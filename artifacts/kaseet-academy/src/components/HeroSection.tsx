@@ -69,15 +69,28 @@ export default function HeroSection() {
           </span>
         </motion.h1>
 
-        {/* Rotating Text */}
-        <motion.div 
+        {/* Rotating Text — stacked: "لكل" on top, gold word below */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-          className="mt-4 md:mt-6 flex flex-row items-center justify-center text-[clamp(26px,5vw,50px)] font-bold gap-3"
+          className="mt-5 md:mt-7 flex flex-col items-center justify-center gap-2"
         >
-          <span className="text-[rgba(255,255,255,0.72)] font-medium text-[clamp(18px,3vw,34px)] italic">لكل</span>
-          <div className="relative h-[1.3em] overflow-hidden w-[200px] md:w-[300px] text-right">
+          <span
+            className="font-normal"
+            style={{
+              fontFamily: 'Tajawal, sans-serif',
+              fontSize: 'clamp(16px,1.6vw,20px)',
+              color: 'rgba(252,251,251,0.85)',
+              letterSpacing: '0.01em',
+            }}
+          >
+            لكل
+          </span>
+          <div
+            className="relative overflow-hidden text-center"
+            style={{ height: 'clamp(44px,6vw,68px)', width: 'clamp(200px,30vw,340px)' }}
+          >
             <AnimatePresence mode="popLayout">
               <motion.span
                 key={activeWordIndex}
@@ -85,7 +98,13 @@ export default function HeroSection() {
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: "-110%", opacity: 0 }}
                 transition={{ duration: 0.5, ease: "easeInOut" }}
-                className="absolute right-0 text-[#FFC107]"
+                className="absolute inset-0 flex items-center justify-center text-[#FFC107] font-black"
+                style={{
+                  fontFamily: 'Tajawal, sans-serif',
+                  fontSize: 'clamp(28px,4.5vw,52px)',
+                  textShadow: '0 4px 30px rgba(255,193,7,0.35)',
+                  whiteSpace: 'nowrap',
+                }}
               >
                 {rotatingWords[activeWordIndex]}
               </motion.span>

@@ -116,7 +116,16 @@ export default function ReelsSection() {
     <section
       className="relative overflow-hidden text-center"
       style={{
-        background: 'linear-gradient(180deg, #131924 0%, #18202c 50%, #111722 100%)',
+        backgroundColor: '#202938',
+        backgroundImage: `
+          repeating-linear-gradient(
+            -45deg,
+            rgba(255,255,255,0.025) 0px,
+            rgba(255,255,255,0.025) 1px,
+            transparent 1px,
+            transparent 9px
+          )
+        `,
         padding: 'clamp(60px,8vh,100px) 0 clamp(70px,9vh,110px)',
       }}
     >
@@ -132,10 +141,23 @@ export default function ReelsSection() {
         }}
       />
 
-      {/* Badge */}
-      <div className="inline-flex items-center gap-2 mb-5 px-5 py-2 rounded-full text-[#FFC107] text-sm font-bold"
-        style={{ background: 'rgba(255,193,7,0.10)', border: '1px solid rgba(255,193,7,0.35)' }}>
-        <span className="w-2 h-2 rounded-full bg-[#FFC107]" style={{ boxShadow: '0 0 10px #FFC107' }} />
+      {/* Badge — glassmorphic */}
+      <div
+        className="inline-flex items-center gap-2 mb-5 px-5 py-2 rounded-full text-[#FFC107] text-sm font-bold"
+        style={{
+          background: 'rgba(255,193,7,0.08)',
+          border: '1px solid rgba(255,193,7,0.22)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          boxShadow: '0 2px 16px rgba(255,193,7,0.08), inset 0 1px 0 rgba(255,255,255,0.06)',
+        }}
+      >
+        <span
+          className="w-[7px] h-[7px] rounded-full bg-[#FFC107] flex-none"
+          style={{
+            boxShadow: '0 0 6px 2px rgba(255,193,7,0.7), 0 0 12px rgba(255,193,7,0.4)',
+          }}
+        />
         من الاستوديو مباشرةً
       </div>
 
