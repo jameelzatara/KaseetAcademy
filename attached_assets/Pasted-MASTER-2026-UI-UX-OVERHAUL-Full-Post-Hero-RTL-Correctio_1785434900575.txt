@@ -1,0 +1,77 @@
+MASTER 2026 UI/UX OVERHAUL: Full Post-Hero RTL Correction, Visual Cropping Fixes, 10-Review Carousel, Kaseet FAQ, and Official Footer Integration.
+
+Please execute the following comprehensive layout, styling, and structural fixes across the site:
+
+==================================================
+1. STRICT POST-HERO RTL & DIRECTION FIX (DO NOT TOUCH HERO)
+==================================================
+- LEAVE THE MAIN HERO SECTION AT THE TOP OF THE PAGE UNTOUCHED.
+- Target ALL sections AFTER the Hero (#reels, #courses, #tracks, #consultant, #testimonials, #faq, footer).
+- Apply strict `direction: rtl; text-align: right;` to all post-hero section wrappers.
+- Fix Flexbox/Grid ordering bugs: Ensure items flow naturally Right-to-Left. Remove any mirrored CSS rules, accidental LTR overrides, or `flex-direction: row-reverse` that cause Arabic text or layouts to appear inverted.
+
+==================================================
+2. STANDARDIZED SEAMLESS SECTION DIVIDERS & BACKGROUND CONTINUITY
+==================================================
+- Replicate the exact smooth section divider line used between the Hero and the "أصوات صنعناها معاً" section across ALL post-hero sections.
+- Divider Styling: Use a clean, sleek divider (`height: 1px; width: 70%; max-width: 900px; margin: 0 auto; background: linear-gradient(90deg, transparent 0%, rgba(255, 193, 7, 0.25) 50%, transparent 100%);`).
+- Apply this divider seamlessly below: `#reels`, `#courses`, `#tracks`, `#consultant`, `#testimonials`, and `#faq`.
+- Ensure all sections share the same `#1e293b` background with continuous geometric grid overlays without harsh horizontal cut-offs or mismatched gradient breaks.
+
+==================================================
+3. REELS SECTION FIXES & DEDUPLICATION (#reels)
+==================================================
+- Remove Duplicate Video: Check the Reels array/list and remove the duplicate entry for the video "شكراً لطلابنا على رأيهم الذي نفخر به.." so it appears only ONCE. Every card in the carousel must be unique.
+- Fix Border & Embed Clipping:
+  * Wrap each reel card in a clean container: `border-radius: 20px; overflow: hidden; background: #0f172a; position: relative;`.
+  * Style the ACTIVE/CENTER reel card with an elegant 2026 glow: `border: 1px solid rgba(255, 193, 7, 0.5); box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 193, 7, 0.2); transform: scale(1.03); z-index: 10;`.
+  * Ensure embedded videos/iframes are clipped inside the rounded corners without ugly white bleed borders.
+
+==================================================
+4. COURSES & TRACKS IMAGE VISIBILITY & CROPPING FIX (#courses & #tracks)
+==================================================
+- Courses Section ("المذيع المحترف والإعلامي الشامل" & "فن الخطابة"):
+  * Update the background image for the "المذيع المحترف والإعلامي الشامل" course to use the newly provided group photo asset (`attached_assets/الخلفية لدورة المذيع.jpg` or matching file in attached_assets).
+  * Fix Image Cropping: Apply `object-fit: cover; object-position: center top; min-height: 240px;` to course card image headers so people's faces and the TEDx speaker are clearly visible and never awkwardly cut off.
+- Academic Tracks Section (#tracks):
+  * Adjust the 3 track cards so the full character portraits and backgrounds are clearly visible. Use `object-fit: cover; object-position: top center; min-height: 220px; border-radius: 16px 16px 0 0;`.
+
+==================================================
+5. CONSULTANT SECTION: COMPACT CIRCULAR AVATAR (#consultant)
+==================================================
+- Image Size Constraint: DO NOT allow the consultant image (`attached_assets/consultant.jpg`) to stretch across the full column height or width.
+- Force a refined circular avatar: `width: 180px; height: 180px; border-radius: 50%; object-fit: cover; margin: 0 auto; border: 3px solid rgba(255, 193, 7, 0.5); box-shadow: 0 8px 24px rgba(0,0,0,0.3);`.
+- Wrap the consultant area in a stylish glass card (`background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(12px); border-radius: 20px; padding: 2.5rem;`).
+- Style the WhatsApp CTA button as a refined dark emerald/gold button (`background: #065f46; color: #fff;`) with smooth hover elevation.
+
+==================================================
+6. 2026 TESTIMONIALS CAROUSEL (DYNAMIC ALL 10 REVIEWS) (#testimonials)
+==================================================
+- Dynamically load ALL 10 student review avatars/images existing inside `attached_assets/` without hardcoded card limits. Create a smooth RTL carousel displaying all 10 reviews.
+- Modern Glassmorphism Styling:
+  * Cards: `background: rgba(30, 41, 59, 0.55); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 2rem; gap: 1.25rem;`.
+  * Typography & Breathing Space: `font-size: 0.95rem; line-height: 1.85; color: #cbd5e1; text-align: right;`. Ensure ample vertical spacing between lines.
+- Card Structure:
+  * Right Side: Student circular avatar (`50x50px`), Arabic Name, and 5 Gold Stars (`★ ★ ★ ★ ★`).
+  * Left Side: Google Verified Review Badge ("Google" icon + "موثق").
+- RTL Navigation: Left arrow `←` moves to NEXT card; Right arrow `→` moves to PREVIOUS card.
+
+==================================================
+7. NEW SECTION: KASEET FAQ (الأسئلة الشائعة) (#faq)
+==================================================
+- Implement a modern Arabic Accordion FAQ section titled "الأسئلة الشائعة حول برامج كاسيت" ("Kaseet FAQ").
+- Build 4-5 collapsible FAQ items in RTL layout with interactive plus/minus (`+ / -`) toggle arrows and smooth CSS expand/collapse animations.
+- Use glassmorphic accordion cards matching `#1e293b` with `#FFC107` gold accent highlights on open state.
+
+==================================================
+8. NEW OFFICIAL FOOTER SECTION (#footer)
+==================================================
+- Build a luxury dark navy footer (`background: #0f172a; padding: 4rem 1.5rem 2rem; border-top: 1px solid rgba(255, 193, 7, 0.2); direction: rtl; text-align: right;`).
+- Include Kaseet Media branding, a short Arabic bio, and quick navigation links.
+- Integrate the official social media icon links with glowing gold hover effects:
+  * Instagram: `https://www.instagram.com/kaseetmedia/?hl=ar`
+  * Facebook: `https://www.facebook.com/kaseetmedia?locale=ar_AR`
+  * LinkedIn: `https://jo.linkedin.com/company/kaseetmedia`
+  * YouTube: `https://www.youtube.com/@Kaseetmedia`
+  * TikTok: `https://www.tiktok.com/@.kaseet?_r=1&_t=ZN-98TGBraBWEg`
+- Add a neat copyright bar at the bottom: "جميع الحقوق محفوظة © كاسيت ميديا 2026".

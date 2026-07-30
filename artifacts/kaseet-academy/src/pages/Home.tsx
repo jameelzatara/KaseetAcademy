@@ -22,11 +22,9 @@ function SectionDivider() {
 
 export default function Home() {
   return (
-    <main className="w-full" dir="rtl">
-      {/* Hero — untouched, has its own direction handling */}
-      <div dir="ltr">
-        <HeroSection />
-      </div>
+    <main className="w-full">
+      {/* Hero — HTML root dir="rtl" already applies; hero handles its own layout */}
+      <HeroSection />
 
       {/* Reels Showcase */}
       <div id="reels">
