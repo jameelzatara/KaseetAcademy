@@ -11,7 +11,6 @@ const rotatingWords = [
   "حرفٍ رسالة",
   "موهبةٍ فرصة",
   "حلمٍ بداية",
-  "كاسيت"
 ];
 
 export default function HeroSection() {
@@ -77,7 +76,7 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
           className="mt-4 md:mt-6 flex flex-row items-center justify-center text-[clamp(26px,5vw,50px)] font-bold gap-3"
         >
-          <span className="text-[#FFC107]">لكل</span>
+          <span className="text-[rgba(255,255,255,0.72)] font-medium text-[clamp(18px,3vw,34px)] italic">لكل</span>
           <div className="relative h-[1.3em] overflow-hidden w-[200px] md:w-[300px] text-right">
             <AnimatePresence mode="popLayout">
               <motion.span
