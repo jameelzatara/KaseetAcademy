@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "Kaseet Academy"
+version = "1.0.0"
+id = "artifacts/kaseet-academy"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 20331
+
+[services.development]
+run = "pnpm --filter @workspace/kaseet-academy run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/kaseet-academy", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/kaseet-academy/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "20331"
+BASE_PATH = "/"

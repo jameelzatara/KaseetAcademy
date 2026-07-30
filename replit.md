@@ -1,6 +1,6 @@
-# [Project name]
+# Kaseet Academy
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+Arabic RTL landing page for Kaseet (كاسيت) — the first Arabic academy for voice-over, podcast production, and audiovisual training.
 
 ## Run & Operate
 
