@@ -1,300 +1,270 @@
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, CSSProperties } from 'react';
 
+// 6 reels — last slot is a repeat until a 6th real URL is available
 const REEL_URLS = [
   "https://www.instagram.com/p/DYcvgQesju9/",
   "https://www.instagram.com/p/DbGBYbhsHNp/",
   "https://www.instagram.com/p/DW6yTEvDMgv/",
   "https://www.instagram.com/p/DWCVkWoDPLS/",
   "https://www.instagram.com/p/DbYqCDzMLPJ/",
+  "https://www.instagram.com/p/DYcvgQesju9/", // slot 6 — replace with 6th reel URL
 ];
 
+const CARD_W = 300;
+const GAP    = 36;
+const CARD_H = 540;
+const N      = REEL_URLS.length; // 6
+
 declare global {
-  interface Window {
-    instgrm?: { Embeds: { process: () => void } };
-  }
+  interface Window { instgrm?: { Embeds: { process: () => void } }; }
 }
 
-function ChevronLeft() {
+function ChevronL() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+      strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
       <polyline points="15 18 9 12 15 6" />
     </svg>
   );
 }
-
-function ChevronRight() {
+function ChevronR() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+      strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
       <polyline points="9 18 15 12 9 6" />
     </svg>
   );
 }
 
+/** Normalize offset into [-⌊N/2⌋ … ⌈N/2⌉) range so we get -2,-1,0,1,2,3 for N=6 */
+function getOffset(i: number, current: number): number {
+  let off = (i - current + N) % N;
+  if (off >= Math.ceil(N / 2)) off -= N;
+  return off;
+}
+
+function cardStyle(offset: number): CSSProperties {
+  const tx   = offset * (CARD_W + GAP);
+  const abs  = Math.abs(offset);
+
+  if (abs === 0) return {
+    transform:    `translateX(${tx}px) scale(1.07)`,
+    opacity:      1,
+    zIndex:       5,
+    border:       '2px solid #FFC107',
+    boxShadow:    '0 0 44px rgba(255,193,7,0.40), 0 22px 55px rgba(0,0,0,0.70)',
+    filter:       'none',
+    pointerEvents: 'none',
+    cursor:       'default',
+  };
+
+  if (abs === 1) return {
+    transform:    `translateX(${tx}px) scale(0.87)`,
+    opacity:      0.44,
+    zIndex:       2,
+    border:       '1px solid rgba(255,255,255,0.07)',
+    boxShadow:    '0 10px 32px rgba(0,0,0,0.50)',
+    filter:       'blur(0.4px)',
+    pointerEvents: 'auto',
+    cursor:       'pointer',
+  };
+
+  // offset ±2 or ±3 — hidden, positioned off-stage for smooth entry
+  return {
+    transform:    `translateX(${tx}px) scale(0.72)`,
+    opacity:      0,
+    zIndex:       0,
+    border:       '1px solid transparent',
+    boxShadow:    'none',
+    filter:       'none',
+    pointerEvents: 'none',
+    cursor:       'default',
+  };
+}
+
+const arrowBase: CSSProperties = {
+  position: 'absolute',
+  top: '50%',
+  transform: 'translateY(-50%)',
+  zIndex: 20,
+  width: 48, height: 48,
+  borderRadius: '50%',
+  display: 'grid', placeItems: 'center',
+  background: 'rgba(255,255,255,0.07)',
+  border: '1px solid rgba(255,255,255,0.16)',
+  backdropFilter: 'blur(8px)',
+  WebkitBackdropFilter: 'blur(8px)',
+  boxShadow: '0 6px 20px rgba(0,0,0,0.30)',
+  color: '#FFC107',
+  cursor: 'pointer',
+  transition: 'background 0.18s, color 0.18s, box-shadow 0.18s',
+};
+
 export default function ReelsSection() {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [centerIdx, setCenterIdx] = useState(Math.floor(REEL_URLS.length / 2));
-  const rafRef = useRef<number | null>(null);
+  const [cur, setCur] = useState(0);
 
-  const computeCenter = useCallback(() => {
-    const track = trackRef.current;
-    if (!track) return;
-    const trackRect = track.getBoundingClientRect();
-    const cx = trackRect.left + trackRect.width / 2;
-    let best = 0;
-    let minDiff = Infinity;
-    cardRefs.current.forEach((card, i) => {
-      if (!card) return;
-      const r = card.getBoundingClientRect();
-      const cardCx = r.left + r.width / 2;
-      const diff = Math.abs(cardCx - cx);
-      if (diff < minDiff) { minDiff = diff; best = i; }
-    });
-    setCenterIdx(best);
-  }, []);
+  const go = (dir: 1 | -1) => setCur(prev => (prev + dir + N) % N);
 
-  const scrollToCard = useCallback((dir: number) => {
-    const track = trackRef.current;
-    if (!track) return;
-    const newIdx = Math.max(0, Math.min(REEL_URLS.length - 1, centerIdx + dir));
-    const card = cardRefs.current[newIdx];
-    if (card) {
-      card.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
-    }
-  }, [centerIdx]);
-
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-
-    const onScroll = () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(computeCenter);
-    };
-
-    track.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', computeCenter);
-
-    // Initial scroll to center card
-    const timer = setTimeout(() => {
-      const mid = cardRefs.current[Math.floor(REEL_URLS.length / 2)];
-      if (mid) mid.scrollIntoView({ inline: 'center', block: 'nearest' });
-      computeCenter();
-    }, 400);
-
-    // Trigger Instagram embeds
-    let attempts = 0;
-    const igTimer = setInterval(() => {
-      attempts++;
-      if (window.instgrm?.Embeds) {
-        window.instgrm.Embeds.process();
-        setTimeout(computeCenter, 600);
-      }
-      if (attempts > 12) clearInterval(igTimer);
-    }, 800);
-
-    return () => {
-      track.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', computeCenter);
-      clearTimeout(timer);
-      clearInterval(igTimer);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, [computeCenter]);
-
-  // Load Instagram embed script once
+  // Load IG embed script once
   useEffect(() => {
     if (document.getElementById('ig-embed-script')) return;
-    const script = document.createElement('script');
-    script.id = 'ig-embed-script';
-    script.src = 'https://www.instagram.com/embed.js';
-    script.async = true;
-    document.body.appendChild(script);
+    const s = document.createElement('script');
+    s.id = 'ig-embed-script';
+    s.src = 'https://www.instagram.com/embed.js';
+    s.async = true;
+    document.body.appendChild(s);
   }, []);
+
+  // Re-process embeds whenever the active card changes
+  useEffect(() => {
+    const t = setTimeout(() => window.instgrm?.Embeds.process(), 120);
+    return () => clearTimeout(t);
+  }, [cur]);
 
   return (
     <section
       className="relative overflow-hidden text-center"
       style={{
-        backgroundColor: '#12172a',
+        backgroundColor: '#1e293b',
+        backgroundImage: [
+          'linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)',
+          'linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)',
+        ].join(', '),
+        backgroundSize: '44px 44px',
         padding: 'clamp(60px,8vh,100px) 0 clamp(70px,9vh,110px)',
       }}
     >
-      {/* Radial gold glow behind center */}
-      <div
-        className="absolute pointer-events-none"
-        style={{
-          top: '38%', left: '50%',
-          transform: 'translate(-50%,-50%)',
-          width: 520, height: 520,
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(255,193,7,0.13), transparent 62%)',
-        }}
-      />
+      {/* ── Golden glow at top boundary ── */}
+      <div className="absolute inset-x-0 top-0 pointer-events-none" style={{
+        height: 160,
+        background: 'linear-gradient(to bottom, rgba(255,193,7,0.14) 0%, transparent 100%)',
+      }} />
 
-      {/* Badge — glassmorphic, pink tint */}
+      {/* ── Subtle radial warm center ── */}
+      <div className="absolute pointer-events-none" style={{
+        top: '50%', left: '50%',
+        transform: 'translate(-50%,-50%)',
+        width: 640, height: 640,
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(255,193,7,0.06), transparent 58%)',
+      }} />
+
+      {/* ── Badge ── */}
       <div
-        className="inline-flex items-center gap-2 mb-5 px-5 py-2 rounded-full text-sm font-bold"
+        className="relative z-10 inline-flex items-center gap-2 mb-5 px-5 py-2 rounded-full text-[#FFC107] text-sm font-bold"
         style={{
-          color: '#e879a0',
-          background: 'rgba(232,121,160,0.10)',
-          border: '1px solid rgba(232,121,160,0.30)',
+          background: 'rgba(255,193,7,0.08)',
+          border: '1px solid rgba(255,193,7,0.25)',
           backdropFilter: 'blur(8px)',
           WebkitBackdropFilter: 'blur(8px)',
-          boxShadow: '0 2px 16px rgba(232,121,160,0.08), inset 0 1px 0 rgba(255,255,255,0.06)',
+          boxShadow: '0 2px 16px rgba(255,193,7,0.08), inset 0 1px 0 rgba(255,255,255,0.06)',
+          fontFamily: 'Tajawal, sans-serif',
         }}
       >
-        <span
-          className="w-[7px] h-[7px] rounded-full flex-none"
-          style={{
-            background: '#e879a0',
-            boxShadow: '0 0 6px 2px rgba(232,121,160,0.8), 0 0 14px rgba(232,121,160,0.5)',
-          }}
-        />
-        تقييمات حقيقية
+        <span className="w-[7px] h-[7px] rounded-full flex-none" style={{
+          background: '#FFC107',
+          boxShadow: '0 0 6px 2px rgba(255,193,7,0.75), 0 0 14px rgba(255,193,7,0.45)',
+        }} />
+        من الاستوديو مباشرةً
       </div>
 
-      {/* Heading */}
+      {/* ── Heading ── */}
       <h2
-        className="font-black text-[rgba(252,251,251,0.95)] mx-4 mb-3"
+        className="relative z-10 font-black text-[rgba(252,251,251,0.96)] mx-4 mb-3"
         style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 'clamp(28px,4.8vw,54px)', lineHeight: 1.25 }}
       >
-        أرواح أُضيئت لتُنير
+        أصوات <span className="text-[#FFC107]">صنعناها معاً</span>
       </h2>
+
+      {/* ── Subtitle ── */}
       <p
-        className="mx-auto px-5 text-[rgba(252,251,251,0.68)]"
-        style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 'clamp(14px,1.6vw,17px)', lineHeight: 1.85, maxWidth: 600, marginBottom: 'clamp(30px,4vh,48px)' }}
+        className="relative z-10 mx-auto px-5 font-normal"
+        style={{
+          fontFamily: 'Tajawal, sans-serif',
+          fontSize: 'clamp(14px,1.55vw,17px)',
+          lineHeight: 1.85,
+          color: 'rgba(252,251,251,0.62)',
+          maxWidth: 640,
+          marginBottom: 'clamp(36px,5vh,56px)',
+        }}
       >
-        استمعي لصدق التحول الداخلي عبر تجارب حية، تعكس جوهر الأثر الذي نسعى لتركه.
+        مقاطع حيّة من ورشنا وأعمال متدربينا ومدربينا على إنستغرام — اسمع الفرق قبل أن تسجّل..
       </p>
 
-      {/* Carousel */}
-      <div className="relative mx-auto" style={{ maxWidth: 1150 }}>
-        {/* Prev arrow (RTL: right side = previous) */}
+      {/* ── Carousel ── */}
+      <div className="relative mx-auto" style={{ maxWidth: 1020 }}>
+
+        {/* Prev — RTL right side */}
         <button
-          onClick={() => scrollToCard(-1)}
+          onClick={() => go(-1)}
           aria-label="السابق"
-          className="absolute top-1/2 -translate-y-1/2 z-10 grid place-items-center rounded-full text-[#FFC107] transition-all duration-200"
-          style={{
-            right: 10,
-            width: 48, height: 48,
-            background: 'rgba(255,255,255,0.08)',
-            border: '1px solid rgba(255,255,255,0.18)',
-            backdropFilter: 'blur(8px)',
-            boxShadow: '0 6px 20px rgba(0,0,0,0.3)',
-          }}
-          onMouseEnter={e => {
-            const el = e.currentTarget;
-            el.style.background = '#FFC107';
-            el.style.color = '#18202c';
-            el.style.boxShadow = '0 0 20px rgba(255,193,7,0.4)';
-          }}
-          onMouseLeave={e => {
-            const el = e.currentTarget;
-            el.style.background = 'rgba(255,255,255,0.08)';
-            el.style.color = '#FFC107';
-            el.style.boxShadow = '0 6px 20px rgba(0,0,0,0.3)';
-          }}
+          style={{ ...arrowBase, right: 4 }}
+          onMouseEnter={e => Object.assign(e.currentTarget.style, { background: '#FFC107', color: '#18202c', boxShadow: '0 0 24px rgba(255,193,7,0.45)' })}
+          onMouseLeave={e => Object.assign(e.currentTarget.style, { background: 'rgba(255,255,255,0.07)', color: '#FFC107', boxShadow: '0 6px 20px rgba(0,0,0,0.30)' })}
         >
-          <ChevronRight />
+          <ChevronL />
         </button>
 
-        {/* Next arrow (RTL: left side = next) */}
+        {/* Next — RTL left side */}
         <button
-          onClick={() => scrollToCard(1)}
+          onClick={() => go(1)}
           aria-label="التالي"
-          className="absolute top-1/2 -translate-y-1/2 z-10 grid place-items-center rounded-full text-[#FFC107] transition-all duration-200"
-          style={{
-            left: 10,
-            width: 48, height: 48,
-            background: 'rgba(255,255,255,0.08)',
-            border: '1px solid rgba(255,255,255,0.18)',
-            backdropFilter: 'blur(8px)',
-            boxShadow: '0 6px 20px rgba(0,0,0,0.3)',
-          }}
-          onMouseEnter={e => {
-            const el = e.currentTarget;
-            el.style.background = '#FFC107';
-            el.style.color = '#18202c';
-            el.style.boxShadow = '0 0 20px rgba(255,193,7,0.4)';
-          }}
-          onMouseLeave={e => {
-            const el = e.currentTarget;
-            el.style.background = 'rgba(255,255,255,0.08)';
-            el.style.color = '#FFC107';
-            el.style.boxShadow = '0 6px 20px rgba(0,0,0,0.3)';
-          }}
+          style={{ ...arrowBase, left: 4 }}
+          onMouseEnter={e => Object.assign(e.currentTarget.style, { background: '#FFC107', color: '#18202c', boxShadow: '0 0 24px rgba(255,193,7,0.45)' })}
+          onMouseLeave={e => Object.assign(e.currentTarget.style, { background: 'rgba(255,255,255,0.07)', color: '#FFC107', boxShadow: '0 6px 20px rgba(0,0,0,0.30)' })}
         >
-          <ChevronLeft />
+          <ChevronR />
         </button>
 
-        {/* Track */}
-        <div
-          ref={trackRef}
-          className="flex gap-6 overflow-x-auto items-center"
-          style={{
-            scrollSnapType: 'x mandatory',
-            WebkitOverflowScrolling: 'touch',
-            scrollbarWidth: 'none',
-            padding: '20px max(calc(50% - 160px), 16px) 30px',
-          }}
-        >
+        {/* Cards stage */}
+        <div style={{ position: 'relative', overflow: 'hidden', height: CARD_H, margin: '0 56px' }}>
           {REEL_URLS.map((url, i) => {
-            const isCenter = i === centerIdx;
+            const off   = getOffset(i, cur);
+            const cstyle = cardStyle(off);
+
             return (
               <div
-                key={url}
-                ref={el => { cardRefs.current[i] = el; }}
+                key={i}
+                onClick={() => { if (off !== 0) go(off > 0 ? 1 : -1); }}
                 style={{
-                  flex: '0 0 auto',
-                  width: 300,
-                  scrollSnapAlign: 'center',
+                  position:   'absolute',
+                  top:        0,
+                  left:       '50%',
+                  marginLeft: -(CARD_W / 2),
+                  width:      CARD_W,
                   borderRadius: 24,
-                  overflow: 'hidden',
-                  background: '#1e2838',
-                  transform: isCenter ? 'scale(1.05)' : 'scale(0.86)',
-                  opacity: isCenter ? 1 : 0.4,
-                  filter: isCenter ? 'none' : 'blur(0.4px)',
-                  transition: 'all 0.45s cubic-bezier(0.25,0.8,0.25,1)',
-                  border: isCenter ? '2px solid #FFC107' : '1px solid rgba(255,255,255,0.08)',
-                  boxShadow: isCenter
-                    ? '0 0 35px rgba(255,193,7,0.35), 0 20px 50px rgba(0,0,0,0.6)'
-                    : '0 10px 30px rgba(0,0,0,0.5)',
-                  position: 'relative',
-                  zIndex: isCenter ? 5 : 1,
+                  overflow:   'hidden',
+                  background: '#1a2233',
+                  transition: 'transform 0.52s cubic-bezier(0.25,0.8,0.25,1), opacity 0.52s ease, box-shadow 0.52s ease, border 0.30s ease',
+                  ...cstyle,
                 }}
               >
                 {/* Instagram embed */}
-                <div style={{ width: '100%', minHeight: 430, background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                <div style={{ width: '100%', minHeight: 430, background: '#000', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <blockquote
                     className="instagram-media"
                     data-instgrm-permalink={url}
                     data-instgrm-version="14"
-                    style={{ margin: '0 !important', width: '100% !important', minWidth: '100% !important', border: 'none !important' }}
+                    style={{ margin: 0, width: '100%', minWidth: '100%', border: 'none' } as CSSProperties}
                   />
                 </div>
 
-                {/* Card footer strip */}
+                {/* Footer strip */}
                 <div
                   className="flex items-center justify-between"
                   style={{
-                    padding: '12px 16px',
-                    background: 'rgba(24,32,44,0.95)',
-                    borderTop: '1px solid rgba(255,255,255,0.08)',
+                    padding: '11px 15px',
+                    background: 'rgba(20,28,42,0.97)',
+                    borderTop: '1px solid rgba(255,255,255,0.07)',
                   }}
                 >
                   <div className="flex items-center gap-2">
-                    <div
-                      className="grid place-items-center text-xs font-black"
-                      style={{
-                        width: 24, height: 24, borderRadius: '50%',
-                        background: '#FFC107', color: '#18202c',
-                        fontFamily: 'Tajawal, sans-serif',
-                      }}
-                    >
-                      ك
-                    </div>
-                    <span style={{ fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 12.5, color: 'rgba(255,255,255,0.9)' }}>
+                    <div className="grid place-items-center text-xs font-black" style={{
+                      width: 24, height: 24, borderRadius: '50%',
+                      background: '#FFC107', color: '#18202c',
+                      fontFamily: 'Tajawal, sans-serif',
+                    }}>ك</div>
+                    <span style={{ fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 12.5, color: 'rgba(255,255,255,0.88)' }}>
                       من متدرّبي كاسيت
                     </span>
                   </div>
@@ -303,6 +273,26 @@ export default function ReelsSection() {
               </div>
             );
           })}
+        </div>
+
+        {/* Dot indicators */}
+        <div className="flex items-center justify-center gap-2 mt-7">
+          {REEL_URLS.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCur(i)}
+              aria-label={`الرييل ${i + 1}`}
+              style={{
+                width:  i === cur ? 22 : 7,
+                height: 7,
+                borderRadius: 99,
+                background: i === cur ? '#FFC107' : 'rgba(255,255,255,0.22)',
+                border: 'none', padding: 0, cursor: 'pointer',
+                transition: 'all 0.35s ease',
+                boxShadow: i === cur ? '0 0 10px rgba(255,193,7,0.55)' : 'none',
+              }}
+            />
+          ))}
         </div>
       </div>
     </section>
