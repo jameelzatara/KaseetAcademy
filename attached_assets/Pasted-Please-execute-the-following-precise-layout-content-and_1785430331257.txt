@@ -1,0 +1,28 @@
+Please execute the following precise layout, content, and image asset updates in index.html and style.css for both the Courses Section (Section 3) and the Reels Section:
+
+1. FEATURED COURSE CARD LAYOUT (RTL FLIP):
+   - In the top featured course hero card, FLIP the grid layout for Arabic RTL alignment:
+     - RIGHT SIDE: Course details, title, badges, price, cohort info, instructor info, and "سجّل الآن" CTA button.
+     - LEFT SIDE: The course featured image with rounded corners and "الأكثر طلباً" overlay badge.
+   - Ensure perfect flex/grid direction (flex-direction: row-reverse or appropriate CSS grid order for RTL) so text is read first from right to left.
+
+2. SECONDARY COURSES GRID & SPECIFIC COURSE COVER (CARD 4):
+   - For the 4th card ("المذيع المحترف والإعلامي الشامل"):
+     - Set the course cover image source to use "assets/images/presenter-course.jpg" (or the updated presenter course cover image path).
+     - Ensure the image fits properly with object-fit: cover and matching border-radius.
+   - Maintain the rest of the 4-card grid layout with instructor avatars, tags, and prices.
+
+3. SECTION HEADER & COPY FIX (COURSES SPECIFIC):
+   - Update the top section header copy:
+     - Main Title: "دوراتنا المتميزة" (with yellow/gold accent styling).
+     - Subtitle: "اختر من بين برامجنا الأكثر طلباً — حضوري ومباشر تفاعلي بمقاعد محدودة".
+     - Left Action Button: "تصفّح كل الدورات ←".
+
+4. SEAMLESS SECTION TRANSITION (REMOVE HARD CUT):
+   - Remove any visible hard divider lines, dark borders, or awkward color cuts between Section 2 (Reels) and Section 3 (Courses).
+   - Use a seamless background transition using the master theme's deep navy color and existing continuous geometric grid pattern.
+
+5. INSTAGRAM REELS CARD & FRAME STYLING:
+   - Fix the Reels iframe wrapper so NO Instagram text or account header/footer is hidden or clipped.
+   - Set container min-height to 530px to fully accommodate the player.
+   - Ensure the glowing gold border wraps smoothly around the card without overlapping inner video elements.
