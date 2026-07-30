@@ -1,6 +1,6 @@
 import HeroSection from '@/components/HeroSection';
 import ReelsSection from '@/components/ReelsSection';
-import ConsultationSection from '@/components/ConsultationSection';
+import CoursesSection from '@/components/CoursesSection';
 
 export default function Home() {
   return (
@@ -12,8 +12,8 @@ export default function Home() {
         <ReelsSection />
       </div>
 
-      {/* Free Consultation CTA */}
-      <ConsultationSection />
+      {/* Courses Catalog */}
+      <CoursesSection />
 
       {/* Cassette Ribbon Border at the very bottom */}
       <div className="w-full h-2 cassette-ribbon" />

@@ -54,7 +54,7 @@ function cardStyle(offset: number): CSSProperties {
     border:       '2px solid #FFC107',
     boxShadow:    '0 0 44px rgba(255,193,7,0.40), 0 22px 55px rgba(0,0,0,0.70)',
     filter:       'none',
-    pointerEvents: 'none',
+    pointerEvents: 'auto',   // center card is fully interactive
     cursor:       'default',
   };
 
@@ -65,8 +65,8 @@ function cardStyle(offset: number): CSSProperties {
     border:       '1px solid rgba(255,255,255,0.07)',
     boxShadow:    '0 10px 32px rgba(0,0,0,0.50)',
     filter:       'blur(0.4px)',
-    pointerEvents: 'auto',
-    cursor:       'pointer',
+    pointerEvents: 'none',   // side cards: no accidental clicks
+    cursor:       'default',
   };
 
   // offset ±2 or ±3 — hidden, positioned off-stage for smooth entry
@@ -240,7 +240,7 @@ export default function ReelsSection() {
                 }}
               >
                 {/* Instagram embed */}
-                <div style={{ width: '100%', minHeight: 430, background: '#000', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div className="reel-embed-wrap" style={{ width: '100%', height: 520, minHeight: 520, background: '#000', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <blockquote
                     className="instagram-media"
                     data-instgrm-permalink={url}
