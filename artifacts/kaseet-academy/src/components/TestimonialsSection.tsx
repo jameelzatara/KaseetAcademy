@@ -9,6 +9,8 @@ import avatarAmjad   from '@assets/Amjad Qasem.png';
 import avatarKhaled  from '@assets/Khaled Alkhd.png';
 import avatarFouad   from '@assets/Fouad Hamati.png';
 import avatarSahar   from '@assets/sahar AL-Assaf.png';
+import avatarYazan   from '@assets/yazan masarweh.png';
+import avatarAhlam   from '@assets/Ahlam Al-Issawi.png';
 
 interface Review {
   id: number;
@@ -65,6 +67,18 @@ const REVIEWS: Review[] = [
     name: 'سحر العساف',
     avatar: avatarSahar,
     text: 'كاسيت أكاديمي أضافت لي الكثير على المستوى الشخصي والمهني في مجال الخطابة والتواصل.',
+  },
+  {
+    id: 9,
+    name: 'يزن مصاروة',
+    avatar: avatarYazan,
+    text: 'أسلوب التدريب عملي ومتخصص جداً، شعرت بتطور حقيقي في أدائي الصوتي منذ الجلسة الأولى.',
+  },
+  {
+    id: 10,
+    name: 'أحلام العيساوي',
+    avatar: avatarAhlam,
+    text: 'كاسيت ليست مجرد أكاديمية، هي منظومة دعم كاملة. المدربون ملتزمون والمحتوى على مستوى عالمي.',
   },
 ];
 

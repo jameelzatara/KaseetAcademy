@@ -1,13 +1,12 @@
 import { useState, useEffect, CSSProperties } from 'react';
 
-// 6 reels — last slot is a repeat until a 6th real URL is available
+// 5 unique reels — all distinct URLs
 const REEL_URLS = [
   "https://www.instagram.com/p/DYcvgQesju9/",
   "https://www.instagram.com/p/DbGBYbhsHNp/",
   "https://www.instagram.com/p/DW6yTEvDMgv/",
   "https://www.instagram.com/p/DWCVkWoDPLS/",
   "https://www.instagram.com/p/DbYqCDzMLPJ/",
-  "https://www.instagram.com/p/DYcvgQesju9/", // slot 6 — replace with 6th reel URL
 ];
 
 const CARD_W = 300;

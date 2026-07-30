@@ -9,6 +9,7 @@ import coverSohaib     from '@assets/cover-public-speaking-tedx_1785428970689.jp
 import instructorSohaib from '@assets/instructor-sohaib_1785428970689.jpeg';
 import coverRana       from '@assets/cover-arabic-course_1785428982698.png';
 import instructorRana  from '@assets/trainer-rana-azzam_1785428982698.JPG';
+import coverPresenter  from '@assets/presenter-bg.png';
 
 // ── Course data ────────────────────────────────────────────
 interface Course {
@@ -89,7 +90,7 @@ const COURSES: Course[] = [
     hours: '24 ساعة',
     shortDesc: 'دورة مكثفة تجمع التحرير الصحفي، الإلقاء الاحترافي، إدارة الحوار، والتغطية الميدانية — كل ما يصنع إعلامياً شاملاً.',
     instructor: { name: 'رنا محمد العزام', title: 'معدة ومقدمة برامج فضائية وبودكاست', photo: instructorRana },
-    cover: instructorRana, // no separate cover — use portrait
+    cover: coverPresenter,
   },
 ];
 
