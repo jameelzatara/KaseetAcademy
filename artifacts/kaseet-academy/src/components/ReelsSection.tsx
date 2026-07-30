@@ -116,16 +116,7 @@ export default function ReelsSection() {
     <section
       className="relative overflow-hidden text-center"
       style={{
-        backgroundColor: '#202938',
-        backgroundImage: `
-          repeating-linear-gradient(
-            -45deg,
-            rgba(255,255,255,0.025) 0px,
-            rgba(255,255,255,0.025) 1px,
-            transparent 1px,
-            transparent 9px
-          )
-        `,
+        backgroundColor: '#12172a',
         padding: 'clamp(60px,8vh,100px) 0 clamp(70px,9vh,110px)',
       }}
     >
@@ -141,24 +132,26 @@ export default function ReelsSection() {
         }}
       />
 
-      {/* Badge — glassmorphic */}
+      {/* Badge — glassmorphic, pink tint */}
       <div
-        className="inline-flex items-center gap-2 mb-5 px-5 py-2 rounded-full text-[#FFC107] text-sm font-bold"
+        className="inline-flex items-center gap-2 mb-5 px-5 py-2 rounded-full text-sm font-bold"
         style={{
-          background: 'rgba(255,193,7,0.08)',
-          border: '1px solid rgba(255,193,7,0.22)',
+          color: '#e879a0',
+          background: 'rgba(232,121,160,0.10)',
+          border: '1px solid rgba(232,121,160,0.30)',
           backdropFilter: 'blur(8px)',
           WebkitBackdropFilter: 'blur(8px)',
-          boxShadow: '0 2px 16px rgba(255,193,7,0.08), inset 0 1px 0 rgba(255,255,255,0.06)',
+          boxShadow: '0 2px 16px rgba(232,121,160,0.08), inset 0 1px 0 rgba(255,255,255,0.06)',
         }}
       >
         <span
-          className="w-[7px] h-[7px] rounded-full bg-[#FFC107] flex-none"
+          className="w-[7px] h-[7px] rounded-full flex-none"
           style={{
-            boxShadow: '0 0 6px 2px rgba(255,193,7,0.7), 0 0 12px rgba(255,193,7,0.4)',
+            background: '#e879a0',
+            boxShadow: '0 0 6px 2px rgba(232,121,160,0.8), 0 0 14px rgba(232,121,160,0.5)',
           }}
         />
-        من الاستوديو مباشرةً
+        تقييمات حقيقية
       </div>
 
       {/* Heading */}
@@ -166,13 +159,13 @@ export default function ReelsSection() {
         className="font-black text-[rgba(252,251,251,0.95)] mx-4 mb-3"
         style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 'clamp(28px,4.8vw,54px)', lineHeight: 1.25 }}
       >
-        أصوات <span className="text-[#FFC107]">صنعناها معاً</span>
+        أرواح أُضيئت لتُنير
       </h2>
       <p
-        className="mx-auto px-5 text-[rgba(252,251,251,0.70)]"
-        style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 'clamp(14px,1.8vw,18px)', lineHeight: 1.8, maxWidth: 640, marginBottom: 'clamp(30px,4vh,48px)' }}
+        className="mx-auto px-5 text-[rgba(252,251,251,0.68)]"
+        style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 'clamp(14px,1.6vw,17px)', lineHeight: 1.85, maxWidth: 600, marginBottom: 'clamp(30px,4vh,48px)' }}
       >
-        مقاطع حيّة من ورشنا وأعمال متدربينا ومدربينا على إنستغرام — اسمع الفرق قبل أن تسجّل.
+        استمعي لصدق التحول الداخلي عبر تجارب حية، تعكس جوهر الأثر الذي نسعى لتركه.
       </p>
 
       {/* Carousel */}
