@@ -1,0 +1,38 @@
+GLOBAL AUDIT & SECTION REDESIGN: Fix post-hero language/direction AND redesign the "Educational Consultant Section" (قسم المستشارة التعليمية) with full creative visual freedom.
+
+==================================================
+PART 1: GLOBAL ARABIC & RTL AUDIT (POST-HERO SECTIONS)
+==================================================
+- Inspect ALL sections located AFTER the Hero section (Statistics, Reels, Courses, Tracks, Consultant, etc.).
+- Ensure ALL copy, titles, subtitles, badges, and button texts are STRICTLY in high-quality Arabic (No English text placeholders).
+- Force dir="rtl" and text-align: right on all post-hero section containers. Ensure arrow icons point correctly to the left "←".
+
+==================================================
+PART 2: CREATIVE REDESIGN OF THE CONSULTANT SECTION
+==================================================
+Redesign the "Free Consultation Section" (قسم المستشارة التعليمية) completely. Break away from the cramped single-line box and create a spacious, luxury 2-column grid layout (or interactive promo card) matching the site's dark navy & gold CSS variables.
+
+1. LAYOUT & VISUAL STRUCTURE (RTL):
+   - Right Column (Text & Value Proposition):
+     * Badge Tag: "استشارة مجانية 100%"
+     * Main Title: "محتار في اختيار المسار الأنسب لصوتك أو حضورك الإعلامي؟"
+     * Description: "تواصل مع المستشارة التعليمية لتحديد مستواك الحالي وبناء خطتك التدريبية المخصصة — بدون أي التزام."
+     * Benefit Bullets (3 quick checkmarks):
+       ✓ تقييم شامل لمستواك الصوتي والإعلامي
+       ✓ ترشيح المسار والأستاذ الأنسب لأهدافك
+       ✓ خطة عمل واضحة بدون أي التزام مالي
+     * Primary CTA Button (WhatsApp Link):
+       - Button Text: "تواصل مع المستشارة عبر واتساب" (Include WhatsApp Icon)
+       - Link Target: "https://wa.me/962771052222"
+     * Secondary Link: "استكشف كل البرامج"
+
+   - Left Column (Consultant Visual & Social Proof):
+     * Image Container: Clean portrait frame using `attached_assets/consultant.jpg` with standard object-fit: cover and a refined gold border glow.
+     * Floating Badge overlay on image: "🟢 متواجدة الآن للرد على استفساراتك"
+     * Stats Sub-bar/Chips underneath or nearby:
+       - "+600 متدرب" | "100% رضا المتدربين" | "+40 دفعة"
+
+2. CREATIVE FREEDOM & THEME COMPATIBILITY:
+   - Use dynamic visual hierarchy, floating cards, or subtle background glow behind the consultant image to make it look active and high-converting.
+   - Do NOT hardcode colors; use master CSS variables (#141a26, #1e293b, accent gold, borders).
+   - Ensure the section merges seamlessly with the grid background of adjacent sections.

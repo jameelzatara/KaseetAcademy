@@ -1,0 +1,100 @@
+GLOBAL AUDIT & MULTI-SECTION IMPLEMENTATION: Post-Hero RTL Audit, Educational Consultant Section, and Authentic Google Testimonials Carousel.
+
+==================================================
+PART 1: GLOBAL ARABIC & RTL AUDIT (POST-HERO SECTIONS)
+==================================================
+- Inspect ALL sections located AFTER the Hero section (Statistics, Reels, Courses, Tracks, Consultant, Testimonials).
+- Ensure ALL copy, titles, subtitles, badges, and button texts are STRICTLY in high-quality Arabic (No English text placeholders).
+- Force dir="rtl" and text-align: right on all section containers. Ensure arrow icons point correctly to the left "←" for forward navigation.
+
+==================================================
+PART 2: REDESIGN OF THE CONSULTANT SECTION
+==================================================
+Redesign the "Free Consultation Section" (قسم المستشارة التعليمية) completely into a luxury, high-converting 2-column grid layout matching master CSS variables.
+
+1. LAYOUT & VISUAL STRUCTURE (RTL):
+   - Right Column (Text & Value Proposition):
+     * Badge Tag: "استشارة مجانية 100%"
+     * Main Title: "محتار في اختيار المسار الأنسب لصوتك أو حضورك الإعلامي؟"
+     * Description: "تواصل مع المستشارة التعليمية لتحديد مستواك الحالي وبناء خطتك التدريبية المخصصة — بدون أي التزام."
+     * Benefit Bullets:
+       ✓ تقييم شامل لمستواك الصوتي والإعلامي
+       ✓ ترشيح المسار والأستاذ الأنسب لأهدافك
+       ✓ خطة عمل واضحة بدون أي التزام مالي
+     * Primary CTA Button (WhatsApp):
+       - Button Text: "تواصل مع المستشارة عبر واتساب" (Include WhatsApp Icon)
+       - Target Link: "https://wa.me/962771052222"
+     * Secondary Link: "استكشف كل البرامج"
+
+   - Left Column (Consultant Visual & Social Proof):
+     * Image Container: Clean portrait frame using `attached_assets/consultant.jpg` with object-fit: cover and a dynamic gold glow.
+     * Floating Status Badge on Image: "🟢 متواجدة الآن للرد على استفساراتك"
+     * Micro Stats Bar: "+600 متدرب" | "100% رضا المتدربين" | "+40 دفعة"
+
+==================================================
+PART 3: AUTHENTIC GOOGLE REVIEWS SECTION (آراء الطلاب)
+==================================================
+Update the "Student Testimonials Section" (قسم آراء طلابنا) to look 100% like real, verified Google Reviews.
+
+1. SECTION HEADER:
+   - Main Title: "آراء طلابنا وقصص نجاحهم"
+   - Subtitle: "أصوات حقيقية عبرت من الشغف إلى الاحتراف"
+   - Google Verified Rating Badge:
+     * Include the official colorful Google SVG logo icon ("G" logo).
+     * Text: "★ ★ ★ ★ ★ 5.0/5 بناءً على تقييمات Google الموثقة"
+
+2. CAROUSEL / CARDS WITH REAL PHOTOS & ORIGINAL FILENAMES:
+   - Use the exact filenames existing in `attached_assets/` as provided (do NOT alter paths):
+   
+   * Card 1:
+     - Avatar Image: `attached_assets/Dina Ra'ad-Yaghnam.png`
+     - Name: "دينا رعد يغنم"
+     - Google Icon Badge: Small Google logo icon next to five gold stars (`★ ★ ★ ★ ★`).
+     - Review Text: "احترافية عالية وأجواء رائعة حقاً. أفضل طاقم عمل متميز لتطريب وتدريب الأداء الصوتي والتمثيل على الإطلاق."
+
+   * Card 2:
+     - Avatar Image: `attached_assets/Hiba Abu Hijleh.png`
+     - Name: "هبة أبو حجلة"
+     - Google Icon Badge: Small Google logo icon next to five gold stars (`★ ★ ★ ★ ★`).
+     - Review Text: "ليس مجرد مكان للتعلم، بل هو مكان لاكتشاف الذات وتطوير المهارات. شكراً جزيلاً لكل من حضر وساعد."
+
+   * Card 3:
+     - Avatar Image: `attached_assets/Abeer Alzoubi.png`
+     - Name: "عبير الزعبي"
+     - Google Icon Badge: Small Google logo icon next to five gold stars (`★ ★ ★ ★ ★`).
+     - Review Text: "تجربة فريدة ومميزة جداً، التطبيق العملي والمتابعة المستمرة صنعت فارقاً كبيراً في حضوري الصوتي."
+
+   * Card 4:
+     - Avatar Image: `attached_assets/al majdalawi.png`
+     - Name: "الـ مجدلاوي"
+     - Google Icon Badge: Small Google logo icon next to five gold stars (`★ ★ ★ ★ ★`).
+     - Review Text: "منظومة تعليمية متكاملة، اهتمام بالتفاصيل ونبرات الصوت بشكل احترافي دقيق."
+
+   * Card 5:
+     - Avatar Image: `attached_assets/Amjad Qasem.png`
+     - Name: "أمجد قاسم"
+     - Google Icon Badge: Small Google logo icon next to five gold stars (`★ ★ ★ ★ ★`).
+     - Review Text: "من أفضل الدورات التي شاركت بها. التوجيهات كانت دقيقة ومباشرة وساعدتني على تجاوز التوتر تماماً."
+
+   * Card 6:
+     - Avatar Image: `attached_assets/Khaled Alkhd.png`
+     - Name: "خالد الخض"
+     - Google Icon Badge: Small Google logo icon next to five gold stars (`★ ★ ★ ★ ★`).
+     - Review Text: "بيئة تحفيزية واحترافية بأعلى المستويات. المدربون يمتلكون خبرة عميقة وشغفاً حقيقياً."
+
+   * Card 7:
+     - Avatar Image: `attached_assets/Fouad Hamati.png`
+     - Name: "فؤاد حمتي"
+     - Google Icon Badge: Small Google logo icon next to five gold stars (`★ ★ ★ ★ ★`).
+     - Review Text: "تدريب عملي ممتازة ومعدات استوديوهات على أعلى مستوى، الاستفادة كانت مضاعفة."
+
+   * Card 8:
+     - Avatar Image: `attached_assets/sahar AL-Assaf.png`
+     - Name: "سحر العساف"
+     - Google Icon Badge: Small Google logo icon next to five gold stars (`★ ★ ★ ★ ★`).
+     - Review Text: "كاسيت أكاديمي أضافت لي الكثير على المستوى الشخصي والمهني في مجال الخطابة والتواصل."
+
+3. CAROUSEL & THEME STYLING:
+   - Format images as smooth circles (60x60px) with object-fit: cover and subtle gold frame borders.
+   - Smooth RTL carousel controls (Left/Right arrows styled with theme CSS variables).
+   - Card styling: Dark elevated navy surface with hover glow matching master CSS variables.
