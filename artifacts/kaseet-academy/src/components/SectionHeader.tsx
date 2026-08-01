@@ -39,7 +39,7 @@ export default function SectionHeader({ badge, heading, description, className, 
         borderRadius: 999,
         background:  'rgba(255,193,7,0.09)',
         border:      '1px solid rgba(255,193,7,0.25)',
-        fontFamily:  'Cairo, sans-serif',
+        fontFamily:  'Tajawal, sans-serif',
         fontWeight:  700,
         fontSize:    12.5,
         color:       '#FFC107',
@@ -57,7 +57,7 @@ export default function SectionHeader({ badge, heading, description, className, 
 
       {/* H2 — 48px / 700 / 1.15lh */}
       <h2 style={{
-        fontFamily:    'Cairo, sans-serif',
+        fontFamily:    'Tajawal, sans-serif',
         fontWeight:    700,
         fontSize:      'clamp(28px, 4vw, 48px)',
         color:         'rgba(252,251,251,0.96)',
@@ -71,7 +71,7 @@ export default function SectionHeader({ badge, heading, description, className, 
       {/* Description — 18px / .72 / 1.9lh */}
       {description && (
         <p style={{
-          fontFamily: 'Cairo, sans-serif',
+          fontFamily: 'Tajawal, sans-serif',
           fontWeight: 400,
           fontSize:   18,
           color:      'rgba(252,251,251,0.72)',

@@ -96,7 +96,7 @@ function TrackCard({ track }: { track: Track }) {
       }}>
         {/* Title — 22px / 600 */}
         <h3 style={{
-          fontFamily: 'Cairo, sans-serif', fontWeight: 600,
+          fontFamily: 'Tajawal, sans-serif', fontWeight: 600,
           fontSize: 22,
           color: hov ? '#FFFFFF' : 'rgba(252,251,251,0.96)',
           lineHeight: 1.3, margin: 0,
@@ -117,7 +117,7 @@ function TrackCard({ track }: { track: Track }) {
 
         {/* Description — 16px / 1.9lh / grows */}
         <p style={{
-          fontFamily: 'Cairo, sans-serif', fontWeight: 400,
+          fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
           fontSize: 16,
           color: 'rgba(252,251,251,0.58)',
           lineHeight: 1.9, margin: 0,
@@ -137,7 +137,7 @@ function TrackCard({ track }: { track: Track }) {
           borderTop: '1px solid rgba(255,255,255,0.07)', marginTop: 'auto',
         }}>
           <span style={{
-            fontFamily: 'Cairo, sans-serif', fontWeight: 600, fontSize: 14,
+            fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 14,
             color: hov ? '#FFC107' : 'rgba(252,251,251,0.42)',
             transition: 'color 0.25s', cursor: 'pointer',
           }}>
@@ -189,7 +189,7 @@ export default function TracksSection() {
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: 40 }}>
           <button style={{
             height: 50, padding: '0 32px', borderRadius: 14,
-            fontFamily: 'Cairo, sans-serif', fontWeight: 600, fontSize: 16,
+            fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 16,
             color: 'rgba(252,251,251,0.60)',
             background: 'transparent',
             border: '1px solid rgba(255,255,255,0.16)',

@@ -63,7 +63,7 @@ function ReviewCard({ review }: { review: Review }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
           <div style={{ textAlign: 'right' }}>
             <div style={{
-              fontFamily: 'Cairo, sans-serif', fontWeight: 700,
+              fontFamily: 'Tajawal, sans-serif', fontWeight: 700,
               fontSize: 15, color: 'rgba(252,251,251,0.95)', lineHeight: 1.3,
             }}>
               {review.name}
@@ -112,7 +112,7 @@ function ReviewCard({ review }: { review: Review }) {
 
       {/* Review text — 16px / 1.9lh */}
       <p style={{
-        fontFamily: 'Cairo, sans-serif', fontWeight: 400,
+        fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
         fontSize: 16,
         color: 'rgba(226,232,240,0.75)',
         lineHeight: 1.9, margin: 0, flex: 1,
@@ -167,7 +167,7 @@ export default function TestimonialsSection() {
           }}>
             <GoogleLogo size={18} />
             <span style={{
-              fontFamily: 'Cairo, sans-serif', fontWeight: 700, fontSize: 13.5,
+              fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 13.5,
               color: 'rgba(252,251,251,0.85)',
               display: 'flex', alignItems: 'center', gap: 6,
             }}>

@@ -241,9 +241,9 @@ export default function ReelsSection() {
                       width: 24, height: 24, borderRadius: '50%',
                       background: '#FFC107', color: '#18202c',
                       display: 'grid', placeItems: 'center',
-                      fontFamily: 'Cairo, sans-serif', fontWeight: 900, fontSize: 12, flexShrink: 0,
+                      fontFamily: 'Tajawal, sans-serif', fontWeight: 900, fontSize: 12, flexShrink: 0,
                     }}>ك</div>
-                    <span style={{ fontFamily: 'Cairo, sans-serif', fontWeight: 600, fontSize: 12.5, color: 'rgba(255,255,255,0.85)' }}>
+                    <span style={{ fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 12.5, color: 'rgba(255,255,255,0.85)' }}>
                       من متدرّبي كاسيت
                     </span>
                   </div>

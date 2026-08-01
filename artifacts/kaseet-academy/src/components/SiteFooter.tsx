@@ -93,7 +93,7 @@ export default function SiteFooter() {
             <img src={logoImg} alt="كاسيت أكاديمي"
               style={{ width: 64, height: 'auto', objectFit: 'contain', display: 'block' }} />
             <p style={{
-              fontFamily: 'Cairo, sans-serif', fontWeight: 400,
+              fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
               fontSize: 14, color: 'rgba(203,213,225,0.60)',
               lineHeight: 1.85, margin: 0, maxWidth: 280,
               textAlign: 'right',
@@ -136,7 +136,7 @@ export default function SiteFooter() {
           {/* Navigation column */}
           <div>
             <h4 style={{
-              fontFamily: 'Cairo, sans-serif', fontWeight: 800,
+              fontFamily: 'Tajawal, sans-serif', fontWeight: 800,
               fontSize: 15, color: '#FFC107', margin: '0 0 18px',
               textAlign: 'right',
             }}>
@@ -146,7 +146,7 @@ export default function SiteFooter() {
               {NAV_LINKS.map(l => (
                 <li key={l.label}>
                   <a href={l.href} style={{
-                    fontFamily: 'Cairo, sans-serif', fontSize: 14,
+                    fontFamily: 'Tajawal, sans-serif', fontSize: 14,
                     color: 'rgba(203,213,225,0.55)',
                     textDecoration: 'none',
                     transition: 'color 0.2s',
@@ -167,7 +167,7 @@ export default function SiteFooter() {
           {/* Contact column */}
           <div>
             <h4 style={{
-              fontFamily: 'Cairo, sans-serif', fontWeight: 800,
+              fontFamily: 'Tajawal, sans-serif', fontWeight: 800,
               fontSize: 15, color: '#FFC107', margin: '0 0 18px',
               textAlign: 'right',
             }}>
@@ -182,7 +182,7 @@ export default function SiteFooter() {
                 rel="noopener noreferrer"
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 10,
-                  fontFamily: 'Cairo, sans-serif', fontWeight: 700, fontSize: 14,
+                  fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 14,
                   padding: '12px 22px', borderRadius: 14,
                   background: 'rgba(37,211,102,0.13)',
                   border: '1px solid rgba(37,211,102,0.32)',
@@ -209,7 +209,7 @@ export default function SiteFooter() {
               </a>
 
               <p style={{
-                fontFamily: 'Cairo, sans-serif', fontSize: 13,
+                fontFamily: 'Tajawal, sans-serif', fontSize: 13,
                 color: 'rgba(203,213,225,0.45)', margin: 0, lineHeight: 1.7,
                 textAlign: 'right',
               }}>
@@ -233,7 +233,7 @@ export default function SiteFooter() {
           flexWrap: 'wrap', gap: 8,
         }}>
           <p style={{
-            fontFamily: 'Cairo, sans-serif', fontSize: 13,
+            fontFamily: 'Tajawal, sans-serif', fontSize: 13,
             color: 'rgba(203,213,225,0.35)', margin: 0,
             textAlign: 'right',
           }}>
