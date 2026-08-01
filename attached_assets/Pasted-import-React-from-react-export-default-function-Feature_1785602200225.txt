@@ -1,0 +1,186 @@
+import React from 'react';
+
+export default function FeaturedCoursesSection() {
+  const secondaryCourses = [
+    {
+      id: 1,
+      badge: "مباشر تفاعلي",
+      title: "دورة التعليق الصوتي أونلاين",
+      instructor: "أ. عمر صايمة",
+      role: "مساق صوتي يوتيوب شامل",
+      image: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&q=80&w=400",
+      avatar: "https://i.pravatar.cc/100?img=33"
+    },
+    {
+      id: 2,
+      badge: "مباشر تفاعلي",
+      title: "دورة فن الخطابة والإلقاء الجماهيري المؤثر",
+      instructor: "د. صهيب الخوالدة",
+      role: "خبير التدريب والتواصل الجماهيري",
+      image: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&q=80&w=400",
+      avatar: "https://i.pravatar.cc/100?img=12"
+    },
+    {
+      id: 3,
+      badge: "وجاهي — مباشر تفاعلي",
+      title: "الدورة المكثفة المذيع المحترف والإعلامي المؤثر",
+      instructor: "أ. رنا عزام",
+      role: "خبيرة التقديم والإعلام",
+      image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=400",
+      avatar: "https://i.pravatar.cc/100?img=47"
+    },
+    {
+      id: 4,
+      badge: "مباشر تفاعلي",
+      title: "دورة فن الخطابة",
+      instructor: "د. صهيب الخوالدة",
+      role: "خبير التدريب والتواصل الجماهيري",
+      image: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&q=80&w=400",
+      avatar: "https://i.pravatar.cc/100?img=12"
+    }
+  ];
+
+  return (
+    <section 
+      dir="rtl" 
+      style={{ fontFamily: "'Tajawal', sans-serif" }} 
+      className="min-h-screen bg-[#111827] text-white p-4 md:p-8"
+    >
+      <div className="max-w-6xl mx-auto space-y-8">
+        
+        {/* === رأس القسم (Header) === */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+          <div className="text-right">
+            <h2 className="text-3xl md:text-4xl font-black text-[#FFC700] mb-2 tracking-tight">
+              دوراتنا المتميّزة
+            </h2>
+            <p className="text-slate-400 text-sm md:text-base font-medium">
+              اختر من بين برامجنا الأكثر طلباً — وجاهي أو أونلاين تفاعلي، ومقاعد محدودة.
+            </p>
+          </div>
+          
+          <div className="flex w-full md:w-auto items-center gap-3">
+            <div className="relative w-full md:w-80">
+              <input 
+                type="text" 
+                placeholder="اكتب اسم الدورة أو المدرب أو التخصص ..." 
+                className="w-full bg-[#1D2636] border border-slate-700/60 rounded-lg py-2.5 px-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-slate-500 transition-colors"
+              />
+            </div>
+            <button className="bg-transparent border border-slate-600 hover:bg-slate-800 text-white text-sm font-bold py-2.5 px-5 rounded-lg whitespace-nowrap transition-colors">
+              تصفح كل الدورات ←
+            </button>
+          </div>
+        </div>
+
+        {/* === الكرت الرئيسي البارز === */}
+        <div className="bg-[#1D2636] border border-slate-700/60 rounded-2xl overflow-hidden relative shadow-2xl">
+          <div className="absolute top-4 left-4 z-20 bg-[#FFC700] text-black font-black text-xs px-3 py-1.5 rounded-md shadow-lg">
+            الأكثر طلباً
+          </div>
+          
+          <div className="flex flex-col lg:flex-row">
+            <div className="flex-1 p-6 md:p-8 flex flex-col justify-between text-right">
+              
+              <div className="flex items-center gap-3 mb-4">
+                <div className="bg-[#FFC700] text-black text-center px-4 py-1.5 rounded-lg font-black shadow-md">
+                  <span className="block text-[10px] uppercase tracking-wider opacity-80">رسوم الدورة</span>
+                  <span className="text-sm font-extrabold dir-ltr inline-block">JD 218</span>
+                </div>
+                <div className="bg-[#26334D] text-slate-200 text-center px-4 py-1.5 rounded-lg border border-slate-600/50">
+                  <span className="block text-[10px] text-slate-400">التدريب</span>
+                  <span className="text-xs font-bold">8 لقاءات - 16 ساعة</span>
+                </div>
+              </div>
+
+              <div>
+                <p className="text-slate-400 text-xs font-medium mb-1">
+                  تدريب وجاهي بالكامل داخل استوديو كاست — عمان
+                </p>
+                <h3 className="text-2xl md:text-3xl font-black text-white mb-1 leading-tight">
+                  أساسيات التعليق والأداء الصوتي
+                </h3>
+                <h4 className="text-[#FFC700] font-bold text-sm mb-3">
+                  المرحلة التأسيسية
+                </h4>
+                <p className="text-slate-300 text-sm leading-relaxed mb-6 max-w-2xl font-medium">
+                  منهج متكامل لبناء أداء صوتي احترافي من الصفر — من ضبط مخارج الحروف والتحكم بالتنفس والتطبيقات الصوتية، إلى بناء ملفك الصوتي الجاهز لسوق العمل، بإشراف مباشر من المدربة يسار عبده.
+                </p>
+              </div>
+
+              <div className="bg-[#141C2A] p-3 rounded-xl border border-slate-700/50 flex flex-wrap items-center gap-2 mb-6 text-xs text-slate-300">
+                <span className="bg-red-500 text-white font-extrabold px-2 py-0.5 rounded text-[11px]">
+                  🔥 اكتمل 50% — متبقي 5 مقاعد فقط!
+                </span>
+                <span className="font-medium">تبدأ 5 أغسطس 2026 — الاثنين والأربعاء | 5:00 — 8:00 مساءً</span>
+              </div>
+
+              <div className="flex items-center justify-between border-t border-slate-800 pt-4 mt-auto">
+                <div className="flex items-center gap-3">
+                  <img 
+                    src="https://i.pravatar.cc/100?img=44" 
+                    alt="يسار عبده" 
+                    className="w-10 h-10 rounded-full border-2 border-[#FFC700] object-cover"
+                  />
+                  <div>
+                    <h5 className="text-white font-bold text-sm">يسار عبده</h5>
+                    <p className="text-slate-400 text-[11px] font-medium">مدربة الأداء الصوتي</p>
+                  </div>
+                </div>
+                <button className="bg-[#FFC700] hover:bg-yellow-400 text-black font-black text-xs md:text-sm px-6 py-2.5 rounded-full shadow-lg transition-transform active:scale-95">
+                  سجّل الآن
+                </button>
+              </div>
+            </div>
+
+            <div className="lg:w-5/12 relative min-h-[260px] lg:min-h-full">
+              <img 
+                src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80&w=800" 
+                alt="صورة الدورة" 
+                className="w-full h-full object-cover object-center"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-[#1D2636] via-transparent to-transparent opacity-60"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* === شبكة الكروت الأربعة === */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {secondaryCourses.map((course) => (
+            <div 
+              key={course.id} 
+              className="bg-[#1D2636] border border-slate-700/60 rounded-xl overflow-hidden flex flex-col justify-between hover:border-slate-500 transition-all shadow-lg group cursor-pointer"
+            >
+              <div className="relative h-48 overflow-hidden">
+                <span className="absolute top-3 right-3 z-10 bg-[#FFC700] text-black font-bold text-[10px] px-2.5 py-1 rounded-md shadow-md">
+                  • {course.badge}
+                </span>
+                <img 
+                  src={course.image} 
+                  alt={course.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1D2636] via-[#1D2636]/60 to-transparent"></div>
+                <h3 className="absolute bottom-3 right-3 left-3 text-white font-bold text-sm leading-snug text-right">
+                  {course.title}
+                </h3>
+              </div>
+              <div className="p-3 bg-[#17202E] flex items-center gap-2.5 border-t border-slate-800">
+                <img 
+                  src={course.avatar} 
+                  alt={course.instructor} 
+                  className="w-8 h-8 rounded-full border border-[#FFC700] object-cover"
+                />
+                <div className="text-right">
+                  <h4 className="text-white font-bold text-xs">{course.instructor}</h4>
+                  <p className="text-slate-400 text-[10px] font-medium">{course.role}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+      </div>
+    </section>
+  );
+}
