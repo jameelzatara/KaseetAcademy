@@ -10,7 +10,7 @@ const REEL_URLS = [
 
 const CARD_W = 300;
 const GAP    = 40;
-const CARD_H = 580;   // increased height for internal breathing room
+const CARD_H = 580;
 const N      = REEL_URLS.length;
 
 declare global {
@@ -44,13 +44,11 @@ function cardStyle(offset: number): CSSProperties {
   const tx  = offset * (CARD_W + GAP);
   const abs = Math.abs(offset);
 
-  // ── Active center card ──────────────────────────────────
   if (abs === 0) return {
     transform:     `translateX(${tx}px) scale(1.0)`,
     opacity:       1,
     zIndex:        5,
     border:        '2px solid rgba(255,193,7,0.88)',
-    // premium yellow neon aura ONLY on center card
     boxShadow:     [
       '0 0 0 1px rgba(255,193,7,0.22)',
       '0 0 32px 4px rgba(255,193,7,0.28)',
@@ -63,7 +61,6 @@ function cardStyle(offset: number): CSSProperties {
     borderRadius:  24,
   };
 
-  // ── Side cards (±1) ─────────────────────────────────────
   if (abs === 1) return {
     transform:     `translateX(${tx}px) scale(0.90)`,
     opacity:       0.45,
@@ -76,7 +73,6 @@ function cardStyle(offset: number): CSSProperties {
     borderRadius:  24,
   };
 
-  // ── Off-stage cards (hidden) ─────────────────────────────
   return {
     transform:     `translateX(${tx}px) scale(0.72)`,
     opacity:       0,
@@ -131,29 +127,11 @@ export default function ReelsSection() {
   }, [cur]);
 
   return (
-    <section
-      className="relative overflow-hidden text-center"
-      style={{
-        backgroundColor: '#1e293b',
-        backgroundImage: [
-          'linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)',
-          'linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)',
-        ].join(', '),
-        backgroundSize: '44px 44px',
-        padding: 'clamp(60px,8vh,100px) 0 clamp(80px,10vh,120px)',
-      }}
-    >
-      {/* Golden top glow */}
+    <section className="section-block relative overflow-hidden text-center">
+      {/* Subtle warm glow at top of section */}
       <div className="absolute inset-x-0 top-0 pointer-events-none" style={{
         height: 160,
-        background: 'linear-gradient(to bottom, rgba(255,193,7,0.12) 0%, transparent 100%)',
-      }} />
-
-      {/* Radial warm center */}
-      <div className="absolute pointer-events-none" style={{
-        top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
-        width: 640, height: 640, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(255,193,7,0.05), transparent 58%)',
+        background: 'linear-gradient(to bottom, rgba(255,193,7,0.08) 0%, transparent 100%)',
       }} />
 
       {/* Badge */}
@@ -189,15 +167,15 @@ export default function ReelsSection() {
           color: 'rgba(252,251,251,0.62)',
           maxWidth: 640,
           marginBottom: 'clamp(36px,5vh,56px)',
+          textAlign: 'center',
         }}
       >
         مقاطع حيّة من ورشنا وأعمال متدربينا ومدربينا على إنستغرام — اسمع الفرق قبل أن تسجّل.
       </p>
 
-      {/* ── Carousel wrapper — arrows outside stage via padding ── */}
+      {/* ── Carousel — arrows outside stage via padding ── */}
       <div className="relative mx-auto" style={{ maxWidth: 1100, padding: '0 72px' }}>
 
-        {/* Prev arrow — RTL visual right → previous */}
         <button
           onClick={() => go(-1)}
           aria-label="السابق"
@@ -208,7 +186,6 @@ export default function ReelsSection() {
           <ChevronL />
         </button>
 
-        {/* Next arrow — RTL visual left → next */}
         <button
           onClick={() => go(1)}
           aria-label="التالي"
@@ -219,12 +196,8 @@ export default function ReelsSection() {
           <ChevronR />
         </button>
 
-        {/* ── Cards stage ── */}
-        <div style={{
-          position: 'relative',
-          overflow: 'hidden',
-          height: CARD_H + 20,   // stage height includes card + small clearance
-        }}>
+        {/* Stage */}
+        <div style={{ position: 'relative', overflow: 'hidden', height: CARD_H + 20 }}>
           {REEL_URLS.map((url, i) => {
             const off     = getOffset(i, cur);
             const cstyle  = cardStyle(off);
@@ -240,7 +213,7 @@ export default function ReelsSection() {
                   left:       '50%',
                   marginLeft: -(CARD_W / 2),
                   width:      CARD_W,
-                  overflow:   'hidden',         // clips embed within rounded corners
+                  overflow:   'hidden',
                   background: '#141e30',
                   display:    'flex',
                   flexDirection: 'column',
@@ -248,15 +221,12 @@ export default function ReelsSection() {
                   ...cstyle,
                 }}
               >
-                {/* ── Top breathing gap (prevents embed from clipping at top rounded corner) ── */}
+                {/* Top breathing gap */}
                 <div style={{ height: 10, flexShrink: 0, background: '#141e30' }} />
 
-                {/* ── Instagram embed ── */}
+                {/* Instagram embed */}
                 <div className="reel-embed-wrap" style={{
-                  flex: 1,
-                  minHeight: 490,
-                  background: '#000',
-                  overflow: 'hidden',
+                  flex: 1, minHeight: 490, background: '#000', overflow: 'hidden',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
                   <blockquote
@@ -267,7 +237,6 @@ export default function ReelsSection() {
                   />
                 </div>
 
-                {/* ── Ambient bottom shadow on active card ── */}
                 {isCenter && (
                   <div style={{
                     position: 'absolute', bottom: 46, left: 0, right: 0, height: 60,
@@ -276,14 +245,16 @@ export default function ReelsSection() {
                   }} />
                 )}
 
-                {/* ── Footer strip — generous padding so text doesn't touch rounded corner ── */}
+                {/* Footer strip */}
                 <div style={{
                   padding: '14px 16px 16px',
                   background: 'rgba(14,20,34,0.98)',
                   borderTop: '1px solid rgba(255,255,255,0.07)',
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                   flexShrink: 0,
+                  direction: 'rtl',
                 }}>
+                  {/* Label first (RIGHT in RTL) */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <div style={{
                       width: 24, height: 24, borderRadius: '50%',
@@ -299,6 +270,7 @@ export default function ReelsSection() {
                       من متدرّبي كاسيت
                     </span>
                   </div>
+                  {/* Stars after text (LEFT) */}
                   <span style={{ color: '#FFC107', fontSize: 12, letterSpacing: 2 }}>★★★★★</span>
                 </div>
               </div>
@@ -306,7 +278,7 @@ export default function ReelsSection() {
           })}
         </div>
 
-        {/* ── Dot indicators — comfortable spacing below stage ── */}
+        {/* Dot indicators */}
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           gap: 8, marginTop: 28,

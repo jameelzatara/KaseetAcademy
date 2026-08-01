@@ -39,24 +39,41 @@ function GoogleLogo({ size = 16 }: { size?: number }) {
 function ReviewCard({ review }: { review: Review }) {
   return (
     <div style={{
-      background: 'rgba(255,255,255,0.04)',
-      backdropFilter: 'blur(14px)',
+      background:           'rgba(255,255,255,0.04)',
+      backdropFilter:       'blur(14px)',
       WebkitBackdropFilter: 'blur(14px)',
-      border: '1px solid rgba(255,255,255,0.09)',
-      borderRadius: 20,
-      padding: 'clamp(20px,2.2vw,28px)',
-      display: 'flex', flexDirection: 'column', gap: 14,
-      textAlign: 'right',
-      flexShrink: 0,
-      width: 'clamp(290px,28vw,340px)',
-      boxShadow: '0 6px 28px rgba(0,0,0,0.30)',
-      cursor: 'default',
-      direction: 'rtl',
+      border:               '1px solid rgba(255,255,255,0.09)',
+      borderRadius:         20,
+      padding:              'clamp(20px,2.2vw,28px)',
+      display:              'flex',
+      flexDirection:        'column',
+      gap:                  14,
+      textAlign:            'right',
+      flexShrink:           0,
+      width:                'clamp(290px,28vw,340px)',
+      boxShadow:            '0 6px 28px rgba(0,0,0,0.30)',
+      cursor:               'default',
+      direction:            'rtl',
     }}>
-      {/* Top row: avatar + name + Google badge */}
+      {/* Top row — name+avatar RIGHT, Google badge LEFT */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-        {/* Avatar + name — right side in RTL */}
+
+        {/* Name + stars — first in DOM → RIGHT in RTL */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          {/* Name text first (RIGHT), avatar image after (LEFT) — icon AFTER Arabic text */}
+          <div style={{ textAlign: 'right' }}>
+            <div style={{
+              fontFamily: 'Tajawal, sans-serif', fontWeight: 700,
+              fontSize: 14.5, color: 'rgba(252,251,251,0.95)', lineHeight: 1.3,
+            }}>{review.name}</div>
+            {/* Stars use LTR direction for correct ★ order */}
+            <div style={{ display: 'flex', gap: 2, alignItems: 'center', direction: 'ltr', marginTop: 2 }}>
+              {[...Array(5)].map((_, i) => (
+                <span key={i} style={{ color: '#FFC107', fontSize: 12, lineHeight: 1 }}>★</span>
+              ))}
+            </div>
+          </div>
+          {/* Avatar — AFTER Arabic name text → LEFT side in RTL */}
           <img
             src={review.avatar}
             alt={review.name}
@@ -69,20 +86,9 @@ function ReviewCard({ review }: { review: Review }) {
             }}
             onError={e => { (e.currentTarget as HTMLImageElement).style.background = '#2d3748'; }}
           />
-          <div>
-            <div style={{
-              fontFamily: 'Tajawal, sans-serif', fontWeight: 700,
-              fontSize: 14.5, color: 'rgba(252,251,251,0.95)', lineHeight: 1.3,
-            }}>{review.name}</div>
-            <div style={{ display: 'flex', gap: 2, alignItems: 'center', direction: 'ltr', marginTop: 2 }}>
-              {[...Array(5)].map((_, i) => (
-                <span key={i} style={{ color: '#FFC107', fontSize: 12, lineHeight: 1 }}>★</span>
-              ))}
-            </div>
-          </div>
         </div>
 
-        {/* Google badge — left side */}
+        {/* Google badge — second → LEFT in RTL (justified away from name) */}
         <div style={{
           display: 'flex', alignItems: 'center', gap: 5,
           padding: '4px 10px', borderRadius: 99,
@@ -108,6 +114,7 @@ function ReviewCard({ review }: { review: Review }) {
         fontSize: 'clamp(13px,1.2vw,14.5px)',
         color: 'rgba(226,232,240,0.78)',
         lineHeight: 1.9, margin: 0, flex: 1,
+        textAlign: 'right',
       }}>
         "{review.text}"
       </p>
@@ -116,51 +123,44 @@ function ReviewCard({ review }: { review: Review }) {
 }
 
 export default function TestimonialsSection() {
-  // Duplicate for seamless infinite loop
   const all = [...REVIEWS, ...REVIEWS];
 
   return (
-    <section className="relative overflow-hidden" style={{
-      backgroundColor: '#1e293b',
-      backgroundImage: [
-        'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px)',
-        'linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)',
-      ].join(', '),
-      backgroundSize: '85px 85px',
-      padding: 'clamp(60px,8vh,100px) 0 clamp(70px,9vh,110px)',
-    }}>
-      {/* top glow */}
+    <section className="section-block relative overflow-hidden" style={{ direction: 'rtl' }}>
+      {/* Subtle top glow */}
       <div className="absolute pointer-events-none" style={{
         top: -60, left: '50%', transform: 'translateX(-50%)',
         width: '70%', height: 200,
         background: 'radial-gradient(ellipse at top, rgba(255,193,7,0.07) 0%, transparent 70%)',
       }} />
 
-      {/* Edge fade masks */}
+      {/* Edge fade masks — colour matches global page canvas */}
       <div className="absolute inset-y-0 right-0 pointer-events-none" style={{
         width: 120, zIndex: 10,
-        background: 'linear-gradient(to left, #1e293b 0%, transparent 100%)',
+        background: 'linear-gradient(to left, var(--page-mid) 0%, transparent 100%)',
       }} />
       <div className="absolute inset-y-0 left-0 pointer-events-none" style={{
         width: 120, zIndex: 10,
-        background: 'linear-gradient(to right, #1e293b 0%, transparent 100%)',
+        background: 'linear-gradient(to right, var(--page-mid) 0%, transparent 100%)',
       }} />
 
       <div className="relative z-10" style={{ maxWidth: 1160, margin: '0 auto' }}>
 
-        {/* Header */}
+        {/* Section header */}
         <div style={{
           padding: '0 clamp(16px,3vw,32px)',
           marginBottom: 'clamp(28px,3.5vh,44px)',
           textAlign: 'right',
           display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
           flexWrap: 'wrap', gap: 16,
+          direction: 'rtl',
         }}>
-          <div>
+          <div style={{ textAlign: 'right' }}>
             <h2 style={{
               fontFamily: 'Tajawal, sans-serif', fontWeight: 900,
               fontSize: 'clamp(24px,3.5vw,42px)',
               color: 'rgba(252,251,251,0.96)', lineHeight: 1.2, margin: '0 0 8px',
+              textAlign: 'right',
             }}>
               آراء طلابنا{' '}
               <span style={{ color: '#FFC107' }}>وقصص نجاحهم</span>
@@ -169,6 +169,7 @@ export default function TestimonialsSection() {
               fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
               fontSize: 'clamp(13px,1.3vw,15.5px)',
               color: 'rgba(226,232,240,0.62)', margin: 0,
+              textAlign: 'right',
             }}>
               أصوات حقيقية عبرت من الشغف إلى الاحتراف
             </p>
@@ -203,7 +204,7 @@ export default function TestimonialsSection() {
           display: 'flex',
           gap: 'clamp(16px,2vw,22px)',
           width: 'max-content',
-          direction: 'ltr',         // marquee goes L→R so RTL cards flow naturally
+          direction: 'ltr',  // marquee scroll direction is LTR; cards remain RTL internally
         }}>
           {all.map((r, i) => (
             <ReviewCard key={`${r.id}-${i}`} review={r} />

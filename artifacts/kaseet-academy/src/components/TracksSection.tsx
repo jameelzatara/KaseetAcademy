@@ -11,7 +11,6 @@ interface Track {
   image: string;
 }
 
-// Exact text content as specified
 const TRACKS: Track[] = [
   {
     id: 1,
@@ -32,15 +31,6 @@ const TRACKS: Track[] = [
     image: publicSpeakingImg,
   },
 ];
-
-const sectionBg = {
-  backgroundColor: '#1e293b',
-  backgroundImage: [
-    'linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)',
-    'linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)',
-  ].join(', '),
-  backgroundSize: '85px 85px',
-} as const;
 
 function TrackCard({ track }: { track: Track }) {
   const [hovered, setHovered] = useState(false);
@@ -67,7 +57,7 @@ function TrackCard({ track }: { track: Track }) {
         direction:  'rtl',
       }}
     >
-      {/* ── Cover image — object-fit: cover for full face/scene visibility ── */}
+      {/* Cover image — object-fit: cover, 4:3 ratio for full scene visibility */}
       <div style={{ position: 'relative', width: '100%', aspectRatio: '4/3', overflow: 'hidden', flexShrink: 0 }}>
         <img
           src={track.image}
@@ -82,13 +72,11 @@ function TrackCard({ track }: { track: Track }) {
             transform:      hovered ? 'scale(1.05)' : 'scale(1.0)',
           }}
         />
-        {/* Bottom gradient blend into card body */}
         <div style={{
           position: 'absolute', bottom: 0, left: 0, right: 0, height: 60,
           background: 'linear-gradient(to bottom, transparent, rgba(18,28,46,0.85))',
           pointerEvents: 'none',
         }} />
-        {/* Gold shimmer tint on hover */}
         {hovered && (
           <div style={{
             position: 'absolute', inset: 0,
@@ -98,7 +86,7 @@ function TrackCard({ track }: { track: Track }) {
         )}
       </div>
 
-      {/* ── Card body — flex:1 enforces equal heights across all 3 cards ── */}
+      {/* Card body */}
       <div style={{
         padding:       'clamp(18px,2.2vw,26px)',
         display:       'flex',
@@ -107,45 +95,50 @@ function TrackCard({ track }: { track: Track }) {
         textAlign:     'right',
         flex:          1,
       }}>
+        {/* Title — right-aligned */}
         <h3 style={{
           fontFamily: 'Tajawal, sans-serif', fontWeight: 900,
           fontSize:   'clamp(17px,1.8vw,21px)',
           color:      hovered ? '#FFFFFF' : 'rgba(252,251,251,0.96)',
           lineHeight: 1.3, margin: 0,
           transition: 'color 0.25s',
+          textAlign:  'right',
         }}>
           {track.title}
         </h3>
 
-        {/* Animated gold accent line */}
+        {/* Animated gold accent — aligned right */}
         <div style={{
           height:     2,
           borderRadius: 2,
           background: hovered ? '#FFC107' : 'rgba(255,193,7,0.35)',
           width:      hovered ? 56 : 36,
           transition: 'background 0.3s, width 0.3s',
-          alignSelf:  'flex-end',
+          alignSelf:  'flex-start',   /* flex-start = RIGHT in RTL */
         }} />
 
+        {/* Description — right-aligned */}
         <p style={{
           fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
           fontSize:   'clamp(13px,1.3vw,14.5px)',
           color:      'rgba(252,251,251,0.60)',
           lineHeight: 1.8, margin: 0, flex: 1,
+          textAlign:  'right',
         }}>
           {track.desc}
         </p>
 
-        {/* CTA — pinned to bottom via marginTop:auto on the flex parent */}
+        {/* CTA — anchored right (flex-start = RIGHT in RTL); label first, arrow after */}
         <div style={{
           display:    'flex',
           alignItems: 'center',
-          justifyContent: 'flex-end',
+          justifyContent: 'flex-start',   /* RTL flex-start = RIGHT edge */
           gap:        6,
           paddingTop: 6,
           borderTop:  '1px solid rgba(255,255,255,0.07)',
           marginTop:  'auto',
         }}>
+          {/* Label first in DOM → RIGHT in RTL */}
           <span style={{
             fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 13.5,
             color:     hovered ? '#FFC107' : 'rgba(252,251,251,0.42)',
@@ -153,6 +146,7 @@ function TrackCard({ track }: { track: Track }) {
           }}>
             اكتشف المسار
           </span>
+          {/* Arrow after label → LEFT in RTL (icon after Arabic text) */}
           <span style={{
             fontSize:   14,
             color:      hovered ? '#FFC107' : 'rgba(252,251,251,0.32)',
@@ -170,10 +164,7 @@ function TrackCard({ track }: { track: Track }) {
 
 export default function TracksSection() {
   return (
-    <section className="relative overflow-hidden" style={{
-      ...sectionBg,
-      padding: 'clamp(60px,8vh,100px) 0 clamp(70px,9vh,110px)',
-    }}>
+    <section className="section-block relative overflow-hidden">
       <div className="absolute pointer-events-none" style={{
         top: -80, left: '50%', transform: 'translateX(-50%)',
         width: '80%', height: 200,
@@ -182,7 +173,7 @@ export default function TracksSection() {
 
       <div className="relative z-10 mx-auto px-4" style={{ maxWidth: 1160 }}>
 
-        {/* ── Section header — strict RTL ── */}
+        {/* Section header — RTL */}
         <div style={{
           display: 'flex', alignItems: 'flex-end',
           justifyContent: 'space-between',
@@ -205,6 +196,7 @@ export default function TracksSection() {
               fontFamily: 'Tajawal, sans-serif', fontWeight: 900,
               fontSize: 'clamp(26px,4vw,46px)',
               color: 'rgba(252,251,251,0.96)', lineHeight: 1.2, margin: 0,
+              textAlign: 'right',
             }}>
               كل صوت يستحق{' '}
               <span style={{ color: '#FFC107' }}>مساراً احترافياً</span>
@@ -214,6 +206,7 @@ export default function TracksSection() {
               fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
               fontSize: 'clamp(13px,1.4vw,16px)',
               color: '#E2E8F0', lineHeight: 1.8, margin: '10px 0 0', maxWidth: 580,
+              textAlign: 'right',
             }}>
               اختر من بين برامجنا الأكثر طلباً — كل مسار صُمِّم ليأخذك خطوة أبعد في عالم الإعلام والصوت والخطابة.
             </p>
@@ -233,7 +226,7 @@ export default function TracksSection() {
           </button>
         </div>
 
-        {/* ── 3-column grid — align-items:stretch enforces equal card heights ── */}
+        {/* 3-column grid */}
         <div className="tracks-grid" style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',

@@ -26,15 +26,6 @@ const FAQS: FAQItem[] = [
   },
 ];
 
-const sectionBg = {
-  backgroundColor: '#1e293b',
-  backgroundImage: [
-    'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px)',
-    'linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)',
-  ].join(', '),
-  backgroundSize: '85px 85px',
-} as const;
-
 function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
   const [open, setOpen] = useState(false);
 
@@ -49,7 +40,6 @@ function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
       transition: 'background 0.3s, border 0.3s',
       boxShadow: open ? '0 4px 24px rgba(255,193,7,0.06)' : '0 2px 12px rgba(0,0,0,0.20)',
     }}>
-      {/* Header button */}
       <button
         onClick={() => setOpen(v => !v)}
         style={{
@@ -62,6 +52,7 @@ function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
           cursor: 'pointer',
           direction: 'rtl',
           gap: 16,
+          textAlign: 'right',
         }}
       >
         {/* Question text — first in DOM → RIGHT side in RTL */}
@@ -77,7 +68,7 @@ function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
           {`${index + 1}. ${item.q}`}
         </span>
 
-        {/* Icon — ms-auto pushes it to the far inline-end (LEFT in RTL) */}
+        {/* ± icon — marginInlineStart:auto pushes it to far inline-end (LEFT in RTL) */}
         <span style={{
           flexShrink: 0,
           marginInlineStart: 'auto',
@@ -90,12 +81,9 @@ function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
           fontSize: 20, fontWeight: 300, lineHeight: 1,
           transition: 'all 0.25s',
           transform: open ? 'rotate(45deg)' : 'rotate(0)',
-        }}>
-          +
-        </span>
+        }}>+</span>
       </button>
 
-      {/* Body */}
       <div style={{
         maxHeight: open ? '500px' : '0',
         overflow: 'hidden',
@@ -127,17 +115,14 @@ function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
 
 export default function FAQSection() {
   return (
-    <section id="faq" className="relative overflow-hidden"
-      style={{ ...sectionBg, padding: 'clamp(60px,8vh,100px) 0 clamp(70px,9vh,110px)' }}
-    >
-      {/* top glow */}
+    <section id="faq" className="section-block relative overflow-hidden">
+      {/* Subtle top glow */}
       <div className="absolute pointer-events-none" style={{
         top: -60, left: '50%', transform: 'translateX(-50%)',
         width: '70%', height: 200,
         background: 'radial-gradient(ellipse at top, rgba(255,193,7,0.07) 0%, transparent 70%)',
       }} />
 
-      {/* Constrained container — max-w-3xl centered */}
       <div className="relative z-10 mx-auto px-4" style={{ maxWidth: 820, direction: 'rtl' }}>
 
         {/* Header */}
@@ -164,6 +149,7 @@ export default function FAQSection() {
             fontSize: 'clamp(24px,3.5vw,42px)',
             color: 'rgba(252,251,251,0.96)',
             lineHeight: 1.2, margin: '0 0 10px',
+            textAlign: 'right',
           }}>
             الأسئلة الشائعة{' '}
             <span style={{ color: '#FFC107' }}>حول برامج كاسيت</span>
@@ -173,6 +159,7 @@ export default function FAQSection() {
             fontSize: 'clamp(13px,1.3vw,15.5px)',
             color: 'rgba(226,232,240,0.58)',
             margin: 0,
+            textAlign: 'right',
           }}>
             إجابات واضحة على أكثر ما يسأل عنه طلابنا قبل التسجيل.
           </p>

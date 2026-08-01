@@ -25,7 +25,7 @@ const SOCIAL = [
     href: 'https://jo.linkedin.com/company/kaseetmedia',
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" width="19" height="19">
-        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 23.2 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
       </svg>
     ),
   },
@@ -69,8 +69,11 @@ function WhatsAppIcon({ size = 18 }: { size?: number }) {
 export default function SiteFooter() {
   return (
     <footer id="footer" style={{
-      background: '#0a1224',
-      borderTop: '1px solid rgba(255,193,7,0.16)',
+      /* Semi-transparent so the global gradient shows through, but still distinguishes footer */
+      background: 'rgba(10, 15, 28, 0.88)',
+      backdropFilter: 'blur(16px)',
+      WebkitBackdropFilter: 'blur(16px)',
+      borderTop: '1px solid rgba(255,193,7,0.14)',
       padding: '4rem 1.5rem 2rem',
       direction: 'rtl',
       textAlign: 'right',
@@ -93,11 +96,12 @@ export default function SiteFooter() {
               fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
               fontSize: 14, color: 'rgba(203,213,225,0.60)',
               lineHeight: 1.85, margin: 0, maxWidth: 280,
+              textAlign: 'right',
             }}>
               كاسيت أكاديمي — الأكاديمية الأولى في الشرق الأوسط لتدريب الأداء الصوتي، التعليق، البودكاست، والإعلام المرئي.
             </p>
 
-            {/* Social icons */}
+            {/* Social icons — RTL row flows right→left */}
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 4 }}>
               {SOCIAL.map(s => (
                 <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" title={s.label}
@@ -134,6 +138,7 @@ export default function SiteFooter() {
             <h4 style={{
               fontFamily: 'Tajawal, sans-serif', fontWeight: 800,
               fontSize: 15, color: '#FFC107', margin: '0 0 18px',
+              textAlign: 'right',
             }}>
               روابط سريعة
             </h4>
@@ -145,15 +150,13 @@ export default function SiteFooter() {
                     color: 'rgba(203,213,225,0.55)',
                     textDecoration: 'none',
                     transition: 'color 0.2s',
-                    // direction:rtl inherited from footer; flex row goes right→left
                     display: 'flex', alignItems: 'center', gap: 6,
                   }}
                     onMouseEnter={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, { color: '#FFC107' })}
                     onMouseLeave={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, { color: 'rgba(203,213,225,0.55)' })}
                   >
-                    {/* Label first in DOM → RIGHT side in RTL (visual anchor) */}
+                    {/* Label first → RIGHT in RTL; arrow last → LEFT (inline-end) */}
                     {l.label}
-                    {/* Arrow second → sits at inline-end (LEFT), points inward */}
                     <span style={{ color: 'rgba(255,193,7,0.50)', fontSize: 10, marginInlineStart: 'auto' }}>←</span>
                   </a>
                 </li>
@@ -166,12 +169,13 @@ export default function SiteFooter() {
             <h4 style={{
               fontFamily: 'Tajawal, sans-serif', fontWeight: 800,
               fontSize: 15, color: '#FFC107', margin: '0 0 18px',
+              textAlign: 'right',
             }}>
               تواصل معنا
             </h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'flex-start' }}>
 
-              {/* WhatsApp CTA — prominent interactive button */}
+              {/* WhatsApp CTA — label first (RIGHT in RTL), icon after (LEFT) */}
               <a
                 href="https://wa.me/962771052222"
                 target="_blank"
@@ -187,6 +191,7 @@ export default function SiteFooter() {
                   transition: 'background 0.2s, box-shadow 0.2s, transform 0.15s',
                   width: 'fit-content',
                   boxShadow: '0 2px 12px rgba(37,211,102,0.10)',
+                  direction: 'rtl',
                 }}
                 onMouseEnter={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, {
                   background: 'rgba(37,211,102,0.22)',
@@ -199,13 +204,14 @@ export default function SiteFooter() {
                   transform: 'none',
                 })}
               >
-                <WhatsAppIcon size={18} />
                 <span>واتساب — تواصل معنا</span>
+                <WhatsAppIcon size={18} />
               </a>
 
               <p style={{
                 fontFamily: 'Tajawal, sans-serif', fontSize: 13,
                 color: 'rgba(203,213,225,0.45)', margin: 0, lineHeight: 1.7,
+                textAlign: 'right',
               }}>
                 عمّان، الأردن<br />
                 استوديوهات كاسيت ميديا
@@ -229,6 +235,7 @@ export default function SiteFooter() {
           <p style={{
             fontFamily: 'Tajawal, sans-serif', fontSize: 13,
             color: 'rgba(203,213,225,0.35)', margin: 0,
+            textAlign: 'right',
           }}>
             جميع الحقوق محفوظة © كاسيت ميديا 2026
           </p>

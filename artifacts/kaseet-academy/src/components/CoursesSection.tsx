@@ -10,12 +10,11 @@ import coverRana        from '@assets/cover-arabic-course_1785428982698.png';
 import instructorRana   from '@assets/trainer-rana-azzam_1785428982698.JPG';
 import coverPresenter   from '@assets/presenter-bg.png';
 
-// ── Data types ────────────────────────────────────────────
 interface Course {
   id: number;
   title: string;
   subtitle: string;
-  badge: string;           // e.g. "الاكثر طلباً"
+  badge: string;
   types: string[];
   price: string;
   priceLabel: string;
@@ -111,16 +110,7 @@ const COURSES: Course[] = [
   },
 ];
 
-// ── Shared styles ──────────────────────────────────────────
-const sectionBg = {
-  backgroundColor: '#1e293b',
-  backgroundImage: [
-    'linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)',
-    'linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)',
-  ].join(', '),
-  backgroundSize: '85px 85px',
-} as const;
-
+// ── Shared glass card style ────────────────────────────────
 const glassCard = {
   background:           'rgba(255,255,255,0.04)',
   backdropFilter:       'blur(14px)',
@@ -147,10 +137,9 @@ function TypeBadge({ label }: { label: string }) {
   );
 }
 
-// ── Featured card ──────────────────────────────────────────
-// RTL: in <html dir="rtl"> flexbox row flows right→left.
-//   First child  → appears on the RIGHT  (text/info)
-//   Second child → appears on the LEFT   (cover image)
+// ── Featured Card (Course 1) ───────────────────────────────
+// RTL flex: first child → RIGHT, second child → LEFT
+// Info text on RIGHT, cover image on LEFT
 function FeaturedCard({ course }: { course: Course }) {
   return (
     <div style={{
@@ -164,20 +153,23 @@ function FeaturedCard({ course }: { course: Course }) {
       direction:      'rtl',
     }}>
 
-      {/* ── 1st child → RIGHT side (info/text) ── */}
+      {/* ── 1st child → RIGHT (info/text) ── */}
       <div style={{
-        flex:          1,
-        padding:       'clamp(24px,3vw,40px)',
-        display:       'flex',
-        flexDirection: 'column',
-        justifyContent:'center',
-        gap:           16,
-        textAlign:     'right',
+        flex:           1,
+        padding:        'clamp(24px,3vw,40px)',
+        display:        'flex',
+        flexDirection:  'column',
+        justifyContent: 'center',
+        gap:            16,
+        textAlign:      'right',
       }}>
 
-        {/* Row 1: category badge (right) + type badges (left) */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
-          {/* Category badge — right side */}
+        {/* Row 1: category badge (start/right) + type badges (end/left) */}
+        <div style={{
+          display: 'flex', alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap', gap: 8,
+        }}>
           <span style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
             padding: '4px 13px', borderRadius: 99,
@@ -187,7 +179,6 @@ function FeaturedCard({ course }: { course: Course }) {
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#FFC107', boxShadow: '0 0 6px rgba(255,193,7,0.8)', flexShrink: 0 }} />
             {course.badge}
           </span>
-          {/* Type badges — left side */}
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
             {course.types.map(t => <TypeBadge key={t} label={t} />)}
           </div>
@@ -197,6 +188,7 @@ function FeaturedCard({ course }: { course: Course }) {
         <div style={{
           fontFamily: 'Tajawal, sans-serif', fontSize: 13,
           color: 'rgba(252,251,251,0.50)', fontWeight: 500,
+          textAlign: 'right',
         }}>
           {course.subtitle}
         </div>
@@ -206,6 +198,7 @@ function FeaturedCard({ course }: { course: Course }) {
           fontFamily: 'Tajawal, sans-serif', fontWeight: 900,
           fontSize: 'clamp(20px,2.4vw,30px)',
           color: 'rgba(252,251,251,0.97)', lineHeight: 1.3, margin: 0,
+          textAlign: 'right',
         }}>
           {course.title}
         </h3>
@@ -215,13 +208,13 @@ function FeaturedCard({ course }: { course: Course }) {
           fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
           fontSize: 'clamp(13px,1.3vw,15px)',
           color: 'rgba(252,251,251,0.65)', lineHeight: 1.8, margin: 0,
+          textAlign: 'right',
         }}>
           {course.shortDesc}
         </p>
 
-        {/* Price + Duration tags */}
+        {/* Price + Duration — justify-content:flex-end aligns right in RTL context */}
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-          {/* Price */}
           <div style={{
             background: 'rgba(255,193,7,0.08)',
             border: '1px solid rgba(255,193,7,0.22)',
@@ -234,11 +227,10 @@ function FeaturedCard({ course }: { course: Course }) {
             }}>
               {course.price}
             </div>
-            <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11, color: 'rgba(252,251,251,0.48)', marginTop: 4 }}>
+            <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11, color: 'rgba(252,251,251,0.48)', marginTop: 4, textAlign: 'right' }}>
               {course.priceLabel}
             </div>
           </div>
-          {/* Duration */}
           <div style={{
             background: 'rgba(255,255,255,0.04)',
             border: '1px solid rgba(255,255,255,0.10)',
@@ -247,34 +239,41 @@ function FeaturedCard({ course }: { course: Course }) {
             <div style={{
               fontFamily: 'Tajawal, sans-serif', fontWeight: 800,
               color: 'rgba(252,251,251,0.90)', fontSize: 'clamp(13px,1.3vw,15px)',
-              lineHeight: 1,
+              lineHeight: 1, textAlign: 'right',
             }}>
               {course.duration}
             </div>
-            <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11, color: 'rgba(252,251,251,0.48)', marginTop: 4 }}>
+            <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11, color: 'rgba(252,251,251,0.48)', marginTop: 4, textAlign: 'right' }}>
               {course.durationLabel}
             </div>
           </div>
         </div>
 
-        {/* Schedule strip */}
+        {/* Schedule strip — Arabic text first (RIGHT), emoji icon after (LEFT) */}
         <div style={{
           display: 'flex', alignItems: 'center', gap: 8,
           padding: '10px 14px', borderRadius: 10,
           background: 'rgba(255,255,255,0.04)',
           border: '1px solid rgba(255,255,255,0.08)',
         }}>
-          <span style={{ fontSize: 14, flexShrink: 0 }}>📅</span>
+          {/* Text first in DOM → RIGHT in RTL */}
           <span style={{
             fontFamily: 'Tajawal, sans-serif', fontSize: 12.5,
             color: 'rgba(226,232,240,0.72)', lineHeight: 1.5,
+            flex: 1, textAlign: 'right',
           }}>
             {course.schedule}
           </span>
+          {/* Icon after text → LEFT in RTL */}
+          <span style={{ fontSize: 14, flexShrink: 0 }}>📅</span>
         </div>
 
-        {/* Instructor */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'flex-end' }}>
+        {/* Instructor — text first (RIGHT), avatar after (LEFT) */}
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 10,
+          justifyContent: 'flex-start',   /* RTL flex-start = RIGHT edge */
+        }}>
+          {/* Name+title first → RIGHT in RTL */}
           <div style={{ textAlign: 'right' }}>
             <div style={{ fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 13.5, color: 'rgba(252,251,251,0.92)' }}>
               {course.instructor.name}
@@ -283,6 +282,7 @@ function FeaturedCard({ course }: { course: Course }) {
               {course.instructor.title}
             </div>
           </div>
+          {/* Photo after text → LEFT in RTL (icon after Arabic text) */}
           <img src={course.instructor.photo} alt={course.instructor.name}
             style={{
               width: 44, height: 44, borderRadius: '50%', objectFit: 'cover',
@@ -292,16 +292,17 @@ function FeaturedCard({ course }: { course: Course }) {
             }} />
         </div>
 
-        {/* CTA */}
+        {/* CTA button — label first (RIGHT), arrow after (LEFT) */}
         <button style={{
-          alignSelf: 'flex-end',
+          alignSelf:  'flex-start',   /* RTL flex-start = RIGHT edge */
           fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 15,
-          padding: '13px 32px', borderRadius: 99,
+          padding:    '13px 32px', borderRadius: 99,
           background: '#FFC107', color: '#111827',
-          border: 'none', cursor: 'pointer',
-          boxShadow: '0 4px 18px rgba(255,193,7,0.40)',
+          border:     'none', cursor: 'pointer',
+          boxShadow:  '0 4px 18px rgba(255,193,7,0.40)',
           transition: 'transform 0.15s, box-shadow 0.15s',
-          display: 'flex', alignItems: 'center', gap: 8,
+          display:    'flex', alignItems: 'center', gap: 8,
+          direction:  'rtl',
         }}
           onMouseEnter={e => Object.assign(e.currentTarget.style, { transform: 'translateY(-2px)', boxShadow: '0 8px 28px rgba(255,193,7,0.55)' })}
           onMouseLeave={e => Object.assign(e.currentTarget.style, { transform: 'none', boxShadow: '0 4px 18px rgba(255,193,7,0.40)' })}
@@ -311,7 +312,7 @@ function FeaturedCard({ course }: { course: Course }) {
         </button>
       </div>
 
-      {/* ── 2nd child → LEFT side (cover image) ── */}
+      {/* ── 2nd child → LEFT (cover image) ── */}
       <div style={{ flex: '0 0 42%', position: 'relative', minHeight: 360 }}>
         <img src={course.cover} alt={course.title}
           style={{
@@ -319,7 +320,7 @@ function FeaturedCard({ course }: { course: Course }) {
             objectFit: 'cover', objectPosition: 'center top',
             display: 'block',
           }} />
-        {/* Gradient blends image edge into the glass card from the right */}
+        {/* Gradient blends from image edge into text panel */}
         <div style={{
           position: 'absolute', inset: 0,
           background: 'linear-gradient(to right, rgba(14,22,40,0.80) 0%, transparent 55%)',
@@ -329,7 +330,7 @@ function FeaturedCard({ course }: { course: Course }) {
   );
 }
 
-// ── Small course card with hover flip ─────────────────────
+// ── Small course card ──────────────────────────────────────
 function CourseCard({ course }: { course: Course }) {
   const [hovered, setHovered] = useState(false);
 
@@ -369,7 +370,8 @@ function CourseCard({ course }: { course: Course }) {
           background: 'linear-gradient(to bottom, transparent, rgba(14,22,38,0.88))',
           pointerEvents: 'none',
         }} />
-        <div style={{ position: 'absolute', top: 10, right: 10, display: 'flex', gap: 5, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+        {/* Type badges — top-right in RTL */}
+        <div style={{ position: 'absolute', top: 10, insetInlineStart: 10, display: 'flex', gap: 5, flexWrap: 'wrap' }}>
           {course.types.map(t => <TypeBadge key={t} label={t} />)}
         </div>
       </div>
@@ -387,23 +389,35 @@ function CourseCard({ course }: { course: Course }) {
           fontFamily: 'Tajawal, sans-serif', fontWeight: 800,
           fontSize: 'clamp(13px,1.3vw,15px)',
           color: 'rgba(252,251,251,0.96)', lineHeight: 1.4,
+          textAlign: 'right',
         }}>
           {course.title}
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'flex-end' }}>
-          <span style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 12, color: 'rgba(252,251,251,0.55)' }}>{course.instructor.name}</span>
+
+        {/* Instructor row — name first (RIGHT in RTL), photo after (LEFT) */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'flex-start' }}>
+          <span style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 12, color: 'rgba(252,251,251,0.55)', textAlign: 'right' }}>
+            {course.instructor.name}
+          </span>
           <img src={course.instructor.photo} alt={course.instructor.name}
             style={{ width: 28, height: 28, borderRadius: '50%', objectFit: 'cover', border: '1.5px solid #FFC107', flexShrink: 0 }} />
         </div>
+
+        {/* Price row — price first (RIGHT), schedule text after (LEFT) */}
         <div style={{
           display: 'flex', justifyContent: 'space-between', alignItems: 'center',
           borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 8, marginTop: 2,
         }}>
-          <span style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11.5, color: 'rgba(252,251,251,0.42)' }}>
-            {course.schedule.split('|')[0]?.trim()}
-          </span>
-          <span style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 14, color: '#FFC107', direction: 'ltr' }}>
+          {/* Price — first child → RIGHT in RTL */}
+          <span style={{
+            fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 14,
+            color: '#FFC107', direction: 'ltr',
+          }}>
             {course.price}
+          </span>
+          {/* Schedule info — second → LEFT */}
+          <span style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11.5, color: 'rgba(252,251,251,0.42)', textAlign: 'right' }}>
+            {course.schedule.split('|')[0]?.trim()}
           </span>
         </div>
       </div>
@@ -420,40 +434,52 @@ function CourseCard({ course }: { course: Course }) {
         pointerEvents: hovered ? 'auto' : 'none',
         background: 'linear-gradient(to top, rgba(10,16,30,0.97) 0%, rgba(10,16,30,0.80) 100%)',
       }}>
-        <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11.5, color: 'rgba(255,193,7,0.75)', fontWeight: 600 }}>
+        <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11.5, color: 'rgba(255,193,7,0.75)', fontWeight: 600, textAlign: 'right' }}>
           {course.subtitle}
         </div>
         <div style={{
           fontFamily: 'Tajawal, sans-serif', fontWeight: 800,
           fontSize: 'clamp(14px,1.4vw,16px)', color: 'rgba(252,251,251,0.97)', lineHeight: 1.35,
+          textAlign: 'right',
         }}>
           {course.title}
         </div>
 
-        {/* Learning outcomes */}
+        {/* Outcomes — icon (✓) first (RIGHT in RTL), text second (LEFT) */}
         <div style={{
           background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)',
           borderRadius: 12, padding: '12px 14px',
           display: 'flex', flexDirection: 'column', gap: 8,
         }}>
-          <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11, color: '#FFC107', fontWeight: 700, marginBottom: 2 }}>
+          <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11, color: '#FFC107', fontWeight: 700, marginBottom: 2, textAlign: 'right' }}>
             ماذا ستتعلم:
           </div>
           {course.outcomes.map((o, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'flex-end' }}>
-              <span style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 12.5, color: 'rgba(226,232,240,0.82)' }}>{o}</span>
+            <div key={i} style={{
+              display: 'flex', alignItems: 'center', gap: 8,
+              justifyContent: 'flex-start',  /* flex-start = RIGHT in RTL */
+            }}>
+              {/* ✓ icon first → RIGHT */}
               <span style={{
                 width: 16, height: 16, borderRadius: '50%',
                 background: 'rgba(255,193,7,0.15)', border: '1px solid rgba(255,193,7,0.35)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 color: '#FFC107', fontSize: 9, flexShrink: 0,
               }}>✓</span>
+              {/* Text after → LEFT */}
+              <span style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 12.5, color: 'rgba(226,232,240,0.82)', textAlign: 'right' }}>{o}</span>
             </div>
           ))}
         </div>
 
-        {/* Price + CTA */}
+        {/* Price + CTA — price first (RIGHT in RTL), button after (LEFT) */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+          {/* Price first → RIGHT in RTL */}
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 15, color: '#FFC107', direction: 'ltr' }}>{course.price}</div>
+            <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 10.5, color: 'rgba(252,251,251,0.40)', textAlign: 'right' }}>{course.priceLabel}</div>
+          </div>
+          {/* CTA button after → LEFT; label first in button, arrow after */}
           <button
             onClick={e => e.stopPropagation()}
             style={{
@@ -463,16 +489,14 @@ function CourseCard({ course }: { course: Course }) {
               border: 'none', cursor: 'pointer',
               boxShadow: '0 4px 16px rgba(255,193,7,0.35)',
               transition: 'transform 0.15s', whiteSpace: 'nowrap',
+              display: 'flex', alignItems: 'center', gap: 6,
             }}
             onMouseEnter={e => Object.assign(e.currentTarget.style, { transform: 'translateY(-1px)' })}
             onMouseLeave={e => Object.assign(e.currentTarget.style, { transform: 'none' })}
           >
-            اكتشف الدورة ←
+            اكتشف الدورة
+            <span style={{ direction: 'ltr' }}>←</span>
           </button>
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 15, color: '#FFC107', direction: 'ltr' }}>{course.price}</div>
-            <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 10.5, color: 'rgba(252,251,251,0.40)' }}>{course.priceLabel}</div>
-          </div>
         </div>
       </div>
     </div>
@@ -485,10 +509,7 @@ export default function CoursesSection() {
   const grid = COURSES.slice(1);
 
   return (
-    <section className="relative overflow-hidden" style={{
-      ...sectionBg,
-      padding: 'clamp(60px,8vh,100px) 0 clamp(70px,9vh,110px)',
-    }}>
+    <section className="section-block relative overflow-hidden">
       <div className="absolute pointer-events-none" style={{
         top: -60, left: '50%', transform: 'translateX(-50%)',
         width: '70%', height: 200,
@@ -497,7 +518,7 @@ export default function CoursesSection() {
 
       <div className="relative z-10 mx-auto px-4" style={{ maxWidth: 1160 }}>
 
-        {/* Section header — RTL */}
+        {/* Section header */}
         <div style={{
           display: 'flex', alignItems: 'flex-end',
           justifyContent: 'space-between',
@@ -520,6 +541,7 @@ export default function CoursesSection() {
               fontFamily: 'Tajawal, sans-serif', fontWeight: 900,
               fontSize: 'clamp(26px,4vw,46px)',
               color: 'rgba(252,251,251,0.96)', lineHeight: 1.2, margin: 0,
+              textAlign: 'right',
             }}>
               دوراتنا <span style={{ color: '#FFC107' }}>المتميزة</span>
             </h2>
@@ -528,6 +550,7 @@ export default function CoursesSection() {
               fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
               fontSize: 'clamp(13px,1.4vw,16px)',
               color: '#E2E8F0', lineHeight: 1.8, margin: '10px 0 0', maxWidth: 600,
+              textAlign: 'right',
             }}>
               اختر من بين برامجنا الأكثر طلباً — وجاهي أو أونلاين تفاعلي، ومقاعد محدودة.
             </p>

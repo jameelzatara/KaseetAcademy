@@ -10,7 +10,7 @@ const BENEFITS = [
 const MICRO_STATS = [
   { value: '+600', label: 'متدرب' },
   { value: '100%', label: 'رضا المتدربين' },
-  { value: '+40', label: 'دفعة' },
+  { value: '+40',  label: 'دفعة' },
 ];
 
 function WhatsAppIcon() {
@@ -25,11 +25,7 @@ export default function ConsultationSection() {
   return (
     <section
       id="consultant"
-      className="relative overflow-hidden"
-      style={{
-        background: 'transparent',
-        padding: 'clamp(70px,9vh,110px) 0',
-      }}
+      className="section-block relative overflow-hidden"
     >
       {/* Gold radial glow */}
       <div className="absolute pointer-events-none" style={{
@@ -54,7 +50,7 @@ export default function ConsultationSection() {
           <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', gap: 22 }}>
 
             {/* Badge */}
-            <div style={{ alignSelf: 'flex-end' }}>
+            <div style={{ alignSelf: 'flex-start' }}>
               <span style={{
                 display: 'inline-flex', alignItems: 'center', gap: 7,
                 padding: '5px 16px', borderRadius: 99,
@@ -77,6 +73,7 @@ export default function ConsultationSection() {
               fontFamily: 'Tajawal, sans-serif', fontWeight: 900,
               fontSize: 'clamp(22px,3.2vw,40px)',
               color: 'rgba(252,251,251,0.96)', lineHeight: 1.35, margin: 0,
+              textAlign: 'right',
             }}>
               محتار في اختيار المسار الأنسب{' '}
               <span style={{ color: '#FFC107' }}>لصوتك أو حضورك الإعلامي؟</span>
@@ -87,37 +84,38 @@ export default function ConsultationSection() {
               fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
               fontSize: 'clamp(14px,1.4vw,16.5px)',
               color: 'rgba(226,232,240,0.75)', lineHeight: 1.85, margin: 0,
+              textAlign: 'right',
             }}>
               تواصل مع المستشارة التعليمية لتحديد مستواك الحالي وبناء خطتك التدريبية المخصصة — بدون أي التزام.
             </p>
 
-            {/* Benefits */}
+            {/* Benefits — icon AFTER Arabic text (icon on LEFT, text on RIGHT) */}
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
               {BENEFITS.map((b, i) => (
                 <li key={i} style={{
                   display: 'flex', alignItems: 'center', gap: 12,
-                  // flex-start in RTL = anchor to the RIGHT — icon first in DOM → right side
                   justifyContent: 'flex-start',
                   direction: 'rtl',
                 }}>
-                  {/* Icon first in DOM → appears on RIGHT in RTL */}
+                  {/* ✓ icon first in DOM → RIGHT in RTL */}
                   <span style={{
                     width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
                     background: 'rgba(255,193,7,0.12)', border: '1px solid rgba(255,193,7,0.30)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     color: '#FFC107', fontSize: 12, fontWeight: 900,
                   }}>✓</span>
-                  {/* Text second → flows to the LEFT of the icon */}
+                  {/* Text second → flows LEFT of icon */}
                   <span style={{
                     fontFamily: 'Tajawal, sans-serif', fontSize: 'clamp(13.5px,1.3vw,15.5px)',
                     color: 'rgba(252,251,251,0.82)', fontWeight: 500,
+                    textAlign: 'right',
                   }}>{b}</span>
                 </li>
               ))}
             </ul>
 
-            {/* CTAs */}
-            <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'flex-end', marginTop: 6 }}>
+            {/* CTAs — Arabic label first (RIGHT), icon after (LEFT) */}
+            <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'flex-start', marginTop: 6 }}>
               <a
                 href="https://wa.me/962771052222"
                 target="_blank"
@@ -131,6 +129,7 @@ export default function ConsultationSection() {
                   boxShadow: '0 4px 20px rgba(6,95,70,0.40)',
                   border: '1px solid rgba(74,222,128,0.25)',
                   transition: 'transform 0.15s, box-shadow 0.15s, background 0.15s',
+                  direction: 'rtl',
                 }}
                 onMouseEnter={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, {
                   transform: 'translateY(-2px)',
@@ -143,8 +142,9 @@ export default function ConsultationSection() {
                   boxShadow: '0 4px 20px rgba(6,95,70,0.40)',
                 })}
               >
-                <WhatsAppIcon />
+                {/* Label first (RIGHT in RTL), icon after (LEFT) */}
                 تواصل مع المستشارة عبر واتساب
+                <WhatsAppIcon />
               </a>
 
               <button
@@ -163,7 +163,7 @@ export default function ConsultationSection() {
             </div>
           </div>
 
-          {/* ── LEFT: Glass Counter-Box card ── */}
+          {/* ── LEFT: Glass card ── */}
           <div style={{
             background: 'rgba(255,255,255,0.04)',
             backdropFilter: 'blur(16px)',
@@ -178,7 +178,7 @@ export default function ConsultationSection() {
             boxShadow: '0 8px 40px rgba(0,0,0,0.30)',
           }}>
 
-            {/* Circular avatar with glow ring */}
+            {/* Avatar with glow ring */}
             <div style={{ position: 'relative' }}>
               <div style={{
                 position: 'absolute', inset: -6, borderRadius: '50%',
@@ -192,8 +192,7 @@ export default function ConsultationSection() {
                 style={{
                   width: 180, height: 180,
                   borderRadius: '50%',
-                  objectFit: 'cover',
-                  objectPosition: 'center top',
+                  objectFit: 'cover', objectPosition: 'center top',
                   border: '3px solid rgba(255,193,7,0.50)',
                   boxShadow: '0 8px 24px rgba(0,0,0,0.30)',
                   display: 'block',
@@ -247,7 +246,7 @@ export default function ConsultationSection() {
               {MICRO_STATS.map((s, i) => (
                 <div key={i} style={{
                   flex: 1, textAlign: 'center', padding: '12px 6px',
-                  borderLeft: i > 0 ? '1px solid rgba(255,255,255,0.07)' : 'none',
+                  borderInlineStart: i > 0 ? '1px solid rgba(255,255,255,0.07)' : 'none',
                 }}>
                   <div style={{
                     fontFamily: 'Poppins, sans-serif', fontWeight: 800,
