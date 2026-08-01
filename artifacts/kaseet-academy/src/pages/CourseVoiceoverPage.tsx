@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'wouter';
-import { ChevronDown, Calendar, Clock, MapPin, Wifi, Users } from 'lucide-react';
+import { ChevronDown, Calendar, Clock, MapPin, Wifi, Users, GraduationCap } from 'lucide-react';
 
 /* ── Asset imports ─────────────────────────────────────────── */
 import ayaImg      from '@assets/اية_القماز_1785619557679.jpeg';
@@ -79,22 +79,29 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 /* ── Schedule data ─────────────────────────────────────────── */
 const scheduleData = {
   inPerson: [
-    { id: 'g34',  group: 'مجموعة 34 - صباحي - وجاهي',       course: 'دورة التعليق والاداء الصوتي (الاساسيات)',              instructor: 'رنا عزام',  days: 'أحد / ثلاثاء / خميس', month: 'يوليو',  day: '21', startDate: '2026-07-21', endDate: '2026-11-08', status: 'جارية الآن' },
-    { id: 'g28',  group: 'مجموعة 28 - مسائي - وجاهي',       course: 'دورة التعليق والاداء الصوتي (الاساسيات)',              instructor: 'يسار عبده', days: 'أحد / ثلاثاء / خميس', month: 'يوليو',  day: '12', startDate: '2026-07-12', endDate: '2026-07-30', status: 'جارية الآن' },
-    { id: 'g36',  group: 'مجموعة 36 متقدمة - وجاهي',        course: 'دورة الاداء الصوتي المتقدمة (الرد الالي والاعلانات)', instructor: 'يسار عبده', days: 'الاحد',               month: 'يوليو',  day: '12', startDate: '2026-07-12', endDate: '-',          status: 'جارية الآن' },
-    { id: 'g31',  group: 'مجموعة 31 - صباحي - وجاهي',       course: 'دورة التعليق والاداء الصوتي (الاساسيات)',              instructor: 'رنا عزام',  days: 'أحد / ثلاثاء / خميس', month: 'فبراير', day: '07', startDate: '2026-02-07', endDate: '-',          status: 'جارية الآن' },
-    { id: 'g26',  group: 'مجموعة 26 - صباحي - وجاهي',       course: 'دورة التعليق والاداء الصوتي (الاساسيات)',              instructor: 'رنا عزام',  days: 'اثنين / اربعاء',     month: 'يناير',  day: '07', startDate: '2026-01-07', endDate: '2026-07-27', status: 'جارية الآن' },
-    { id: 'g17',  group: 'مجموعة 17 - مسائي - وجاهي',       course: 'دورة الاداء الصوتي المتقدمة (كتب صوتية)',              instructor: 'يسار عبده', days: 'الأثنين',             month: 'مايو',   day: '18', startDate: '2026-05-18', endDate: '2026-07-13', status: 'جارية الآن' },
-    { id: 'g18',  group: 'مجموعة 18 - مسائي - وجاهي',       course: 'دورة الاداء الصوتي المتقدمة (الرد الالي والاعلانات)', instructor: 'يسار عبده', days: 'الأربعاء',            month: 'مايو',   day: '20', startDate: '2026-05-20', endDate: '2026-07-22', status: 'جارية الآن' },
-    { id: 'gAdv', group: 'مجموعة متقدمة - مسائي - وجاهي',   course: 'دورة الاداء الصوتي المتقدمة (الرد الالي والاعلانات)', instructor: 'يسار عبده', days: 'السبت',               month: 'يونيو',  day: '27', startDate: '2026-06-27', endDate: '2026-08-15', status: 'جارية الآن' },
+    { id: 'g34',   group: 'مجموعة 34 - صباحي - وجاهي',         course: 'التعليق والأداء الصوتي (الأساسيات)',               instructor: 'رنا عزام',   days: 'أحد / ثلاثاء / خميس',  time: '',              month: 'يوليو',   day: '21', status: 'active'   },
+    { id: 'g28',   group: 'مجموعة 28 - مسائي - وجاهي',          course: 'التعليق والأداء الصوتي (الأساسيات)',               instructor: 'يسار عبده',  days: 'أحد / ثلاثاء / خميس',  time: '',              month: 'يوليو',   day: '12', status: 'active'   },
+    { id: 'g36',   group: 'مجموعة 36 متقدمة - وجاهي',           course: 'الأداء الصوتي المتقدم (الرد الآلي والإعلانات)',    instructor: 'يسار عبده',  days: 'الأحد',                 time: '',              month: 'يوليو',   day: '12', status: 'active'   },
+    { id: 'g31',   group: 'مجموعة 31 - صباحي - وجاهي',          course: 'التعليق والأداء الصوتي (الأساسيات)',               instructor: 'رنا عزام',   days: 'أحد / ثلاثاء / خميس',  time: '',              month: 'فبراير',  day: '07', status: 'active'   },
+    { id: 'g26',   group: 'مجموعة 26 - صباحي - وجاهي',          course: 'التعليق والأداء الصوتي (الأساسيات)',               instructor: 'رنا عزام',   days: 'الإثنين / الأربعاء',    time: '',              month: 'يناير',   day: '07', status: 'active'   },
+    { id: 'g17',   group: 'مجموعة 17 - مسائي - وجاهي',          course: 'الأداء الصوتي المتقدم (كتب صوتية)',                instructor: 'يسار عبده',  days: 'الإثنين',               time: '',              month: 'مايو',    day: '18', status: 'active'   },
+    { id: 'g18',   group: 'مجموعة 18 - مسائي - وجاهي',          course: 'الأداء الصوتي المتقدم (الرد الآلي والإعلانات)',    instructor: 'يسار عبده',  days: 'الأربعاء',              time: '',              month: 'مايو',    day: '20', status: 'active'   },
+    { id: 'gAdv',  group: 'مجموعة متقدمة - مسائي - وجاهي',      course: 'الأداء الصوتي المتقدم (الرد الآلي والإعلانات)',    instructor: 'يسار عبده',  days: 'السبت',                 time: '',              month: 'يونيو',   day: '27', status: 'active'   },
+    // ── أغسطس 2026 ──
+    { id: 'g37m',  group: 'مجموعة مسائية - أغسطس 2026',         course: 'التعليق والأداء الصوتي (الأساسيات)',               instructor: 'يسار عبده',  days: 'الإثنين والأربعاء',     time: '6:00-8:00 م',   month: 'أغسطس',   day: '12', status: 'upcoming' },
+    { id: 'g37s',  group: 'مجموعة صباحية - أغسطس 2026',         course: 'التعليق والأداء الصوتي (الأساسيات)',               instructor: 'رنا عزام',   days: 'الأربعاء',              time: '12:00-2:00 ظ',  month: 'أغسطس',   day: '12', status: 'upcoming' },
+    { id: 'g40ip', group: 'مجموعة وجاهية - قريباً',              course: 'التعليق والأداء الصوتي (الأساسيات)',               instructor: 'يسار عبده',  days: '-',                     time: '',              month: 'قريباً',  day: '--', status: 'upcoming' },
   ],
   online: [
-    { id: 'g25', group: 'مجموعة 25 - اونلاين', course: 'دورة التعليق الصوتي أونلاين (الاساسيات)', instructor: 'يسار عبده', days: 'السبت',    month: 'يونيو',  day: '20', startDate: '2026-06-20', endDate: '-', status: 'جارية الآن' },
-    { id: 'g27', group: 'مجموعة 27 - اونلاين', course: 'دورة التعليق الصوتي أونلاين (الاساسيات)', instructor: 'رنا عزام',  days: 'السبت',    month: 'شهر 6',  day: '--',  startDate: 'قريباً',    endDate: '-', status: 'جارية الآن' },
-    { id: 'g29', group: 'مجموعة 29 - اونلاين', course: 'دورة التعليق الصوتي أونلاين (الاساسيات)', instructor: 'رنا عزام',  days: 'السبت',    month: 'شهر 7',  day: '--',  startDate: 'قريباً',    endDate: '-', status: 'جارية الآن' },
-    { id: 'g32', group: 'مجموعة 32 - اونلاين', course: 'دورة التعليق الصوتي أونلاين (الاساسيات)', instructor: 'رنا عزام',  days: 'الثلاثاء', month: 'شهر 7',  day: '--',  startDate: 'قريباً',    endDate: '-', status: 'جارية الآن' },
-    { id: 'g33', group: 'مجموعة 33 - اونلاين', course: 'دورة التعليق الصوتي أونلاين (الاساسيات)', instructor: 'عمر درابكة',days: 'السبت',    month: 'شهر 7',  day: '--',  startDate: 'قريباً',    endDate: '-', status: 'جارية الآن' },
-    { id: 'g35', group: 'مجموعة 35 - اونلاين', course: 'دورة التعليق الصوتي أونلاين (الاساسيات)', instructor: 'عمر درابكة',days: 'الاحد',    month: 'شهر 7',  day: '--',  startDate: 'قريباً',    endDate: '-', status: 'جارية الآن' },
+    { id: 'g25',   group: 'مجموعة 25 - أونلاين',    course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'يسار عبده',  days: 'السبت',    time: '', month: 'يونيو',  day: '20', status: 'active'   },
+    { id: 'g27',   group: 'مجموعة 27 - أونلاين',    course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'رنا عزام',   days: 'السبت',    time: '', month: 'يونيو',  day: '--', status: 'active'   },
+    { id: 'g29',   group: 'مجموعة 29 - أونلاين',    course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'رنا عزام',   days: 'السبت',    time: '', month: 'يوليو',  day: '--', status: 'active'   },
+    { id: 'g32',   group: 'مجموعة 32 - أونلاين',    course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'رنا عزام',   days: 'الثلاثاء', time: '', month: 'يوليو',  day: '--', status: 'active'   },
+    { id: 'g33',   group: 'مجموعة 33 - أونلاين',    course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'عمر درابكة', days: 'السبت',    time: '', month: 'يوليو',  day: '--', status: 'active'   },
+    { id: 'g35',   group: 'مجموعة 35 - أونلاين',    course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'عمر درابكة', days: 'الأحد',    time: '', month: 'يوليو',  day: '--', status: 'active'   },
+    // ── قريباً ──
+    { id: 'g38',   group: 'مجموعة 38 - أونلاين',    course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'عمر درابكة', days: '-',        time: '', month: 'قريباً', day: '--', status: 'upcoming' },
+    { id: 'g39',   group: 'مجموعة 39 - أونلاين',    course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'رنا عزام',   days: '-',        time: '', month: 'قريباً', day: '--', status: 'upcoming' },
   ],
 };
 
@@ -141,6 +148,7 @@ export default function CourseVoiceoverPage() {
   const [currTab, setCurrTab] = useState<'inperson' | 'online'>('inperson');
   const [openLec, setOpenLec] = useState<number | null>(null);
   const [openAccordion, setOpenAccordion] = useState<'inperson' | 'online' | null>(null);
+  const [partnerBarOpen, setPartnerBarOpen] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   // scroll to top on mount
@@ -362,123 +370,45 @@ export default function CourseVoiceoverPage() {
         borderBottom: '1px solid rgba(255,255,255,0.07)',
       }}>
         <div style={INNER}>
-          <SectionTitle>خيارات التسجيل والمواعيد المتاحة</SectionTitle>
+          <SectionTitle>المواعيد المتاحة للتسجيل</SectionTitle>
           <p style={{
-            fontFamily: F, fontSize: 15, color: MUTED, marginBottom: 28,
-            lineHeight: 1.8, margin: '0 0 28px',
+            fontFamily: F, fontSize: 15, color: MUTED,
+            lineHeight: 1.8, margin: '0 0 32px',
           }}>
-            اختر طريقة التدريب التي تتوافق تماماً مع وقتك وأسلوب حياتك:
+            اختر طريقة التعلّم التي تناسب أسلوبك — كل مسار صُمِّم ليمنحك تجربة تدريبية استثنائية
           </p>
 
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
             gap: 20,
           }}>
-            {/* In-person card */}
-            <TrackCard
-              selected={track === 'inperson'}
-              onClick={() => { setTrack('inperson'); setCurrTab('inperson'); }}
-              icon="🏢"
-              badge="الأكثر طلباً"
-              title="حضوري (في القاعة)"
-              subtitle="بيئة تعلم منظمة وتفاعل مباشر مع المدرب والزملاء."
-              details={[
-                { label: 'تاريخ البدء', value: '6 أغسطس 2026' },
-                { label: 'الأيام والوقت', value: 'الإثنين والأربعاء — 6:00-8:00 مساءً' },
-                { label: 'موعد إضافي', value: '12 أغسطس — الفترة الصباحية (12:00-2:00)' },
-                { label: 'الساعات', value: '16 ساعة (8 محاضرات)' },
-                { label: 'المقاعد', value: '10 مقاعد فقط لكل مجموعة' },
-                { label: 'الدورات شهرياً', value: '5 دورات (دورتان صباحية + 3 مسائية)' },
-              ]}
-              price="218 دينار"
-              priceStrike="260"
-              priceLabel="بعد الخصم"
-              cta="اختر المسار الوجاهي"
-              installment
-              batchCount={scheduleData.inPerson.length}
+            <TrackCard2
+              variant="inperson"
+              activeBatches={scheduleData.inPerson.filter(b => b.status === 'active')}
+              upcomingBatches={scheduleData.inPerson.filter(b => b.status === 'upcoming')}
               expanded={openAccordion === 'inperson'}
-              onExpand={() => setOpenAccordion(openAccordion === 'inperson' ? null : 'inperson')}
+              onToggle={() => {
+                setOpenAccordion(openAccordion === 'inperson' ? null : 'inperson');
+                setTrack('inperson');
+                setCurrTab('inperson');
+              }}
             />
-
-            {/* Online card */}
-            <TrackCard
-              selected={track === 'online'}
-              onClick={() => { setTrack('online'); setCurrTab('online'); }}
-              icon="🌐"
-              badge="الأعمق تأثيراً"
-              title="عن بُعد (أونلاين Zoom)"
-              subtitle="مرونة كاملة في الوقت والمكان مع الحفاظ على جودة التدريب التفاعلي."
-              details={[
-                { label: 'الدفعة الأولى', value: '5 أغسطس 2026 (الإثنين والأربعاء، 6:00-8:00م)' },
-                { label: 'الدفعة الثانية', value: '10 أغسطس 2026' },
-                { label: 'الدفعة الثالثة', value: '18 أغسطس 2026' },
-                { label: 'الدورات شهرياً', value: '8 دورات أونلاين شهرياً' },
-              ]}
-              price="$150"
-              priceLabel="رسوم التسجيل"
-              cta="اختر المسار الأونلاين"
-              installment
-              batchCount={scheduleData.online.length}
+            <TrackCard2
+              variant="online"
+              activeBatches={scheduleData.online.filter(b => b.status === 'active')}
+              upcomingBatches={scheduleData.online.filter(b => b.status === 'upcoming')}
               expanded={openAccordion === 'online'}
-              onExpand={() => setOpenAccordion(openAccordion === 'online' ? null : 'online')}
+              onToggle={() => {
+                setOpenAccordion(openAccordion === 'online' ? null : 'online');
+                setTrack('online');
+                setCurrTab('online');
+              }}
             />
           </div>
 
-          {/* ── Accordion batch list ── */}
-          {openAccordion && (
-            <div style={{ marginTop: 24 }}>
-              {/* Header bar */}
-              <div style={{
-                display: 'flex', alignItems: 'center',
-                justifyContent: 'space-between',
-                background: CARD2,
-                borderRadius: '14px 14px 0 0',
-                padding: '12px 20px',
-                borderBottom: `2px solid ${GOLD}`,
-                direction: 'rtl',
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <div style={{ width: 3, height: 20, background: GOLD, borderRadius: 4 }} />
-                  <span style={{
-                    fontFamily: F, fontWeight: 800, fontSize: 15, color: OFF,
-                  }}>
-                    {openAccordion === 'inperson' ? 'شعب تدريب حضوري' : 'شعب تدريب أونلاين'}
-                  </span>
-                </div>
-                <span style={{
-                  fontFamily: F, fontWeight: 700, fontSize: 13,
-                  background: 'rgba(255,193,7,0.15)',
-                  border: '1px solid rgba(255,193,7,0.30)',
-                  color: GOLD, borderRadius: 999,
-                  padding: '4px 14px',
-                }}>
-                  {openAccordion === 'inperson'
-                    ? `${scheduleData.inPerson.length} شعب متاحة`
-                    : `${scheduleData.online.length} شعب متاحة`}
-                </span>
-              </div>
-
-              {/* Batch cards */}
-              <div style={{
-                background: DARK, borderRadius: '0 0 14px 14px',
-                border: '1px solid rgba(255,255,255,0.06)',
-                borderTop: 'none',
-                overflow: 'hidden',
-              }}>
-                {(openAccordion === 'inperson'
-                  ? scheduleData.inPerson
-                  : scheduleData.online
-                ).map((batch, idx, arr) => (
-                  <BatchCard
-                    key={batch.id}
-                    batch={batch}
-                    isLast={idx === arr.length - 1}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
+          {/* ── Partner bar ── */}
+          <PartnerBar open={partnerBarOpen} onToggle={() => setPartnerBarOpen(p => !p)} />
 
         </div>
       </section>
@@ -962,6 +892,430 @@ function RegistrationCard({ track, onRegister }: {
       >
         عرض المواعيد والتسجيل ←
       </button>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════
+   COMPACT BATCH ROW  (used inside TrackCard2 expanded panel)
+════════════════════════════════════════════════════════════ */
+type ScheduleEntry = {
+  id: string; group: string; course: string; instructor: string;
+  days: string; time: string; month: string; day: string; status: string;
+};
+
+function CompactBatchRow({ batch, accent }: { batch: ScheduleEntry; accent: string }) {
+  const hasDay = batch.day && batch.day !== '--';
+  const isComingSoon = batch.status === 'upcoming';
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'center', gap: 12,
+      padding: '10px 0', direction: 'rtl',
+      borderBottom: '1px solid rgba(255,255,255,0.05)',
+    }}>
+      {/* Date box */}
+      <div style={{
+        width: 46, height: 46, borderRadius: 10, flexShrink: 0,
+        background: 'rgba(0,0,0,0.25)',
+        display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center', gap: 1,
+      }}>
+        {hasDay ? (
+          <>
+            <span style={{ fontFamily: F, fontSize: 9, color: 'rgba(252,251,251,0.45)', lineHeight: 1 }}>{batch.month}</span>
+            <span style={{ fontFamily: "'Poppins',sans-serif", fontWeight: 900, fontSize: 20, color: '#fff', lineHeight: 1 }}>{batch.day}</span>
+          </>
+        ) : (
+          <span style={{ fontFamily: F, fontSize: 9.5, fontWeight: 700, color: 'rgba(252,251,251,0.45)', textAlign: 'center', lineHeight: 1.4 }}>
+            {batch.month === 'قريباً' ? 'قريباً' : batch.month}
+          </span>
+        )}
+      </div>
+
+      {/* Info */}
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontFamily: F, fontWeight: 700, fontSize: 13, color: OFF, marginBottom: 3 }}>
+          {batch.group}
+        </div>
+        <div style={{
+          display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 8,
+          fontFamily: F, fontSize: 11.5, color: MUTED,
+        }}>
+          {batch.days && batch.days !== '-' && (
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+              <Calendar size={10} color={MUTED} strokeWidth={2} />
+              {batch.days}
+            </span>
+          )}
+          {batch.time && (
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+              <Clock size={10} color={MUTED} strokeWidth={2} />
+              {batch.time}
+            </span>
+          )}
+          <span style={{ color: 'rgba(252,251,251,0.50)', fontSize: 11 }}>· {batch.instructor}</span>
+        </div>
+      </div>
+
+      {/* Status pill */}
+      {isComingSoon ? (
+        <span style={{
+          flexShrink: 0, fontFamily: F, fontWeight: 700, fontSize: 10.5,
+          background: `rgba(${accent === '#FFC107' ? '255,193,7' : '103,232,249'},0.12)`,
+          border: `1px solid rgba(${accent === '#FFC107' ? '255,193,7' : '103,232,249'},0.25)`,
+          color: accent, borderRadius: 999, padding: '3px 10px', whiteSpace: 'nowrap',
+        }}>
+          قريباً
+        </span>
+      ) : (
+        <span style={{
+          flexShrink: 0, fontFamily: F, fontWeight: 700, fontSize: 10.5,
+          background: 'rgba(34,197,94,0.12)',
+          border: '1px solid rgba(34,197,94,0.25)',
+          color: '#4ade80', borderRadius: 999, padding: '3px 10px', whiteSpace: 'nowrap',
+        }}>
+          جارية
+        </span>
+      )}
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════
+   TRACK CARD 2  (new reference-style card)
+════════════════════════════════════════════════════════════ */
+function TrackCard2({
+  variant, activeBatches, upcomingBatches, expanded, onToggle,
+}: {
+  variant: 'inperson' | 'online';
+  activeBatches: ScheduleEntry[];
+  upcomingBatches: ScheduleEntry[];
+  expanded: boolean;
+  onToggle: () => void;
+}) {
+  const isInperson = variant === 'inperson';
+
+  /* Kaseet-palette gradients */
+  const bg = isInperson
+    ? 'linear-gradient(150deg, #1e1506 0%, #19110a 55%, #141010 100%)'
+    : 'linear-gradient(150deg, #0b1220 0%, #101827 55%, #161f2e 100%)';
+
+  const accent       = isInperson ? '#FFC107' : '#67e8f9';
+  const accentRgb    = isInperson ? '255,193,7' : '103,232,249';
+  const badgeBg      = `rgba(${accentRgb},0.13)`;
+  const badgeBorder  = `rgba(${accentRgb},0.28)`;
+  const borderColor  = expanded ? `rgba(${accentRgb},0.55)` : 'rgba(255,255,255,0.08)';
+
+  const price        = isInperson ? '218 دينار' : '$150';
+  const priceStrike  = isInperson ? '260 دينار' : '$200';
+  const waPhone      = isInperson ? '962790234483' : '962771052222';
+  const waMsg        = isInperson
+    ? 'السلام عليكم، أرغب في حجز مقعد في المسار الوجاهي — دورة التعليق والأداء الصوتي'
+    : 'السلام عليكم، أرغب في حجز مقعد في المسار الأونلاين — دورة التعليق الصوتي';
+
+  const totalCount = activeBatches.length + upcomingBatches.length;
+
+  return (
+    <div
+      onClick={onToggle}
+      style={{
+        background: bg,
+        border: `1px solid ${borderColor}`,
+        borderRadius: 20, cursor: 'pointer',
+        transition: 'border-color 0.25s',
+        direction: 'rtl', overflow: 'hidden',
+      }}
+    >
+      {/* ── Card body (always visible) ── */}
+      <div style={{ padding: 'clamp(20px,2.5vw,28px)' }}>
+
+        {/* Badge */}
+        <div style={{ marginBottom: 20 }}>
+          <span style={{
+            display: 'inline-flex', alignItems: 'center', gap: 5,
+            background: badgeBg, border: `1px solid ${badgeBorder}`,
+            color: accent, borderRadius: 999,
+            fontFamily: F, fontWeight: 700, fontSize: 12,
+            padding: '5px 14px',
+          }}>
+            <span style={{
+              width: 6, height: 6, borderRadius: '50%',
+              background: accent, display: 'inline-block',
+            }} />
+            {isInperson ? 'الأعمق تأثيراً' : 'الأكثر مرونة'}
+          </span>
+        </div>
+
+        {/* Title + icon */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+          <h3 style={{
+            fontFamily: F, fontWeight: 900,
+            fontSize: 'clamp(28px,3.5vw,36px)',
+            color: '#fff', margin: 0, lineHeight: 1.1,
+          }}>
+            {isInperson ? 'حضوري' : 'عن بُعد'}
+          </h3>
+          <div style={{
+            background: 'rgba(0,0,0,0.28)',
+            borderRadius: 10, padding: 8, flexShrink: 0,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            {isInperson
+              ? <MapPin size={18} color={accent} strokeWidth={2.2} />
+              : <Wifi    size={18} color={accent} strokeWidth={2.2} />}
+          </div>
+        </div>
+
+        {/* Coloured subtitle */}
+        <div style={{
+          fontFamily: F, fontWeight: 700, fontSize: 14.5,
+          color: accent, marginBottom: 8,
+        }}>
+          {isInperson ? 'تعلّم وجهاً لوجه' : 'تعلّم من أي مكان'}
+        </div>
+
+        {/* Description */}
+        <p style={{
+          fontFamily: F, fontSize: 13.5, color: MUTED,
+          lineHeight: 1.75, margin: '0 0 24px',
+        }}>
+          {isInperson
+            ? 'تفاعل مباشر مع المدربين المعتمدين في بيئة تدريبية احترافية تُشعل الدافعية وتُسرّع النمو'
+            : 'مرونة كاملة في الوقت والمكان دون التنازل عن جودة التدريب أو عمق التفاعل'}
+        </p>
+
+        {/* Bottom row: batch count + chevron toggle */}
+        <div style={{
+          display: 'flex', alignItems: 'center',
+          justifyContent: 'space-between',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+            <Calendar size={14} color={MUTED} strokeWidth={2} />
+            <span style={{ fontFamily: F, fontSize: 13, color: MUTED }}>
+              {totalCount} شعب متاحة
+            </span>
+          </div>
+          <button
+            onClick={e => { e.stopPropagation(); onToggle(); }}
+            style={{
+              width: 34, height: 34, borderRadius: '50%',
+              background: expanded ? `rgba(${accentRgb},0.15)` : 'rgba(255,255,255,0.08)',
+              border: `1px solid ${expanded ? `rgba(${accentRgb},0.35)` : 'rgba(255,255,255,0.14)'}`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer', transition: 'all 0.2s', flexShrink: 0,
+            }}
+          >
+            <ChevronDown
+              size={16}
+              color={expanded ? accent : 'rgba(252,251,251,0.65)'}
+              strokeWidth={2.5}
+              style={{
+                transform: expanded ? 'rotate(180deg)' : 'none',
+                transition: 'transform 0.3s',
+              }}
+            />
+          </button>
+        </div>
+      </div>
+
+      {/* ── Expanded panel ── */}
+      {expanded && (
+        <div style={{
+          borderTop: `1px solid rgba(${accentRgb},0.18)`,
+          background: 'rgba(0,0,0,0.22)',
+          padding: 'clamp(16px,2.5vw,24px)',
+        }}>
+
+          {/* Active batches */}
+          {activeBatches.length > 0 && (
+            <div style={{ marginBottom: 20 }}>
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14,
+              }}>
+                <div style={{ width: 3, height: 16, background: '#4ade80', borderRadius: 4 }} />
+                <span style={{ fontFamily: F, fontWeight: 800, fontSize: 13, color: '#4ade80' }}>
+                  الدورات الفعالة حالياً
+                </span>
+                <span style={{
+                  fontFamily: F, fontSize: 11, fontWeight: 700,
+                  background: 'rgba(34,197,94,0.12)',
+                  border: '1px solid rgba(34,197,94,0.25)',
+                  color: '#4ade80', borderRadius: 999, padding: '2px 9px',
+                }}>
+                  {activeBatches.length}
+                </span>
+              </div>
+              {activeBatches.map(b => (
+                <CompactBatchRow key={b.id} batch={b} accent={accent} />
+              ))}
+            </div>
+          )}
+
+          {/* Upcoming August batches */}
+          {upcomingBatches.length > 0 && (
+            <div style={{ marginBottom: 20 }}>
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14,
+                marginTop: activeBatches.length > 0 ? 20 : 0,
+              }}>
+                <div style={{ width: 3, height: 16, background: accent, borderRadius: 4 }} />
+                <span style={{ fontFamily: F, fontWeight: 800, fontSize: 13, color: accent }}>
+                  الدورات القادمة
+                </span>
+                <span style={{
+                  fontFamily: F, fontSize: 11, fontWeight: 700,
+                  background: badgeBg, border: `1px solid ${badgeBorder}`,
+                  color: accent, borderRadius: 999, padding: '2px 9px',
+                }}>
+                  {upcomingBatches.length}
+                </span>
+              </div>
+              {upcomingBatches.map(b => (
+                <CompactBatchRow key={b.id} batch={b} accent={accent} />
+              ))}
+            </div>
+          )}
+
+          {/* Price badge */}
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 12,
+            margin: '20px 0 16px',
+            padding: '14px 18px',
+            background: 'rgba(0,0,0,0.20)',
+            borderRadius: 12,
+            border: `1px solid rgba(${accentRgb},0.18)`,
+          }}>
+            <div>
+              <div style={{ fontFamily: F, fontSize: 11, color: MUTED, marginBottom: 2 }}>
+                السعر بعد الخصم
+              </div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 7 }}>
+                <span style={{ fontFamily: "'Poppins',sans-serif", fontWeight: 900, fontSize: 22, color: GOLD }}>
+                  {price}
+                </span>
+                <span style={{
+                  fontFamily: "'Poppins',sans-serif", fontSize: 13,
+                  color: 'rgba(252,251,251,0.28)', textDecoration: 'line-through',
+                }}>
+                  {priceStrike}
+                </span>
+              </div>
+            </div>
+            <div style={{ marginRight: 'auto' }}>
+              <span style={{
+                fontFamily: F, fontSize: 11.5, fontWeight: 700,
+                color: 'rgba(255,193,7,0.70)',
+              }}>
+                بإمكانية التقسيط
+              </span>
+            </div>
+          </div>
+
+          {/* CTA */}
+          <a
+            href={waLink(waPhone, waMsg)}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={e => e.stopPropagation()}
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              width: '100%', boxSizing: 'border-box',
+              background: accent, color: isInperson ? NAVY : '#0a1020',
+              border: 'none', borderRadius: 12,
+              fontFamily: F, fontWeight: 800, fontSize: 14.5,
+              padding: '13px 20px', cursor: 'pointer',
+              textDecoration: 'none',
+              transition: 'opacity 0.2s',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.opacity = '0.88')}
+            onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+          >
+            احجز مقعدك في هذا المسار ←
+          </a>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════
+   PARTNER BAR
+════════════════════════════════════════════════════════════ */
+function PartnerBar({ open, onToggle }: { open: boolean; onToggle: () => void }) {
+  return (
+    <div style={{
+      marginTop: 20, borderRadius: 14, overflow: 'hidden',
+      border: '1px solid rgba(255,255,255,0.08)',
+      direction: 'rtl',
+    }}>
+      {/* Header */}
+      <button
+        onClick={onToggle}
+        style={{
+          width: '100%', background: CARD, border: 'none',
+          display: 'flex', alignItems: 'center',
+          padding: '14px 20px', cursor: 'pointer', gap: 10,
+          justifyContent: 'space-between',
+        }}
+      >
+        {/* Right side: icon + label */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
+          <GraduationCap size={17} color={GOLD} strokeWidth={2} />
+          <span style={{ fontFamily: F, fontWeight: 700, fontSize: 13.5, color: OFF }}>
+            المؤسسات التعليمية الشريكة
+          </span>
+        </div>
+
+        {/* Left side: badge + chevron */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 9, flexShrink: 0 }}>
+          <span style={{
+            fontFamily: F, fontWeight: 700, fontSize: 12,
+            background: 'rgba(255,193,7,0.15)',
+            border: '1px solid rgba(255,193,7,0.30)',
+            color: GOLD, borderRadius: 999, padding: '3px 11px',
+          }}>
+            1
+          </span>
+          <ChevronDown
+            size={15}
+            color={MUTED}
+            strokeWidth={2.5}
+            style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s' }}
+          />
+        </div>
+      </button>
+
+      {/* Expanded partners list */}
+      {open && (
+        <div style={{
+          background: DARK, padding: '16px 20px',
+          borderTop: '1px solid rgba(255,255,255,0.06)',
+        }}>
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 14,
+            padding: '10px 14px',
+            background: 'rgba(255,255,255,0.04)',
+            borderRadius: 10,
+            border: '1px solid rgba(255,255,255,0.07)',
+          }}>
+            <div style={{
+              width: 38, height: 38, borderRadius: 9,
+              background: 'rgba(255,193,7,0.12)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+            }}>
+              <GraduationCap size={18} color={GOLD} strokeWidth={2} />
+            </div>
+            <div>
+              <div style={{ fontFamily: F, fontWeight: 700, fontSize: 13.5, color: OFF }}>
+                تطبيق وجيز
+              </div>
+              <div style={{ fontFamily: F, fontSize: 12, color: MUTED, marginTop: 2 }}>
+                أكبر منصة صوتية بالشرق الأوسط — شريك اعتماد رسمي لشهادات البرنامج
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
