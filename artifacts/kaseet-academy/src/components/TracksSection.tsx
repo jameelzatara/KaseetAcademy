@@ -11,23 +11,24 @@ interface Track {
   image: string;
 }
 
+// Exact text content as specified
 const TRACKS: Track[] = [
   {
     id: 1,
     title: 'المسار الإعلامي',
-    desc: 'برنامج شامل للتدريب على التقديم التلفزيوني والإخباري، إعداد البرامج، وإتقان الحضور أمام الكاميرا بثقة واحتراف.',
+    desc:  'برنامج شامل للتدريب على التقديم التلفزيوني والإذاعي، إعداد البرامج، وإتقان الحضور أمام الكاميرا بثقة واحتراف.',
     image: mediaTrackImg,
   },
   {
     id: 2,
     title: 'مسار التعليق والأداء الصوتي',
-    desc: 'رحلة متكاملة لتطوير نبرات الصوت، التنفس الصحيح، وتدريب الأداء الصوتي للإعلانات، الوثائقيات، والدبلجة.',
+    desc:  'رحلة متكاملة لتطوير نبرات الصوت، التنفس الصحيح، وتدريب الأداء الصوتي لمختلف الإعلانات، الوثائقيات والبودكاست.',
     image: voiceoverTrackImg,
   },
   {
     id: 3,
     title: 'مسار فن الخطابة',
-    desc: 'برنامج تطبيقي لبناء الكاريزما والقيادة الصوتية، إتقان لغة الجسد، والتأثير في الجمهور والتغلب على رهبة المسرح.',
+    desc:  'برنامج تطبيقي لبناء الكاريزما والقيادة الصوتية، إتقان لغة الجسد والتأثير في الجمهور والتخلص من رهبة المسرح.',
     image: publicSpeakingImg,
   },
 ];
@@ -49,104 +50,115 @@ function TrackCard({ track }: { track: Track }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        borderRadius: 22,
-        overflow: 'hidden',
-        background: 'rgba(255,255,255,0.04)',
-        backdropFilter: 'blur(14px)',
+        borderRadius:         22,
+        overflow:             'hidden',
+        background:           'rgba(255,255,255,0.04)',
+        backdropFilter:       'blur(14px)',
         WebkitBackdropFilter: 'blur(14px)',
-        border: hovered ? '1px solid rgba(255,193,7,0.36)' : '1px solid rgba(255,255,255,0.08)',
-        boxShadow: hovered
+        border:     hovered ? '1px solid rgba(255,193,7,0.36)' : '1px solid rgba(255,255,255,0.08)',
+        boxShadow:  hovered
           ? '0 0 32px rgba(255,193,7,0.11), 0 16px 48px rgba(0,0,0,0.50)'
           : '0 8px 32px rgba(0,0,0,0.35)',
         transition: 'border 0.3s, box-shadow 0.3s, transform 0.3s',
-        transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
-        display: 'flex',
+        transform:  hovered ? 'translateY(-4px)' : 'translateY(0)',
+        display:    'flex',
         flexDirection: 'column',
-        cursor: 'default',
+        cursor:     'default',
+        direction:  'rtl',
       }}
     >
-      {/* Cover image — full visibility, contain inside a fixed-ratio box */}
-      <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', overflow: 'hidden', flexShrink: 0, background: '#0d1624' }}>
+      {/* ── Cover image — object-fit: cover for full face/scene visibility ── */}
+      <div style={{ position: 'relative', width: '100%', aspectRatio: '4/3', overflow: 'hidden', flexShrink: 0 }}>
         <img
           src={track.image}
           alt={track.title}
           style={{
-            width: '100%', height: '100%',
-            objectFit: 'contain',
-            objectPosition: 'center',
-            display: 'block',
-            transition: 'transform 0.55s ease',
-            transform: hovered ? 'scale(1.04)' : 'scale(1.0)',
+            width:          '100%',
+            height:         '100%',
+            objectFit:      'cover',
+            objectPosition: 'center center',
+            display:        'block',
+            transition:     'transform 0.55s ease',
+            transform:      hovered ? 'scale(1.05)' : 'scale(1.0)',
           }}
         />
-        {/* bottom fade into card body */}
+        {/* Bottom gradient blend into card body */}
         <div style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0, height: 50,
-          background: 'linear-gradient(to bottom, transparent, rgba(18,28,46,0.80))',
+          position: 'absolute', bottom: 0, left: 0, right: 0, height: 60,
+          background: 'linear-gradient(to bottom, transparent, rgba(18,28,46,0.85))',
           pointerEvents: 'none',
         }} />
+        {/* Gold shimmer tint on hover */}
         {hovered && (
           <div style={{
             position: 'absolute', inset: 0,
-            background: 'linear-gradient(135deg, rgba(255,193,7,0.06) 0%, transparent 60%)',
+            background: 'linear-gradient(135deg, rgba(255,193,7,0.07) 0%, transparent 60%)',
             pointerEvents: 'none',
           }} />
         )}
       </div>
 
-      {/* Card body — flex:1 so all cards stretch to equal height */}
+      {/* ── Card body — flex:1 enforces equal heights across all 3 cards ── */}
       <div style={{
-        padding: 'clamp(18px,2.2vw,26px)',
-        display: 'flex', flexDirection: 'column',
-        gap: 12, textAlign: 'right', flex: 1,
+        padding:       'clamp(18px,2.2vw,26px)',
+        display:       'flex',
+        flexDirection: 'column',
+        gap:           12,
+        textAlign:     'right',
+        flex:          1,
       }}>
         <h3 style={{
           fontFamily: 'Tajawal, sans-serif', fontWeight: 900,
-          fontSize: 'clamp(17px,1.8vw,21px)',
-          color: hovered ? '#FFFFFF' : 'rgba(252,251,251,0.96)',
+          fontSize:   'clamp(17px,1.8vw,21px)',
+          color:      hovered ? '#FFFFFF' : 'rgba(252,251,251,0.96)',
           lineHeight: 1.3, margin: 0,
           transition: 'color 0.25s',
         }}>
           {track.title}
         </h3>
 
-        {/* Animated gold divider */}
+        {/* Animated gold accent line */}
         <div style={{
-          height: 2, borderRadius: 2,
+          height:     2,
+          borderRadius: 2,
           background: hovered ? '#FFC107' : 'rgba(255,193,7,0.35)',
-          width: hovered ? 56 : 36,
+          width:      hovered ? 56 : 36,
           transition: 'background 0.3s, width 0.3s',
-          alignSelf: 'flex-end',
+          alignSelf:  'flex-end',
         }} />
 
         <p style={{
           fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
-          fontSize: 'clamp(13px,1.3vw,14.5px)',
-          color: 'rgba(252,251,251,0.60)',
+          fontSize:   'clamp(13px,1.3vw,14.5px)',
+          color:      'rgba(252,251,251,0.60)',
           lineHeight: 1.8, margin: 0, flex: 1,
         }}>
           {track.desc}
         </p>
 
-        {/* CTA — aligned at bottom across all equal-height cards */}
+        {/* CTA — pinned to bottom via marginTop:auto on the flex parent */}
         <div style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 6,
-          paddingTop: 4, borderTop: '1px solid rgba(255,255,255,0.07)',
-          marginTop: 'auto',
+          display:    'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          gap:        6,
+          paddingTop: 6,
+          borderTop:  '1px solid rgba(255,255,255,0.07)',
+          marginTop:  'auto',
         }}>
           <span style={{
             fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 13.5,
-            color: hovered ? '#FFC107' : 'rgba(252,251,251,0.42)',
+            color:     hovered ? '#FFC107' : 'rgba(252,251,251,0.42)',
             transition: 'color 0.25s', cursor: 'pointer',
           }}>
             اكتشف المسار
           </span>
           <span style={{
-            fontSize: 14,
-            color: hovered ? '#FFC107' : 'rgba(252,251,251,0.32)',
+            fontSize:   14,
+            color:      hovered ? '#FFC107' : 'rgba(252,251,251,0.32)',
             transition: 'color 0.25s, transform 0.25s',
-            transform: hovered ? 'translateX(-3px)' : 'translateX(0)',
-            display: 'inline-block',
+            transform:  hovered ? 'translateX(-3px)' : 'translateX(0)',
+            display:    'inline-block',
           }}>
             ←
           </span>
@@ -170,12 +182,13 @@ export default function TracksSection() {
 
       <div className="relative z-10 mx-auto px-4" style={{ maxWidth: 1160 }}>
 
-        {/* Section header */}
+        {/* ── Section header — strict RTL ── */}
         <div style={{
           display: 'flex', alignItems: 'flex-end',
           justifyContent: 'space-between',
           marginBottom: 'clamp(32px,4vh,52px)',
           flexWrap: 'wrap', gap: 12,
+          direction: 'rtl',
         }}>
           <div style={{ textAlign: 'right' }}>
             <div style={{
@@ -200,8 +213,7 @@ export default function TracksSection() {
             <p style={{
               fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
               fontSize: 'clamp(13px,1.4vw,16px)',
-              color: '#E2E8F0', lineHeight: 1.8, margin: '10px 0 0',
-              maxWidth: 580,
+              color: '#E2E8F0', lineHeight: 1.8, margin: '10px 0 0', maxWidth: 580,
             }}>
               اختر من بين برامجنا الأكثر طلباً — كل مسار صُمِّم ليأخذك خطوة أبعد في عالم الإعلام والصوت والخطابة.
             </p>
@@ -221,7 +233,7 @@ export default function TracksSection() {
           </button>
         </div>
 
-        {/* 3-column grid — equal height cards via align-items:stretch */}
+        {/* ── 3-column grid — align-items:stretch enforces equal card heights ── */}
         <div className="tracks-grid" style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
