@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'wouter';
 
 import coverYasar       from '@assets/course_01_cover_1785428932170.png';
 import instructorYasar  from '@assets/course_01_instructor_1785428932171.jpeg';
@@ -479,10 +480,8 @@ export default function CoursesSection() {
               </div>
 
               {/* CTA */}
-              <a
-                href={waLink(FEATURED.title)}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/courses/voiceover"
                 style={{
                   background: GOLD, color: NAVY,
                   borderRadius: 11, padding: '12px 30px',
@@ -492,11 +491,11 @@ export default function CoursesSection() {
                   transition: 'transform 0.2s',
                   display: 'inline-block', whiteSpace: 'nowrap',
                 }}
-                onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-2px)')}
-                onMouseLeave={e => (e.currentTarget.style.transform = 'none')}
+                onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.transform = 'translateY(-2px)')}
+                onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.transform = 'none')}
               >
-                سجل الآن
-              </a>
+                سجل الآن ←
+              </Link>
             </div>
           </div>
 
