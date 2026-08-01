@@ -55,10 +55,10 @@ export default function SectionHeader({ badge, heading, description, className, 
         {badge}
       </div>
 
-      {/* H2 — 48px / 700 / 1.15lh */}
+      {/* H2 — 48px / 900 / 1.15lh */}
       <h2 style={{
         fontFamily:    'Tajawal, sans-serif',
-        fontWeight:    700,
+        fontWeight:    900,
         fontSize:      'clamp(28px, 4vw, 48px)',
         color:         'rgba(252,251,251,0.96)',
         lineHeight:    1.15,

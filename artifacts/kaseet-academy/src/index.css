@@ -31,6 +31,8 @@
   --input: 219 26% 23%;
   --ring: 45 100% 51%;
   --app-font-sans: 'Tajawal', sans-serif;
+  --font-ar:  'Tajawal', sans-serif;
+  --font-num: 'Poppins', sans-serif;
 
   /* ── Global canvas colours ── */
   --page-top:    #1D2738;
@@ -39,7 +41,17 @@
 }
 
 @layer base {
-  * { @apply border-border; font-family: var(--app-font-sans); }
+  /* Tajawal on every element — overrides browser UA for inputs & buttons */
+  *, body, button, input, textarea, select {
+    @apply border-border;
+    font-family: var(--font-ar);
+  }
+
+  /* Headings — weight 900 matches Courses section */
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-ar);
+    font-weight: 900;
+  }
 
   body {
     @apply font-sans antialiased text-foreground overflow-x-hidden;
@@ -90,4 +102,9 @@
 }
 .animate-equalizer {
   animation: equalizer-oscillate var(--speed, 1.5s) ease-in-out infinite;
+}
+
+/* ── Poppins utility — numbers, prices, English strings ── */
+.num, .price, .en {
+  font-family: var(--font-num);
 }

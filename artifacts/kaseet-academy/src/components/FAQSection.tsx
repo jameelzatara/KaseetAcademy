@@ -74,7 +74,7 @@ function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
           border: `1px solid ${open ? 'rgba(255,193,7,0.40)' : 'rgba(255,255,255,0.10)'}`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           color: open ? '#FFC107' : 'rgba(252,251,251,0.52)',
-          fontSize: 18, fontWeight: 300, lineHeight: 1,
+          fontSize: 18, fontWeight: 500, lineHeight: 1,
           transition: 'all 220ms ease',
           transform: open ? 'rotate(45deg)' : 'rotate(0)',
         }}>+</span>
