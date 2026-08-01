@@ -32,6 +32,13 @@ interface Course {
   imgPos: string;
 }
 
+const WA_NUMBER = '962771052222';
+
+function waLink(courseTitle: string) {
+  const msg = encodeURIComponent(`السلام عليكم، أرغب في التسجيل في دورة: ${courseTitle}`);
+  return `https://wa.me/${WA_NUMBER}?text=${msg}`;
+}
+
 const COURSES: Course[] = [
   {
     id: 1, badge: 'الاكثر طلباً',
@@ -241,7 +248,10 @@ function FeaturedCard({ course }: { course: Course }) {
               </div>
             </div>
 
-            <button
+            <a
+              href={waLink(course.title)}
+              target="_blank"
+              rel="noopener noreferrer"
               style={{
                 height: 46, padding: '0 28px', borderRadius: 999,
                 fontFamily: F, fontWeight: 700, fontSize: 15,
@@ -249,15 +259,16 @@ function FeaturedCard({ course }: { course: Course }) {
                 border: 'none', cursor: 'pointer',
                 boxShadow: '0 4px 18px rgba(255,193,7,0.35)',
                 transition: 'transform 250ms, box-shadow 250ms',
-                display: 'flex', alignItems: 'center', gap: 6,
+                display: 'inline-flex', alignItems: 'center', gap: 6,
                 whiteSpace: 'nowrap',
+                textDecoration: 'none',
               }}
               onMouseEnter={e => Object.assign(e.currentTarget.style, { transform: 'translateY(-2px)', boxShadow: '0 8px 28px rgba(255,193,7,0.50)' })}
               onMouseLeave={e => Object.assign(e.currentTarget.style, { transform: 'none', boxShadow: '0 4px 18px rgba(255,193,7,0.35)' })}
             >
               سجّل الآن
               <span style={{ direction: 'ltr' }}>←</span>
-            </button>
+            </a>
           </div>
         </div>
 
@@ -347,6 +358,37 @@ function GridCard({ course }: { course: Course }) {
         }}>
           {course.title}
         </h3>
+
+        {/* Hover CTA overlay */}
+        <div style={{
+          position: 'absolute', inset: 0, zIndex: 20,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: 'rgba(14,20,36,0.45)',
+          opacity: hov ? 1 : 0,
+          transition: 'opacity 0.25s ease',
+          pointerEvents: hov ? 'auto' : 'none',
+        }}>
+          <a
+            href={waLink(course.title)}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={e => e.stopPropagation()}
+            style={{
+              height: 40, padding: '0 22px', borderRadius: 999,
+              fontFamily: F, fontWeight: 700, fontSize: 13,
+              background: '#FFC107', color: '#111827',
+              display: 'inline-flex', alignItems: 'center', gap: 5,
+              textDecoration: 'none',
+              boxShadow: '0 4px 18px rgba(255,193,7,0.45)',
+              whiteSpace: 'nowrap',
+              transform: hov ? 'translateY(0)' : 'translateY(6px)',
+              transition: 'transform 0.25s ease',
+            }}
+          >
+            سجّل الآن
+            <span style={{ direction: 'ltr' }}>←</span>
+          </a>
+        </div>
       </div>
 
       {/* Instructor strip */}
@@ -455,20 +497,24 @@ export default function CoursesSection() {
               onFocus={e => (e.currentTarget.style.borderColor = 'rgba(255,193,7,0.45)')}
               onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)')}
             />
-            <button style={{
-              height: 44, padding: '0 20px', borderRadius: 12,
-              fontFamily: F, fontWeight: 700, fontSize: 14,
-              color: 'rgba(252,251,251,0.70)',
-              background: 'transparent',
-              border: '1px solid rgba(255,255,255,0.16)',
-              cursor: 'pointer', whiteSpace: 'nowrap',
-              transition: 'color 250ms, border-color 250ms, background 250ms',
-            }}
+            <a
+              href="#courses"
+              style={{
+                height: 44, padding: '0 20px', borderRadius: 12,
+                fontFamily: F, fontWeight: 700, fontSize: 14,
+                color: 'rgba(252,251,251,0.70)',
+                background: 'transparent',
+                border: '1px solid rgba(255,255,255,0.16)',
+                cursor: 'pointer', whiteSpace: 'nowrap',
+                transition: 'color 250ms, border-color 250ms, background 250ms',
+                display: 'inline-flex', alignItems: 'center',
+                textDecoration: 'none',
+              }}
               onMouseEnter={e => Object.assign(e.currentTarget.style, { color: '#FFC107', borderColor: 'rgba(255,193,7,0.40)', background: 'rgba(255,255,255,0.04)' })}
               onMouseLeave={e => Object.assign(e.currentTarget.style, { color: 'rgba(252,251,251,0.70)', borderColor: 'rgba(255,255,255,0.16)', background: 'transparent' })}
             >
               تصفح كل الدورات ←
-            </button>
+            </a>
           </div>
         </div>
 
