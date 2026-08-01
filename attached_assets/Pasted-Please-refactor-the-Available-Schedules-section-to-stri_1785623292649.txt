@@ -1,0 +1,40 @@
+Please refactor the "Available Schedules / خيارات التسجيل والمواعيد المتاحة" section to strictly match the visual design and interactive accordion functionality shown in the reference image:
+
+1. Section Header:
+   - Title: "المواعيد المتاحة للتسجيل" with a vertical Magenta accent line (`#D946EF`) on the right.
+   - Subtitle: "اختر طريقة التعلّم التي تناسب أسلوبك — كل مسار صُمِّم ليمنحك تجربة تدريبية استثنائية".
+
+2. Card Visual Styling (Unexpanded State):
+   - Card 1 (Right Side - "حضوري"):
+     * Background: Deep warm bronze/dark brown subtle gradient.
+     * Top Badge: "• الأعمق تأثيراً" (Warm amber/copper pill badge).
+     * Header Icon: MapPin icon inside a dark rounded box next to title "حضوري".
+     * Subtitle: "تعلّم وجهاً لوجه" (Amber text color).
+     * Description: "تفاعل مباشر مع المدربين المعتمدين في بيئة تدريبية احترافية تُشعل الدافعية وتُسرّع النمو".
+     * Bottom Row: Calendar icon with text "10 شعب متاحة" on the right, and a circular toggle button with a ChevronDown icon on the left.
+
+   - Card 2 (Left Side - "عن بُعد"):
+     * Background: Deep rich blue/navy gradient.
+     * Top Badge: "• الأكثر مرونة" (Soft blue pill badge).
+     * Header Icon: Wifi / Globe icon inside a dark rounded box next to title "عن بُعد".
+     * Subtitle: "تعلّم من أي مكان" (Cyan/blue text color).
+     * Description: "مرونة كاملة في الوقت والمكان دون التنازل عن جودة التدريب أو عمق التفاعل".
+     * Bottom Row: Calendar icon with text "8 شعب متاحة" on the right, and a circular toggle button with a ChevronDown icon on the left.
+
+3. Expandable Accordion Functionality (On Click):
+   - Make each card expandable when clicked (or when the chevron is clicked).
+   - When expanded, smoothly slide open an inner panel displaying the detailed schedules separated into two clear tabs/sections:
+     a) "الدورات الفعالة حالياً" (Active Running Batches)
+     b) "الدورات القادمة - أغسطس 2026" (Upcoming August 2026 Batches)
+   - Inside the expanded panel, clearly display:
+     * Pricing Badge: 
+       - For In-person: **218 دينار** (Strikethrough old price: ~~260 دينار~~).
+       - For Online: **$150** (Strikethrough old price: ~~$200~~).
+     * Detailed Schedule List: Class times, days (e.g., الإثنين والأربعاء 6:00 - 8:00 م), and remaining seats per batch.
+     * Action Button: A prominent CTA button "احجز مقعدك في هذا المسار" at the bottom of the expanded details.
+
+4. Icons:
+   - Use Lucide Icons strictly (`MapPin`, `Wifi`, `Calendar`, `ChevronDown`, `GraduationCap`).
+
+5. Bottom Partner Bar:
+   - Include the full-width collapsible bar underneath both cards: "المؤسسات التعليمية الشريكة" with a GraduationCap icon on the right, badge counter "1" and expandable chevron arrow on the left.
