@@ -68,7 +68,7 @@ export default function ConsultationSection() {
                     color: '#FFC107', fontSize: 12, fontWeight: 900,
                   }}>✓</span>
                   <span style={{
-                    fontFamily: 'Tajawal, sans-serif',
+                    fontFamily: 'Cairo, sans-serif',
                     fontSize: 16,
                     color: 'rgba(252,251,251,0.80)', fontWeight: 500,
                     textAlign: 'right', lineHeight: 1.6,
@@ -86,7 +86,7 @@ export default function ConsultationSection() {
                 rel="noopener noreferrer"
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 10,
-                  fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 16,
+                  fontFamily: 'Cairo, sans-serif', fontWeight: 600, fontSize: 16,
                   height: 50, padding: '0 28px', borderRadius: 14,
                   background: '#065f46', color: '#fff',
                   textDecoration: 'none',
@@ -112,7 +112,7 @@ export default function ConsultationSection() {
 
               {/* Secondary button */}
               <button style={{
-                fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 16,
+                fontFamily: 'Cairo, sans-serif', fontWeight: 600, fontSize: 16,
                 color: 'rgba(252,251,251,0.55)',
                 background: 'transparent',
                 border: '1px solid rgba(255,255,255,0.18)',
@@ -164,10 +164,10 @@ export default function ConsultationSection() {
 
             {/* Name + title */}
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontFamily: 'Tajawal, sans-serif', fontWeight: 800, fontSize: 18, color: 'rgba(252,251,251,0.95)' }}>
+              <div style={{ fontFamily: 'Cairo, sans-serif', fontWeight: 800, fontSize: 18, color: 'rgba(252,251,251,0.95)' }}>
                 المستشارة التعليمية
               </div>
-              <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 13, color: 'rgba(252,251,251,0.46)', marginTop: 4 }}>
+              <div style={{ fontFamily: 'Cairo, sans-serif', fontSize: 13, color: 'rgba(252,251,251,0.46)', marginTop: 4 }}>
                 أكاديمية كاسيت ميديا
               </div>
             </div>
@@ -184,7 +184,7 @@ export default function ConsultationSection() {
                 width: 8, height: 8, borderRadius: '50%', flexShrink: 0,
                 background: '#4ade80', boxShadow: '0 0 8px rgba(74,222,128,0.9)',
               }} />
-              <span style={{ fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 12.5, color: 'rgba(252,251,251,0.90)' }}>
+              <span style={{ fontFamily: 'Cairo, sans-serif', fontWeight: 600, fontSize: 12.5, color: 'rgba(252,251,251,0.90)' }}>
                 متواجدة الآن للرد على استفساراتك
               </span>
             </div>
@@ -204,7 +204,7 @@ export default function ConsultationSection() {
                   <div style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: 17, color: '#FFC107', direction: 'ltr' }}>
                     {s.value}
                   </div>
-                  <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11, color: 'rgba(252,251,251,0.44)', marginTop: 3 }}>
+                  <div style={{ fontFamily: 'Cairo, sans-serif', fontSize: 11, color: 'rgba(252,251,251,0.44)', marginTop: 3 }}>
                     {s.label}
                   </div>
                 </div>

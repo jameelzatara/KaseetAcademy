@@ -1,0 +1,134 @@
+Perform the following UI refinements without changing the overall layout or structure. These are visual polishing tasks only.
+
+1. Arabic Typography & RTL Alignment (High Priority)
+
+- Perform a full RTL alignment audit across the entire website (except the Hero section).
+- Ensure every Arabic heading, paragraph, list, price, badge, button, metadata row and icon follows proper Arabic reading flow.
+- Text must always be right-aligned.
+- Icons should appear in the correct RTL position.
+- Fix any inconsistent spacing or justification.
+
+Additionally:
+
+- Use the exact Arabic font shown in the attached reference image throughout the website.
+- Apply it consistently to headings, body text, buttons, cards and section titles.
+- Keep font weights balanced to maintain a premium modern appearance.
+
+----------------------------------------------------
+
+2. Testimonials Section
+
+Section:
+"آراء طلابنا وقصص نجاحهم"
+"أصوات حقيقية عبرت من الشغف إلى الاحتراف"
+
+Do NOT autoplay the cards by continuously sliding.
+
+Instead:
+
+- Keep one row only.
+- Add elegant previous / next navigation arrows.
+- Users should manually browse the testimonials.
+
+OR
+
+If autoplay remains enabled:
+
+- Make it an infinite seamless loop.
+- No jump back to the first slide.
+- Continuous replace effect.
+- Smooth motion.
+- Pause on hover.
+
+----------------------------------------------------
+
+3. Media Career Card
+
+Inside:
+
+"المسار الإعلامي"
+
+Raise the image vertically.
+
+Current issue:
+The image sits lower than the neighboring cards.
+
+Requirements:
+
+- Move the image upward.
+- Align the visible face height with the adjacent cards.
+- Keep the same crop ratio.
+- Do not stretch the image.
+
+----------------------------------------------------
+
+4. Featured Courses Section
+
+Section title:
+
+"دوراتنا المتميزة"
+
+Subtitle:
+
+"اختر من بين برامجنا الأكثر طلباً — وجاهي أو أونلاين تفاعلي، ومقاعد محدودة."
+
+Keep the current layout and design exactly as it is.
+
+Only replace the written content with the wording from the attached reference image.
+
+Do not redesign the section.
+
+Only update the copy while preserving the existing UI.
+
+----------------------------------------------------
+
+5. Instagram Reels Section
+
+Section title:
+
+"أصوات صنعناها معاً"
+
+Subtitle:
+
+"مقاطع حيّة من ورشنا وأعمال متدربينا ومدربينا على إنستغرام — اسمع الفرق قبل أن تسجّل."
+
+Update the heading and subtitle using the above wording.
+
+Keep the existing layout.
+
+----------------------------------------------------
+
+6. Instagram Reel Cards
+
+Current issue:
+
+There is a heavy black shadow/overlay covering the top area of each Reel preview.
+
+Requirements:
+
+- Remove the harsh black overlay.
+- Preserve readability.
+- Replace it with a soft edge fade.
+
+Use one of these approaches:
+
+Option A:
+Very light top gradient
+rgba(0,0,0,0.18)
+
+Option B:
+Apply only rounded top corners with a subtle transparent fade.
+
+The reel thumbnails should remain bright and visible.
+
+Faces, text and thumbnails must not be hidden by the overlay.
+
+The result should feel cleaner and more premium.
+
+----------------------------------------------------
+
+Do not redesign the page.
+
+Do not change spacing unless necessary.
+
+Focus only on these refinements while preserving the existing design system.

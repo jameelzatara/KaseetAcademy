@@ -81,7 +81,7 @@ function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
 
         {/* Question text — center-vertically via height:64px on parent */}
         <span style={{
-          fontFamily: 'Tajawal, sans-serif', fontWeight: 700,
+          fontFamily: 'Cairo, sans-serif', fontWeight: 700,
           fontSize: 'clamp(14px,1.4vw,16px)',
           color: open ? '#FFC107' : 'rgba(252,251,251,0.88)',
           lineHeight: 1.4,
@@ -107,7 +107,7 @@ function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
             marginBottom: 18,
           }} />
           <p style={{
-            fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
+            fontFamily: 'Cairo, sans-serif', fontWeight: 400,
             fontSize: 16,
             color: 'rgba(226,232,240,0.72)',
             lineHeight: 1.9, margin: 0,

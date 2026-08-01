@@ -199,20 +199,18 @@ export default function ReelsSection() {
                   marginLeft: -(CARD_W / 2),
                   width:      CARD_W,
                   overflow:   'hidden',
-                  background: 'rgba(12,18,30,0.95)',
+                  background: 'rgba(18,26,42,0.88)',
                   display:    'flex',
                   flexDirection: 'column',
                   transition: 'transform 0.50s cubic-bezier(0.25,0.8,0.25,1), opacity 0.50s ease, box-shadow 0.50s ease, border 0.28s ease',
                   ...cstyle,
                 }}
               >
-                {/* Top spacing */}
-                <div style={{ height: 10, flexShrink: 0, background: 'rgba(12,18,30,0.95)' }} />
-
                 {/* Instagram embed */}
                 <div className="reel-embed-wrap" style={{
-                  flex: 1, minHeight: 490, background: '#000', overflow: 'hidden',
+                  flex: 1, minHeight: 490, background: 'transparent', overflow: 'hidden',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  position: 'relative',
                 }}>
                   <blockquote
                     className="instagram-media"
@@ -243,9 +241,9 @@ export default function ReelsSection() {
                       width: 24, height: 24, borderRadius: '50%',
                       background: '#FFC107', color: '#18202c',
                       display: 'grid', placeItems: 'center',
-                      fontFamily: 'Tajawal, sans-serif', fontWeight: 900, fontSize: 12, flexShrink: 0,
+                      fontFamily: 'Cairo, sans-serif', fontWeight: 900, fontSize: 12, flexShrink: 0,
                     }}>ك</div>
-                    <span style={{ fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 12.5, color: 'rgba(255,255,255,0.85)' }}>
+                    <span style={{ fontFamily: 'Cairo, sans-serif', fontWeight: 600, fontSize: 12.5, color: 'rgba(255,255,255,0.85)' }}>
                       من متدرّبي كاسيت
                     </span>
                   </div>

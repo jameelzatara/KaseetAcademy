@@ -108,7 +108,7 @@ function TypeBadge({ label }: { label: string }) {
       display: 'inline-flex', alignItems: 'center', gap: 5,
       padding: '3px 12px', borderRadius: 999,
       fontSize: 11.5, fontWeight: 700,
-      fontFamily: 'Tajawal, sans-serif',
+      fontFamily: 'Cairo, sans-serif',
       background: live ? 'rgba(255,193,7,0.12)' : 'rgba(99,179,237,0.14)',
       border: `1px solid ${live ? 'rgba(255,193,7,0.32)' : 'rgba(99,179,237,0.32)'}`,
       color: live ? '#FFC107' : '#90cdf4',
@@ -166,7 +166,7 @@ function FeaturedCard({ course }: { course: Course }) {
             display: 'inline-flex', alignItems: 'center', gap: 5,
             padding: '4px 12px', borderRadius: 999,
             background: 'rgba(255,193,7,0.18)', border: '1px solid rgba(255,193,7,0.45)',
-            fontFamily: 'Tajawal, sans-serif', fontWeight: 800, fontSize: 12, color: '#FFC107',
+            fontFamily: 'Cairo, sans-serif', fontWeight: 800, fontSize: 12, color: '#FFC107',
             backdropFilter: 'blur(8px)',
           }}>
             <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#FFC107', boxShadow: '0 0 5px rgba(255,193,7,0.8)', flexShrink: 0 }} />
@@ -176,7 +176,7 @@ function FeaturedCard({ course }: { course: Course }) {
         {/* Title over gradient */}
         <div style={{ position: 'absolute', bottom: 18, right: 20, left: 20 }}>
           <h3 style={{
-            fontFamily: 'Tajawal, sans-serif', fontWeight: 700,
+            fontFamily: 'Cairo, sans-serif', fontWeight: 700,
             fontSize: 'clamp(18px, 2vw, 26px)',
             color: 'rgba(252,251,251,0.98)', lineHeight: 1.25,
             margin: 0, letterSpacing: '0.01em',
@@ -193,7 +193,7 @@ function FeaturedCard({ course }: { course: Course }) {
       }}>
         {/* Description — 16px / 1.9lh / max 3 lines */}
         <p style={{
-          fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
+          fontFamily: 'Cairo, sans-serif', fontWeight: 400,
           fontSize: 16, color: 'rgba(252,251,251,0.65)',
           lineHeight: 1.9, margin: 0,
           display: '-webkit-box' as const,
@@ -217,7 +217,7 @@ function FeaturedCard({ course }: { course: Course }) {
             <div style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800, color: '#FFC107', fontSize: 22, lineHeight: 1, direction: 'ltr' }}>
               {course.price}
             </div>
-            <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11, color: 'rgba(252,251,251,0.42)', marginTop: 3, textAlign: 'right' }}>
+            <div style={{ fontFamily: 'Cairo, sans-serif', fontSize: 11, color: 'rgba(252,251,251,0.42)', marginTop: 3, textAlign: 'right' }}>
               {course.priceLabel}
             </div>
           </div>
@@ -225,10 +225,10 @@ function FeaturedCard({ course }: { course: Course }) {
             background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)',
             borderRadius: 12, padding: '8px 14px', textAlign: 'center',
           }}>
-            <div style={{ fontFamily: 'Tajawal, sans-serif', fontWeight: 700, color: 'rgba(252,251,251,0.88)', fontSize: 14, lineHeight: 1, textAlign: 'right' }}>
+            <div style={{ fontFamily: 'Cairo, sans-serif', fontWeight: 700, color: 'rgba(252,251,251,0.88)', fontSize: 14, lineHeight: 1, textAlign: 'right' }}>
               {course.duration}
             </div>
-            <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11, color: 'rgba(252,251,251,0.42)', marginTop: 3, textAlign: 'right' }}>
+            <div style={{ fontFamily: 'Cairo, sans-serif', fontSize: 11, color: 'rgba(252,251,251,0.42)', marginTop: 3, textAlign: 'right' }}>
               {course.durationLabel}
             </div>
           </div>
@@ -240,7 +240,7 @@ function FeaturedCard({ course }: { course: Course }) {
           padding: '9px 14px', borderRadius: 10,
           background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)',
         }}>
-          <span style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 12.5, color: 'rgba(226,232,240,0.65)', lineHeight: 1.5, flex: 1, textAlign: 'right' }}>
+          <span style={{ fontFamily: 'Cairo, sans-serif', fontSize: 12.5, color: 'rgba(226,232,240,0.65)', lineHeight: 1.5, flex: 1, textAlign: 'right' }}>
             {course.schedule}
           </span>
           <span style={{ fontSize: 14, flexShrink: 0 }}>📅</span>
@@ -250,10 +250,10 @@ function FeaturedCard({ course }: { course: Course }) {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'flex-start' }}>
             <div style={{ textAlign: 'right' }}>
-              <div style={{ fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 14, color: 'rgba(252,251,251,0.90)' }}>
+              <div style={{ fontFamily: 'Cairo, sans-serif', fontWeight: 700, fontSize: 14, color: 'rgba(252,251,251,0.90)' }}>
                 {course.instructor.name}
               </div>
-              <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 12, color: 'rgba(252,251,251,0.45)' }}>
+              <div style={{ fontFamily: 'Cairo, sans-serif', fontSize: 12, color: 'rgba(252,251,251,0.45)' }}>
                 {course.instructor.title}
               </div>
             </div>
@@ -268,7 +268,7 @@ function FeaturedCard({ course }: { course: Course }) {
           {/* Primary CTA */}
           <button style={{
             height: 50, padding: '0 28px', borderRadius: 14,
-            fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 16,
+            fontFamily: 'Cairo, sans-serif', fontWeight: 600, fontSize: 16,
             background: '#FFC107', color: '#111827',
             border: 'none', cursor: 'pointer',
             boxShadow: '0 4px 18px rgba(255,193,7,0.35)',
@@ -338,7 +338,7 @@ function CourseCard({ course }: { course: Course }) {
       }}>
         {/* Card title — 22px / 600 / max 2 lines */}
         <h3 style={{
-          fontFamily: 'Tajawal, sans-serif', fontWeight: 600,
+          fontFamily: 'Cairo, sans-serif', fontWeight: 600,
           fontSize: 22,
           color: 'rgba(252,251,251,0.96)', lineHeight: 1.3,
           margin: 0, letterSpacing: '0.01em',
@@ -352,7 +352,7 @@ function CourseCard({ course }: { course: Course }) {
 
         {/* Description — 16px / 1.9lh / max 3 lines */}
         <p style={{
-          fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
+          fontFamily: 'Cairo, sans-serif', fontWeight: 400,
           fontSize: 16, color: 'rgba(252,251,251,0.55)',
           lineHeight: 1.9, margin: 0,
           display: '-webkit-box' as const,
@@ -371,7 +371,7 @@ function CourseCard({ course }: { course: Course }) {
           gap: 8,
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 13, color: 'rgba(252,251,251,0.50)' }}>
+            <span style={{ fontFamily: 'Cairo, sans-serif', fontSize: 13, color: 'rgba(252,251,251,0.50)' }}>
               {course.instructor.name}
             </span>
             <img src={course.instructor.photo} alt={course.instructor.name} style={{
@@ -390,7 +390,7 @@ function CourseCard({ course }: { course: Course }) {
           onClick={e => e.stopPropagation()}
           style={{
             width: '100%', height: 50, borderRadius: 14,
-            fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 16,
+            fontFamily: 'Cairo, sans-serif', fontWeight: 600, fontSize: 16,
             background: '#FFC107', color: '#111827',
             border: 'none', cursor: 'pointer',
             boxShadow: '0 4px 16px rgba(255,193,7,0.30)',
@@ -468,7 +468,7 @@ export default function CoursesSection() {
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: 40 }}>
           <button style={{
             height: 50, padding: '0 32px', borderRadius: 14,
-            fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 16,
+            fontFamily: 'Cairo, sans-serif', fontWeight: 600, fontSize: 16,
             color: 'rgba(252,251,251,0.60)',
             background: 'transparent',
             border: '1px solid rgba(255,255,255,0.16)',
