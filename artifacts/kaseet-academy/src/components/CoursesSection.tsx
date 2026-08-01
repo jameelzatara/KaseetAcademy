@@ -329,7 +329,7 @@ export default function CoursesSection() {
             fontFamily: F, fontWeight: 500,
             fontSize: 'clamp(14px,1.8vw,18px)',
             color: 'rgba(252,251,251,0.72)',
-            marginTop: 14, maxWidth: 660, marginInlineStart: 'auto', lineHeight: 1.8,
+            marginTop: 14, maxWidth: 660, marginInlineStart: 0, lineHeight: 1.8,
           }}>
             اختر من بين برامجنا الأكثر طلباً — حضوري أو مباشر تفاعلي (Online LIVE)، ومقاعد محدودة.
           </p>

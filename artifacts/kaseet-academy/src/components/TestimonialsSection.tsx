@@ -55,6 +55,7 @@ function ReviewCard({ review }: { review: Review }) {
       width:                'clamp(300px,28vw,360px)',
       boxShadow:            '0 10px 30px rgba(0,0,0,0.25)',
       direction:            'rtl',
+      marginInlineEnd:      'clamp(16px,2vw,24px)',
     }}>
       {/* Top row */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
@@ -182,7 +183,6 @@ export default function TestimonialsSection() {
       <div className="testimonials-marquee-wrap" style={{ overflow: 'hidden', width: '100%' }}>
         <div className="testimonials-marquee" style={{
           display: 'flex',
-          gap: 'clamp(16px,2vw,24px)',
           width: 'max-content',
           direction: 'ltr',
         }}>

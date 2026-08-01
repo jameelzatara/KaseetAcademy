@@ -34,12 +34,23 @@ export default function ConsultationSection() {
 
       <div className="relative z-10 mx-auto px-4" style={{ maxWidth: 1160 }}>
 
+        {/* ── Unified card container ── */}
+        <div style={{
+          background:   'rgba(49,61,84,0.55)',
+          border:       '1px solid rgba(255,255,255,0.10)',
+          borderRadius: 24,
+          padding:      'clamp(32px,4vw,56px)',
+          boxShadow:    '0 20px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+        }}>
+
         {/* Centered section header */}
         <SectionHeader
           badge="استشارة مجانية 100%"
           heading={<>محتار في اختيار المسار الأنسب <Gold>لصوتك؟</Gold></>}
           description="تواصل مع المستشارة التعليمية لتحديد مستواك الحالي وبناء خطتك التدريبية المخصصة — بدون أي التزام."
-          style={{ marginBottom: 56 }}
+          style={{ marginBottom: 40 }}
         />
 
         {/* Two-column layout */}
@@ -212,6 +223,8 @@ export default function ConsultationSection() {
             </div>
           </div>
         </div>
+
+        </div>{/* end unified card */}
       </div>
 
       <style>{`

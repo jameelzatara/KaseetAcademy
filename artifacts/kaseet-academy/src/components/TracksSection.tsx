@@ -20,7 +20,7 @@ const TRACKS: Track[] = [
     title:  'المسار الإعلامي',
     desc:   'برنامج شامل للتدريب على التقديم التلفزيوني والإذاعي، إعداد البرامج، وإتقان الحضور أمام الكاميرا بثقة واحتراف.',
     image:  mediaTrackImg,
-    imgPos: 'center top',
+    imgPos: 'center 45%',
   },
   {
     id: 2,
