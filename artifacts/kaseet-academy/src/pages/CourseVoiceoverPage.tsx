@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'wouter';
+import { ChevronDown, Calendar, Clock, MapPin, Wifi, Users } from 'lucide-react';
 
 /* ── Asset imports ─────────────────────────────────────────── */
 import ayaImg      from '@assets/اية_القماز_1785619557679.jpeg';
@@ -75,6 +76,28 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
   );
 }
 
+/* ── Schedule data ─────────────────────────────────────────── */
+const scheduleData = {
+  inPerson: [
+    { id: 'g34',  group: 'مجموعة 34 - صباحي - وجاهي',       course: 'دورة التعليق والاداء الصوتي (الاساسيات)',              instructor: 'رنا عزام',  days: 'أحد / ثلاثاء / خميس', month: 'يوليو',  day: '21', startDate: '2026-07-21', endDate: '2026-11-08', status: 'جارية الآن' },
+    { id: 'g28',  group: 'مجموعة 28 - مسائي - وجاهي',       course: 'دورة التعليق والاداء الصوتي (الاساسيات)',              instructor: 'يسار عبده', days: 'أحد / ثلاثاء / خميس', month: 'يوليو',  day: '12', startDate: '2026-07-12', endDate: '2026-07-30', status: 'جارية الآن' },
+    { id: 'g36',  group: 'مجموعة 36 متقدمة - وجاهي',        course: 'دورة الاداء الصوتي المتقدمة (الرد الالي والاعلانات)', instructor: 'يسار عبده', days: 'الاحد',               month: 'يوليو',  day: '12', startDate: '2026-07-12', endDate: '-',          status: 'جارية الآن' },
+    { id: 'g31',  group: 'مجموعة 31 - صباحي - وجاهي',       course: 'دورة التعليق والاداء الصوتي (الاساسيات)',              instructor: 'رنا عزام',  days: 'أحد / ثلاثاء / خميس', month: 'فبراير', day: '07', startDate: '2026-02-07', endDate: '-',          status: 'جارية الآن' },
+    { id: 'g26',  group: 'مجموعة 26 - صباحي - وجاهي',       course: 'دورة التعليق والاداء الصوتي (الاساسيات)',              instructor: 'رنا عزام',  days: 'اثنين / اربعاء',     month: 'يناير',  day: '07', startDate: '2026-01-07', endDate: '2026-07-27', status: 'جارية الآن' },
+    { id: 'g17',  group: 'مجموعة 17 - مسائي - وجاهي',       course: 'دورة الاداء الصوتي المتقدمة (كتب صوتية)',              instructor: 'يسار عبده', days: 'الأثنين',             month: 'مايو',   day: '18', startDate: '2026-05-18', endDate: '2026-07-13', status: 'جارية الآن' },
+    { id: 'g18',  group: 'مجموعة 18 - مسائي - وجاهي',       course: 'دورة الاداء الصوتي المتقدمة (الرد الالي والاعلانات)', instructor: 'يسار عبده', days: 'الأربعاء',            month: 'مايو',   day: '20', startDate: '2026-05-20', endDate: '2026-07-22', status: 'جارية الآن' },
+    { id: 'gAdv', group: 'مجموعة متقدمة - مسائي - وجاهي',   course: 'دورة الاداء الصوتي المتقدمة (الرد الالي والاعلانات)', instructor: 'يسار عبده', days: 'السبت',               month: 'يونيو',  day: '27', startDate: '2026-06-27', endDate: '2026-08-15', status: 'جارية الآن' },
+  ],
+  online: [
+    { id: 'g25', group: 'مجموعة 25 - اونلاين', course: 'دورة التعليق الصوتي أونلاين (الاساسيات)', instructor: 'يسار عبده', days: 'السبت',    month: 'يونيو',  day: '20', startDate: '2026-06-20', endDate: '-', status: 'جارية الآن' },
+    { id: 'g27', group: 'مجموعة 27 - اونلاين', course: 'دورة التعليق الصوتي أونلاين (الاساسيات)', instructor: 'رنا عزام',  days: 'السبت',    month: 'شهر 6',  day: '--',  startDate: 'قريباً',    endDate: '-', status: 'جارية الآن' },
+    { id: 'g29', group: 'مجموعة 29 - اونلاين', course: 'دورة التعليق الصوتي أونلاين (الاساسيات)', instructor: 'رنا عزام',  days: 'السبت',    month: 'شهر 7',  day: '--',  startDate: 'قريباً',    endDate: '-', status: 'جارية الآن' },
+    { id: 'g32', group: 'مجموعة 32 - اونلاين', course: 'دورة التعليق الصوتي أونلاين (الاساسيات)', instructor: 'رنا عزام',  days: 'الثلاثاء', month: 'شهر 7',  day: '--',  startDate: 'قريباً',    endDate: '-', status: 'جارية الآن' },
+    { id: 'g33', group: 'مجموعة 33 - اونلاين', course: 'دورة التعليق الصوتي أونلاين (الاساسيات)', instructor: 'عمر درابكة',days: 'السبت',    month: 'شهر 7',  day: '--',  startDate: 'قريباً',    endDate: '-', status: 'جارية الآن' },
+    { id: 'g35', group: 'مجموعة 35 - اونلاين', course: 'دورة التعليق الصوتي أونلاين (الاساسيات)', instructor: 'عمر درابكة',days: 'الاحد',    month: 'شهر 7',  day: '--',  startDate: 'قريباً',    endDate: '-', status: 'جارية الآن' },
+  ],
+};
+
 /* ── Curriculum data ───────────────────────────────────────── */
 const LECTURES_INPERSON = [
   {
@@ -117,6 +140,7 @@ export default function CourseVoiceoverPage() {
   const [track, setTrack] = useState<'inperson' | 'online'>('inperson');
   const [currTab, setCurrTab] = useState<'inperson' | 'online'>('inperson');
   const [openLec, setOpenLec] = useState<number | null>(null);
+  const [openAccordion, setOpenAccordion] = useState<'inperson' | 'online' | null>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   // scroll to top on mount
@@ -372,6 +396,9 @@ export default function CourseVoiceoverPage() {
               priceLabel="بعد الخصم"
               cta="اختر المسار الوجاهي"
               installment
+              batchCount={scheduleData.inPerson.length}
+              expanded={openAccordion === 'inperson'}
+              onExpand={() => setOpenAccordion(openAccordion === 'inperson' ? null : 'inperson')}
             />
 
             {/* Online card */}
@@ -392,8 +419,67 @@ export default function CourseVoiceoverPage() {
               priceLabel="رسوم التسجيل"
               cta="اختر المسار الأونلاين"
               installment
+              batchCount={scheduleData.online.length}
+              expanded={openAccordion === 'online'}
+              onExpand={() => setOpenAccordion(openAccordion === 'online' ? null : 'online')}
             />
           </div>
+
+          {/* ── Accordion batch list ── */}
+          {openAccordion && (
+            <div style={{ marginTop: 24 }}>
+              {/* Header bar */}
+              <div style={{
+                display: 'flex', alignItems: 'center',
+                justifyContent: 'space-between',
+                background: CARD2,
+                borderRadius: '14px 14px 0 0',
+                padding: '12px 20px',
+                borderBottom: `2px solid ${GOLD}`,
+                direction: 'rtl',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <div style={{ width: 3, height: 20, background: GOLD, borderRadius: 4 }} />
+                  <span style={{
+                    fontFamily: F, fontWeight: 800, fontSize: 15, color: OFF,
+                  }}>
+                    {openAccordion === 'inperson' ? 'شعب تدريب حضوري' : 'شعب تدريب أونلاين'}
+                  </span>
+                </div>
+                <span style={{
+                  fontFamily: F, fontWeight: 700, fontSize: 13,
+                  background: 'rgba(255,193,7,0.15)',
+                  border: '1px solid rgba(255,193,7,0.30)',
+                  color: GOLD, borderRadius: 999,
+                  padding: '4px 14px',
+                }}>
+                  {openAccordion === 'inperson'
+                    ? `${scheduleData.inPerson.length} شعب متاحة`
+                    : `${scheduleData.online.length} شعب متاحة`}
+                </span>
+              </div>
+
+              {/* Batch cards */}
+              <div style={{
+                background: DARK, borderRadius: '0 0 14px 14px',
+                border: '1px solid rgba(255,255,255,0.06)',
+                borderTop: 'none',
+                overflow: 'hidden',
+              }}>
+                {(openAccordion === 'inperson'
+                  ? scheduleData.inPerson
+                  : scheduleData.online
+                ).map((batch, idx, arr) => (
+                  <BatchCard
+                    key={batch.id}
+                    batch={batch}
+                    isLast={idx === arr.length - 1}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
         </div>
       </section>
 
@@ -886,6 +972,7 @@ function RegistrationCard({ track, onRegister }: {
 function TrackCard({
   selected, onClick, icon, badge, title, subtitle, details,
   price, priceStrike, priceLabel, cta, installment,
+  batchCount, expanded, onExpand,
 }: {
   selected: boolean;
   onClick: () => void;
@@ -899,6 +986,9 @@ function TrackCard({
   priceLabel: string;
   cta: string;
   installment?: boolean;
+  batchCount?: number;
+  expanded?: boolean;
+  onExpand?: () => void;
 }) {
   return (
     <div
@@ -991,6 +1081,211 @@ function TrackCard({
           {selected ? '✓ تم الاختيار' : cta}
         </div>
       </div>
+
+      {/* Expand batches toggle */}
+      {onExpand && batchCount !== undefined && (
+        <button
+          onClick={e => { e.stopPropagation(); onExpand(); }}
+          style={{
+            marginTop: 16, width: '100%',
+            background: expanded ? 'rgba(255,193,7,0.10)' : 'rgba(255,255,255,0.04)',
+            border: `1px solid ${expanded ? 'rgba(255,193,7,0.30)' : 'rgba(255,255,255,0.10)'}`,
+            borderRadius: 10, padding: '9px 16px',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+            cursor: 'pointer', transition: 'all 0.2s',
+          }}
+        >
+          <span style={{ fontFamily: F, fontWeight: 700, fontSize: 13, color: expanded ? GOLD : MUTED }}>
+            {expanded ? 'إخفاء المواعيد' : `عرض ${batchCount} شعبة متاحة`}
+          </span>
+          <ChevronDown
+            size={16}
+            color={expanded ? GOLD : MUTED}
+            strokeWidth={2.5}
+            style={{
+              transform: expanded ? 'rotate(180deg)' : 'none',
+              transition: 'transform 0.3s',
+            }}
+          />
+        </button>
+      )}
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════
+   BATCH CARD
+════════════════════════════════════════════════════════════ */
+type BatchEntry = {
+  id: string;
+  group: string;
+  course: string;
+  instructor: string;
+  days: string;
+  month: string;
+  day: string;
+  startDate: string;
+  endDate: string;
+  status: string;
+};
+
+function BatchCard({ batch, isLast }: { batch: BatchEntry; isLast: boolean }) {
+  const hasDay = batch.day && batch.day !== '--';
+  const isOnline = batch.course.includes('أونلاين');
+
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'center',
+      gap: 'clamp(10px,2vw,18px)',
+      padding: 'clamp(14px,2vw,18px) clamp(14px,2.5vw,22px)',
+      borderBottom: isLast ? 'none' : '1px solid rgba(255,255,255,0.06)',
+      direction: 'rtl', flexWrap: 'wrap',
+    }}>
+
+      {/* ── Date box ── */}
+      <div style={{
+        width: 64, height: 64, borderRadius: 14, flexShrink: 0,
+        background: '#1D1A27',
+        display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center',
+        gap: 2,
+      }}>
+        {hasDay ? (
+          <>
+            <span style={{
+              fontFamily: F, fontSize: 10, color: 'rgba(252,251,251,0.50)',
+              fontWeight: 600, lineHeight: 1,
+            }}>
+              {batch.month}
+            </span>
+            <span style={{
+              fontFamily: "'Poppins', sans-serif", fontWeight: 900,
+              fontSize: 24, color: '#fff', lineHeight: 1,
+            }}>
+              {batch.day}
+            </span>
+          </>
+        ) : (
+          <span style={{
+            fontFamily: F, fontSize: 11, fontWeight: 700,
+            color: 'rgba(252,251,251,0.55)', textAlign: 'center', lineHeight: 1.3,
+          }}>
+            {batch.month}<br />قريباً
+          </span>
+        )}
+      </div>
+
+      {/* ── Centre info ── */}
+      <div style={{ flex: 1, minWidth: 0 }}>
+        {/* Line 1: group name + status badge */}
+        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 8, marginBottom: 5 }}>
+          <span style={{
+            fontFamily: F, fontWeight: 800, fontSize: 14, color: OFF,
+          }}>
+            {batch.group}
+          </span>
+          <span style={{
+            display: 'inline-flex', alignItems: 'center', gap: 4,
+            background: 'rgba(34,197,94,0.12)',
+            border: '1px solid rgba(34,197,94,0.28)',
+            color: '#4ade80', borderRadius: 999,
+            fontFamily: F, fontWeight: 700, fontSize: 11,
+            padding: '2px 10px', whiteSpace: 'nowrap',
+          }}>
+            • {batch.status}
+          </span>
+        </div>
+
+        {/* Line 2: course + instructor + days + dates */}
+        <div style={{
+          display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 6,
+          fontFamily: F, fontSize: 12.5, color: MUTED, marginBottom: 5,
+        }}>
+          <span>{batch.course}</span>
+          <span style={{ color: 'rgba(255,255,255,0.20)' }}>·</span>
+          <span style={{ color: 'rgba(252,251,251,0.75)', fontWeight: 600 }}>{batch.instructor}</span>
+          <span style={{ color: 'rgba(255,255,255,0.20)' }}>·</span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+            <Calendar size={11} color={MUTED} strokeWidth={2} />
+            {batch.days}
+          </span>
+          {batch.startDate !== 'قريباً' && (
+            <>
+              <span style={{ color: 'rgba(255,255,255,0.20)' }}>·</span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+                <Clock size={11} color={MUTED} strokeWidth={2} />
+                {batch.startDate}
+                {batch.endDate && batch.endDate !== '-' && ` — ${batch.endDate}`}
+              </span>
+            </>
+          )}
+        </div>
+
+        {/* Line 3: lecture count link */}
+        <button
+          onClick={e => e.stopPropagation()}
+          style={{
+            background: 'none', border: 'none', padding: 0, cursor: 'pointer',
+            fontFamily: F, fontSize: 12, fontWeight: 700,
+            color: GOLD,
+            display: 'inline-flex', alignItems: 'center', gap: 4,
+          }}
+        >
+          {isOnline ? '22' : '23'} محاضرة — اضغط لعرض الجدول الزمني
+          <ChevronDown size={12} color={GOLD} strokeWidth={2.5} />
+        </button>
+      </div>
+
+      {/* ── Seat progress ── */}
+      <div style={{ flexShrink: 0, textAlign: 'center', minWidth: 60 }}>
+        <div style={{ fontFamily: F, fontSize: 10, color: MUTED, marginBottom: 4 }}>المقاعد</div>
+        <div style={{
+          width: 56, height: 6, borderRadius: 99,
+          background: 'rgba(255,255,255,0.10)', overflow: 'hidden',
+        }}>
+          <div style={{
+            width: hasDay ? '70%' : '25%',
+            height: '100%',
+            background: hasDay ? '#f97316' : '#22c55e',
+            borderRadius: 99,
+          }} />
+        </div>
+        <div style={{
+          fontFamily: F, fontSize: 10, fontWeight: 700,
+          color: hasDay ? '#fb923c' : '#4ade80', marginTop: 3,
+        }}>
+          {hasDay ? 'جارية' : 'متاحة'}
+        </div>
+      </div>
+
+      {/* ── CTA button ── */}
+      <a
+        href={`https://wa.me/${isOnline ? '962771052222' : '962790234483'}?text=${encodeURIComponent(`السلام عليكم، أرغب في حجز مقعد في ${batch.group} — ${batch.course}`)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={e => e.stopPropagation()}
+        style={{
+          flexShrink: 0,
+          background: '#0F2A28',
+          color: '#34d399',
+          border: '1px solid rgba(52,211,153,0.30)',
+          borderRadius: 10, padding: '9px 16px',
+          fontFamily: F, fontWeight: 700, fontSize: 13,
+          cursor: 'pointer', whiteSpace: 'nowrap',
+          transition: 'background 0.2s, color 0.2s',
+          textDecoration: 'none', display: 'inline-block',
+        }}
+        onMouseEnter={e => {
+          e.currentTarget.style.background = '#10b981';
+          e.currentTarget.style.color = '#000';
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.background = '#0F2A28';
+          e.currentTarget.style.color = '#34d399';
+        }}
+      >
+        احجز مقعدك
+      </a>
     </div>
   );
 }
