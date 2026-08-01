@@ -56,7 +56,6 @@ function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
           width: '100%',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between',
           padding: 'clamp(18px,2.2vw,24px) clamp(20px,2.8vw,32px)',
           background: 'none',
           border: 'none',
@@ -65,9 +64,23 @@ function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
           gap: 16,
         }}
       >
-        {/* Icon — positioned on LEFT (RTL end) */}
+        {/* Question text — first in DOM → RIGHT side in RTL */}
+        <span style={{
+          fontFamily: 'Tajawal, sans-serif', fontWeight: 700,
+          fontSize: 'clamp(14px,1.5vw,17px)',
+          color: open ? '#FFC107' : 'rgba(252,251,251,0.90)',
+          lineHeight: 1.45,
+          flex: 1,
+          textAlign: 'right',
+          transition: 'color 0.25s',
+        }}>
+          {`${index + 1}. ${item.q}`}
+        </span>
+
+        {/* Icon — ms-auto pushes it to the far inline-end (LEFT in RTL) */}
         <span style={{
           flexShrink: 0,
+          marginInlineStart: 'auto',
           width: 30, height: 30,
           borderRadius: '50%',
           background: open ? 'rgba(255,193,7,0.15)' : 'rgba(255,255,255,0.06)',
@@ -77,23 +90,8 @@ function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
           fontSize: 20, fontWeight: 300, lineHeight: 1,
           transition: 'all 0.25s',
           transform: open ? 'rotate(45deg)' : 'rotate(0)',
-          order: 1,  // appears on the left in RTL flex
         }}>
           +
-        </span>
-
-        {/* Question text — positioned on RIGHT (RTL start) */}
-        <span style={{
-          fontFamily: 'Tajawal, sans-serif', fontWeight: 700,
-          fontSize: 'clamp(14px,1.5vw,17px)',
-          color: open ? '#FFC107' : 'rgba(252,251,251,0.90)',
-          lineHeight: 1.45,
-          flex: 1,
-          textAlign: 'right',
-          transition: 'color 0.25s',
-          order: 0,
-        }}>
-          {`${index + 1}. ${item.q}`}
         </span>
       </button>
 

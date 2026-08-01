@@ -94,17 +94,24 @@ export default function ConsultationSection() {
             {/* Benefits */}
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
               {BENEFITS.map((b, i) => (
-                <li key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, justifyContent: 'flex-end' }}>
-                  <span style={{
-                    fontFamily: 'Tajawal, sans-serif', fontSize: 'clamp(13.5px,1.3vw,15.5px)',
-                    color: 'rgba(252,251,251,0.82)', fontWeight: 500,
-                  }}>{b}</span>
+                <li key={i} style={{
+                  display: 'flex', alignItems: 'center', gap: 12,
+                  // flex-start in RTL = anchor to the RIGHT — icon first in DOM → right side
+                  justifyContent: 'flex-start',
+                  direction: 'rtl',
+                }}>
+                  {/* Icon first in DOM → appears on RIGHT in RTL */}
                   <span style={{
                     width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
                     background: 'rgba(255,193,7,0.12)', border: '1px solid rgba(255,193,7,0.30)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     color: '#FFC107', fontSize: 12, fontWeight: 900,
                   }}>✓</span>
+                  {/* Text second → flows to the LEFT of the icon */}
+                  <span style={{
+                    fontFamily: 'Tajawal, sans-serif', fontSize: 'clamp(13.5px,1.3vw,15.5px)',
+                    color: 'rgba(252,251,251,0.82)', fontWeight: 500,
+                  }}>{b}</span>
                 </li>
               ))}
             </ul>

@@ -9,7 +9,7 @@ import SiteFooter from '@/components/SiteFooter';
 
 export default function Home() {
   return (
-    <main className="w-full">
+    <main className="w-full" dir="rtl">
       {/* Hero — HTML root dir="rtl" already applies */}
       <HeroSection />
       <div id="reels"><ReelsSection /></div>

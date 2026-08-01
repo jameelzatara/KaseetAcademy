@@ -145,13 +145,16 @@ export default function SiteFooter() {
                     color: 'rgba(203,213,225,0.55)',
                     textDecoration: 'none',
                     transition: 'color 0.2s',
+                    // direction:rtl inherited from footer; flex row goes right→left
                     display: 'flex', alignItems: 'center', gap: 6,
                   }}
                     onMouseEnter={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, { color: '#FFC107' })}
                     onMouseLeave={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, { color: 'rgba(203,213,225,0.55)' })}
                   >
-                    <span style={{ color: 'rgba(255,193,7,0.50)', fontSize: 10 }}>←</span>
+                    {/* Label first in DOM → RIGHT side in RTL (visual anchor) */}
                     {l.label}
+                    {/* Arrow second → sits at inline-end (LEFT), points inward */}
+                    <span style={{ color: 'rgba(255,193,7,0.50)', fontSize: 10, marginInlineStart: 'auto' }}>←</span>
                   </a>
                 </li>
               ))}
