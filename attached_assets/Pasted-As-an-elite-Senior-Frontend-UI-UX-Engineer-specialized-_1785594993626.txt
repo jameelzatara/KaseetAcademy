@@ -1,0 +1,46 @@
+As an elite Senior Frontend & UI/UX Engineer specialized in pixel-perfect responsive web deployment, you are tasked with completely rewriting and refactoring the attached web page. This is a production-level code fix, so you must strictly adhere to modern 2026 UI/UX design trends (cleanliness, glassmorphism, transparent elements, and seamless component continuity). 
+
+CRITICAL PROTOCOLS (Zero-Deviation Rules):
+1. Global RTL Layout: Apply strict Right-to-Left (RTL) text direction and alignment to ALL sections on the page, EXCEPT for the top Hero Section. The Hero Section must remain 100% untouched in its original layout.
+2. Content & Text Integrity: Do not alter, rewrite, or invent placeholder text for any section or card. Keep the code structure flexible and clean, ensuring all original text fields are preserved precisely as they appear.
+
+Execute the following fixes sequentially from top to bottom:
+
+1. Premium iOS-Style Reels Carousel:
+   - Layout & Depth: Maintain the 3-video layout but scale it professionally. The active center video must be fully prominent (100% opacity, scale-100), while the two side videos are elegantly visible but slightly scaled down and faded to create visual depth.
+   - iOS Design Style: Apply premium iOS smooth rounded corners (20px to 24px) to all 3 video cards. Add a subtle, smooth dark gradient/shading at the bottom of the active card (Drop Shadow / Bottom Ambient Shading) to elevate it visually.
+   - Yellow Glowing Border: Add a beautiful, clean yellow glowing border effect (subtle box-shadow/neon aura) ONLY around the active center video cover to make it pop dynamically as the main focused item.
+   - Arrow and Layout Fixes: Move navigation arrows completely away from the card edges to sit cleanly on the outer sides. Fix the right arrow rotation to be perfectly horizontal. Add proper vertical padding below the center card text (stars and name) to prevent layout clipping.
+
+2. Section Dividers:
+   - Completely eliminate harsh, random transition lines or background-colored blocks between sections. Use clean, balanced negative space to separate layout blocks elegantly.
+
+3. "Our Distinguished Courses" Section & Interactive Hover Effects:
+   - Sub-header Layout: Ensure the sub-header directly below "دوراتنا المتميزة" is fully visible and rendered without clipping or wrong alignment as: "اختر من بين برامجنا الأكثر طلباً — وجاهي أو أونلاين تفاعلي، ومقاعد محدودة."
+   - Smart Hover Flip/Fade: Implement a sleek interactive hover effect for the four lower cards. Upon hover, the current image should smoothly fade/slide out, revealing a structured list container for "Course Learning Outcomes" (flexible enough to support different list items later). Keep the price, instructor name, and registration button fixed at the bottom.
+   - Card Styling (Counter Box Style): Replace the dark, opaque card backgrounds. Apply our site's "Counter Box" style: a semi-transparent, blurred glassmorphism background that blends cleanly into the main background, using subtle, faint borders and smooth iOS rounded corners (16px to 24px). Enforce 'overflow: hidden' on the card wrapper to prevent inner images from breaking the rounded corners.
+   - Image Visibility & Equal Heights: Fix image containers to display 100% of the original image details and text overlays without aggressive cropping using 'object-fit: contain' or proper aspect ratios. Use Flexbox to enforce equal heights across the 4 cards so that prices and instructor tags align on a perfectly straight horizontal line.
+
+4. Three Paths Section ("كل صوت يستحق مساراً احترافياً"):
+   - Complete Image Visibility & Equal Heights: Ensure images for the three paths (Media, Voiceover, Public Speaking) are fully visible without bad cropping. Enforce equal heights on all 3 cards so the "اكتشف المسار ←" buttons align cleanly at the bottom. Apply the same semi-transparent Counter Box styling here.
+
+5. Educational Consultant Section ("محتار في اختيار المسار الأنسب؟"):
+   - Layout & Background Fix: Remove the solid dark section background completely and make the section background 100% transparent, merging seamlessly into the main page background.
+   - Flexible Content Architecture: Build a clean HTML/React layout divided into two RTL blocks: the Consultant Card on the right (using the transparent Counter Box style with iOS rounded corners) and the list/button container on the left, ensuring it is easy to inject new text later.
+   - WhatsApp Integration: Ensure the "Contact the Consultant" button directly opens the WhatsApp link: https://wa.me
+   - Currency Formatting: Fix all price renderings across the site to comply with correct RTL formatting (e.g., "150 $" or "218 JD" instead of reversed symbols).
+
+6. Google Reviews & Student Success Stories Section:
+   - Layout & Infinite Scroll: Fix the squished, cropped, and broken card layouts. Implement a premium, infinite horizontal marquee or smooth responsive carousel slider. Cards should never be cut off or text-cloned awkwardly. 
+   - Review Card Styling: Apply the site's seamless semi-transparent Counter Box style with iOS rounded corners. Use appropriate internal padding so the text inside each review breathes and is 100% readable without clipping. Ensure the Google logo and 5-star badges are properly aligned at the top right of each card.
+
+7. Frequently Asked Questions (FAQ Section):
+   - Container Constraint: Limit the maximum width of the accordion container (e.g., max-w-3xl or max-w-4xl) so it doesn't stretch harshly across the entire screen. Center the container beautifully using negative space.
+   - RTL Accordion Layout: Ensure the toggle buttons/plus icons are correctly positioned following proper Arabic RTL hierarchy. Ensure there is generous inner vertical and horizontal padding inside each opened question tab for a highly responsive, modern native feel. 
+   - Border & Transparency: Use the sleek blurred glassmorphism style for the accordion items with fine, subtle separator lines instead of heavy borders.
+
+8. Premium Footer Section:
+   - Typography & Alignment: Enforce strict RTL alignment on all columns. The links, contact info, and copyright text must line up accurately. 
+   - WhatsApp Call-To-Action Style: Convert the placeholder WhatsApp text link into a high-utility, beautiful interactive icon/button that stands out cleanly with proper padding and hover states, strictly using the link: https://wa.me
+
+Please provide the fully updated, production-ready, clean, and responsive code based on this strict structural engineering workflow.

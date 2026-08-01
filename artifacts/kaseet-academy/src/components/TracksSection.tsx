@@ -32,7 +32,6 @@ const TRACKS: Track[] = [
   },
 ];
 
-// ── Shared background — identical to Courses & Reels ───────
 const sectionBg = {
   backgroundColor: '#1e293b',
   backgroundImage: [
@@ -42,7 +41,6 @@ const sectionBg = {
   backgroundSize: '85px 85px',
 } as const;
 
-// ── Single track card ───────────────────────────────────────
 function TrackCard({ track }: { track: Track }) {
   const [hovered, setHovered] = useState(false);
 
@@ -51,15 +49,15 @@ function TrackCard({ track }: { track: Track }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        borderRadius: 18,
+        borderRadius: 22,
         overflow: 'hidden',
-        background: 'rgba(255,255,255,0.03)',
-        border: hovered
-          ? '1px solid rgba(255,193,7,0.38)'
-          : '1px solid rgba(255,255,255,0.08)',
+        background: 'rgba(255,255,255,0.04)',
+        backdropFilter: 'blur(14px)',
+        WebkitBackdropFilter: 'blur(14px)',
+        border: hovered ? '1px solid rgba(255,193,7,0.36)' : '1px solid rgba(255,255,255,0.08)',
         boxShadow: hovered
-          ? '0 0 32px rgba(255,193,7,0.12), 0 16px 48px rgba(0,0,0,0.55)'
-          : '0 8px 32px rgba(0,0,0,0.40)',
+          ? '0 0 32px rgba(255,193,7,0.11), 0 16px 48px rgba(0,0,0,0.50)'
+          : '0 8px 32px rgba(0,0,0,0.35)',
         transition: 'border 0.3s, box-shadow 0.3s, transform 0.3s',
         transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
         display: 'flex',
@@ -67,108 +65,85 @@ function TrackCard({ track }: { track: Track }) {
         cursor: 'default',
       }}
     >
-      {/* ── Cover image ── */}
-      <div style={{ position: 'relative', height: 220, overflow: 'hidden', flexShrink: 0 }}>
+      {/* Cover image — full visibility, contain inside a fixed-ratio box */}
+      <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', overflow: 'hidden', flexShrink: 0, background: '#0d1624' }}>
         <img
           src={track.image}
           alt={track.title}
           style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            objectPosition: 'center top',
+            width: '100%', height: '100%',
+            objectFit: 'contain',
+            objectPosition: 'center',
             display: 'block',
             transition: 'transform 0.55s ease',
-            transform: hovered ? 'scale(1.06)' : 'scale(1.0)',
+            transform: hovered ? 'scale(1.04)' : 'scale(1.0)',
           }}
         />
-        {/* subtle bottom fade into card body */}
+        {/* bottom fade into card body */}
         <div style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0, height: 60,
-          background: 'linear-gradient(to bottom, transparent, rgba(30,41,59,0.85))',
+          position: 'absolute', bottom: 0, left: 0, right: 0, height: 50,
+          background: 'linear-gradient(to bottom, transparent, rgba(18,28,46,0.80))',
           pointerEvents: 'none',
         }} />
-        {/* top-left gold shimmer on hover */}
         {hovered && (
           <div style={{
             position: 'absolute', inset: 0,
-            background: 'linear-gradient(135deg, rgba(255,193,7,0.07) 0%, transparent 60%)',
+            background: 'linear-gradient(135deg, rgba(255,193,7,0.06) 0%, transparent 60%)',
             pointerEvents: 'none',
           }} />
         )}
       </div>
 
-      {/* ── Card body ── */}
+      {/* Card body — flex:1 so all cards stretch to equal height */}
       <div style={{
         padding: 'clamp(18px,2.2vw,26px)',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 12,
-        textAlign: 'right',
-        flex: 1,
+        display: 'flex', flexDirection: 'column',
+        gap: 12, textAlign: 'right', flex: 1,
       }}>
-        {/* Title */}
         <h3 style={{
-          fontFamily: 'Tajawal, sans-serif',
-          fontWeight: 900,
+          fontFamily: 'Tajawal, sans-serif', fontWeight: 900,
           fontSize: 'clamp(17px,1.8vw,21px)',
-          color: 'rgba(252,251,251,0.96)',
-          lineHeight: 1.3,
-          margin: 0,
+          color: hovered ? '#FFFFFF' : 'rgba(252,251,251,0.96)',
+          lineHeight: 1.3, margin: 0,
           transition: 'color 0.25s',
-          ...(hovered ? { color: '#FFFFFF' } : {}),
         }}>
           {track.title}
         </h3>
 
-        {/* Divider */}
+        {/* Animated gold divider */}
         <div style={{
-          width: 36,
-          height: 2,
-          borderRadius: 2,
+          height: 2, borderRadius: 2,
           background: hovered ? '#FFC107' : 'rgba(255,193,7,0.35)',
+          width: hovered ? 56 : 36,
           transition: 'background 0.3s, width 0.3s',
-          ...(hovered ? { width: 56 } : {}),
-          marginRight: 0,
           alignSelf: 'flex-end',
         }} />
 
-        {/* Description */}
         <p style={{
-          fontFamily: 'Tajawal, sans-serif',
-          fontWeight: 400,
+          fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
           fontSize: 'clamp(13px,1.3vw,14.5px)',
           color: 'rgba(252,251,251,0.60)',
-          lineHeight: 1.8,
-          margin: 0,
-          flex: 1,
+          lineHeight: 1.8, margin: 0, flex: 1,
         }}>
           {track.desc}
         </p>
 
-        {/* CTA link */}
+        {/* CTA — aligned at bottom across all equal-height cards */}
         <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-          gap: 6,
-          paddingTop: 4,
-          borderTop: '1px solid rgba(255,255,255,0.07)',
+          display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 6,
+          paddingTop: 4, borderTop: '1px solid rgba(255,255,255,0.07)',
+          marginTop: 'auto',
         }}>
           <span style={{
-            fontFamily: 'Tajawal, sans-serif',
-            fontWeight: 700,
-            fontSize: 13.5,
+            fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 13.5,
             color: hovered ? '#FFC107' : 'rgba(252,251,251,0.42)',
-            transition: 'color 0.25s',
-            cursor: 'pointer',
-            letterSpacing: '0.01em',
+            transition: 'color 0.25s', cursor: 'pointer',
           }}>
             اكتشف المسار
           </span>
           <span style={{
             fontSize: 14,
-            color: hovered ? '#FFC107' : 'rgba(252,251,251,0.35)',
+            color: hovered ? '#FFC107' : 'rgba(252,251,251,0.32)',
             transition: 'color 0.25s, transform 0.25s',
             transform: hovered ? 'translateX(-3px)' : 'translateX(0)',
             display: 'inline-block',
@@ -181,88 +156,64 @@ function TrackCard({ track }: { track: Track }) {
   );
 }
 
-// ── Main export ────────────────────────────────────────────
 export default function TracksSection() {
   return (
-    <section
-      className="relative overflow-hidden"
-      style={{
-        ...sectionBg,
-        padding: 'clamp(60px,8vh,100px) 0 clamp(70px,9vh,110px)',
-      }}
-    >
-      {/* Seamless top blend from CoursesSection (same bg, just a soft radial) */}
+    <section className="relative overflow-hidden" style={{
+      ...sectionBg,
+      padding: 'clamp(60px,8vh,100px) 0 clamp(70px,9vh,110px)',
+    }}>
       <div className="absolute pointer-events-none" style={{
         top: -80, left: '50%', transform: 'translateX(-50%)',
         width: '80%', height: 200,
         background: 'radial-gradient(ellipse at top, rgba(255,193,7,0.07) 0%, transparent 70%)',
       }} />
 
-      {/* Content wrapper */}
       <div className="relative z-10 mx-auto px-4" style={{ maxWidth: 1160 }}>
 
-        {/* ── Section header ── */}
+        {/* Section header */}
         <div style={{
-          display: 'flex',
-          alignItems: 'flex-end',
+          display: 'flex', alignItems: 'flex-end',
           justifyContent: 'space-between',
           marginBottom: 'clamp(32px,4vh,52px)',
-          flexWrap: 'wrap',
-          gap: 12,
+          flexWrap: 'wrap', gap: 12,
         }}>
           <div style={{ textAlign: 'right' }}>
-            {/* Badge */}
             <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: 7,
-              marginBottom: 12,
+              display: 'inline-flex', alignItems: 'center', gap: 7, marginBottom: 12,
               padding: '4px 14px', borderRadius: 99,
-              background: 'rgba(255,193,7,0.09)',
-              border: '1px solid rgba(255,193,7,0.25)',
-              fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 12.5,
-              color: '#FFC107',
+              background: 'rgba(255,193,7,0.09)', border: '1px solid rgba(255,193,7,0.25)',
+              fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 12.5, color: '#FFC107',
             }}>
-              <span style={{
-                width: 6, height: 6, borderRadius: '50%',
-                background: '#FFC107',
-                boxShadow: '0 0 6px rgba(255,193,7,0.7)',
-                flexShrink: 0,
-              }} />
-              البرامج الأكاديمية
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#FFC107', boxShadow: '0 0 6px rgba(255,193,7,0.7)', flexShrink: 0 }} />
+              المسارات الأكاديمية
             </div>
 
-            {/* Heading */}
             <h2 style={{
               fontFamily: 'Tajawal, sans-serif', fontWeight: 900,
               fontSize: 'clamp(26px,4vw,46px)',
-              color: 'rgba(252,251,251,0.96)',
-              lineHeight: 1.2, margin: 0,
+              color: 'rgba(252,251,251,0.96)', lineHeight: 1.2, margin: 0,
             }}>
               كل صوت يستحق{' '}
               <span style={{ color: '#FFC107' }}>مساراً احترافياً</span>
             </h2>
 
-            {/* Subtitle */}
             <p style={{
               fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
               fontSize: 'clamp(13px,1.4vw,16px)',
-              color: '#E2E8F0',
-              lineHeight: 1.8, margin: '10px 0 0',
+              color: '#E2E8F0', lineHeight: 1.8, margin: '10px 0 0',
               maxWidth: 580,
             }}>
               اختر من بين برامجنا الأكثر طلباً — كل مسار صُمِّم ليأخذك خطوة أبعد في عالم الإعلام والصوت والخطابة.
             </p>
           </div>
 
-          {/* See-all button */}
-          <button
-            style={{
-              fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 14,
-              color: 'rgba(252,251,251,0.55)',
-              background: 'none', border: '1px solid rgba(255,255,255,0.14)',
-              borderRadius: 99, padding: '8px 20px', cursor: 'pointer',
-              transition: 'color 0.2s, border-color 0.2s',
-              whiteSpace: 'nowrap',
-            }}
+          <button style={{
+            fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 14,
+            color: 'rgba(252,251,251,0.55)',
+            background: 'none', border: '1px solid rgba(255,255,255,0.14)',
+            borderRadius: 99, padding: '8px 20px', cursor: 'pointer',
+            transition: 'color 0.2s, border-color 0.2s', whiteSpace: 'nowrap',
+          }}
             onMouseEnter={e => Object.assign(e.currentTarget.style, { color: '#FFC107', borderColor: 'rgba(255,193,7,0.4)' })}
             onMouseLeave={e => Object.assign(e.currentTarget.style, { color: 'rgba(252,251,251,0.55)', borderColor: 'rgba(255,255,255,0.14)' })}
           >
@@ -270,23 +221,17 @@ export default function TracksSection() {
           </button>
         </div>
 
-        {/* ── 3-column track grid ── */}
-        <div
-          className="tracks-grid"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: 'clamp(16px,2.5vw,28px)',
-          }}
-        >
-          {TRACKS.map(track => (
-            <TrackCard key={track.id} track={track} />
-          ))}
+        {/* 3-column grid — equal height cards via align-items:stretch */}
+        <div className="tracks-grid" style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: 'clamp(16px,2.5vw,28px)',
+          alignItems: 'stretch',
+        }}>
+          {TRACKS.map(track => <TrackCard key={track.id} track={track} />)}
         </div>
-
       </div>
 
-      {/* Mobile: stack to 1 col */}
       <style>{`
         @media (max-width: 767px) {
           .tracks-grid { grid-template-columns: 1fr !important; }

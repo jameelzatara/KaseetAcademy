@@ -1,10 +1,7 @@
 // ── Kaseet FAQ Section ────────────────────────────────────
 import { useState } from 'react';
 
-interface FAQItem {
-  q: string;
-  a: string;
-}
+interface FAQItem { q: string; a: string; }
 
 const FAQS: FAQItem[] = [
   {
@@ -42,16 +39,17 @@ function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div
-      style={{
-        borderRadius: 14,
-        background: open ? 'rgba(255,193,7,0.05)' : 'rgba(255,255,255,0.03)',
-        border: open ? '1px solid rgba(255,193,7,0.28)' : '1px solid rgba(255,255,255,0.08)',
-        overflow: 'hidden',
-        transition: 'background 0.3s, border 0.3s',
-      }}
-    >
-      {/* Header */}
+    <div style={{
+      borderRadius: 16,
+      background: open ? 'rgba(255,193,7,0.04)' : 'rgba(255,255,255,0.03)',
+      backdropFilter: 'blur(12px)',
+      WebkitBackdropFilter: 'blur(12px)',
+      border: open ? '1px solid rgba(255,193,7,0.25)' : '1px solid rgba(255,255,255,0.07)',
+      overflow: 'hidden',
+      transition: 'background 0.3s, border 0.3s',
+      boxShadow: open ? '0 4px 24px rgba(255,193,7,0.06)' : '0 2px 12px rgba(0,0,0,0.20)',
+    }}>
+      {/* Header button */}
       <button
         onClick={() => setOpen(v => !v)}
         style={{
@@ -59,62 +57,66 @@ function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: 'clamp(16px,2vw,22px) clamp(18px,2.5vw,28px)',
+          padding: 'clamp(18px,2.2vw,24px) clamp(20px,2.8vw,32px)',
           background: 'none',
           border: 'none',
           cursor: 'pointer',
-          textAlign: 'right',
           direction: 'rtl',
           gap: 16,
         }}
       >
+        {/* Icon — positioned on LEFT (RTL end) */}
+        <span style={{
+          flexShrink: 0,
+          width: 30, height: 30,
+          borderRadius: '50%',
+          background: open ? 'rgba(255,193,7,0.15)' : 'rgba(255,255,255,0.06)',
+          border: `1px solid ${open ? 'rgba(255,193,7,0.40)' : 'rgba(255,255,255,0.10)'}`,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color: open ? '#FFC107' : 'rgba(252,251,251,0.50)',
+          fontSize: 20, fontWeight: 300, lineHeight: 1,
+          transition: 'all 0.25s',
+          transform: open ? 'rotate(45deg)' : 'rotate(0)',
+          order: 1,  // appears on the left in RTL flex
+        }}>
+          +
+        </span>
+
+        {/* Question text — positioned on RIGHT (RTL start) */}
         <span style={{
           fontFamily: 'Tajawal, sans-serif', fontWeight: 700,
           fontSize: 'clamp(14px,1.5vw,17px)',
           color: open ? '#FFC107' : 'rgba(252,251,251,0.90)',
-          lineHeight: 1.4,
+          lineHeight: 1.45,
           flex: 1,
-          transition: 'color 0.25s',
           textAlign: 'right',
+          transition: 'color 0.25s',
+          order: 0,
         }}>
           {`${index + 1}. ${item.q}`}
         </span>
-        <span style={{
-          flexShrink: 0,
-          width: 28, height: 28,
-          borderRadius: '50%',
-          background: open ? 'rgba(255,193,7,0.15)' : 'rgba(255,255,255,0.06)',
-          border: `1px solid ${open ? 'rgba(255,193,7,0.40)' : 'rgba(255,255,255,0.12)'}`,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: open ? '#FFC107' : 'rgba(252,251,251,0.50)',
-          fontSize: 18, fontWeight: 300, lineHeight: 1,
-          transition: 'all 0.25s',
-          transform: open ? 'rotate(45deg)' : 'rotate(0)',
-        }}>
-          +
-        </span>
       </button>
 
-      {/* Body — CSS height transition via max-height trick */}
+      {/* Body */}
       <div style={{
-        maxHeight: open ? '400px' : '0',
+        maxHeight: open ? '500px' : '0',
         overflow: 'hidden',
         transition: 'max-height 0.40s cubic-bezier(0.4,0,0.2,1)',
       }}>
         <div style={{
-          padding: '0 clamp(18px,2.5vw,28px) clamp(16px,2vw,22px)',
+          padding: '0 clamp(20px,2.8vw,32px) clamp(20px,2.5vw,28px)',
           direction: 'rtl',
         }}>
           <div style={{
             height: 1,
-            background: 'linear-gradient(90deg, transparent, rgba(255,193,7,0.20), transparent)',
-            marginBottom: 16,
+            background: 'linear-gradient(to left, rgba(255,193,7,0.25), transparent)',
+            marginBottom: 18,
           }} />
           <p style={{
             fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
             fontSize: 'clamp(13.5px,1.3vw,15.5px)',
             color: 'rgba(226,232,240,0.75)',
-            lineHeight: 1.9, margin: 0,
+            lineHeight: 1.95, margin: 0,
             textAlign: 'right',
           }}>
             {item.a}
@@ -127,22 +129,18 @@ function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
 
 export default function FAQSection() {
   return (
-    <section
-      id="faq"
-      className="relative overflow-hidden"
-      style={{
-        ...sectionBg,
-        padding: 'clamp(60px,8vh,100px) 0 clamp(70px,9vh,110px)',
-      }}
+    <section id="faq" className="relative overflow-hidden"
+      style={{ ...sectionBg, padding: 'clamp(60px,8vh,100px) 0 clamp(70px,9vh,110px)' }}
     >
       {/* top glow */}
       <div className="absolute pointer-events-none" style={{
         top: -60, left: '50%', transform: 'translateX(-50%)',
         width: '70%', height: 200,
-        background: 'radial-gradient(ellipse at top, rgba(255,193,7,0.08) 0%, transparent 70%)',
+        background: 'radial-gradient(ellipse at top, rgba(255,193,7,0.07) 0%, transparent 70%)',
       }} />
 
-      <div className="relative z-10 mx-auto px-4" style={{ maxWidth: 860, direction: 'rtl' }}>
+      {/* Constrained container — max-w-3xl centered */}
+      <div className="relative z-10 mx-auto px-4" style={{ maxWidth: 820, direction: 'rtl' }}>
 
         {/* Header */}
         <div style={{ textAlign: 'right', marginBottom: 'clamp(32px,4vh,52px)' }}>
@@ -157,8 +155,7 @@ export default function FAQSection() {
           }}>
             <span style={{
               width: 6, height: 6, borderRadius: '50%',
-              background: '#FFC107',
-              boxShadow: '0 0 6px rgba(255,193,7,0.7)',
+              background: '#FFC107', boxShadow: '0 0 6px rgba(255,193,7,0.7)',
               flexShrink: 0,
             }} />
             الأسئلة الشائعة
@@ -176,7 +173,7 @@ export default function FAQSection() {
           <p style={{
             fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
             fontSize: 'clamp(13px,1.3vw,15.5px)',
-            color: 'rgba(226,232,240,0.60)',
+            color: 'rgba(226,232,240,0.58)',
             margin: 0,
           }}>
             إجابات واضحة على أكثر ما يسأل عنه طلابنا قبل التسجيل.
@@ -184,12 +181,11 @@ export default function FAQSection() {
         </div>
 
         {/* Accordion */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           {FAQS.map((item, i) => (
             <AccordionItem key={i} item={item} index={i} />
           ))}
         </div>
-
       </div>
     </section>
   );

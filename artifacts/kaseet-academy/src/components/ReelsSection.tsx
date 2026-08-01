@@ -1,6 +1,5 @@
 import { useState, useEffect, CSSProperties } from 'react';
 
-// 5 unique reels — all distinct URLs
 const REEL_URLS = [
   "https://www.instagram.com/p/DYcvgQesju9/",
   "https://www.instagram.com/p/DbGBYbhsHNp/",
@@ -10,9 +9,9 @@ const REEL_URLS = [
 ];
 
 const CARD_W = 300;
-const GAP    = 36;
+const GAP    = 40;
 const CARD_H = 540;
-const N      = REEL_URLS.length; // 6
+const N      = REEL_URLS.length;
 
 declare global {
   interface Window { instgrm?: { Embeds: { process: () => void } }; }
@@ -35,7 +34,6 @@ function ChevronR() {
   );
 }
 
-/** Normalize offset into [-⌊N/2⌋ … ⌈N/2⌉) range so we get -2,-1,0,1,2,3 for N=6 */
 function getOffset(i: number, current: number): number {
   let off = (i - current + N) % N;
   if (off >= Math.ceil(N / 2)) off -= N;
@@ -43,60 +41,65 @@ function getOffset(i: number, current: number): number {
 }
 
 function cardStyle(offset: number): CSSProperties {
-  const tx   = offset * (CARD_W + GAP);
-  const abs  = Math.abs(offset);
+  const tx  = offset * (CARD_W + GAP);
+  const abs = Math.abs(offset);
 
   if (abs === 0) return {
-    transform:    `translateX(${tx}px) scale(1.07)`,
-    opacity:      1,
-    zIndex:       5,
-    border:       '2px solid #FFC107',
-    boxShadow:    '0 0 44px rgba(255,193,7,0.40), 0 22px 55px rgba(0,0,0,0.70)',
-    filter:       'none',
-    pointerEvents: 'auto',   // center card is fully interactive
-    cursor:       'default',
+    transform:     `translateX(${tx}px) scale(1.06)`,
+    opacity:       1,
+    zIndex:        5,
+    border:        '2px solid rgba(255,193,7,0.85)',
+    boxShadow:     '0 0 0 1px rgba(255,193,7,0.25), 0 0 40px 6px rgba(255,193,7,0.32), 0 24px 60px rgba(0,0,0,0.72)',
+    filter:        'none',
+    pointerEvents: 'auto',
+    cursor:        'default',
+    borderRadius:  22,
   };
 
   if (abs === 1) return {
-    transform:    `translateX(${tx}px) scale(0.87)`,
-    opacity:      0.44,
-    zIndex:       2,
-    border:       '1px solid rgba(255,255,255,0.07)',
-    boxShadow:    '0 10px 32px rgba(0,0,0,0.50)',
-    filter:       'blur(0.4px)',
-    pointerEvents: 'none',   // side cards: no accidental clicks
-    cursor:       'default',
+    transform:     `translateX(${tx}px) scale(0.86)`,
+    opacity:       0.42,
+    zIndex:        2,
+    border:        '1px solid rgba(255,255,255,0.06)',
+    boxShadow:     '0 10px 32px rgba(0,0,0,0.50)',
+    filter:        'blur(0.5px)',
+    pointerEvents: 'none',
+    cursor:        'default',
+    borderRadius:  22,
   };
 
-  // offset ±2 or ±3 — hidden, positioned off-stage for smooth entry
   return {
-    transform:    `translateX(${tx}px) scale(0.72)`,
-    opacity:      0,
-    zIndex:       0,
-    border:       '1px solid transparent',
-    boxShadow:    'none',
-    filter:       'none',
+    transform:     `translateX(${tx}px) scale(0.72)`,
+    opacity:       0,
+    zIndex:        0,
+    border:        '1px solid transparent',
+    boxShadow:     'none',
+    filter:        'none',
     pointerEvents: 'none',
-    cursor:       'default',
+    cursor:        'default',
+    borderRadius:  22,
   };
 }
 
 const arrowBase: CSSProperties = {
-  position: 'absolute',
-  top: '50%',
-  transform: 'translateY(-50%)',
-  zIndex: 20,
-  width: 48, height: 48,
-  borderRadius: '50%',
-  display: 'grid', placeItems: 'center',
-  background: 'rgba(255,255,255,0.07)',
-  border: '1px solid rgba(255,255,255,0.16)',
-  backdropFilter: 'blur(8px)',
-  WebkitBackdropFilter: 'blur(8px)',
-  boxShadow: '0 6px 20px rgba(0,0,0,0.30)',
-  color: '#FFC107',
-  cursor: 'pointer',
-  transition: 'background 0.18s, color 0.18s, box-shadow 0.18s',
+  position:        'absolute',
+  top:             '50%',
+  transform:       'translateY(-50%)',
+  zIndex:          20,
+  width:           50,
+  height:          50,
+  borderRadius:    '50%',
+  display:         'grid',
+  placeItems:      'center',
+  background:      'rgba(255,255,255,0.07)',
+  border:          '1px solid rgba(255,255,255,0.16)',
+  backdropFilter:  'blur(10px)',
+  WebkitBackdropFilter: 'blur(10px)',
+  boxShadow:       '0 6px 24px rgba(0,0,0,0.35)',
+  color:           '#FFC107',
+  cursor:          'pointer',
+  transition:      'background 0.18s, color 0.18s, box-shadow 0.18s',
+  flexShrink:      0,
 };
 
 export default function ReelsSection() {
@@ -104,17 +107,15 @@ export default function ReelsSection() {
 
   const go = (dir: 1 | -1) => setCur(prev => (prev + dir + N) % N);
 
-  // Load IG embed script once
   useEffect(() => {
     if (document.getElementById('ig-embed-script')) return;
     const s = document.createElement('script');
-    s.id = 'ig-embed-script';
+    s.id  = 'ig-embed-script';
     s.src = 'https://www.instagram.com/embed.js';
     s.async = true;
     document.body.appendChild(s);
   }, []);
 
-  // Re-process embeds whenever the active card changes
   useEffect(() => {
     const t = setTimeout(() => window.instgrm?.Embeds.process(), 120);
     return () => clearTimeout(t);
@@ -133,30 +134,28 @@ export default function ReelsSection() {
         padding: 'clamp(60px,8vh,100px) 0 clamp(70px,9vh,110px)',
       }}
     >
-      {/* ── Golden glow at top boundary ── */}
+      {/* Golden top glow */}
       <div className="absolute inset-x-0 top-0 pointer-events-none" style={{
         height: 160,
-        background: 'linear-gradient(to bottom, rgba(255,193,7,0.14) 0%, transparent 100%)',
+        background: 'linear-gradient(to bottom, rgba(255,193,7,0.13) 0%, transparent 100%)',
       }} />
 
-      {/* ── Subtle radial warm center ── */}
+      {/* Radial warm center */}
       <div className="absolute pointer-events-none" style={{
         top: '50%', left: '50%',
         transform: 'translate(-50%,-50%)',
         width: 640, height: 640,
         borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(255,193,7,0.06), transparent 58%)',
+        background: 'radial-gradient(circle, rgba(255,193,7,0.055), transparent 58%)',
       }} />
 
-      {/* ── Badge ── */}
-      <div
-        className="relative z-10 inline-flex items-center gap-2 mb-5 px-5 py-2 rounded-full text-[#FFC107] text-sm font-bold"
+      {/* Badge */}
+      <div className="relative z-10 inline-flex items-center gap-2 mb-5 px-5 py-2 rounded-full text-[#FFC107] text-sm font-bold"
         style={{
           background: 'rgba(255,193,7,0.08)',
           border: '1px solid rgba(255,193,7,0.25)',
           backdropFilter: 'blur(8px)',
           WebkitBackdropFilter: 'blur(8px)',
-          boxShadow: '0 2px 16px rgba(255,193,7,0.08), inset 0 1px 0 rgba(255,255,255,0.06)',
           fontFamily: 'Tajawal, sans-serif',
         }}
       >
@@ -167,17 +166,15 @@ export default function ReelsSection() {
         من الاستوديو مباشرةً
       </div>
 
-      {/* ── Heading ── */}
-      <h2
-        className="relative z-10 font-black text-[rgba(252,251,251,0.96)] mx-4 mb-3"
+      {/* Heading */}
+      <h2 className="relative z-10 font-black text-[rgba(252,251,251,0.96)] mx-4 mb-3"
         style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 'clamp(28px,4.8vw,54px)', lineHeight: 1.25 }}
       >
         أصوات <span className="text-[#FFC107]">صنعناها معاً</span>
       </h2>
 
-      {/* ── Subtitle ── */}
-      <p
-        className="relative z-10 mx-auto px-5 font-normal"
+      {/* Subtitle */}
+      <p className="relative z-10 mx-auto px-5 font-normal"
         style={{
           fontFamily: 'Tajawal, sans-serif',
           fontSize: 'clamp(14px,1.55vw,17px)',
@@ -187,39 +184,40 @@ export default function ReelsSection() {
           marginBottom: 'clamp(36px,5vh,56px)',
         }}
       >
-        مقاطع حيّة من ورشنا وأعمال متدربينا ومدربينا على إنستغرام — اسمع الفرق قبل أن تسجّل..
+        مقاطع حيّة من ورشنا وأعمال متدربينا ومدربينا على إنستغرام — اسمع الفرق قبل أن تسجّل.
       </p>
 
-      {/* ── Carousel ── */}
-      <div className="relative mx-auto" style={{ maxWidth: 1020 }}>
+      {/* Carousel wrapper — arrows sit OUTSIDE the stage */}
+      <div className="relative mx-auto" style={{ maxWidth: 1100, padding: '0 70px' }}>
 
-        {/* Prev — RTL right side */}
+        {/* Prev arrow — RTL: visual right side → goes to previous */}
         <button
           onClick={() => go(-1)}
           aria-label="السابق"
-          style={{ ...arrowBase, right: 4 }}
-          onMouseEnter={e => Object.assign(e.currentTarget.style, { background: '#FFC107', color: '#18202c', boxShadow: '0 0 24px rgba(255,193,7,0.45)' })}
-          onMouseLeave={e => Object.assign(e.currentTarget.style, { background: 'rgba(255,255,255,0.07)', color: '#FFC107', boxShadow: '0 6px 20px rgba(0,0,0,0.30)' })}
+          style={{ ...arrowBase, right: 6 }}
+          onMouseEnter={e => Object.assign(e.currentTarget.style, { background: '#FFC107', color: '#18202c', boxShadow: '0 0 24px rgba(255,193,7,0.50)' })}
+          onMouseLeave={e => Object.assign(e.currentTarget.style, { background: 'rgba(255,255,255,0.07)', color: '#FFC107', boxShadow: '0 6px 24px rgba(0,0,0,0.35)' })}
         >
           <ChevronL />
         </button>
 
-        {/* Next — RTL left side */}
+        {/* Next arrow — RTL: visual left side → goes to next */}
         <button
           onClick={() => go(1)}
           aria-label="التالي"
-          style={{ ...arrowBase, left: 4 }}
-          onMouseEnter={e => Object.assign(e.currentTarget.style, { background: '#FFC107', color: '#18202c', boxShadow: '0 0 24px rgba(255,193,7,0.45)' })}
-          onMouseLeave={e => Object.assign(e.currentTarget.style, { background: 'rgba(255,255,255,0.07)', color: '#FFC107', boxShadow: '0 6px 20px rgba(0,0,0,0.30)' })}
+          style={{ ...arrowBase, left: 6 }}
+          onMouseEnter={e => Object.assign(e.currentTarget.style, { background: '#FFC107', color: '#18202c', boxShadow: '0 0 24px rgba(255,193,7,0.50)' })}
+          onMouseLeave={e => Object.assign(e.currentTarget.style, { background: 'rgba(255,255,255,0.07)', color: '#FFC107', boxShadow: '0 6px 24px rgba(0,0,0,0.35)' })}
         >
           <ChevronR />
         </button>
 
         {/* Cards stage */}
-        <div style={{ position: 'relative', overflow: 'hidden', height: CARD_H, margin: '0 56px' }}>
+        <div style={{ position: 'relative', overflow: 'hidden', height: CARD_H + 60 }}>
           {REEL_URLS.map((url, i) => {
-            const off   = getOffset(i, cur);
+            const off    = getOffset(i, cur);
             const cstyle = cardStyle(off);
+            const isCenter = off === 0;
 
             return (
               <div
@@ -231,15 +229,18 @@ export default function ReelsSection() {
                   left:       '50%',
                   marginLeft: -(CARD_W / 2),
                   width:      CARD_W,
-                  borderRadius: 24,
                   overflow:   'hidden',
-                  background: '#1a2233',
+                  background: '#141e30',
                   transition: 'transform 0.52s cubic-bezier(0.25,0.8,0.25,1), opacity 0.52s ease, box-shadow 0.52s ease, border 0.30s ease',
                   ...cstyle,
                 }}
               >
                 {/* Instagram embed */}
-                <div className="reel-embed-wrap" style={{ width: '100%', height: 520, minHeight: 520, background: '#000', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div className="reel-embed-wrap" style={{
+                  width: '100%', height: 490, minHeight: 490,
+                  background: '#000', overflow: 'hidden',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
                   <blockquote
                     className="instagram-media"
                     data-instgrm-permalink={url}
@@ -248,15 +249,24 @@ export default function ReelsSection() {
                   />
                 </div>
 
+                {/* Bottom ambient shading on active card */}
+                {isCenter && (
+                  <div style={{
+                    position: 'absolute',
+                    bottom: 44,
+                    left: 0, right: 0,
+                    height: 80,
+                    background: 'linear-gradient(to top, rgba(10,14,24,0.90) 0%, transparent 100%)',
+                    pointerEvents: 'none',
+                  }} />
+                )}
+
                 {/* Footer strip */}
-                <div
-                  className="flex items-center justify-between"
-                  style={{
-                    padding: '11px 15px',
-                    background: 'rgba(20,28,42,0.97)',
-                    borderTop: '1px solid rgba(255,255,255,0.07)',
-                  }}
-                >
+                <div className="flex items-center justify-between" style={{
+                  padding: '12px 16px 14px',
+                  background: 'rgba(16,22,36,0.98)',
+                  borderTop: '1px solid rgba(255,255,255,0.07)',
+                }}>
                   <div className="flex items-center gap-2">
                     <div className="grid place-items-center text-xs font-black" style={{
                       width: 24, height: 24, borderRadius: '50%',
@@ -275,7 +285,7 @@ export default function ReelsSection() {
         </div>
 
         {/* Dot indicators */}
-        <div className="flex items-center justify-center gap-2 mt-7">
+        <div className="flex items-center justify-center gap-2 mt-5">
           {REEL_URLS.map((_, i) => (
             <button
               key={i}
