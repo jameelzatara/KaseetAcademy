@@ -1,0 +1,56 @@
+Please complete the full redesign and data integration for the "Schedules & Registration / خيارات التسجيل والمواعيد المتاحة" section based on the uploaded active courses data ("جدول الدورات الفعالة.xlsx") and the sleek UI reference image:
+
+1. Visual Aesthetic & Header Design:
+   - Header Accent: A vibrant Magenta vertical line (`#D946EF`) placed on the right side of the section title "المواعيد المتاحة للتسجيل".
+   - Subtitle: "اختر طريقة التعلّم التي تناسب أسلوبك — كل مسار صُمِّم ليمنحك تجربة تدريبية استثنائية".
+   - Section Background: Dark Obsidian (#0D0B14).
+
+2. Unexpanded Card Design (Strictly Minimalist):
+   - Right Card ("حضوري"):
+     * Background: Deep warm bronze/dark gradient background.
+     * Badge (Top Right): "• الأعمق تأثيراً" (Amber pill badge).
+     * Title Layout: Dark rounded container with Location icon (Lucide `MapPin`) next to title "حضوري".
+     * Subtitle: "تعلّم وجهاً لوجه" (Amber highlight).
+     * Description: "تفاعل مباشر مع المدربين المعتمدين في بيئة تدريبية احترافية تُشعل الدافعية وتُسرّع النمو".
+     * Footer Bar: Calendar icon with text "8 شعب مخصصة" on the right, and an interactive rounded button with ChevronDown icon (`v`) on the left.
+
+   - Left Card ("عن بُعد"):
+     * Background: Deep rich blue/navy gradient background.
+     * Badge (Top Right): "• الأكثر مرونة" (Blue pill badge).
+     * Title Layout: Dark rounded container with Wi-Fi icon (Lucide `Wifi`) next to title "عن بُعد".
+     * Subtitle: "تعلّم من أي مكان" (Cyan highlight).
+     * Description: "مرونة كاملة في الوقت والمكان دون التنازل عن جودة التدريب أو عمق التفاعل".
+     * Footer Bar: Calendar icon with text "6 شعب مخصصة" on the right, and an interactive rounded button with ChevronDown icon (`v`) on the left.
+
+3. Interactive Accordion & Dynamic Data Flow (On Click Expand):
+   When the user clicks anywhere on the card or the chevron arrow, smoothly slide down an expanded inner panel. This panel MUST parse and render the following structured schedule data from Excel:
+
+   A. For "حضوري" (In-Person Track):
+      - Pricing Header: **218 دينار** (Old price crossed out: ~~260 دينار~~) + "إمكانية التقسيط".
+      - Tabs / Toggle Filters: ["🟢 الدورات الفعالة حالياً", "⏳ المجموعات القادمة"]
+      - Schedule Cards List:
+        * مجموعة 34 (صباحي): دورة الأساسيات | المدرب: رنا عزام | الأيام: أحد / ثلاثاء / خميس | تاريخ البدء: 21-7-2026 | حالة: نشط
+        * مجموعة 28 (مسائي): دورة الأساسيات | المدرب: يسار عبده | الأيام: أحد / ثلاثاء / خميس | تاريخ البدء: 12-7-2026 | حالة: نشط
+        * مجموعة 31 (صباحي): دورة الأساسيات | المدرب: رنا عزام | الأيام: أحد / ثلاثاء / خميس | حالة: نشط
+        * مجموعة 26 (صباحي): دورة الأساسيات | المدرب: رنا عزام | الأيام: اثنين / اربعاء | حالة: نشط
+        * مجموعة 36 (متقدمة): الرد الآلي والاعلانات | المدرب: يسار عبده | الأيام: الأحد | تاريخ البدء: 12-7-2026 | حالة: نشط
+        * مجموعة متقدمة (مسائي): الرد الآلي والاعلانات | المدرب: يسار عبده | الأيام: السبت | تاريخ البدء: 27-6-2026 | حالة: نشط
+        * مجموعة 17 (مسائي): كتب صوتية | المدرب: يسار عبده | الأيام: الأثنين | تاريخ البدء: 18-5-2026 | حالة: نشط
+        * مجموعة 18 (مسائي): الرد الآلي والاعلانات | المدرب: يسار عبده | الأيام: الأربعاء | تاريخ البدء: 20-5-2026 | حالة: نشط
+      - Action CTA: Prominent button "احجز مقعدك في الورشة الوجاهية".
+
+   B. For "عن بُعد" (Online Zoom Track):
+      - Pricing Header: **$150** (Old price crossed out: ~~$200~~) + "إمكانية التقسيط".
+      - Tabs / Toggle Filters: ["🟢 الدورات الفعالة حالياً", "⏳ قيد الانتظار (أغسطس 2026)"]
+      - Active Batches (الفعالة):
+        * مجموعة 25: دورة أونلاين الأساسيات | المدرب: يسار عبده | الأيام: السبت | بدء: 20-6-2026 | حالة: نشط
+        * مجموعة 27: دورة أونلاين الأساسيات | المدرب: رنا عزام | الأيام: السبت | حالة: نشط
+      - Upcoming Batches (قيد الانتظار - أغسطس 2026):
+        * مجموعة 29: دورة أونلاين الأساسيات | المدرب: رنا عزام | الأيام: السبت | قيد الانتظار (أغسطس)
+        * مجموعة 32: دورة أونلاين الأساسيات | المدرب: رنا عزام | الأيام: الثلاثاء | قيد الانتظار (أغسطس)
+        * مجموعة 33: دورة أونلاين الأساسيات | المدرب: عمر درابكة | الأيام: السبت | قيد الانتظار (أغسطس)
+        * مجموعة 35: دورة أونلاين الأساسيات | المدرب: عمر درابكة | الأيام: الأحد | قيد الانتظار (أغسطس)
+      - Action CTA: Prominent button "اختر المسار الأونلاين والتسجيل".
+
+4. Bottom Partner Accordion Bar:
+   - Full-width collapsible bar at the bottom: Title "المؤسسات التعليمية الشريكة" with Lucide `GraduationCap` icon, badge "1", and expandable chevron.

@@ -1,0 +1,194 @@
+Please build the interactive expanded accordion details view for both "حضوري" and "عن بُعد" cards, matching the EXACT UI layout from the reference image, using the complete course dataset provided below:
+
+1. Expanded Section Container Header:
+   - For In-Person: Header bar with vertical accent line `| شعب تدريب حضوري` on the right, and count badge `8 شعب متاحة` on the left.
+   - For Online: Header bar with vertical accent line `| شعب تدريب أونلاين` on the right, and count badge `6 شعب متاحة` on the left.
+
+2. Batch Card Layout (Matching Screenshot 2):
+   Each batch inside the list must be rendered using this component structure (in RTL):
+   - Right Side (Date Box): Dark gray rounded container (`bg-[#1D1A27] rounded-xl w-16 h-16 flex flex-col items-center justify-center`). Shows the Month abbreviation on top in light text (e.g., "مايو", "يوليو") and the Day number in big bold white text below (e.g., "18", "21"). If no day exists, display "قريباً".
+   - Center Info:
+     * Line 1: Group Name (e.g., "مجموعة 34 - صباحي - وجاهي") + Emerald Pill Badge ("• جارية الآن").
+     * Line 2: Course Title + Instructor Name + Days + Date Range with Calendar & Clock icons (Lucide).
+     * Line 3: Interactive link text in amber/gold: "23 محاضرة — اضغط لعرض الجدول الزمني v".
+   - Left-Center (Seat Progress): Small seat capacity bar with label "المقاعد" and status text "جارية".
+   - Left Side (Action Button): Sleek rounded button "احجز مقعدك" (`bg-[#0F2A28] text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500 hover:text-black transition-all`).
+
+3. Complete Dataset Array to Map:
+
+const scheduleData = {
+  inPerson: [
+    {
+      id: "g34",
+      group: "مجموعة 34 - صباحي - وجاهي",
+      course: "دورة التعليق والاداء الصوتي (الاساسيات)",
+      instructor: "رنا عزام",
+      days: "أحد / ثلاثاء / خميس",
+      month: "يوليو",
+      day: "21",
+      startDate: "2026-07-21",
+      endDate: "2026-11-08",
+      status: "جارية الآن"
+    },
+    {
+      id: "g28",
+      group: "مجموعة 28 - مسائي - وجاهي",
+      course: "دورة التعليق والاداء الصوتي (الاساسيات)",
+      instructor: "يسار عبده",
+      days: "أحد / ثلاثاء / خميس",
+      month: "يوليو",
+      day: "12",
+      startDate: "2026-07-12",
+      endDate: "2026-07-30",
+      status: "جارية الآن"
+    },
+    {
+      id: "g36",
+      group: "مجموعة 36 متقدمة - وجاهي",
+      course: "دورة الاداء الصوتي المتقدمة (الرد الالي والاعلانات)",
+      instructor: "يسار عبده",
+      days: "الاحد",
+      month: "يوليو",
+      day: "12",
+      startDate: "2026-07-12",
+      endDate: "-",
+      status: "جارية الآن"
+    },
+    {
+      id: "g31",
+      group: "مجموعة 31 - صباحي - وجاهي",
+      course: "دورة التعليق والاداء الصوتي (الاساسيات)",
+      instructor: "رنا عزام",
+      days: "أحد / ثلاثاء / خميس",
+      month: "فبراير",
+      day: "07",
+      startDate: "2026-02-07",
+      endDate: "-",
+      status: "جارية الآن"
+    },
+    {
+      id: "g26",
+      group: "مجموعة 26 - صباحي - وجاهي",
+      course: "دورة التعليق والاداء الصوتي (الاساسيات)",
+      instructor: "رنا عزام",
+      days: "اثنين / اربعاء",
+      month: "يناير",
+      day: "07",
+      startDate: "2026-01-07",
+      endDate: "2026-07-27",
+      status: "جارية الآن"
+    },
+    {
+      id: "g17",
+      group: "مجموعة 17 - مسائي - وجاهي",
+      course: "دورة الاداء الصوتي المتقدمة (كتب صوتية)",
+      instructor: "يسار عبده",
+      days: "الأثنين",
+      month: "مايو",
+      day: "18",
+      startDate: "2026-05-18",
+      endDate: "2026-07-13",
+      status: "جارية الآن"
+    },
+    {
+      id: "g18",
+      group: "مجموعة 18 - مسائي - وجاهي",
+      course: "دورة الاداء الصوتي المتقدمة (الرد الالي والاعلانات)",
+      instructor: "يسار عبده",
+      days: "الأربعاء",
+      month: "مايو",
+      day: "20",
+      startDate: "2026-05-20",
+      endDate: "2026-07-22",
+      status: "جارية الآن"
+    },
+    {
+      id: "gAdv",
+      group: "مجموعة متقدمة - مسائي - وجاهي",
+      course: "دورة الاداء الصوتي المتقدمة (الرد الالي والاعلانات)",
+      instructor: "يسار عبده",
+      days: "السبت",
+      month: "يونيو",
+      day: "27",
+      startDate: "2026-06-27",
+      endDate: "2026-08-15",
+      status: "جارية الآن"
+    }
+  ],
+  online: [
+    {
+      id: "g25",
+      group: "مجموعة 25 - اونلاين",
+      course: "دورة التعليق الصوتي أونلاين (الاساسيات)",
+      instructor: "يسار عبده",
+      days: "السبت",
+      month: "يونيو",
+      day: "20",
+      startDate: "2026-06-20",
+      endDate: "-",
+      status: "جارية الآن"
+    },
+    {
+      id: "g27",
+      group: "مجموعة 27 - اونلاين",
+      course: "دورة التعليق الصوتي أونلاين (الاساسيات)",
+      instructor: "رنا عزام",
+      days: "السبت",
+      month: "شهر 6",
+      day: "--",
+      startDate: "قريباً",
+      endDate: "-",
+      status: "جارية الآن"
+    },
+    {
+      id: "g29",
+      group: "مجموعة 29 - اونلاين",
+      course: "دورة التعليق الصوتي أونلاين (الاساسيات)",
+      instructor: "رنا عزام",
+      days: "السبت",
+      month: "شهر 7",
+      day: "--",
+      startDate: "قريباً",
+      endDate: "-",
+      status: "جارية الآن"
+    },
+    {
+      id: "g32",
+      group: "مجموعة 32 - اونلاين",
+      course: "دورة التعليق الصوتي أونلاين (الاساسيات)",
+      instructor: "رنا عزام",
+      days: "الثلاثاء",
+      month: "شهر 7",
+      day: "--",
+      startDate: "قريباً",
+      endDate: "-",
+      status: "جارية الآن"
+    },
+    {
+      id: "g33",
+      group: "مجموعة 33 - اونلاين",
+      course: "دورة التعليق الصوتي أونلاين (الاساسيات)",
+      instructor: "عمر درابكة",
+      days: "السبت",
+      month: "شهر 7",
+      day: "--",
+      startDate: "قريباً",
+      endDate: "-",
+      status: "جارية الآن"
+    },
+    {
+      id: "g35",
+      group: "مجموعة 35 - اونلاين",
+      course: "دورة التعليق الصوتي أونلاين (الاساسيات)",
+      instructor: "عمر درابكة",
+      days: "الاحد",
+      month: "شهر 7",
+      day: "--",
+      startDate: "قريباً",
+      endDate: "-",
+      status: "جارية الآن"
+    }
+  ]
+};
+
+Make sure the accordion expands smoothly with Framer Motion or standard Tailwind CSS transitions.
