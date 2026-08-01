@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import SectionHeader, { Gold } from './SectionHeader';
 
 import coverYasar       from '@assets/course_01_cover_1785428932170.png';
 import instructorYasar  from '@assets/course_01_instructor_1785428932171.jpeg';
@@ -25,109 +26,79 @@ interface Course {
   outcomes: string[];
   instructor: { name: string; title: string; photo: string };
   cover: string;
-  /** smart object-position based on image content */
   imgPos: string;
 }
 
 const COURSES: Course[] = [
   {
-    id: 1,
-    badge:         'الاكثر طلباً',
-    title:         'أساسيات التعليق والأداء الصوتي',
-    subtitle:      'المرحلة التأسيسية',
-    types:         ['وجاهي', 'مباشر تفاعلي'],
-    price:         'JD 218',
-    priceLabel:    'التسجيل للدورة',
-    duration:      '16 ساعة (8 لقاءات)',
-    durationLabel: 'المدة الزمنية',
-    schedule:      'الشعبة المسائية | تبدأ أغسطس 2026 — الاثنين والأربعاء | 6:00 - 8:00 مساءً | 12 مقعداً فقط',
-    shortDesc:     'منهج متكامل لبناء أداء صوتي احترافي من الصفر – من ضبط مخارج الحروف والتحكم بالتنفس والطبقات الصوتية، إلى بناء ملفك الصوتي الجاهز لسوق العمل، بإشراف مباشر من المدربة يسار عبده.',
-    outcomes:      ['إتقان النطق والنبرات الاحترافية', 'تقنيات التنفس والتحكم بالإيقاع', 'التسجيل والإنتاج الصوتي', 'بناء ملف صوتي احترافي'],
-    instructor:    { name: 'يسار عبده', title: 'مدربة الأداء الصوتي', photo: instructorYasar },
-    cover:         coverYasar,
-    imgPos:        'center top',  // portrait — never crop face
+    id: 1, badge: 'الاكثر طلباً',
+    title: 'أساسيات التعليق والأداء الصوتي', subtitle: 'المرحلة التأسيسية',
+    types: ['وجاهي', 'مباشر تفاعلي'],
+    price: 'JD 218', priceLabel: 'التسجيل للدورة',
+    duration: '16 ساعة (8 لقاءات)', durationLabel: 'المدة الزمنية',
+    schedule: 'الشعبة المسائية | تبدأ أغسطس 2026 — الاثنين والأربعاء | 6:00 - 8:00 مساءً | 12 مقعداً فقط',
+    shortDesc: 'منهج متكامل لبناء أداء صوتي احترافي من الصفر – من ضبط مخارج الحروف والتحكم بالتنفس والطبقات الصوتية، إلى بناء ملفك الصوتي الجاهز لسوق العمل، بإشراف مباشر من المدربة يسار عبده.',
+    outcomes: ['إتقان النطق والنبرات الاحترافية', 'تقنيات التنفس والتحكم بالإيقاع', 'التسجيل والإنتاج الصوتي', 'بناء ملف صوتي احترافي'],
+    instructor: { name: 'يسار عبده', title: 'مدربة الأداء الصوتي', photo: instructorYasar },
+    cover: coverYasar, imgPos: 'center top',
   },
   {
-    id: 2,
-    badge:         'تعليق صوتي',
-    title:         'التعليق الصوتي أونلاين — بث مباشر تفاعلي',
-    subtitle:      'تعليق صوتي',
-    types:         ['مباشر تفاعلي'],
-    price:         '$ 150',
-    priceLabel:    'التسجيل للدورة',
-    duration:      '12 ساعة (8 لقاءات)',
-    durationLabel: 'المدة الزمنية',
-    schedule:      'تبدأ أغسطس 2026 | عبر الإنترنت',
-    shortDesc:     'معلّق صوتي محترف، سجّل مئات الأفلام الوثائقية والإعلانات لكبرى المؤسسات الإعلامية بالخليج والشرق الأوسط. خبرة +12 سنة.',
-    outcomes:      ['تعليق الأفلام الوثائقية', 'أداء الإعلانات التجارية', 'دبلجة المحتوى الدرامي', 'بناء الهوية الصوتية الخاصة'],
-    instructor:    { name: 'عمر الدرابكة', title: 'معلّق صوتي محترف ومدرب أداء', photo: instructorOmar },
-    cover:         coverOmar,
-    imgPos:        'center',       // studio background — use center
+    id: 2, badge: 'تعليق صوتي',
+    title: 'التعليق الصوتي أونلاين — بث مباشر تفاعلي', subtitle: 'تعليق صوتي',
+    types: ['مباشر تفاعلي'],
+    price: '$ 150', priceLabel: 'التسجيل للدورة',
+    duration: '12 ساعة (8 لقاءات)', durationLabel: 'المدة الزمنية',
+    schedule: 'تبدأ أغسطس 2026 | عبر الإنترنت',
+    shortDesc: 'معلّق صوتي محترف، سجّل مئات الأفلام الوثائقية والإعلانات لكبرى المؤسسات الإعلامية بالخليج والشرق الأوسط. خبرة +12 سنة.',
+    outcomes: ['تعليق الأفلام الوثائقية', 'أداء الإعلانات التجارية', 'دبلجة المحتوى الدرامي', 'بناء الهوية الصوتية الخاصة'],
+    instructor: { name: 'عمر الدرابكة', title: 'معلّق صوتي محترف ومدرب أداء', photo: instructorOmar },
+    cover: coverOmar, imgPos: 'center',
   },
   {
-    id: 3,
-    badge:         'خطابة وإلقاء',
-    title:         'فن الخطابة والإلقاء الجماهيري المؤثر',
-    subtitle:      'خطابة وإلقاء',
-    types:         ['مباشر تفاعلي'],
-    price:         '$ 150',
-    priceLabel:    'التسجيل للدورة',
-    duration:      '12 ساعة (8 لقاءات)',
-    durationLabel: 'المدة الزمنية',
-    schedule:      'تبدأ أغسطس 2026 | عبر الإنترنت',
-    shortDesc:     'دكتوراه في إدارة الأعمال، خبير تواصل قيادي بخبرة +16 عاماً. اكسر الرهبة وابنِ كاريزما الحضور أمام الجمهور.',
-    outcomes:      ['التغلب على رهبة المسرح', 'لغة الجسد والكاريزما', 'هيكلة الخطاب المؤثر', 'إدارة التفاعل مع الجمهور'],
-    instructor:    { name: 'د. صهيب الخوالدة', title: 'خبير تخطيط استراتيجي وتواصل قيادي', photo: instructorSohaib },
-    cover:         coverSohaib,
-    imgPos:        'center 30%',   // TEDx group photo — show faces without aggressive crop
+    id: 3, badge: 'خطابة وإلقاء',
+    title: 'فن الخطابة والإلقاء الجماهيري المؤثر', subtitle: 'خطابة وإلقاء',
+    types: ['مباشر تفاعلي'],
+    price: '$ 150', priceLabel: 'التسجيل للدورة',
+    duration: '12 ساعة (8 لقاءات)', durationLabel: 'المدة الزمنية',
+    schedule: 'تبدأ أغسطس 2026 | عبر الإنترنت',
+    shortDesc: 'دكتوراه في إدارة الأعمال، خبير تواصل قيادي بخبرة +16 عاماً. اكسر الرهبة وابنِ كاريزما الحضور أمام الجمهور.',
+    outcomes: ['التغلب على رهبة المسرح', 'لغة الجسد والكاريزما', 'هيكلة الخطاب المؤثر', 'إدارة التفاعل مع الجمهور'],
+    instructor: { name: 'د. صهيب الخوالدة', title: 'خبير تخطيط استراتيجي وتواصل قيادي', photo: instructorSohaib },
+    cover: coverSohaib, imgPos: 'center 30%',
   },
   {
-    id: 4,
-    badge:         'لغة عربية',
-    title:         'تمكين اللغة العربية وفنون التحرير اللغوي',
-    subtitle:      'لغة عربية',
-    types:         ['مباشر تفاعلي'],
-    price:         '$ 150',
-    priceLabel:    'التسجيل للدورة',
-    duration:      '16 ساعة (8 لقاءات)',
-    durationLabel: 'المدة الزمنية',
-    schedule:      'تبدأ سبتمبر 2026 | عبر الإنترنت',
-    shortDesc:     'إعلامية ومحررة لغوية سابقة لمجمع اللغة العربية. أتقن النحو والتحرير والتدقيق اللغوي للمهنيين والإعلاميين.',
-    outcomes:      ['قواعد النحو التطبيقي', 'التحرير الصحفي الاحترافي', 'التدقيق اللغوي المتقدم', 'الأسلوب الإعلامي الرصين'],
-    instructor:    { name: 'رنا محمد العزام', title: 'إعلامية ومختصة في التحرير اللغوي', photo: instructorRana },
-    cover:         coverRana,
-    imgPos:        'center top',   // portrait — never crop face
+    id: 4, badge: 'لغة عربية',
+    title: 'تمكين اللغة العربية وفنون التحرير اللغوي', subtitle: 'لغة عربية',
+    types: ['مباشر تفاعلي'],
+    price: '$ 150', priceLabel: 'التسجيل للدورة',
+    duration: '16 ساعة (8 لقاءات)', durationLabel: 'المدة الزمنية',
+    schedule: 'تبدأ سبتمبر 2026 | عبر الإنترنت',
+    shortDesc: 'إعلامية ومحررة لغوية سابقة لمجمع اللغة العربية. أتقن النحو والتحرير والتدقيق اللغوي للمهنيين والإعلاميين.',
+    outcomes: ['قواعد النحو التطبيقي', 'التحرير الصحفي الاحترافي', 'التدقيق اللغوي المتقدم', 'الأسلوب الإعلامي الرصين'],
+    instructor: { name: 'رنا محمد العزام', title: 'إعلامية ومختصة في التحرير اللغوي', photo: instructorRana },
+    cover: coverRana, imgPos: 'center top',
   },
   {
-    id: 5,
-    badge:         'إعلام متقدم',
-    title:         'المذيع المحترف والإعلامي الشامل',
-    subtitle:      'إعلام متقدم',
-    types:         ['مباشر تفاعلي'],
-    price:         '$ 200',
-    priceLabel:    'التسجيل للدورة',
-    duration:      '24 ساعة (8 أيام)',
-    durationLabel: 'المدة الزمنية',
-    schedule:      'تبدأ أغسطس 2026 | وجاهي',
-    shortDesc:     'دورة مكثفة تجمع التحرير الصحفي، الإلقاء الاحترافي، إدارة الحوار، والتغطية الميدانية — كل ما يصنع إعلامياً شاملاً.',
-    outcomes:      ['التحرير والإعداد الإخباري', 'الإلقاء وإدارة الحوار', 'التغطية الميدانية المباشرة', 'الحضور التلفزيوني الاحترافي'],
-    instructor:    { name: 'رنا محمد العزام', title: 'معدة ومقدمة برامج فضائية وبودكاست', photo: instructorRana },
-    cover:         coverPresenter,
-    imgPos:        'center top',   // studio presenter — center top preserves subject
+    id: 5, badge: 'إعلام متقدم',
+    title: 'المذيع المحترف والإعلامي الشامل', subtitle: 'إعلام متقدم',
+    types: ['مباشر تفاعلي'],
+    price: '$ 200', priceLabel: 'التسجيل للدورة',
+    duration: '24 ساعة (8 أيام)', durationLabel: 'المدة الزمنية',
+    schedule: 'تبدأ أغسطس 2026 | وجاهي',
+    shortDesc: 'دورة مكثفة تجمع التحرير الصحفي، الإلقاء الاحترافي، إدارة الحوار، والتغطية الميدانية — كل ما يصنع إعلامياً شاملاً.',
+    outcomes: ['التحرير والإعداد الإخباري', 'الإلقاء وإدارة الحوار', 'التغطية الميدانية المباشرة', 'الحضور التلفزيوني الاحترافي'],
+    instructor: { name: 'رنا محمد العزام', title: 'معدة ومقدمة برامج فضائية وبودكاست', photo: instructorRana },
+    cover: coverPresenter, imgPos: 'center top',
   },
 ];
 
-// ── Shared glass card base ────────────────────────────────
-const glassCard = {
-  background:           'rgba(255,255,255,0.04)',
-  backdropFilter:       'blur(14px)',
-  WebkitBackdropFilter: 'blur(14px)',
-  border:               '1px solid rgba(255,255,255,0.09)',
+// ── Shared premium glass card ──────────────────────────────
+const glass = {
+  background:           'rgba(255,255,255,0.035)',
+  backdropFilter:       'blur(16px)',
+  WebkitBackdropFilter: 'blur(16px)',
+  border:               '1px solid rgba(255,255,255,0.06)',
 } as const;
-
-// ── Elevation shadows ─────────────────────────────────────
-const shadowDefault = '0 10px 30px rgba(0,0,0,0.25)';
-const shadowHover   = '0 20px 45px rgba(0,0,0,0.40)';
 
 // ── Type badge ─────────────────────────────────────────────
 function TypeBadge({ label }: { label: string }) {
@@ -135,7 +106,7 @@ function TypeBadge({ label }: { label: string }) {
   return (
     <span style={{
       display: 'inline-flex', alignItems: 'center', gap: 5,
-      padding: '3px 11px', borderRadius: 99,
+      padding: '3px 12px', borderRadius: 999,
       fontSize: 11.5, fontWeight: 700,
       fontFamily: 'Tajawal, sans-serif',
       background: live ? 'rgba(255,193,7,0.12)' : 'rgba(99,179,237,0.14)',
@@ -148,378 +119,167 @@ function TypeBadge({ label }: { label: string }) {
   );
 }
 
-// ── Featured Card (Course 1) ───────────────────────────────
-// RTL flex: first child → RIGHT, second child → LEFT
-// Info text on RIGHT, cover image on LEFT
+// ── Featured Card (2fr column) ─────────────────────────────
 function FeaturedCard({ course }: { course: Course }) {
+  const [hov, setHov] = useState(false);
   return (
-    <div style={{
-      display:        'flex',
-      flexDirection:  'row',
-      borderRadius:   22,
-      overflow:       'hidden',
-      ...glassCard,
-      boxShadow:      shadowDefault,
-      marginBottom:   40,
-      direction:      'rtl',
-    }}>
-
-      {/* ── 1st child → RIGHT (info/text) ── */}
-      <div style={{
-        flex:           1,
-        padding:        'clamp(24px,3vw,40px)',
-        display:        'flex',
-        flexDirection:  'column',
-        justifyContent: 'center',
-        gap:            16,
-        textAlign:      'right',
-      }}>
-
-        {/* Row 1: category badge + type badges */}
+    <div
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        ...glass,
+        borderRadius:  22,
+        overflow:      'hidden',
+        display:       'flex',
+        flexDirection: 'column',
+        direction:     'rtl',
+        height:        '100%',
+        boxShadow:     hov ? '0 20px 45px rgba(0,0,0,0.40)' : '0 10px 30px rgba(0,0,0,0.25)',
+        border:        hov ? '1px solid rgba(255,255,255,0.10)' : '1px solid rgba(255,255,255,0.06)',
+        transition:    'border 0.25s, box-shadow 0.25s',
+      }}
+    >
+      {/* Cover image — top, 16/9 */}
+      <div style={{ position: 'relative', aspectRatio: '16/9', overflow: 'hidden', flexShrink: 0 }}>
+        <img src={course.cover} alt={course.title} style={{
+          width: '100%', height: '100%',
+          objectFit: 'cover', objectPosition: course.imgPos,
+          display: 'block',
+          transform: hov ? 'scale(1.03)' : 'scale(1)',
+          transition: 'transform 0.55s ease',
+        }} />
+        {/* Gradient overlay */}
         <div style={{
-          display: 'flex', alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap', gap: 8,
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to bottom, transparent 40%, rgba(10,16,30,0.92) 100%)',
+          pointerEvents: 'none',
+        }} />
+        {/* Badge + types floating over image */}
+        <div style={{
+          position: 'absolute', inset: '14px 14px auto',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
         }}>
-          <span style={{
-            display: 'inline-flex', alignItems: 'center', gap: 6,
-            padding: '4px 13px', borderRadius: 99,
-            background: 'rgba(255,193,7,0.15)', border: '1px solid rgba(255,193,7,0.40)',
-            fontFamily: 'Tajawal, sans-serif', fontWeight: 800, fontSize: 12, color: '#FFC107',
-          }}>
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#FFC107', boxShadow: '0 0 6px rgba(255,193,7,0.8)', flexShrink: 0 }} />
-            {course.badge}
-          </span>
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
             {course.types.map(t => <TypeBadge key={t} label={t} />)}
           </div>
+          <span style={{
+            display: 'inline-flex', alignItems: 'center', gap: 5,
+            padding: '4px 12px', borderRadius: 999,
+            background: 'rgba(255,193,7,0.18)', border: '1px solid rgba(255,193,7,0.45)',
+            fontFamily: 'Tajawal, sans-serif', fontWeight: 800, fontSize: 12, color: '#FFC107',
+            backdropFilter: 'blur(8px)',
+          }}>
+            <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#FFC107', boxShadow: '0 0 5px rgba(255,193,7,0.8)', flexShrink: 0 }} />
+            {course.badge}
+          </span>
         </div>
-
-        {/* Subtitle */}
-        <div style={{
-          fontFamily: 'Tajawal, sans-serif', fontSize: 13,
-          color: 'rgba(252,251,251,0.50)', fontWeight: 500,
-          textAlign: 'right',
-        }}>
-          {course.subtitle}
+        {/* Title over gradient */}
+        <div style={{ position: 'absolute', bottom: 18, right: 20, left: 20 }}>
+          <h3 style={{
+            fontFamily: 'Tajawal, sans-serif', fontWeight: 700,
+            fontSize: 'clamp(18px, 2vw, 26px)',
+            color: 'rgba(252,251,251,0.98)', lineHeight: 1.25,
+            margin: 0, letterSpacing: '0.01em',
+          }}>
+            {course.title}
+          </h3>
         </div>
+      </div>
 
-        {/* Title */}
-        <h3 style={{
-          fontFamily: 'Tajawal, sans-serif', fontWeight: 900,
-          fontSize: 'clamp(20px,2.4vw,30px)',
-          color: 'rgba(252,251,251,0.97)', lineHeight: 1.3, margin: 0,
-          textAlign: 'right',
-        }}>
-          {course.title}
-        </h3>
-
-        {/* Description */}
+      {/* Body */}
+      <div style={{
+        flex: 1, display: 'flex', flexDirection: 'column',
+        padding: '22px 24px 24px', gap: 14, textAlign: 'right',
+      }}>
+        {/* Description — 16px / 1.9lh / max 3 lines */}
         <p style={{
           fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
-          fontSize: 'clamp(13px,1.3vw,15px)',
-          color: 'rgba(252,251,251,0.65)', lineHeight: 1.8, margin: 0,
-          textAlign: 'right',
+          fontSize: 16, color: 'rgba(252,251,251,0.65)',
+          lineHeight: 1.9, margin: 0,
+          display: '-webkit-box' as const,
+          WebkitLineClamp: 3,
+          WebkitBoxOrient: 'vertical' as const,
+          overflow: 'hidden',
+          flexGrow: 1,
         }}>
           {course.shortDesc}
         </p>
 
-        {/* Price + Duration */}
-        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+        {/* Meta strip */}
+        <div style={{
+          display: 'flex', gap: 10, flexWrap: 'wrap',
+          justifyContent: 'flex-start',
+        }}>
           <div style={{
-            background: 'rgba(255,193,7,0.08)',
-            border: '1px solid rgba(255,193,7,0.22)',
-            borderRadius: 12, padding: '10px 16px', textAlign: 'center',
+            background: 'rgba(255,193,7,0.08)', border: '1px solid rgba(255,193,7,0.20)',
+            borderRadius: 12, padding: '8px 14px', textAlign: 'center',
           }}>
-            <div style={{
-              fontFamily: 'Poppins, sans-serif', fontWeight: 900,
-              color: '#FFC107', fontSize: 'clamp(20px,2.2vw,26px)',
-              lineHeight: 1, direction: 'ltr',
-            }}>
+            <div style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800, color: '#FFC107', fontSize: 22, lineHeight: 1, direction: 'ltr' }}>
               {course.price}
             </div>
-            <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11, color: 'rgba(252,251,251,0.48)', marginTop: 4, textAlign: 'right' }}>
+            <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11, color: 'rgba(252,251,251,0.42)', marginTop: 3, textAlign: 'right' }}>
               {course.priceLabel}
             </div>
           </div>
           <div style={{
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.10)',
-            borderRadius: 12, padding: '10px 16px', textAlign: 'center',
+            background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)',
+            borderRadius: 12, padding: '8px 14px', textAlign: 'center',
           }}>
-            <div style={{
-              fontFamily: 'Tajawal, sans-serif', fontWeight: 800,
-              color: 'rgba(252,251,251,0.90)', fontSize: 'clamp(13px,1.3vw,15px)',
-              lineHeight: 1, textAlign: 'right',
-            }}>
+            <div style={{ fontFamily: 'Tajawal, sans-serif', fontWeight: 700, color: 'rgba(252,251,251,0.88)', fontSize: 14, lineHeight: 1, textAlign: 'right' }}>
               {course.duration}
             </div>
-            <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11, color: 'rgba(252,251,251,0.48)', marginTop: 4, textAlign: 'right' }}>
+            <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11, color: 'rgba(252,251,251,0.42)', marginTop: 3, textAlign: 'right' }}>
               {course.durationLabel}
             </div>
           </div>
         </div>
 
-        {/* Schedule strip */}
+        {/* Schedule */}
         <div style={{
           display: 'flex', alignItems: 'center', gap: 8,
-          padding: '10px 14px', borderRadius: 10,
-          background: 'rgba(255,255,255,0.04)',
-          border: '1px solid rgba(255,255,255,0.08)',
+          padding: '9px 14px', borderRadius: 10,
+          background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)',
         }}>
-          <span style={{
-            fontFamily: 'Tajawal, sans-serif', fontSize: 12.5,
-            color: 'rgba(226,232,240,0.72)', lineHeight: 1.5,
-            flex: 1, textAlign: 'right',
-          }}>
+          <span style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 12.5, color: 'rgba(226,232,240,0.65)', lineHeight: 1.5, flex: 1, textAlign: 'right' }}>
             {course.schedule}
           </span>
           <span style={{ fontSize: 14, flexShrink: 0 }}>📅</span>
         </div>
 
-        {/* Instructor */}
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: 10,
-          justifyContent: 'flex-start',
-        }}>
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 13.5, color: 'rgba(252,251,251,0.92)' }}>
-              {course.instructor.name}
+        {/* Instructor + CTA row */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'flex-start' }}>
+            <div style={{ textAlign: 'right' }}>
+              <div style={{ fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 14, color: 'rgba(252,251,251,0.90)' }}>
+                {course.instructor.name}
+              </div>
+              <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 12, color: 'rgba(252,251,251,0.45)' }}>
+                {course.instructor.title}
+              </div>
             </div>
-            <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11.5, color: 'rgba(252,251,251,0.48)' }}>
-              {course.instructor.title}
-            </div>
-          </div>
-          <img src={course.instructor.photo} alt={course.instructor.name}
-            style={{
-              width: 44, height: 44, borderRadius: '50%',
+            <img src={course.instructor.photo} alt={course.instructor.name} style={{
+              width: 42, height: 42, borderRadius: '50%',
               objectFit: 'cover', objectPosition: 'center top',
-              border: '2px solid #FFC107',
-              boxShadow: '0 0 10px rgba(255,193,7,0.30)',
+              border: '2px solid #FFC107', boxShadow: '0 0 10px rgba(255,193,7,0.28)',
               flexShrink: 0,
             }} />
-        </div>
+          </div>
 
-        {/* Primary CTA — height:50px, px:28px, br:14px, glow */}
-        <button style={{
-          alignSelf:  'flex-start',
-          fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 15,
-          height:     50,
-          padding:    '0 28px',
-          borderRadius: 14,
-          background: '#FFC107', color: '#111827',
-          border:     'none', cursor: 'pointer',
-          boxShadow:  '0 4px 18px rgba(255,193,7,0.35)',
-          transition: 'transform 250ms, box-shadow 250ms',
-          display:    'flex', alignItems: 'center', gap: 8,
-          direction:  'rtl',
-        }}
-          onMouseEnter={e => Object.assign(e.currentTarget.style, {
-            transform: 'translateY(-2px)',
-            boxShadow: '0 8px 28px rgba(255,193,7,0.50), 0 0 24px rgba(255,193,7,0.25)',
-          })}
-          onMouseLeave={e => Object.assign(e.currentTarget.style, {
-            transform: 'none',
+          {/* Primary CTA */}
+          <button style={{
+            height: 50, padding: '0 28px', borderRadius: 14,
+            fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 16,
+            background: '#FFC107', color: '#111827',
+            border: 'none', cursor: 'pointer',
             boxShadow: '0 4px 18px rgba(255,193,7,0.35)',
-          })}
-        >
-          سجّل الآن
-          <span style={{ direction: 'ltr' }}>←</span>
-        </button>
-      </div>
-
-      {/* ── 2nd child → LEFT (cover image) ── */}
-      <div style={{ flex: '0 0 42%', position: 'relative', minHeight: 360, overflow: 'hidden', borderRadius: 'inherit' }}>
-        <img src={course.cover} alt={course.title}
-          style={{
-            width: '100%', height: '100%',
-            objectFit: 'cover',
-            objectPosition: course.imgPos,
-            display: 'block',
-          }} />
-        {/* gradient blends image edge into text panel */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'linear-gradient(to right, rgba(14,22,40,0.80) 0%, transparent 55%)',
-        }} />
-      </div>
-    </div>
-  );
-}
-
-// ── Small course card ──────────────────────────────────────
-function CourseCard({ course }: { course: Course }) {
-  const [hovered, setHovered] = useState(false);
-
-  return (
-    <div
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onClick={() => setHovered(v => !v)}
-      style={{
-        position:      'relative',
-        borderRadius:  20,
-        overflow:      'hidden',
-        cursor:        'pointer',
-        display:       'flex',
-        flexDirection: 'column',
-        direction:     'rtl',
-        ...glassCard,
-        border:    hovered ? '1px solid rgba(255,193,7,0.38)' : '1px solid rgba(255,255,255,0.08)',
-        boxShadow: hovered ? shadowHover : shadowDefault,
-        transform: hovered ? 'translateY(-6px)' : 'translateY(0)',
-        transition: 'border 0.3s, box-shadow 0.3s, transform 0.3s',
-      }}
-    >
-      {/* Cover image — smart object-position per image type */}
-      <div style={{ position: 'relative', width: '100%', aspectRatio: '16/10', overflow: 'hidden', flexShrink: 0, borderRadius: 'inherit' }}>
-        <img src={course.cover} alt={course.title}
-          style={{
-            width: '100%', height: '100%',
-            objectFit: 'cover',
-            objectPosition: course.imgPos,
-            background: '#0d1624', display: 'block',
-            transition: 'transform 0.5s ease, filter 0.4s ease',
-            transform: hovered ? 'scale(1.04)' : 'scale(1.0)',
-            filter: hovered ? 'brightness(0.18) blur(2px)' : 'brightness(0.88)',
-          }} />
-        <div style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0, height: 48,
-          background: 'linear-gradient(to bottom, transparent, rgba(14,22,38,0.88))',
-          pointerEvents: 'none',
-        }} />
-        {/* Type badges — top-right in RTL */}
-        <div style={{ position: 'absolute', top: 10, insetInlineStart: 10, display: 'flex', gap: 5, flexWrap: 'wrap' }}>
-          {course.types.map(t => <TypeBadge key={t} label={t} />)}
-        </div>
-      </div>
-
-      {/* Default bottom strip — flex col; title grows to pin price to bottom */}
-      <div style={{
-        padding: '14px 16px 16px',
-        display: 'flex', flexDirection: 'column', gap: 8,
-        textAlign: 'right',
-        flex: 1,                    // fills remaining card height
-        opacity: hovered ? 0 : 1,
-        transition: 'opacity 0.22s',
-        pointerEvents: hovered ? 'none' : 'auto',
-      }}>
-        {/* Title — grows to push price row to bottom */}
-        <div style={{
-          fontFamily: 'Tajawal, sans-serif', fontWeight: 800,
-          fontSize: 'clamp(13px,1.3vw,15px)',
-          color: 'rgba(252,251,251,0.96)', lineHeight: 1.4,
-          textAlign: 'right',
-          flexGrow: 1,              // description-equivalent: fill vertical space
-        }}>
-          {course.title}
-        </div>
-
-        {/* Instructor row */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'flex-start' }}>
-          <span style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 12, color: 'rgba(252,251,251,0.55)', textAlign: 'right' }}>
-            {course.instructor.name}
-          </span>
-          <img src={course.instructor.photo} alt={course.instructor.name}
-            style={{
-              width: 28, height: 28, borderRadius: '50%',
-              objectFit: 'cover', objectPosition: 'center top',
-              border: '1.5px solid #FFC107', flexShrink: 0,
-            }} />
-        </div>
-
-        {/* Price row — pinned to bottom */}
-        <div style={{
-          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-          borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 8, marginTop: 2,
-        }}>
-          <span style={{
-            fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 14,
-            color: '#FFC107', direction: 'ltr',
-          }}>
-            {course.price}
-          </span>
-          <span style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11.5, color: 'rgba(252,251,251,0.42)', textAlign: 'right' }}>
-            {course.schedule.split('|')[0]?.trim()}
-          </span>
-        </div>
-      </div>
-
-      {/* Hover overlay — learning outcomes */}
-      <div style={{
-        position: 'absolute', inset: 0,
-        padding: '20px 18px 18px',
-        display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: 10,
-        textAlign: 'right', direction: 'rtl',
-        opacity: hovered ? 1 : 0,
-        transform: hovered ? 'translateY(0)' : 'translateY(8px)',
-        transition: 'opacity 0.28s 0.06s, transform 0.28s 0.06s',
-        pointerEvents: hovered ? 'auto' : 'none',
-        background: 'linear-gradient(to top, rgba(10,16,30,0.97) 0%, rgba(10,16,30,0.80) 100%)',
-      }}>
-        <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11.5, color: 'rgba(255,193,7,0.75)', fontWeight: 600, textAlign: 'right' }}>
-          {course.subtitle}
-        </div>
-        <div style={{
-          fontFamily: 'Tajawal, sans-serif', fontWeight: 800,
-          fontSize: 'clamp(14px,1.4vw,16px)', color: 'rgba(252,251,251,0.97)', lineHeight: 1.35,
-          textAlign: 'right',
-        }}>
-          {course.title}
-        </div>
-
-        {/* Outcomes */}
-        <div style={{
-          background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)',
-          borderRadius: 12, padding: '12px 14px',
-          display: 'flex', flexDirection: 'column', gap: 8,
-          flexGrow: 1,
-        }}>
-          <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11, color: '#FFC107', fontWeight: 700, marginBottom: 2, textAlign: 'right' }}>
-            ماذا ستتعلم:
-          </div>
-          {course.outcomes.map((o, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'flex-start' }}>
-              <span style={{
-                width: 16, height: 16, borderRadius: '50%',
-                background: 'rgba(255,193,7,0.15)', border: '1px solid rgba(255,193,7,0.35)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                color: '#FFC107', fontSize: 9, flexShrink: 0,
-              }}>✓</span>
-              <span style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 12.5, color: 'rgba(226,232,240,0.82)', textAlign: 'right' }}>{o}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Price + CTA — pinned to bottom */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 15, color: '#FFC107', direction: 'ltr' }}>{course.price}</div>
-            <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 10.5, color: 'rgba(252,251,251,0.40)', textAlign: 'right' }}>{course.priceLabel}</div>
-          </div>
-          {/* Primary button — h:50px, px:28px, br:14px */}
-          <button
-            onClick={e => e.stopPropagation()}
-            style={{
-              fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 13,
-              height: 50, padding: '0 28px', borderRadius: 14,
-              background: '#FFC107', color: '#111827',
-              border: 'none', cursor: 'pointer',
-              boxShadow: '0 4px 16px rgba(255,193,7,0.30)',
-              transition: 'transform 250ms, box-shadow 250ms',
-              whiteSpace: 'nowrap',
-              display: 'flex', alignItems: 'center', gap: 6,
-            }}
-            onMouseEnter={e => Object.assign(e.currentTarget.style, {
-              transform: 'translateY(-2px)',
-              boxShadow: '0 8px 24px rgba(255,193,7,0.45), 0 0 24px rgba(255,193,7,0.25)',
-            })}
-            onMouseLeave={e => Object.assign(e.currentTarget.style, {
-              transform: 'none',
-              boxShadow: '0 4px 16px rgba(255,193,7,0.30)',
-            })}
+            transition: 'transform 250ms, box-shadow 250ms',
+            display: 'flex', alignItems: 'center', gap: 8,
+            whiteSpace: 'nowrap',
+          }}
+            onMouseEnter={e => Object.assign(e.currentTarget.style, { transform: 'translateY(-2px)', boxShadow: '0 8px 28px rgba(255,193,7,0.50), 0 0 24px rgba(255,193,7,0.25)' })}
+            onMouseLeave={e => Object.assign(e.currentTarget.style, { transform: 'none', boxShadow: '0 4px 18px rgba(255,193,7,0.35)' })}
           >
-            اكتشف الدورة
+            سجّل الآن
             <span style={{ direction: 'ltr' }}>←</span>
           </button>
         </div>
@@ -528,99 +288,207 @@ function CourseCard({ course }: { course: Course }) {
   );
 }
 
+// ── Side / Bottom Card (1fr columns) ───────────────────────
+function CourseCard({ course }: { course: Course }) {
+  const [hov, setHov] = useState(false);
+
+  return (
+    <div
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        ...glass,
+        background:    hov ? 'rgba(255,255,255,0.055)' : 'rgba(255,255,255,0.035)',
+        border:        hov ? '1px solid rgba(255,255,255,0.10)' : '1px solid rgba(255,255,255,0.06)',
+        borderRadius:  22,
+        overflow:      'hidden',
+        display:       'flex',
+        flexDirection: 'column',
+        direction:     'rtl',
+        cursor:        'pointer',
+        height:        '100%',
+        boxShadow:     hov ? '0 20px 45px rgba(0,0,0,0.40)' : '0 10px 30px rgba(0,0,0,0.25)',
+        transform:     hov ? 'translateY(-4px)' : 'translateY(0)',
+        transition:    'all 0.25s ease',
+      }}
+    >
+      {/* Cover image */}
+      <div style={{ position: 'relative', aspectRatio: '16/9', overflow: 'hidden', flexShrink: 0 }}>
+        <img src={course.cover} alt={course.title} style={{
+          width: '100%', height: '100%',
+          objectFit: 'cover', objectPosition: course.imgPos,
+          display: 'block',
+          transform: hov ? 'scale(1.04)' : 'scale(1)',
+          transition: 'transform 0.5s ease',
+        }} />
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0, height: 50,
+          background: 'linear-gradient(to bottom, transparent, rgba(14,22,38,0.90))',
+          pointerEvents: 'none',
+        }} />
+        <div style={{ position: 'absolute', top: 10, insetInlineStart: 10, display: 'flex', gap: 5, flexWrap: 'wrap' }}>
+          {course.types.map(t => <TypeBadge key={t} label={t} />)}
+        </div>
+      </div>
+
+      {/* Body */}
+      <div style={{
+        flex: 1, display: 'flex', flexDirection: 'column',
+        padding: '18px 20px 20px', gap: 10, textAlign: 'right',
+      }}>
+        {/* Card title — 22px / 600 / max 2 lines */}
+        <h3 style={{
+          fontFamily: 'Tajawal, sans-serif', fontWeight: 600,
+          fontSize: 22,
+          color: 'rgba(252,251,251,0.96)', lineHeight: 1.3,
+          margin: 0, letterSpacing: '0.01em',
+          display: '-webkit-box' as const,
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: 'vertical' as const,
+          overflow: 'hidden',
+        }}>
+          {course.title}
+        </h3>
+
+        {/* Description — 16px / 1.9lh / max 3 lines */}
+        <p style={{
+          fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
+          fontSize: 16, color: 'rgba(252,251,251,0.55)',
+          lineHeight: 1.9, margin: 0,
+          display: '-webkit-box' as const,
+          WebkitLineClamp: 3,
+          WebkitBoxOrient: 'vertical' as const,
+          overflow: 'hidden',
+          flexGrow: 1,
+        }}>
+          {course.shortDesc}
+        </p>
+
+        {/* Bottom strip — instructor + price, pinned to bottom */}
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          paddingTop: 12, borderTop: '1px solid rgba(255,255,255,0.07)',
+          gap: 8,
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 13, color: 'rgba(252,251,251,0.50)' }}>
+              {course.instructor.name}
+            </span>
+            <img src={course.instructor.photo} alt={course.instructor.name} style={{
+              width: 30, height: 30, borderRadius: '50%',
+              objectFit: 'cover', objectPosition: 'center top',
+              border: '1.5px solid #FFC107', flexShrink: 0,
+            }} />
+          </div>
+          <span style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 16, color: '#FFC107', direction: 'ltr' }}>
+            {course.price}
+          </span>
+        </div>
+
+        {/* CTA — appears on hover, always allocated (opacity 0 → 1) */}
+        <button
+          onClick={e => e.stopPropagation()}
+          style={{
+            width: '100%', height: 50, borderRadius: 14,
+            fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 16,
+            background: '#FFC107', color: '#111827',
+            border: 'none', cursor: 'pointer',
+            boxShadow: '0 4px 16px rgba(255,193,7,0.30)',
+            opacity: hov ? 1 : 0,
+            transform: hov ? 'translateY(0)' : 'translateY(6px)',
+            transition: 'opacity 250ms, transform 250ms, box-shadow 250ms',
+            pointerEvents: hov ? 'auto' : 'none',
+          }}
+          onMouseEnter={e => Object.assign(e.currentTarget.style, { boxShadow: '0 8px 24px rgba(255,193,7,0.45), 0 0 24px rgba(255,193,7,0.25)' })}
+          onMouseLeave={e => Object.assign(e.currentTarget.style, { boxShadow: '0 4px 16px rgba(255,193,7,0.30)' })}
+        >
+          اكتشف الدورة ←
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // ── Main section ───────────────────────────────────────────
 export default function CoursesSection() {
-  const [featured] = COURSES.slice(0, 1);
-  const grid = COURSES.slice(1);
+  const featured  = COURSES[0];
+  const sideCards = COURSES.slice(1, 3);    // 2 stacked in 1fr column
+  const botCards  = COURSES.slice(3);       // 2 equal-width in bottom row
 
   return (
     <section className="section-block relative overflow-hidden">
+      {/* Subtle top glow */}
       <div className="absolute pointer-events-none" style={{
         top: -60, left: '50%', transform: 'translateX(-50%)',
         width: '70%', height: 200,
-        background: 'radial-gradient(ellipse at top, rgba(255,193,7,0.11) 0%, transparent 70%)',
+        background: 'radial-gradient(ellipse at top, rgba(255,193,7,0.10) 0%, transparent 70%)',
       }} />
 
-      <div className="relative z-10 mx-auto px-4" style={{ maxWidth: 1160 }}>
+      <div className="relative z-10 mx-auto px-4" style={{ maxWidth: 1200 }}>
 
-        {/* Section header — 8pt spacing system */}
-        <div style={{
-          display: 'flex', alignItems: 'flex-end',
-          justifyContent: 'space-between',
-          marginBottom: 48,             /* subtitle → cards */
-          flexWrap: 'wrap', gap: 12,
-          direction: 'rtl',
+        {/* Centered section header */}
+        <SectionHeader
+          badge="البرامج الأكاديمية"
+          heading={<>دوراتنا <Gold>المتميزة</Gold></>}
+          description="اختر من بين برامجنا الأكثر طلباً — وجاهي أو أونلاين تفاعلي، ومقاعد محدودة."
+          style={{ marginBottom: 48 }}
+        />
+
+        {/* ── Top row: 2fr featured | 1fr side column ── */}
+        <div className="courses-top-grid" style={{
+          display: 'grid',
+          gridTemplateColumns: '2fr 1fr',
+          gap: 24,
+          marginBottom: 24,
         }}>
-          <div style={{ textAlign: 'right' }}>
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: 7, marginBottom: 12,
-              padding: '4px 14px', borderRadius: 99,
-              background: 'rgba(255,193,7,0.09)', border: '1px solid rgba(255,193,7,0.25)',
-              fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 12.5, color: '#FFC107',
-            }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#FFC107', boxShadow: '0 0 6px rgba(255,193,7,0.7)', flexShrink: 0 }} />
-              البرامج الأكاديمية
-            </div>
+          {/* Featured — 2fr */}
+          <FeaturedCard course={featured} />
 
-            <h2 style={{
-              fontFamily: 'Tajawal, sans-serif', fontWeight: 900,
-              fontSize: 'clamp(26px,4vw,46px)',
-              color: 'rgba(252,251,251,0.96)', lineHeight: 1.2, margin: 0,
-              textAlign: 'right',
-            }}>
-              دوراتنا <span style={{ color: '#FFC107' }}>المتميزة</span>
-            </h2>
-
-            {/* heading → subtitle: 20px */}
-            <p style={{
-              fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
-              fontSize: 'clamp(13px,1.4vw,16px)',
-              color: '#E2E8F0', lineHeight: 1.8, margin: '20px 0 0', maxWidth: 600,
-              textAlign: 'right',
-            }}>
-              اختر من بين برامجنا الأكثر طلباً — وجاهي أو أونلاين تفاعلي، ومقاعد محدودة.
-            </p>
+          {/* Side column — 1fr, 2 stacked cards */}
+          <div style={{
+            display: 'grid',
+            gridTemplateRows: '1fr 1fr',
+            gap: 24,
+          }}>
+            {sideCards.map(c => <CourseCard key={c.id} course={c} />)}
           </div>
+        </div>
 
-          {/* Secondary button — transparent, 1px border, subtle hover */}
+        {/* ── Bottom row: equal-width, equal-height cards ── */}
+        <div className="courses-bot-grid" style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, 1fr)',
+          gridAutoRows: '1fr',
+          gap: 24,
+        }}>
+          {botCards.map(c => <CourseCard key={c.id} course={c} />)}
+        </div>
+
+        {/* View all — secondary button, centered below */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 40 }}>
           <button style={{
-            fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 14,
-            color: 'rgba(252,251,251,0.55)',
+            height: 50, padding: '0 32px', borderRadius: 14,
+            fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 16,
+            color: 'rgba(252,251,251,0.60)',
             background: 'transparent',
-            border: '1px solid rgba(255,255,255,0.18)',
-            borderRadius: 14, padding: '0 20px', height: 50,
+            border: '1px solid rgba(255,255,255,0.16)',
             cursor: 'pointer',
             transition: 'color 250ms, border-color 250ms, background 250ms',
-            whiteSpace: 'nowrap',
           }}
-            onMouseEnter={e => Object.assign(e.currentTarget.style, {
-              color: '#FFC107',
-              borderColor: 'rgba(255,193,7,0.4)',
-              background: 'rgba(255,255,255,0.04)',
-            })}
-            onMouseLeave={e => Object.assign(e.currentTarget.style, {
-              color: 'rgba(252,251,251,0.55)',
-              borderColor: 'rgba(255,255,255,0.18)',
-              background: 'transparent',
-            })}
+            onMouseEnter={e => Object.assign(e.currentTarget.style, { color: '#FFC107', borderColor: 'rgba(255,193,7,0.40)', background: 'rgba(255,255,255,0.04)' })}
+            onMouseLeave={e => Object.assign(e.currentTarget.style, { color: 'rgba(252,251,251,0.60)', borderColor: 'rgba(255,255,255,0.16)', background: 'transparent' })}
           >
             استعرض كل الدورات ←
           </button>
         </div>
-
-        {/* Featured card */}
-        <FeaturedCard course={featured} />
-
-        {/* 4-card grid — grid-auto-rows:1fr equalises all row heights */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))',
-          gridAutoRows: '1fr',
-          gap: 'clamp(14px,2vw,22px)',
-        }}>
-          {grid.map(course => <CourseCard key={course.id} course={course} />)}
-        </div>
       </div>
+
+      <style>{`
+        @media (max-width: 767px) {
+          .courses-top-grid { grid-template-columns: 1fr !important; }
+          .courses-bot-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </section>
   );
 }

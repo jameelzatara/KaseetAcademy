@@ -1,5 +1,6 @@
 // ── Kaseet FAQ Section ────────────────────────────────────
 import { useState } from 'react';
+import SectionHeader, { Gold } from './SectionHeader';
 
 interface FAQItem { q: string; a: string; }
 
@@ -27,82 +28,89 @@ const FAQS: FAQItem[] = [
 ];
 
 function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen]   = useState(false);
+  const [hov,  setHov]    = useState(false);
 
   return (
     <div style={{
-      borderRadius: 16,
-      background: open ? 'rgba(255,193,7,0.04)' : 'rgba(255,255,255,0.03)',
-      backdropFilter: 'blur(12px)',
-      WebkitBackdropFilter: 'blur(12px)',
-      border: open ? '1px solid rgba(255,193,7,0.25)' : '1px solid rgba(255,255,255,0.09)',
-      overflow: 'hidden',
-      transition: 'background 0.3s, border 0.3s, box-shadow 0.3s',
-      boxShadow: open ? '0 10px 30px rgba(0,0,0,0.25), 0 4px 24px rgba(255,193,7,0.06)' : '0 10px 30px rgba(0,0,0,0.25)',
+      borderRadius: 18,
+      /* bg: open → gold tint, hover → slightly brighter, default → base */
+      background: open
+        ? 'rgba(255,193,7,0.04)'
+        : hov
+          ? 'rgba(255,255,255,0.05)'
+          : 'rgba(255,255,255,0.03)',
+      backdropFilter:       'blur(16px)',
+      WebkitBackdropFilter: 'blur(16px)',
+      border:    open ? '1px solid rgba(255,193,7,0.22)' : '1px solid rgba(255,255,255,0.06)',
+      overflow:  'hidden',
+      boxShadow: '0 10px 30px rgba(0,0,0,0.22)',
+      transition: 'background 220ms, border 220ms, box-shadow 220ms',
     }}>
+      {/* Trigger row — exactly 64px, padding-inline 24px */}
       <button
         onClick={() => setOpen(v => !v)}
+        onMouseEnter={() => setHov(true)}
+        onMouseLeave={() => setHov(false)}
         style={{
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          padding: 'clamp(18px,2.2vw,24px) clamp(20px,2.8vw,32px)',
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          direction: 'rtl',
-          gap: 16,
-          textAlign: 'right',
+          width:          '100%',
+          height:         64,
+          display:        'flex',
+          alignItems:     'center',
+          paddingInline:  24,
+          background:     'none',
+          border:         'none',
+          cursor:         'pointer',
+          direction:      'rtl',
+          gap:            14,
         }}
       >
-        {/* Question text — first in DOM → RIGHT side in RTL */}
+        {/* Toggle icon — first in DOM → visual RIGHT in RTL */}
+        <span style={{
+          flexShrink: 0,
+          width: 28, height: 28,
+          borderRadius: '50%',
+          background: open ? 'rgba(255,193,7,0.15)' : 'rgba(255,255,255,0.07)',
+          border: `1px solid ${open ? 'rgba(255,193,7,0.40)' : 'rgba(255,255,255,0.10)'}`,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color: open ? '#FFC107' : 'rgba(252,251,251,0.52)',
+          fontSize: 18, fontWeight: 300, lineHeight: 1,
+          transition: 'all 220ms ease',
+          transform: open ? 'rotate(45deg)' : 'rotate(0)',
+        }}>+</span>
+
+        {/* Question text — center-vertically via height:64px on parent */}
         <span style={{
           fontFamily: 'Tajawal, sans-serif', fontWeight: 700,
-          fontSize: 'clamp(14px,1.5vw,17px)',
-          color: open ? '#FFC107' : 'rgba(252,251,251,0.90)',
-          lineHeight: 1.45,
+          fontSize: 'clamp(14px,1.4vw,16px)',
+          color: open ? '#FFC107' : 'rgba(252,251,251,0.88)',
+          lineHeight: 1.4,
           flex: 1,
           textAlign: 'right',
-          transition: 'color 0.25s',
+          transition: 'color 220ms',
         }}>
           {`${index + 1}. ${item.q}`}
         </span>
-
-        {/* ± icon — marginInlineStart:auto pushes it to far inline-end (LEFT in RTL) */}
-        <span style={{
-          flexShrink: 0,
-          marginInlineStart: 'auto',
-          width: 30, height: 30,
-          borderRadius: '50%',
-          background: open ? 'rgba(255,193,7,0.15)' : 'rgba(255,255,255,0.06)',
-          border: `1px solid ${open ? 'rgba(255,193,7,0.40)' : 'rgba(255,255,255,0.10)'}`,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: open ? '#FFC107' : 'rgba(252,251,251,0.50)',
-          fontSize: 20, fontWeight: 300, lineHeight: 1,
-          transition: 'all 0.25s',
-          transform: open ? 'rotate(45deg)' : 'rotate(0)',
-        }}>+</span>
       </button>
 
+      {/* Expand panel — 220ms animation */}
       <div style={{
-        maxHeight: open ? '500px' : '0',
-        overflow: 'hidden',
-        transition: 'max-height 0.40s cubic-bezier(0.4,0,0.2,1)',
+        maxHeight:  open ? 560 : 0,
+        overflow:   'hidden',
+        transition: 'max-height 220ms cubic-bezier(0.4,0,0.2,1)',
       }}>
-        <div style={{
-          padding: '0 clamp(20px,2.8vw,32px) clamp(20px,2.5vw,28px)',
-          direction: 'rtl',
-        }}>
+        <div style={{ padding: '0 24px 24px', direction: 'rtl' }}>
+          {/* Thin gold rule */}
           <div style={{
             height: 1,
-            background: 'linear-gradient(to left, rgba(255,193,7,0.25), transparent)',
+            background: 'linear-gradient(to left, rgba(255,193,7,0.22), transparent)',
             marginBottom: 18,
           }} />
           <p style={{
             fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
-            fontSize: 'clamp(13.5px,1.3vw,15.5px)',
-            color: 'rgba(226,232,240,0.75)',
-            lineHeight: 1.95, margin: 0,
+            fontSize: 16,
+            color: 'rgba(226,232,240,0.72)',
+            lineHeight: 1.9, margin: 0,
             textAlign: 'right',
           }}>
             {item.a}
@@ -123,50 +131,18 @@ export default function FAQSection() {
         background: 'radial-gradient(ellipse at top, rgba(255,193,7,0.07) 0%, transparent 70%)',
       }} />
 
-      <div className="relative z-10 mx-auto px-4" style={{ maxWidth: 820, direction: 'rtl' }}>
+      <div className="relative z-10 mx-auto px-4" style={{ maxWidth: 820 }}>
 
-        {/* Header */}
-        <div style={{ textAlign: 'right', marginBottom: 48 }}>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: 7,
-            marginBottom: 12,
-            padding: '4px 14px', borderRadius: 99,
-            background: 'rgba(255,193,7,0.09)',
-            border: '1px solid rgba(255,193,7,0.25)',
-            fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 12.5,
-            color: '#FFC107',
-          }}>
-            <span style={{
-              width: 6, height: 6, borderRadius: '50%',
-              background: '#FFC107', boxShadow: '0 0 6px rgba(255,193,7,0.7)',
-              flexShrink: 0,
-            }} />
-            الأسئلة الشائعة
-          </div>
-
-          <h2 style={{
-            fontFamily: 'Tajawal, sans-serif', fontWeight: 900,
-            fontSize: 'clamp(24px,3.5vw,42px)',
-            color: 'rgba(252,251,251,0.96)',
-            lineHeight: 1.2, margin: '0 0 10px',
-            textAlign: 'right',
-          }}>
-            الأسئلة الشائعة{' '}
-            <span style={{ color: '#FFC107' }}>حول برامج كاسيت</span>
-          </h2>
-          <p style={{
-            fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
-            fontSize: 'clamp(13px,1.3vw,15.5px)',
-            color: 'rgba(226,232,240,0.58)',
-            margin: '20px 0 0',    /* heading → subtitle: 20px */
-            textAlign: 'right',
-          }}>
-            إجابات واضحة على أكثر ما يسأل عنه طلابنا قبل التسجيل.
-          </p>
-        </div>
+        {/* Centered section header */}
+        <SectionHeader
+          badge="الأسئلة الشائعة"
+          heading={<>الأسئلة الشائعة <Gold>حول برامج كاسيت</Gold></>}
+          description="إجابات واضحة على أكثر ما يسأل عنه طلابنا قبل التسجيل."
+          style={{ marginBottom: 48 }}
+        />
 
         {/* Accordion */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {FAQS.map((item, i) => (
             <AccordionItem key={i} item={item} index={i} />
           ))}

@@ -1,4 +1,5 @@
 // ── Free Consultation Section ──────────────────────────────
+import SectionHeader, { Gold } from './SectionHeader';
 import consultantImg from '@assets/consultant_1785431795181.jpeg';
 
 const BENEFITS = [
@@ -23,10 +24,7 @@ function WhatsAppIcon() {
 
 export default function ConsultationSection() {
   return (
-    <section
-      id="consultant"
-      className="section-block relative overflow-hidden"
-    >
+    <section id="consultant" className="section-block relative overflow-hidden">
       {/* Gold radial glow */}
       <div className="absolute pointer-events-none" style={{
         top: -60, left: '50%', transform: 'translateX(-50%)',
@@ -35,95 +33,60 @@ export default function ConsultationSection() {
       }} />
 
       <div className="relative z-10 mx-auto px-4" style={{ maxWidth: 1160 }}>
-        <div
-          className="consultation-grid"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 380px',
-            gap: 'clamp(32px,5vw,72px)',
-            alignItems: 'center',
-            direction: 'rtl',
-          }}
-        >
+
+        {/* Centered section header */}
+        <SectionHeader
+          badge="استشارة مجانية 100%"
+          heading={<>محتار في اختيار المسار الأنسب <Gold>لصوتك؟</Gold></>}
+          description="تواصل مع المستشارة التعليمية لتحديد مستواك الحالي وبناء خطتك التدريبية المخصصة — بدون أي التزام."
+          style={{ marginBottom: 56 }}
+        />
+
+        {/* Two-column layout */}
+        <div className="consultation-grid" style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 380px',
+          gap: 'clamp(32px,5vw,72px)',
+          alignItems: 'center',
+          direction: 'rtl',
+        }}>
 
           {/* ── RIGHT: Text column ── */}
-          <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', gap: 22 }}>
+          <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', gap: 24 }}>
 
-            {/* Badge */}
-            <div style={{ alignSelf: 'flex-start' }}>
-              <span style={{
-                display: 'inline-flex', alignItems: 'center', gap: 7,
-                padding: '5px 16px', borderRadius: 99,
-                background: 'rgba(74,222,128,0.10)',
-                border: '1px solid rgba(74,222,128,0.28)',
-                fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 13,
-                color: '#4ade80',
-              }}>
-                <span style={{
-                  width: 7, height: 7, borderRadius: '50%', background: '#4ade80',
-                  boxShadow: '0 0 8px rgba(74,222,128,0.8)', flexShrink: 0,
-                  animation: 'consultPulse 2s infinite',
-                }} />
-                استشارة مجانية 100%
-              </span>
-            </div>
-
-            {/* Heading */}
-            <h2 style={{
-              fontFamily: 'Tajawal, sans-serif', fontWeight: 900,
-              fontSize: 'clamp(22px,3.2vw,40px)',
-              color: 'rgba(252,251,251,0.96)', lineHeight: 1.35, margin: 0,
-              textAlign: 'right',
-            }}>
-              محتار في اختيار المسار الأنسب{' '}
-              <span style={{ color: '#FFC107' }}>لصوتك أو حضورك الإعلامي؟</span>
-            </h2>
-
-            {/* Description */}
-            <p style={{
-              fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
-              fontSize: 'clamp(14px,1.4vw,16.5px)',
-              color: 'rgba(226,232,240,0.75)', lineHeight: 1.85, margin: 0,
-              textAlign: 'right',
-            }}>
-              تواصل مع المستشارة التعليمية لتحديد مستواك الحالي وبناء خطتك التدريبية المخصصة — بدون أي التزام.
-            </p>
-
-            {/* Benefits — icon AFTER Arabic text (icon on LEFT, text on RIGHT) */}
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {/* Benefits */}
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 14 }}>
               {BENEFITS.map((b, i) => (
                 <li key={i} style={{
                   display: 'flex', alignItems: 'center', gap: 12,
-                  justifyContent: 'flex-start',
-                  direction: 'rtl',
+                  justifyContent: 'flex-start', direction: 'rtl',
                 }}>
-                  {/* ✓ icon first in DOM → RIGHT in RTL */}
                   <span style={{
                     width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
                     background: 'rgba(255,193,7,0.12)', border: '1px solid rgba(255,193,7,0.30)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     color: '#FFC107', fontSize: 12, fontWeight: 900,
                   }}>✓</span>
-                  {/* Text second → flows LEFT of icon */}
                   <span style={{
-                    fontFamily: 'Tajawal, sans-serif', fontSize: 'clamp(13.5px,1.3vw,15.5px)',
-                    color: 'rgba(252,251,251,0.82)', fontWeight: 500,
-                    textAlign: 'right',
+                    fontFamily: 'Tajawal, sans-serif',
+                    fontSize: 16,
+                    color: 'rgba(252,251,251,0.80)', fontWeight: 500,
+                    textAlign: 'right', lineHeight: 1.6,
                   }}>{b}</span>
                 </li>
               ))}
             </ul>
 
-            {/* CTAs — Arabic label first (RIGHT), icon after (LEFT) */}
-            <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'flex-start', marginTop: 6 }}>
-              {/* Primary CTA — height:50px, px:28px, br:14px, glow on hover */}
+            {/* CTAs */}
+            <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'flex-start' }}>
+              {/* Primary WA button */}
               <a
                 href="https://wa.me/962771052222"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 10,
-                  fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 15,
+                  fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 16,
                   height: 50, padding: '0 28px', borderRadius: 14,
                   background: '#065f46', color: '#fff',
                   textDecoration: 'none',
@@ -147,27 +110,18 @@ export default function ConsultationSection() {
                 <WhatsAppIcon />
               </a>
 
-              {/* Secondary button — transparent, 1px border, subtle hover */}
-              <button
-                style={{
-                  fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 14,
-                  color: 'rgba(252,251,251,0.55)',
-                  background: 'transparent',
-                  border: '1px solid rgba(255,255,255,0.18)',
-                  borderRadius: 14, height: 50, padding: '0 24px',
-                  cursor: 'pointer',
-                  transition: 'color 250ms, border-color 250ms, background 250ms',
-                }}
-                onMouseEnter={e => Object.assign(e.currentTarget.style, {
-                  color: '#FFC107',
-                  borderColor: 'rgba(255,193,7,0.4)',
-                  background: 'rgba(255,255,255,0.04)',
-                })}
-                onMouseLeave={e => Object.assign(e.currentTarget.style, {
-                  color: 'rgba(252,251,251,0.55)',
-                  borderColor: 'rgba(255,255,255,0.18)',
-                  background: 'transparent',
-                })}
+              {/* Secondary button */}
+              <button style={{
+                fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 16,
+                color: 'rgba(252,251,251,0.55)',
+                background: 'transparent',
+                border: '1px solid rgba(255,255,255,0.18)',
+                borderRadius: 14, height: 50, padding: '0 24px',
+                cursor: 'pointer',
+                transition: 'color 250ms, border-color 250ms, background 250ms',
+              }}
+                onMouseEnter={e => Object.assign(e.currentTarget.style, { color: '#FFC107', borderColor: 'rgba(255,193,7,0.4)', background: 'rgba(255,255,255,0.04)' })}
+                onMouseLeave={e => Object.assign(e.currentTarget.style, { color: 'rgba(252,251,251,0.55)', borderColor: 'rgba(255,255,255,0.18)', background: 'transparent' })}
               >
                 استكشف كل البرامج
               </button>
@@ -176,17 +130,15 @@ export default function ConsultationSection() {
 
           {/* ── LEFT: Glass card ── */}
           <div style={{
-            background: 'rgba(255,255,255,0.04)',
+            background: 'rgba(255,255,255,0.035)',
             backdropFilter: 'blur(16px)',
             WebkitBackdropFilter: 'blur(16px)',
-            borderRadius: 24,
-            border: '1px solid rgba(255,255,255,0.10)',
+            borderRadius: 22,
+            border: '1px solid rgba(255,255,255,0.06)',
             padding: '2.5rem',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: 20,
-            boxShadow: '0 8px 40px rgba(0,0,0,0.30)',
+            display: 'flex', flexDirection: 'column',
+            alignItems: 'center', gap: 20,
+            boxShadow: '0 10px 30px rgba(0,0,0,0.25)',
           }}>
 
             {/* Avatar with glow ring */}
@@ -194,15 +146,14 @@ export default function ConsultationSection() {
               <div style={{
                 position: 'absolute', inset: -6, borderRadius: '50%',
                 background: 'transparent',
-                boxShadow: '0 0 36px 8px rgba(255,193,7,0.20)',
+                boxShadow: '0 0 36px 8px rgba(255,193,7,0.18)',
                 pointerEvents: 'none',
               }} />
               <img
                 src={consultantImg}
                 alt="المستشارة التعليمية"
                 style={{
-                  width: 180, height: 180,
-                  borderRadius: '50%',
+                  width: 180, height: 180, borderRadius: '50%',
                   objectFit: 'cover', objectPosition: 'center top',
                   border: '3px solid rgba(255,193,7,0.50)',
                   boxShadow: '0 8px 24px rgba(0,0,0,0.30)',
@@ -213,16 +164,10 @@ export default function ConsultationSection() {
 
             {/* Name + title */}
             <div style={{ textAlign: 'center' }}>
-              <div style={{
-                fontFamily: 'Tajawal, sans-serif', fontWeight: 800,
-                fontSize: 18, color: 'rgba(252,251,251,0.95)',
-              }}>
+              <div style={{ fontFamily: 'Tajawal, sans-serif', fontWeight: 800, fontSize: 18, color: 'rgba(252,251,251,0.95)' }}>
                 المستشارة التعليمية
               </div>
-              <div style={{
-                fontFamily: 'Tajawal, sans-serif', fontSize: 13,
-                color: 'rgba(252,251,251,0.48)', marginTop: 4,
-              }}>
+              <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 13, color: 'rgba(252,251,251,0.46)', marginTop: 4 }}>
                 أكاديمية كاسيت ميديا
               </div>
             </div>
@@ -230,7 +175,7 @@ export default function ConsultationSection() {
             {/* Online status */}
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
-              padding: '7px 18px', borderRadius: 99,
+              padding: '7px 18px', borderRadius: 999,
               background: 'rgba(15,23,42,0.55)',
               border: '1px solid rgba(74,222,128,0.35)',
               backdropFilter: 'blur(6px)',
@@ -239,10 +184,7 @@ export default function ConsultationSection() {
                 width: 8, height: 8, borderRadius: '50%', flexShrink: 0,
                 background: '#4ade80', boxShadow: '0 0 8px rgba(74,222,128,0.9)',
               }} />
-              <span style={{
-                fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 12.5,
-                color: 'rgba(252,251,251,0.90)',
-              }}>
+              <span style={{ fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 12.5, color: 'rgba(252,251,251,0.90)' }}>
                 متواجدة الآن للرد على استفساراتك
               </span>
             </div>
@@ -251,7 +193,7 @@ export default function ConsultationSection() {
             <div style={{
               display: 'flex', gap: 0, width: '100%',
               background: 'rgba(255,255,255,0.04)',
-              border: '1px solid rgba(255,255,255,0.08)',
+              border: '1px solid rgba(255,255,255,0.07)',
               borderRadius: 14, overflow: 'hidden',
             }}>
               {MICRO_STATS.map((s, i) => (
@@ -259,14 +201,12 @@ export default function ConsultationSection() {
                   flex: 1, textAlign: 'center', padding: '12px 6px',
                   borderInlineStart: i > 0 ? '1px solid rgba(255,255,255,0.07)' : 'none',
                 }}>
-                  <div style={{
-                    fontFamily: 'Poppins, sans-serif', fontWeight: 800,
-                    fontSize: 17, color: '#FFC107', direction: 'ltr',
-                  }}>{s.value}</div>
-                  <div style={{
-                    fontFamily: 'Tajawal, sans-serif', fontSize: 11,
-                    color: 'rgba(252,251,251,0.45)', marginTop: 3,
-                  }}>{s.label}</div>
+                  <div style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: 17, color: '#FFC107', direction: 'ltr' }}>
+                    {s.value}
+                  </div>
+                  <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11, color: 'rgba(252,251,251,0.44)', marginTop: 3 }}>
+                    {s.label}
+                  </div>
                 </div>
               ))}
             </div>
@@ -277,7 +217,7 @@ export default function ConsultationSection() {
       <style>{`
         @keyframes consultPulse {
           0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.55; transform: scale(0.80); }
+          50%       { opacity: 0.55; transform: scale(0.80); }
         }
         @media (max-width: 767px) {
           .consultation-grid { grid-template-columns: 1fr !important; }

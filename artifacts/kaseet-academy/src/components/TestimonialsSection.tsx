@@ -1,4 +1,6 @@
 // ── Testimonials — infinite marquee ──────────────────────
+import SectionHeader, { Gold } from './SectionHeader';
+
 import avatarDina    from '@assets/Dina Raad-Yaghnam.png';
 import avatarHiba    from '@assets/Hiba Abu Hijleh.png';
 import avatarAbeer   from '@assets/Abeer Alzoubi.png';
@@ -39,47 +41,41 @@ function GoogleLogo({ size = 16 }: { size?: number }) {
 function ReviewCard({ review }: { review: Review }) {
   return (
     <div style={{
-      background:           'rgba(255,255,255,0.04)',
-      backdropFilter:       'blur(14px)',
-      WebkitBackdropFilter: 'blur(14px)',
-      border:               '1px solid rgba(255,255,255,0.09)',
-      borderRadius:         20,
-      /* 28px desktop / 22px mobile — breathing room */
+      background:           'rgba(255,255,255,0.035)',
+      backdropFilter:       'blur(16px)',
+      WebkitBackdropFilter: 'blur(16px)',
+      border:               '1px solid rgba(255,255,255,0.06)',
+      borderRadius:         22,
       padding:              'clamp(22px,2.5vw,28px)',
       display:              'flex',
       flexDirection:        'column',
       gap:                  16,
       textAlign:            'right',
       flexShrink:           0,
-      width:                'clamp(290px,28vw,360px)',
+      width:                'clamp(300px,28vw,360px)',
       boxShadow:            '0 10px 30px rgba(0,0,0,0.25)',
-      cursor:               'default',
       direction:            'rtl',
     }}>
-      {/* Top row — name+avatar RIGHT, Google badge LEFT */}
+      {/* Top row */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
 
-        {/* Name + stars — first in DOM → RIGHT in RTL */}
-        {/* gap:18px between name block and avatar */}
+        {/* Name + stars — gap 18px between text block and avatar */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
-          {/* Name text first (RIGHT), avatar image after (LEFT) */}
           <div style={{ textAlign: 'right' }}>
             <div style={{
               fontFamily: 'Tajawal, sans-serif', fontWeight: 700,
-              fontSize: 14.5, color: 'rgba(252,251,251,0.95)', lineHeight: 1.3,
-            }}>{review.name}</div>
-            {/* Stars — LTR for correct ★ order, same baseline as name */}
-            <div style={{
-              display: 'flex', gap: 2,
-              alignItems: 'baseline',   /* same baseline */
-              direction: 'ltr', marginTop: 4,
+              fontSize: 15, color: 'rgba(252,251,251,0.95)', lineHeight: 1.3,
             }}>
+              {review.name}
+            </div>
+            {/* Stars — LTR, baseline-aligned */}
+            <div style={{ display: 'flex', gap: 2, alignItems: 'baseline', direction: 'ltr', marginTop: 4 }}>
               {[...Array(5)].map((_, i) => (
                 <span key={i} style={{ color: '#FFC107', fontSize: 13, lineHeight: 1 }}>★</span>
               ))}
             </div>
           </div>
-          {/* Avatar — 64px, AFTER Arabic name text → LEFT side in RTL */}
+          {/* Avatar — 64px */}
           <img
             src={review.avatar}
             alt={review.name}
@@ -87,25 +83,25 @@ function ReviewCard({ review }: { review: Review }) {
               width: 64, height: 64, borderRadius: '50%',
               objectFit: 'cover', objectPosition: 'center top',
               border: '2px solid rgba(255,193,7,0.45)',
-              boxShadow: '0 0 14px rgba(255,193,7,0.18)',
+              boxShadow: '0 0 14px rgba(255,193,7,0.16)',
               flexShrink: 0,
             }}
             onError={e => { (e.currentTarget as HTMLImageElement).style.background = '#2d3748'; }}
           />
         </div>
 
-        {/* Google badge — second → LEFT in RTL */}
+        {/* Google badge */}
         <div style={{
           display: 'flex', alignItems: 'center', gap: 5,
-          padding: '4px 10px', borderRadius: 99,
-          background: 'rgba(255,255,255,0.06)',
-          border: '1px solid rgba(255,255,255,0.10)',
+          padding: '4px 10px', borderRadius: 999,
+          background: 'rgba(255,255,255,0.05)',
+          border: '1px solid rgba(255,255,255,0.09)',
           flexShrink: 0,
         }}>
           <GoogleLogo size={14} />
           <span style={{
             fontFamily: 'Poppins, sans-serif', fontSize: 10,
-            color: 'rgba(252,251,251,0.48)', fontWeight: 500,
+            color: 'rgba(252,251,251,0.46)', fontWeight: 500,
             direction: 'ltr',
           }}>موثّق</span>
         </div>
@@ -114,11 +110,11 @@ function ReviewCard({ review }: { review: Review }) {
       {/* Separator */}
       <div style={{ height: 1, background: 'rgba(255,255,255,0.07)' }} />
 
-      {/* Review text — line-height:1.9 for breathing room */}
+      {/* Review text — 16px / 1.9lh */}
       <p style={{
         fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
-        fontSize: 'clamp(13px,1.2vw,14.5px)',
-        color: 'rgba(226,232,240,0.78)',
+        fontSize: 16,
+        color: 'rgba(226,232,240,0.75)',
         lineHeight: 1.9, margin: 0, flex: 1,
         textAlign: 'right',
       }}>
@@ -140,7 +136,7 @@ export default function TestimonialsSection() {
         background: 'radial-gradient(ellipse at top, rgba(255,193,7,0.07) 0%, transparent 70%)',
       }} />
 
-      {/* Edge fade masks — colour matches global page canvas */}
+      {/* Edge fade masks */}
       <div className="absolute inset-y-0 right-0 pointer-events-none" style={{
         width: 120, zIndex: 10,
         background: 'linear-gradient(to left, var(--page-mid) 0%, transparent 100%)',
@@ -150,46 +146,24 @@ export default function TestimonialsSection() {
         background: 'linear-gradient(to right, var(--page-mid) 0%, transparent 100%)',
       }} />
 
-      <div className="relative z-10" style={{ maxWidth: 1160, margin: '0 auto' }}>
+      <div className="relative z-10 px-4" style={{ maxWidth: 1160, margin: '0 auto' }}>
+        {/* Centered section header */}
+        <SectionHeader
+          badge="آراء الطلاب"
+          heading={<>آراء طلابنا <Gold>وقصص نجاحهم</Gold></>}
+          description="أصوات حقيقية عبرت من الشغف إلى الاحتراف"
+          style={{ marginBottom: 20 }}
+        />
 
-        {/* Section header */}
-        <div style={{
-          padding: '0 clamp(16px,3vw,32px)',
-          marginBottom: 48,
-          textAlign: 'right',
-          display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
-          flexWrap: 'wrap', gap: 16,
-          direction: 'rtl',
-        }}>
-          <div style={{ textAlign: 'right' }}>
-            <h2 style={{
-              fontFamily: 'Tajawal, sans-serif', fontWeight: 900,
-              fontSize: 'clamp(24px,3.5vw,42px)',
-              color: 'rgba(252,251,251,0.96)', lineHeight: 1.2, margin: '0 0 8px',
-              textAlign: 'right',
-            }}>
-              آراء طلابنا{' '}
-              <span style={{ color: '#FFC107' }}>وقصص نجاحهم</span>
-            </h2>
-            <p style={{
-              fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
-              fontSize: 'clamp(13px,1.3vw,15.5px)',
-              color: 'rgba(226,232,240,0.62)', margin: 0,
-              textAlign: 'right',
-            }}>
-              أصوات حقيقية عبرت من الشغف إلى الاحتراف
-            </p>
-          </div>
-
-          {/* Overall rating badge */}
+        {/* Rating badge — centered */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 48 }}>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 10,
-            padding: '8px 20px', borderRadius: 99,
+            padding: '8px 20px', borderRadius: 999,
             background: 'rgba(255,255,255,0.05)',
-            border: '1px solid rgba(255,255,255,0.12)',
+            border: '1px solid rgba(255,255,255,0.11)',
             backdropFilter: 'blur(8px)',
             WebkitBackdropFilter: 'blur(8px)',
-            flexShrink: 0,
           }}>
             <GoogleLogo size={18} />
             <span style={{
@@ -197,20 +171,20 @@ export default function TestimonialsSection() {
               color: 'rgba(252,251,251,0.85)',
               display: 'flex', alignItems: 'center', gap: 6,
             }}>
-              <span style={{ color: '#FFC107' }}>★★★★★</span>
+              <span style={{ color: '#FFC107', textShadow: '0 0 12px rgba(255,193,7,0.25)' }}>★★★★★</span>
               <span>5.0 / 5 بناءً على تقييمات Google</span>
             </span>
           </div>
         </div>
       </div>
 
-      {/* ── Infinite marquee track ── */}
+      {/* ── Infinite marquee ── */}
       <div className="testimonials-marquee-wrap" style={{ overflow: 'hidden', width: '100%' }}>
         <div className="testimonials-marquee" style={{
           display: 'flex',
-          gap: 'clamp(16px,2vw,22px)',
+          gap: 'clamp(16px,2vw,24px)',
           width: 'max-content',
-          direction: 'ltr',  // marquee scroll direction is LTR; cards remain RTL internally
+          direction: 'ltr',
         }}>
           {all.map((r, i) => (
             <ReviewCard key={`${r.id}-${i}`} review={r} />
@@ -224,13 +198,13 @@ export default function TestimonialsSection() {
           100% { transform: translateX(-50%); }
         }
         .testimonials-marquee {
-          animation: marquee-scroll 48s linear infinite;
+          animation: marquee-scroll 52s linear infinite;
         }
         .testimonials-marquee:hover {
           animation-play-state: paused;
         }
         .testimonials-marquee-wrap {
-          padding: 12px 0 16px;
+          padding: 12px 0 18px;
         }
       `}</style>
     </section>
