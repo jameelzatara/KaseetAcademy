@@ -9,26 +9,31 @@ interface Track {
   title: string;
   desc: string;
   image: string;
+  /** smart object-position based on image content */
+  imgPos: string;
 }
 
 const TRACKS: Track[] = [
   {
     id: 1,
-    title: 'المسار الإعلامي',
-    desc:  'برنامج شامل للتدريب على التقديم التلفزيوني والإذاعي، إعداد البرامج، وإتقان الحضور أمام الكاميرا بثقة واحتراف.',
-    image: mediaTrackImg,
+    title:  'المسار الإعلامي',
+    desc:   'برنامج شامل للتدريب على التقديم التلفزيوني والإذاعي، إعداد البرامج، وإتقان الحضور أمام الكاميرا بثقة واحتراف.',
+    image:  mediaTrackImg,
+    imgPos: 'center 30%',   // group/media photo — preserve faces without aggressive crop
   },
   {
     id: 2,
-    title: 'مسار التعليق والأداء الصوتي',
-    desc:  'رحلة متكاملة لتطوير نبرات الصوت، التنفس الصحيح، وتدريب الأداء الصوتي لمختلف الإعلانات، الوثائقيات والبودكاست.',
-    image: voiceoverTrackImg,
+    title:  'مسار التعليق والأداء الصوتي',
+    desc:   'رحلة متكاملة لتطوير نبرات الصوت، التنفس الصحيح، وتدريب الأداء الصوتي لمختلف الإعلانات، الوثائقيات والبودكاست.',
+    image:  voiceoverTrackImg,
+    imgPos: 'center 30%',   // studio group — show upper composition
   },
   {
     id: 3,
-    title: 'مسار فن الخطابة',
-    desc:  'برنامج تطبيقي لبناء الكاريزما والقيادة الصوتية، إتقان لغة الجسد والتأثير في الجمهور والتخلص من رهبة المسرح.',
-    image: publicSpeakingImg,
+    title:  'مسار فن الخطابة',
+    desc:   'برنامج تطبيقي لبناء الكاريزما والقيادة الصوتية، إتقان لغة الجسد والتأثير في الجمهور والتخلص من رهبة المسرح.',
+    image:  publicSpeakingImg,
+    imgPos: 'center 30%',   // speaker/audience — preserve speaker face
   },
 ];
 
@@ -45,20 +50,18 @@ function TrackCard({ track }: { track: Track }) {
         background:           'rgba(255,255,255,0.04)',
         backdropFilter:       'blur(14px)',
         WebkitBackdropFilter: 'blur(14px)',
-        border:     hovered ? '1px solid rgba(255,193,7,0.36)' : '1px solid rgba(255,255,255,0.08)',
-        boxShadow:  hovered
-          ? '0 0 32px rgba(255,193,7,0.11), 0 16px 48px rgba(0,0,0,0.50)'
-          : '0 8px 32px rgba(0,0,0,0.35)',
+        border:     hovered ? '1px solid rgba(255,193,7,0.36)' : '1px solid rgba(255,255,255,0.09)',
+        boxShadow:  hovered ? '0 20px 45px rgba(0,0,0,0.40)' : '0 10px 30px rgba(0,0,0,0.25)',
         transition: 'border 0.3s, box-shadow 0.3s, transform 0.3s',
-        transform:  hovered ? 'translateY(-4px)' : 'translateY(0)',
+        transform:  hovered ? 'translateY(-6px)' : 'translateY(0)',
         display:    'flex',
         flexDirection: 'column',
         cursor:     'default',
         direction:  'rtl',
       }}
     >
-      {/* Cover image — object-fit: cover, 4:3 ratio for full scene visibility */}
-      <div style={{ position: 'relative', width: '100%', aspectRatio: '4/3', overflow: 'hidden', flexShrink: 0 }}>
+      {/* Cover image — smart object-position; overflow:hidden + border-radius:inherit */}
+      <div style={{ position: 'relative', width: '100%', aspectRatio: '4/3', overflow: 'hidden', flexShrink: 0, borderRadius: 'inherit' }}>
         <img
           src={track.image}
           alt={track.title}
@@ -66,7 +69,7 @@ function TrackCard({ track }: { track: Track }) {
             width:          '100%',
             height:         '100%',
             objectFit:      'cover',
-            objectPosition: 'center center',
+            objectPosition: track.imgPos,
             display:        'block',
             transition:     'transform 0.55s ease',
             transform:      hovered ? 'scale(1.05)' : 'scale(1.0)',
@@ -86,7 +89,7 @@ function TrackCard({ track }: { track: Track }) {
         )}
       </div>
 
-      {/* Card body */}
+      {/* Card body — flex col; desc grows to pin CTA to bottom */}
       <div style={{
         padding:       'clamp(18px,2.2vw,26px)',
         display:       'flex',
@@ -95,7 +98,7 @@ function TrackCard({ track }: { track: Track }) {
         textAlign:     'right',
         flex:          1,
       }}>
-        {/* Title — right-aligned */}
+        {/* Title */}
         <h3 style={{
           fontFamily: 'Tajawal, sans-serif', fontWeight: 900,
           fontSize:   'clamp(17px,1.8vw,21px)',
@@ -107,38 +110,38 @@ function TrackCard({ track }: { track: Track }) {
           {track.title}
         </h3>
 
-        {/* Animated gold accent — aligned right */}
+        {/* Animated gold accent */}
         <div style={{
           height:     2,
           borderRadius: 2,
           background: hovered ? '#FFC107' : 'rgba(255,193,7,0.35)',
           width:      hovered ? 56 : 36,
           transition: 'background 0.3s, width 0.3s',
-          alignSelf:  'flex-start',   /* flex-start = RIGHT in RTL */
+          alignSelf:  'flex-start',
         }} />
 
-        {/* Description — right-aligned */}
+        {/* Description — grows to pin CTA to bottom */}
         <p style={{
           fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
           fontSize:   'clamp(13px,1.3vw,14.5px)',
           color:      'rgba(252,251,251,0.60)',
-          lineHeight: 1.8, margin: 0, flex: 1,
+          lineHeight: 1.8, margin: 0,
+          flexGrow:   1,              // fills available vertical space
           textAlign:  'right',
         }}>
           {track.desc}
         </p>
 
-        {/* CTA — anchored right (flex-start = RIGHT in RTL); label first, arrow after */}
+        {/* CTA — pinned to bottom */}
         <div style={{
           display:    'flex',
           alignItems: 'center',
-          justifyContent: 'flex-start',   /* RTL flex-start = RIGHT edge */
+          justifyContent: 'flex-start',
           gap:        6,
           paddingTop: 6,
           borderTop:  '1px solid rgba(255,255,255,0.07)',
           marginTop:  'auto',
         }}>
-          {/* Label first in DOM → RIGHT in RTL */}
           <span style={{
             fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 13.5,
             color:     hovered ? '#FFC107' : 'rgba(252,251,251,0.42)',
@@ -146,7 +149,6 @@ function TrackCard({ track }: { track: Track }) {
           }}>
             اكتشف المسار
           </span>
-          {/* Arrow after label → LEFT in RTL (icon after Arabic text) */}
           <span style={{
             fontSize:   14,
             color:      hovered ? '#FFC107' : 'rgba(252,251,251,0.32)',
@@ -173,11 +175,11 @@ export default function TracksSection() {
 
       <div className="relative z-10 mx-auto px-4" style={{ maxWidth: 1160 }}>
 
-        {/* Section header — RTL */}
+        {/* Section header — 8pt spacing system */}
         <div style={{
           display: 'flex', alignItems: 'flex-end',
           justifyContent: 'space-between',
-          marginBottom: 'clamp(32px,4vh,52px)',
+          marginBottom: 48,             /* subtitle → cards */
           flexWrap: 'wrap', gap: 12,
           direction: 'rtl',
         }}>
@@ -202,36 +204,49 @@ export default function TracksSection() {
               <span style={{ color: '#FFC107' }}>مساراً احترافياً</span>
             </h2>
 
+            {/* heading → subtitle: 20px */}
             <p style={{
               fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
               fontSize: 'clamp(13px,1.4vw,16px)',
-              color: '#E2E8F0', lineHeight: 1.8, margin: '10px 0 0', maxWidth: 580,
+              color: '#E2E8F0', lineHeight: 1.8, margin: '20px 0 0', maxWidth: 580,
               textAlign: 'right',
             }}>
               اختر من بين برامجنا الأكثر طلباً — كل مسار صُمِّم ليأخذك خطوة أبعد في عالم الإعلام والصوت والخطابة.
             </p>
           </div>
 
+          {/* Secondary button */}
           <button style={{
             fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 14,
             color: 'rgba(252,251,251,0.55)',
-            background: 'none', border: '1px solid rgba(255,255,255,0.14)',
-            borderRadius: 99, padding: '8px 20px', cursor: 'pointer',
-            transition: 'color 0.2s, border-color 0.2s', whiteSpace: 'nowrap',
+            background: 'transparent',
+            border: '1px solid rgba(255,255,255,0.18)',
+            borderRadius: 14, padding: '0 20px', height: 50,
+            cursor: 'pointer',
+            transition: 'color 250ms, border-color 250ms, background 250ms',
+            whiteSpace: 'nowrap',
           }}
-            onMouseEnter={e => Object.assign(e.currentTarget.style, { color: '#FFC107', borderColor: 'rgba(255,193,7,0.4)' })}
-            onMouseLeave={e => Object.assign(e.currentTarget.style, { color: 'rgba(252,251,251,0.55)', borderColor: 'rgba(255,255,255,0.14)' })}
+            onMouseEnter={e => Object.assign(e.currentTarget.style, {
+              color: '#FFC107',
+              borderColor: 'rgba(255,193,7,0.4)',
+              background: 'rgba(255,255,255,0.04)',
+            })}
+            onMouseLeave={e => Object.assign(e.currentTarget.style, {
+              color: 'rgba(252,251,251,0.55)',
+              borderColor: 'rgba(255,255,255,0.18)',
+              background: 'transparent',
+            })}
           >
             استعراض كل المسارات ←
           </button>
         </div>
 
-        {/* 3-column grid */}
+        {/* 3-column grid — grid-auto-rows:1fr equalises row heights */}
         <div className="tracks-grid" style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
+          gridAutoRows: '1fr',
           gap: 'clamp(16px,2.5vw,28px)',
-          alignItems: 'stretch',
         }}>
           {TRACKS.map(track => <TrackCard key={track.id} track={track} />)}
         </div>

@@ -116,6 +116,7 @@ export default function ConsultationSection() {
 
             {/* CTAs — Arabic label first (RIGHT), icon after (LEFT) */}
             <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'flex-start', marginTop: 6 }}>
+              {/* Primary CTA — height:50px, px:28px, br:14px, glow on hover */}
               <a
                 href="https://wa.me/962771052222"
                 target="_blank"
@@ -123,18 +124,18 @@ export default function ConsultationSection() {
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 10,
                   fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 15,
-                  padding: '14px 30px', borderRadius: 99,
+                  height: 50, padding: '0 28px', borderRadius: 14,
                   background: '#065f46', color: '#fff',
                   textDecoration: 'none',
                   boxShadow: '0 4px 20px rgba(6,95,70,0.40)',
                   border: '1px solid rgba(74,222,128,0.25)',
-                  transition: 'transform 0.15s, box-shadow 0.15s, background 0.15s',
+                  transition: 'transform 250ms, box-shadow 250ms, background 250ms',
                   direction: 'rtl',
                 }}
                 onMouseEnter={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, {
                   transform: 'translateY(-2px)',
                   background: '#047857',
-                  boxShadow: '0 8px 28px rgba(6,95,70,0.55)',
+                  boxShadow: '0 8px 28px rgba(6,95,70,0.55), 0 0 24px rgba(74,222,128,0.18)',
                 })}
                 onMouseLeave={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, {
                   transform: 'none',
@@ -142,21 +143,31 @@ export default function ConsultationSection() {
                   boxShadow: '0 4px 20px rgba(6,95,70,0.40)',
                 })}
               >
-                {/* Label first (RIGHT in RTL), icon after (LEFT) */}
                 تواصل مع المستشارة عبر واتساب
                 <WhatsAppIcon />
               </a>
 
+              {/* Secondary button — transparent, 1px border, subtle hover */}
               <button
                 style={{
                   fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 14,
                   color: 'rgba(252,251,251,0.55)',
-                  background: 'none', border: '1px solid rgba(255,255,255,0.14)',
-                  borderRadius: 99, padding: '14px 24px', cursor: 'pointer',
-                  transition: 'color 0.2s, border-color 0.2s',
+                  background: 'transparent',
+                  border: '1px solid rgba(255,255,255,0.18)',
+                  borderRadius: 14, height: 50, padding: '0 24px',
+                  cursor: 'pointer',
+                  transition: 'color 250ms, border-color 250ms, background 250ms',
                 }}
-                onMouseEnter={e => Object.assign(e.currentTarget.style, { color: '#FFC107', borderColor: 'rgba(255,193,7,0.4)' })}
-                onMouseLeave={e => Object.assign(e.currentTarget.style, { color: 'rgba(252,251,251,0.55)', borderColor: 'rgba(255,255,255,0.14)' })}
+                onMouseEnter={e => Object.assign(e.currentTarget.style, {
+                  color: '#FFC107',
+                  borderColor: 'rgba(255,193,7,0.4)',
+                  background: 'rgba(255,255,255,0.04)',
+                })}
+                onMouseLeave={e => Object.assign(e.currentTarget.style, {
+                  color: 'rgba(252,251,251,0.55)',
+                  borderColor: 'rgba(255,255,255,0.18)',
+                  background: 'transparent',
+                })}
               >
                 استكشف كل البرامج
               </button>

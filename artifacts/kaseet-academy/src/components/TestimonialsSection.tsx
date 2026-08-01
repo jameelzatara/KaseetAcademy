@@ -44,14 +44,15 @@ function ReviewCard({ review }: { review: Review }) {
       WebkitBackdropFilter: 'blur(14px)',
       border:               '1px solid rgba(255,255,255,0.09)',
       borderRadius:         20,
-      padding:              'clamp(20px,2.2vw,28px)',
+      /* 28px desktop / 22px mobile — breathing room */
+      padding:              'clamp(22px,2.5vw,28px)',
       display:              'flex',
       flexDirection:        'column',
-      gap:                  14,
+      gap:                  16,
       textAlign:            'right',
       flexShrink:           0,
-      width:                'clamp(290px,28vw,340px)',
-      boxShadow:            '0 6px 28px rgba(0,0,0,0.30)',
+      width:                'clamp(290px,28vw,360px)',
+      boxShadow:            '0 10px 30px rgba(0,0,0,0.25)',
       cursor:               'default',
       direction:            'rtl',
     }}>
@@ -59,36 +60,41 @@ function ReviewCard({ review }: { review: Review }) {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
 
         {/* Name + stars — first in DOM → RIGHT in RTL */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          {/* Name text first (RIGHT), avatar image after (LEFT) — icon AFTER Arabic text */}
+        {/* gap:18px between name block and avatar */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
+          {/* Name text first (RIGHT), avatar image after (LEFT) */}
           <div style={{ textAlign: 'right' }}>
             <div style={{
               fontFamily: 'Tajawal, sans-serif', fontWeight: 700,
               fontSize: 14.5, color: 'rgba(252,251,251,0.95)', lineHeight: 1.3,
             }}>{review.name}</div>
-            {/* Stars use LTR direction for correct ★ order */}
-            <div style={{ display: 'flex', gap: 2, alignItems: 'center', direction: 'ltr', marginTop: 2 }}>
+            {/* Stars — LTR for correct ★ order, same baseline as name */}
+            <div style={{
+              display: 'flex', gap: 2,
+              alignItems: 'baseline',   /* same baseline */
+              direction: 'ltr', marginTop: 4,
+            }}>
               {[...Array(5)].map((_, i) => (
-                <span key={i} style={{ color: '#FFC107', fontSize: 12, lineHeight: 1 }}>★</span>
+                <span key={i} style={{ color: '#FFC107', fontSize: 13, lineHeight: 1 }}>★</span>
               ))}
             </div>
           </div>
-          {/* Avatar — AFTER Arabic name text → LEFT side in RTL */}
+          {/* Avatar — 64px, AFTER Arabic name text → LEFT side in RTL */}
           <img
             src={review.avatar}
             alt={review.name}
             style={{
-              width: 46, height: 46, borderRadius: '50%',
-              objectFit: 'cover',
-              border: '2px solid rgba(255,193,7,0.40)',
-              boxShadow: '0 0 10px rgba(255,193,7,0.15)',
+              width: 64, height: 64, borderRadius: '50%',
+              objectFit: 'cover', objectPosition: 'center top',
+              border: '2px solid rgba(255,193,7,0.45)',
+              boxShadow: '0 0 14px rgba(255,193,7,0.18)',
               flexShrink: 0,
             }}
             onError={e => { (e.currentTarget as HTMLImageElement).style.background = '#2d3748'; }}
           />
         </div>
 
-        {/* Google badge — second → LEFT in RTL (justified away from name) */}
+        {/* Google badge — second → LEFT in RTL */}
         <div style={{
           display: 'flex', alignItems: 'center', gap: 5,
           padding: '4px 10px', borderRadius: 99,
@@ -108,7 +114,7 @@ function ReviewCard({ review }: { review: Review }) {
       {/* Separator */}
       <div style={{ height: 1, background: 'rgba(255,255,255,0.07)' }} />
 
-      {/* Review text */}
+      {/* Review text — line-height:1.9 for breathing room */}
       <p style={{
         fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
         fontSize: 'clamp(13px,1.2vw,14.5px)',
@@ -149,7 +155,7 @@ export default function TestimonialsSection() {
         {/* Section header */}
         <div style={{
           padding: '0 clamp(16px,3vw,32px)',
-          marginBottom: 'clamp(28px,3.5vh,44px)',
+          marginBottom: 48,
           textAlign: 'right',
           display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
           flexWrap: 'wrap', gap: 16,

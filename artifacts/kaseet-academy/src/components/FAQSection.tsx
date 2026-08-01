@@ -35,10 +35,10 @@ function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
       background: open ? 'rgba(255,193,7,0.04)' : 'rgba(255,255,255,0.03)',
       backdropFilter: 'blur(12px)',
       WebkitBackdropFilter: 'blur(12px)',
-      border: open ? '1px solid rgba(255,193,7,0.25)' : '1px solid rgba(255,255,255,0.07)',
+      border: open ? '1px solid rgba(255,193,7,0.25)' : '1px solid rgba(255,255,255,0.09)',
       overflow: 'hidden',
-      transition: 'background 0.3s, border 0.3s',
-      boxShadow: open ? '0 4px 24px rgba(255,193,7,0.06)' : '0 2px 12px rgba(0,0,0,0.20)',
+      transition: 'background 0.3s, border 0.3s, box-shadow 0.3s',
+      boxShadow: open ? '0 10px 30px rgba(0,0,0,0.25), 0 4px 24px rgba(255,193,7,0.06)' : '0 10px 30px rgba(0,0,0,0.25)',
     }}>
       <button
         onClick={() => setOpen(v => !v)}
@@ -126,7 +126,7 @@ export default function FAQSection() {
       <div className="relative z-10 mx-auto px-4" style={{ maxWidth: 820, direction: 'rtl' }}>
 
         {/* Header */}
-        <div style={{ textAlign: 'right', marginBottom: 'clamp(32px,4vh,52px)' }}>
+        <div style={{ textAlign: 'right', marginBottom: 48 }}>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 7,
             marginBottom: 12,
@@ -158,7 +158,7 @@ export default function FAQSection() {
             fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
             fontSize: 'clamp(13px,1.3vw,15.5px)',
             color: 'rgba(226,232,240,0.58)',
-            margin: 0,
+            margin: '20px 0 0',    /* heading → subtitle: 20px */
             textAlign: 'right',
           }}>
             إجابات واضحة على أكثر ما يسأل عنه طلابنا قبل التسجيل.
