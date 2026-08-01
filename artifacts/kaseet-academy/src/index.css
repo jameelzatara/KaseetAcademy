@@ -39,7 +39,7 @@
 }
 
 @layer base {
-  * { @apply border-border; }
+  * { @apply border-border; font-family: var(--app-font-sans); }
 
   body {
     @apply font-sans antialiased text-foreground overflow-x-hidden;

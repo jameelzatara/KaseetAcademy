@@ -1,6 +1,7 @@
-// ── Free Consultation Section ──────────────────────────────
-import SectionHeader, { Gold } from './SectionHeader';
+// ── Free Consultation Section — compact 2-column banner ──────
 import consultantImg from '@assets/consultant_1785431795181.jpeg';
+
+const GOLD = '#FFC107';
 
 const BENEFITS = [
   'تقييم شامل لمستواك الصوتي والإعلامي',
@@ -34,206 +35,222 @@ export default function ConsultationSection() {
 
       <div className="relative z-10 mx-auto px-4" style={{ maxWidth: 1160 }}>
 
-        {/* ── Unified card container ── */}
+        {/* ── Compact unified card ── */}
         <div style={{
-          background:   'rgba(49,61,84,0.55)',
-          border:       '1px solid rgba(255,255,255,0.10)',
-          borderRadius: 24,
-          padding:      'clamp(32px,4vw,56px)',
-          boxShadow:    '0 20px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06)',
-          backdropFilter: 'blur(8px)',
-          WebkitBackdropFilter: 'blur(8px)',
+          background:          'rgba(49,61,84,0.55)',
+          border:              '1px solid rgba(255,255,255,0.10)',
+          borderRadius:        24,
+          padding:             'clamp(24px,3vw,40px) clamp(24px,4vw,48px)',
+          boxShadow:           '0 20px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06)',
+          backdropFilter:      'blur(8px)',
+          WebkitBackdropFilter:'blur(8px)',
         }}>
 
-        {/* Centered section header */}
-        <SectionHeader
-          badge="استشارة مجانية 100%"
-          heading={<>محتار في اختيار المسار الأنسب <Gold>لصوتك؟</Gold></>}
-          description="تواصل مع المستشارة التعليمية لتحديد مستواك الحالي وبناء خطتك التدريبية المخصصة — بدون أي التزام."
-          style={{ marginBottom: 40 }}
-        />
-
-        {/* Two-column layout */}
-        <div className="consultation-grid" style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 380px',
-          gap: 'clamp(32px,5vw,72px)',
-          alignItems: 'center',
-          direction: 'rtl',
-        }}>
-
-          {/* ── RIGHT: Text column ── */}
-          <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', gap: 24 }}>
-
-            {/* Benefits */}
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 14 }}>
-              {BENEFITS.map((b, i) => (
-                <li key={i} style={{
-                  display: 'flex', alignItems: 'center', gap: 12,
-                  justifyContent: 'flex-start', direction: 'rtl',
-                }}>
-                  <span style={{
-                    width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
-                    background: 'rgba(255,193,7,0.12)', border: '1px solid rgba(255,193,7,0.30)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: '#FFC107', fontSize: 12, fontWeight: 900,
-                  }}>✓</span>
-                  <span style={{
-                    fontFamily: 'Tajawal, sans-serif',
-                    fontSize: 16,
-                    color: 'rgba(252,251,251,0.80)', fontWeight: 500,
-                    textAlign: 'right', lineHeight: 1.6,
-                  }}>{b}</span>
-                </li>
-              ))}
-            </ul>
-
-            {/* CTAs */}
-            <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'flex-start' }}>
-              {/* Primary WA button */}
-              <a
-                href="https://wa.me/962771052222"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 10,
-                  fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 16,
-                  height: 50, padding: '0 28px', borderRadius: 14,
-                  background: '#065f46', color: '#fff',
-                  textDecoration: 'none',
-                  boxShadow: '0 4px 20px rgba(6,95,70,0.40)',
-                  border: '1px solid rgba(74,222,128,0.25)',
-                  transition: 'transform 250ms, box-shadow 250ms, background 250ms',
-                  direction: 'rtl',
-                }}
-                onMouseEnter={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, {
-                  transform: 'translateY(-2px)',
-                  background: '#047857',
-                  boxShadow: '0 8px 28px rgba(6,95,70,0.55), 0 0 24px rgba(74,222,128,0.18)',
-                })}
-                onMouseLeave={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, {
-                  transform: 'none',
-                  background: '#065f46',
-                  boxShadow: '0 4px 20px rgba(6,95,70,0.40)',
-                })}
-              >
-                تواصل مع المستشارة عبر واتساب
-                <WhatsAppIcon />
-              </a>
-
-              {/* Secondary button */}
-              <button style={{
-                fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 16,
-                color: 'rgba(252,251,251,0.55)',
-                background: 'transparent',
-                border: '1px solid rgba(255,255,255,0.18)',
-                borderRadius: 14, height: 50, padding: '0 24px',
-                cursor: 'pointer',
-                transition: 'color 250ms, border-color 250ms, background 250ms',
-              }}
-                onMouseEnter={e => Object.assign(e.currentTarget.style, { color: '#FFC107', borderColor: 'rgba(255,193,7,0.4)', background: 'rgba(255,255,255,0.04)' })}
-                onMouseLeave={e => Object.assign(e.currentTarget.style, { color: 'rgba(252,251,251,0.55)', borderColor: 'rgba(255,255,255,0.18)', background: 'transparent' })}
-              >
-                استكشف كل البرامج
-              </button>
-            </div>
-          </div>
-
-          {/* ── LEFT: Glass card ── */}
-          <div style={{
-            background: 'rgba(255,255,255,0.035)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            borderRadius: 22,
-            border: '1px solid rgba(255,255,255,0.06)',
-            padding: '2.5rem',
-            display: 'flex', flexDirection: 'column',
-            alignItems: 'center', gap: 20,
-            boxShadow: '0 10px 30px rgba(0,0,0,0.25)',
+          {/* ── 2-column RTL grid ── */}
+          <div className="consult-banner-grid" style={{
+            display:             'grid',
+            gridTemplateColumns: '1fr 320px',
+            gap:                 'clamp(28px,4vw,60px)',
+            alignItems:          'center',
+            direction:           'rtl',
           }}>
 
-            {/* Avatar with glow ring */}
-            <div style={{ position: 'relative' }}>
-              <div style={{
-                position: 'absolute', inset: -6, borderRadius: '50%',
-                background: 'transparent',
-                boxShadow: '0 0 36px 8px rgba(255,193,7,0.18)',
-                pointerEvents: 'none',
-              }} />
-              <img
-                src={consultantImg}
-                alt="المستشارة التعليمية"
-                style={{
-                  width: 180, height: 180, borderRadius: '50%',
-                  objectFit: 'cover', objectPosition: 'center top',
-                  border: '3px solid rgba(255,193,7,0.50)',
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.30)',
-                  display: 'block',
-                }}
-              />
-            </div>
+            {/* ── RIGHT COLUMN: all text content ── */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20, textAlign: 'right' }}>
 
-            {/* Name + title */}
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontFamily: 'Tajawal, sans-serif', fontWeight: 800, fontSize: 18, color: 'rgba(252,251,251,0.95)' }}>
-                المستشارة التعليمية
-              </div>
-              <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 13, color: 'rgba(252,251,251,0.46)', marginTop: 4 }}>
-                أكاديمية كاسيت ميديا
-              </div>
-            </div>
-
-            {/* Online status */}
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8,
-              padding: '7px 18px', borderRadius: 999,
-              background: 'rgba(15,23,42,0.55)',
-              border: '1px solid rgba(74,222,128,0.35)',
-              backdropFilter: 'blur(6px)',
-            }}>
-              <span style={{
-                width: 8, height: 8, borderRadius: '50%', flexShrink: 0,
-                background: '#4ade80', boxShadow: '0 0 8px rgba(74,222,128,0.9)',
-              }} />
-              <span style={{ fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 12.5, color: 'rgba(252,251,251,0.90)' }}>
-                متواجدة الآن للرد على استفساراتك
-              </span>
-            </div>
-
-            {/* Micro stats */}
-            <div style={{
-              display: 'flex', gap: 0, width: '100%',
-              background: 'rgba(255,255,255,0.04)',
-              border: '1px solid rgba(255,255,255,0.07)',
-              borderRadius: 14, overflow: 'hidden',
-            }}>
-              {MICRO_STATS.map((s, i) => (
-                <div key={i} style={{
-                  flex: 1, textAlign: 'center', padding: '12px 6px',
-                  borderInlineStart: i > 0 ? '1px solid rgba(255,255,255,0.07)' : 'none',
+              {/* Badge */}
+              <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                <span style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 6,
+                  padding: '5px 14px', borderRadius: 999,
+                  background: 'rgba(255,193,7,0.12)',
+                  border: '1px solid rgba(255,193,7,0.30)',
+                  color: GOLD, fontSize: 13, fontWeight: 700,
                 }}>
-                  <div style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: 17, color: '#FFC107', direction: 'ltr' }}>
-                    {s.value}
-                  </div>
-                  <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11, color: 'rgba(252,251,251,0.44)', marginTop: 3 }}>
-                    {s.label}
-                  </div>
+                  ✦ استشارة مجانية 100%
+                </span>
+              </div>
+
+              {/* Heading */}
+              <h2 style={{
+                margin: 0,
+                fontSize: 'clamp(22px,3.2vw,36px)',
+                fontWeight: 900,
+                lineHeight: 1.3,
+                color: 'rgba(252,251,251,0.97)',
+              }}>
+                محتار في اختيار المسار الأنسب{' '}
+                <span style={{ color: GOLD }}>لصوتك؟</span>
+              </h2>
+
+              {/* Subtitle */}
+              <p style={{
+                margin: 0,
+                fontSize: 'clamp(14px,1.6vw,17px)',
+                fontWeight: 400,
+                color: 'rgba(252,251,251,0.62)',
+                lineHeight: 1.75,
+              }}>
+                تواصل مع المستشارة التعليمية لتحديد مستواك الحالي وبناء خطتك التدريبية المخصصة — بدون أي التزام.
+              </p>
+
+              {/* Benefits */}
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                {BENEFITS.map((b, i) => (
+                  <li key={i} style={{
+                    display: 'flex', alignItems: 'center', gap: 12,
+                    direction: 'rtl',
+                  }}>
+                    <span style={{
+                      width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
+                      background: 'rgba(255,193,7,0.12)', border: '1px solid rgba(255,193,7,0.30)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      color: GOLD, fontSize: 12, fontWeight: 900,
+                    }}>✓</span>
+                    <span style={{
+                      fontSize: 15, fontWeight: 500,
+                      color: 'rgba(252,251,251,0.80)', lineHeight: 1.6,
+                    }}>{b}</span>
+                  </li>
+                ))}
+              </ul>
+
+              {/* CTAs */}
+              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+                <a
+                  href="https://wa.me/962771052222"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 10,
+                    fontWeight: 600, fontSize: 15,
+                    height: 46, padding: '0 24px', borderRadius: 12,
+                    background: '#065f46', color: '#fff',
+                    textDecoration: 'none',
+                    boxShadow: '0 4px 20px rgba(6,95,70,0.40)',
+                    border: '1px solid rgba(74,222,128,0.25)',
+                    transition: 'transform 250ms, box-shadow 250ms, background 250ms',
+                    direction: 'rtl',
+                  }}
+                  onMouseEnter={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, {
+                    transform: 'translateY(-2px)', background: '#047857',
+                    boxShadow: '0 8px 28px rgba(6,95,70,0.55), 0 0 24px rgba(74,222,128,0.18)',
+                  })}
+                  onMouseLeave={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, {
+                    transform: 'none', background: '#065f46',
+                    boxShadow: '0 4px 20px rgba(6,95,70,0.40)',
+                  })}
+                >
+                  تواصل مع المستشارة عبر واتساب
+                  <WhatsAppIcon />
+                </a>
+
+                <button style={{
+                  fontWeight: 600, fontSize: 15,
+                  color: 'rgba(252,251,251,0.55)',
+                  background: 'transparent',
+                  border: '1px solid rgba(255,255,255,0.18)',
+                  borderRadius: 12, height: 46, padding: '0 20px',
+                  cursor: 'pointer',
+                  transition: 'color 250ms, border-color 250ms, background 250ms',
+                }}
+                  onMouseEnter={e => Object.assign(e.currentTarget.style, { color: GOLD, borderColor: 'rgba(255,193,7,0.4)', background: 'rgba(255,255,255,0.04)' })}
+                  onMouseLeave={e => Object.assign(e.currentTarget.style, { color: 'rgba(252,251,251,0.55)', borderColor: 'rgba(255,255,255,0.18)', background: 'transparent' })}
+                >
+                  استكشف كل البرامج
+                </button>
+              </div>
+            </div>
+
+            {/* ── LEFT COLUMN: Consultant card ── */}
+            <div style={{
+              background: 'rgba(255,255,255,0.035)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              borderRadius: 20,
+              border: '1px solid rgba(255,255,255,0.06)',
+              padding: '2rem',
+              display: 'flex', flexDirection: 'column',
+              alignItems: 'center', gap: 16,
+              boxShadow: '0 10px 30px rgba(0,0,0,0.25)',
+            }}>
+
+              {/* Avatar with glow ring */}
+              <div style={{ position: 'relative' }}>
+                <div style={{
+                  position: 'absolute', inset: -6, borderRadius: '50%',
+                  boxShadow: '0 0 36px 8px rgba(255,193,7,0.18)',
+                  pointerEvents: 'none',
+                }} />
+                <img
+                  src={consultantImg}
+                  alt="المستشارة التعليمية"
+                  style={{
+                    width: 140, height: 140, borderRadius: '50%',
+                    objectFit: 'cover', objectPosition: 'center top',
+                    border: '3px solid rgba(255,193,7,0.50)',
+                    boxShadow: '0 8px 24px rgba(0,0,0,0.30)',
+                    display: 'block',
+                  }}
+                />
+              </div>
+
+              {/* Name + title */}
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontWeight: 800, fontSize: 17, color: 'rgba(252,251,251,0.95)' }}>
+                  المستشارة التعليمية
                 </div>
-              ))}
+                <div style={{ fontSize: 12, color: 'rgba(252,251,251,0.46)', marginTop: 4 }}>
+                  أكاديمية كاسيت ميديا
+                </div>
+              </div>
+
+              {/* Online status */}
+              <div style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                padding: '6px 16px', borderRadius: 999,
+                background: 'rgba(15,23,42,0.55)',
+                border: '1px solid rgba(74,222,128,0.35)',
+              }}>
+                <span style={{
+                  width: 8, height: 8, borderRadius: '50%', flexShrink: 0,
+                  background: '#4ade80', boxShadow: '0 0 8px rgba(74,222,128,0.9)',
+                }} />
+                <span style={{ fontWeight: 600, fontSize: 12, color: 'rgba(252,251,251,0.90)' }}>
+                  متواجدة الآن للرد على استفساراتك
+                </span>
+              </div>
+
+              {/* Micro stats */}
+              <div style={{
+                display: 'flex', gap: 0, width: '100%',
+                background: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(255,255,255,0.07)',
+                borderRadius: 12, overflow: 'hidden',
+              }}>
+                {MICRO_STATS.map((s, i) => (
+                  <div key={i} style={{
+                    flex: 1, textAlign: 'center', padding: '10px 4px',
+                    borderInlineStart: i > 0 ? '1px solid rgba(255,255,255,0.07)' : 'none',
+                  }}>
+                    <div style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: 16, color: GOLD, direction: 'ltr' }}>
+                      {s.value}
+                    </div>
+                    <div style={{ fontSize: 10, color: 'rgba(252,251,251,0.44)', marginTop: 2 }}>
+                      {s.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
 
         </div>{/* end unified card */}
       </div>
 
       <style>{`
-        @keyframes consultPulse {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50%       { opacity: 0.55; transform: scale(0.80); }
-        }
         @media (max-width: 767px) {
-          .consultation-grid { grid-template-columns: 1fr !important; }
+          .consult-banner-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </section>
