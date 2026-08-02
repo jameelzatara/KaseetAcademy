@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Search, Clock, CheckCircle2, ArrowLeft, Star } from 'lucide-react';
 import { Link } from 'wouter';
 
 import coverYasar       from '@assets/course_01_cover_1785428932170.png';
@@ -24,30 +25,11 @@ function waLink(title: string) {
   return `https://wa.me/${WA_NUM}?text=${encodeURIComponent(`السلام عليكم، أرغب في التسجيل في دورة: ${title}`)}`;
 }
 
-/* ── Inline SVG icons (explicit size — never oversized) ─── */
-function SearchIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      style={{ flexShrink: 0 }}>
-      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-    </svg>
-  );
-}
-function ClockIcon({ size = 14 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      style={{ flexShrink: 0 }}>
-      <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-    </svg>
-  );
-}
 
 /* ── Featured card data ─────────────────────────────────── */
 const FEATURED = {
   searchData:  'أساسيات التعليق والأداء الصوتي يسار عبده حضوري عمان المرحلة التأسيسية voice over',
-  type:        '● حضوري في عمّان (استوديو كاسيت) · ومباشر تفاعلي (Online LIVE)',
+  type:        'حضوري في عمّان (استوديو كاسيت) · ومباشر تفاعلي (Online LIVE)',
   level:       'المرحلة التأسيسية',
   title:       'أساسيات التعليق والأداء الصوتي',
   desc:        'منهج متكامل لبناء أداء صوتي احترافي من الصفر — من ضبط مخارج الحروف والتحكم بالتنفس والطبقات الصوتية، إلى بناء ملفك الصوتي الجاهز لسوق العمل. متوفّرة حضورياً في عمّان ومباشر تفاعلي (Online LIVE).',
@@ -79,7 +61,7 @@ interface GCard {
 const GRID: GCard[] = [
   {
     title:    'التعليق الصوتي (أونلاين - بث مباشر)',
-    badge:    '● مباشر تفاعلي (Online LIVE)',
+    badge:    'مباشر تفاعلي (Online LIVE)',
     cover:    coverOmar,
     imgPos:   'center',
     instructor: { name: 'أ. عمر درابكة', role: 'معلّق صوتي ومدرب أداء', photo: instructorOmar },
@@ -94,7 +76,7 @@ const GRID: GCard[] = [
   },
   {
     title:    'الدورة المكثفة: المذيع المحترف والإعلامي الشامل (اللايف)',
-    badge:    '● حضوري ومباشر تفاعلي',
+    badge:    'حضوري ومباشر تفاعلي',
     cover:    coverPresenter,
     imgPos:   'center 32%',
     instructor: { name: 'أ. رنا محمد العزام', role: 'إعلامية ومدربة أداء ومختصة تحرير لغوي', photo: instructorRana },
@@ -109,7 +91,7 @@ const GRID: GCard[] = [
   },
   {
     title:    'تمكين اللغة العربية وفنون التحرير اللغوي',
-    badge:    '● مباشر تفاعلي (Online LIVE)',
+    badge:    'مباشر تفاعلي (Online LIVE)',
     cover:    coverRana,
     imgPos:   'center 22%',
     instructor: { name: 'أ. رنا محمد العزام', role: 'إعلامية ومدربة أداء ومختصة تحرير لغوي', photo: instructorRana },
@@ -124,7 +106,7 @@ const GRID: GCard[] = [
   },
   {
     title:    'فن الخطابة والإلقاء الجماهيري المؤثر (اللايف)',
-    badge:    '● مباشر تفاعلي (Online LIVE)',
+    badge:    'مباشر تفاعلي (Online LIVE)',
     cover:    coverSohaib,
     imgPos:   'center',
     instructor: { name: 'د. صهيب الخوالدة', role: 'خبير خطابة وتواصل قيادي', photo: instructorSohaib },
@@ -240,7 +222,7 @@ function GridCard({ card, hidden }: { card: GCard; hidden: boolean }) {
             fontFamily: F, fontSize: 12, color: 'rgba(252,251,251,0.60)',
           }}>
             {card.duration}
-            <ClockIcon size={14} />
+            <Clock size={14} style={{ flexShrink: 0 }} />
           </span>
         </div>
       </div>
@@ -266,7 +248,7 @@ function GridCard({ card, hidden }: { card: GCard; hidden: boolean }) {
               fontFamily: F, fontWeight: 500, fontSize: 12.5,
               color: 'rgba(252,251,251,0.92)', lineHeight: 1.6,
             }}>
-              <span style={{ color: GOLD, fontWeight: 900, flexShrink: 0 }}>✓</span>
+              <CheckCircle2 size={14} color={GOLD} style={{ flexShrink: 0 }} />
               {o}
             </li>
           ))}
@@ -285,7 +267,7 @@ function GridCard({ card, hidden }: { card: GCard; hidden: boolean }) {
             boxShadow: '0 8px 20px rgba(255,193,7,0.30)',
           }}
         >
-          سجل الآن في الدورة ←
+          سجل الآن في الدورة <ArrowLeft size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineStart: 4 }} />
         </a>
       </div>
     </article>
@@ -343,7 +325,7 @@ export default function CoursesSection() {
             borderRadius: 14, padding: '14px 18px',
             color: 'rgba(255,255,255,0.50)',
           }}>
-            <SearchIcon />
+            <Search size={18} style={{ flexShrink: 0 }} />
             <input
               type="text"
               value={query}
@@ -475,7 +457,7 @@ export default function CoursesSection() {
                 </span>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
                   {FEATURED.duration}
-                  <ClockIcon size={16} />
+                  <Clock size={16} style={{ flexShrink: 0 }} />
                 </span>
               </div>
 
@@ -494,7 +476,7 @@ export default function CoursesSection() {
                 onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.transform = 'translateY(-2px)')}
                 onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.transform = 'none')}
               >
-                سجل الآن ←
+                سجل الآن <ArrowLeft size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineStart: 4 }} />
               </Link>
             </div>
           </div>
@@ -524,7 +506,7 @@ export default function CoursesSection() {
               padding: '7px 14px', borderRadius: 999,
               boxShadow: '0 6px 16px rgba(255,193,7,0.40)',
             }}>
-              ★ الأكثر طلباً
+              <Star size={11} fill={NAVY} color={NAVY} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineEnd: 4 }} /> الأكثر طلباً
             </span>
           </div>
         </article>

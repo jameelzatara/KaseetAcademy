@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'wouter';
-import { ChevronDown, Calendar, Clock, MapPin, Wifi, Users, GraduationCap, Award, Mic, Volume2, Star, Printer, BookOpen, Zap, Briefcase, Sliders, CheckCircle2 } from 'lucide-react';
+import { ChevronDown, Calendar, Clock, MapPin, Wifi, Users, GraduationCap, Award, Mic, Volume2, Star, Printer, BookOpen, Zap, Briefcase, Sliders, CheckCircle2, ArrowLeft, MessageCircle, Download, Globe, RefreshCw, Circle, Sparkles } from 'lucide-react';
 
 /* ── Asset imports ─────────────────────────────────────────── */
 import ayaImg      from '@assets/اية_القماز_1785619557679.jpeg';
@@ -96,7 +96,7 @@ function AdvisorMini({ name, role, photo, href }: { name: string; role: string; 
         <div style={{ fontFamily: F, fontWeight: 800, fontSize: 14, color: OFF, marginBottom: 2 }}>{name}</div>
         <div style={{ fontFamily: F, fontSize: 11.5, color: MUTED, marginBottom: 8 }}>{role}</div>
         <a href={href} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: GOLD, color: NAVY, fontFamily: F, fontWeight: 800, fontSize: 12, padding: '6px 14px', borderRadius: 8, textDecoration: 'none' }}>
-          تواصل الآن 💬
+          تواصل الآن <MessageCircle size={12} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineStart: 3 }} />
         </a>
       </div>
     </div>
@@ -275,7 +275,7 @@ function CoursePricingCard() {
           color: 'rgba(255,193,7,0.72)',
           textAlign: 'center', margin: '0 0 14px',
         }}>
-          ✦ بإمكانية التقسيط
+          <Sparkles size={12} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineEnd: 4 }} /> بإمكانية التقسيط
         </p>
 
         {/* Divider */}
@@ -318,7 +318,7 @@ function CoursePricingCard() {
             boxShadow: '0 6px 18px rgba(255,193,7,0.28)',
           }}
         >
-          سجل الآن ←
+          سجل الآن <ArrowLeft size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineStart: 4 }} />
         </a>
       </div>
     </div>
@@ -375,7 +375,7 @@ export default function CourseVoiceoverPage() {
                 marginBottom: 22,
               }}
             >
-              <span style={{ fontSize: 18, lineHeight: 1 }}>←</span>
+              <ArrowLeft size={16} />
               الرجوع إلى قائمة الدورات
             </button>
 
@@ -422,12 +422,12 @@ export default function CourseVoiceoverPage() {
               marginBottom: 28, fontFamily: F, fontSize: 13.5, color: '#475569',
             }}>
               {[
-                ['🪑', '10 مقاعد محدودة'],
-                ['📜', 'شهادة معتمدة'],
-                ['🗓️', '8 لقاءات'],
-                ['⏳', '16 ساعة تدريبية'],
-                ['🌍', 'عربي'],
-              ].map(([icon, label]) => (
+                { icon: <Users size={13} />,        label: '10 مقاعد محدودة' },
+                { icon: <Award size={13} />,        label: 'شهادة معتمدة' },
+                { icon: <Calendar size={13} />,     label: '8 لقاءات' },
+                { icon: <Clock size={13} />,        label: '16 ساعة تدريبية' },
+                { icon: <Globe size={13} />,        label: 'عربي' },
+              ].map(({ icon, label }) => (
                 <span key={label} style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
                   background: 'rgba(0,0,0,0.05)',
@@ -471,12 +471,12 @@ export default function CourseVoiceoverPage() {
               fontFamily: F, fontSize: 13, color: '#64748b',
             }}>
               {[
-                '🎓 شهادة معتمدة دولياً',
-                '👨‍🏫 خبراء معتمدون',
-                '🔄 إعادة التدريب مدى الحياة',
-              ].map(b => (
-                <span key={b} style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-                  {b}
+                { icon: <GraduationCap size={13} />, text: 'شهادة معتمدة دولياً' },
+                { icon: <Users size={13} />,         text: 'خبراء معتمدون' },
+                { icon: <RefreshCw size={13} />,     text: 'إعادة التدريب مدى الحياة' },
+              ].map(({ icon, text }) => (
+                <span key={text} style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                  {icon} {text}
                 </span>
               ))}
             </div>
@@ -497,7 +497,7 @@ export default function CourseVoiceoverPage() {
                 onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-2px)')}
                 onMouseLeave={e => (e.currentTarget.style.transform = 'none')}
               >
-                سجل الآن ←
+                سجل الآن <ArrowLeft size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineStart: 4 }} />
               </a>
 
               <a
@@ -515,7 +515,7 @@ export default function CourseVoiceoverPage() {
                 onMouseEnter={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.09)')}
                 onMouseLeave={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.05)')}
               >
-                ⬇ تحميل الكتيب الوجاهي
+                <Download size={14} style={{ flexShrink: 0 }} /> تحميل الكتيب الوجاهي
               </a>
 
               <a
@@ -533,7 +533,7 @@ export default function CourseVoiceoverPage() {
                 onMouseEnter={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.09)')}
                 onMouseLeave={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.05)')}
               >
-                ⬇ تحميل كتيب الأونلاين
+                <Download size={14} style={{ flexShrink: 0 }} /> تحميل كتيب الأونلاين
               </a>
             </div>
           </div>
@@ -711,7 +711,10 @@ export default function CourseVoiceoverPage() {
                 fontFamily: F, fontWeight: 700, fontSize: 14,
                 padding: '9px 22px', cursor: 'pointer', transition: 'all 0.2s',
               }}>
-                {t === 'inperson' ? '🏢 حضوري (16 ساعة)' : '🌐 عن بُعد (أونلاين)'}
+                {t === 'inperson'
+                  ? <><MapPin size={13} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineEnd: 4 }} /> حضوري (16 ساعة)</>
+                  : <><Wifi  size={13} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineEnd: 4 }} /> عن بُعد (أونلاين)</>
+                }
               </button>
             ))}
           </div>
@@ -956,7 +959,7 @@ function RegistrationCard({ track, onRegister }: {
         fontFamily: F, fontSize: 12.5, color: 'rgba(255,193,7,0.75)',
         textAlign: 'center', margin: '0 0 18px',
       }}>
-        ✦ بإمكانية التقسيط
+        <Sparkles size={12} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineEnd: 4 }} /> بإمكانية التقسيط
       </p>
 
       {/* instructor avatars */}
@@ -993,7 +996,7 @@ function RegistrationCard({ track, onRegister }: {
         onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-2px)')}
         onMouseLeave={e => (e.currentTarget.style.transform = 'none')}
       >
-        عرض المواعيد والتسجيل ←
+        عرض المواعيد والتسجيل <ArrowLeft size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineStart: 4 }} />
       </button>
     </div>
   );
@@ -1055,7 +1058,7 @@ function CompactBatchRow({ batch, accent }: { batch: ScheduleEntry; accent: stri
             color: isActive ? '#4ade80' : accent,
             borderRadius: 999, padding: '2px 9px', whiteSpace: 'nowrap',
           }}>
-            {isActive ? '● جارية' : '◌ قريباً'}
+            <Circle size={7} fill={isActive ? '#4ade80' : accent} color={isActive ? '#4ade80' : accent} style={{ flexShrink: 0, display: 'inline-block', verticalAlign: 'middle', marginInlineEnd: 4 }} />{isActive ? 'جارية' : 'قريباً'}
           </span>
         </div>
         {/* Row 2: days + time */}
@@ -1263,7 +1266,7 @@ function TrackCard2({
               onMouseEnter={e => (e.currentTarget.style.opacity = '0.88')}
               onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
             >
-              احجز مقعدك في هذا المسار ←
+              احجز مقعدك في هذا المسار <ArrowLeft size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineStart: 4 }} />
             </a>
           </div>
         </div>
@@ -1466,7 +1469,7 @@ function TrackCard({
           fontFamily: F, fontWeight: 700, fontSize: 13.5,
           transition: 'all 0.2s', whiteSpace: 'nowrap',
         }}>
-          {selected ? '✓ تم الاختيار' : cta}
+          {selected ? <><CheckCircle2 size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineEnd: 4 }} /> تم الاختيار</> : cta}
         </div>
       </div>
 

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, CSSProperties } from 'react';
+import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import SectionHeader, { Gold } from './SectionHeader';
 
 const REEL_URLS = [
@@ -19,22 +20,6 @@ declare global {
   interface Window { instgrm?: { Embeds: { process: () => void } }; }
 }
 
-function ChevronL() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"
-      strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
-      <polyline points="15 18 9 12 15 6" />
-    </svg>
-  );
-}
-function ChevronR() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"
-      strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
-      <polyline points="9 18 15 12 9 6" />
-    </svg>
-  );
-}
 
 function getOffset(i: number, current: number): number {
   let off = (i - current + N) % N;
@@ -167,7 +152,7 @@ export default function ReelsSection() {
           onMouseEnter={e => Object.assign(e.currentTarget.style, { background: '#FFC107', color: '#18202c', boxShadow: '0 0 20px rgba(255,193,7,0.45)' })}
           onMouseLeave={e => Object.assign(e.currentTarget.style, { background: 'rgba(255,255,255,0.06)', color: '#FFC107', boxShadow: '0 6px 24px rgba(0,0,0,0.30)' })}
         >
-          <ChevronL />
+          <ChevronLeft size={20} strokeWidth={2.2} />
         </button>
 
         {/* Left arrow (RTL: next) */}
@@ -178,7 +163,7 @@ export default function ReelsSection() {
           onMouseEnter={e => Object.assign(e.currentTarget.style, { background: '#FFC107', color: '#18202c', boxShadow: '0 0 20px rgba(255,193,7,0.45)' })}
           onMouseLeave={e => Object.assign(e.currentTarget.style, { background: 'rgba(255,255,255,0.06)', color: '#FFC107', boxShadow: '0 6px 24px rgba(0,0,0,0.30)' })}
         >
-          <ChevronR />
+          <ChevronRight size={20} strokeWidth={2.2} />
         </button>
 
         {/* Stage — overflow visible so adjacent cards peek 40px */}
@@ -247,7 +232,9 @@ export default function ReelsSection() {
                       من متدرّبي كاسيت
                     </span>
                   </div>
-                  <span style={{ color: '#FFC107', fontSize: 11, letterSpacing: 2 }}>★★★★★</span>
+                  <span style={{ display: 'inline-flex', gap: 1 }}>
+                    {[...Array(5)].map((_, i) => <Star key={i} size={11} fill="#FFC107" color="#FFC107" />)}
+                  </span>
                 </div>
               </div>
             );

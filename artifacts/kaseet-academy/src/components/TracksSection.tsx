@@ -1,5 +1,6 @@
 // ── Academic Tracks Section ────────────────────────────────
 import { useState } from 'react';
+import { ArrowLeft } from 'lucide-react';
 import SectionHeader, { Gold } from './SectionHeader';
 
 import mediaTrackImg     from '@assets/media-track_1785431174381.jpeg';
@@ -143,13 +144,11 @@ function TrackCard({ track }: { track: Track }) {
           }}>
             اكتشف المسار
           </span>
-          <span style={{
-            fontSize: 14,
-            color: hov ? '#FFC107' : 'rgba(252,251,251,0.30)',
-            transition: 'color 0.25s, transform 0.25s',
-            transform: hov ? 'translateX(-3px)' : 'translateX(0)',
-            display: 'inline-block',
-          }}>←</span>
+          <ArrowLeft
+            size={14}
+            color={hov ? '#FFC107' : 'rgba(252,251,251,0.30)'}
+            style={{ transition: 'color 0.25s, transform 0.25s', transform: hov ? 'translateX(-3px)' : 'translateX(0)' }}
+          />
         </div>
       </div>
     </div>
@@ -199,7 +198,7 @@ export default function TracksSection() {
             onMouseEnter={e => Object.assign(e.currentTarget.style, { color: '#FFC107', borderColor: 'rgba(255,193,7,0.40)', background: 'rgba(255,255,255,0.04)' })}
             onMouseLeave={e => Object.assign(e.currentTarget.style, { color: 'rgba(252,251,251,0.60)', borderColor: 'rgba(255,255,255,0.16)', background: 'transparent' })}
           >
-            استعراض كل المسارات ←
+            استعراض كل المسارات <ArrowLeft size={16} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineStart: 4 }} />
           </button>
         </div>
       </div>

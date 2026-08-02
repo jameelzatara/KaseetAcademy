@@ -4,6 +4,8 @@ import {
   ChevronDown, Calendar, Clock, MapPin, Wifi,
   Users, GraduationCap, Zap, BookOpen, Printer,
   CheckCircle2, Mic, Wind, MessageSquare, Volume2, Award, Briefcase,
+  ArrowLeft, MessageCircle, Download, Globe, RefreshCw, Sparkles,
+  Star, Sliders,
 } from 'lucide-react';
 
 /* ── Asset imports ─────────────────────────────────────────── */
@@ -213,7 +215,7 @@ function CoursePricingCard() {
         </div>
 
         <p style={{ fontFamily: F, fontSize: 11.5, color: 'rgba(255,193,7,0.72)', textAlign: 'center', margin: '0 0 14px' }}>
-          ✦ بإمكانية التقسيط
+          <Sparkles size={12} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineEnd: 4 }} /> بإمكانية التقسيط
         </p>
 
         <div style={{ height: 1, background: 'rgba(255,255,255,0.08)', margin: '0 0 14px' }} />
@@ -245,7 +247,7 @@ function CoursePricingCard() {
           textDecoration: 'none',
           boxShadow: '0 6px 18px rgba(255,193,7,0.28)',
         }}>
-          سجل الآن ←
+          سجل الآن <ArrowLeft size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineStart: 4 }} />
         </a>
       </div>
     </div>
@@ -462,7 +464,7 @@ function TrackCard2({
             onMouseEnter={e => (e.currentTarget.style.opacity = '0.88')}
             onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
           >
-            احجز مقعدك في هذا المسار ←
+            احجز مقعدك في هذا المسار <ArrowLeft size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineStart: 4 }} />
           </a>
         </div>
       )}
@@ -526,7 +528,7 @@ function AdvisorMini({ name, role, photo, href }: { name: string; role: string; 
           padding: '6px 14px', borderRadius: 8,
           textDecoration: 'none',
         }}>
-          تواصل الآن 💬
+          تواصل الآن <MessageCircle size={12} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineStart: 3 }} />
         </a>
       </div>
     </div>
@@ -570,7 +572,7 @@ export default function CourseBasicsPage() {
               display: 'inline-flex', alignItems: 'center', gap: 6,
               color: DF, fontFamily: F, fontSize: 14, padding: 0, marginBottom: 22,
             }}>
-              <span style={{ fontSize: 18, lineHeight: 1 }}>←</span>
+              <ArrowLeft size={16} />
               الرجوع إلى قائمة الدورات
             </button>
 
@@ -598,7 +600,13 @@ export default function CourseBasicsPage() {
 
             {/* Stats row */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'clamp(10px,1.5vw,18px)', marginBottom: 28, fontFamily: F, fontSize: 13.5, color: DM }}>
-              {[['🪑','10 مقاعد محدودة'], ['📜','شهادة معتمدة'], ['🗓️','8 محاضرات'], ['⏳','16 ساعة تدريبية'], ['🌍','عربي']].map(([icon, label]) => (
+              {[
+                { icon: <Users size={13} />,        label: '10 مقاعد محدودة' },
+                { icon: <Award size={13} />,        label: 'شهادة معتمدة' },
+                { icon: <Calendar size={13} />,     label: '8 محاضرات' },
+                { icon: <Clock size={13} />,        label: '16 ساعة تدريبية' },
+                { icon: <Globe size={13} />,        label: 'عربي' },
+              ].map(({ icon, label }) => (
                 <span key={label} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 999, padding: '6px 14px', fontWeight: 500 }}>
                   {icon} {label}
                 </span>
@@ -620,8 +628,12 @@ export default function CourseBasicsPage() {
 
             {/* Trust badges */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 30, fontFamily: F, fontSize: 13, color: DF }}>
-              {['🎓 شهادة معتمدة دولياً', '👨‍🏫 خبراء معتمدون', '🔄 إعادة التدريب مدى الحياة'].map(b => (
-                <span key={b} style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>{b}</span>
+              {[
+                { icon: <GraduationCap size={13} />, text: 'شهادة معتمدة دولياً' },
+                { icon: <Users size={13} />,         text: 'خبراء معتمدون' },
+                { icon: <RefreshCw size={13} />,     text: 'إعادة التدريب مدى الحياة' },
+              ].map(({ icon, text }) => (
+                <span key={text} style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>{icon} {text}</span>
               ))}
             </div>
 
@@ -629,13 +641,13 @@ export default function CourseBasicsPage() {
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
               <a href={waLink('962771052222', 'السلام عليكم، أرغب في التسجيل في دورة أساسيات التعليق والأداء الصوتي')} target="_blank" rel="noopener noreferrer"
                 style={{ background: GOLD, color: NAVY, fontFamily: F, fontWeight: 800, fontSize: 15, padding: '13px 30px', borderRadius: 12, textDecoration: 'none', display: 'inline-block', boxShadow: '0 8px 22px rgba(255,193,7,0.32)' }}>
-                سجل الآن ←
+                سجل الآن <ArrowLeft size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineStart: 4 }} />
               </a>
               <a href={inPersonPdf} download style={{ background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.14)', color: DH, fontFamily: F, fontWeight: 700, fontSize: 14, padding: '13px 22px', borderRadius: 12, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 7 }}>
-                ⬇ تحميل الكتيب الوجاهي
+                <Download size={14} style={{ flexShrink: 0 }} /> تحميل الكتيب الوجاهي
               </a>
               <a href={onlinePdf} download style={{ background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.14)', color: DH, fontFamily: F, fontWeight: 700, fontSize: 14, padding: '13px 22px', borderRadius: 12, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 7 }}>
-                ⬇ تحميل كتيب الأونلاين
+                <Download size={14} style={{ flexShrink: 0 }} /> تحميل كتيب الأونلاين
               </a>
             </div>
           </div>
@@ -705,15 +717,15 @@ export default function CourseBasicsPage() {
             <LightTitle>الأهداف المتحققة</LightTitle>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14 }}>
               {[
-                { icon: '🌟', text: 'إتقان كافة ألوان التعليق الصوتي: الإعلانات التجارية، الرد الآلي (IVR)، الكتب الصوتية، الوثائقيات، الأخبار، والدوبلاج.' },
-                { icon: '🔤', text: 'تحسين مخارج الحروف والنطق السليم: التخلص من عيوب النطق وإتقان مخارج الحروف بشكل محترف.' },
-                { icon: '🎚️', text: 'التحكم بالطبقات الصوتية والإيقاع والنَفَس: اكتساب مرونة صوتية كاملة للتحول بين النبرات أثناء التسجيل.' },
-                { icon: '🎤', text: 'كسر رهبة الميكروفون نهائياً: التأقلم الكامل مع البيئة الصوتية الاحترافية والعمل بثقة.' },
-                { icon: '💪', text: 'تعزيز الثقة بالنفس والحضور الصوتي: بناء شخصية صوتية قوية وجذابة تعكس الاحترافية.' },
-                { icon: '💼', text: 'تنمية مهارات التواصل والأداء المهني: فهم متطلبات سوق العمل والتفاعل مع التوجيهات الإخراجية.' },
+                { icon: <Star     size={22} color={GOLD} />, text: 'إتقان كافة ألوان التعليق الصوتي: الإعلانات التجارية، الرد الآلي (IVR)، الكتب الصوتية، الوثائقيات، الأخبار، والدوبلاج.' },
+                { icon: <Volume2  size={22} color={GOLD} />, text: 'تحسين مخارج الحروف والنطق السليم: التخلص من عيوب النطق وإتقان مخارج الحروف بشكل محترف.' },
+                { icon: <Sliders  size={22} color={GOLD} />, text: 'التحكم بالطبقات الصوتية والإيقاع والنَفَس: اكتساب مرونة صوتية كاملة للتحول بين النبرات أثناء التسجيل.' },
+                { icon: <Mic      size={22} color={GOLD} />, text: 'كسر رهبة الميكروفون نهائياً: التأقلم الكامل مع البيئة الصوتية الاحترافية والعمل بثقة.' },
+                { icon: <Zap      size={22} color={GOLD} />, text: 'تعزيز الثقة بالنفس والحضور الصوتي: بناء شخصية صوتية قوية وجذابة تعكس الاحترافية.' },
+                { icon: <Briefcase size={22} color={GOLD} />, text: 'تنمية مهارات التواصل والأداء المهني: فهم متطلبات سوق العمل والتفاعل مع التوجيهات الإخراجية.' },
               ].map((g, i) => (
                 <div key={i} style={{ display: 'flex', gap: 14, background: '#fff', borderRadius: 14, border: '1px solid rgba(0,0,0,0.08)', padding: '18px 20px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-                  <span style={{ fontSize: 22, flexShrink: 0 }}>{g.icon}</span>
+                  <span style={{ flexShrink: 0, display: 'flex', alignItems: 'flex-start', paddingTop: 2 }}>{g.icon}</span>
                   <p style={{ fontFamily: F, fontSize: 14, color: DM, lineHeight: 1.8, margin: 0 }}>{g.text}</p>
                 </div>
               ))}
@@ -830,7 +842,10 @@ export default function CourseBasicsPage() {
                 fontFamily: F, fontWeight: 700, fontSize: 14,
                 padding: '9px 22px', cursor: 'pointer', transition: 'all 0.2s',
               }}>
-                {t === 'inperson' ? '🏢 حضوري (16 ساعة)' : '🌐 عن بُعد (أونلاين)'}
+                {t === 'inperson'
+                  ? <><MapPin size={13} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineEnd: 4 }} /> حضوري (16 ساعة)</>
+                  : <><Wifi  size={13} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineEnd: 4 }} /> عن بُعد (أونلاين)</>
+                }
               </button>
             ))}
           </div>
@@ -990,7 +1005,7 @@ export default function CourseBasicsPage() {
           <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 14 }}>
             <a href={waLink('962771052222', 'السلام عليكم، أرغب في التسجيل في دورة أساسيات التعليق والأداء الصوتي')} target="_blank" rel="noopener noreferrer"
               style={{ background: GOLD, color: NAVY, fontFamily: F, fontWeight: 800, fontSize: 16, padding: '14px 36px', borderRadius: 14, textDecoration: 'none', display: 'inline-block', boxShadow: '0 8px 24px rgba(255,193,7,0.30)' }}>
-              سجل الآن ←
+              سجل الآن <ArrowLeft size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineStart: 4 }} />
             </a>
             <button onClick={() => navigate('/')} style={{
               background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.20)',
