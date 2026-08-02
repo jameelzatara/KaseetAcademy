@@ -141,6 +141,144 @@ const LECTURES_INPERSON = [
   },
 ];
 
+/* ════════════════════════════════════════════════════════════
+   COURSE PRICING CARD  (floating dark-navy card in hero)
+════════════════════════════════════════════════════════════ */
+function CoursePricingCard() {
+  const waHref = waLink(
+    '962771052222',
+    'السلام عليكم، أرغب في التسجيل في البرنامج الشامل للتعليق والأداء الصوتي',
+  );
+  return (
+    <div style={{
+      width: '100%',
+      background: NAVY,
+      borderRadius: 22,
+      overflow: 'hidden',
+      boxShadow: '0 28px 64px rgba(29,39,56,0.22), 0 8px 20px rgba(0,0,0,0.12)',
+    }}>
+      {/* Cover image */}
+      <div style={{ position: 'relative', height: 176, overflow: 'hidden' }}>
+        <img
+          src={heroCover}
+          alt="دورة التعليق والأداء الصوتي"
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 20%' }}
+        />
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to bottom, rgba(29,39,56,0.05) 30%, rgba(29,39,56,0.82) 100%)',
+        }} />
+        <span style={{
+          position: 'absolute', bottom: 12, right: 14, left: 14,
+          fontFamily: F, fontWeight: 800, fontSize: 13,
+          color: '#fff', lineHeight: 1.4,
+        }}>
+          البرنامج الشامل للتعليق والأداء الصوتي
+        </span>
+      </div>
+
+      {/* Card body */}
+      <div style={{ padding: '18px 16px 20px' }}>
+
+        {/* Price rows */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 14 }}>
+
+          {/* حضوري */}
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            background: 'rgba(255,193,7,0.10)',
+            border: '1px solid rgba(255,193,7,0.28)',
+            borderRadius: 10, padding: '9px 12px',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <MapPin size={13} color={GOLD} strokeWidth={2.5} />
+              <span style={{ fontFamily: F, fontWeight: 700, fontSize: 13, color: 'rgba(252,251,251,0.85)' }}>
+                حضوري
+              </span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, direction: 'ltr' }}>
+              <span style={{ fontFamily: "'Poppins',sans-serif", fontWeight: 900, fontSize: 18, color: GOLD }}>218</span>
+              <span style={{ fontFamily: F, fontWeight: 600, fontSize: 12, color: 'rgba(252,251,251,0.65)' }}>JOD</span>
+              <span style={{ fontFamily: "'Poppins',sans-serif", fontSize: 11.5, color: 'rgba(252,251,251,0.28)', textDecoration: 'line-through' }}>260</span>
+            </div>
+          </div>
+
+          {/* أونلاين */}
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            background: 'rgba(255,255,255,0.04)',
+            border: '1px solid rgba(255,255,255,0.09)',
+            borderRadius: 10, padding: '9px 12px',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <Wifi size={13} color='rgba(252,251,251,0.55)' strokeWidth={2.5} />
+              <span style={{ fontFamily: F, fontWeight: 700, fontSize: 13, color: 'rgba(252,251,251,0.72)' }}>
+                عن بُعد
+              </span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, direction: 'ltr' }}>
+              <span style={{ fontFamily: "'Poppins',sans-serif", fontWeight: 900, fontSize: 18, color: GOLD }}>$150</span>
+              <span style={{ fontFamily: "'Poppins',sans-serif", fontSize: 11.5, color: 'rgba(252,251,251,0.28)', textDecoration: 'line-through' }}>$200</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Installment */}
+        <p style={{
+          fontFamily: F, fontSize: 11.5,
+          color: 'rgba(255,193,7,0.72)',
+          textAlign: 'center', margin: '0 0 14px',
+        }}>
+          ✦ بإمكانية التقسيط
+        </p>
+
+        {/* Divider */}
+        <div style={{ height: 1, background: 'rgba(255,255,255,0.08)', margin: '0 0 14px' }} />
+
+        {/* Stacked instructors */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 9, marginBottom: 16 }}>
+          {[
+            { img: yasar, name: 'يسار عبده'  },
+            { img: rana,  name: 'رنا عزام'   },
+            { img: omar,  name: 'عمر درابكة' },
+          ].map(({ img, name }) => (
+            <div key={name} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <img
+                src={img} alt={name}
+                style={{
+                  width: 34, height: 34, borderRadius: '50%',
+                  objectFit: 'cover', objectPosition: 'center top',
+                  border: '2px solid rgba(255,193,7,0.42)', flexShrink: 0,
+                }}
+              />
+              <span style={{ fontFamily: F, fontWeight: 700, fontSize: 13.5, color: 'rgba(252,251,251,0.88)' }}>
+                {name}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* CTA */}
+        <a
+          href={waHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'block', textAlign: 'center',
+            background: GOLD, color: NAVY,
+            fontFamily: F, fontWeight: 800, fontSize: 14,
+            padding: '11px 0', borderRadius: 10,
+            textDecoration: 'none',
+            boxShadow: '0 6px 18px rgba(255,193,7,0.28)',
+          }}
+        >
+          سجل الآن ←
+        </a>
+      </div>
+    </div>
+  );
+}
+
 /* ── Main page component ───────────────────────────────────── */
 export default function CourseVoiceoverPage() {
   const [, navigate]   = useLocation();
@@ -167,12 +305,13 @@ export default function CourseVoiceoverPage() {
     }}>
 
       {/* ══════════════════════════════════════════════════════
-          HERO SECTION — two-column layout
+          HERO SECTION — light off-white, two-column
       ══════════════════════════════════════════════════════ */}
       <section style={{
         paddingTop: 'clamp(24px,4vw,56px)',
         paddingBottom: 'clamp(36px,4vw,64px)',
-        borderBottom: '1px solid rgba(255,255,255,0.07)',
+        background: '#F5F3EF',
+        borderBottom: '1px solid rgba(0,0,0,0.08)',
       }}>
         <div style={{ ...INNER, display: 'flex', gap: 'clamp(24px,3vw,48px)', alignItems: 'flex-start' }}>
 
@@ -185,7 +324,7 @@ export default function CourseVoiceoverPage() {
               style={{
                 background: 'none', border: 'none', cursor: 'pointer',
                 display: 'inline-flex', alignItems: 'center', gap: 6,
-                color: MUTED, fontFamily: F, fontSize: 14, padding: 0,
+                color: '#64748b', fontFamily: F, fontSize: 14, padding: 0,
                 marginBottom: 22,
               }}
             >
@@ -195,17 +334,25 @@ export default function CourseVoiceoverPage() {
 
             {/* tags row */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 18 }}>
-              <Tag>صنّاع المحتوى</Tag>
-              <Tag>المذيعون والمقدّمون</Tag>
-              <Tag>المعلّقون الصّوتيون</Tag>
-              <Tag>المستوى المبتدئ</Tag>
+              {['صنّاع المحتوى', 'المذيعون والمقدّمون', 'المعلّقون الصّوتيون', 'المستوى المبتدئ'].map(t => (
+                <span key={t} style={{
+                  display: 'inline-flex', alignItems: 'center',
+                  background: 'rgba(255,193,7,0.12)',
+                  border: '1px solid rgba(255,193,7,0.35)',
+                  color: '#92670a', borderRadius: 999,
+                  fontFamily: F, fontWeight: 700, fontSize: 12,
+                  padding: '5px 13px', whiteSpace: 'nowrap',
+                }}>
+                  {t}
+                </span>
+              ))}
             </div>
 
             {/* title */}
             <h1 style={{
               fontFamily: F, fontWeight: 900,
               fontSize: 'clamp(26px,3.8vw,46px)',
-              color: OFF, lineHeight: 1.2, margin: '0 0 16px',
+              color: '#1e293b', lineHeight: 1.2, margin: '0 0 16px',
             }}>
               البرنامج الشامل للتعليق والأداء الصوتي
             </h1>
@@ -224,8 +371,8 @@ export default function CourseVoiceoverPage() {
 
             {/* stats row */}
             <div style={{
-              display: 'flex', flexWrap: 'wrap', gap: 'clamp(12px,2vw,22px)',
-              marginBottom: 28, fontFamily: F, fontSize: 14, color: MUTED,
+              display: 'flex', flexWrap: 'wrap', gap: 'clamp(10px,1.5vw,18px)',
+              marginBottom: 28, fontFamily: F, fontSize: 13.5, color: '#475569',
             }}>
               {[
                 ['🪑', '10 مقاعد محدودة'],
@@ -236,8 +383,8 @@ export default function CourseVoiceoverPage() {
               ].map(([icon, label]) => (
                 <span key={label} style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
-                  background: 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(255,255,255,0.10)',
+                  background: 'rgba(0,0,0,0.05)',
+                  border: '1px solid rgba(0,0,0,0.10)',
                   borderRadius: 999, padding: '6px 14px',
                   fontWeight: 500,
                 }}>
@@ -255,17 +402,17 @@ export default function CourseVoiceoverPage() {
                   <img key={i} src={img} alt="" style={{
                     width: 44, height: 44, borderRadius: '50%',
                     objectFit: 'cover', objectPosition: 'center top',
-                    border: '2px solid rgba(255,193,7,0.50)',
+                    border: '2px solid rgba(255,193,7,0.60)',
                     marginInlineStart: i > 0 ? -14 : 0,
-                    boxShadow: '0 3px 8px rgba(0,0,0,0.45)',
+                    boxShadow: '0 3px 8px rgba(0,0,0,0.18)',
                   }} />
                 ))}
               </div>
               <div>
-                <span style={{ fontFamily: F, fontWeight: 700, fontSize: 14, color: OFF, display: 'block' }}>
+                <span style={{ fontFamily: F, fontWeight: 700, fontSize: 14, color: '#1e293b', display: 'block' }}>
                   بإشراف نخبة من أفضل المدربين
                 </span>
-                <span style={{ fontFamily: F, fontSize: 12.5, color: MUTED }}>
+                <span style={{ fontFamily: F, fontSize: 12.5, color: '#64748b' }}>
                   يسار عبده · رنا عزام · عمر درابكة
                 </span>
               </div>
@@ -274,16 +421,14 @@ export default function CourseVoiceoverPage() {
             {/* trust badges */}
             <div style={{
               display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 30,
-              fontFamily: F, fontSize: 13, color: MUTED,
+              fontFamily: F, fontSize: 13, color: '#64748b',
             }}>
               {[
                 '🎓 شهادة معتمدة دولياً',
                 '👨‍🏫 خبراء معتمدون',
                 '🔄 إعادة التدريب مدى الحياة',
               ].map(b => (
-                <span key={b} style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 5,
-                }}>
+                <span key={b} style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
                   {b}
                 </span>
               ))}
@@ -299,7 +444,7 @@ export default function CourseVoiceoverPage() {
                   fontFamily: F, fontWeight: 800, fontSize: 15,
                   padding: '13px 30px', borderRadius: 12,
                   textDecoration: 'none', display: 'inline-block',
-                  boxShadow: '0 8px 22px rgba(255,193,7,0.30)',
+                  boxShadow: '0 8px 22px rgba(255,193,7,0.32)',
                   transition: 'transform 0.2s',
                 }}
                 onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-2px)')}
@@ -311,17 +456,17 @@ export default function CourseVoiceoverPage() {
               <a
                 href={inPersonPdf} download
                 style={{
-                  background: 'rgba(255,255,255,0.06)',
-                  border: '1px solid rgba(255,255,255,0.18)',
-                  color: OFF,
+                  background: 'rgba(0,0,0,0.05)',
+                  border: '1px solid rgba(0,0,0,0.14)',
+                  color: '#1e293b',
                   fontFamily: F, fontWeight: 700, fontSize: 14,
                   padding: '13px 22px', borderRadius: 12,
                   textDecoration: 'none', display: 'inline-flex',
                   alignItems: 'center', gap: 7,
                   transition: 'background 0.2s',
                 }}
-                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.10)')}
-                onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.06)')}
+                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.09)')}
+                onMouseLeave={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.05)')}
               >
                 ⬇ تحميل الكتيب الوجاهي
               </a>
@@ -329,35 +474,30 @@ export default function CourseVoiceoverPage() {
               <a
                 href={onlinePdf} download
                 style={{
-                  background: 'rgba(255,255,255,0.06)',
-                  border: '1px solid rgba(255,255,255,0.18)',
-                  color: OFF,
+                  background: 'rgba(0,0,0,0.05)',
+                  border: '1px solid rgba(0,0,0,0.14)',
+                  color: '#1e293b',
                   fontFamily: F, fontWeight: 700, fontSize: 14,
                   padding: '13px 22px', borderRadius: 12,
                   textDecoration: 'none', display: 'inline-flex',
                   alignItems: 'center', gap: 7,
                   transition: 'background 0.2s',
                 }}
-                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.10)')}
-                onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.06)')}
+                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.09)')}
+                onMouseLeave={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.05)')}
               >
                 ⬇ تحميل كتيب الأونلاين
               </a>
             </div>
           </div>
 
-          {/* ── Left column — sticky registration card ── */}
+          {/* ── Left column — floating pricing card ── */}
           <div ref={sidebarRef} style={{
-            width: 'clamp(280px,28vw,320px)',
+            width: 'clamp(280px,28vw,310px)',
             flexShrink: 0,
             position: 'sticky', top: 20,
           }}>
-            <RegistrationCard track={track} onRegister={() => {
-              window.open(
-                waLink('962771052222', `السلام عليكم، أرغب في التسجيل في البرنامج الشامل للتعليق والأداء الصوتي — المسار: ${track === 'inperson' ? 'حضوري' : 'أونلاين'}`),
-                '_blank',
-              );
-            }} />
+            <CoursePricingCard />
           </div>
         </div>
       </section>
