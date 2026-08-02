@@ -1,16 +1,19 @@
 // ── Instructors Section ─────────────────────────────────────
 import { Users, Clock, Globe, Award, Tv, GraduationCap, Mic } from 'lucide-react';
-import SectionHeader, { Gold } from './SectionHeader';
 
-const F  = 'Tajawal, sans-serif';
-const FP = "'Poppins', sans-serif";
+const F   = 'Tajawal, sans-serif';
+const FP  = "'Poppins', sans-serif";
 const GOLD = '#FFC107';
 
-// ── card colours matching the reference design ────────────────
-const CARD_BG     = 'rgba(13, 18, 38, 0.92)';
-const CARD_BORDER = 'rgba(255,255,255,0.09)';
-const HEADER_BG   = 'rgba(18, 25, 52, 0.95)';
-const BIO_BG      = 'rgba(20, 28, 56, 0.75)';
+// ── light palette (matches LBG sections in course page) ──────
+const SECTION_BG  = '#F5F4F0';
+const CARD_BG     = '#F5F4F0';
+const CARD_BORDER = 'rgba(0,0,0,0.08)';
+const BIO_BG      = '#ffffff';
+const NAME_COLOR  = '#1e293b';
+const ROLE_COLOR  = '#92670a';   // dark gold — readable on light bg
+const BADGE_TEXT  = '#475569';
+const BIO_TEXT    = '#475569';
 
 type IconComponent = typeof Users;
 
@@ -19,15 +22,16 @@ interface Badge {
   label: string;
 }
 
-interface Instructor {
+export interface Instructor {
   initials: string;
+  photo?: string;          // real portrait — optional, falls back to initials
   name: string;
   role: string;
   badges: Badge[];
   bio: string;
 }
 
-const INSTRUCTORS: Instructor[] = [
+const DEFAULT_INSTRUCTORS: Instructor[] = [
   {
     initials: 'ي.ع',
     name:  'يسار عبده',
@@ -67,11 +71,11 @@ function InstructorCard({ ins }: { ins: Instructor }) {
   const IconBadge = ({ icon: Icon, label }: Badge) => (
     <div style={{
       display: 'inline-flex', alignItems: 'center', gap: 6,
-      background: 'rgba(255,255,255,0.06)',
-      border: '1px solid rgba(255,255,255,0.10)',
+      background: 'rgba(0,0,0,0.05)',
+      border: '1px solid rgba(0,0,0,0.10)',
       borderRadius: 8, padding: '5px 11px',
       fontFamily: F, fontSize: 12.5, fontWeight: 600,
-      color: 'rgba(252,251,251,0.72)',
+      color: BADGE_TEXT,
       whiteSpace: 'nowrap' as const,
     }}>
       <Icon size={13} color={GOLD} strokeWidth={2} style={{ flexShrink: 0 }} />
@@ -85,47 +89,61 @@ function InstructorCard({ ins }: { ins: Instructor }) {
       overflow: 'hidden',
       background: CARD_BG,
       border: `1px solid ${CARD_BORDER}`,
-      boxShadow: '0 8px 32px rgba(0,0,0,0.38)',
+      boxShadow: '0 4px 18px rgba(0,0,0,0.08)',
       direction: 'rtl',
     }}>
-      {/* ── Header ── */}
-      <div style={{
-        background: HEADER_BG,
-        padding: '22px 24px 20px',
-      }}>
-        {/* name + role + avatar row */}
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, marginBottom: 16 }}>
-          {/* name + role (right side, RTL = natural start) */}
+      {/* ── Header: photo + name + role + badges ── */}
+      <div style={{ padding: '22px 24px 20px' }}>
+        {/* name + role + photo row */}
+        <div style={{
+          display: 'flex', alignItems: 'center',
+          justifyContent: 'space-between', gap: 16, marginBottom: 16,
+        }}>
+          {/* name + role */}
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{
-              fontFamily: F, fontWeight: 900, fontSize: 'clamp(20px,2.2vw,26px)',
-              color: 'rgba(252,251,251,0.97)', lineHeight: 1.2, marginBottom: 6,
+              fontFamily: F, fontWeight: 900,
+              fontSize: 'clamp(20px,2.2vw,24px)',
+              color: NAME_COLOR, lineHeight: 1.2, marginBottom: 5,
             }}>
               {ins.name}
             </div>
             <div style={{
-              fontFamily: F, fontWeight: 700, fontSize: 14,
-              color: GOLD, lineHeight: 1.4,
+              fontFamily: F, fontWeight: 700, fontSize: 13.5,
+              color: ROLE_COLOR, lineHeight: 1.4,
             }}>
               {ins.role}
             </div>
           </div>
 
-          {/* Initials avatar */}
-          <div style={{
-            width: 66, height: 66, borderRadius: '50%', flexShrink: 0,
-            background: `linear-gradient(135deg, ${GOLD} 0%, #e6a800 100%)`,
-            border: `3px solid rgba(255,193,7,0.35)`,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 4px 16px rgba(255,193,7,0.25)',
-          }}>
-            <span style={{
-              fontFamily: FP, fontWeight: 800, fontSize: 18,
-              color: '#0d1125', letterSpacing: '0.04em',
+          {/* Photo or initials fallback */}
+          {ins.photo ? (
+            <img
+              src={ins.photo}
+              alt={ins.name}
+              style={{
+                width: 72, height: 72, borderRadius: '50%', flexShrink: 0,
+                objectFit: 'cover', objectPosition: 'center top',
+                border: `3px solid rgba(255,193,7,0.45)`,
+                boxShadow: '0 4px 14px rgba(0,0,0,0.14)',
+              }}
+            />
+          ) : (
+            <div style={{
+              width: 72, height: 72, borderRadius: '50%', flexShrink: 0,
+              background: `linear-gradient(135deg, ${GOLD} 0%, #e6a800 100%)`,
+              border: `3px solid rgba(255,193,7,0.35)`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 4px 14px rgba(255,193,7,0.22)',
             }}>
-              {ins.initials}
-            </span>
-          </div>
+              <span style={{
+                fontFamily: FP, fontWeight: 800, fontSize: 17,
+                color: '#0d1125', letterSpacing: '0.04em',
+              }}>
+                {ins.initials}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Badges row */}
@@ -135,14 +153,14 @@ function InstructorCard({ ins }: { ins: Instructor }) {
       </div>
 
       {/* ── Divider ── */}
-      <div style={{ height: 1, background: 'rgba(255,255,255,0.07)' }} />
+      <div style={{ height: 1, background: 'rgba(0,0,0,0.07)', marginInline: 24 }} />
 
-      {/* ── Bio ── */}
-      <div style={{ background: BIO_BG, padding: '20px 24px' }}>
+      {/* ── Bio in white box ── */}
+      <div style={{ background: BIO_BG, margin: 16, borderRadius: 12, padding: '16px 20px' }}>
         <p style={{
           fontFamily: F, fontWeight: 400,
           fontSize: 'clamp(13.5px,1.4vw,15px)',
-          color: 'rgba(252,251,251,0.68)',
+          color: BIO_TEXT,
           lineHeight: 1.95, margin: 0,
           textAlign: 'right',
         }}>
@@ -153,27 +171,36 @@ function InstructorCard({ ins }: { ins: Instructor }) {
   );
 }
 
-export default function InstructorsSection() {
+interface Props {
+  instructors?: Instructor[];
+}
+
+export default function InstructorsSection({ instructors = DEFAULT_INSTRUCTORS }: Props) {
   return (
-    <section className="section-block relative overflow-hidden" dir="rtl">
-      {/* subtle ambient glow */}
-      <div aria-hidden="true" style={{
-        position: 'absolute', top: -60, right: '10%',
-        width: 500, height: 500, borderRadius: '50%', pointerEvents: 'none',
-        background: 'radial-gradient(circle, rgba(255,193,7,0.05) 0%, transparent 68%)',
-        filter: 'blur(70px)',
-      }} />
+    <section
+      dir="rtl"
+      style={{
+        background: SECTION_BG,
+        paddingBlock: 'clamp(48px,5vw,80px)',
+        borderBottom: '1px solid rgba(0,0,0,0.07)',
+      }}
+    >
+      <div style={{ maxWidth: 860, margin: '0 auto', padding: '0 clamp(16px,4vw,40px)' }}>
 
-      <div className="relative mx-auto px-4" style={{ maxWidth: 860, zIndex: 1 }}>
-        <SectionHeader
-          badge="خبراؤنا في التدريس"
-          heading={<>وراء كل صوت ناجح <Gold>خبير يُلهمه</Gold></>}
-          description="فريق مدربينا جمعهم عقود من الخبرة في الإعلام والتعليق الصوتي والخطابة — جاهزون ليرافقوك في كل خطوة من رحلتك."
-          style={{ marginBottom: 48 }}
-        />
+        {/* Section title — light style (gold bar + dark text) */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 40 }}>
+          <div style={{ width: 4, height: 30, background: GOLD, borderRadius: 4, flexShrink: 0 }} />
+          <h2 style={{
+            fontFamily: F, fontWeight: 900,
+            fontSize: 'clamp(22px,2.8vw,30px)',
+            color: NAME_COLOR, margin: 0, lineHeight: 1.2,
+          }}>
+            خبراؤنا في التدريس
+          </h2>
+        </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-          {INSTRUCTORS.map(ins => <InstructorCard key={ins.name} ins={ins} />)}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+          {instructors.map(ins => <InstructorCard key={ins.name} ins={ins} />)}
         </div>
       </div>
     </section>

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import InstructorsSection from '@/components/InstructorsSection';
+import InstructorsSection, { type Instructor as InstructorData } from '@/components/InstructorsSection';
 import { useLocation } from 'wouter';
-import { ChevronDown, Calendar, Clock, MapPin, Wifi, Users, GraduationCap, Award, Mic, Volume2, Star, Printer, BookOpen, Zap, Briefcase, Sliders, CheckCircle2, ArrowLeft, MessageCircle, Download, Globe, RefreshCw, Circle, Sparkles, Video } from 'lucide-react';
+import { ChevronDown, Calendar, Clock, MapPin, Wifi, Users, GraduationCap, Award, Mic, Volume2, Star, Printer, BookOpen, Zap, Briefcase, Sliders, CheckCircle2, ArrowLeft, MessageCircle, Download, Globe, RefreshCw, Circle, Sparkles, Video, Tv } from 'lucide-react';
 
 /* ── Asset imports ─────────────────────────────────────────── */
 import ayaImg      from '@assets/اية_القماز_1785619557679.jpeg';
@@ -852,7 +852,41 @@ export default function CourseVoiceoverPage() {
         </div>
       </section>
 
-      <InstructorsSection />
+      <InstructorsSection instructors={[
+        {
+          initials: 'ي.ع', photo: yasar,
+          name:  'يسار عبده',
+          role:  'مدربة إعلامية وخبيرة تعليق صوتي',
+          badges: [
+            { icon: Users,         label: '3,000+ طالب مدرّب'        },
+            { icon: Clock,         label: 'خبرة 20+ سنة'             },
+            { icon: Globe,         label: 'معتمدة لدى الأمم المتحدة'  },
+          ],
+          bio: 'مدربة معتمدة لدى الأمم المتحدة والمؤسسات الوطنية، بخبرة تزيد على عشرين عامًا في الإعلام والتعليق الصوتي والتدريب المهني. تحمل درجة البكالوريوس في اللغة الإنجليزية وعلم الأصوات (Phonetics)، ودرجة الماجستير في حقوق الإنسان والتنمية البشرية. خبرتها تشمل الدبلجة، الأخبار، الأفلام الوثائقية، الكتب الصوتية، والتعليق الصوتي الإعلاني.',
+        },
+        {
+          initials: 'ر.ع', photo: rana,
+          name:  'رنا العزام',
+          role:  'إعلامية ومدربة أداء ومختصة بالتحرير اللغوي',
+          badges: [
+            { icon: Tv,            label: 'قنوات فضائية وإذاعات'            },
+            { icon: Award,         label: 'جوائز إعلامية'                   },
+            { icon: GraduationCap, label: 'بكالوريوس لغة عربية — اليرموك'   },
+          ],
+          bio: 'الإعلامية رنا محمد العزام معدة ومقدمة برامج فضائية وإذاعية وبودكاست معتمدة. تنقلت بين كبرى المؤسسات الإعلامية مثل قناة رؤيا الفضائية وقناة صاد وإذاعة حياة FM. عملت لسنوات محررة ومدققة لغوية في مجمع اللغة العربية ومذيعة في إذاعة المجمع. قدّمت برامج تدريبية متخصصة لطلبة الإعلام في جامعة البتراء ولمؤسسات حكومية كبرى، وحازت لأفضل إنتاج إعلاني حول المرأة العربية.',
+        },
+        {
+          initials: 'ع.د', photo: omar,
+          name:  'عمر الدرابكة',
+          role:  'معلق صوتي محترف ومدرب أداء وإلقاء',
+          badges: [
+            { icon: Mic,           label: 'مئات الأعمال المسجلة'           },
+            { icon: Clock,         label: 'خبرة 12+ سنة'                   },
+            { icon: GraduationCap, label: 'دبلوم إعلام — فلوريدا'          },
+          ],
+          bio: 'معلق صوتي محترف ومدرب أداء وإلقاء. سجّل بصوته مئات الأفلام الوثائقية والإعلانات التجارية لكبرى الشركات والمؤسسات الإعلامية في الخليج والشرق الأوسط. حاصل على دبلوم الإعلام من الأكاديمية العالمية للفنون والإبداع بفلوريدا. ويمتلك خبرة واسعة في التدريب الصوتي والتمكين اللغوي تتجاوز 12 عامًا.',
+        },
+      ] as InstructorData[]} />
 
     </div>
   );
