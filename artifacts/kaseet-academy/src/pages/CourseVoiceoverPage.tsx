@@ -673,13 +673,76 @@ export default function CourseVoiceoverPage() {
               { Icon: Star,     title: 'عضوية قاعدة بيانات كاسيت + مشروع التخرج', desc: 'إدراج اسمك وصوتك في بنك الأصوات المعتمد للحصول على فرص ترشيح لمشاريع إنتاجية حقيقية.' },
             ] as { Icon: React.ElementType; title: string; desc: string }[]).map(({ Icon, title, desc }, i) => (
               <div key={i} style={{ background: '#fff', borderRadius: 18, border: '1px solid rgba(0,0,0,0.08)', padding: '26px 22px', display: 'flex', flexDirection: 'column', gap: 14, boxShadow: '0 3px 12px rgba(0,0,0,0.05)' }}>
-                <div style={{ width: 48, height: 48, borderRadius: 13, background: 'rgba(224,30,140,0.08)', border: '1px solid rgba(224,30,140,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Icon size={22} color={RASB} strokeWidth={2} />
+                <div style={{ width: 48, height: 48, borderRadius: 13, background: 'rgba(255,193,7,0.10)', border: '1px solid rgba(255,193,7,0.28)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Icon size={22} color={GOLD} strokeWidth={2} />
                 </div>
                 <h4 style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: DH, margin: 0, lineHeight: 1.3 }}>{title}</h4>
                 <p style={{ fontFamily: F, fontSize: 13.5, color: DM, lineHeight: 1.8, margin: 0 }}>{desc}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════
+          WJEZ PARTNER — certification partner banner
+      ══════════════════════════════════════════════════════ */}
+      <section style={{
+        background: 'linear-gradient(135deg, #1D2738 0%, #0D0B14 100%)',
+        paddingBlock: 'clamp(32px,4vw,52px)',
+        borderBottom: '1px solid rgba(255,193,7,0.12)',
+      }}>
+        <div style={INNER}>
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            flexWrap: 'wrap', gap: 24, direction: 'rtl',
+          }}>
+            {/* Partner info */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
+              <div style={{
+                width: 58, height: 58, borderRadius: 16, flexShrink: 0,
+                background: 'rgba(255,193,7,0.12)',
+                border: '1px solid rgba(255,193,7,0.28)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <GraduationCap size={26} color={GOLD} strokeWidth={2} />
+              </div>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 5 }}>
+                  <span style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(17px,2vw,22px)', color: '#fff' }}>
+                    تطبيق وجيز
+                  </span>
+                  <span style={{
+                    fontFamily: F, fontWeight: 700, fontSize: 11,
+                    background: 'rgba(255,193,7,0.15)', border: '1px solid rgba(255,193,7,0.30)',
+                    color: GOLD, borderRadius: 999, padding: '2px 10px', whiteSpace: 'nowrap',
+                  }}>
+                    شريك اعتماد رسمي
+                  </span>
+                </div>
+                <p style={{ fontFamily: F, fontSize: 13.5, color: MUTED, margin: 0, lineHeight: 1.6 }}>
+                  أكبر منصة صوتية بالشرق الأوسط — شريك اعتماد رسمي لشهادات البرنامج
+                </p>
+              </div>
+            </div>
+            {/* CTA */}
+            <a
+              href="https://wzz.sa"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                background: GOLD, color: NAVY,
+                fontFamily: F, fontWeight: 800, fontSize: 14,
+                padding: '11px 24px', borderRadius: 12,
+                textDecoration: 'none',
+                boxShadow: '0 6px 20px rgba(255,193,7,0.28)',
+                flexShrink: 0, whiteSpace: 'nowrap',
+              }}
+            >
+              <Globe size={15} strokeWidth={2} />
+              زيارة منصة وجيز
+            </a>
           </div>
         </div>
       </section>
@@ -696,7 +759,46 @@ export default function CourseVoiceoverPage() {
               <h2 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(20px,2.4vw,26px)', color: DH, margin: 0, lineHeight: 1.2 }}>الخطة الدراسية</h2>
             </div>
             <button
-              onClick={() => window.print()}
+              onClick={() => {
+                const inpersonRows = LECTURES_INPERSON.map((lec, i) => `
+                  <div class="lecture">
+                    <div class="num">${i + 1}</div>
+                    <div><div class="ltitle">${lec.title}</div><div class="ldesc">${lec.desc}</div></div>
+                  </div>`).join('');
+                const onlineRows = ONLINE_MODULES_V.map((mod, i) => `
+                  <div class="lecture">
+                    <div class="num online">${i + 1}</div>
+                    <div><div class="ltitle">${mod.title}</div><div class="ldesc">${mod.intro}</div></div>
+                  </div>`).join('');
+                const html = `<!DOCTYPE html><html dir="rtl" lang="ar"><head><meta charset="utf-8"/>
+                  <title>الخطة الدراسية — البرنامج الشامل للتعليق والأداء الصوتي</title>
+                  <style>
+                    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
+                    *{box-sizing:border-box;margin:0;padding:0}
+                    body{font-family:'Tajawal',Arial,sans-serif;direction:rtl;color:#1e293b;max-width:760px;margin:0 auto;padding:32px 28px}
+                    h1{font-size:22px;font-weight:900;border-bottom:3px solid #FFC107;padding-bottom:10px;margin-bottom:6px}
+                    .sub{font-size:12px;color:#64748b;margin-bottom:28px}
+                    h2{font-size:16px;font-weight:900;margin:26px 0 4px;display:flex;align-items:center;gap:10px}
+                    .badge{font-size:10px;padding:2px 10px;border-radius:99px;font-weight:700}
+                    .bi{background:#FFF3CD;color:#92670a}.bo{background:#E0F7FA;color:#0e7490}
+                    .note{font-size:11.5px;color:#64748b;margin:0 0 14px}
+                    .lecture{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid #f1f5f9;align-items:flex-start}
+                    .num{width:26px;height:26px;border-radius:50%;background:#FFC107;color:#0d1125;font-weight:900;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+                    .num.online{background:#67e8f9;color:#051520}
+                    .ltitle{font-weight:800;font-size:13.5px;margin-bottom:3px}
+                    .ldesc{font-size:12px;color:#475569;line-height:1.7}
+                    @media print{body{padding:16px}}
+                  </style></head><body>
+                  <h1>البرنامج الشامل للتعليق والأداء الصوتي</h1>
+                  <p class="sub">أكاديمية كاسيت ميديا — شهادة معتمدة من تطبيق وجيز</p>
+                  <h2><span class="badge bi">📍 حضوري</span>مسار حضوري — 8 محاضرات · 16 ساعة</h2>
+                  <p class="note">داخل استوديو كاسيت وقاعتنا</p>${inpersonRows}
+                  <h2><span class="badge bo">🌐 عن بُعد</span>مسار عن بُعد — 7 محاضرات · 12 ساعة</h2>
+                  <p class="note">أونلاين · من أي مكان في العالم</p>${onlineRows}
+                </body></html>`;
+                const win = window.open('', '_blank', 'width=860,height=900');
+                if (win) { win.document.write(html); win.document.close(); win.focus(); setTimeout(() => win.print(), 600); }
+              }}
               style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: '#fff', border: '1px solid rgba(0,0,0,0.12)', color: DM, fontFamily: F, fontWeight: 700, fontSize: 13.5, padding: '9px 18px', borderRadius: 10, cursor: 'pointer', boxShadow: '0 2px 6px rgba(0,0,0,0.06)' }}
             >
               <Printer size={15} color={DM} strokeWidth={2} />
@@ -1029,10 +1131,11 @@ type ScheduleEntry = {
   days: string; time: string; month: string; day: string; status: string;
 };
 
-function CompactBatchRow({ batch, accent }: { batch: ScheduleEntry; accent: string }) {
+function CompactBatchRow({ batch, accent, waHref }: { batch: ScheduleEntry; accent: string; waHref: string }) {
   const accentRgb  = accent === '#FFC107' ? '255,193,7' : '103,232,249';
   const hasDay     = batch.day && batch.day !== '--';
   const isActive   = batch.status === 'active';
+  const fillPct    = isActive ? 82 : 35;
 
   return (
     <div style={{
@@ -1080,7 +1183,7 @@ function CompactBatchRow({ batch, accent }: { batch: ScheduleEntry; accent: stri
             <Circle size={7} fill={isActive ? '#4ade80' : accent} color={isActive ? '#4ade80' : accent} style={{ flexShrink: 0, display: 'inline-block', verticalAlign: 'middle', marginInlineEnd: 4 }} />{isActive ? 'جارية' : 'قريباً'}
           </span>
         </div>
-        {/* Row 2: days + time */}
+        {/* Row 2: days + time + instructor */}
         <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '3px 10px', fontFamily: F, fontSize: 11.5, color: MUTED }}>
           {batch.days && batch.days !== '-' && (
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}>
@@ -1096,6 +1199,57 @@ function CompactBatchRow({ batch, accent }: { batch: ScheduleEntry; accent: stri
             <span style={{ color: 'rgba(252,251,251,0.38)', fontSize: 11 }}>· {batch.instructor}</span>
           )}
         </div>
+      </div>
+
+      {/* ── Seats bar + CTA block ── */}
+      <div style={{
+        width: 148, flexShrink: 0,
+        borderRight: '1px solid rgba(255,255,255,0.06)',
+        padding: '10px 12px',
+        display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 8,
+        background: 'rgba(0,0,0,0.18)',
+      }}>
+        {/* Progress bar */}
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+            <span style={{ fontFamily: F, fontSize: 9.5, color: 'rgba(252,251,251,0.42)' }}>المقاعد</span>
+            <span style={{ fontFamily: FP, fontWeight: 700, fontSize: 9.5, color: isActive ? '#4ade80' : accent }}>
+              {isActive ? 'جارية' : '10 متاحة'}
+            </span>
+          </div>
+          <div style={{ height: 4, borderRadius: 99, background: 'rgba(255,255,255,0.10)', overflow: 'hidden' }}>
+            <div style={{ height: '100%', borderRadius: 99, width: `${fillPct}%`, background: isActive ? '#4ade80' : accent }} />
+          </div>
+        </div>
+        {/* CTA */}
+        {isActive ? (
+          <span style={{
+            display: 'block', textAlign: 'center',
+            fontFamily: F, fontWeight: 700, fontSize: 10.5,
+            color: '#4ade80',
+            background: 'rgba(34,197,94,0.10)',
+            border: '1px solid rgba(34,197,94,0.22)',
+            borderRadius: 7, padding: '5px 8px',
+          }}>
+            تُفذّت المقاعد
+          </span>
+        ) : (
+          <a
+            href={waHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={e => e.stopPropagation()}
+            style={{
+              display: 'block', textAlign: 'center',
+              fontFamily: F, fontWeight: 700, fontSize: 10.5,
+              color: accent === '#FFC107' ? '#0d1125' : '#051520',
+              background: accent, borderRadius: 7, padding: '5px 8px',
+              textDecoration: 'none',
+            }}
+          >
+            سجل الآن
+          </a>
+        )}
       </div>
     </div>
   );
@@ -1235,7 +1389,7 @@ function TrackCard2({
                 </span>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {activeBatches.map(b => <CompactBatchRow key={b.id} batch={b} accent={accent} />)}
+                {activeBatches.map(b => <CompactBatchRow key={b.id} batch={b} accent={accent} waHref={`https://wa.me/${waPhone}?text=${encodeURIComponent(waMsg)}`} />)}
               </div>
             </div>
           )}
@@ -1250,7 +1404,7 @@ function TrackCard2({
                 </span>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {upcomingBatches.map(b => <CompactBatchRow key={b.id} batch={b} accent={accent} />)}
+                {upcomingBatches.map(b => <CompactBatchRow key={b.id} batch={b} accent={accent} waHref={`https://wa.me/${waPhone}?text=${encodeURIComponent(waMsg)}`} />)}
               </div>
             </div>
           )}
