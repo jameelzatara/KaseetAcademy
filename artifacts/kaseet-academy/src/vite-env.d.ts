@@ -1,5 +1,8 @@
 /// <reference types="vite/client" />
 
+// Extension-less asset: presenter cover uploaded without file extension
+declare module '*1785692222453' { const src: string; export default src; }
+
 // Image asset modules
 declare module '*.png' { const src: string; export default src; }
 declare module '*.jpg' { const src: string; export default src; }

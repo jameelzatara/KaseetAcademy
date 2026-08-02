@@ -4,13 +4,13 @@ import { Link } from 'wouter';
 
 import coverYasar       from '@assets/voiceover-group-photo_1785690181212.jpg';
 import instructorYasar  from '@assets/course_01_instructor_1785428932171.jpeg';
-import coverOmar        from '@assets/course-omar-bg_1785428945248.png';
-import instructorOmar   from '@assets/trainer-omar_1785428945248.jpg';
-import coverSohaib      from '@assets/cover-public-speaking-tedx_1785428970689.jpeg';
-import instructorSohaib from '@assets/instructor-sohaib_1785428970689.jpeg';
-import coverRana        from '@assets/cover-arabic-course_1785428982698.png';
-import instructorRana   from '@assets/trainer-rana-azzam_1785428982698.JPG';
-import coverPresenter   from '@assets/presenter-bg.png';
+import coverOmar        from '@assets/course-omar-bg_1785692015818.png';
+import instructorOmar   from '@assets/trainer-omar_1785692015818.jpg';
+import coverSohaib      from '@assets/cover-public-speaking-tedx_1785692401460.jpeg';
+import instructorSohaib from '@assets/instructor-sohaib_1785692401461.jpeg';
+import coverRana        from '@assets/cover_دورة_ﺗﻤﻜﻴﻦ_اﻟﻠﻐﺔ_اﻟﻌﺮﺑﻴﺔ_وﻓﻨﻮن_اﻟﺘﺤﺮﻳﺮ_اﻟﻠﻐﻮي_1785692339633.png';
+import instructorRana   from '@assets/trainer-rana-azzam_1785692178863.JPG';
+import coverPresenter   from '@assets/cover_كورس_اﻟﺪورة_اﻟﻤﻜﺜﻔﺔ_اﻟﻤﺬﻳﻊ_اﻟﻤﺤﺘﺮف_وﻣﻬﺎرات_اﻹﻋﻼم_اﻟﺮﻗﻤﻲ_1785692222453';
 
 /* ── Tokens ─────────────────────────────────────────────── */
 const NAVY    = '#2C374B';
@@ -57,68 +57,73 @@ interface GCard {
   duration:   string;
   searchData: string;
   outcomes:   string[];
+  route?:     string;     // when set, CTA links to the detail page
 }
 
 const GRID: GCard[] = [
   {
-    title:    'التعليق الصوتي (أونلاين - بث مباشر)',
-    badge:    'مباشر تفاعلي (Online LIVE)',
+    title:    'التعليق والأداء الصوتي',
+    badge:    'عن بُعد — تفاعلية مباشرة',
     cover:    coverOmar,
     imgPos:   'center',
     instructor: { name: 'أ. عمر درابكة', role: 'معلّق صوتي ومدرب أداء', photo: instructorOmar },
     price:    '$150',
-    duration: '12 ساعة تدريبية (زوم)',
-    searchData: 'التعليق الصوتي اونلاين بث مباشر عمر درابكة voice over online',
+    duration: '12 ساعة / 7 وحدات',
+    searchData: 'التعليق الصوتي اونلاين عمر درابكة voice over online',
     outcomes: [
-      'شهادة معتمدة من تطبيق وجيز.',
-      'ملف صوتي احترافي (Voice Demo) يمثّل هويتك.',
-      'فرصة للانضمام لقاعدة بيانات كاسيت للمواهب.',
+      'شهادة معتمدة من تطبيق وجيز وأكاديمية كاسيت.',
+      'ملف صوتي احترافي (Voice Demo) جاهز لسوق العمل.',
+      'فرصة الانضمام لقاعدة بيانات كاسيت للمواهب الصوتية.',
     ],
+    route: '/courses/voiceover-live',
   },
   {
-    title:    'الدورة المكثفة: المذيع المحترف والإعلامي الشامل (اللايف)',
-    badge:    'حضوري ومباشر تفاعلي',
+    title:    'الدورة المكثفة: المذيع المحترف ومهارات الإعلام الرقمي',
+    badge:    'حضوري في عمّان',
     cover:    coverPresenter,
     imgPos:   'center 32%',
     instructor: { name: 'أ. رنا محمد العزام', role: 'إعلامية ومدربة أداء ومختصة تحرير لغوي', photo: instructorRana },
-    price:    '$200',
-    duration: '8 أيام تدريبية مكثفة',
-    searchData: 'المذيع المحترف الاعلامي الشامل رنا العزام تحرير صحفي تقرير تلفزيوني',
+    price:    '250 د.أ',
+    duration: '16 ساعة / 8 جلسات',
+    searchData: 'المذيع المحترف الاعلامي رنا العزام تحرير صحفي اعلام رقمي',
     outcomes: [
-      'إنتاج تقرير صحفي متكامل ومحرَّر بمعايير غرف الأخبار العالمية.',
-      'تسجيل تقديمي أمام الكاميرا مقيّم ومراجَع من المدربة.',
-      'شهادة إتمام رسمية معتمدة من كاسيت ميديا وتطبيق وجيز.',
+      'إنتاج تقرير صحفي متكامل بمعايير غرف الأخبار العالمية.',
+      'تقديم احترافي أمام الكاميرا مقيّم من المدربة.',
+      'شهادة رسمية معتمدة من كاسيت ميديا وتطبيق وجيز.',
     ],
+    route: '/courses/presenter',
   },
   {
     title:    'تمكين اللغة العربية وفنون التحرير اللغوي',
-    badge:    'مباشر تفاعلي (Online LIVE)',
+    badge:    'عن بُعد — تفاعلية مباشرة',
     cover:    coverRana,
     imgPos:   'center 22%',
-    instructor: { name: 'أ. رنا محمد العزام', role: 'إعلامية ومدربة أداء ومختصة تحرير لغوي', photo: instructorRana },
+    instructor: { name: 'أ. رنا محمد العزام', role: 'إعلامية ومختصة تحرير لغوي', photo: instructorRana },
     price:    '$150',
-    duration: '12 ساعة تدريبية',
+    duration: '16 ساعة / 8 جلسات',
     searchData: 'تمكين اللغة العربية التحرير اللغوي نحو صرف تدقيق رنا العزام',
     outcomes: [
-      'حقيبة مرجعية وأدلة رقمية تلخّص القواعد النحوية والإملائية للتدقيق الذاتي.',
-      'تطبيقات إعرابية حية ومراجعة نصوص أدبية وإعلامية مع تصويب فوري.',
-      'شهادة إتمام رسمية معتمدة من تطبيق وجيز وأكاديمية كاسيت.',
+      'كتابة عربية سليمة خالية من أخطاء النحو والإملاء.',
+      'حقيبة مرجعية رقمية للقواعد النحوية والإملائية.',
+      'شهادة رسمية معتمدة من تطبيق وجيز وأكاديمية كاسيت.',
     ],
+    route: '/courses/arabic-language',
   },
   {
-    title:    'فن الخطابة والإلقاء الجماهيري المؤثر (اللايف)',
-    badge:    'مباشر تفاعلي (Online LIVE)',
+    title:    'فن الخطابة والإلقاء الجماهيري المؤثر',
+    badge:    'حضوري وعن بُعد',
     cover:    coverSohaib,
     imgPos:   'center',
     instructor: { name: 'د. صهيب الخوالدة', role: 'خبير خطابة وتواصل قيادي', photo: instructorSohaib },
-    price:    '$150',
-    duration: '12 ساعة (8 لقاءات)',
+    price:    'من 180 د.أ',
+    duration: '16 ساعة / 8 جلسات',
     searchData: 'فن الخطابة الالقاء الجماهيري صهيب الخوالدة public speaking قيادة',
     outcomes: [
-      'إلقاء خطاب تخرّج متكامل مقيّم مباشرةً من المدرب.',
-      'وصول كامل لتسجيلات اللقاءات + تقرير فردي لهويتك الخطابية.',
+      'خطاب TED x كامل تُقدّمه أمام لجنة التقييم.',
+      'تقرير فردي لهويتك الخطابية وخريطة تطوير.',
       'شهادة رسمية معتمدة من تطبيق وجيز وأكاديمية كاسيت.',
     ],
+    route: '/courses/public-speaking',
   },
 ];
 
@@ -254,22 +259,36 @@ function GridCard({ card, hidden }: { card: GCard; hidden: boolean }) {
             </li>
           ))}
         </ul>
-        <a
-          href={waLink(card.title)}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            display: 'block', width: '100%', textAlign: 'center',
-            background: GOLD, color: NAVY,
-            border: 'none', borderRadius: 10,
-            padding: '12px 0',
-            fontFamily: F, fontWeight: 800, fontSize: 13.5,
-            cursor: 'pointer', textDecoration: 'none',
-            boxShadow: '0 8px 20px rgba(255,193,7,0.30)',
-          }}
-        >
-          سجل الآن في الدورة <ArrowLeft size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineStart: 4 }} />
-        </a>
+        {card.route ? (
+          <Link
+            href={card.route}
+            style={{
+              display: 'block', width: '100%', textAlign: 'center',
+              background: GOLD, color: NAVY,
+              borderRadius: 10, padding: '12px 0',
+              fontFamily: F, fontWeight: 800, fontSize: 13.5,
+              textDecoration: 'none',
+              boxShadow: '0 8px 20px rgba(255,193,7,0.30)',
+            }}
+          >
+            عرض التفاصيل والتسجيل <ArrowLeft size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineStart: 4 }} />
+          </Link>
+        ) : (
+          <a
+            href={waLink(card.title)}
+            target="_blank" rel="noopener noreferrer"
+            style={{
+              display: 'block', width: '100%', textAlign: 'center',
+              background: GOLD, color: NAVY,
+              border: 'none', borderRadius: 10, padding: '12px 0',
+              fontFamily: F, fontWeight: 800, fontSize: 13.5,
+              cursor: 'pointer', textDecoration: 'none',
+              boxShadow: '0 8px 20px rgba(255,193,7,0.30)',
+            }}
+          >
+            سجل الآن في الدورة <ArrowLeft size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineStart: 4 }} />
+          </a>
+        )}
       </div>
     </article>
   );

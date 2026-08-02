@@ -125,3 +125,23 @@
 .num, .price, .en {
   font-family: var(--font-num);
 }
+
+/* ── Course detail page — hero grid (text + pricing card) ── */
+.course-hero-grid {
+  grid-template-columns: 1fr minmax(0, 420px) !important;
+}
+@media (max-width: 860px) {
+  .course-hero-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── Course detail page — dual-advisor grid ── */
+.advisor-grid {
+  grid-template-columns: 1fr 1fr !important;
+}
+@media (max-width: 640px) {
+  .advisor-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

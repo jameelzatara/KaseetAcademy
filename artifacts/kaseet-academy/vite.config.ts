@@ -29,6 +29,8 @@ if (!basePath) {
 
 export default defineConfig({
   base: basePath,
+  // Treat extension-less uploaded assets (e.g. PNG files without .png) as static assets
+  assetsInclude: ['**/*1785692222453'],
   plugins: [
     react(),
     tailwindcss(),

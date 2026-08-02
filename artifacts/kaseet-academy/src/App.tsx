@@ -1,14 +1,22 @@
 import { Route, Switch, Router as WouterRouter } from 'wouter';
 import Home from '@/pages/Home';
-import CourseVoiceoverPage from '@/pages/CourseVoiceoverPage';
-import CourseBasicsPage from '@/pages/CourseBasicsPage';
+import CourseVoiceoverPage      from '@/pages/CourseVoiceoverPage';
+import CourseBasicsPage         from '@/pages/CourseBasicsPage';
+import CourseVoiceoverLivePage  from '@/pages/CourseVoiceoverLivePage';
+import CoursePresenterPage      from '@/pages/CoursePresenterPage';
+import CourseArabicLanguagePage from '@/pages/CourseArabicLanguagePage';
+import CoursePublicSpeakingPage from '@/pages/CoursePublicSpeakingPage';
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
-      <Route path="/courses/voiceover" component={CourseVoiceoverPage} />
+      <Route path="/courses/voiceover"        component={CourseVoiceoverPage} />
       <Route path="/courses/voiceover-basics" component={CourseBasicsPage} />
+      <Route path="/courses/voiceover-live"   component={CourseVoiceoverLivePage} />
+      <Route path="/courses/presenter"        component={CoursePresenterPage} />
+      <Route path="/courses/arabic-language"  component={CourseArabicLanguagePage} />
+      <Route path="/courses/public-speaking"  component={CoursePublicSpeakingPage} />
       <Route component={() => <div className="text-center p-20">صفحة غير موجودة 404</div>} />
     </Switch>
   );
