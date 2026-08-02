@@ -1,0 +1,132 @@
+FINAL EXECUTION SPECIFICATION & DATA UPDATE (`CourseVoiceoverPage.tsx`):
+
+Please execute the complete update for BOTH In-Person (حضوري) and Remote Interactive (عن بُعد - تفاعلية مباشرة) tracks, ensuring all image cropping, terminology, and badge layouts are fully fixed.
+
+==================================================
+1. HERO & STICKY CARD IMAGE FIX (CRITICAL)
+==================================================
+- Asset: `watermarked_img_3469464024435272729.png`
+- Locations: Top Hero section and Sticky Side-Card.
+- UI/CSS Fix:
+  * Apply `object-fit: cover` with `object-position: top center` (or `center top`).
+  * Set dynamic aspect ratios (`aspect-[16/9]` on hero, `aspect-[4/3]` or `aspect-square` on sticky card) with proper `max-h` constraints.
+  * Guarantee that ALL FOUR instructors' faces and the main course title embedded in the image remain 100% visible without horizontal or vertical clipping on all screen sizes (Mobile, Tablet, Desktop).
+
+==================================================
+2. STRICT TERMINOLOGY & TITLE RULES
+==================================================
+- Site-Wide Trainer Name: "رنا العزام" (Corrected).
+- Course Main Title: Strictly "أساسيات التعليق والأداء الصوتي".
+- STRICTLY BANNED WORDS: "أونلاين" (Online), "مسجلة" (Pre-recorded), "مجموعة" (Group).
+- MANDATORY TERMINOLOGY:
+  * Use "عن بُعد (تفاعلية مباشرة)" for all remote interactive live tracks.
+  * Use "دفعة" (Batch) instead of Group across all components.
+
+==================================================
+3. IN-PERSON BATCHES DATA ARRAY (حضوري - #101+)
+==================================================
+Timing Rules: Morning = "12:00 م – 02:00 م" | Evening = "06:00 م – 08:00 م"
+
+[
+  {
+    batchNumber: "#101",
+    type: "In-Person",
+    title: "دفعة #101 - حضوري (مسائي)",
+    instructor: "يسار عبده",
+    days: "الإثنين / الأربعاء",
+    time: "06:00 م – 08:00 م",
+    registeredCount: 5,
+    availableSeats: 5,
+    badgeDate: "26 أغسطس",
+    status: "متاحة"
+  },
+  {
+    batchNumber: "#102",
+    type: "In-Person",
+    title: "دفعة #102 - حضوري (مسائي)",
+    instructor: "يسار عبده",
+    days: "الأحد / الثلاثاء / الخميس",
+    time: "06:00 م – 08:00 م",
+    registeredCount: 6,
+    availableSeats: 4,
+    badgeDate: "09 أغسطس",
+    status: "متاحة"
+  },
+  {
+    batchNumber: "#103",
+    type: "In-Person",
+    title: "دفعة #103 - حضوري (صباحي)",
+    instructor: "رنا العزام",
+    days: "الإثنين / الأربعاء",
+    time: "12:00 م – 02:00 م",
+    registeredCount: 3,
+    availableSeats: 7,
+    badgeDate: "10 أغسطس",
+    status: "متاحة"
+  },
+  {
+    batchNumber: "#104",
+    type: "In-Person",
+    title: "دفعة #104 - حضوري (صباحي)",
+    instructor: "رنا العزام",
+    days: "سيتم التحديد",
+    time: "12:00 م – 02:00 م",
+    availableSeats: 10,
+    badgeDate: "أغسطس",
+    status: "قريباً"
+  },
+  {
+    batchNumber: "#105",
+    type: "In-Person",
+    title: "دفعة #105 - حضوري (مسائي)",
+    instructor: "رنا العزام",
+    days: "سيتم التحديد",
+    time: "06:00 م – 08:00 م",
+    availableSeats: 10,
+    badgeDate: "أغسطس",
+    status: "قريباً"
+  }
+]
+
+==================================================
+4. REMOTE INTERACTIVE BATCHES DATA ARRAY (عن بُعد تفاعلية مباشرة - #201+)
+==================================================
+Timing Rules: Set time strictly to "التوقيت بالتنسيق مع المتدربين".
+
+[
+  {
+    batchNumber: "#201",
+    type: "Remote",
+    title: "دفعة #201 - عن بُعد (تفاعلية مباشرة - الجمعة)",
+    instructor: "رنا العزام",
+    days: "الجمعة",
+    time: "التوقيت بالتنسيق مع المتدربين",
+    startDate: "07 أغسطس 2026",
+    badgeDate: "07 أغسطس",
+    availableSeats: 10,
+    status: "قريباً"
+  },
+  {
+    batchNumber: "#202",
+    type: "Remote",
+    title: "دفعة #202 - عن بُعد (تفاعلية مباشرة - ثلاثاء / خميس)",
+    instructor: "عمر درابكة",
+    days: "الثلاثاء / الخميس",
+    time: "التوقيت بالتنسيق مع المتدربين",
+    startDate: "18 أغسطس 2026",
+    badgeDate: "18 أغسطس",
+    availableSeats: 10,
+    status: "قريباً"
+  },
+  { batchNumber: "#203", type: "Remote", title: "دفعة #203 - عن بُعد (تفاعلية مباشرة)", time: "التوقيت بالتنسيق مع المتدربين", badgeDate: "أغسطس", availableSeats: 10, status: "قريباً" },
+  { batchNumber: "#204", type: "Remote", title: "دفعة #204 - عن بُعد (تفاعلية مباشرة)", time: "التوقيت بالتنسيق مع المتدربين", badgeDate: "أغسطس", availableSeats: 10, status: "قريباً" },
+  { batchNumber: "#205", type: "Remote", title: "دفعة #205 - عن بُعد (تفاعلية مباشرة)", time: "التوقيت بالتنسيق مع المتدربين", badgeDate: "أغسطس", availableSeats: 10, status: "قريباً" },
+  { batchNumber: "#206", type: "Remote", title: "دفعة #206 - عن بُعد (تفاعلية مباشرة)", time: "التوقيت بالتنسيق مع المتدربين", badgeDate: "أغسطس", availableSeats: 10, status: "قريباً" },
+  { batchNumber: "#207", type: "Remote", title: "دفعة #207 - عن بُعد (تفاعلية مباشرة)", time: "التوقيت بالتنسيق مع المتدربين", badgeDate: "أغسطس", availableSeats: 10, status: "قريباً" }
+]
+
+==================================================
+5. BADGES & EXPANSION LAYOUT
+==================================================
+- Badge Display Box: Right-side box must always display the Batch Code (`#101`, `#201`...) on the top line, with the Date Text (`09 أغسطس`) on the bottom line. Never render an empty box.
+- Expanded Accordion Container: Set container width to `w-full` (`100%`) when expanded. Ensure single-card accordion logic (expanding one track collapses the other).
