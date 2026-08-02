@@ -1,0 +1,56 @@
+COURSE PAGES REPLICATION & HOMEPAGE UPDATES (Standardizing all courses):
+
+Please use the finalized layout, UI components, and strict terminology from `CourseVoiceoverPage.tsx` as the BASE TEMPLATE to create/update the other course pages. 
+
+==================================================
+0. GLOBAL RULES FOR ALL NEW COURSE PAGES
+==================================================
+- Base Template: Replicate the exact UI structure of `CourseVoiceoverPage.tsx` (Hero image styling with `object-fit: cover` and `object-top`, Registration Accordions with full-width expansion, Curriculum Print logic, Instructors section, etc.).
+- Terminology: STRICTLY use "عن بُعد (تفاعلية مباشرة)" instead of "أونلاين". Use "دفعة" instead of "مجموعة".
+- Batch Numbering: Use `#101, #102...` for In-Person batches, and `#201, #202...` for Remote batches.
+- Single-Track Courses: If a course is ONLY In-Person or ONLY Remote, hide/remove the other track's accordion card completely. Do not show empty tracks.
+
+==================================================
+1. HOMEPAGE UPDATES (Course Titles)
+==================================================
+- Update the course titles on the Homepage course cards to match the exact names below:
+  1. "التعليق والأداء الصوتي" (Instructor: عمر درابكة)
+  2. "الدورة المكثفة المذيع المحترف ومهارات الإعلام الرقمي" (Instructor: رنا العزام)
+  3. "تمكين اللغة العربية وفنون التحرير اللغوي"
+  4. "فن الخطابة والإلقاء الجماهيري المؤثر"
+
+==================================================
+2. COURSE PAGE 1: التعليق والأداء الصوتي
+==================================================
+- Instructor: عمر درابكة (Omar Darabkeh) ONLY. Remove other instructors from this page.
+- Track/Mode: ONLY Remote / عن بُعد (تفاعلية مباشرة). Remove the In-Person (حضوري) registration card entirely.
+- Duration: 12 Hours (12 ساعة تدريبية).
+- Curriculum: Use the remote curriculum data from the Voiceover template. (User will attach specific file if adjustments are needed).
+- Batch Data: Create mock batches for Remote only (#201, #202) following the standard structure.
+
+==================================================
+3. COURSE PAGE 2: الدورة المكثفة المذيع المحترف ومهارات الإعلام الرقمي
+==================================================
+- Instructor: رنا العزام (Rana Al-Azzam) ONLY.
+- Track/Mode: ONLY In-Person / حضوري. Remove the Remote (عن بُعد) registration card entirely.
+- Duration: 16 Hours (16 ساعة تدريبية).
+- Curriculum: (User will provide specific curriculum file). 
+- Batch Data: Create mock batches for In-Person only (#101, #102) with strict times (e.g., 06:00 م – 08:00 م).
+
+==================================================
+4. COURSE PAGE 3: تمكين اللغة العربية وفنون التحرير اللغوي
+==================================================
+- Instructor: رنا العزام (Rana Al-Azzam) ONLY.
+- Track/Mode: ONLY Remote / عن بُعد (تفاعلية مباشرة). Remove the In-Person registration card entirely.
+- Duration: (Adjust based on user provided file, default to 12 Hours if not specified).
+- Batch Data: Create mock batches for Remote only (#201, #202) with "التوقيت بالتنسيق مع المتدربين".
+
+==================================================
+5. COURSE PAGE 4: فن الخطابة والإلقاء الجماهيري المؤثر
+==================================================
+- Instructor: د. صهيب الخوالدة (Dr. Suhaib Al-Khawaldeh) ONLY.
+- Track/Mode: BOTH In-Person (حضوري) AND Remote (عن بُعد - تفاعلية مباشرة).
+- Duration: Show both depending on the track.
+- Batch Data: 
+  * Create In-Person batches (#101, #102) with explicit times (e.g., 06:00 م – 08:00 م).
+  * Create Remote batches (#201, #202) with "التوقيت بالتنسيق مع المتدربين".
