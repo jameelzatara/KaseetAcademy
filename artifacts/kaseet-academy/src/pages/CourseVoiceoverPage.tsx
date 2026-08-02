@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'wouter';
-import { ChevronDown, Calendar, Clock, MapPin, Wifi, Users, GraduationCap } from 'lucide-react';
+import { ChevronDown, Calendar, Clock, MapPin, Wifi, Users, GraduationCap, Award, Mic, Volume2, Star, Printer, BookOpen, Zap, Briefcase, Sliders } from 'lucide-react';
 
 /* ── Asset imports ─────────────────────────────────────────── */
 import ayaImg      from '@assets/اية_القماز_1785619557679.jpeg';
@@ -24,6 +24,13 @@ const MUTED   = 'rgba(252,251,251,0.62)';
 const F       = "'Tajawal', sans-serif";
 const FP      = "'Poppins', sans-serif";
 const WA_BASE = 'https://wa.me/';
+
+/* ── Light section tokens ──────────────────────────────────── */
+const LBG  = '#F5F4F0';
+const DH   = '#1e293b';
+const DM   = '#475569';
+const DF   = '#64748b';
+const RASB = '#e01e8c';
 
 function waLink(phone: string, msg: string) {
   return `${WA_BASE}${phone}?text=${encodeURIComponent(msg)}`;
@@ -58,20 +65,40 @@ function Tag({ children }: { children: React.ReactNode }) {
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{
-      display: 'flex', alignItems: 'center', gap: 10,
-      marginBottom: 28, direction: 'rtl',
-    }}>
-      <div style={{
-        width: 4, height: 28, background: GOLD, borderRadius: 4, flexShrink: 0,
-      }} />
-      <h2 style={{
-        fontFamily: F, fontWeight: 900,
-        fontSize: 'clamp(20px,2.4vw,26px)',
-        color: OFF, margin: 0, lineHeight: 1.2,
-      }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 28, direction: 'rtl' }}>
+      <div style={{ width: 4, height: 28, background: GOLD, borderRadius: 4, flexShrink: 0 }} />
+      <h2 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(20px,2.4vw,26px)', color: OFF, margin: 0, lineHeight: 1.2 }}>
         {children}
       </h2>
+    </div>
+  );
+}
+
+function LightSectionTitle({ children }: { children: React.ReactNode }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 28, direction: 'rtl' }}>
+      <div style={{ width: 4, height: 28, background: GOLD, borderRadius: 4, flexShrink: 0 }} />
+      <h2 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(20px,2.4vw,26px)', color: DH, margin: 0, lineHeight: 1.2 }}>
+        {children}
+      </h2>
+    </div>
+  );
+}
+
+function AdvisorMini({ name, role, photo, href }: { name: string; role: string; photo: string; href: string }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+      <div style={{ position: 'relative', flexShrink: 0 }}>
+        <img src={photo} alt={name} style={{ width: 52, height: 52, borderRadius: '50%', objectFit: 'cover', objectPosition: 'center top', border: '2px solid rgba(255,193,7,0.35)' }} />
+        <span style={{ position: 'absolute', bottom: 2, right: 2, width: 10, height: 10, borderRadius: '50%', background: '#22c55e', border: '2px solid #181325' }} />
+      </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontFamily: F, fontWeight: 800, fontSize: 14, color: OFF, marginBottom: 2 }}>{name}</div>
+        <div style={{ fontFamily: F, fontSize: 11.5, color: MUTED, marginBottom: 8 }}>{role}</div>
+        <a href={href} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: GOLD, color: NAVY, fontFamily: F, fontWeight: 800, fontSize: 12, padding: '6px 14px', borderRadius: 8, textDecoration: 'none' }}>
+          تواصل الآن 💬
+        </a>
+      </div>
     </div>
   );
 }
@@ -104,6 +131,17 @@ const scheduleData = {
     { id: 'g39',   group: 'مجموعة 39 - أونلاين',    course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'رنا عزام',   days: '-',        time: '', month: 'قريباً', day: '--', status: 'upcoming' },
   ],
 };
+
+/* ── Online curriculum modules (for الأونلاين tab) ────────── */
+const ONLINE_MODULES_V = [
+  { title: 'الاستوديو المنزلي والمعدات',      intro: 'كيفية تجهيز بيئة تسجيل احترافية في المنزل دون ميزانية ضخمة.',                                 points: ['اختيار الميكروفون المناسب لصوتك', 'المعالجة الصوتية بالفوم والمواد المتاحة', 'برامج التسجيل والمونتاج للمبتدئين'] },
+  { title: 'أساسيات الصوت والتنفس',           intro: 'تأسيس مهاري شامل يبني جسراً بين الصوت الطبيعي والصوت الاحترافي.',                              points: ['مناطق الرنين الصوتي ومعادن الصوت', 'التنفس الحجابي وإدارة النَفَس', 'تمارين تطوير الحضور الصوتي'] },
+  { title: 'النطق ومخارج الحروف',             intro: 'تشريح عملي وتدريب مكثّف على النطق السليم لكل حرف عربي.',                                       points: ['مخارج الحروف العربية الـ 28 بالتطبيق', 'التخلص من "الفم الكسول" والنطق الرخو', 'تمارين اللسان والشفتين والحلق'] },
+  { title: 'اللغة العربية والتحرير اللغوي',   intro: 'قواعد لغوية تطبيقية مصممة خصيصاً لاحتياجات المعلق الصوتي.',                                    points: ['الهمزات والتنوين والمدود', 'فن الوقف والابتداء في النص', 'منهجية التحرير اللغوي قبل التسجيل'] },
+  { title: 'التلوين الانفعالي والمشاعر',      intro: 'أداء صادق يستحضر العاطفة دون تمثيل مصطنع.',                                                   points: ['شجرة المشاعر وتصنيفاتها الصوتية', 'ترميز المشاعر داخل النص', 'التحكم بكثافة العاطفة في مختلف الأنواع'] },
+  { title: 'تطبيقات التعليق الصوتي',         intro: 'ورشة تطبيقية على مختلف أنواع التعليق الصوتي المطلوبة في السوق.',                                points: ['الإعلانات التجارية والرد الآلي (IVR)', 'الكتب الصوتية والوثائقيات والأخبار', 'الدوبلاج وبرامج الأطفال'] },
+  { title: 'مشروع التخرج والانطلاق في السوق', intro: 'خطوتك الفعلية نحو سوق العمل الصوتي.',                                                          points: ['بناء الهوية الصوتية الشخصية', 'إنتاج Voice Demo CV احترافي', 'خطة الـ 100 يوم الأولى في السوق'] },
+];
 
 /* ── Curriculum data ───────────────────────────────────────── */
 const LECTURES_INPERSON = [
@@ -503,103 +541,131 @@ export default function CourseVoiceoverPage() {
       </section>
 
       {/* ══════════════════════════════════════════════════════
-          REGISTRATION OPTIONS
+          REGISTRATION OPTIONS — dark #0D0B14 + neon blobs
       ══════════════════════════════════════════════════════ */}
-      <section style={{
-        paddingBlock: 'clamp(48px,5vw,80px)',
-        borderBottom: '1px solid rgba(255,255,255,0.07)',
-      }}>
-        <div style={INNER}>
+      <section style={{ background: '#0D0B14', paddingBlock: 'clamp(48px,5vw,80px)', position: 'relative', overflow: 'hidden' }}>
+        {/* Neon blobs */}
+        <div aria-hidden className="ka-blob-1" style={{ position: 'absolute', width: 520, height: 520, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,193,7,0.13) 0%, transparent 70%)', top: '-120px', right: '-80px', pointerEvents: 'none' }} />
+        <div aria-hidden className="ka-blob-2" style={{ position: 'absolute', width: 420, height: 420, borderRadius: '50%', background: 'radial-gradient(circle, rgba(224,30,140,0.10) 0%, transparent 70%)', bottom: '-60px', left: '10%', pointerEvents: 'none' }} />
+        <div aria-hidden className="ka-blob-3" style={{ position: 'absolute', width: 340, height: 340, borderRadius: '50%', background: 'radial-gradient(circle, rgba(103,232,249,0.09) 0%, transparent 70%)', top: '30%', left: '-60px', pointerEvents: 'none' }} />
+
+        <div style={{ ...INNER, position: 'relative', zIndex: 1 }}>
           <SectionTitle>المواعيد المتاحة للتسجيل</SectionTitle>
-          <p style={{
-            fontFamily: F, fontSize: 15, color: MUTED,
-            lineHeight: 1.8, margin: '0 0 32px',
-          }}>
+          <p style={{ fontFamily: F, fontSize: 15, color: MUTED, lineHeight: 1.8, margin: '0 0 32px' }}>
             اختر طريقة التعلّم التي تناسب أسلوبك — كل مسار صُمِّم ليمنحك تجربة تدريبية استثنائية
           </p>
 
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: 20,
-          }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20 }}>
             <TrackCard2
               variant="inperson"
               activeBatches={scheduleData.inPerson.filter(b => b.status === 'active')}
               upcomingBatches={scheduleData.inPerson.filter(b => b.status === 'upcoming')}
               expanded={openAccordion === 'inperson'}
-              onToggle={() => {
-                setOpenAccordion(openAccordion === 'inperson' ? null : 'inperson');
-                setTrack('inperson');
-                setCurrTab('inperson');
-              }}
+              onToggle={() => { setOpenAccordion(openAccordion === 'inperson' ? null : 'inperson'); setTrack('inperson'); setCurrTab('inperson'); }}
             />
             <TrackCard2
               variant="online"
               activeBatches={scheduleData.online.filter(b => b.status === 'active')}
               upcomingBatches={scheduleData.online.filter(b => b.status === 'upcoming')}
               expanded={openAccordion === 'online'}
-              onToggle={() => {
-                setOpenAccordion(openAccordion === 'online' ? null : 'online');
-                setTrack('online');
-                setCurrTab('online');
-              }}
+              onToggle={() => { setOpenAccordion(openAccordion === 'online' ? null : 'online'); setTrack('online'); setCurrTab('online'); }}
             />
           </div>
 
-          {/* ── Partner bar ── */}
           <PartnerBar open={partnerBarOpen} onToggle={() => setPartnerBarOpen(p => !p)} />
-
         </div>
       </section>
 
       {/* ══════════════════════════════════════════════════════
-          ABOUT + GOALS
+          ABOUT + GOALS — light bg, 2-col + sticky advisor
       ══════════════════════════════════════════════════════ */}
-      <section style={{
-        paddingBlock: 'clamp(48px,5vw,80px)',
-        borderBottom: '1px solid rgba(255,255,255,0.07)',
-      }}>
-        <div style={INNER}>
-          <SectionTitle>نبذة عن البرنامج وأهدافه</SectionTitle>
+      <section style={{ background: LBG, paddingBlock: 'clamp(48px,5vw,80px)', borderBottom: '1px solid rgba(0,0,0,0.07)' }}>
+        <div style={{ ...INNER, display: 'flex', gap: 'clamp(24px,3vw,40px)', alignItems: 'flex-start' }}>
 
-          <p style={{
-            fontFamily: F, fontSize: 'clamp(14px,1.5vw,16.5px)', color: 'rgba(252,251,251,0.80)',
-            lineHeight: 2, marginBottom: 40, maxWidth: 760,
-          }}>
-            يسعى هذا البرنامج إلى إعداد وتأهيل المتدربين لاحتراف مجال التعليق الصوتي وتجهيزهم بالمهارات اللازمة
-            للاندماج في سوق العمل. ترتكز أهدافنا على تطوير مخارج الحروف والنطق السليم، والتمكن من التحكم في
-            الطبقات الصوتية وضبط الإيقاع، بالإضافة إلى كسر رهبة الميكروفون تماماً لتعزيز الثقة بالنفس وتنمية
-            مهارات الإلقاء والتواصل المهني.
-          </p>
+          {/* ── Main content ── */}
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <LightSectionTitle>نبذة عن البرنامج وأهدافه</LightSectionTitle>
+            <p style={{ fontFamily: F, fontSize: 'clamp(14px,1.5vw,16.5px)', color: DM, lineHeight: 2, marginBottom: 40, maxWidth: 720 }}>
+              يسعى هذا البرنامج إلى إعداد وتأهيل المتدربين لاحتراف مجال التعليق الصوتي وتجهيزهم بالمهارات اللازمة
+              للاندماج في سوق العمل. ترتكز أهدافنا على تطوير مخارج الحروف والنطق السليم، والتمكن من التحكم في
+              الطبقات الصوتية وضبط الإيقاع، بالإضافة إلى كسر رهبة الميكروفون تماماً لتعزيز الثقة بالنفس وتنمية
+              مهارات الإلقاء والتواصل المهني.
+            </p>
 
-          <SectionTitle>الأهداف المتحققة</SectionTitle>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: 16,
-          }}>
-            {[
-              { icon: '🌟', text: 'إتقان كافة ألوان التعليق الصوتي: الإعلانات التجارية، الرد الآلي (IVR)، الكتب الصوتية، الوثائقيات، الأخبار، والدوبلاج.' },
-              { icon: '🔤', text: 'تحسين مخارج الحروف والنطق السليم: التخلص من عيوب النطق، ضبط الأداء اللغوي، وإتقان مخارج الحروف بشكل محترف.' },
-              { icon: '🎚️', text: 'التحكم بالطبقات الصوتية والإيقاع والنفس: اكتساب مرونة صوتية كاملة للتحول بين النبرات والتحكم بالأنفاس أثناء التسجيل.' },
-              { icon: '🎤', text: 'كسر رهبة الميكروفون والاستوديو نهائياً: التأقلم التام مع البيئة الصوتية الاحترافية والعمل بثقة كاملة أمام اللاقط.' },
-              { icon: '💪', text: 'تعزيز الثقة بالنفس والحضور الصوتي: بناء شخصية صوتية قوية وجذابة تعكس الاحترافية أمام الجمهور والعملاء.' },
-              { icon: '💼', text: 'تنمية مهارات التواصل والأداء المهني: فهم متطلبات سوق العمل والتفاعل مع التوجيهات الإخراجية مع مختلف أنواع النصوص.' },
-            ].map((g, i) => (
-              <div key={i} style={{
-                display: 'flex', gap: 14,
-                background: CARD, borderRadius: 14,
-                border: '1px solid rgba(255,255,255,0.07)',
-                padding: '18px 20px',
-              }}>
-                <span style={{ fontSize: 24, flexShrink: 0 }}>{g.icon}</span>
-                <p style={{
-                  fontFamily: F, fontSize: 14, color: 'rgba(252,251,251,0.80)',
-                  lineHeight: 1.8, margin: 0,
-                }}>
-                  {g.text}
+            <LightSectionTitle>الأهداف المتحققة</LightSectionTitle>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14 }}>
+              {([
+                { Icon: Star,     text: 'إتقان كافة ألوان التعليق الصوتي: الإعلانات التجارية، الرد الآلي (IVR)، الكتب الصوتية، الوثائقيات، الأخبار، والدوبلاج.' },
+                { Icon: Volume2,  text: 'تحسين مخارج الحروف والنطق السليم: التخلص من عيوب النطق وإتقان مخارج الحروف بشكل محترف.' },
+                { Icon: Sliders,  text: 'التحكم بالطبقات الصوتية والإيقاع والنَفَس: اكتساب مرونة صوتية كاملة للتحول بين النبرات أثناء التسجيل.' },
+                { Icon: Mic,      text: 'كسر رهبة الميكروفون والاستوديو نهائياً: التأقلم التام مع البيئة الصوتية الاحترافية والعمل بثقة.' },
+                { Icon: Zap,      text: 'تعزيز الثقة بالنفس والحضور الصوتي: بناء شخصية صوتية قوية وجذابة تعكس الاحترافية.' },
+                { Icon: Briefcase,text: 'تنمية مهارات التواصل والأداء المهني: فهم متطلبات سوق العمل والتفاعل مع التوجيهات الإخراجية.' },
+              ] as { Icon: React.ElementType; text: string }[]).map(({ Icon, text }, i) => (
+                <div key={i} style={{ display: 'flex', gap: 14, background: '#fff', borderRadius: 14, border: '1px solid rgba(0,0,0,0.08)', padding: '18px 20px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                  <div style={{ flexShrink: 0, width: 36, height: 36, borderRadius: 9, background: 'rgba(255,193,7,0.12)', border: '1px solid rgba(255,193,7,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 2 }}>
+                    <Icon size={17} color={GOLD} strokeWidth={2.2} />
+                  </div>
+                  <p style={{ fontFamily: F, fontSize: 14, color: DM, lineHeight: 1.8, margin: 0 }}>{text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── Sticky advisor sidebar ── */}
+          <div style={{ width: 'clamp(260px,26vw,310px)', flexShrink: 0, position: 'sticky', top: 24 }}>
+            <div style={{ background: '#181325', borderRadius: 20, padding: '24px 20px', boxShadow: '0 20px 50px rgba(0,0,0,0.20)' }}>
+              <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 18, color: OFF, margin: '0 0 8px' }}>
+                هل تحتاج مساعدة في التسجيل؟
+              </h3>
+              <p style={{ fontFamily: F, fontSize: 12.5, color: MUTED, lineHeight: 1.7, margin: '0 0 20px' }}>
+                تواصل مع مستشاراتنا الأكاديميات مباشرة — نحن هنا للمساعدة
+              </p>
+              <div style={{ height: 1, background: 'rgba(255,255,255,0.08)', marginBottom: 20 }} />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                <AdvisorMini
+                  name="آية القماز"
+                  role="مستشارة التسجيل — وجاهي"
+                  photo={ayaImg}
+                  href={waLink('962790234483', 'السلام عليكم، أرغب في الاستفسار عن المسار الوجاهي للبرنامج الشامل للتعليق الصوتي')}
+                />
+                <div style={{ height: 1, background: 'rgba(255,255,255,0.06)' }} />
+                <AdvisorMini
+                  name="ياقوت الخشاشنة"
+                  role="مستشارة التسجيل — أونلاين"
+                  photo={yaqoutImg}
+                  href={waLink('962771052222', 'السلام عليكم، أرغب في الاستفسار عن المسار الأونلاين للبرنامج الشامل للتعليق الصوتي')}
+                />
+              </div>
+              <div style={{ marginTop: 20, padding: '12px 14px', background: 'rgba(255,193,7,0.08)', border: '1px solid rgba(255,193,7,0.22)', borderRadius: 10 }}>
+                <p style={{ fontFamily: F, fontSize: 12, color: 'rgba(255,193,7,0.80)', lineHeight: 1.65, margin: 0 }}>
+                  ⏱ أوقات التواصل: يومياً من 9 صباحاً حتى 10 مساءً
                 </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════
+          EXPECTED OUTCOMES — light bg, lucide icons
+      ══════════════════════════════════════════════════════ */}
+      <section style={{ background: LBG, paddingBlock: 'clamp(48px,5vw,80px)', borderBottom: '1px solid rgba(0,0,0,0.07)' }}>
+        <div style={INNER}>
+          <LightSectionTitle>المخرجات التدريبية المتوقعة</LightSectionTitle>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16 }}>
+            {([
+              { Icon: Award,    title: 'شهادة معتمدة رسمياً',                   desc: 'شهادة إتمام البرنامج معتمدة رسمياً من منصة "وجيز" وأكاديمية "كاسيت ميديا".' },
+              { Icon: Mic,      title: 'ديمو صوتي احترافي (Voice Demo CV)',      desc: 'ملف صوتي متكامل مُهندَس بأحدث المؤثرات، يستعرض خامات صوتك في مختلف ألوان التعليق.' },
+              { Icon: Volume2,  title: 'تسجيلات استوديو عالية الجودة',           desc: 'عينات صوتية احترافية مسجلة بأحدث اللاقطات داخل استوديوهات كاسيت الفعلية.' },
+              { Icon: Star,     title: 'عضوية قاعدة بيانات كاسيت + مشروع التخرج', desc: 'إدراج اسمك وصوتك في بنك الأصوات المعتمد للحصول على فرص ترشيح لمشاريع إنتاجية حقيقية.' },
+            ] as { Icon: React.ElementType; title: string; desc: string }[]).map(({ Icon, title, desc }, i) => (
+              <div key={i} style={{ background: '#fff', borderRadius: 18, border: '1px solid rgba(0,0,0,0.08)', padding: '26px 22px', display: 'flex', flexDirection: 'column', gap: 14, boxShadow: '0 3px 12px rgba(0,0,0,0.05)' }}>
+                <div style={{ width: 48, height: 48, borderRadius: 13, background: 'rgba(224,30,140,0.08)', border: '1px solid rgba(224,30,140,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Icon size={22} color={RASB} strokeWidth={2} />
+                </div>
+                <h4 style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: DH, margin: 0, lineHeight: 1.3 }}>{title}</h4>
+                <p style={{ fontFamily: F, fontSize: 13.5, color: DM, lineHeight: 1.8, margin: 0 }}>{desc}</p>
               </div>
             ))}
           </div>
@@ -607,92 +673,35 @@ export default function CourseVoiceoverPage() {
       </section>
 
       {/* ══════════════════════════════════════════════════════
-          EXPECTED OUTCOMES
+          CURRICULUM — light bg, print button, 2hr badges
       ══════════════════════════════════════════════════════ */}
-      <section style={{
-        paddingBlock: 'clamp(48px,5vw,80px)',
-        borderBottom: '1px solid rgba(255,255,255,0.07)',
-      }}>
+      <section style={{ background: LBG, paddingBlock: 'clamp(48px,5vw,80px)', borderBottom: '1px solid rgba(0,0,0,0.07)' }}>
         <div style={INNER}>
-          <SectionTitle>المخرجات التدريبية المتوقعة</SectionTitle>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-            gap: 16,
-          }}>
-            {[
-              {
-                icon: '📜',
-                title: 'شهادة معتمدة رسمياً',
-                desc:  'شهادة إتمام البرنامج معتمدة رسمياً من منصة "وجيز" وأكاديمية "كاسيت ميديا".',
-              },
-              {
-                icon: '🎙️',
-                title: 'ديمو صوتي احترافي (Voice Demo CV)',
-                desc:  'ملف صوتي متكامل مُهندَس بأحدث المؤثرات، يستعرض خامات صوتك في مختلف ألوان التعليق.',
-              },
-              {
-                icon: '🎚️',
-                title: 'تسجيلات استوديو عالية الجودة',
-                desc:  'عينات صوتية احترافية مسجلة بأحدث اللاقطات داخل استوديوهات كاسيت الفعلية.',
-              },
-              {
-                icon: '🏆',
-                title: 'عضوية قاعدة بيانات كاسيت + مشروع التخرج',
-                desc:  'إدراج اسمك وصوتك في بنك الأصوات المعتمد للحصول على فرص ترشيح لمشاريع إنتاجية حقيقية.',
-              },
-            ].map((o, i) => (
-              <div key={i} style={{
-                background: CARD2, borderRadius: 16,
-                border: `1px solid rgba(255,193,7,0.15)`,
-                padding: '24px 22px',
-                display: 'flex', flexDirection: 'column', gap: 12,
-              }}>
-                <span style={{ fontSize: 32 }}>{o.icon}</span>
-                <h4 style={{
-                  fontFamily: F, fontWeight: 800, fontSize: 16,
-                  color: GOLD, margin: 0, lineHeight: 1.3,
-                }}>
-                  {o.title}
-                </h4>
-                <p style={{
-                  fontFamily: F, fontSize: 13.5, color: MUTED, lineHeight: 1.8, margin: 0,
-                }}>
-                  {o.desc}
-                </p>
-              </div>
-            ))}
+          {/* Header row: title + print button */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 28 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{ width: 4, height: 28, background: GOLD, borderRadius: 4, flexShrink: 0 }} />
+              <h2 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(20px,2.4vw,26px)', color: DH, margin: 0, lineHeight: 1.2 }}>الخطة الدراسية</h2>
+            </div>
+            <button
+              onClick={() => window.print()}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: '#fff', border: '1px solid rgba(0,0,0,0.12)', color: DM, fontFamily: F, fontWeight: 700, fontSize: 13.5, padding: '9px 18px', borderRadius: 10, cursor: 'pointer', boxShadow: '0 2px 6px rgba(0,0,0,0.06)' }}
+            >
+              <Printer size={15} color={DM} strokeWidth={2} />
+              طباعة المنهج
+            </button>
           </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════
-          CURRICULUM
-      ══════════════════════════════════════════════════════ */}
-      <section style={{
-        paddingBlock: 'clamp(48px,5vw,80px)',
-        borderBottom: '1px solid rgba(255,255,255,0.07)',
-      }}>
-        <div style={INNER}>
-          <SectionTitle>الخطة الدراسية</SectionTitle>
 
           {/* Track toggle */}
-          <div style={{
-            display: 'inline-flex', gap: 0,
-            background: 'rgba(255,255,255,0.06)',
-            borderRadius: 12, padding: 4, marginBottom: 28,
-            border: '1px solid rgba(255,255,255,0.10)',
-          }}>
+          <div style={{ display: 'inline-flex', gap: 0, background: 'rgba(0,0,0,0.06)', borderRadius: 12, padding: 4, marginBottom: 28, border: '1px solid rgba(0,0,0,0.10)' }}>
             {(['inperson', 'online'] as const).map(t => (
-              <button key={t} onClick={() => setCurrTab(t)}
-                style={{
-                  background: currTab === t ? GOLD : 'transparent',
-                  color: currTab === t ? NAVY : MUTED,
-                  border: 'none', borderRadius: 9,
-                  fontFamily: F, fontWeight: 700, fontSize: 14,
-                  padding: '9px 22px', cursor: 'pointer',
-                  transition: 'all 0.2s',
-                }}>
+              <button key={t} onClick={() => setCurrTab(t)} style={{
+                background: currTab === t ? GOLD : 'transparent',
+                color: currTab === t ? NAVY : DM,
+                border: 'none', borderRadius: 9,
+                fontFamily: F, fontWeight: 700, fontSize: 14,
+                padding: '9px 22px', cursor: 'pointer', transition: 'all 0.2s',
+              }}>
                 {t === 'inperson' ? '🏢 حضوري (16 ساعة)' : '🌐 عن بُعد (أونلاين)'}
               </button>
             ))}
@@ -701,63 +710,21 @@ export default function CourseVoiceoverPage() {
           {currTab === 'inperson' ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {LECTURES_INPERSON.map((lec, i) => (
-                <div key={i} style={{
-                  background: CARD,
-                  border: `1px solid ${openLec === i ? 'rgba(255,193,7,0.35)' : 'rgba(255,255,255,0.08)'}`,
-                  borderRadius: 14, overflow: 'hidden',
-                  transition: 'border 0.2s',
-                }}>
-                  <button
-                    onClick={() => setOpenLec(openLec === i ? null : i)}
-                    style={{
-                      width: '100%', background: 'none', border: 'none',
-                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                      padding: '16px 20px', cursor: 'pointer', textAlign: 'right',
-                      gap: 12,
-                    }}
-                  >
+                <div key={i} style={{ background: '#fff', border: `1px solid ${openLec === i ? 'rgba(255,193,7,0.45)' : 'rgba(0,0,0,0.08)'}`, borderRadius: 14, overflow: 'hidden', transition: 'border 0.2s', boxShadow: '0 2px 6px rgba(0,0,0,0.04)' }}>
+                  <button onClick={() => setOpenLec(openLec === i ? null : i)} style={{ width: '100%', background: 'none', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', cursor: 'pointer', textAlign: 'right', gap: 12 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 14, minWidth: 0 }}>
-                      <span style={{
-                        fontFamily: FP, fontWeight: 700, fontSize: 13,
-                        color: GOLD, flexShrink: 0,
-                        width: 28, height: 28, borderRadius: '50%',
-                        background: 'rgba(255,193,7,0.12)',
-                        border: '1px solid rgba(255,193,7,0.30)',
-                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                      }}>
+                      <span style={{ fontFamily: FP, fontWeight: 700, fontSize: 13, color: GOLD, flexShrink: 0, width: 28, height: 28, borderRadius: '50%', background: 'rgba(255,193,7,0.12)', border: '1px solid rgba(255,193,7,0.30)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
                         {i + 1}
                       </span>
-                      <span style={{
-                        fontFamily: F, fontWeight: 700, fontSize: 15, color: OFF,
-                        textAlign: 'right',
-                      }}>
-                        {lec.title}
-                      </span>
+                      <span style={{ fontFamily: F, fontWeight: 700, fontSize: 15, color: DH, textAlign: 'right' }}>{lec.title}</span>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-                      <span style={{
-                        fontFamily: FP, fontSize: 11, color: MUTED,
-                        background: 'rgba(255,255,255,0.06)',
-                        border: '1px solid rgba(255,255,255,0.10)',
-                        borderRadius: 6, padding: '3px 8px',
-                      }}>
-                        4 ساعات
-                      </span>
-                      <span style={{
-                        fontSize: 18, color: openLec === i ? GOLD : MUTED,
-                        transform: openLec === i ? 'rotate(45deg)' : 'none',
-                        transition: 'transform 0.2s, color 0.2s',
-                        display: 'inline-block',
-                      }}>+</span>
+                      <span style={{ fontFamily: FP, fontSize: 11, color: DF, background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 6, padding: '3px 8px' }}>ساعتان</span>
+                      <span style={{ fontSize: 18, color: openLec === i ? GOLD : DF, transform: openLec === i ? 'rotate(45deg)' : 'none', transition: 'transform 0.2s, color 0.2s', display: 'inline-block' }}>+</span>
                     </div>
                   </button>
                   {openLec === i && (
-                    <div style={{
-                      padding: '0 20px 18px 20px',
-                      fontFamily: F, fontSize: 14, color: MUTED,
-                      lineHeight: 1.85, borderTop: '1px solid rgba(255,255,255,0.06)',
-                      paddingTop: 16,
-                    }}>
+                    <div style={{ padding: '0 20px 18px', fontFamily: F, fontSize: 14, color: DM, lineHeight: 1.85, borderTop: '1px solid rgba(0,0,0,0.06)', paddingTop: 16 }}>
                       {lec.desc}
                     </div>
                   )}
@@ -765,140 +732,64 @@ export default function CourseVoiceoverPage() {
               ))}
             </div>
           ) : (
-            <div style={{
-              background: CARD, borderRadius: 16,
-              border: '1px solid rgba(255,255,255,0.08)',
-              padding: 'clamp(20px,3vw,32px)',
-            }}>
-              <h4 style={{
-                fontFamily: F, fontWeight: 800, fontSize: 17, color: GOLD,
-                margin: '0 0 14px',
-              }}>
-                نبذة عن المنهج الأونلاين
-              </h4>
-              <p style={{
-                fontFamily: F, fontSize: 15, color: 'rgba(252,251,251,0.80)',
-                lineHeight: 2, margin: 0,
-              }}>
-                منهج متكامل يعتمد على فلسفة "كاسيت" التعليمية. يأخذك خطوة بخطوة بدءاً من تأسيس
-                استوديو منزلي احترافي، مروراً بتمارين التنفس، النطق، التحرير اللغوي، وصولاً إلى
-                الطبقات الصوتية والتلوين الانفعالي. يغطي المنهج تطبيقات الدوبلاج والإعلانات،
-                ويختتم بملاحق خاصة لإنشاء الـ Voice Demo، مشروع التخرج، وخطة الانطلاق لسوق العمل
-                في أول 100 يوم.
-              </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              {ONLINE_MODULES_V.map((mod, i) => (
+                <div key={i} style={{ background: '#fff', borderRadius: 16, border: '1px solid rgba(0,0,0,0.08)', padding: '22px 24px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
+                    <div style={{ width: 32, height: 32, borderRadius: 8, background: 'rgba(255,193,7,0.12)', border: '1px solid rgba(255,193,7,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <BookOpen size={15} color={GOLD} strokeWidth={2.2} />
+                    </div>
+                    <h4 style={{ fontFamily: F, fontWeight: 800, fontSize: 15.5, color: DH, margin: 0 }}>{mod.title}</h4>
+                  </div>
+                  <p style={{ fontFamily: F, fontSize: 13.5, color: DM, lineHeight: 1.75, margin: '0 0 12px' }}>{mod.intro}</p>
+                  <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    {mod.points.map((pt, j) => (
+                      <li key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontFamily: F, fontSize: 13, color: DF }}>
+                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: GOLD, flexShrink: 0, marginTop: 6 }} />
+                        {pt}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
           )}
         </div>
       </section>
 
       {/* ══════════════════════════════════════════════════════
-          INSTRUCTORS
+          INSTRUCTORS — light bg, full-width stacked cards
       ══════════════════════════════════════════════════════ */}
-      <section style={{
-        paddingBlock: 'clamp(48px,5vw,80px)',
-        borderBottom: '1px solid rgba(255,255,255,0.07)',
-      }}>
+      <section style={{ background: LBG, paddingBlock: 'clamp(48px,5vw,80px)' }}>
         <div style={INNER}>
-          <SectionTitle>خبراؤنا في التدريس</SectionTitle>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: 20,
-          }}>
+          <LightSectionTitle>خبراؤنا في التدريس</LightSectionTitle>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
             {[
               {
                 photo: yasar, name: 'يسار عبده',
-                role: 'مدربة إعلامية وخبيرة تعليق صوتي',
-                bio:  'تتمتع بخبرة تزيد عن 20 عاماً، وهي مدربة معتمدة لدى الأمم المتحدة. تحمل البكالوريوس في اللغة الإنجليزية وعلم الأصوات والماجستير في حقوق الإنسان. خبرتها تغطي الدبلجة، الأخبار، الأفلام الوثائقية والإعلانات.',
+                role: 'مدرب إعلامي وخبير تعليق صوتي',
+                bio: 'يتمتع بخبرة تزيد عن 20 عاماً، ومدرب معتمد لدى الأمم المتحدة. يحمل البكالوريوس في اللغة الإنجليزية وعلم الأصوات والماجستير في حقوق الإنسان. خبرته تغطي الدوبلاج، الأخبار، الأفلام الوثائقية والإعلانات.',
               },
               {
                 photo: rana, name: 'رنا عزام',
                 role: 'إعلامية مختصة بالتحرير والتدقيق اللغوي',
-                bio:  'معدة ومقدمة برامج فضائية وإذاعية وبودكاست معتمدة. عملت لسنوات كمحررة ومدققة ومذيعة في مجمع اللغة العربية. حاصلة على بكالوريوس اللغة العربية وآدابها من جامعة اليرموك.',
+                bio: 'معدة ومقدمة برامج فضائية وإذاعية وبودكاست معتمدة. عملت لسنوات كمحررة ومدققة ومذيعة في مجمع اللغة العربية. حاصلة على بكالوريوس اللغة العربية وآدابها من جامعة اليرموك.',
               },
               {
                 photo: omar, name: 'عمر درابكة',
                 role: 'معلّق صوتي محترف ومدرب أداء وإلقاء خطابي',
-                bio:  'يمتلك خبرة تتجاوز 12 عاماً، سجّل خلالها مئات الأفلام الوثائقية والإعلانات التجارية لكبرى الشركات في الخليج والشرق الأوسط. حاصل على دبلوم الإعلام من الأكاديمية العالمية للفنون.',
+                bio: 'يمتلك خبرة تتجاوز 12 عاماً، سجّل خلالها مئات الأفلام الوثائقية والإعلانات التجارية لكبرى الشركات في الخليج والشرق الأوسط. حاصل على دبلوم الإعلام من الأكاديمية العالمية للفنون.',
               },
             ].map((ins, i) => (
-              <div key={i} style={{
-                background: CARD, borderRadius: 18,
-                border: '1px solid rgba(255,255,255,0.08)',
-                padding: '26px 24px', textAlign: 'right',
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 14 }}>
-                  <img src={ins.photo} alt={ins.name} style={{
-                    width: 60, height: 60, borderRadius: '50%',
-                    objectFit: 'cover', objectPosition: 'center top',
-                    border: '2px solid rgba(255,193,7,0.50)',
-                    flexShrink: 0,
-                  }} />
-                  <div>
-                    <div style={{
-                      fontFamily: F, fontWeight: 800, fontSize: 16, color: OFF, marginBottom: 3,
-                    }}>
-                      {ins.name}
-                    </div>
-                    <div style={{ fontFamily: F, fontSize: 12.5, color: GOLD }}>
-                      {ins.role}
-                    </div>
-                  </div>
+              <div key={i} style={{ background: '#fff', borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', padding: 'clamp(22px,3vw,32px)', display: 'flex', gap: 'clamp(20px,2.5vw,32px)', alignItems: 'flex-start', boxShadow: '0 4px 16px rgba(0,0,0,0.05)', direction: 'rtl' }}>
+                <img src={ins.photo} alt={ins.name} style={{ width: 'clamp(80px,10vw,110px)', height: 'clamp(80px,10vw,110px)', borderRadius: 16, objectFit: 'cover', objectPosition: 'center top', border: '3px solid rgba(255,193,7,0.45)', flexShrink: 0 }} />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(17px,2vw,20px)', color: DH, marginBottom: 4 }}>{ins.name}</div>
+                  <div style={{ fontFamily: F, fontWeight: 700, fontSize: 13, color: GOLD, marginBottom: 14 }}>{ins.role}</div>
+                  <p style={{ fontFamily: F, fontSize: 14, color: DM, lineHeight: 1.85, margin: 0 }}>{ins.bio}</p>
                 </div>
-                <p style={{
-                  fontFamily: F, fontSize: 13.5, color: MUTED, lineHeight: 1.85, margin: 0,
-                }}>
-                  {ins.bio}
-                </p>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════
-          HELP / ADVISOR SECTION
-      ══════════════════════════════════════════════════════ */}
-      <section style={{ paddingBlock: 'clamp(48px,5vw,80px)' }}>
-        <div style={INNER}>
-          <div style={{ textAlign: 'center', marginBottom: 36 }}>
-            <h2 style={{
-              fontFamily: F, fontWeight: 900,
-              fontSize: 'clamp(20px,2.6vw,30px)',
-              color: OFF, margin: '0 0 10px',
-            }}>
-              هل تحتاج مساعدة في التسجيل؟
-            </h2>
-            <p style={{
-              fontFamily: F, fontSize: 15, color: MUTED, lineHeight: 1.8, margin: 0,
-            }}>
-              تواصل مع مستشاراتنا الأكاديميات مباشرة — نحن هنا للرد على كافة استفساراتك ومساعدتك في إتمام حجزك.
-            </p>
-          </div>
-
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: 20,
-          }}>
-            <AdvisorCard
-              name="آية القماز"
-              role="مستشارة التسجيل للمسار الوجاهي"
-              badge="🏢 تأهيل واستوديو حي"
-              photo={ayaImg}
-              waLink={waLink('962790234483', 'السلام عليكم، أرغب في الاستفسار عن المسار الوجاهي للبرنامج الشامل للتعليق الصوتي')}
-              ctaLabel="تواصل مع آية 💬"
-              highlighted={track === 'inperson'}
-            />
-            <AdvisorCard
-              name="ياقوت الخشاشنة"
-              role="مستشارة التسجيل للمسار الأونلاين"
-              badge="💻 تدريب أونلاين مباشر"
-              photo={yaqoutImg}
-              waLink={waLink('962771052222', 'السلام عليكم، أرغب في الاستفسار عن المسار الأونلاين للبرنامج الشامل للتعليق الصوتي')}
-              ctaLabel="تواصل مع ياقوت 💬"
-              highlighted={track === 'online'}
-            />
           </div>
         </div>
       </section>
