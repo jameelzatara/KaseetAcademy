@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Search, Clock, CheckCircle2, ArrowLeft, Star } from 'lucide-react';
 import { Link } from 'wouter';
 
-import coverYasar       from '@assets/course_01_cover_1785428932170.png';
+import coverYasar       from '@assets/voiceover-group-photo_1785690181212.jpg';
 import instructorYasar  from '@assets/course_01_instructor_1785428932171.jpeg';
 import coverOmar        from '@assets/course-omar-bg_1785428945248.png';
 import instructorOmar   from '@assets/trainer-omar_1785428945248.jpg';
@@ -42,7 +42,8 @@ const FEATURED = {
   priceA: 'JD 218', labelA: 'حضوري',
   priceB: '$150',   labelB: 'مباشر تفاعلي',
   duration: '16 ساعة (8 لقاءات)',
-  cover: coverYasar,
+  cover:   coverYasar,
+  imgPos:  'center 25%',
 };
 
 /* ── Grid card type ─────────────────────────────────────── */
@@ -489,7 +490,7 @@ export default function CoursesSection() {
               style={{
                 position: 'absolute', inset: 0,
                 width: '100%', height: '100%',
-                objectFit: 'cover', objectPosition: 'center top',
+                objectFit: 'cover', objectPosition: FEATURED.imgPos ?? 'center top',
                 display: 'block',
               }}
             />

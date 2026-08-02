@@ -9,7 +9,8 @@ import yaqoutImg   from '@assets/ياقوت__1785619557679.jpeg';
 import yasar       from '@assets/course_01_instructor_1785428932171.jpeg';
 import rana        from '@assets/trainer-rana-azzam_1785428982698.JPG';
 import omar        from '@assets/trainer-omar_1785428945248.jpg';
-import wajeezLogo  from '@assets/wajeez-logo_1785688262989.png';
+import wajeezLogo    from '@assets/wajeez-logo_1785688262989.png';
+import groupCover    from '@assets/voiceover-group-photo_1785690181212.jpg';
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 const inPersonPdf = `${BASE}/voiceover-inperson.pdf`;
 const onlinePdf   = `${BASE}/voiceover-online.pdf`;
@@ -211,6 +212,19 @@ function CoursePricingCard() {
       overflow: 'hidden',
       boxShadow: '0 28px 64px rgba(29,39,56,0.22), 0 8px 20px rgba(0,0,0,0.12)',
     }}>
+      {/* Cover photo */}
+      <div style={{ position: 'relative', height: 200, overflow: 'hidden' }}>
+        <img
+          src={groupCover}
+          alt="مجموعة دورة التعليق والأداء الصوتي"
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 22%', display: 'block' }}
+        />
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to bottom, rgba(29,39,56,0.05) 40%, rgba(29,39,56,0.75) 100%)',
+        }} />
+      </div>
+
       {/* Card body */}
       <div style={{ padding: '18px 16px 20px' }}>
 
