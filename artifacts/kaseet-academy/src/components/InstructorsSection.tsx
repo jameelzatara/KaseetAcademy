@@ -99,24 +99,7 @@ function InstructorCard({ ins }: { ins: Instructor }) {
           display: 'flex', alignItems: 'center',
           justifyContent: 'space-between', gap: 16, marginBottom: 16,
         }}>
-          {/* name + role */}
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{
-              fontFamily: F, fontWeight: 900,
-              fontSize: 'clamp(20px,2.2vw,24px)',
-              color: NAME_COLOR, lineHeight: 1.2, marginBottom: 5,
-            }}>
-              {ins.name}
-            </div>
-            <div style={{
-              fontFamily: F, fontWeight: 700, fontSize: 13.5,
-              color: ROLE_COLOR, lineHeight: 1.4,
-            }}>
-              {ins.role}
-            </div>
-          </div>
-
-          {/* Photo or initials fallback */}
+          {/* Photo or initials fallback — first in DOM = rightmost in RTL */}
           {ins.photo ? (
             <img
               src={ins.photo}
@@ -144,6 +127,23 @@ function InstructorCard({ ins }: { ins: Instructor }) {
               </span>
             </div>
           )}
+
+          {/* name + role — after photo in DOM = left side in RTL */}
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{
+              fontFamily: F, fontWeight: 900,
+              fontSize: 'clamp(20px,2.2vw,24px)',
+              color: NAME_COLOR, lineHeight: 1.2, marginBottom: 5,
+            }}>
+              {ins.name}
+            </div>
+            <div style={{
+              fontFamily: F, fontWeight: 700, fontSize: 13.5,
+              color: ROLE_COLOR, lineHeight: 1.4,
+            }}>
+              {ins.role}
+            </div>
+          </div>
         </div>
 
         {/* Badges row */}
