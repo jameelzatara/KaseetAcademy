@@ -1,5 +1,22 @@
 @import 'tailwindcss';
 
+/* ── Neon blob animations (registration section of course pages) ── */
+@keyframes ka-blob-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 1; }
+  50%       { transform: translate(60px, -40px) scale(1.15); opacity: 0.7; }
+}
+@keyframes ka-blob-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 1; }
+  50%       { transform: translate(-80px, 50px) scale(0.88); opacity: 0.65; }
+}
+@keyframes ka-blob-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 1; }
+  50%       { transform: translate(30px, 60px) scale(1.08); opacity: 0.75; }
+}
+.ka-blob-1 { animation: ka-blob-1 18s ease-in-out infinite; }
+.ka-blob-2 { animation: ka-blob-2 22s ease-in-out infinite; }
+.ka-blob-3 { animation: ka-blob-3 16s ease-in-out infinite; }
+
 /* ── Reel embed iframe force-fill ── */
 .reel-embed-wrap iframe {
   width: 100% !important;
