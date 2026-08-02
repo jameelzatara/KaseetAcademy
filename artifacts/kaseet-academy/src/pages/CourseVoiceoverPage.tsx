@@ -116,9 +116,11 @@ const scheduleData = {
     { id: 'g18',   group: 'مجموعة 18 - مسائي - وجاهي',          course: 'الأداء الصوتي المتقدم (الرد الآلي والإعلانات)',    instructor: 'يسار عبده',  days: 'الأربعاء',              time: '',              month: 'مايو',    day: '20', status: 'active'   },
     { id: 'gAdv',  group: 'مجموعة متقدمة - مسائي - وجاهي',      course: 'الأداء الصوتي المتقدم (الرد الآلي والإعلانات)',    instructor: 'يسار عبده',  days: 'السبت',                 time: '',              month: 'يونيو',   day: '27', status: 'active'   },
     // ── أغسطس 2026 ──
-    { id: 'g37m',  group: 'مجموعة مسائية - أغسطس 2026',         course: 'التعليق والأداء الصوتي (الأساسيات)',               instructor: 'يسار عبده',  days: 'الإثنين والأربعاء',     time: '6:00-8:00 م',   month: 'أغسطس',   day: '12', status: 'upcoming' },
-    { id: 'g37s',  group: 'مجموعة صباحية - أغسطس 2026',         course: 'التعليق والأداء الصوتي (الأساسيات)',               instructor: 'رنا العزام',   days: 'الأربعاء',              time: '12:00-2:00 ظ',  month: 'أغسطس',   day: '12', status: 'upcoming' },
-    { id: 'g40ip', group: 'مجموعة وجاهية - قريباً',              course: 'التعليق والأداء الصوتي (الأساسيات)',               instructor: 'يسار عبده',  days: '-',                     time: '',              month: 'قريباً',  day: '--', status: 'upcoming' },
+    { id: 'gip-a1', group: 'دورة أساسيات - مسائي (إثنين/أربعاء)',          course: 'التعليق والأداء الصوتي (الأساسيات)', instructor: 'يسار عبده',  days: 'الإثنين / الأربعاء',        time: '06:00 م – 08:00 م', month: 'أغسطس', day: '--', status: 'upcoming', registeredCount: 5  },
+    { id: 'gip-a2', group: 'دورة أساسيات - مسائي (أحد/ثلاثاء/خميس)',       course: 'التعليق والأداء الصوتي (الأساسيات)', instructor: 'يسار عبده',  days: 'الأحد / الثلاثاء / الخميس', time: '06:00 م – 08:00 م', month: 'أغسطس', day: '09', status: 'upcoming', registeredCount: 6  },
+    { id: 'gip-a3', group: 'دورة صباحية (إثنين/أربعاء)',                    course: 'التعليق والأداء الصوتي (الأساسيات)', instructor: 'رنا العزام',  days: 'الإثنين / الأربعاء',        time: '12:00 م – 02:00 م', month: 'أغسطس', day: '10', status: 'upcoming', registeredCount: 3  },
+    { id: 'gip-a4', group: 'دورة صباحية جديدة - قريباً',                    course: 'التعليق والأداء الصوتي (الأساسيات)', instructor: 'رنا العزام',  days: '-',                          time: '12:00 م – 02:00 م', month: 'أغسطس', day: '--', status: 'upcoming' },
+    { id: 'gip-a5', group: 'دورة مسائية جديدة - قريباً',                    course: 'التعليق والأداء الصوتي (الأساسيات)', instructor: 'رنا العزام',  days: '-',                          time: '06:00 م – 08:00 م', month: 'أغسطس', day: '--', status: 'upcoming' },
   ],
   online: [
     { id: 'g25',   group: 'مجموعة 25 - أونلاين',    course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'يسار عبده',  days: 'السبت',    time: '', month: 'يونيو',  day: '20', status: 'active'   },
@@ -128,8 +130,13 @@ const scheduleData = {
     { id: 'g33',   group: 'مجموعة 33 - أونلاين',    course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'عمر درابكة', days: 'السبت',    time: '', month: 'يوليو',  day: '--', status: 'active'   },
     { id: 'g35',   group: 'مجموعة 35 - أونلاين',    course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'عمر درابكة', days: 'الأحد',    time: '', month: 'يوليو',  day: '--', status: 'active'   },
     // ── قريباً ──
-    { id: 'g38',   group: 'مجموعة 38 - أونلاين (الجمعة)',         course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'رنا العزام',   days: 'الجمعة',          time: 'تنتهي 11 سبتمبر', month: 'أغسطس', day: '07', status: 'upcoming' },
-    { id: 'g39',   group: 'مجموعة 39 - أونلاين (ثلاثاء / خميس)', course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'عمر درابكة', days: 'الثلاثاء / الخميس', time: 'تنتهي 3 سبتمبر',  month: 'أغسطس', day: '18', status: 'upcoming' },
+    { id: 'g38', group: 'مجموعة 38 - أونلاين (الجمعة)',         course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'رنا العزام',  days: 'الجمعة',            time: 'التوقيت بالتنسيق مع المتدربين', month: 'أغسطس', day: '07', endMonth: 'سبتمبر', endDay: '11', status: 'upcoming', availableSeats: 10 },
+    { id: 'g39', group: 'مجموعة 39 - أونلاين (ثلاثاء / خميس)', course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'عمر درابكة', days: 'الثلاثاء / الخميس', time: 'التوقيت بالتنسيق مع المتدربين', month: 'أغسطس', day: '18', endMonth: 'سبتمبر', endDay: '03', status: 'upcoming', availableSeats: 10 },
+    { id: 'g40', group: 'مجموعة 40 - أونلاين', course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: '', days: '-', time: 'التوقيت بالتنسيق مع المتدربين', month: 'أغسطس', day: '--', status: 'upcoming', availableSeats: 10 },
+    { id: 'g41', group: 'مجموعة 41 - أونلاين', course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: '', days: '-', time: 'التوقيت بالتنسيق مع المتدربين', month: 'أغسطس', day: '--', status: 'upcoming', availableSeats: 10 },
+    { id: 'g42', group: 'مجموعة 42 - أونلاين', course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: '', days: '-', time: 'التوقيت بالتنسيق مع المتدربين', month: 'أغسطس', day: '--', status: 'upcoming', availableSeats: 10 },
+    { id: 'g43', group: 'مجموعة 43 - أونلاين', course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: '', days: '-', time: 'التوقيت بالتنسيق مع المتدربين', month: 'أغسطس', day: '--', status: 'upcoming', availableSeats: 10 },
+    { id: 'g44', group: 'مجموعة 44 - أونلاين', course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: '', days: '-', time: 'التوقيت بالتنسيق مع المتدربين', month: 'أغسطس', day: '--', status: 'upcoming', availableSeats: 10 },
   ],
 };
 
