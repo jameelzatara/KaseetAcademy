@@ -5,7 +5,7 @@ import {
   Users, GraduationCap, Zap, BookOpen, Printer,
   CheckCircle2, Mic, Wind, MessageSquare, Volume2, Award, Briefcase,
   ArrowLeft, MessageCircle, Download, Globe, RefreshCw, Sparkles,
-  Star, Sliders,
+  Star, Sliders, Video,
 } from 'lucide-react';
 
 /* ── Asset imports ─────────────────────────────────────────── */
@@ -541,6 +541,8 @@ function AdvisorMini({ name, role, photo, href }: { name: string; role: string; 
 export default function CourseBasicsPage() {
   const [, navigate] = useLocation();
   const [openAccordion, setOpenAccordion] = useState<'inperson' | 'online' | null>(null);
+  const [openCurrInperson, setOpenCurrInperson] = useState(false);
+  const [openCurrOnline, setOpenCurrOnline] = useState(false);
   const [partnerBarOpen, setPartnerBarOpen] = useState(false);
   const [currTab, setCurrTab] = useState<'inperson' | 'online'>('inperson');
   const [openLec, setOpenLec] = useState<number | null>(null);
@@ -828,100 +830,154 @@ export default function CourseBasicsPage() {
             </button>
           </div>
 
-          {/* Track toggle */}
+          {/* ── "اختر أسلوب تعلّمك" comparison card ── */}
           <div style={{
-            display: 'inline-flex', gap: 0,
-            background: 'rgba(0,0,0,0.06)', borderRadius: 12, padding: 4, marginBottom: 28,
-            border: '1px solid rgba(0,0,0,0.10)',
+            background: '#fff',
+            borderRadius: 20,
+            border: '1px solid rgba(0,0,0,0.08)',
+            padding: 'clamp(20px,3vw,32px)',
+            marginBottom: 24,
+            boxShadow: '0 2px 12px rgba(0,0,0,0.05)',
           }}>
-            {(['inperson', 'online'] as const).map(t => (
-              <button key={t} onClick={() => setCurrTab(t)} style={{
-                background: currTab === t ? GOLD : 'transparent',
-                color: currTab === t ? NAVY : DM,
-                border: 'none', borderRadius: 9,
-                fontFamily: F, fontWeight: 700, fontSize: 14,
-                padding: '9px 22px', cursor: 'pointer', transition: 'all 0.2s',
-              }}>
-                {t === 'inperson'
-                  ? <><MapPin size={13} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineEnd: 4 }} /> حضوري (16 ساعة)</>
-                  : <><Wifi  size={13} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineEnd: 4 }} /> عن بُعد (أونلاين)</>
-                }
-              </button>
-            ))}
+            <div style={{ marginBottom: 18 }}>
+              <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(16px,2vw,19px)', color: DH, margin: '0 0 5px' }}>اختر أسلوب تعلّمك</h3>
+              <p style={{ fontFamily: F, fontSize: 13.5, color: DF, margin: 0, lineHeight: 1.6 }}>
+                نفس المحتوى والشهادات المُعترَفة محلياً وعالمياً — فقط اختر ما يناسب جدولك وحياتك
+              </p>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: 14 }}>
+              {/* حضوري option tile */}
+              <div style={{ background: 'rgba(255,193,7,0.06)', border: '1.5px solid rgba(255,193,7,0.28)', borderRadius: 14, padding: '18px 20px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+                  <div style={{ width: 38, height: 38, borderRadius: '50%', background: 'rgba(255,193,7,0.16)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <MapPin size={18} color={GOLD} strokeWidth={2.2} />
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: F, fontWeight: 900, fontSize: 15, color: '#92670a' }}>حضوري</div>
+                    <div style={{ fontFamily: F, fontSize: 12, color: '#a07620', lineHeight: 1.4 }}>حضور فعلي في استوديو كاسيت وقاعتنا</div>
+                  </div>
+                </div>
+                <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {['تفاعل مباشر مع المدرب والزملاء', 'تطبيق عملي فوري داخل الصف', 'بيئة تعلم منظَّمة بلا إلهاء'].map(pt => (
+                    <li key={pt} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontFamily: F, fontSize: 13, color: DM }}>
+                      <CheckCircle2 size={14} color={GOLD} strokeWidth={2.2} style={{ flexShrink: 0, marginTop: 2 }} />
+                      {pt}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              {/* عن بُعد option tile */}
+              <div style={{ background: 'rgba(103,232,249,0.05)', border: '1.5px solid rgba(103,232,249,0.26)', borderRadius: 14, padding: '18px 20px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+                  <div style={{ width: 38, height: 38, borderRadius: '50%', background: 'rgba(103,232,249,0.13)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Wifi size={18} color="#67e8f9" strokeWidth={2.2} />
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: F, fontWeight: 900, fontSize: 15, color: '#0e7490' }}>عن بُعد</div>
+                    <div style={{ fontFamily: F, fontSize: 12, color: '#0e7490', lineHeight: 1.4 }}>من أي مكان في العالم</div>
+                  </div>
+                </div>
+                <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {['مرونة كاملة في الوقت والمكان', 'تسجيلات المحاضرات متاحة دائماً', 'وفّر وقت التنقل واستثمره في التعلم'].map(pt => (
+                    <li key={pt} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontFamily: F, fontSize: 13, color: DM }}>
+                      <CheckCircle2 size={14} color="#67e8f9" strokeWidth={2.2} style={{ flexShrink: 0, marginTop: 2 }} />
+                      {pt}
+                    </li>
+                  ))}
+                </ul>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(103,232,249,0.13)', border: '1px solid rgba(103,232,249,0.32)', borderRadius: 999, padding: '5px 12px', marginTop: 14, fontFamily: F, fontWeight: 700, fontSize: 12, color: '#0e7490' }}>
+                  <Video size={13} color="#67e8f9" strokeWidth={2} />
+                  8 محاضرة تفاعلية عبر Zoom
+                </div>
+              </div>
+            </div>
           </div>
 
-          {currTab === 'inperson' ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {LECTURES.map((lec, i) => (
-                <div key={i} style={{
-                  background: '#fff',
-                  border: `1px solid ${openLec === i ? 'rgba(255,193,7,0.55)' : 'rgba(0,0,0,0.09)'}`,
-                  borderRadius: 14, overflow: 'hidden', transition: 'border 0.2s',
-                  boxShadow: openLec === i ? '0 4px 16px rgba(255,193,7,0.12)' : '0 1px 4px rgba(0,0,0,0.05)',
-                }}>
-                  <button onClick={() => setOpenLec(openLec === i ? null : i)} style={{
-                    width: '100%', background: 'none', border: 'none',
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    padding: '16px 20px', cursor: 'pointer', textAlign: 'right', gap: 12,
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 14, minWidth: 0 }}>
-                      <span style={{
-                        fontFamily: FP, fontWeight: 700, fontSize: 13, color: openLec === i ? NAVY : DF,
-                        width: 28, height: 28, borderRadius: '50%',
-                        background: openLec === i ? GOLD : 'rgba(0,0,0,0.07)',
-                        border: `1px solid ${openLec === i ? GOLD : 'rgba(0,0,0,0.12)'}`,
-                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                      }}>
-                        {i + 1}
-                      </span>
-                      <span style={{ fontFamily: F, fontWeight: 700, fontSize: 15, color: DH, textAlign: 'right' }}>{lec.title}</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-                      <span style={{ fontFamily: FP, fontSize: 11, color: DF, background: 'rgba(0,0,0,0.06)', border: '1px solid rgba(0,0,0,0.09)', borderRadius: 6, padding: '3px 8px' }}>
-                        {lec.duration}
-                      </span>
-                      <span style={{ fontSize: 18, color: openLec === i ? GOLD : DF, transform: openLec === i ? 'rotate(45deg)' : 'none', transition: 'transform 0.2s, color 0.2s', display: 'inline-block' }}>+</span>
-                    </div>
-                  </button>
-                  {openLec === i && (
-                    <div style={{ padding: '0 20px 18px', paddingTop: 16, fontFamily: F, fontSize: 14, color: DM, lineHeight: 1.85, borderTop: '1px solid rgba(0,0,0,0.06)' }}>
-                      {lec.desc}
-                    </div>
-                  )}
+          {/* ── حضوري accordion ── */}
+          <div style={{ borderRadius: 18, overflow: 'hidden', marginBottom: 12, border: `1px solid ${openCurrInperson ? 'rgba(255,193,7,0.45)' : 'rgba(0,0,0,0.09)'}`, boxShadow: openCurrInperson ? '0 6px 24px rgba(255,193,7,0.10)' : '0 2px 8px rgba(0,0,0,0.05)', transition: 'border-color 0.2s, box-shadow 0.2s' }}>
+            <button
+              onClick={() => setOpenCurrInperson(!openCurrInperson)}
+              style={{ width: '100%', background: openCurrInperson ? 'rgba(255,193,7,0.05)' : '#fff', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 22px', cursor: 'pointer', textAlign: 'right', gap: 12 }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{ width: 38, height: 38, borderRadius: '50%', flexShrink: 0, background: openCurrInperson ? GOLD : 'rgba(255,193,7,0.12)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.2s' }}>
+                  <MapPin size={17} color={openCurrInperson ? NAVY : GOLD} strokeWidth={2.2} />
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-              {ONLINE_MODULES.map((mod, i) => (
-                <div key={i} style={{ background: '#fff', borderRadius: 16, border: '1px solid rgba(0,0,0,0.09)', padding: '22px 24px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-                  {/* Module title */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
-                    <span style={{
-                      fontFamily: FP, fontWeight: 800, fontSize: 13, color: NAVY,
-                      width: 30, height: 30, borderRadius: '50%',
-                      background: GOLD,
-                      display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                    }}>
-                      {i + 1}
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontFamily: F, fontWeight: 900, fontSize: 16, color: DH }}>حضوري</div>
+                  <div style={{ fontFamily: F, fontSize: 12.5, color: DF, marginTop: 2 }}>داخل استوديو كاسيت وقاعتنا</div>
+                </div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 7, flexShrink: 0 }}>
+                <span style={{ fontFamily: FP, fontSize: 11, color: DF, background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.09)', borderRadius: 6, padding: '3px 8px', whiteSpace: 'nowrap' }}>8 محاضرة</span>
+                <span style={{ fontFamily: FP, fontSize: 11, color: DF, background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.09)', borderRadius: 6, padding: '3px 8px', whiteSpace: 'nowrap' }}>16 ساعة</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: FP, fontSize: 11, color: '#0e7490', background: 'rgba(103,232,249,0.12)', border: '1px solid rgba(103,232,249,0.28)', borderRadius: 6, padding: '3px 8px', whiteSpace: 'nowrap' }}>
+                  <Video size={11} strokeWidth={2} /> Zoom 8
+                </span>
+                <ChevronDown size={16} color={openCurrInperson ? GOLD : DF} strokeWidth={2.5} style={{ transform: openCurrInperson ? 'rotate(180deg)' : 'none', transition: 'transform 0.25s, color 0.2s', flexShrink: 0 }} />
+              </div>
+            </button>
+            {openCurrInperson && (
+              <div style={{ background: 'rgba(255,193,7,0.03)', borderTop: '1px solid rgba(255,193,7,0.16)' }}>
+                {LECTURES.map((lec, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 14, padding: '16px 22px', borderBottom: i < LECTURES.length - 1 ? '1px solid rgba(0,0,0,0.06)' : 'none' }}>
+                    <span style={{ fontFamily: FP, fontWeight: 800, fontSize: 12, color: NAVY, background: GOLD, borderRadius: '50%', flexShrink: 0, width: 28, height: 28, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{i + 1}</span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontFamily: F, fontWeight: 800, fontSize: 14.5, color: DH, marginBottom: 5 }}>{lec.title}</div>
+                      <div style={{ fontFamily: F, fontSize: 13.5, color: DM, lineHeight: 1.75 }}>{lec.desc}</div>
+                    </div>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, flexShrink: 0, background: 'rgba(103,232,249,0.12)', border: '1px solid rgba(103,232,249,0.28)', borderRadius: 8, padding: '4px 10px', fontFamily: FP, fontWeight: 700, fontSize: 11, color: '#0e7490', whiteSpace: 'nowrap' }}>
+                      <Video size={11} strokeWidth={2} color="#67e8f9" />
+                      تفاعلية Zoom
                     </span>
-                    <h4 style={{ fontFamily: F, fontWeight: 900, fontSize: 16, color: DH, margin: 0 }}>{mod.title}</h4>
                   </div>
-                  {/* Intro */}
-                  <p style={{ fontFamily: F, fontSize: 13.5, color: DM, lineHeight: 1.75, margin: '0 0 14px', paddingRight: 42 }}>{mod.intro}</p>
-                  {/* Bullet points */}
-                  <ul style={{ margin: 0, padding: 0, paddingRight: 42, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
-                    {mod.points.map((pt, j) => (
-                      <li key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontFamily: F, fontSize: 13.5, color: DM, lineHeight: 1.7 }}>
-                        <BookOpen size={14} color={GOLD} strokeWidth={2.2} style={{ flexShrink: 0, marginTop: 3 }} />
-                        {pt}
-                      </li>
-                    ))}
-                  </ul>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* ── عن بُعد accordion ── */}
+          <div style={{ borderRadius: 18, overflow: 'hidden', border: `1px solid ${openCurrOnline ? 'rgba(103,232,249,0.40)' : 'rgba(0,0,0,0.09)'}`, boxShadow: openCurrOnline ? '0 6px 24px rgba(103,232,249,0.08)' : '0 2px 8px rgba(0,0,0,0.05)', transition: 'border-color 0.2s, box-shadow 0.2s' }}>
+            <button
+              onClick={() => setOpenCurrOnline(!openCurrOnline)}
+              style={{ width: '100%', background: openCurrOnline ? 'rgba(103,232,249,0.04)' : '#fff', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 22px', cursor: 'pointer', textAlign: 'right', gap: 12 }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{ width: 38, height: 38, borderRadius: '50%', flexShrink: 0, background: openCurrOnline ? '#67e8f9' : 'rgba(103,232,249,0.10)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.2s' }}>
+                  <Wifi size={17} color={openCurrOnline ? '#0a1020' : '#67e8f9'} strokeWidth={2.2} />
                 </div>
-              ))}
-            </div>
-          )}
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontFamily: F, fontWeight: 900, fontSize: 16, color: DH }}>عن بُعد</div>
+                  <div style={{ fontFamily: F, fontSize: 12.5, color: DF, marginTop: 2 }}>أونلاين · من أي مكان في العالم</div>
+                </div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 7, flexShrink: 0 }}>
+                <span style={{ fontFamily: FP, fontSize: 11, color: DF, background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.09)', borderRadius: 6, padding: '3px 8px', whiteSpace: 'nowrap' }}>7 وحدات</span>
+                <span style={{ fontFamily: FP, fontSize: 11, color: DF, background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.09)', borderRadius: 6, padding: '3px 8px', whiteSpace: 'nowrap' }}>16 ساعة</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: FP, fontSize: 11, color: '#0e7490', background: 'rgba(103,232,249,0.12)', border: '1px solid rgba(103,232,249,0.28)', borderRadius: 6, padding: '3px 8px', whiteSpace: 'nowrap' }}>
+                  <Video size={11} strokeWidth={2} /> Zoom 7
+                </span>
+                <ChevronDown size={16} color={openCurrOnline ? '#67e8f9' : DF} strokeWidth={2.5} style={{ transform: openCurrOnline ? 'rotate(180deg)' : 'none', transition: 'transform 0.25s, color 0.2s', flexShrink: 0 }} />
+              </div>
+            </button>
+            {openCurrOnline && (
+              <div style={{ background: 'rgba(103,232,249,0.03)', borderTop: '1px solid rgba(103,232,249,0.16)' }}>
+                {ONLINE_MODULES.map((mod, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 14, padding: '16px 22px', borderBottom: i < ONLINE_MODULES.length - 1 ? '1px solid rgba(0,0,0,0.06)' : 'none' }}>
+                    <span style={{ fontFamily: FP, fontWeight: 800, fontSize: 12, color: '#0a1020', background: '#67e8f9', borderRadius: '50%', flexShrink: 0, width: 28, height: 28, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{i + 1}</span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontFamily: F, fontWeight: 800, fontSize: 14.5, color: DH, marginBottom: 5 }}>{mod.title}</div>
+                      <div style={{ fontFamily: F, fontSize: 13.5, color: DM, lineHeight: 1.75 }}>{mod.intro}</div>
+                    </div>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, flexShrink: 0, background: 'rgba(103,232,249,0.12)', border: '1px solid rgba(103,232,249,0.28)', borderRadius: 8, padding: '4px 10px', fontFamily: FP, fontWeight: 700, fontSize: 11, color: '#0e7490', whiteSpace: 'nowrap' }}>
+                      <Video size={11} strokeWidth={2} color="#67e8f9" />
+                      تفاعلية Zoom
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
