@@ -858,7 +858,7 @@ export default function CourseBasicsPage() {
                   </div>
                 </div>
                 <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  {['تفاعل مباشر مع المدرب والزملاء', 'تطبيق عملي فوري داخل الصف', 'بيئة تعلم منظَّمة بلا إلهاء'].map(pt => (
+                  {['تفاعل مباشر مع المدرب والزملاء', 'تطبيق عملي داخل الاستوديوهات', 'بيئة تعلم منظَّمة بلا إلهاء'].map(pt => (
                     <li key={pt} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontFamily: F, fontSize: 13, color: DM }}>
                       <CheckCircle2 size={14} color={GOLD} strokeWidth={2.2} style={{ flexShrink: 0, marginTop: 2 }} />
                       {pt}
@@ -886,8 +886,8 @@ export default function CourseBasicsPage() {
                   ))}
                 </ul>
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(103,232,249,0.13)', border: '1px solid rgba(103,232,249,0.32)', borderRadius: 999, padding: '5px 12px', marginTop: 14, fontFamily: F, fontWeight: 700, fontSize: 12, color: '#0e7490' }}>
-                  <Video size={13} color="#67e8f9" strokeWidth={2} />
-                  8 محاضرة تفاعلية عبر Zoom
+                  <Wifi size={13} color="#67e8f9" strokeWidth={2} />
+                  6 محاضرات تفاعلية مباشرة
                 </div>
               </div>
             </div>
@@ -909,11 +909,8 @@ export default function CourseBasicsPage() {
                 </div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 7, flexShrink: 0 }}>
-                <span style={{ fontFamily: FP, fontSize: 11, color: DF, background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.09)', borderRadius: 6, padding: '3px 8px', whiteSpace: 'nowrap' }}>8 محاضرة</span>
+                <span style={{ fontFamily: FP, fontSize: 11, color: DF, background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.09)', borderRadius: 6, padding: '3px 8px', whiteSpace: 'nowrap' }}>8 محاضرات</span>
                 <span style={{ fontFamily: FP, fontSize: 11, color: DF, background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.09)', borderRadius: 6, padding: '3px 8px', whiteSpace: 'nowrap' }}>16 ساعة</span>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: FP, fontSize: 11, color: '#0e7490', background: 'rgba(103,232,249,0.12)', border: '1px solid rgba(103,232,249,0.28)', borderRadius: 6, padding: '3px 8px', whiteSpace: 'nowrap' }}>
-                  <Video size={11} strokeWidth={2} /> Zoom 8
-                </span>
                 <ChevronDown size={16} color={openCurrInperson ? GOLD : DF} strokeWidth={2.5} style={{ transform: openCurrInperson ? 'rotate(180deg)' : 'none', transition: 'transform 0.25s, color 0.2s', flexShrink: 0 }} />
               </div>
             </button>
@@ -926,9 +923,9 @@ export default function CourseBasicsPage() {
                       <div style={{ fontFamily: F, fontWeight: 800, fontSize: 14.5, color: DH, marginBottom: 5 }}>{lec.title}</div>
                       <div style={{ fontFamily: F, fontSize: 13.5, color: DM, lineHeight: 1.75 }}>{lec.desc}</div>
                     </div>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, flexShrink: 0, background: 'rgba(103,232,249,0.12)', border: '1px solid rgba(103,232,249,0.28)', borderRadius: 8, padding: '4px 10px', fontFamily: FP, fontWeight: 700, fontSize: 11, color: '#0e7490', whiteSpace: 'nowrap' }}>
-                      <Video size={11} strokeWidth={2} color="#67e8f9" />
-                      تفاعلية Zoom
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, flexShrink: 0, background: 'rgba(255,193,7,0.10)', border: '1px solid rgba(255,193,7,0.28)', borderRadius: 8, padding: '4px 10px', fontFamily: FP, fontWeight: 700, fontSize: 11, color: '#92670a', whiteSpace: 'nowrap' }}>
+                      <MapPin size={11} strokeWidth={2} color={GOLD} />
+                      داخل الاستوديو
                     </span>
                   </div>
                 ))}
@@ -952,10 +949,10 @@ export default function CourseBasicsPage() {
                 </div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 7, flexShrink: 0 }}>
-                <span style={{ fontFamily: FP, fontSize: 11, color: DF, background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.09)', borderRadius: 6, padding: '3px 8px', whiteSpace: 'nowrap' }}>7 وحدات</span>
-                <span style={{ fontFamily: FP, fontSize: 11, color: DF, background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.09)', borderRadius: 6, padding: '3px 8px', whiteSpace: 'nowrap' }}>16 ساعة</span>
+                <span style={{ fontFamily: FP, fontSize: 11, color: DF, background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.09)', borderRadius: 6, padding: '3px 8px', whiteSpace: 'nowrap' }}>6 محاضرات</span>
+                <span style={{ fontFamily: FP, fontSize: 11, color: DF, background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.09)', borderRadius: 6, padding: '3px 8px', whiteSpace: 'nowrap' }}>12 ساعة</span>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: FP, fontSize: 11, color: '#0e7490', background: 'rgba(103,232,249,0.12)', border: '1px solid rgba(103,232,249,0.28)', borderRadius: 6, padding: '3px 8px', whiteSpace: 'nowrap' }}>
-                  <Video size={11} strokeWidth={2} /> Zoom 7
+                  <Wifi size={11} strokeWidth={2} color="#67e8f9" /> بث مباشر
                 </span>
                 <ChevronDown size={16} color={openCurrOnline ? '#67e8f9' : DF} strokeWidth={2.5} style={{ transform: openCurrOnline ? 'rotate(180deg)' : 'none', transition: 'transform 0.25s, color 0.2s', flexShrink: 0 }} />
               </div>
@@ -970,8 +967,8 @@ export default function CourseBasicsPage() {
                       <div style={{ fontFamily: F, fontSize: 13.5, color: DM, lineHeight: 1.75 }}>{mod.intro}</div>
                     </div>
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, flexShrink: 0, background: 'rgba(103,232,249,0.12)', border: '1px solid rgba(103,232,249,0.28)', borderRadius: 8, padding: '4px 10px', fontFamily: FP, fontWeight: 700, fontSize: 11, color: '#0e7490', whiteSpace: 'nowrap' }}>
-                      <Video size={11} strokeWidth={2} color="#67e8f9" />
-                      تفاعلية Zoom
+                      <Wifi size={11} strokeWidth={2} color="#67e8f9" />
+                      لقاء تفاعلي مباشر
                     </span>
                   </div>
                 ))}
