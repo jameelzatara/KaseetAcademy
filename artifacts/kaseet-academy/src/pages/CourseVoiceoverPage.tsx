@@ -108,36 +108,36 @@ function AdvisorMini({ name, role, photo, href }: { name: string; role: string; 
 /* ── Schedule data ─────────────────────────────────────────── */
 const scheduleData = {
   inPerson: [
-    { id: 'g34',   group: 'مجموعة 34 - صباحي - وجاهي',         course: 'التعليق والأداء الصوتي (الأساسيات)',               instructor: 'رنا العزام',   days: 'أحد / ثلاثاء / خميس',  time: '',              month: 'يوليو',   day: '21', status: 'active'   },
-    { id: 'g28',   group: 'مجموعة 28 - مسائي - وجاهي',          course: 'التعليق والأداء الصوتي (الأساسيات)',               instructor: 'يسار عبده',  days: 'أحد / ثلاثاء / خميس',  time: '',              month: 'يوليو',   day: '12', status: 'active'   },
-    { id: 'g36',   group: 'مجموعة 36 متقدمة - وجاهي',           course: 'الأداء الصوتي المتقدم (الرد الآلي والإعلانات)',    instructor: 'يسار عبده',  days: 'الأحد',                 time: '',              month: 'يوليو',   day: '12', status: 'active'   },
-    { id: 'g31',   group: 'مجموعة 31 - صباحي - وجاهي',          course: 'التعليق والأداء الصوتي (الأساسيات)',               instructor: 'رنا العزام',   days: 'أحد / ثلاثاء / خميس',  time: '',              month: 'فبراير',  day: '07', status: 'active'   },
-    { id: 'g26',   group: 'مجموعة 26 - صباحي - وجاهي',          course: 'التعليق والأداء الصوتي (الأساسيات)',               instructor: 'رنا العزام',   days: 'الإثنين / الأربعاء',    time: '',              month: 'يناير',   day: '07', status: 'active'   },
-    { id: 'g17',   group: 'مجموعة 17 - مسائي - وجاهي',          course: 'الأداء الصوتي المتقدم (كتب صوتية)',                instructor: 'يسار عبده',  days: 'الإثنين',               time: '',              month: 'مايو',    day: '18', status: 'active'   },
-    { id: 'g18',   group: 'مجموعة 18 - مسائي - وجاهي',          course: 'الأداء الصوتي المتقدم (الرد الآلي والإعلانات)',    instructor: 'يسار عبده',  days: 'الأربعاء',              time: '',              month: 'مايو',    day: '20', status: 'active'   },
-    { id: 'gAdv',  group: 'مجموعة متقدمة - مسائي - وجاهي',      course: 'الأداء الصوتي المتقدم (الرد الآلي والإعلانات)',    instructor: 'يسار عبده',  days: 'السبت',                 time: '',              month: 'يونيو',   day: '27', status: 'active'   },
-    // ── أغسطس 2026 ──
-    { id: 'gip-a1', group: 'دورة أساسيات - مسائي (إثنين/أربعاء)',          course: 'التعليق والأداء الصوتي (الأساسيات)', instructor: 'يسار عبده',  days: 'الإثنين / الأربعاء',        time: '06:00 م – 08:00 م', month: 'أغسطس', day: '--', status: 'upcoming', registeredCount: 5  },
-    { id: 'gip-a2', group: 'دورة أساسيات - مسائي (أحد/ثلاثاء/خميس)',       course: 'التعليق والأداء الصوتي (الأساسيات)', instructor: 'يسار عبده',  days: 'الأحد / الثلاثاء / الخميس', time: '06:00 م – 08:00 م', month: 'أغسطس', day: '09', status: 'upcoming', registeredCount: 6  },
-    { id: 'gip-a3', group: 'دورة صباحية (إثنين/أربعاء)',                    course: 'التعليق والأداء الصوتي (الأساسيات)', instructor: 'رنا العزام',  days: 'الإثنين / الأربعاء',        time: '12:00 م – 02:00 م', month: 'أغسطس', day: '10', status: 'upcoming', registeredCount: 3  },
-    { id: 'gip-a4', group: 'دورة صباحية جديدة - قريباً',                    course: 'التعليق والأداء الصوتي (الأساسيات)', instructor: 'رنا العزام',  days: '-',                          time: '12:00 م – 02:00 م', month: 'أغسطس', day: '--', status: 'upcoming' },
-    { id: 'gip-a5', group: 'دورة مسائية جديدة - قريباً',                    course: 'التعليق والأداء الصوتي (الأساسيات)', instructor: 'رنا العزام',  days: '-',                          time: '06:00 م – 08:00 م', month: 'أغسطس', day: '--', status: 'upcoming' },
+    { id: 'g34',   group: 'دفعة 34 - صباحي - وجاهي',         course: 'أساسيات التعليق والأداء الصوتي',               instructor: 'رنا العزام',   days: 'أحد / ثلاثاء / خميس',  time: '',              month: 'يوليو',   day: '21', status: 'active'   },
+    { id: 'g28',   group: 'دفعة 28 - مسائي - وجاهي',          course: 'أساسيات التعليق والأداء الصوتي',               instructor: 'يسار عبده',  days: 'أحد / ثلاثاء / خميس',  time: '',              month: 'يوليو',   day: '12', status: 'active'   },
+    { id: 'g36',   group: 'دفعة 36 متقدمة - وجاهي',           course: 'الأداء الصوتي المتقدم (الرد الآلي والإعلانات)',    instructor: 'يسار عبده',  days: 'الأحد',                 time: '',              month: 'يوليو',   day: '12', status: 'active'   },
+    { id: 'g31',   group: 'دفعة 31 - صباحي - وجاهي',          course: 'أساسيات التعليق والأداء الصوتي',               instructor: 'رنا العزام',   days: 'أحد / ثلاثاء / خميس',  time: '',              month: 'فبراير',  day: '07', status: 'active'   },
+    { id: 'g26',   group: 'دفعة 26 - صباحي - وجاهي',          course: 'أساسيات التعليق والأداء الصوتي',               instructor: 'رنا العزام',   days: 'الإثنين / الأربعاء',    time: '',              month: 'يناير',   day: '07', status: 'active'   },
+    { id: 'g17',   group: 'دفعة 17 - مسائي - وجاهي',          course: 'الأداء الصوتي المتقدم (كتب صوتية)',                instructor: 'يسار عبده',  days: 'الإثنين',               time: '',              month: 'مايو',    day: '18', status: 'active'   },
+    { id: 'g18',   group: 'دفعة 18 - مسائي - وجاهي',          course: 'الأداء الصوتي المتقدم (الرد الآلي والإعلانات)',    instructor: 'يسار عبده',  days: 'الأربعاء',              time: '',              month: 'مايو',    day: '20', status: 'active'   },
+    { id: 'gAdv',  group: 'دفعة متقدمة - مسائي - وجاهي',      course: 'الأداء الصوتي المتقدم (الرد الآلي والإعلانات)',    instructor: 'يسار عبده',  days: 'السبت',                 time: '',              month: 'يونيو',   day: '27', status: 'active'   },
+    // ── أغسطس 2026 — دفعات #101+ ──
+    { id: 'ip-101', batchNumber: '#101', group: 'دفعة #101 - حضوري (مسائي)',  course: 'أساسيات التعليق والأداء الصوتي', instructor: 'يسار عبده', days: 'الإثنين / الأربعاء',        time: '06:00 م – 08:00 م', month: 'أغسطس', day: '--', badgeDate: '26 أغسطس', status: 'upcoming', registeredCount: 5, availableSeats: 5  },
+    { id: 'ip-102', batchNumber: '#102', group: 'دفعة #102 - حضوري (مسائي)',  course: 'أساسيات التعليق والأداء الصوتي', instructor: 'يسار عبده', days: 'الأحد / الثلاثاء / الخميس', time: '06:00 م – 08:00 م', month: 'أغسطس', day: '09', badgeDate: '09 أغسطس', status: 'upcoming', registeredCount: 6, availableSeats: 4  },
+    { id: 'ip-103', batchNumber: '#103', group: 'دفعة #103 - حضوري (صباحي)',  course: 'أساسيات التعليق والأداء الصوتي', instructor: 'رنا العزام', days: 'الإثنين / الأربعاء',        time: '12:00 م – 02:00 م', month: 'أغسطس', day: '10', badgeDate: '10 أغسطس', status: 'upcoming', registeredCount: 3, availableSeats: 7  },
+    { id: 'ip-104', batchNumber: '#104', group: 'دفعة #104 - حضوري (صباحي)',  course: 'أساسيات التعليق والأداء الصوتي', instructor: 'رنا العزام', days: 'سيتم التحديد',               time: '12:00 م – 02:00 م', month: 'أغسطس', day: '--', badgeDate: 'أغسطس',    status: 'upcoming', availableSeats: 10 },
+    { id: 'ip-105', batchNumber: '#105', group: 'دفعة #105 - حضوري (مسائي)',  course: 'أساسيات التعليق والأداء الصوتي', instructor: 'رنا العزام', days: 'سيتم التحديد',               time: '06:00 م – 08:00 م', month: 'أغسطس', day: '--', badgeDate: 'أغسطس',    status: 'upcoming', availableSeats: 10 },
   ],
   online: [
-    { id: 'g25',   group: 'مجموعة 25 - أونلاين',    course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'يسار عبده',  days: 'السبت',    time: '', month: 'يونيو',  day: '20', status: 'active'   },
-    { id: 'g27',   group: 'مجموعة 27 - أونلاين',    course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'رنا العزام',   days: 'السبت',    time: '', month: 'يونيو',  day: '--', status: 'active'   },
-    { id: 'g29',   group: 'مجموعة 29 - أونلاين',    course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'رنا العزام',   days: 'السبت',    time: '', month: 'يوليو',  day: '--', status: 'active'   },
-    { id: 'g32',   group: 'مجموعة 32 - أونلاين',    course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'رنا العزام',   days: 'الثلاثاء', time: '', month: 'يوليو',  day: '--', status: 'active'   },
-    { id: 'g33',   group: 'مجموعة 33 - أونلاين',    course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'عمر درابكة', days: 'السبت',    time: '', month: 'يوليو',  day: '--', status: 'active'   },
-    { id: 'g35',   group: 'مجموعة 35 - أونلاين',    course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'عمر درابكة', days: 'الأحد',    time: '', month: 'يوليو',  day: '--', status: 'active'   },
-    // ── قريباً ──
-    { id: 'g38', group: 'مجموعة 38 - أونلاين (الجمعة)',         course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'رنا العزام',  days: 'الجمعة',            time: 'التوقيت بالتنسيق مع المتدربين', month: 'أغسطس', day: '07', endMonth: 'سبتمبر', endDay: '11', status: 'upcoming', availableSeats: 10 },
-    { id: 'g39', group: 'مجموعة 39 - أونلاين (ثلاثاء / خميس)', course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'عمر درابكة', days: 'الثلاثاء / الخميس', time: 'التوقيت بالتنسيق مع المتدربين', month: 'أغسطس', day: '18', endMonth: 'سبتمبر', endDay: '03', status: 'upcoming', availableSeats: 10 },
-    { id: 'g40', group: 'مجموعة 40 - أونلاين', course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: '', days: '-', time: 'التوقيت بالتنسيق مع المتدربين', month: 'أغسطس', day: '--', status: 'upcoming', availableSeats: 10 },
-    { id: 'g41', group: 'مجموعة 41 - أونلاين', course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: '', days: '-', time: 'التوقيت بالتنسيق مع المتدربين', month: 'أغسطس', day: '--', status: 'upcoming', availableSeats: 10 },
-    { id: 'g42', group: 'مجموعة 42 - أونلاين', course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: '', days: '-', time: 'التوقيت بالتنسيق مع المتدربين', month: 'أغسطس', day: '--', status: 'upcoming', availableSeats: 10 },
-    { id: 'g43', group: 'مجموعة 43 - أونلاين', course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: '', days: '-', time: 'التوقيت بالتنسيق مع المتدربين', month: 'أغسطس', day: '--', status: 'upcoming', availableSeats: 10 },
-    { id: 'g44', group: 'مجموعة 44 - أونلاين', course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: '', days: '-', time: 'التوقيت بالتنسيق مع المتدربين', month: 'أغسطس', day: '--', status: 'upcoming', availableSeats: 10 },
+    { id: 'g25',   group: 'دفعة 25 - عن بُعد',    course: 'أساسيات التعليق والأداء الصوتي (عن بُعد - تفاعلية مباشرة)', instructor: 'يسار عبده',  days: 'السبت',    time: '', month: 'يونيو',  day: '20', status: 'active'   },
+    { id: 'g27',   group: 'دفعة 27 - عن بُعد',    course: 'أساسيات التعليق والأداء الصوتي (عن بُعد - تفاعلية مباشرة)', instructor: 'رنا العزام',  days: 'السبت',    time: '', month: 'يونيو',  day: '--', status: 'active'   },
+    { id: 'g29',   group: 'دفعة 29 - عن بُعد',    course: 'أساسيات التعليق والأداء الصوتي (عن بُعد - تفاعلية مباشرة)', instructor: 'رنا العزام',  days: 'السبت',    time: '', month: 'يوليو',  day: '--', status: 'active'   },
+    { id: 'g32',   group: 'دفعة 32 - عن بُعد',    course: 'أساسيات التعليق والأداء الصوتي (عن بُعد - تفاعلية مباشرة)', instructor: 'رنا العزام',  days: 'الثلاثاء', time: '', month: 'يوليو',  day: '--', status: 'active'   },
+    { id: 'g33',   group: 'دفعة 33 - عن بُعد',    course: 'أساسيات التعليق والأداء الصوتي (عن بُعد - تفاعلية مباشرة)', instructor: 'عمر درابكة', days: 'السبت',    time: '', month: 'يوليو',  day: '--', status: 'active'   },
+    { id: 'g35',   group: 'دفعة 35 - عن بُعد',    course: 'أساسيات التعليق والأداء الصوتي (عن بُعد - تفاعلية مباشرة)', instructor: 'عمر درابكة', days: 'الأحد',    time: '', month: 'يوليو',  day: '--', status: 'active'   },
+    // ── قريباً — دفعات #201+ ──
+    { id: 'rm-201', batchNumber: '#201', group: 'دفعة #201 - عن بُعد (الجمعة)',           course: 'أساسيات التعليق والأداء الصوتي (عن بُعد - تفاعلية مباشرة)', instructor: 'رنا العزام',  days: 'الجمعة',            time: 'التوقيت بالتنسيق مع المتدربين', month: 'أغسطس', day: '07', badgeDate: '07 أغسطس', status: 'upcoming', availableSeats: 10 },
+    { id: 'rm-202', batchNumber: '#202', group: 'دفعة #202 - عن بُعد (ثلاثاء / خميس)',   course: 'أساسيات التعليق والأداء الصوتي (عن بُعد - تفاعلية مباشرة)', instructor: 'عمر درابكة', days: 'الثلاثاء / الخميس', time: 'التوقيت بالتنسيق مع المتدربين', month: 'أغسطس', day: '18', badgeDate: '18 أغسطس', status: 'upcoming', availableSeats: 10 },
+    { id: 'rm-203', batchNumber: '#203', group: 'دفعة #203 - عن بُعد (تفاعلية مباشرة)',   course: 'أساسيات التعليق والأداء الصوتي (عن بُعد - تفاعلية مباشرة)', instructor: '', days: 'سيتم التحديد', time: 'التوقيت بالتنسيق مع المتدربين', month: 'أغسطس', day: '--', badgeDate: 'أغسطس', status: 'upcoming', availableSeats: 10 },
+    { id: 'rm-204', batchNumber: '#204', group: 'دفعة #204 - عن بُعد (تفاعلية مباشرة)',   course: 'أساسيات التعليق والأداء الصوتي (عن بُعد - تفاعلية مباشرة)', instructor: '', days: 'سيتم التحديد', time: 'التوقيت بالتنسيق مع المتدربين', month: 'أغسطس', day: '--', badgeDate: 'أغسطس', status: 'upcoming', availableSeats: 10 },
+    { id: 'rm-205', batchNumber: '#205', group: 'دفعة #205 - عن بُعد (تفاعلية مباشرة)',   course: 'أساسيات التعليق والأداء الصوتي (عن بُعد - تفاعلية مباشرة)', instructor: '', days: 'سيتم التحديد', time: 'التوقيت بالتنسيق مع المتدربين', month: 'أغسطس', day: '--', badgeDate: 'أغسطس', status: 'upcoming', availableSeats: 10 },
+    { id: 'rm-206', batchNumber: '#206', group: 'دفعة #206 - عن بُعد (تفاعلية مباشرة)',   course: 'أساسيات التعليق والأداء الصوتي (عن بُعد - تفاعلية مباشرة)', instructor: '', days: 'سيتم التحديد', time: 'التوقيت بالتنسيق مع المتدربين', month: 'أغسطس', day: '--', badgeDate: 'أغسطس', status: 'upcoming', availableSeats: 10 },
+    { id: 'rm-207', batchNumber: '#207', group: 'دفعة #207 - عن بُعد (تفاعلية مباشرة)',   course: 'أساسيات التعليق والأداء الصوتي (عن بُعد - تفاعلية مباشرة)', instructor: '', days: 'سيتم التحديد', time: 'التوقيت بالتنسيق مع المتدربين', month: 'أغسطس', day: '--', badgeDate: 'أغسطس', status: 'upcoming', availableSeats: 10 },
   ],
 };
 
@@ -537,7 +537,7 @@ export default function CourseVoiceoverPage() {
                 onMouseEnter={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.09)')}
                 onMouseLeave={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.05)')}
               >
-                <Download size={14} style={{ flexShrink: 0 }} /> تحميل كتيب الأونلاين
+                <Download size={14} style={{ flexShrink: 0 }} /> تحميل كتيب عن بُعد
               </a>
             </div>
           </div>
@@ -653,9 +653,9 @@ export default function CourseVoiceoverPage() {
                 <div style={{ height: 1, background: 'rgba(255,255,255,0.06)' }} />
                 <AdvisorMini
                   name="ياقوت الخشاشنة"
-                  role="مستشارة التسجيل — أونلاين"
+                  role="مستشارة التسجيل — عن بُعد"
                   photo={yaqoutImg}
-                  href={waLink('962771052222', 'السلام عليكم، أرغب في الاستفسار عن المسار الأونلاين للبرنامج الشامل للتعليق الصوتي')}
+                  href={waLink('962771052222', 'السلام عليكم، أرغب في الاستفسار عن مسار عن بُعد (تفاعلية مباشرة) للبرنامج الشامل للتعليق الصوتي')}
                 />
               </div>
               <div style={{ marginTop: 20, padding: '12px 14px', background: 'rgba(255,193,7,0.08)', border: '1px solid rgba(255,193,7,0.22)', borderRadius: 10 }}>
@@ -740,7 +740,7 @@ export default function CourseVoiceoverPage() {
                   <h2><span class="badge bi">📍 حضوري</span>مسار حضوري — 8 محاضرات · 16 ساعة</h2>
                   <p class="note">داخل استوديو كاسيت وقاعتنا</p>${inpersonRows}
                   <h2><span class="badge bo">🌐 عن بُعد</span>مسار عن بُعد — 7 محاضرات · 12 ساعة</h2>
-                  <p class="note">أونلاين · من أي مكان في العالم</p>${onlineRows}
+                  <p class="note">عن بُعد · من أي مكان في العالم</p>${onlineRows}
                 </body></html>`;
                 const win = window.open('', '_blank', 'width=860,height=900');
                 if (win) { win.document.write(html); win.document.close(); win.focus(); setTimeout(() => win.print(), 600); }
@@ -867,7 +867,7 @@ export default function CourseVoiceoverPage() {
                 </div>
                 <div style={{ textAlign: 'right' }}>
                   <div style={{ fontFamily: F, fontWeight: 900, fontSize: 16, color: DH }}>عن بُعد</div>
-                  <div style={{ fontFamily: F, fontSize: 12.5, color: DF, marginTop: 2 }}>أونلاين · من أي مكان في العالم</div>
+                  <div style={{ fontFamily: F, fontSize: 12.5, color: DF, marginTop: 2 }}>عن بُعد (تفاعلية مباشرة) · من أي مكان في العالم</div>
                 </div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 7, flexShrink: 0 }}>
@@ -1003,7 +1003,7 @@ function RegistrationCard({ track, onRegister }: {
           borderRadius: 12, transition: 'all 0.3s',
         }}>
           <div>
-            <div style={{ fontFamily: F, fontWeight: 700, fontSize: 13, color: MUTED }}>أونلاين</div>
+            <div style={{ fontFamily: F, fontWeight: 700, fontSize: 13, color: MUTED }}>عن بُعد (تفاعلية مباشرة)</div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
               <span style={{ fontFamily: FP, fontWeight: 900, fontSize: 22, color: GOLD }}>
                 $150
@@ -1075,13 +1075,22 @@ function RegistrationCard({ track, onRegister }: {
 type ScheduleEntry = {
   id: string; group: string; course: string; instructor: string;
   days: string; time: string; month: string; day: string; status: string;
+  batchNumber?: string; availableSeats?: number; registeredCount?: number; badgeDate?: string;
+  endMonth?: string; endDay?: string;
 };
 
 function CompactBatchRow({ batch, accent, waHref }: { batch: ScheduleEntry; accent: string; waHref: string }) {
   const accentRgb  = accent === '#FFC107' ? '255,193,7' : '103,232,249';
   const hasDay     = batch.day && batch.day !== '--';
   const isActive   = batch.status === 'active';
-  const fillPct    = isActive ? 82 : 35;
+  // Derive fill % from real data when available, otherwise use defaults
+  const capacity   = (batch.registeredCount ?? 0) + (batch.availableSeats ?? 0);
+  const fillPct    = capacity > 0
+    ? Math.round((batch.registeredCount ?? 0) / capacity * 100)
+    : (isActive ? 82 : 35);
+  const seatsLabel = batch.availableSeats !== undefined
+    ? `${batch.availableSeats} متاحة`
+    : (isActive ? 'جارية' : '10 متاحة');
 
   return (
     <div style={{
@@ -1094,15 +1103,20 @@ function CompactBatchRow({ batch, accent, waHref }: { batch: ScheduleEntry; acce
       {/* Status strip */}
       <div style={{ width: 3, flexShrink: 0, background: isActive ? '#4ade80' : accent }} />
 
-      {/* Date block */}
+      {/* Date / batch-number block */}
       <div style={{
-        width: 54, flexShrink: 0,
+        width: 60, flexShrink: 0,
         background: 'rgba(0,0,0,0.22)',
         display: 'flex', flexDirection: 'column',
         alignItems: 'center', justifyContent: 'center',
-        padding: '10px 4px', gap: 1,
+        padding: '10px 4px', gap: 2,
       }}>
-        {hasDay ? (
+        {batch.batchNumber ? (
+          <>
+            <span style={{ fontFamily: FP, fontWeight: 900, fontSize: 13, color: '#fff', lineHeight: 1 }}>{batch.batchNumber}</span>
+            <span style={{ fontFamily: F, fontSize: 9, color: 'rgba(252,251,251,0.50)', lineHeight: 1.3, textAlign: 'center' }}>{batch.badgeDate || batch.month || 'قريباً'}</span>
+          </>
+        ) : hasDay ? (
           <>
             <span style={{ fontFamily: F, fontSize: 9, color: 'rgba(252,251,251,0.45)', lineHeight: 1 }}>{batch.month}</span>
             <span style={{ fontFamily: FP, fontWeight: 900, fontSize: 22, color: '#fff', lineHeight: 1 }}>{batch.day}</span>
@@ -1160,7 +1174,7 @@ function CompactBatchRow({ batch, accent, waHref }: { batch: ScheduleEntry; acce
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
             <span style={{ fontFamily: F, fontSize: 9.5, color: 'rgba(252,251,251,0.42)' }}>المقاعد</span>
             <span style={{ fontFamily: FP, fontWeight: 700, fontSize: 9.5, color: isActive ? '#4ade80' : accent }}>
-              {isActive ? 'جارية' : '10 متاحة'}
+              {seatsLabel}
             </span>
           </div>
           <div style={{ height: 4, borderRadius: 99, background: 'rgba(255,255,255,0.10)', overflow: 'hidden' }}>
@@ -1222,7 +1236,7 @@ function TrackCard2({
   const waPhone     = isInperson ? '962790234483' : '962771052222';
   const waMsg       = isInperson
     ? 'السلام عليكم، أرغب في حجز مقعد في المسار الوجاهي — دورة التعليق والأداء الصوتي'
-    : 'السلام عليكم، أرغب في حجز مقعد في المسار الأونلاين — دورة التعليق الصوتي';
+    : 'السلام عليكم، أرغب في حجز مقعد في مسار عن بُعد (تفاعلية مباشرة) — دورة التعليق الصوتي';
 
   const cardBg = isInperson
     ? 'linear-gradient(160deg, #1A1205 0%, #141008 55%, #100E0E 100%)'
@@ -1639,7 +1653,7 @@ type BatchEntry = {
 
 function BatchCard({ batch, isLast }: { batch: BatchEntry; isLast: boolean }) {
   const hasDay = batch.day && batch.day !== '--';
-  const isOnline = batch.course.includes('أونلاين');
+  const isOnline = batch.course.includes('عن بُعد') || batch.id.startsWith('rm-') || batch.id.startsWith('g2') || batch.id.startsWith('g3');
 
   return (
     <div style={{
