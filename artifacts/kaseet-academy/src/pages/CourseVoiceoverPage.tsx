@@ -9,7 +9,7 @@ import yaqoutImg   from '@assets/ياقوت__1785619557679.jpeg';
 import yasar       from '@assets/course_01_instructor_1785428932171.jpeg';
 import rana        from '@assets/trainer-rana-azzam_1785428982698.JPG';
 import omar        from '@assets/trainer-omar_1785428945248.jpg';
-import heroCover   from '@assets/course_01_cover_new_1785679077227.jpg';
+import wajeezLogo  from '@assets/wajeez-logo_1785688262989.png';
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 const inPersonPdf = `${BASE}/voiceover-inperson.pdf`;
 const onlinePdf   = `${BASE}/voiceover-online.pdf`;
@@ -128,8 +128,8 @@ const scheduleData = {
     { id: 'g33',   group: 'مجموعة 33 - أونلاين',    course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'عمر درابكة', days: 'السبت',    time: '', month: 'يوليو',  day: '--', status: 'active'   },
     { id: 'g35',   group: 'مجموعة 35 - أونلاين',    course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'عمر درابكة', days: 'الأحد',    time: '', month: 'يوليو',  day: '--', status: 'active'   },
     // ── قريباً ──
-    { id: 'g38',   group: 'مجموعة 38 - أونلاين',    course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'عمر درابكة', days: '-',        time: '', month: 'قريباً', day: '--', status: 'upcoming' },
-    { id: 'g39',   group: 'مجموعة 39 - أونلاين',    course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'رنا العزام',   days: '-',        time: '', month: 'قريباً', day: '--', status: 'upcoming' },
+    { id: 'g38',   group: 'مجموعة 38 - أونلاين (الجمعة)',         course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'رنا العزام',   days: 'الجمعة',          time: 'تنتهي 11 سبتمبر', month: 'أغسطس', day: '07', status: 'upcoming' },
+    { id: 'g39',   group: 'مجموعة 39 - أونلاين (ثلاثاء / خميس)', course: 'التعليق الصوتي أونلاين (الأساسيات)', instructor: 'عمر درابكة', days: 'الثلاثاء / الخميس', time: 'تنتهي 3 سبتمبر',  month: 'أغسطس', day: '18', status: 'upcoming' },
   ],
 };
 
@@ -204,26 +204,6 @@ function CoursePricingCard() {
       overflow: 'hidden',
       boxShadow: '0 28px 64px rgba(29,39,56,0.22), 0 8px 20px rgba(0,0,0,0.12)',
     }}>
-      {/* Cover image */}
-      <div style={{ position: 'relative', height: 200, overflow: 'hidden' }}>
-        <img
-          src={heroCover}
-          alt="دورة التعليق والأداء الصوتي"
-          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 35%' }}
-        />
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'linear-gradient(to bottom, rgba(29,39,56,0.05) 30%, rgba(29,39,56,0.82) 100%)',
-        }} />
-        <span style={{
-          position: 'absolute', bottom: 12, right: 14, left: 14,
-          fontFamily: F, fontWeight: 800, fontSize: 13,
-          color: '#fff', lineHeight: 1.4,
-        }}>
-          البرنامج الشامل للتعليق والأداء الصوتي
-        </span>
-      </div>
-
       {/* Card body */}
       <div style={{ padding: '18px 16px 20px' }}>
 
@@ -688,69 +668,6 @@ export default function CourseVoiceoverPage() {
                 <p style={{ fontFamily: F, fontSize: 13.5, color: DM, lineHeight: 1.8, margin: 0 }}>{desc}</p>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════
-          WJEZ PARTNER — certification partner banner
-      ══════════════════════════════════════════════════════ */}
-      <section style={{
-        background: 'linear-gradient(135deg, #1D2738 0%, #0D0B14 100%)',
-        paddingBlock: 'clamp(32px,4vw,52px)',
-        borderBottom: '1px solid rgba(255,193,7,0.12)',
-      }}>
-        <div style={INNER}>
-          <div style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            flexWrap: 'wrap', gap: 24, direction: 'rtl',
-          }}>
-            {/* Partner info */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
-              <div style={{
-                width: 58, height: 58, borderRadius: 16, flexShrink: 0,
-                background: 'rgba(255,193,7,0.12)',
-                border: '1px solid rgba(255,193,7,0.28)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                <GraduationCap size={26} color={GOLD} strokeWidth={2} />
-              </div>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 5 }}>
-                  <span style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(17px,2vw,22px)', color: '#fff' }}>
-                    تطبيق وجيز
-                  </span>
-                  <span style={{
-                    fontFamily: F, fontWeight: 700, fontSize: 11,
-                    background: 'rgba(255,193,7,0.15)', border: '1px solid rgba(255,193,7,0.30)',
-                    color: GOLD, borderRadius: 999, padding: '2px 10px', whiteSpace: 'nowrap',
-                  }}>
-                    شريك اعتماد رسمي
-                  </span>
-                </div>
-                <p style={{ fontFamily: F, fontSize: 13.5, color: MUTED, margin: 0, lineHeight: 1.6 }}>
-                  أكبر منصة صوتية بالشرق الأوسط — شريك اعتماد رسمي لشهادات البرنامج
-                </p>
-              </div>
-            </div>
-            {/* CTA */}
-            <a
-              href="https://wzz.sa"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: 8,
-                background: GOLD, color: NAVY,
-                fontFamily: F, fontWeight: 800, fontSize: 14,
-                padding: '11px 24px', borderRadius: 12,
-                textDecoration: 'none',
-                boxShadow: '0 6px 20px rgba(255,193,7,0.28)',
-                flexShrink: 0, whiteSpace: 'nowrap',
-              }}
-            >
-              <Globe size={15} strokeWidth={2} />
-              زيارة منصة وجيز
-            </a>
           </div>
         </div>
       </section>
@@ -1447,7 +1364,7 @@ function TrackCard2({
               onMouseEnter={e => (e.currentTarget.style.opacity = '0.88')}
               onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
             >
-              احجز مقعدك في هذا المسار <ArrowLeft size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineStart: 4 }} />
+              احجز مقعدك <ArrowLeft size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineStart: 4 }} />
             </a>
           </div>
         </div>
@@ -1516,13 +1433,11 @@ function PartnerBar({ open, onToggle }: { open: boolean; onToggle: () => void })
             borderRadius: 10,
             border: '1px solid rgba(255,255,255,0.07)',
           }}>
-            <div style={{
-              width: 38, height: 38, borderRadius: 9,
-              background: 'rgba(255,193,7,0.12)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-            }}>
-              <GraduationCap size={18} color={GOLD} strokeWidth={2} />
-            </div>
+            <img
+              src={wajeezLogo}
+              alt="وجيز"
+              style={{ width: 44, height: 44, borderRadius: 10, flexShrink: 0, objectFit: 'cover' }}
+            />
             <div>
               <div style={{ fontFamily: F, fontWeight: 700, fontSize: 13.5, color: OFF }}>
                 تطبيق وجيز
