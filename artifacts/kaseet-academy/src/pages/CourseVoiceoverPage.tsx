@@ -8,7 +8,7 @@ import yaqoutImg   from '@assets/ياقوت__1785619557679.jpeg';
 import yasar       from '@assets/course_01_instructor_1785428932171.jpeg';
 import rana        from '@assets/trainer-rana-azzam_1785428982698.JPG';
 import omar        from '@assets/trainer-omar_1785428945248.jpg';
-import heroCover   from '@assets/course_01_cover_1785428932170.png';
+import heroCover   from '@assets/course_01_cover_new_1785679077227.jpg';
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 const inPersonPdf = `${BASE}/voiceover-inperson.pdf`;
 const onlinePdf   = `${BASE}/voiceover-online.pdf`;
@@ -204,11 +204,11 @@ function CoursePricingCard() {
       boxShadow: '0 28px 64px rgba(29,39,56,0.22), 0 8px 20px rgba(0,0,0,0.12)',
     }}>
       {/* Cover image */}
-      <div style={{ position: 'relative', height: 176, overflow: 'hidden' }}>
+      <div style={{ position: 'relative', height: 200, overflow: 'hidden' }}>
         <img
           src={heroCover}
           alt="دورة التعليق والأداء الصوتي"
-          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 20%' }}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 35%' }}
         />
         <div style={{
           position: 'absolute', inset: 0,
@@ -540,7 +540,7 @@ export default function CourseVoiceoverPage() {
 
           {/* ── Left column — floating pricing card ── */}
           <div ref={sidebarRef} style={{
-            width: 'clamp(280px,28vw,310px)',
+            width: 'clamp(340px,30vw,420px)',
             flexShrink: 0,
             position: 'sticky', top: 20,
           }}>
