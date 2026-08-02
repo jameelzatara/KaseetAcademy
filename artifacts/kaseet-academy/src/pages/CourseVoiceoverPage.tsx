@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import InstructorsSection from '@/components/InstructorsSection';
 import { useLocation } from 'wouter';
 import { ChevronDown, Calendar, Clock, MapPin, Wifi, Users, GraduationCap, Award, Mic, Volume2, Star, Printer, BookOpen, Zap, Briefcase, Sliders, CheckCircle2, ArrowLeft, MessageCircle, Download, Globe, RefreshCw, Circle, Sparkles, Video } from 'lucide-react';
 
@@ -851,42 +852,7 @@ export default function CourseVoiceoverPage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════
-          INSTRUCTORS — light bg, full-width stacked cards
-      ══════════════════════════════════════════════════════ */}
-      <section style={{ background: LBG, paddingBlock: 'clamp(48px,5vw,80px)' }}>
-        <div style={INNER}>
-          <LightSectionTitle>خبراؤنا في التدريس</LightSectionTitle>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-            {[
-              {
-                photo: yasar, name: 'يسار عبده',
-                role: 'مدرب إعلامي وخبير تعليق صوتي',
-                bio: 'يتمتع بخبرة تزيد عن 20 عاماً، ومدرب معتمد لدى الأمم المتحدة. يحمل البكالوريوس في اللغة الإنجليزية وعلم الأصوات والماجستير في حقوق الإنسان. خبرته تغطي الدوبلاج، الأخبار، الأفلام الوثائقية والإعلانات.',
-              },
-              {
-                photo: rana, name: 'رنا عزام',
-                role: 'إعلامية مختصة بالتحرير والتدقيق اللغوي',
-                bio: 'معدة ومقدمة برامج فضائية وإذاعية وبودكاست معتمدة. عملت لسنوات كمحررة ومدققة ومذيعة في مجمع اللغة العربية. حاصلة على بكالوريوس اللغة العربية وآدابها من جامعة اليرموك.',
-              },
-              {
-                photo: omar, name: 'عمر درابكة',
-                role: 'معلّق صوتي محترف ومدرب أداء وإلقاء خطابي',
-                bio: 'يمتلك خبرة تتجاوز 12 عاماً، سجّل خلالها مئات الأفلام الوثائقية والإعلانات التجارية لكبرى الشركات في الخليج والشرق الأوسط. حاصل على دبلوم الإعلام من الأكاديمية العالمية للفنون.',
-              },
-            ].map((ins, i) => (
-              <div key={i} style={{ background: '#fff', borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', padding: 'clamp(22px,3vw,32px)', display: 'flex', gap: 'clamp(20px,2.5vw,32px)', alignItems: 'flex-start', boxShadow: '0 4px 16px rgba(0,0,0,0.05)', direction: 'rtl' }}>
-                <img src={ins.photo} alt={ins.name} style={{ width: 'clamp(80px,10vw,110px)', height: 'clamp(80px,10vw,110px)', borderRadius: 16, objectFit: 'cover', objectPosition: 'center top', border: '3px solid rgba(255,193,7,0.45)', flexShrink: 0 }} />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(17px,2vw,20px)', color: DH, marginBottom: 4 }}>{ins.name}</div>
-                  <div style={{ fontFamily: F, fontWeight: 700, fontSize: 13, color: GOLD, marginBottom: 14 }}>{ins.role}</div>
-                  <p style={{ fontFamily: F, fontSize: 14, color: DM, lineHeight: 1.85, margin: 0 }}>{ins.bio}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <InstructorsSection />
 
     </div>
   );

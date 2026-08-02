@@ -2,7 +2,6 @@ import HeroSection        from '@/components/HeroSection';
 import ReelsSection       from '@/components/ReelsSection';
 import CoursesSection     from '@/components/CoursesSection';
 import TracksSection      from '@/components/TracksSection';
-import InstructorsSection  from '@/components/InstructorsSection';
 import ConsultationSection from '@/components/ConsultationSection';
 import TestimonialsSection from '@/components/TestimonialsSection';
 import FAQSection         from '@/components/FAQSection';
@@ -47,7 +46,6 @@ export default function Home() {
         <div id="reels"><ReelsSection /></div>
         <div id="courses"><CoursesSection /></div>
         <div id="tracks"><TracksSection /></div>
-        <InstructorsSection />
         <ConsultationSection />
         <div id="testimonials"><TestimonialsSection /></div>
         <FAQSection />
