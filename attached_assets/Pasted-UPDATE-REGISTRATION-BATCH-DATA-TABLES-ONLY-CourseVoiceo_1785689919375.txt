@@ -1,0 +1,102 @@
+UPDATE REGISTRATION BATCH DATA & TABLES ONLY (`CourseVoiceoverPage.tsx`):
+
+Please update the course schedule data source / arrays for both In-Person and Online tracks according to the exact parameters below:
+
+=========================================
+1. IN-PERSON BATCHES (الدورات الوجاهية)
+=========================================
+Rules: 
+- Morning Batches Time: strictly "12:00 م – 02:00 م"
+- Evening Batches Time: strictly "06:00 م – 08:00 م"
+
+Data Records:
+[
+  {
+    type: "In-Person",
+    title: "دورة أساسيات - مسائي",
+    instructor: "يسار عبده",
+    days: "الاثنين / الأربعاء",
+    time: "06:00 م – 08:00 م",
+    registeredCount: 5,
+    endDate: "26 أغسطس 2026",
+    status: "متاحة"
+  },
+  {
+    type: "In-Person",
+    title: "دورة أساسيات - مسائي",
+    instructor: "يسار عبده",
+    days: "الأحد / الثلاثاء / الخميس",
+    time: "06:00 م – 08:00 م",
+    registeredCount: 6,
+    startDate: "09 أغسطس 2026",
+    status: "متاحة"
+  },
+  {
+    type: "In-Person",
+    title: "دورة صباحية",
+    instructor: "رنا العزام",
+    days: "الاثنين / الأربعاء",
+    time: "12:00 م – 02:00 م",
+    registeredCount: 3,
+    startDate: "10 أغسطس 2026",
+    endDate: "02 سبتمبر 2026",
+    status: "متاحة"
+  },
+  {
+    type: "In-Person",
+    title: "دورة صباحية جديدة",
+    instructor: "رنا العزام",
+    time: "12:00 م – 02:00 م",
+    startDate: "أغسطس 2026",
+    status: "قريباً"
+  },
+  {
+    type: "In-Person",
+    title: "دورة مسائية جديدة",
+    instructor: "رنا العزام",
+    time: "06:00 م – 08:00 م",
+    startDate: "أغسطس 2026",
+    status: "قريباً"
+  }
+]
+
+=========================================
+2. ONLINE BATCHES (الدورات عن بُعد)
+=========================================
+Rules: 
+- DO NOT add hourly time slots (e.g., 12-2 or 6-8).
+- Set time field to: "التوقيت بالتنسيق مع المتدربين".
+
+Data Records:
+[
+  {
+    type: "Online",
+    groupNumber: "38",
+    title: "مجموعة 38 - أونلاين (الجمعة)",
+    instructor: "رنا العزام",
+    days: "الجمعة",
+    time: "التوقيت بالتنسيق مع المتدربين",
+    startDate: "07 أغسطس 2026",
+    endDate: "11 سبتمبر 2026",
+    availableSeats: 10,
+    status: "قريباً"
+  },
+  {
+    type: "Online",
+    groupNumber: "39",
+    title: "مجموعة 39 - أونلاين (ثلاثاء / خميس)",
+    instructor: "عمر درابكة",
+    days: "الثلاثاء / الخميس",
+    time: "التوقيت بالتنسيق مع المتدربين",
+    startDate: "18 أغسطس 2026",
+    endDate: "03 سبتمبر 2026",
+    availableSeats: 10,
+    status: "قريباً"
+  },
+  // Placeholders for 5 upcoming August groups (Groups 40 to 44)
+  { type: "Online", groupNumber: "40", title: "مجموعة 40 - أونلاين", time: "التوقيت بالتنسيق مع المتدربين", startDate: "أغسطس 2026", availableSeats: 10, status: "قريباً" },
+  { type: "Online", groupNumber: "41", title: "مجموعة 41 - أونلاين", time: "التوقيت بالتنسيق مع المتدربين", startDate: "أغسطس 2026", availableSeats: 10, status: "قريباً" },
+  { type: "Online", groupNumber: "42", title: "مجموعة 42 - أونلاين", time: "التوقيت بالتنسيق مع المتدربين", startDate: "أغسطس 2026", availableSeats: 10, status: "قريباً" },
+  { type: "Online", groupNumber: "43", title: "مجموعة 43 - أونلاين", time: "التوقيت بالتنسيق مع المتدربين", startDate: "أغسطس 2026", availableSeats: 10, status: "قريباً" },
+  { type: "Online", groupNumber: "44", title: "مجموعة 44 - أونلاين", time: "التوقيت بالتنسيق مع المتدربين", startDate: "أغسطس 2026", availableSeats: 10, status: "قريباً" }
+]
