@@ -567,21 +567,29 @@ export default function CourseVoiceoverPage() {
             اختر طريقة التعلّم التي تناسب أسلوبك — كل مسار صُمِّم ليمنحك تجربة تدريبية استثنائية
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20 }}>
-            <TrackCard2
-              variant="inperson"
-              activeBatches={scheduleData.inPerson.filter(b => b.status === 'active')}
-              upcomingBatches={scheduleData.inPerson.filter(b => b.status === 'upcoming')}
-              expanded={openAccordion === 'inperson'}
-              onToggle={() => { setOpenAccordion(openAccordion === 'inperson' ? null : 'inperson'); setTrack('inperson'); setCurrTab('inperson'); }}
-            />
-            <TrackCard2
-              variant="online"
-              activeBatches={scheduleData.online.filter(b => b.status === 'active')}
-              upcomingBatches={scheduleData.online.filter(b => b.status === 'upcoming')}
-              expanded={openAccordion === 'online'}
-              onToggle={() => { setOpenAccordion(openAccordion === 'online' ? null : 'online'); setTrack('online'); setCurrTab('online'); }}
-            />
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: openAccordion ? '1fr' : 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: 20,
+          }}>
+            <div style={{ order: openAccordion === 'online' ? 1 : 0 }}>
+              <TrackCard2
+                variant="inperson"
+                activeBatches={scheduleData.inPerson.filter(b => b.status === 'active')}
+                upcomingBatches={scheduleData.inPerson.filter(b => b.status === 'upcoming')}
+                expanded={openAccordion === 'inperson'}
+                onToggle={() => { setOpenAccordion(openAccordion === 'inperson' ? null : 'inperson'); setTrack('inperson'); setCurrTab('inperson'); }}
+              />
+            </div>
+            <div style={{ order: openAccordion === 'online' ? 0 : 1 }}>
+              <TrackCard2
+                variant="online"
+                activeBatches={scheduleData.online.filter(b => b.status === 'active')}
+                upcomingBatches={scheduleData.online.filter(b => b.status === 'upcoming')}
+                expanded={openAccordion === 'online'}
+                onToggle={() => { setOpenAccordion(openAccordion === 'online' ? null : 'online'); setTrack('online'); setCurrTab('online'); }}
+              />
+            </div>
           </div>
 
           <PartnerBar open={partnerBarOpen} onToggle={() => setPartnerBarOpen(p => !p)} />
