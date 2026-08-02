@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'wouter';
-import { ChevronDown, Calendar, Clock, MapPin, Wifi, Users, GraduationCap, Award, Mic, Volume2, Star, Printer, BookOpen, Zap, Briefcase, Sliders } from 'lucide-react';
+import { ChevronDown, Calendar, Clock, MapPin, Wifi, Users, GraduationCap, Award, Mic, Volume2, Star, Printer, BookOpen, Zap, Briefcase, Sliders, CheckCircle2 } from 'lucide-react';
 
 /* ── Asset imports ─────────────────────────────────────────── */
 import ayaImg      from '@assets/اية_القماز_1785619557679.jpeg';
@@ -134,48 +134,56 @@ const scheduleData = {
 
 /* ── Online curriculum modules (for الأونلاين tab) ────────── */
 const ONLINE_MODULES_V = [
-  { title: 'الاستوديو المنزلي والمعدات',      intro: 'كيفية تجهيز بيئة تسجيل احترافية في المنزل دون ميزانية ضخمة.',                                 points: ['اختيار الميكروفون المناسب لصوتك', 'المعالجة الصوتية بالفوم والمواد المتاحة', 'برامج التسجيل والمونتاج للمبتدئين'] },
-  { title: 'أساسيات الصوت والتنفس',           intro: 'تأسيس مهاري شامل يبني جسراً بين الصوت الطبيعي والصوت الاحترافي.',                              points: ['مناطق الرنين الصوتي ومعادن الصوت', 'التنفس الحجابي وإدارة النَفَس', 'تمارين تطوير الحضور الصوتي'] },
-  { title: 'النطق ومخارج الحروف',             intro: 'تشريح عملي وتدريب مكثّف على النطق السليم لكل حرف عربي.',                                       points: ['مخارج الحروف العربية الـ 28 بالتطبيق', 'التخلص من "الفم الكسول" والنطق الرخو', 'تمارين اللسان والشفتين والحلق'] },
-  { title: 'اللغة العربية والتحرير اللغوي',   intro: 'قواعد لغوية تطبيقية مصممة خصيصاً لاحتياجات المعلق الصوتي.',                                    points: ['الهمزات والتنوين والمدود', 'فن الوقف والابتداء في النص', 'منهجية التحرير اللغوي قبل التسجيل'] },
-  { title: 'التلوين الانفعالي والمشاعر',      intro: 'أداء صادق يستحضر العاطفة دون تمثيل مصطنع.',                                                   points: ['شجرة المشاعر وتصنيفاتها الصوتية', 'ترميز المشاعر داخل النص', 'التحكم بكثافة العاطفة في مختلف الأنواع'] },
-  { title: 'تطبيقات التعليق الصوتي',         intro: 'ورشة تطبيقية على مختلف أنواع التعليق الصوتي المطلوبة في السوق.',                                points: ['الإعلانات التجارية والرد الآلي (IVR)', 'الكتب الصوتية والوثائقيات والأخبار', 'الدوبلاج وبرامج الأطفال'] },
-  { title: 'مشروع التخرج والانطلاق في السوق', intro: 'خطوتك الفعلية نحو سوق العمل الصوتي.',                                                          points: ['بناء الهوية الصوتية الشخصية', 'إنتاج Voice Demo CV احترافي', 'خطة الـ 100 يوم الأولى في السوق'] },
+  { title: 'الاستوديو المنزلي والمعدات',      intro: 'كيفية تجهيز بيئة تسجيل احترافية في المنزل دون ميزانية ضخمة.',                                 points: ['اختيار الميكروفون المناسب لصوتك وميزانيتك', 'المعالجة الصوتية بالفوم والمواد المتاحة محلياً', 'برامج التسجيل والمونتاج للمبتدئين'] },
+  { title: 'أساسيات الصوت والتنفس',           intro: 'تأسيس مهاري شامل يبني جسراً بين الصوت الطبيعي والصوت الاحترافي.',                              points: ['مناطق الرنين الصوتي ومعادن الصوت المختلفة', 'التنفس الحجابي وإدارة النَفَس أثناء التسجيل', 'تمارين تطوير الحضور الصوتي والثقة'] },
+  { title: 'النطق ومخارج الحروف',             intro: 'تشريح عملي وتدريب مكثّف على النطق السليم لكل حرف عربي.',                                       points: ['مخارج الحروف العربية الـ 28 بالتطبيق المباشر', 'التخلص من "الفم الكسول" والنطق الرخو', 'تمارين اللسان والشفتين والحلق يومياً'] },
+  { title: 'اللغة العربية والتحرير اللغوي',   intro: 'قواعد لغوية تطبيقية مصممة خصيصاً لاحتياجات المعلق الصوتي.',                                    points: ['الهمزات والتنوين والمدود في نصوص التعليق', 'فن الوقف والابتداء وأثره على المعنى الصوتي', 'منهجية التحرير اللغوي الاحترافي قبل التسجيل'] },
+  { title: 'التلوين الانفعالي والمشاعر',      intro: 'أداء صادق يستحضر العاطفة دون تمثيل مصطنع.',                                                   points: ['شجرة المشاعر وتصنيفاتها الصوتية التطبيقية', 'ترميز المشاعر داخل النص وقراءتها صوتياً', 'التحكم بكثافة العاطفة في مختلف أنواع التعليق'] },
+  { title: 'تطبيقات التعليق الصوتي',         intro: 'ورشة تطبيقية على مختلف أنواع التعليق الصوتي المطلوبة في السوق.',                                points: ['الإعلانات التجارية وأسلوب الإقناع الصوتي', 'الرد الآلي (IVR) والكتب الصوتية والوثائقيات', 'الأخبار والدوبلاج وبرامج الأطفال'] },
+  { title: 'مشروع التخرج والانطلاق في السوق', intro: 'خطوتك الفعلية نحو سوق العمل الصوتي.',                                                          points: ['بناء الهوية الصوتية الشخصية وتسعير الخدمات', 'إنتاج Voice Demo CV احترافي متكامل', 'خطة الـ 100 يوم الأولى في سوق التعليق'] },
 ];
 
 /* ── Curriculum data ───────────────────────────────────────── */
 const LECTURES_INPERSON = [
   {
     title: 'الصوت',
-    desc:  'رحلة لاكتشاف مفهوم الصوت ومناطق خروجه ومعادنه، وصولاً إلى تحديد البصمة الصوتية الخاصة بك وإتقان فن تنويع الصوت.',
+    desc:   'رحلة لاكتشاف مفهوم الصوت ومناطق خروجه ومعادنه، وصولاً إلى تحديد البصمة الصوتية الخاصة بك وإتقان فن تنويع الصوت.',
+    points: ['مفهوم الصوت ومناطق الرنين الصوتي', 'تحديد معدن الصوت والبصمة الصوتية الشخصية', 'فن تنويع الصوت والتلوين الأدائي'],
   },
   {
     title: 'التنفس',
-    desc:  'مفتاح الصوت القوي؛ تتعلم فيه تشريح الجهاز التنفسي، تقنيات التنفس الحجابي والتحكم المركزي، وكيفية قراءة النَفَس داخل النص.',
+    desc:   'مفتاح الصوت القوي؛ تتعلم تشريح الجهاز التنفسي، تقنيات التنفس الحجابي والتحكم المركزي، وكيفية قراءة النَفَس داخل النص.',
+    points: ['تشريح الجهاز التنفسي وآلية عمله الصوتي', 'التنفس الحجابي والتحكم المركزي بالنَفَس', 'قراءة علامات النَفَس داخل النص الصوتي'],
   },
   {
     title: 'جهاز النطق',
-    desc:  'تتبع رحلة الهواء من الرئة إلى نطق الحرف، مع التعرف على مخارج الحروف العربية الـ 28، وطرق التخلص من "الفم الكسول".',
-  },
-  {
-    title: 'مهارة الاستماع والنقد السمعيّ',
-    desc:  'تدريب أذنك لتصبح ناقدك الأول. يشمل حلقة التغذية الصوتية، منهجية نقد التسجيلات، والاستفادة من تجارب المحترفين.',
-  },
-  {
-    title: 'اللغة العربيّة للمعلّق',
-    desc:  'قواعد مصممة خصيصاً لاحتياجات المعلق؛ تغطي الهمزات، اللام الشمسية والقمرية، فن الوقف والابتداء، ومنهجية التحرير اللغوي.',
-  },
-  {
-    title: 'المشاعر',
-    desc:  'اكتشف شجرة المشاعر وكيفية استحضار العاطفة بصدق دون تمثيل، مع تعلم ترميز المشاعر داخل النص والتحكم بكثافتها.',
-  },
-  {
-    title: 'التطبيق المهنيّ ومشروع التخرّج',
-    desc:  'خطوتك نحو السوق؛ بناء هويتك وتسعير صوتك، التعامل مع العملاء والمنصات، وإنجاز مشروع التخرج.',
+    desc:   'تتبع رحلة الهواء من الرئة إلى نطق الحرف، مع التعرف على مخارج الحروف العربية الـ 28، وطرق التخلص من "الفم الكسول".',
+    points: ['رحلة الهواء من الرئة إلى نطق الحرف', 'مخارج الحروف العربية الـ 28 بالتطبيق العملي', 'التخلص من الفم الكسول وتمارين عضلات النطق'],
   },
   {
     title: 'ألوان التعليق الصوتي',
-    desc:  'التدريب العملي والتطبيقي على الإعلانات التجارية، الرد الآلي (IVR)، الكتب الصوتية، الوثائقيات، الأخبار، والدوبلاج.',
+    desc:   'التدريب العملي والتطبيقي على الإعلانات التجارية، الرد الآلي (IVR)، الكتب الصوتية، الوثائقيات، الأخبار، والدوبلاج.',
+    points: ['الإعلانات التجارية وأسلوب الإقناع الصوتي', 'الرد الآلي (IVR) والكتب الصوتية والوثائقيات', 'الأخبار والدوبلاج وبرامج الأطفال'],
+  },
+  {
+    title: 'مهارة الاستماع والنقد السمعيّ',
+    desc:   'تدريب أذنك لتصبح ناقدك الأول. يشمل حلقة التغذية الصوتية، منهجية نقد التسجيلات، والاستفادة من تجارب المحترفين.',
+    points: ['حلقة التغذية الراجعة الصوتية الاحترافية', 'منهجية نقد التسجيلات بمعايير السوق', 'التعلم من نماذج المحترفين وتحليل أعمالهم'],
+  },
+  {
+    title: 'اللغة العربيّة للمعلّق',
+    desc:   'قواعد مصممة خصيصاً لاحتياجات المعلق؛ تغطي الهمزات، اللام الشمسية والقمرية، فن الوقف والابتداء، ومنهجية التحرير اللغوي.',
+    points: ['الهمزات والتنوين والمدود في النص الصوتي', 'اللام الشمسية والقمرية وفن الوقف والابتداء', 'منهجية التحرير اللغوي قبل الدخول للاستوديو'],
+  },
+  {
+    title: 'المشاعر',
+    desc:   'اكتشف شجرة المشاعر وكيفية استحضار العاطفة بصدق دون تمثيل، مع تعلم ترميز المشاعر داخل النص والتحكم بكثافتها.',
+    points: ['شجرة المشاعر وتصنيفاتها الصوتية', 'ترميز العاطفة داخل النص والأداء بصدق', 'التحكم بكثافة المشاعر في مختلف أنواع التعليق'],
+  },
+  {
+    title: 'التطبيق المهنيّ ومشروع التخرّج',
+    desc:   'خطوتك نحو السوق؛ بناء هويتك وتسعير صوتك، التعامل مع العملاء والمنصات، وإنجاز مشروع التخرج.',
+    points: ['بناء الهوية الصوتية الشخصية وتسعير الخدمات', 'التعامل مع العملاء والتوجيهات الإخراجية', 'إنتاج Voice Demo CV احترافي كمشروع التخرج'],
   },
 ];
 
@@ -323,6 +331,7 @@ export default function CourseVoiceoverPage() {
   const [track, setTrack] = useState<'inperson' | 'online'>('inperson');
   const [currTab, setCurrTab] = useState<'inperson' | 'online'>('inperson');
   const [openLec, setOpenLec] = useState<number | null>(null);
+  const [openMod, setOpenMod] = useState<number | null>(null);
   const [openAccordion, setOpenAccordion] = useState<'inperson' | 'online' | null>(null);
   const [partnerBarOpen, setPartnerBarOpen] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -708,50 +717,113 @@ export default function CourseVoiceoverPage() {
           </div>
 
           {currTab === 'inperson' ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {LECTURES_INPERSON.map((lec, i) => (
-                <div key={i} style={{ background: '#fff', border: `1px solid ${openLec === i ? 'rgba(255,193,7,0.45)' : 'rgba(0,0,0,0.08)'}`, borderRadius: 14, overflow: 'hidden', transition: 'border 0.2s', boxShadow: '0 2px 6px rgba(0,0,0,0.04)' }}>
-                  <button onClick={() => setOpenLec(openLec === i ? null : i)} style={{ width: '100%', background: 'none', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', cursor: 'pointer', textAlign: 'right', gap: 12 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 14, minWidth: 0 }}>
-                      <span style={{ fontFamily: FP, fontWeight: 700, fontSize: 13, color: GOLD, flexShrink: 0, width: 28, height: 28, borderRadius: '50%', background: 'rgba(255,193,7,0.12)', border: '1px solid rgba(255,193,7,0.30)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-                        {i + 1}
-                      </span>
-                      <span style={{ fontFamily: F, fontWeight: 700, fontSize: 15, color: DH, textAlign: 'right' }}>{lec.title}</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-                      <span style={{ fontFamily: FP, fontSize: 11, color: DF, background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 6, padding: '3px 8px' }}>ساعتان</span>
-                      <span style={{ fontSize: 18, color: openLec === i ? GOLD : DF, transform: openLec === i ? 'rotate(45deg)' : 'none', transition: 'transform 0.2s, color 0.2s', display: 'inline-block' }}>+</span>
-                    </div>
-                  </button>
-                  {openLec === i && (
-                    <div style={{ padding: '0 20px 18px', fontFamily: F, fontSize: 14, color: DM, lineHeight: 1.85, borderTop: '1px solid rgba(0,0,0,0.06)', paddingTop: 16 }}>
-                      {lec.desc}
-                    </div>
-                  )}
-                </div>
-              ))}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {LECTURES_INPERSON.map((lec, i) => {
+                const isOpen = openLec === i;
+                return (
+                  <div key={i} style={{
+                    background: '#fff',
+                    border: `1px solid ${isOpen ? 'rgba(255,193,7,0.45)' : 'rgba(0,0,0,0.08)'}`,
+                    borderRadius: 14, overflow: 'hidden',
+                    transition: 'border-color 0.2s',
+                    boxShadow: isOpen ? '0 4px 18px rgba(255,193,7,0.08)' : '0 2px 6px rgba(0,0,0,0.04)',
+                  }}>
+                    <button
+                      onClick={() => setOpenLec(isOpen ? null : i)}
+                      style={{ width: '100%', background: 'none', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '15px 20px', cursor: 'pointer', textAlign: 'right', gap: 12 }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0, flex: 1 }}>
+                        <span style={{
+                          fontFamily: FP, fontWeight: 700, fontSize: 12,
+                          color: isOpen ? NAVY : GOLD,
+                          background: isOpen ? GOLD : 'rgba(255,193,7,0.12)',
+                          border: `1px solid ${isOpen ? GOLD : 'rgba(255,193,7,0.30)'}`,
+                          borderRadius: '50%', flexShrink: 0,
+                          width: 28, height: 28,
+                          display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                          transition: 'all 0.2s',
+                        }}>
+                          {i + 1}
+                        </span>
+                        <span style={{ fontFamily: F, fontWeight: 700, fontSize: 15, color: DH, textAlign: 'right' }}>{lec.title}</span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
+                        <span style={{ fontFamily: FP, fontSize: 11, color: DF, background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.10)', borderRadius: 6, padding: '3px 8px' }}>ساعتان</span>
+                        <ChevronDown
+                          size={16} color={isOpen ? GOLD : DF} strokeWidth={2.5}
+                          style={{ transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.25s, color 0.2s', flexShrink: 0 }}
+                        />
+                      </div>
+                    </button>
+                    {isOpen && (
+                      <div style={{ padding: '0 20px 20px', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+                        <p style={{ fontFamily: F, fontSize: 14, color: DM, lineHeight: 1.85, margin: '16px 0 14px' }}>{lec.desc}</p>
+                        <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                          {lec.points.map((pt, j) => (
+                            <li key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontFamily: F, fontSize: 13.5, color: DH }}>
+                              <CheckCircle2 size={16} color={GOLD} strokeWidth={2.2} style={{ flexShrink: 0, marginTop: 3 }} />
+                              {pt}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-              {ONLINE_MODULES_V.map((mod, i) => (
-                <div key={i} style={{ background: '#fff', borderRadius: 16, border: '1px solid rgba(0,0,0,0.08)', padding: '22px 24px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
-                    <div style={{ width: 32, height: 32, borderRadius: 8, background: 'rgba(255,193,7,0.12)', border: '1px solid rgba(255,193,7,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <BookOpen size={15} color={GOLD} strokeWidth={2.2} />
-                    </div>
-                    <h4 style={{ fontFamily: F, fontWeight: 800, fontSize: 15.5, color: DH, margin: 0 }}>{mod.title}</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {ONLINE_MODULES_V.map((mod, i) => {
+                const isOpen = openMod === i;
+                return (
+                  <div key={i} style={{
+                    background: '#fff',
+                    border: `1px solid ${isOpen ? 'rgba(103,232,249,0.40)' : 'rgba(0,0,0,0.08)'}`,
+                    borderRadius: 14, overflow: 'hidden',
+                    transition: 'border-color 0.2s',
+                    boxShadow: isOpen ? '0 4px 18px rgba(103,232,249,0.06)' : '0 2px 6px rgba(0,0,0,0.04)',
+                  }}>
+                    <button
+                      onClick={() => setOpenMod(isOpen ? null : i)}
+                      style={{ width: '100%', background: 'none', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '15px 20px', cursor: 'pointer', textAlign: 'right', gap: 12 }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0, flex: 1 }}>
+                        <span style={{
+                          fontFamily: FP, fontWeight: 700, fontSize: 12,
+                          color: isOpen ? '#0a1020' : '#67e8f9',
+                          background: isOpen ? '#67e8f9' : 'rgba(103,232,249,0.10)',
+                          border: `1px solid ${isOpen ? '#67e8f9' : 'rgba(103,232,249,0.28)'}`,
+                          borderRadius: '50%', flexShrink: 0,
+                          width: 28, height: 28,
+                          display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                          transition: 'all 0.2s',
+                        }}>
+                          {i + 1}
+                        </span>
+                        <span style={{ fontFamily: F, fontWeight: 700, fontSize: 15, color: DH, textAlign: 'right' }}>{mod.title}</span>
+                      </div>
+                      <ChevronDown
+                        size={16} color={isOpen ? '#67e8f9' : DF} strokeWidth={2.5}
+                        style={{ transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.25s', flexShrink: 0 }}
+                      />
+                    </button>
+                    {isOpen && (
+                      <div style={{ padding: '0 20px 20px', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+                        <p style={{ fontFamily: F, fontSize: 14, color: DM, lineHeight: 1.85, margin: '16px 0 14px' }}>{mod.intro}</p>
+                        <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                          {mod.points.map((pt, j) => (
+                            <li key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontFamily: F, fontSize: 13.5, color: DH }}>
+                              <CheckCircle2 size={16} color="#67e8f9" strokeWidth={2.2} style={{ flexShrink: 0, marginTop: 3 }} />
+                              {pt}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
-                  <p style={{ fontFamily: F, fontSize: 13.5, color: DM, lineHeight: 1.75, margin: '0 0 12px' }}>{mod.intro}</p>
-                  <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 6 }}>
-                    {mod.points.map((pt, j) => (
-                      <li key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontFamily: F, fontSize: 13, color: DF }}>
-                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: GOLD, flexShrink: 0, marginTop: 6 }} />
-                        {pt}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
@@ -936,84 +1008,79 @@ type ScheduleEntry = {
 };
 
 function CompactBatchRow({ batch, accent }: { batch: ScheduleEntry; accent: string }) {
-  const hasDay = batch.day && batch.day !== '--';
-  const isComingSoon = batch.status === 'upcoming';
+  const accentRgb  = accent === '#FFC107' ? '255,193,7' : '103,232,249';
+  const hasDay     = batch.day && batch.day !== '--';
+  const isActive   = batch.status === 'active';
+
   return (
     <div style={{
-      display: 'flex', alignItems: 'center', gap: 12,
-      padding: '10px 0', direction: 'rtl',
-      borderBottom: '1px solid rgba(255,255,255,0.05)',
+      display: 'flex', alignItems: 'stretch',
+      background: 'rgba(255,255,255,0.04)',
+      borderRadius: 12,
+      border: `1px solid ${isActive ? 'rgba(34,197,94,0.18)' : `rgba(${accentRgb},0.14)`}`,
+      overflow: 'hidden', direction: 'rtl',
     }}>
-      {/* Date box */}
+      {/* Status strip */}
+      <div style={{ width: 3, flexShrink: 0, background: isActive ? '#4ade80' : accent }} />
+
+      {/* Date block */}
       <div style={{
-        width: 46, height: 46, borderRadius: 10, flexShrink: 0,
-        background: 'rgba(0,0,0,0.25)',
+        width: 54, flexShrink: 0,
+        background: 'rgba(0,0,0,0.22)',
         display: 'flex', flexDirection: 'column',
-        alignItems: 'center', justifyContent: 'center', gap: 1,
+        alignItems: 'center', justifyContent: 'center',
+        padding: '10px 4px', gap: 1,
       }}>
         {hasDay ? (
           <>
             <span style={{ fontFamily: F, fontSize: 9, color: 'rgba(252,251,251,0.45)', lineHeight: 1 }}>{batch.month}</span>
-            <span style={{ fontFamily: "'Poppins',sans-serif", fontWeight: 900, fontSize: 20, color: '#fff', lineHeight: 1 }}>{batch.day}</span>
+            <span style={{ fontFamily: FP, fontWeight: 900, fontSize: 22, color: '#fff', lineHeight: 1 }}>{batch.day}</span>
           </>
         ) : (
           <span style={{ fontFamily: F, fontSize: 9.5, fontWeight: 700, color: 'rgba(252,251,251,0.45)', textAlign: 'center', lineHeight: 1.4 }}>
-            {batch.month === 'قريباً' ? 'قريباً' : batch.month}
+            {batch.month || 'قريباً'}
           </span>
         )}
       </div>
 
-      {/* Info */}
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontFamily: F, fontWeight: 700, fontSize: 13, color: OFF, marginBottom: 3 }}>
-          {batch.group}
+      {/* Main info */}
+      <div style={{ flex: 1, minWidth: 0, padding: '10px 12px' }}>
+        {/* Row 1: batch name + status pill */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 5 }}>
+          <span style={{ fontFamily: F, fontWeight: 800, fontSize: 13, color: OFF }}>{batch.group}</span>
+          <span style={{
+            flexShrink: 0, fontFamily: F, fontWeight: 700, fontSize: 10,
+            background: isActive ? 'rgba(34,197,94,0.14)' : `rgba(${accentRgb},0.12)`,
+            border: `1px solid ${isActive ? 'rgba(34,197,94,0.28)' : `rgba(${accentRgb},0.25)`}`,
+            color: isActive ? '#4ade80' : accent,
+            borderRadius: 999, padding: '2px 9px', whiteSpace: 'nowrap',
+          }}>
+            {isActive ? '● جارية' : '◌ قريباً'}
+          </span>
         </div>
-        <div style={{
-          display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 8,
-          fontFamily: F, fontSize: 11.5, color: MUTED,
-        }}>
+        {/* Row 2: days + time */}
+        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '3px 10px', fontFamily: F, fontSize: 11.5, color: MUTED }}>
           {batch.days && batch.days !== '-' && (
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}>
-              <Calendar size={10} color={MUTED} strokeWidth={2} />
-              {batch.days}
+              <Calendar size={10} color={MUTED} strokeWidth={2} /> {batch.days}
             </span>
           )}
           {batch.time && (
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}>
-              <Clock size={10} color={MUTED} strokeWidth={2} />
-              {batch.time}
+              <Clock size={10} color={MUTED} strokeWidth={2} /> {batch.time}
             </span>
           )}
-          <span style={{ color: 'rgba(252,251,251,0.50)', fontSize: 11 }}>· {batch.instructor}</span>
+          {batch.instructor && (
+            <span style={{ color: 'rgba(252,251,251,0.38)', fontSize: 11 }}>· {batch.instructor}</span>
+          )}
         </div>
       </div>
-
-      {/* Status pill */}
-      {isComingSoon ? (
-        <span style={{
-          flexShrink: 0, fontFamily: F, fontWeight: 700, fontSize: 10.5,
-          background: `rgba(${accent === '#FFC107' ? '255,193,7' : '103,232,249'},0.12)`,
-          border: `1px solid rgba(${accent === '#FFC107' ? '255,193,7' : '103,232,249'},0.25)`,
-          color: accent, borderRadius: 999, padding: '3px 10px', whiteSpace: 'nowrap',
-        }}>
-          قريباً
-        </span>
-      ) : (
-        <span style={{
-          flexShrink: 0, fontFamily: F, fontWeight: 700, fontSize: 10.5,
-          background: 'rgba(34,197,94,0.12)',
-          border: '1px solid rgba(34,197,94,0.25)',
-          color: '#4ade80', borderRadius: 999, padding: '3px 10px', whiteSpace: 'nowrap',
-        }}>
-          جارية
-        </span>
-      )}
     </div>
   );
 }
 
 /* ════════════════════════════════════════════════════════════
-   TRACK CARD 2  (new reference-style card)
+   TRACK CARD 2  (accordion registration card)
 ════════════════════════════════════════════════════════════ */
 function TrackCard2({
   variant, activeBatches, upcomingBatches, expanded, onToggle,
@@ -1025,244 +1092,180 @@ function TrackCard2({
   onToggle: () => void;
 }) {
   const isInperson = variant === 'inperson';
-
-  /* Kaseet-palette gradients */
-  const bg = isInperson
-    ? 'linear-gradient(150deg, #1e1506 0%, #19110a 55%, #141010 100%)'
-    : 'linear-gradient(150deg, #0b1220 0%, #101827 55%, #161f2e 100%)';
-
-  const accent       = isInperson ? '#FFC107' : '#67e8f9';
-  const accentRgb    = isInperson ? '255,193,7' : '103,232,249';
-  const badgeBg      = `rgba(${accentRgb},0.13)`;
-  const badgeBorder  = `rgba(${accentRgb},0.28)`;
-  const borderColor  = expanded ? `rgba(${accentRgb},0.55)` : 'rgba(255,255,255,0.08)';
-
-  const price        = isInperson ? '218 دينار' : '$150';
-  const priceStrike  = isInperson ? '260 دينار' : '$200';
-  const waPhone      = isInperson ? '962790234483' : '962771052222';
-  const waMsg        = isInperson
+  const accent     = isInperson ? '#FFC107' : '#67e8f9';
+  const accentRgb  = isInperson ? '255,193,7' : '103,232,249';
+  const totalCount = activeBatches.length + upcomingBatches.length;
+  const price       = isInperson ? '218 د.أ' : '$150';
+  const priceStrike = isInperson ? '260 د.أ' : '$200';
+  const waPhone     = isInperson ? '962790234483' : '962771052222';
+  const waMsg       = isInperson
     ? 'السلام عليكم، أرغب في حجز مقعد في المسار الوجاهي — دورة التعليق والأداء الصوتي'
     : 'السلام عليكم، أرغب في حجز مقعد في المسار الأونلاين — دورة التعليق الصوتي';
 
-  const totalCount = activeBatches.length + upcomingBatches.length;
+  const cardBg = isInperson
+    ? 'linear-gradient(160deg, #1A1205 0%, #141008 55%, #100E0E 100%)'
+    : 'linear-gradient(160deg, #060C1A 0%, #08101E 55%, #0E1626 100%)';
 
   return (
-    <div
-      onClick={onToggle}
-      style={{
-        background: bg,
-        border: `1px solid ${borderColor}`,
-        borderRadius: 20, cursor: 'pointer',
-        transition: 'border-color 0.25s',
-        direction: 'rtl', overflow: 'hidden',
-      }}
-    >
-      {/* ── Card body (always visible) ── */}
-      <div style={{ padding: 'clamp(20px,2.5vw,28px)' }}>
+    <div style={{
+      borderRadius: 22, overflow: 'hidden', direction: 'rtl',
+      border: `1px solid ${expanded ? `rgba(${accentRgb},0.52)` : 'rgba(255,255,255,0.09)'}`,
+      boxShadow: expanded
+        ? `0 0 0 1px rgba(${accentRgb},0.10), 0 24px 56px rgba(0,0,0,0.40)`
+        : '0 8px 28px rgba(0,0,0,0.28)',
+      transition: 'border-color 0.3s, box-shadow 0.3s',
+    }}>
 
-        {/* Badge */}
-        <div style={{ marginBottom: 20 }}>
+      {/* ── Accent top stripe ── */}
+      <div style={{
+        height: 3,
+        background: `linear-gradient(90deg, transparent 0%, rgba(${accentRgb},0.85) 50%, transparent 100%)`,
+      }} />
+
+      {/* ── Header button ── */}
+      <button
+        onClick={onToggle}
+        style={{
+          width: '100%', border: 'none', cursor: 'pointer',
+          padding: 'clamp(20px,2.5vw,28px)',
+          display: 'flex', flexDirection: 'column', gap: 0,
+          textAlign: 'right', direction: 'rtl', background: cardBg,
+        }}
+      >
+        {/* Top row: badge + icon */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
           <span style={{
             display: 'inline-flex', alignItems: 'center', gap: 5,
-            background: badgeBg, border: `1px solid ${badgeBorder}`,
+            background: `rgba(${accentRgb},0.12)`, border: `1px solid rgba(${accentRgb},0.28)`,
             color: accent, borderRadius: 999,
-            fontFamily: F, fontWeight: 700, fontSize: 12,
-            padding: '5px 14px',
+            fontFamily: F, fontWeight: 700, fontSize: 12, padding: '5px 14px',
           }}>
-            <span style={{
-              width: 6, height: 6, borderRadius: '50%',
-              background: accent, display: 'inline-block',
-            }} />
+            <span style={{ width: 5, height: 5, borderRadius: '50%', background: accent, display: 'inline-block' }} />
             {isInperson ? 'الأعمق تأثيراً' : 'الأكثر مرونة'}
           </span>
-        </div>
-
-        {/* Title + icon */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
-          <h3 style={{
-            fontFamily: F, fontWeight: 900,
-            fontSize: 'clamp(28px,3.5vw,36px)',
-            color: '#fff', margin: 0, lineHeight: 1.1,
-          }}>
-            {isInperson ? 'حضوري' : 'عن بُعد'}
-          </h3>
           <div style={{
-            background: 'rgba(0,0,0,0.28)',
-            borderRadius: 10, padding: 8, flexShrink: 0,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            width: 44, height: 44, borderRadius: 12,
+            background: `rgba(${accentRgb},0.10)`, border: `1px solid rgba(${accentRgb},0.20)`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
           }}>
             {isInperson
-              ? <MapPin size={18} color={accent} strokeWidth={2.2} />
-              : <Wifi    size={18} color={accent} strokeWidth={2.2} />}
+              ? <MapPin size={21} color={accent} strokeWidth={2.2} />
+              : <Wifi   size={21} color={accent} strokeWidth={2.2} />}
           </div>
         </div>
 
-        {/* Coloured subtitle */}
-        <div style={{
-          fontFamily: F, fontWeight: 700, fontSize: 14.5,
-          color: accent, marginBottom: 8,
-        }}>
+        {/* Title + subtitle */}
+        <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(30px,3.8vw,40px)', color: '#fff', margin: '0 0 6px', lineHeight: 1.1 }}>
+          {isInperson ? 'حضوري' : 'عن بُعد'}
+        </h3>
+        <div style={{ fontFamily: F, fontWeight: 700, fontSize: 14, color: accent, marginBottom: 14 }}>
           {isInperson ? 'تعلّم وجهاً لوجه' : 'تعلّم من أي مكان'}
         </div>
 
         {/* Description */}
-        <p style={{
-          fontFamily: F, fontSize: 13.5, color: MUTED,
-          lineHeight: 1.75, margin: '0 0 24px',
-        }}>
+        <p style={{ fontFamily: F, fontSize: 13.5, color: MUTED, lineHeight: 1.75, margin: '0 0 22px', textAlign: 'right' }}>
           {isInperson
             ? 'تفاعل مباشر مع المدربين المعتمدين في بيئة تدريبية احترافية تُشعل الدافعية وتُسرّع النمو'
             : 'مرونة كاملة في الوقت والمكان دون التنازل عن جودة التدريب أو عمق التفاعل'}
         </p>
 
-        {/* Bottom row: batch count + chevron toggle */}
-        <div style={{
-          display: 'flex', alignItems: 'center',
-          justifyContent: 'space-between',
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-            <Calendar size={14} color={MUTED} strokeWidth={2} />
-            <span style={{ fontFamily: F, fontSize: 13, color: MUTED }}>
-              {totalCount} شعب متاحة
-            </span>
+        {/* Footer: count + expand pill */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <Calendar size={13} color={MUTED} strokeWidth={2} />
+            <span style={{ fontFamily: F, fontSize: 12.5, color: MUTED }}>{totalCount} شعبة متاحة</span>
           </div>
-          <button
-            onClick={e => { e.stopPropagation(); onToggle(); }}
-            style={{
-              width: 34, height: 34, borderRadius: '50%',
-              background: expanded ? `rgba(${accentRgb},0.15)` : 'rgba(255,255,255,0.08)',
-              border: `1px solid ${expanded ? `rgba(${accentRgb},0.35)` : 'rgba(255,255,255,0.14)'}`,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer', transition: 'all 0.2s', flexShrink: 0,
-            }}
-          >
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            background: expanded ? `rgba(${accentRgb},0.15)` : 'rgba(255,255,255,0.07)',
+            border: `1px solid ${expanded ? `rgba(${accentRgb},0.35)` : 'rgba(255,255,255,0.12)'}`,
+            borderRadius: 99, padding: '6px 12px',
+            transition: 'all 0.2s',
+          }}>
+            <span style={{ fontFamily: F, fontWeight: 700, fontSize: 12, color: expanded ? accent : MUTED }}>
+              {expanded ? 'إخفاء المواعيد' : 'عرض المواعيد'}
+            </span>
             <ChevronDown
-              size={16}
-              color={expanded ? accent : 'rgba(252,251,251,0.65)'}
-              strokeWidth={2.5}
-              style={{
-                transform: expanded ? 'rotate(180deg)' : 'none',
-                transition: 'transform 0.3s',
-              }}
+              size={14} color={expanded ? accent : MUTED} strokeWidth={2.5}
+              style={{ transform: expanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s', flexShrink: 0 }}
             />
-          </button>
+          </div>
         </div>
-      </div>
+      </button>
 
-      {/* ── Expanded panel ── */}
+      {/* ── Expanded batch list ── */}
       {expanded && (
         <div style={{
-          borderTop: `1px solid rgba(${accentRgb},0.18)`,
-          background: 'rgba(0,0,0,0.22)',
+          background: isInperson
+            ? 'linear-gradient(180deg, #0E0A04 0%, #0a0804 100%)'
+            : 'linear-gradient(180deg, #050A14 0%, #060a12 100%)',
+          borderTop: `1px solid rgba(${accentRgb},0.15)`,
           padding: 'clamp(16px,2.5vw,24px)',
         }}>
 
-          {/* Active batches */}
           {activeBatches.length > 0 && (
-            <div style={{ marginBottom: 20 }}>
-              <div style={{
-                display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14,
-              }}>
-                <div style={{ width: 3, height: 16, background: '#4ade80', borderRadius: 4 }} />
-                <span style={{ fontFamily: F, fontWeight: 800, fontSize: 13, color: '#4ade80' }}>
-                  الدورات الفعالة حالياً
-                </span>
-                <span style={{
-                  fontFamily: F, fontSize: 11, fontWeight: 700,
-                  background: 'rgba(34,197,94,0.12)',
-                  border: '1px solid rgba(34,197,94,0.25)',
-                  color: '#4ade80', borderRadius: 999, padding: '2px 9px',
-                }}>
+            <div style={{ marginBottom: upcomingBatches.length > 0 ? 22 : 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                <div style={{ width: 3, height: 14, background: '#4ade80', borderRadius: 4 }} />
+                <span style={{ fontFamily: F, fontWeight: 800, fontSize: 12.5, color: '#4ade80' }}>الدورات الفعالة حالياً</span>
+                <span style={{ fontFamily: FP, fontSize: 11, fontWeight: 700, background: 'rgba(34,197,94,0.12)', border: '1px solid rgba(34,197,94,0.25)', color: '#4ade80', borderRadius: 999, padding: '2px 8px' }}>
                   {activeBatches.length}
                 </span>
               </div>
-              {activeBatches.map(b => (
-                <CompactBatchRow key={b.id} batch={b} accent={accent} />
-              ))}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {activeBatches.map(b => <CompactBatchRow key={b.id} batch={b} accent={accent} />)}
+              </div>
             </div>
           )}
 
-          {/* Upcoming August batches */}
           {upcomingBatches.length > 0 && (
-            <div style={{ marginBottom: 20 }}>
-              <div style={{
-                display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14,
-                marginTop: activeBatches.length > 0 ? 20 : 0,
-              }}>
-                <div style={{ width: 3, height: 16, background: accent, borderRadius: 4 }} />
-                <span style={{ fontFamily: F, fontWeight: 800, fontSize: 13, color: accent }}>
-                  الدورات القادمة
-                </span>
-                <span style={{
-                  fontFamily: F, fontSize: 11, fontWeight: 700,
-                  background: badgeBg, border: `1px solid ${badgeBorder}`,
-                  color: accent, borderRadius: 999, padding: '2px 9px',
-                }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                <div style={{ width: 3, height: 14, background: accent, borderRadius: 4 }} />
+                <span style={{ fontFamily: F, fontWeight: 800, fontSize: 12.5, color: accent }}>الدورات القادمة</span>
+                <span style={{ fontFamily: FP, fontSize: 11, fontWeight: 700, background: `rgba(${accentRgb},0.12)`, border: `1px solid rgba(${accentRgb},0.25)`, color: accent, borderRadius: 999, padding: '2px 8px' }}>
                   {upcomingBatches.length}
                 </span>
               </div>
-              {upcomingBatches.map(b => (
-                <CompactBatchRow key={b.id} batch={b} accent={accent} />
-              ))}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {upcomingBatches.map(b => <CompactBatchRow key={b.id} batch={b} accent={accent} />)}
+              </div>
             </div>
           )}
 
-          {/* Price badge */}
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: 12,
-            margin: '20px 0 16px',
-            padding: '14px 18px',
-            background: 'rgba(0,0,0,0.20)',
-            borderRadius: 12,
-            border: `1px solid rgba(${accentRgb},0.18)`,
-          }}>
-            <div>
-              <div style={{ fontFamily: F, fontSize: 11, color: MUTED, marginBottom: 2 }}>
-                السعر بعد الخصم
+          {/* Price + CTA */}
+          <div style={{ marginTop: 22, padding: '16px 18px', background: 'rgba(0,0,0,0.32)', borderRadius: 14, border: `1px solid rgba(${accentRgb},0.15)` }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+              <div>
+                <div style={{ fontFamily: F, fontSize: 11, color: MUTED, marginBottom: 3 }}>السعر بعد الخصم</div>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: 7 }}>
+                  <span style={{ fontFamily: FP, fontWeight: 900, fontSize: 24, color: GOLD }}>{price}</span>
+                  <span style={{ fontFamily: FP, fontSize: 13, color: 'rgba(252,251,251,0.28)', textDecoration: 'line-through' }}>{priceStrike}</span>
+                </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 7 }}>
-                <span style={{ fontFamily: "'Poppins',sans-serif", fontWeight: 900, fontSize: 22, color: GOLD }}>
-                  {price}
-                </span>
-                <span style={{
-                  fontFamily: "'Poppins',sans-serif", fontSize: 13,
-                  color: 'rgba(252,251,251,0.28)', textDecoration: 'line-through',
-                }}>
-                  {priceStrike}
-                </span>
-              </div>
-            </div>
-            <div style={{ marginRight: 'auto' }}>
-              <span style={{
-                fontFamily: F, fontSize: 11.5, fontWeight: 700,
-                color: 'rgba(255,193,7,0.70)',
-              }}>
+              <span style={{ fontFamily: F, fontSize: 11, fontWeight: 700, color: 'rgba(255,193,7,0.65)', background: 'rgba(255,193,7,0.08)', border: '1px solid rgba(255,193,7,0.15)', borderRadius: 8, padding: '5px 11px' }}>
                 بإمكانية التقسيط
               </span>
             </div>
+            <a
+              href={waLink(waPhone, waMsg)}
+              target="_blank" rel="noopener noreferrer"
+              onClick={e => e.stopPropagation()}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                width: '100%', boxSizing: 'border-box',
+                background: accent, color: isInperson ? NAVY : '#0a1020',
+                border: 'none', borderRadius: 12,
+                fontFamily: F, fontWeight: 800, fontSize: 14.5,
+                padding: '13px 20px', cursor: 'pointer',
+                textDecoration: 'none', transition: 'opacity 0.2s',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.opacity = '0.88')}
+              onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+            >
+              احجز مقعدك في هذا المسار ←
+            </a>
           </div>
-
-          {/* CTA */}
-          <a
-            href={waLink(waPhone, waMsg)}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={e => e.stopPropagation()}
-            style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              width: '100%', boxSizing: 'border-box',
-              background: accent, color: isInperson ? NAVY : '#0a1020',
-              border: 'none', borderRadius: 12,
-              fontFamily: F, fontWeight: 800, fontSize: 14.5,
-              padding: '13px 20px', cursor: 'pointer',
-              textDecoration: 'none',
-              transition: 'opacity 0.2s',
-            }}
-            onMouseEnter={e => (e.currentTarget.style.opacity = '0.88')}
-            onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
-          >
-            احجز مقعدك في هذا المسار ←
-          </a>
         </div>
       )}
     </div>
