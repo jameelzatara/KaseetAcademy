@@ -5,16 +5,8 @@ import { useState } from 'react';
 import { Link, useLocation } from 'wouter';
 import { ChevronDown, ArrowLeft, MapPin, Wifi, Award } from 'lucide-react';
 import { NAVY, GOLD, OFF, MUTED, F, FP, INNER, LBG, DH, DM, waLink } from './shared/coursePageHelpers';
-import wajeezLogo     from '@assets/wajeez-logo_1785688262989.png';
-import coverElami     from '@assets/cover_لصفحة_الاعلام_1785772052880.jpeg';
-import m1             from '@assets/M1_1785772181185.png';
-import m2             from '@assets/M2_1785772181186.png';
-import m3             from '@assets/M3_1785772176798.png';
-import m4             from '@assets/M4_1785772176799.png';
-import m5             from '@assets/M5_1785772176798.png';
-import instructorYasar from '@assets/course_01_instructor_1785428932171.jpeg';
-import instructorRana  from '@assets/trainer-rana-azzam_1785692178863.JPG';
-import instructorOmar  from '@assets/trainer-omar_1785692015818.jpg';
+import wajeezLogo    from '@assets/wajeez-logo_1785688262989.png';
+import instructorRana from '@assets/trainer-rana-azzam_1785692178863.JPG';
 
 /* ── tokens ───────────────────────────────────────────── */
 const BG   = '#161E2B';
@@ -142,8 +134,6 @@ const PHASE_LABELS: Record<number, { label: string; color: string }> = {
   3: { label: 'مرحلة القيادة',  color: '#a78bfa' },
 };
 
-const STUDENT_IMGS = [m1, m2, m3, m4, m5];
-
 const STANDALONE_COURSES = [
   {
     n: '01',
@@ -174,26 +164,7 @@ const STANDALONE_COURSES = [
   },
 ];
 
-const CONSULTANTS = [
-  {
-    name: 'أ. يسار عبده',
-    role: 'خبير الأداء الصوتي والتعليق',
-    specialty: 'التعليق الصوتي · الأداء الصوتي · بناء الملف الصوتي',
-    photo: instructorYasar,
-  },
-  {
-    name: 'أ. رنا محمد العزام',
-    role: 'إعلامية ومدربة أداء ومختصة تحرير لغوي',
-    specialty: 'الإعلام التلفزيوني · التحرير اللغوي · المتحدث الرسمي',
-    photo: instructorRana,
-  },
-  {
-    name: 'أ. عمر درابكة',
-    role: 'معلّق صوتي ومدرب أداء رقمي',
-    specialty: 'التعليق الصوتي الرقمي · الإعلام التفاعلي · المحتوى الصوتي',
-    photo: instructorOmar,
-  },
-];
+/* only Rana's card */
 
 /* ── Station card ────────────────────────────────────── */
 function Station({ s, open, onToggle }: { s: StationType; open: boolean; onToggle: () => void }) {
@@ -425,20 +396,6 @@ export default function MasarElamiPage() {
         </div>
       </section>
 
-      {/* ════════════════ COVER IMAGE ════════════════ */}
-      <div style={{ position: 'relative', height: 'clamp(260px,36vw,480px)', overflow: 'hidden' }}>
-        <img src={coverElami} alt="المسار الإعلامي" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%', display: 'block' }} />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(22,30,43,0.55) 0%, rgba(22,30,43,0.20) 40%, rgba(22,30,43,0.55) 100%)' }} />
-        {/* student avatars */}
-        <div style={{ position: 'absolute', bottom: 24, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 10, justifyContent: 'center' }}>
-          {STUDENT_IMGS.map((img, i) => (
-            <div key={i} style={{ width: 56, height: 56, borderRadius: '50%', overflow: 'hidden', border: `2.5px solid ${GLD}`, flexShrink: 0, boxShadow: '0 4px 14px rgba(0,0,0,0.4)' }}>
-              <img src={img} alt={`متدرب ${i+1}`} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 20%' }} />
-            </div>
-          ))}
-        </div>
-      </div>
-
       {/* ════════════════ TREE ════════════════ */}
       <section id="tree" style={{ background: BG2, borderBlock: `1px solid ${HAIR}`, padding: '88px 0' }}>
         <div style={{ ...INNER }}>
@@ -530,38 +487,110 @@ export default function MasarElamiPage() {
         </div>
       </section>
 
-      {/* ════════════════ CONSULTANTS (cream) ════════════════ */}
+      {/* ════════════════ CONSULTANT — Rana ════════════════ */}
       <section style={{ background: '#EEECEA', borderBlock: '1px solid rgba(0,0,0,0.08)', padding: '88px 0' }}>
         <div style={{ ...INNER }}>
-          <div style={{ textAlign: 'center', marginBottom: 52 }}>
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, border: '1px solid rgba(255,193,7,0.35)', color: '#92600a', background: 'rgba(255,193,7,0.12)', fontFamily: F, fontSize: 13, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>الاستشارة الفردية</span>
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', marginTop: 18, lineHeight: 1.35, color: DH }}>
-              جلسة استشارية <span style={{ color: '#92600a' }}>مع أحد مدربينا</span>
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,4vw,40px)', marginTop: 18, lineHeight: 1.35, color: DH }}>
+              مش متأكد؟ <span style={{ color: '#92600a' }}>ابدأ باستشارة</span>
             </h2>
-            <p style={{ fontFamily: F, fontSize: 16.5, color: DM, maxWidth: 620, marginInline: 'auto', marginTop: 14 }}>
-              جلسة مخصَّصة لتقييم مستواك الحالي، تحديد مسارك الأنسب، ومراجعة ملفك الصوتي أو الإعلامي.
+            <p style={{ fontFamily: F, fontSize: 16, color: DM, maxWidth: 560, marginInline: 'auto', marginTop: 12 }}>
+              جلسة فردية مع المستشارة التعليمية لتقييم مستواك الحالي وترشيح المسار أو الدورة الأنسب لك.
             </p>
           </div>
 
-          <div className="masar-consult-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
-            {CONSULTANTS.map(c => (
-              <div key={c.name} style={{ background: '#fff', border: '1px solid rgba(0,0,0,0.07)', borderRadius: 18, padding: '32px 26px', textAlign: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.06)', display: 'flex', flexDirection: 'column', gap: 0 }}>
-                <div style={{ width: 90, height: 90, borderRadius: '50%', overflow: 'hidden', border: '3px solid rgba(255,193,7,0.40)', margin: '0 auto 16px', flexShrink: 0 }}>
-                  <img src={c.photo} alt={c.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
+          {/* Rana's featured card */}
+          <div style={{ maxWidth: 860, marginInline: 'auto' }}>
+            <div style={{
+              background: '#fff', borderRadius: 24, overflow: 'hidden',
+              boxShadow: '0 8px 40px rgba(0,0,0,0.10)', border: '1px solid rgba(0,0,0,0.07)',
+              display: 'grid', gridTemplateColumns: 'minmax(0,0.85fr) minmax(0,1.15fr)',
+            }}>
+              {/* photo column */}
+              <div style={{ position: 'relative', minHeight: 340, background: '#111827', overflow: 'hidden' }}>
+                <img
+                  src={instructorRana}
+                  alt="أ. رنا محمد العزام"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block', position: 'absolute', inset: 0 }}
+                />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 55%)' }} />
+                {/* live badge */}
+                <div style={{
+                  position: 'absolute', top: 18, right: 18,
+                  display: 'inline-flex', alignItems: 'center', gap: 7,
+                  background: 'rgba(0,0,0,0.60)', backdropFilter: 'blur(8px)',
+                  border: '1px solid rgba(255,255,255,0.18)', borderRadius: 999,
+                  padding: '6px 14px', fontFamily: F, fontSize: 12.5, fontWeight: 700, color: '#fff',
+                }}>
+                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#22c55e', display: 'block', boxShadow: '0 0 0 3px rgba(34,197,94,0.30)' }} />
+                  متاحة الآن
                 </div>
-                <div style={{ fontFamily: F, fontWeight: 800, fontSize: 18, color: DH, marginBottom: 4 }}>{c.name}</div>
-                <div style={{ fontFamily: F, fontSize: 13, color: DM, marginBottom: 12, lineHeight: 1.55 }}>{c.role}</div>
-                <div style={{ fontFamily: F, fontSize: 12.5, color: '#92600a', background: 'rgba(255,193,7,0.10)', border: '1px solid rgba(255,193,7,0.25)', borderRadius: 8, padding: '6px 12px', marginBottom: 20, lineHeight: 1.6 }}>{c.specialty}</div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 20 }}>
-                  <span style={{ fontFamily: FP, fontWeight: 800, fontSize: 32, color: DH, lineHeight: 1 }}>$70</span>
-                  <span style={{ fontFamily: F, fontSize: 13, color: DM }}>/ جلسة</span>
-                </div>
-                <a href={WA_CONSULT(c.name)} target="_blank" rel="noopener noreferrer"
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, background: NAVY, color: '#fff', fontFamily: F, fontWeight: 700, fontSize: 14, padding: '12px 20px', borderRadius: 12, textDecoration: 'none', marginTop: 'auto' }}>
-                  احجز جلستك <ArrowLeft size={14} />
-                </a>
               </div>
-            ))}
+
+              {/* info column */}
+              <div style={{ padding: '36px 36px 32px', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ fontFamily: F, fontSize: 12.5, fontWeight: 700, color: '#92600a', letterSpacing: 0.5, marginBottom: 8 }}>المستشارة التعليمية</div>
+                <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(22px,2.4vw,28px)', color: DH, margin: '0 0 6px', lineHeight: 1.3 }}>
+                  أ. رنا محمد العزام
+                </h3>
+                <div style={{ fontFamily: F, fontSize: 14, color: DM, marginBottom: 20, lineHeight: 1.6 }}>
+                  إعلامية ومدربة أداء — متخصصة في الإعلام التلفزيوني والتحرير اللغوي والمتحدث الرسمي
+                </div>
+
+                {/* specialties */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 24 }}>
+                  {['الإعلام التلفزيوني', 'التحرير اللغوي', 'المتحدث الرسمي', 'الحضور الإعلامي'].map(tag => (
+                    <span key={tag} style={{
+                      fontFamily: F, fontSize: 12.5, color: '#92600a',
+                      background: 'rgba(255,193,7,0.10)', border: '1px solid rgba(255,193,7,0.25)',
+                      borderRadius: 999, padding: '5px 13px',
+                    }}>{tag}</span>
+                  ))}
+                </div>
+
+                {/* what you get */}
+                <ul style={{ listStyle: 'none', display: 'grid', gap: 10, marginBottom: 28 }}>
+                  {[
+                    'تقييم مستواك الحالي بدقة',
+                    'ترشيح المسار أو الدورة الأنسب لك',
+                    'إجابة كل أسئلتك قبل التسجيل',
+                    'مراجعة مبدئية لملفك الصوتي أو الإعلامي',
+                  ].map(item => (
+                    <li key={item} style={{ display: 'flex', gap: 10, fontFamily: F, fontSize: 14, color: DM, lineHeight: 1.7 }}>
+                      <span style={{ color: '#B8860B', fontWeight: 700, flexShrink: 0 }}>✓</span> {item}
+                    </li>
+                  ))}
+                </ul>
+
+                {/* price + CTA */}
+                <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+                  <div>
+                    <div style={{ fontFamily: F, fontSize: 12, color: DM, marginBottom: 2 }}>سعر الجلسة</div>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 5 }}>
+                      <span style={{ fontFamily: FP, fontSize: 36, fontWeight: 800, color: DH, lineHeight: 1 }}>$70</span>
+                      <span style={{ fontFamily: F, fontSize: 13, color: DM }}> / 45 دقيقة</span>
+                    </div>
+                  </div>
+                  <a
+                    href={WA_CONSULT('أ. رنا محمد العزام')}
+                    target="_blank" rel="noopener noreferrer"
+                    style={{
+                      flex: 1, minWidth: 160, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                      background: NAVY, color: '#fff', fontFamily: F, fontWeight: 800, fontSize: 15,
+                      padding: '14px 24px', borderRadius: 14, textDecoration: 'none',
+                      boxShadow: '0 8px 24px rgba(29,39,56,0.18)',
+                    }}>
+                    احجز جلستك الآن <ArrowLeft size={15} />
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* note below */}
+            <p style={{ fontFamily: F, fontSize: 14, color: DM, textAlign: 'center', marginTop: 16 }}>
+              الاستشارة ليست إلزامية — يمكنك التسجيل مباشرةً في أي وقت.
+            </p>
           </div>
         </div>
       </section>
