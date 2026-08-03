@@ -9,6 +9,7 @@ import wajeezLogo     from '@assets/wajeez-logo_1785688262989.png';
 import coverMasar     from '@assets/cover_المسار_الاعلامي_1785777356196.png';
 import instructorRana from '@assets/trainer-rana-azzam_1785692178863.JPG';
 import instructorRami from '@assets/رامي_ابو_جبارة_1785777158127.png';
+import advisorYaqout  from '@assets/ياقوت__1785784311527.jpeg';
 
 /* ── design tokens ─────────────────────────────────────── */
 const GLD  = GOLD;                           // #FFC107
@@ -28,7 +29,7 @@ const S5 = '#0D1627';   // mid-navy — Advisor
 const CARD = 'rgba(255,255,255,0.04)';
 const CARD_BORDER = 'rgba(255,255,255,0.08)';
 
-const WA_PHONE  = '962700000000';
+const WA_PHONE  = '962771052222';
 const WA_TRACK  = waLink(WA_PHONE, 'مرحباً، أودّ الاستفسار عن المسار الإعلامي');
 const WA_CONSULT = waLink(WA_PHONE, 'مرحباً، أودّ حجز استشارة تعليمية مجانية');
 
@@ -865,7 +866,7 @@ export default function MasarElamiPage() {
             }}>
               {/* photo */}
               <div style={{ position: 'relative', minHeight: 280, background: '#050810', overflow: 'hidden' }}>
-                <img src={instructorRana} alt="أ. رنا محمد العزام — مستشارة تعليمية"
+                <img src={advisorYaqout} alt="ياقوت — مستشارة تعليمية"
                   loading="lazy" decoding="async"
                   style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block', position: 'absolute', inset: 0 }} />
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, rgba(8,13,23,0.70) 0%, transparent 50%)' }} />
@@ -885,7 +886,7 @@ export default function MasarElamiPage() {
                   <span style={{ fontFamily: F, fontSize: 12, fontWeight: 700, color: GLD }}>مستشارة تعليمية</span>
                 </div>
 
-                <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 22, color: OFF, margin: '0 0 6px' }}>أ. رنا محمد العزام</h3>
+                <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 22, color: OFF, margin: '0 0 6px' }}>ياقوت</h3>
                 <p style={{ fontFamily: F, fontSize: 13.5, color: MUT, lineHeight: 1.8, marginBottom: 20 }}>
                   ستساعدك في تقييم مستواك الحالي، ومعرفة ما إذا كان المسار الكامل هو الخيار الأنسب لك — أو إذا كانت دورة منفردة هي نقطة البداية الأفضل.
                 </p>

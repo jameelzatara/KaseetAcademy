@@ -1,0 +1,547 @@
+# بريف تنفيذي — صفحة ماستركلاس الإعلام
+**من:** وجيز · كاسيت أكاديمي
+**إلى:** Replit
+**الحالة:** 4 مهام — ثلاثة جاهزة للتنفيذ، وواحدة تنتظر رقم واتساب
+
+---
+
+## قائمة التنفيذ
+
+| # | المهمة | الحالة |
+|---|---|---|
+| 1 | OG / Social meta tags | جاهز — الكود بالأسفل |
+| 2 | صورة المعاينة 1200×630 | جاهز — المواصفات بالأسفل |
+| 3 | JSON-LD structured data | جاهز — الكود بالأسفل |
+| 4 | رقم واتساب (Task #54) | **ينتظر الرقم — اقرأ القسم 4** |
+| 5 | نظام ألوان الخلفيات | جاهز — **هذا أهم قسم بالبريف** |
+
+> **قبل ما تبدأ:** استبدل `DOMAIN.com` في كل الأكواد بالدومين الحقيقي. وكل الروابط في الميتا تاجز لازم تكون **absolute** — أي رابط نسبي هون بيكسر المعاينة بالواتساب.
+
+---
+
+# 1 · OG / Social Meta Tags
+
+ضيف الكود التالي داخل `<head>` صفحة ماستركلاس الإعلام:
+
+```html
+<!-- ===== Primary ===== -->
+<meta name="description" content="ماستركلاس الإعلام من كاسيت أكاديمي: 10 محطات متسلسلة، 40 ساعة تدريبية، و8 مشاريع تطبيقية. من التقديم أمام الكاميرا إلى القيادة الإعلامية. شهادة معتمدة من تطبيق وجيز.">
+<link rel="canonical" href="https://DOMAIN.com/masar-elami">
+
+<!-- ===== Open Graph ===== -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="كاسيت أكاديمي">
+<meta property="og:locale" content="ar_JO">
+<meta property="og:url" content="https://DOMAIN.com/masar-elami">
+<meta property="og:title" content="ماستركلاس الإعلام | كاسيت أكاديمي">
+<meta property="og:description" content="10 محطات · 40 ساعة تدريبية · 8 مشاريع تطبيقية. شهادة معتمدة من تطبيق وجيز — أكبر مكتبة صوتية وبودكاست في الشرق الأوسط.">
+<meta property="og:image" content="https://DOMAIN.com/og/masar-elami.jpg">
+<meta property="og:image:secure_url" content="https://DOMAIN.com/og/masar-elami.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="ماستركلاس الإعلام — كاسيت أكاديمي">
+
+<!-- ===== Twitter / X ===== -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ماستركلاس الإعلام | كاسيت أكاديمي">
+<meta name="twitter:description" content="10 محطات · 40 ساعة تدريبية · 8 مشاريع تطبيقية. شهادة معتمدة من تطبيق وجيز.">
+<meta name="twitter:image" content="https://DOMAIN.com/og/masar-elami.jpg">
+```
+
+### نقاط تقنية إلزامية
+
+1. **`og:image:width` و `height` مش رفاهية.** بدونهم واتساب وفيسبوك بيعرضو كرت صغير بأول مشاركة، وبعد ما يعملو fetch للصورة يكبّروه. حضورهم = كرت كبير من أول ثانية.
+2. **الصورة لازم تكون متاحة بدون تسجيل دخول.** لو الموقع لسا محمي بباسورد على Replit، المعاينة رح تفضل فاضية. اختبر برابط incognito.
+3. **واتساب بيعمل cache قوي.** بعد أي تعديل على الصورة أو الميتا، امسح الكاش من:
+   - Facebook Sharing Debugger → `developers.facebook.com/tools/debug` → اضغط **Scrape Again**
+   - أو غيّر اسم الملف (`masar-elami-v2.jpg`) — أسرع حل عملي
+4. **حجم الصورة:** تحت 300KB. واتساب بيسكّر عند الملفات الكبيرة وبيعرض بدون صورة.
+5. **JPEG مش PNG** لصورة فيها تدرجات — نفس الجودة بثلث الحجم.
+
+### للصفحات التانية
+نفس البلوك بالضبط، بس بدّل: `og:url`, `og:title`, `og:description`, `og:image`.
+اعمل الميتا تاجز **كومبوننت واحد** بياخذ props، لا كود مكرر بكل صفحة.
+
+---
+
+# 2 · صورة المعاينة 1200×630
+
+## طريقة التوليد المقترحة (الأدق)
+
+اعمل route داخلي `/_og/masar-elami` يرندر div بمقاس **1200×630 ثابت**، وبعدها اسكرين شوت بـPlaywright واحفظه كملف ستاتيك:
+
+```js
+// scripts/gen-og.js
+const { chromium } = require('playwright');
+
+(async () => {
+  const browser = await chromium.launch();
+  const page = await browser.newPage({
+    viewport: { width: 1200, height: 630 },
+    deviceScaleFactor: 2   // للحدة
+  });
+  await page.goto('http://localhost:3000/_og/masar-elami', { waitUntil: 'networkidle' });
+  await page.screenshot({ path: 'public/og/masar-elami.jpg', type: 'jpeg', quality: 88 });
+  await browser.close();
+})();
+```
+
+**ليش هذي الطريقة:** المتصفح يرندر تشكيل العربي (الحروف المتصلة) صح مية بالمية. أي توليد للصورة من خارج المتصفح بيكسر العربي — انتبه لهاي النقطة تحديداً.
+
+## مواصفات التصميم
+
+| العنصر | المواصفة |
+|---|---|
+| المقاس | 1200 × 630 · `deviceScaleFactor: 2` |
+| الخلفية | `#161E2B` |
+| الشبكة | خطوط 1px كل 64px بلون `rgba(255,255,255,.03)` |
+| الضو الذهبي | radial gradient من `rgba(255,193,7,.16)` للشفاف، مركزه فوق يمين |
+| التمويجات | خطين SVG stroke أسفل الصورة — `rgba(255,193,7,.28)` و `rgba(255,255,255,.10)`، عرض 1.5px، بلا fill |
+| الشريط الأيمن | خط ذهبي عمودي 3px على الحافة اليمنى |
+
+**المحتوى (RTL، هامش يمين 80px):**
+
+```
+[شريحة ذهبية: كاسيت أكاديمي · ماستركلاس]
+
+ماستركلاس الإعلام          ← "ماستركلاس" أبيض · "الإعلام" ذهبي #FFC107
+                              خط 96px وزن 800 · خط تحت الكلمة الذهبية
+
+من التقديم أمام الكاميرا إلى القيادة الإعلامية    ← 34px لون #CBD4E1
+
+[10 محطات] [40 ساعة تدريبية] [8 مشاريع تطبيقية] [حضوري + Online LIVE]
+   ← شرائح: خلفية rgba(255,255,255,.05) · حدود rgba(255,255,255,.12) · نقطة ذهبية قبل كل نص
+
+أسفل يمين:
+   [لوقو وجيز على مربع أبيض 96px radius 20]
+   شهادة معتمدة من تطبيق وجيز              ← 30px أبيض
+   أكبر مكتبة صوتية وبودكاست في الشرق الأوسط  ← 23px لون #96C3CA
+```
+
+**الخط:** نفس ستاك الموقع — GE SS Two ثم Tajawal. لو مش متوفر بالسيرفر، حمّل Tajawal من Google Fonts داخل صفحة الـOG.
+
+**بعد التوليد:** ولّد نسخة لكل صفحة (`masar-elami.jpg`, `masterclass-voice.jpg`, `home.jpg`) وخلّي السكربت جزء من الـbuild.
+
+---
+
+# 3 · JSON-LD Structured Data
+
+ضيف الأكواد التالية قبل `</head>`.
+
+## 3.1 · Course Schema
+
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": "ماستركلاس الإعلام",
+  "alternateName": "المسار الإعلامي",
+  "description": "برنامج تدريبي مهني من 10 محطات متسلسلة و40 ساعة تدريبية، يبني الإعلامي من التقديم أمام الكاميرا إلى القيادة الإعلامية، مع 8 مشاريع تطبيقية. متوفر حضورياً في عمّان أو مباشر تفاعلي.",
+  "url": "https://DOMAIN.com/masar-elami",
+  "inLanguage": "ar",
+  "timeRequired": "PT40H",
+  "educationalLevel": "مبتدئ إلى متقدم",
+  "educationalCredentialAwarded": "شهادة إتمام ماستركلاس الإعلام — معتمدة من تطبيق وجيز",
+  "teaches": [
+    "التقديم التلفزيوني والإذاعي",
+    "التعليق الصوتي",
+    "الصحافة والتحرير الإعلامي",
+    "المراسل الميداني",
+    "صناعة المحتوى الإعلامي",
+    "البودكاست",
+    "الإعلام الرقمي والمتحدث الرسمي",
+    "الإنتاج الإعلامي",
+    "الذكاء الاصطناعي للإعلاميين",
+    "القيادة الإعلامية"
+  ],
+  "provider": {
+    "@type": "EducationalOrganization",
+    "name": "كاسيت أكاديمي — بيركلي للصوتيات المسموعة",
+    "url": "https://DOMAIN.com",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "عمّان",
+      "addressCountry": "JO"
+    }
+  },
+  "hasCourseInstance": [
+    {
+      "@type": "CourseInstance",
+      "name": "ماستركلاس الإعلام — حضوري",
+      "courseMode": "onsite",
+      "courseWorkload": "PT40H",
+      "location": {
+        "@type": "Place",
+        "name": "استوديو كاسيت",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "عمّان",
+          "addressCountry": "JO"
+        }
+      }
+    },
+    {
+      "@type": "CourseInstance",
+      "name": "ماستركلاس الإعلام — مباشر تفاعلي",
+      "courseMode": "online",
+      "courseWorkload": "PT40H"
+    }
+  ]
+}
+</script>
+```
+
+## 3.2 · BreadcrumbList
+
+الصفحة فيها breadcrumb ظاهر، فهاد الـschema بيظهر فعلياً بنتائج جوجل:
+
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "الرئيسية", "item": "https://DOMAIN.com" },
+    { "@type": "ListItem", "position": 2, "name": "الماستركلاسات", "item": "https://DOMAIN.com/tracks" },
+    { "@type": "ListItem", "position": 3, "name": "ماستركلاس الإعلام" }
+  ]
+}
+</script>
+```
+
+## 3.3 · تحذيرات مهمة — اقرأها قبل التنفيذ
+
+**١. ممنوع تضيف `offers` بسعر وهمي.**
+جوجل يشترط تطابق البيانات المنظّمة مع المحتوى الظاهر. الأسعار حالياً على الصفحة `—`. لو حطيت سعر بالـschema وهو مش ظاهر بالصفحة، هاد **مخالفة** وبيسبب رفض الـrich result أو عقوبة يدوية. أضِف البلوك التالي **فقط بعد ما ينزل السعر الحقيقي على الصفحة**:
+
+```json
+"offers": {
+  "@type": "Offer",
+  "price": "PRICE",
+  "priceCurrency": "JOD",
+  "category": "Paid",
+  "availability": "https://schema.org/InStock",
+  "url": "https://DOMAIN.com/masar-elami#enroll"
+}
+```
+
+**٢. نفس القاعدة على `aggregateRating`.**
+ما تضيف تقييمات ونجوم إلا لو في تقييمات حقيقية معروضة على الصفحة نفسها. التقييمات المفبركة بالـschema من أسرع الطرق لعقوبة يدوية من جوجل.
+
+**٣. `FAQPage` schema — أولوية منخفضة.**
+جوجل قلّص ظهور نتائج الـFAQ منذ 2023 وصار محصوراً بمواقع حكومية وصحية معتمدة. إضافته ما تضر بس ما تتوقع منها ظهور. لا تصرف عليها وقت الآن.
+
+**٤. اختبر قبل ما تسلّم:**
+- `search.google.com/test/rich-results` — يعطيك أخطاء الـschema
+- `validator.schema.org` — يتحقق من صحة البنية
+- Google Search Console → Enhancements → بعد الفهرسة
+
+---
+
+# 4 · رقم واتساب (Task #54)
+
+**الرقم مش موجود عندي، ولا أقدر أخترعه — لازم وجيز يبعته.**
+وقت ما يوصل، نفّذ التالي:
+
+## 4.1 · خزّنه بمكان واحد
+
+```env
+# .env
+NEXT_PUBLIC_WHATSAPP=962790000000
+```
+
+```js
+// lib/config.js
+export const WHATSAPP = process.env.NEXT_PUBLIC_WHATSAPP;
+export const waLink = (msg) =>
+  `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
+```
+
+استخدم `waLink()` بكل مكان. **ممنوع** يتكرر الرقم مكتوباً بأكثر من ملف — لأنه بيتغير مرة وبتضل نسخ قديمة شغالة.
+
+## 4.2 · صيغة الرقم — أشيع خطأ بهاد الموضوع
+
+الرقم الأردني `0790 000 000` يتحول لـ:
+
+```
+962790000000        ✅ صح
+```
+
+| غلط | ليش |
+|---|---|
+| `+962790000000` | علامة `+` تكسر الرابط |
+| `9620790000000` | الصفر بعد كود الدولة لازم يُحذف |
+| `962 79 000 0000` | المسافات تكسر الرابط |
+| `00962790000000` | `00` تُستبدل بكود الدولة، ما تُضاف قبله |
+
+**القاعدة:** كود الدولة `962` + الرقم بلا الصفر الأول + بلا `+` وبلا مسافات وبلا شرطات.
+
+## 4.3 · الرسالة المُعبّأة مسبقاً
+
+خلّيها مختلفة بكل صفحة، عشان المستشارة تعرف من وين جاي العميل:
+
+```js
+// صفحة ماستركلاس الإعلام
+waLink('مرحبا، بستفسر عن ماستركلاس الإعلام')
+
+// صفحة ماستركلاس التعليق الصوتي
+waLink('مرحبا، بستفسر عن ماستركلاس التعليق والأداء الصوتي')
+
+// الصفحة الرئيسية
+waLink('مرحبا، بستفسر عن برامج كاسيت أكاديمي')
+```
+
+## 4.4 · تفاصيل تنفيذ
+
+```html
+<a href="..." target="_blank" rel="noopener noreferrer">
+```
+- `rel="noopener noreferrer"` إلزامي أمنياً على أي `target="_blank"`
+- ضيف تتبّع الحدث: `onClick` → `gtag('event','whatsapp_click',{page:'masar-elami'})` — عشان تعرف أي صفحة تجيب استفسارات فعلاً
+
+---
+
+# 5 · نظام ألوان الخلفيات والطبقات
+
+> **هذا القسم هو حل المشكلة الأساسية.** المشكلة مش بلون معيّن — المشكلة إنه ما في **مصدر واحد للحقيقة**، فكل صفحة تتبني بطبقات مختلفة والنتيجة تتفكك. الحل: التوكنز التالية تصير المرجع الوحيد، وأي لون مكتوب hardcoded بالكود يُحذف ويُستبدل بتوكن.
+
+## 5.1 · التوكنز — انسخها كما هي في `:root`
+
+```css
+:root{
+  /* ===== خلفيات كحلية ===== */
+  --bg-canvas:  #12192A;   /* أغمق طبقة — خلف كل شي */
+  --bg-1:       #161E2B;   /* القسم الأساسي */
+  --bg-2:       #1A2332;   /* القسم البديل (alternate) */
+
+  /* ===== أسطح الكروت — الكحلي الفاتح ===== */
+  --surface-1:  #242F40;   /* الكرت الافتراضي */
+  --surface-2:  #2C374B;   /* كرت مرفوع · hover · كرت داخل كرت */
+  --surface-3:  #35425A;   /* أعلى مستوى — استخدام نادر جداً */
+
+  /* ===== خلفيات كريمية ===== */
+  --cream-1:    #F6F2E9;   /* القسم الكريمي */
+  --cream-2:    #FFFFFF;   /* الكرت فوق الكريمي */
+  --cream-3:    #EDE6D8;   /* حقل غائر (inset) فوق الكريمي */
+
+  /* ===== النصوص ===== */
+  --text-1:     #FFFFFF;   /* على الكحلي */
+  --text-2:     #C4CEDD;
+  --text-3:     #9AA6B8;
+  --text-4:     #76839A;
+  --ink-1:      #18202F;   /* على الكريمي */
+  --ink-2:      #56617A;
+  --ink-3:      #7B8496;
+
+  /* ===== الذهبي ===== */
+  --gold:       #FFC107;   /* على الكحلي فقط */
+  --gold-ink:   #8A6200;   /* الذهبي كنص على الكريمي */
+  --gold-soft:  rgba(255,193,7,.10);
+  --gold-line:  rgba(255,193,7,.28);
+
+  /* ===== وجيز ===== */
+  --teal:       #1E7A85;
+  --teal-soft:  rgba(30,122,133,.14);
+  --teal-line:  rgba(30,122,133,.48);
+
+  /* ===== الحدود ===== */
+  --line-1:     rgba(255,255,255,.08);   /* الافتراضي */
+  --line-2:     rgba(255,255,255,.14);   /* أوضح */
+  --line-cream: rgba(24,32,47,.10);      /* على الكريمي */
+
+  /* ===== الظلال — ثلاثة مستويات فقط ===== */
+  --sh-1: 0 2px 8px rgba(0,0,0,.18);     /* شرائح */
+  --sh-2: 0 12px 34px rgba(0,0,0,.28);   /* كرت عند hover */
+  --sh-3: 0 30px 80px rgba(0,0,0,.50);   /* صورة hero · modal */
+}
+```
+
+## 5.2 · القاعدة الذهبية للطبقات
+
+**الكرت لازم يكون درجة واحدة أفتح من القسم اللي هو فيه. ممنوع كرت بنفس لون خلفيته.**
+
+| القسم | الكرت | الكرت الداخلي |
+|---|---|---|
+| `--bg-1` | `--surface-1` | `--surface-2` |
+| `--bg-2` | `--surface-1` | `--surface-2` |
+| `--cream-1` | `--cream-2` (أبيض) | `--cream-3` |
+
+كلاسات جاهزة:
+
+```css
+.sec--dark  { background: var(--bg-1); color: var(--text-1); }
+.sec--alt   { background: var(--bg-2); color: var(--text-1);
+              border-block: 1px solid var(--line-1); }
+.sec--cream { background: var(--cream-1); color: var(--ink-1); }
+
+.card { background: var(--surface-1); border: 1px solid var(--line-1);
+        border-radius: 14px; transition: border-color .25s, transform .25s; }
+.card:hover { background: var(--surface-2); border-color: var(--gold-line);
+              transform: translateY(-3px); box-shadow: var(--sh-2); }
+
+/* الكريمي يقلب كل شي — لازم override صريح */
+.sec--cream .card         { background: var(--cream-2); border-color: var(--line-cream); }
+.sec--cream .card:hover   { background: var(--cream-2); border-color: var(--gold-ink); }
+.sec--cream h2, .sec--cream h3, .sec--cream h4 { color: var(--ink-1); }
+.sec--cream p             { color: var(--ink-2); }
+.sec--cream .accent       { color: var(--gold-ink); }  /* لا --gold */
+```
+
+## 5.3 · تحذير حاسم على الكريمي
+
+**`#FFC107` كنص على خلفية كريمية أو بيضاء = نسبة تباين 1.6:1 — غير مقروء ومخالف لمعايير الوصولية (الحد الأدنى 4.5:1).**
+
+| الحالة | الصح |
+|---|---|
+| نص ذهبي على كريمي | `--gold-ink` (#8A6200) — تباين 5.9:1 ✅ |
+| زر ذهبي على كريمي | خلفية `--gold` + نص `#1A1206` ✅ |
+| حدود ذهبية على كريمي | `--gold-ink` بشفافية 40% ✅ |
+| نص `--gold` على كريمي | ❌ ممنوع |
+
+## 5.4 · إيقاع الأقسام
+
+```
+dark → alt → dark → CREAM → dark → alt → dark
+```
+
+**قواعد الكريمي:**
+- **قسم كريمي واحد بالصفحة كحد أقصى** — اتنين يكسرو الهوية الكحلية
+- ممنوع قسمين كريميين ورا بعض
+- ممنوع الكريمي أول قسم أو آخر قسم — لازم يكون محاصر بكحلي من الجهتين
+
+**وين نحطه؟** توصيتي: **قسم الالتحاق والأسعار.**
+الأقسام الفاتحة تُقرأ كـ"رسمية وموثوقة" — وهاي بالضبط الإحساس المطلوب عند لحظة قرار الدفع. وكمان بتعطي راحة بصرية بمنتصف صفحة طويلة كحلية.
+
+## 5.5 · الطبقات المحيطة — الشبكة والضو والتمويجات
+
+الثلاثة `position: fixed`, `z-index: 0`, `pointer-events: none`, وخلف كل المحتوى:
+
+```html
+<div class="ambient" aria-hidden="true">
+  <div class="ambient-grid"></div>
+  <div class="ambient-glow"></div>
+  <svg class="ambient-waves" viewBox="0 0 1440 340" preserveAspectRatio="none">
+    <path d="M0,210 C160,140 300,275 460,205 C620,135 760,265 920,195 C1080,125 1250,255 1440,185"
+          fill="none" stroke="rgba(255,193,7,.30)" stroke-width="1.2"/>
+    <path d="M0,250 C170,190 320,305 480,245 C640,185 790,300 950,240 C1110,180 1270,295 1440,235"
+          fill="none" stroke="rgba(255,255,255,.10)" stroke-width="1"/>
+  </svg>
+</div>
+```
+
+```css
+.ambient{ position:fixed; inset:0; z-index:0; pointer-events:none; }
+
+/* 1 · الشبكة (المربعات) */
+.ambient-grid{
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(to right,  rgba(255,255,255,.022) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,.022) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* 2 · الضو العاكس */
+.ambient-glow{
+  position:absolute; top:-260px; left:50%; transform:translateX(-50%);
+  width:1100px; height:700px;
+  background: radial-gradient(ellipse at center, rgba(255,193,7,.07), transparent 65%);
+}
+
+/* 3 · التمويجات */
+.ambient-waves{
+  position:absolute; bottom:0; left:0;
+  width:100%; height:340px; opacity:.18;
+}
+
+/* المحتوى لازم يكون فوقهم */
+.page{ position:relative; z-index:1; }
+```
+
+**قواعد الثلاثة:**
+
+| الطبقة | القاعدة |
+|---|---|
+| الشبكة | مقاسها **64px ثابت** بكل الصفحات. ممنوع تتكرر جوّا الكروت — الشبكة للخلفية فقط |
+| الضو | **واحد بالصفحة، فوق فقط.** ضو بمنتصف الصفحة يبان كبقعة لا كإضاءة |
+| التمويجات | فوق أو تحت فقط، `stroke` بلا `fill`، عرض 1–1.2px. ممنوع بالمنتصف |
+
+**على القسم الكريمي** الشبكة تتغير:
+```css
+.sec--cream .ambient-grid{
+  background-image:
+    linear-gradient(to right,  rgba(24,32,47,.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(24,32,47,.05) 1px, transparent 1px);
+}
+```
+
+## 5.6 · النيون — القاعدة الحاسمة
+
+```css
+.neon{
+  border: 1px solid var(--gold);
+  box-shadow:
+    0 0 0 1px rgba(255,193,7,.55),
+    0 0 22px rgba(255,193,7,.16),
+    var(--sh-3);
+}
+```
+
+**عنصر نيون واحد بكل شاشة. لا أكثر.**
+
+النيون وظيفته يقول "هذا هو الشي المهم". لو كل شي يلمع، ما في شي يلمع — وهاد بالضبط سبب الإحساس بالفوضى الحالي.
+
+| ✅ استخدمه على | ❌ لا تستخدمه على |
+|---|---|
+| الخطة المميزة بقسم الأسعار | كل الكروت |
+| كرت مشروع التخرّج | الشرائح والبادجز |
+| الزر الأساسي (CTA) | حدود الأقسام |
+| — | أكثر من عنصر بنفس الشاشة |
+
+## 5.7 · الممنوعات — راجعها قبل ما تسلّم
+
+1. ❌ أكثر من `glow` واحد بالصفحة
+2. ❌ كرت بنفس لون القسم اللي هو فيه
+3. ❌ نيون على أكثر من عنصر بالشاشة الواحدة
+4. ❌ `#FFC107` كنص على كريمي أو أبيض
+5. ❌ الشبكة داخل الكروت
+6. ❌ تمويجات بمنتصف الصفحة
+7. ❌ أكثر من 3 مستويات ارتفاع (surface) بنفس الشاشة
+8. ❌ أي لون hex مكتوب مباشرة بالكود — **كله لازم يمر بتوكن**
+
+## 5.8 · خطوة التنظيف الإلزامية
+
+قبل ما تعتبر المهمة خلصت:
+
+```bash
+# ابحث عن كل الألوان الـhardcoded واستبدلها بتوكنز
+grep -rn "#[0-9A-Fa-f]\{6\}" src/ --include="*.css" --include="*.tsx" --include="*.jsx"
+grep -rn "rgba(" src/ --include="*.css" --include="*.tsx" --include="*.jsx"
+```
+
+كل نتيجة تظهر **برا** بلوك `:root` لازم تُستبدل بتوكن. هاي الخطوة هي اللي فعلياً تحل المشكلة — التوكنز بلا تنظيف بتصير طبقة زيادة لا حل.
+
+## 5.9 · التسليم المطلوب
+
+اعمل صفحة `/_styleguide` تعرض:
+- كل التوكنز كمربعات ملوّنة مع أسمائها وقيمها
+- مثال قسم كحلي · قسم بديل · قسم كريمي
+- كرت عادي · كرت hover · كرت نيون
+- الطبقات الثلاثة المحيطة كل واحدة لحالها ثم مجتمعة
+
+هاي الصفحة تصير المرجع لأي صفحة جديدة، وتمنع تكرار المشكلة.
+
+---
+
+# ملخص الأولويات
+
+| الأولوية | المهمة | ليش |
+|---|---|---|
+| **1** | نظام التوكنز + التنظيف (القسم 5) | كل صفحة جديدة تُبنى قبله بتحتاج إعادة عمل |
+| **2** | صورة المعاينة + OG tags | كل مشاركة بواتساب بلا صورة = فرصة ضائعة |
+| **3** | JSON-LD | مكسب SEO تراكمي، ما إله deadline |
+| **4** | واتساب | ينتظر الرقم من وجيز |
+
+**اللي منتظر من وجيز:** رقم واتساب المستشارة · الدومين الحقيقي · صورة المستشارة · أسعار الماستركلاس والدورات.
