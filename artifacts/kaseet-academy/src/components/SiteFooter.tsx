@@ -1,5 +1,6 @@
 // ── Official Kaseet Media Footer ──────────────────────────
 import { Instagram, Facebook, Linkedin, Youtube, Music2, MessageCircle, ArrowLeft } from 'lucide-react';
+import { Link } from 'wouter';
 import logoImg from '@assets/logo_1785422080938.png';
 
 const SOCIAL = [
@@ -14,6 +15,7 @@ const NAV_LINKS = [
   { label: 'الرئيسية',            href: '#' },
   { label: 'الدورات',             href: '#courses' },
   { label: 'المسارات الأكاديمية', href: '#tracks' },
+  { label: 'المسار الإعلامي',     href: '/masar-elami' },
   { label: 'الاستشارة المجانية', href: '#consultant' },
   { label: 'آراء الطلاب',         href: '#testimonials' },
   { label: 'الأسئلة الشائعة',     href: '#faq' },
@@ -97,24 +99,38 @@ export default function SiteFooter() {
               روابط سريعة
             </h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {NAV_LINKS.map(l => (
-                <li key={l.label}>
-                  <a href={l.href} style={{
-                    fontFamily: 'Tajawal, sans-serif', fontSize: 14,
-                    color: 'rgba(203,213,225,0.55)',
-                    textDecoration: 'none',
-                    transition: 'color 0.2s',
-                    display: 'flex', alignItems: 'center', gap: 6,
-                  }}
-                    onMouseEnter={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, { color: '#FFC107' })}
-                    onMouseLeave={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, { color: 'rgba(203,213,225,0.55)' })}
-                  >
-                    {/* Label first → RIGHT in RTL; arrow last → LEFT (inline-end) */}
+              {NAV_LINKS.map(l => {
+                const linkStyle: React.CSSProperties = {
+                  fontFamily: 'Tajawal, sans-serif', fontSize: 14,
+                  color: 'rgba(203,213,225,0.55)',
+                  textDecoration: 'none',
+                  transition: 'color 0.2s',
+                  display: 'flex', alignItems: 'center', gap: 6,
+                };
+                const onEnter = (e: React.MouseEvent<HTMLAnchorElement>) =>
+                  Object.assign(e.currentTarget.style, { color: '#FFC107' });
+                const onLeave = (e: React.MouseEvent<HTMLAnchorElement>) =>
+                  Object.assign(e.currentTarget.style, { color: 'rgba(203,213,225,0.55)' });
+                const content = (
+                  <>
                     {l.label}
                     <ArrowLeft size={10} color="rgba(255,193,7,0.50)" style={{ marginInlineStart: 'auto', flexShrink: 0 }} />
-                  </a>
-                </li>
-              ))}
+                  </>
+                );
+                return (
+                  <li key={l.label}>
+                    {l.href.startsWith('/') ? (
+                      <Link href={l.href} style={linkStyle} onMouseEnter={onEnter} onMouseLeave={onLeave}>
+                        {content}
+                      </Link>
+                    ) : (
+                      <a href={l.href} style={linkStyle} onMouseEnter={onEnter} onMouseLeave={onLeave}>
+                        {content}
+                      </a>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           </div>
 

@@ -60,6 +60,7 @@ function TrackCard({ track }: { track: Track }) {
     direction:  'rtl',
     height:     '100%',
     textDecoration: 'none',
+    color: 'inherit',
     cursor: track.route ? 'pointer' : 'default',
   };
 
