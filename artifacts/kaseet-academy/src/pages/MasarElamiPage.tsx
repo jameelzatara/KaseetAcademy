@@ -3,7 +3,7 @@
  */
 import { useState } from 'react';
 import { Link, useLocation } from 'wouter';
-import { ChevronDown, ArrowLeft, MapPin, Wifi, Award } from 'lucide-react';
+import { ChevronDown, ArrowLeft, MapPin, Wifi, Award, Layers, Clock, FolderCheck, CheckCircle2 } from 'lucide-react';
 import { NAVY, GOLD, OFF, MUTED, F, FP, INNER, LBG, DH, DM, waLink } from './shared/coursePageHelpers';
 import wajeezLogo    from '@assets/wajeez-logo_1785688262989.png';
 import coverMasar    from '@assets/cover_المسار_الاعلامي_1785777356196.png';
@@ -259,6 +259,78 @@ function FaqItem({ q, a }: { q: string; a: string }) {
   );
 }
 
+/* ── Study accordion ─────────────────────────────────── */
+function StudyAccordion({
+  variant, label, sub, badges, items,
+}: {
+  variant: 'inperson' | 'online';
+  label: string; sub: string;
+  badges: string[];
+  items: { title: string; desc: string }[];
+}) {
+  const [open, setOpen] = useState(false);
+  const isIP   = variant === 'inperson';
+  const accent = isIP ? GLD         : '#67e8f9';
+  const bgOpen = isIP ? 'rgba(255,193,7,0.06)'   : 'rgba(103,232,249,0.04)';
+  const bdOpen = isIP ? 'rgba(255,193,7,0.45)'   : 'rgba(103,232,249,0.40)';
+  const bdCls  = isIP ? `1px solid rgba(255,193,7,0.28)` : `1px solid rgba(103,232,249,0.26)`;
+  const iconBg = isIP ? 'rgba(255,193,7,0.14)'   : 'rgba(103,232,249,0.13)';
+  const rowBg  = isIP ? 'rgba(255,193,7,0.03)'   : 'rgba(103,232,249,0.03)';
+  const rowBd  = isIP ? 'rgba(255,193,7,0.16)'   : 'rgba(103,232,249,0.16)';
+  const chipBg = isIP ? 'rgba(255,193,7,0.10)'   : 'rgba(103,232,249,0.12)';
+  const chipBd = isIP ? 'rgba(255,193,7,0.28)'   : 'rgba(103,232,249,0.28)';
+  const chipTx = isIP ? '#B8860B'                : '#0e7490';
+
+  return (
+    <div style={{
+      borderRadius: 18, overflow: 'hidden', marginBottom: 12,
+      border: `1px solid ${open ? bdOpen : HAIR}`,
+      boxShadow: open ? `0 6px 24px rgba(0,0,0,0.20)` : '0 2px 8px rgba(0,0,0,0.10)',
+      transition: 'border-color 0.2s, box-shadow 0.2s',
+    }}>
+      <button
+        onClick={() => setOpen(v => !v)}
+        style={{ width: '100%', background: open ? bgOpen : CARD, border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 22px', cursor: 'pointer', textAlign: 'right', gap: 12 }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ width: 38, height: 38, borderRadius: '50%', flexShrink: 0, background: open ? accent : iconBg, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.2s' }}>
+            {isIP
+              ? <MapPin size={17} color={open ? BG : accent} strokeWidth={2.2} />
+              : <Wifi   size={17} color={open ? BG : accent} strokeWidth={2.2} />}
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontFamily: F, fontWeight: 900, fontSize: 16, color: OFF }}>{label}</div>
+            <div style={{ fontFamily: F, fontSize: 12.5, color: MUT, marginTop: 2 }}>{sub}</div>
+          </div>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 7, flexShrink: 0, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+          {badges.map(b => (
+            <span key={b} style={{ fontFamily: FP, fontSize: 11, color: MUT, background: 'rgba(255,255,255,0.05)', border: `1px solid ${HAIR}`, borderRadius: 6, padding: '3px 8px', whiteSpace: 'nowrap' }}>{b}</span>
+          ))}
+          <ChevronDown size={16} color={open ? accent : MUT} strokeWidth={2.5} style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.25s', flexShrink: 0 }} />
+        </div>
+      </button>
+      {open && (
+        <div style={{ background: rowBg, borderTop: `1px solid ${rowBd}` }}>
+          {items.map((item, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 14, padding: '16px 22px', borderBottom: i < items.length - 1 ? `1px solid ${HAIR}` : 'none' }}>
+              <span style={{ fontFamily: FP, fontWeight: 800, fontSize: 12, color: BG, background: accent, borderRadius: '50%', flexShrink: 0, width: 28, height: 28, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{i + 1}</span>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontFamily: F, fontWeight: 800, fontSize: 14.5, color: OFF, marginBottom: 5 }}>{item.title}</div>
+                <div style={{ fontFamily: F, fontSize: 13.5, color: MUT, lineHeight: 1.75 }}>{item.desc}</div>
+              </div>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, flexShrink: 0, background: chipBg, border: `1px solid ${chipBd}`, borderRadius: 8, padding: '4px 10px', fontFamily: FP, fontWeight: 700, fontSize: 11, color: chipTx, whiteSpace: 'nowrap' }}>
+                {isIP ? <MapPin size={11} strokeWidth={2} color={accent} /> : <Wifi size={11} strokeWidth={2} color={accent} />}
+                {isIP ? 'داخل الاستوديو' : 'بث مباشر'}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ── Page ────────────────────────────────────────────── */
 export default function MasarElamiPage() {
   const [, navigate]         = useLocation();
@@ -301,8 +373,20 @@ export default function MasarElamiPage() {
       </div>
 
       {/* ════════════════ HERO ════════════════ */}
-      <section style={{ padding: '52px 0 88px' }}>
-        <div style={{ ...INNER }}>
+      <section style={{ position: 'relative', padding: '52px 0 88px', overflow: 'hidden' }}>
+        {/* cover image — full-bleed background */}
+        <img
+          src={coverMasar}
+          alt=""
+          aria-hidden="true"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', zIndex: 0 }}
+        />
+        {/* dark gradient overlay */}
+        <div style={{
+          position: 'absolute', inset: 0, zIndex: 1,
+          background: 'linear-gradient(to bottom, rgba(15,20,32,0.85) 0%, rgba(22,30,43,0.90) 50%, rgba(22,30,43,0.97) 100%)',
+        }} />
+        <div style={{ position: 'relative', zIndex: 2, ...INNER }}>
           <div className="masar-hero-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1.15fr) minmax(0,0.85fr)', gap: 56, alignItems: 'center' }}>
 
             {/* text column */}
@@ -321,20 +405,23 @@ export default function MasarElamiPage() {
                 صحافة، ميدان، محتوى، بودكاست، متحدث رسمي، وإنتاج — وكل محطة تُسلَّم فيها مشروع تطبيقي.
               </p>
 
+              {/* stat badges — icon grid */}
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 28 }}>
-                {[
-                  ['10',   'محطات تدريبية متسلسلة'],
-                  ['40',   'ساعة تدريبية موزَّعة'],
-                  ['8',    'مشاريع تطبيقية تُسلَّم'],
-                  [null,   'حضوري في عمّان أو Online LIVE'],
-                ].map(([b, txt], i) => (
+                {([
+                  { Icon: Layers,      num: '10', label: 'محطات تدريبية متسلسلة' },
+                  { Icon: Clock,       num: '40', label: 'ساعة تدريبية موزَّعة'  },
+                  { Icon: FolderCheck, num: '8',  label: 'مشاريع تطبيقية تُسلَّم' },
+                  { Icon: MapPin,      num: null, label: 'حضوري في عمّان أو Online LIVE' },
+                  { Icon: Award,       num: null, label: 'شهادة معتمدة من تطبيق وجيز' },
+                ] as const).map(({ Icon, num, label }, i) => (
                   <span key={i} style={{
                     display: 'inline-flex', alignItems: 'center', gap: 9,
-                    background: 'rgba(255,255,255,0.035)', border: `1px solid ${HAIR}`,
-                    padding: '9px 15px', borderRadius: 10, fontFamily: F, fontSize: 13.5, color: LT,
+                    background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)',
+                    padding: '10px 16px', borderRadius: 12, fontFamily: F, fontSize: 13.5, color: LT,
                   }}>
-                    <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD, flexShrink: 0 }} />
-                    {b && <b style={{ color: OFF, fontWeight: 700 }}>{b}</b>} {txt}
+                    <Icon size={15} color={GLD} strokeWidth={2} style={{ flexShrink: 0 }} />
+                    {num && <b style={{ fontFamily: FP, color: OFF, fontWeight: 700 }}>{num}</b>}
+                    {label}
                   </span>
                 ))}
               </div>
@@ -399,19 +486,6 @@ export default function MasarElamiPage() {
           </div>
         </div>
       </section>
-
-      {/* ════════════════ COVER STRIP ════════════════ */}
-      <div style={{ position: 'relative', height: 'clamp(100px,12vw,160px)', overflow: 'hidden' }}>
-        <img
-          src={coverMasar}
-          alt="المسار الإعلامي"
-          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 28%', display: 'block' }}
-        />
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'linear-gradient(to bottom, rgba(22,30,43,0.80) 0%, rgba(36,46,64,0.70) 50%, rgba(22,30,43,0.92) 100%)',
-        }} />
-      </div>
 
       {/* ════════════════ TREE ════════════════ */}
       <section id="tree" style={{ background: BG2, borderBlock: `1px solid ${HAIR}`, padding: '88px 0' }}>
@@ -611,45 +685,118 @@ export default function MasarElamiPage() {
         </div>
       </section>
 
-      {/* ════════════════ STUDY MODES (dark) ════════════════ */}
+      {/* ════════════════ STUDY MODES — "اختر أسلوب تعلّمك" ════════════════ */}
       <section style={{ padding: '88px 0' }}>
         <div style={{ ...INNER }}>
           <div style={{ textAlign: 'center', marginBottom: 48 }}>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, border: `1px solid ${GL}`, color: GLD, background: GS, fontFamily: F, fontSize: 13, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>أسلوب الدراسة</span>
             <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', marginTop: 18, lineHeight: 1.35, color: OFF }}>
-              اختر <span style={{ color: GLD }}>أسلوبك</span>
+              اختر <span style={{ color: GLD }}>أسلوب تعلّمك</span>
             </h2>
-            <p style={{ fontFamily: F, fontSize: 16.5, color: MUT, marginTop: 14 }}>نفس المنهج ونفس المدربين — الاختلاف الوحيد هو مكان الدراسة.</p>
+            <p style={{ fontFamily: F, fontSize: 16.5, color: MUT, marginTop: 14, maxWidth: 560, marginInline: 'auto' }}>
+              نفس المنهج ونفس المدربين والشهادة المعتمدة — فقط اختر ما يناسب جدولك وحياتك
+            </p>
           </div>
-          <div className="masar-study-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18 }}>
-            {[
-              {
-                tag:'حضوري في عمّان', Icon:MapPin, title:'استوديو كاسيت',
-                desc:'تدريب داخل استوديو مجهَّز صوتياً، مع كاميرا ومايكروفونات احترافية.',
-                items:['تسجيل عملي بمعدات احترافية','مقاعد محدودة لكل مجموعة','تصحيح فوري ومباشر من المدرب','تشبيك مع المتدربين وفرص العمل'],
-              },
-              {
-                tag:'مباشر تفاعلي (Online LIVE)', Icon:Wifi, title:'كاسيت لايف',
-                desc:'جلسات مباشرة بالكامل — لا تسجيلات مسبقة ولا دراسة منفردة.',
-                items:['جلسات مباشرة مع المدرب في الوقت الفعلي','تسجيلات الجلسات متاحة للمراجعة','تسليم واجبات وتقييم فردي','متاح من أي مكان في العالم العربي'],
-              },
-            ].map(({ tag, Icon, title, desc, items }) => (
-              <div key={tag} style={{ background: CARD, border: `1px solid ${HAIR}`, borderRadius: 18, padding: '32px 30px' }}>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, border: `1px solid ${GL}`, color: GLD, background: GS, fontFamily: F, fontSize: 13, fontWeight: 700, padding: '6px 15px', borderRadius: 999, marginBottom: 18 }}>
-                  <Icon size={14} /> {tag}
+
+          {/* comparison card */}
+          <div style={{
+            background: CARD,
+            borderRadius: 20,
+            border: `1px solid ${HAIR}`,
+            padding: 'clamp(20px,3vw,32px)',
+            marginBottom: 24,
+            boxShadow: '0 8px 32px rgba(0,0,0,0.25)',
+          }}>
+            <div style={{ marginBottom: 18 }}>
+              <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(16px,2vw,19px)', color: OFF, margin: '0 0 5px' }}>قارن بين الأسلوبين</h3>
+              <p style={{ fontFamily: F, fontSize: 13.5, color: MUT, margin: 0, lineHeight: 1.6 }}>
+                نفس المحتوى والشهادات — فقط الاختلاف في مكان الحضور وتوقيته
+              </p>
+            </div>
+
+            <div className="masar-study-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: 14 }}>
+
+              {/* حضوري tile */}
+              <div style={{ background: 'rgba(255,193,7,0.06)', border: '1.5px solid rgba(255,193,7,0.28)', borderRadius: 14, padding: '18px 20px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+                  <div style={{ width: 38, height: 38, borderRadius: '50%', background: 'rgba(255,193,7,0.16)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <MapPin size={18} color={GLD} strokeWidth={2.2} />
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: F, fontWeight: 900, fontSize: 15, color: GLD }}>حضوري — استوديو كاسيت</div>
+                    <div style={{ fontFamily: F, fontSize: 12, color: MUT, lineHeight: 1.4 }}>حضور فعلي في استوديو كاسيت وعمّان</div>
+                  </div>
                 </div>
-                <h4 style={{ fontFamily: F, fontWeight: 800, fontSize: 21, color: OFF, marginBottom: 10 }}>{title}</h4>
-                <p style={{ fontFamily: F, fontSize: 15, color: MUT, marginBottom: 18, lineHeight: 1.7 }}>{desc}</p>
-                <ul style={{ listStyle: 'none', display: 'grid', gap: 10 }}>
-                  {items.map(item => (
-                    <li key={item} style={{ display: 'flex', gap: 10, fontFamily: F, fontSize: 14.5, color: LT, lineHeight: 1.7 }}>
-                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: GLD, marginTop: 10, flexShrink: 0 }} />{item}
+                <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {['تفاعل مباشر مع المدرب والزملاء', 'تطبيق عملي داخل الاستوديوهات المجهَّزة', 'بيئة تعلم منظَّمة بلا إلهاء', 'تشبيك مع المتدربين وفرص العمل'].map(pt => (
+                    <li key={pt} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontFamily: F, fontSize: 13, color: LT }}>
+                      <CheckCircle2 size={14} color={GLD} strokeWidth={2.2} style={{ flexShrink: 0, marginTop: 2 }} />
+                      {pt}
                     </li>
                   ))}
                 </ul>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,193,7,0.12)', border: '1px solid rgba(255,193,7,0.30)', borderRadius: 999, padding: '5px 12px', marginTop: 14, fontFamily: F, fontWeight: 700, fontSize: 12, color: GLD }}>
+                  <MapPin size={13} color={GLD} strokeWidth={2} />
+                  عمّان — الأردن
+                </div>
               </div>
-            ))}
+
+              {/* أونلاين tile */}
+              <div style={{ background: 'rgba(103,232,249,0.05)', border: '1.5px solid rgba(103,232,249,0.26)', borderRadius: 14, padding: '18px 20px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+                  <div style={{ width: 38, height: 38, borderRadius: '50%', background: 'rgba(103,232,249,0.13)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Wifi size={18} color="#67e8f9" strokeWidth={2.2} />
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: F, fontWeight: 900, fontSize: 15, color: '#67e8f9' }}>كاسيت لايف — Online LIVE</div>
+                    <div style={{ fontFamily: F, fontSize: 12, color: MUT, lineHeight: 1.4 }}>جلسات مباشرة تفاعلية من أي مكان</div>
+                  </div>
+                </div>
+                <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {['جلسات مباشرة مع المدرب في الوقت الفعلي', 'تسجيلات الجلسات متاحة للمراجعة', 'تسليم واجبات وتقييم فردي', 'متاح من أي مكان في العالم العربي'].map(pt => (
+                    <li key={pt} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontFamily: F, fontSize: 13, color: LT }}>
+                      <CheckCircle2 size={14} color="#67e8f9" strokeWidth={2.2} style={{ flexShrink: 0, marginTop: 2 }} />
+                      {pt}
+                    </li>
+                  ))}
+                </ul>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(103,232,249,0.13)', border: '1px solid rgba(103,232,249,0.32)', borderRadius: 999, padding: '5px 12px', marginTop: 14, fontFamily: F, fontWeight: 700, fontSize: 12, color: '#67e8f9' }}>
+                  <Wifi size={13} color="#67e8f9" strokeWidth={2} />
+                  بث مباشر تفاعلي
+                </div>
+              </div>
+
+            </div>
           </div>
+
+          {/* حضوري details accordion */}
+          <StudyAccordion
+            variant="inperson"
+            label="حضوري — داخل استوديو كاسيت"
+            sub="تدريب ميداني مع معدات احترافية وتصحيح فوري"
+            badges={['10 محطات', '40 ساعة']}
+            items={[
+              { title: 'تطبيق عملي أمام الكاميرا',     desc: 'كل محطة تنتهي بمشروع مصوَّر أو مسجَّل يُسلَّم ويُقيَّم من لجنة المدربين.' },
+              { title: 'استوديو مجهَّز احترافياً',       desc: 'كاميرات، إضاءة، وأجهزة تسجيل صوتي متاحة طوال فترة التدريب.' },
+              { title: 'مجموعات صغيرة — تصحيح فردي',    desc: 'لا يتجاوز عدد المجموعة 12 متدرباً لضمان اهتمام المدرب بكل متدرب.' },
+              { title: 'تشبيك مهني مع الزملاء',          desc: 'بيئة تعلم جماعية تفتح أبواب الفرص المهنية والتعاون بين المتدربين.' },
+            ]}
+          />
+
+          {/* أونلاين details accordion */}
+          <StudyAccordion
+            variant="online"
+            label="Online LIVE — بث مباشر تفاعلي"
+            sub="من أي مكان في العالم العربي — بث حي لا تسجيلات مسبقة"
+            badges={['10 محطات', '40 ساعة', 'بث مباشر']}
+            items={[
+              { title: 'جلسات حية مع المدرب',           desc: 'كل محطة تُقدَّم مباشرةً في الوقت الفعلي — لا محاضرات مسجَّلة مسبقاً.' },
+              { title: 'تسجيلات للمراجعة',               desc: 'تسجيلات الجلسات محفوظة ومتاحة للمشتركين لمراجعتها في أي وقت.' },
+              { title: 'تسليم مشاريع وتقييم فردي',       desc: 'نفس آلية التسليم والتقييم المطبَّقة في الحضوري — لا تنازل عن المعايير.' },
+              { title: 'متاح من أي مكان',                desc: 'الأردن، السعودية، الإمارات، مصر، أو أي مكان آخر — بشرط اتصال جيد.' },
+            ]}
+          />
+
         </div>
       </section>
 
