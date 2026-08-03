@@ -91,6 +91,18 @@ function TrackCard({ track }: { track: Track }) {
             pointerEvents: 'none',
           }} />
         )}
+        {/* Badge for clickable tracks */}
+        {track.route && (
+          <span style={{
+            position: 'absolute', top: 12, right: 12, zIndex: 1,
+            fontFamily: 'Tajawal, sans-serif', fontWeight: 800, fontSize: 11,
+            color: '#121927', background: '#FFC107',
+            padding: '5px 12px', borderRadius: 999,
+            boxShadow: '0 4px 12px rgba(255,193,7,0.45)',
+          }}>
+            اكتشف الآن ↗
+          </span>
+        )}
       </div>
 
       {/* Card body */}
