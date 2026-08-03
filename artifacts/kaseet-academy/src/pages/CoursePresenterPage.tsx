@@ -15,7 +15,7 @@ import {
   INNER, waLink, SectionTitle, LightSectionTitle, AdvisorMini,
   ScheduleEntry, SessionItem, TrackCard2, PartnerBar,
 } from './shared/coursePageHelpers';
-import coverPresenter from '@assets/cover_كورس_اﻟﺪورة_اﻟﻤﻜﺜﻔﺔ_اﻟﻤﺬﻳﻊ_اﻟﻤﺤﺘﺮف_وﻣﻬﺎرات_اﻹﻋﻼم_اﻟﺮﻗﻤﻲ_1785692222453';
+import coverPresenter from '@assets/رنا_عزام_1785758295559.png';
 import photoRana     from '@assets/trainer-rana-azzam_1785692178863.JPG';
 import ayaImg        from '@assets/اية_القماز_1785619557679.jpeg';
 

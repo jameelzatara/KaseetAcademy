@@ -10,7 +10,7 @@ import coverSohaib      from '@assets/cover-public-speaking-tedx_1785692401460.j
 import instructorSohaib from '@assets/instructor-sohaib_1785692401461.jpeg';
 import coverRana        from '@assets/رنا_عزام_1785757997825.png';
 import instructorRana   from '@assets/trainer-rana-azzam_1785692178863.JPG';
-import coverPresenter   from '@assets/cover_كورس_اﻟﺪورة_اﻟﻤﻜﺜﻔﺔ_اﻟﻤﺬﻳﻊ_اﻟﻤﺤﺘﺮف_وﻣﻬﺎرات_اﻹﻋﻼم_اﻟﺮﻗﻤﻲ_1785692222453';
+import coverPresenter   from '@assets/رنا_عزام_1785758295559.png';
 
 /* ── Tokens ─────────────────────────────────────────────── */
 const NAVY    = '#2C374B';
