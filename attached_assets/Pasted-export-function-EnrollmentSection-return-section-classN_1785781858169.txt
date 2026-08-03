@@ -1,0 +1,90 @@
+export function EnrollmentSection() {
+  return (
+    <section className="py-20 px-4 relative bg-slate-950">
+      {/* Studio Spotlight Effect */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-[120px] pointer-events-none" />
+
+      {/* Header */}
+      <div className="text-center max-w-2xl mx-auto mb-12 relative z-10">
+        <span className="text-amber-400 text-xs font-semibold tracking-widest uppercase px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20">
+          الالتحاق بالمسار
+        </span>
+        <h2 className="text-3xl md:text-4xl font-bold text-white mt-4">
+          اختر خيار الالتحاق
+        </h2>
+        <p className="text-slate-400 text-sm md:text-base mt-2">
+          سر في المسار الكامل للتحول لإعلامي محترف، أو ابدأ بدورة منفردة.
+        </p>
+      </div>
+
+      {/* Main Centered Pricing Card */}
+      <div className="max-w-2xl mx-auto relative z-10">
+        {/* Glow backdrop */}
+        <div className="absolute -inset-1 bg-gradient-to-r from-amber-500/20 to-orange-500/20 rounded-3xl blur-xl opacity-50" />
+
+        <div className="relative bg-slate-900/90 border border-amber-500/30 rounded-3xl p-8 md:p-10 backdrop-blur-xl shadow-2xl">
+          {/* Top Badge */}
+          <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 text-xs font-bold px-4 py-1 rounded-full shadow-lg">
+            الأشمل والأوفر
+          </div>
+
+          {/* Pricing Info */}
+          <div className="text-center pb-8 border-b border-white/10">
+            <h3 className="text-2xl font-bold text-white">المسار الإعلامي الكامل</h3>
+            <p className="text-slate-400 text-xs md:text-sm mt-1">
+              10 محطات كاملة · التأسيس + كل التخصصات الإعلامية + القيادة الإعلامية
+            </p>
+
+            <div className="mt-6 flex items-center justify-center gap-2">
+              <span className="text-5xl font-black text-amber-400">$1,000</span>
+              <span className="text-slate-400 text-xs self-end mb-1">للمسار الكامل</span>
+            </div>
+
+            {/* Clean Replacement for the Gray Box */}
+            <div className="mt-4 inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs md:text-sm">
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+              <span>التقسيط متاح: ادفع الدفعة الأولى <strong className="text-white font-bold">$250</strong> لتثبيت مقعدك وقسّط الباقي ميسراً</span>
+            </div>
+            
+            <p className="text-slate-400 text-xs mt-3">40 ساعة موزعة · حضوري أو Online LIVE</p>
+          </div>
+
+          {/* Features List */}
+          <ul className="py-8 space-y-4 text-sm text-slate-200">
+            {[
+              "10 محطات متسلسلة (3 مراحل كاملة)",
+              "تغطية جميع التخصصات الإعلامية",
+              "8 محطات حصريّة داخل المسار",
+              "8 مشاريع تطبيقية مصورة بإشراف مباشر",
+              "محطة القيادة الإعلامية وتأهيل البروفايل",
+              "شهادة معتمدة من تطبيق وجيز",
+              "إمكانية خصم قيمة أي دورة درستها سابقاً",
+            ].map((feature, idx) => (
+              <li key={idx} className="flex items-start gap-3">
+                <span className="text-amber-400 font-bold">✓</span>
+                <span>{feature}</span>
+              </li>
+            ))}
+          </ul>
+
+          {/* Main CTA */}
+          <div className="space-y-3">
+            <button className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-base transition-all shadow-lg shadow-amber-500/20">
+              التسجيل في المسار ←
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Single Course Down-sell (Replaces the left card) */}
+      <div className="mt-8 text-center relative z-10">
+        <p className="text-slate-400 text-xs md:text-sm">
+          تريد البدء بدورة واحدة قبل الالتزام بالمسار الكامل؟{" "}
+          <a href="#single-courses" className="text-amber-400 underline underline-offset-4 hover:text-amber-300 transition-colors font-semibold">
+            استعرض الدورات المنفردة ($150 - $250) ←
+          </a>
+        </p>
+      </div>
+    </section>
+  );
+}

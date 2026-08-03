@@ -854,74 +854,92 @@ export default function MasarElamiPage() {
         </div>
       </section>
 
-      {/* ════════════════ ENROLL (dark) ════════════════ */}
-      <section id="enroll" style={{ padding: '88px 0' }}>
-        <div style={{ ...INNER }}>
-          <div style={{ textAlign: 'center', marginBottom: 52 }}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, border: `1px solid ${GL}`, color: GLD, background: GS, fontFamily: F, fontSize: 13, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>الالتحاق بالمسار</span>
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', marginTop: 18, lineHeight: 1.35, color: OFF }}>
+      {/* ════════════════ ENROLL ════════════════ */}
+      <section id="enroll" style={{ position: 'relative', padding: '88px 0', background: '#020617', overflow: 'hidden' }}>
+        {/* spotlight glow */}
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 500, height: 500, background: 'rgba(255,193,7,0.10)', borderRadius: '50%', filter: 'blur(120px)', pointerEvents: 'none' }} />
+
+        <div style={{ position: 'relative', zIndex: 1, ...INNER }}>
+          {/* header */}
+          <div style={{ textAlign: 'center', maxWidth: 640, margin: '0 auto 48px' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: F, fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: GLD, background: 'rgba(255,193,7,0.10)', border: '1px solid rgba(255,193,7,0.20)', padding: '5px 14px', borderRadius: 999 }}>
+              الالتحاق بالمسار
+            </span>
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,4vw,40px)', color: OFF, marginTop: 16, lineHeight: 1.3 }}>
               اختر <span style={{ color: GLD }}>خيار الالتحاق</span>
             </h2>
-            <p style={{ fontFamily: F, fontSize: 16.5, color: MUT, marginTop: 14 }}>سر المسار الكامل، أو ابدأ بدورة تأسيسية وحدِّد مسارك لاحقاً.</p>
+            <p style={{ fontFamily: F, fontSize: 15, color: MUT, marginTop: 10, lineHeight: 1.7 }}>
+              سر في المسار الكامل للتحوّل لإعلامي محترف، أو ابدأ بدورة منفردة.
+            </p>
           </div>
 
-          <div className="masar-enroll-grid" style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: 20 }}>
-            {/* track plan */}
-            <div style={{ background: `linear-gradient(180deg, rgba(255,193,7,0.07), ${CARD} 40%)`, border: `1px solid ${GL}`, borderRadius: 18, padding: '36px 32px', position: 'relative', display: 'flex', flexDirection: 'column' }}>
-              <span style={{ position: 'absolute', top: 22, left: 26, fontFamily: F, fontSize: 11.5, fontWeight: 700, background: GLD, color: '#1A1206', padding: '5px 12px', borderRadius: 999 }}>الأشمل والأوفر</span>
-              <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 24, color: OFF, marginBottom: 10 }}>المسار الإعلامي الكامل</h3>
-              <p style={{ fontFamily: F, fontSize: 15, color: MUT, lineHeight: 1.7 }}>10 محطات كاملة: التأسيس + كل التخصصات الإعلامية + القيادة الإعلامية.</p>
+          {/* centered pricing card */}
+          <div style={{ maxWidth: 640, margin: '0 auto', position: 'relative' }}>
+            {/* glow backdrop */}
+            <div style={{ position: 'absolute', inset: -4, background: 'linear-gradient(135deg, rgba(255,193,7,0.20), rgba(234,88,12,0.20))', borderRadius: 28, filter: 'blur(20px)', opacity: 0.5, pointerEvents: 'none' }} />
 
-              {/* price */}
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, margin: '26px 0 6px', flexWrap: 'wrap' }}>
-                <span style={{ fontFamily: FP, fontSize: 44, fontWeight: 700, color: GLD, lineHeight: 1 }}>$1,000</span>
-                <span style={{ fontFamily: F, fontSize: 15, color: MUT }}>للمسار الكامل</span>
+            <div style={{ position: 'relative', background: 'rgba(15,23,42,0.90)', border: '1px solid rgba(255,193,7,0.30)', borderRadius: 24, padding: 'clamp(28px,4vw,40px)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', boxShadow: '0 24px 64px rgba(0,0,0,0.40)' }}>
+
+              {/* top pill badge */}
+              <div style={{ position: 'absolute', top: -14, left: '50%', transform: 'translateX(-50%)', background: 'linear-gradient(90deg, #f59e0b, #d97706)', color: '#0c0a00', fontFamily: F, fontWeight: 800, fontSize: 12, padding: '5px 18px', borderRadius: 999, whiteSpace: 'nowrap', boxShadow: '0 4px 14px rgba(245,158,11,0.35)' }}>
+                الأشمل والأوفر
               </div>
 
-              {/* installment banner */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(255,193,7,0.08)', border: '1px solid rgba(255,193,7,0.25)', borderRadius: 10, padding: '10px 14px', marginBottom: 24 }}>
-                <Award size={16} color={GLD} style={{ flexShrink: 0 }} />
-                <div>
-                  <div style={{ fontFamily: F, fontWeight: 700, fontSize: 13.5, color: OFF }}>التقسيط متاح</div>
-                  <div style={{ fontFamily: F, fontSize: 12, color: MUT }}>ادفع الدفعة الأولى لتثبيت مقعدك وقسِّط الباقي على مراحل المسار</div>
+              {/* pricing info */}
+              <div style={{ textAlign: 'center', paddingBottom: 28, borderBottom: '1px solid rgba(255,255,255,0.08)', marginBottom: 0 }}>
+                <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 22, color: OFF }}>المسار الإعلامي الكامل</h3>
+                <p style={{ fontFamily: F, fontSize: 13, color: MUT, marginTop: 6, lineHeight: 1.6 }}>
+                  10 محطات كاملة · التأسيس + كل التخصصات الإعلامية + القيادة الإعلامية
+                </p>
+
+                <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: 8, margin: '22px 0 0' }}>
+                  <span style={{ fontFamily: FP, fontSize: 56, fontWeight: 900, color: GLD, lineHeight: 1 }}>$1,000</span>
+                  <span style={{ fontFamily: F, fontSize: 13, color: MUT, marginBottom: 8 }}>للمسار الكامل</span>
                 </div>
+
+                {/* installment chip */}
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 14, background: 'rgba(255,193,7,0.10)', border: '1px solid rgba(255,193,7,0.20)', color: GLD, fontFamily: F, fontSize: 13, padding: '9px 16px', borderRadius: 14 }}>
+                  <span style={{ width: 8, height: 8, borderRadius: '50%', background: GLD, flexShrink: 0, animation: 'pulse 2s infinite' }} />
+                  <span>التقسيط متاح: ادفع الدفعة الأولى <b style={{ color: OFF, fontWeight: 700 }}>$250</b> لتثبيت مقعدك وقسّط الباقي ميسراً</span>
+                </div>
+
+                <p style={{ fontFamily: F, fontSize: 13, color: MUT, marginTop: 12 }}>40 ساعة موزَّعة · حضوري أو Online LIVE</p>
               </div>
 
-              <p style={{ fontFamily: F, fontSize: 13, color: MUT, marginBottom: 24 }}>40 ساعة موزَّعة · حضوري أو Online LIVE</p>
-
-              <ul style={{ listStyle: 'none', display: 'grid', gap: 11, marginBottom: 28, flex: 1 }}>
-                {['10 محطات متسلسلة · 3 مراحل','جميع التخصصات الإعلامية','8 محطات حصرية داخل المسار','8 مشاريع تطبيقية بإشراف مباشر','محطة القيادة الإعلامية','شهادة معتمدة من تطبيق وجيز','إمكانية خصم دورة درستها مسبقاً'].map(item => (
-                  <li key={item} style={{ display: 'flex', gap: 10, fontFamily: F, fontSize: 14.5, color: LT, lineHeight: 1.7 }}>
-                    <span style={{ color: GLD, fontWeight: 700, flexShrink: 0 }}>✓</span> {item}
+              {/* features list */}
+              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 14, padding: '28px 0', margin: 0 }}>
+                {[
+                  '10 محطات متسلسلة (3 مراحل كاملة)',
+                  'تغطية جميع التخصصات الإعلامية',
+                  '8 محطات حصريّة داخل المسار',
+                  '8 مشاريع تطبيقية مصوَّرة بإشراف مباشر',
+                  'محطة القيادة الإعلامية وتأهيل البروفايل',
+                  'شهادة معتمدة من تطبيق وجيز',
+                  'إمكانية خصم قيمة أي دورة درستها سابقاً',
+                ].map(feat => (
+                  <li key={feat} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, fontFamily: F, fontSize: 14.5, color: LT, lineHeight: 1.6 }}>
+                    <span style={{ color: GLD, fontWeight: 800, flexShrink: 0, marginTop: 1 }}>✓</span>
+                    {feat}
                   </li>
                 ))}
               </ul>
+
+              {/* CTA */}
               <a href={WA_TRACK} target="_blank" rel="noopener noreferrer"
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '15px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 10px 30px rgba(255,193,7,0.22)' }}>
-                التسجيل في المسار <ArrowLeft size={15} />
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, width: '100%', boxSizing: 'border-box', background: 'linear-gradient(90deg, #f59e0b, #d97706)', color: '#0c0a00', fontFamily: F, fontWeight: 800, fontSize: 15.5, padding: '15px 24px', borderRadius: 16, textDecoration: 'none', boxShadow: '0 8px 24px rgba(245,158,11,0.25)' }}>
+                التسجيل في المسار <ArrowLeft size={16} />
               </a>
             </div>
+          </div>
 
-            {/* single course plan */}
-            <div style={{ background: CARD, border: `1px solid ${HAIR}`, borderRadius: 18, padding: '36px 32px', display: 'flex', flexDirection: 'column' }}>
-              <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 24, color: OFF, marginBottom: 10 }}>دورة منفردة</h3>
-              <p style={{ fontFamily: F, fontSize: 15, color: MUT, lineHeight: 1.7 }}>ابدأ بدورة واحدة قبل الالتزام بالمسار الكامل.</p>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, margin: '26px 0 6px', flexWrap: 'wrap' }}>
-                <span style={{ fontFamily: FP, fontSize: 40, fontWeight: 700, color: GLD, lineHeight: 1 }}>$150 – $250</span>
-              </div>
-              <p style={{ fontFamily: F, fontSize: 13, color: MUT, marginBottom: 24 }}>للدورة الواحدة · القيمة تُستقطع عند الالتحاق بالمسار</p>
-              <ul style={{ listStyle: 'none', display: 'grid', gap: 11, marginBottom: 28, flex: 1 }}>
-                {['16 ساعة · 8 جلسات','مشروع تطبيقي واحد','شهادة إتمام الدورة','قيمتها تُستقطع عند الالتحاق بالمسار'].map(item => (
-                  <li key={item} style={{ display: 'flex', gap: 10, fontFamily: F, fontSize: 14.5, color: LT, lineHeight: 1.7 }}>
-                    <span style={{ color: GLD, fontWeight: 700, flexShrink: 0 }}>✓</span> {item}
-                  </li>
-                ))}
-              </ul>
-              <button onClick={() => navigate('/')}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, background: 'rgba(255,255,255,0.03)', border: `1px solid ${HAIR}`, color: OFF, fontFamily: F, fontWeight: 700, fontSize: 15, padding: 15, borderRadius: 999, cursor: 'pointer' }}>
-                استعراض الدورات <ArrowLeft size={15} />
-              </button>
-            </div>
+          {/* down-sell link */}
+          <div style={{ textAlign: 'center', marginTop: 28 }}>
+            <p style={{ fontFamily: F, fontSize: 14, color: MUT }}>
+              تريد البدء بدورة واحدة قبل الالتزام بالمسار الكامل؟{' '}
+              <a href="#standalone" style={{ color: GLD, textDecoration: 'underline', textUnderlineOffset: 4, fontWeight: 700 }}>
+                استعرض الدورات المنفردة ($150 - $250) ←
+              </a>
+            </p>
           </div>
         </div>
       </section>
