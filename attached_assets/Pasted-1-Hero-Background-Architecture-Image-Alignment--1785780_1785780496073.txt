@@ -1,0 +1,91 @@
+1. خلفية الهيرو والإضاءة (Hero Background Architecture)
+تموضع صورة الخلفية (Image Alignment):
+
+ضبط الصورة عبر object-cover object-top (أو object-[center_15%]).
+
+النتيجة: رفع صورة المذيعة لتظهر تفاصيل الوجه والجزء العلوي بوضوح دون اقتطاع سفلي.
+
+طبقة التعتيم والشفافية (Overlay Opacity & Gradient):
+
+استبدال التعتيم الثقيل بتدرج لوني موزون يبرز تفاصيل الاستوديو الخلفية دون التأثير على تباين القراءة:
+bg-gradient-to-b from-slate-950/75 via-slate-950/50 to-slate-950/90
+
+عناصر الكاميرا الشريطية (Studio HUD Overlay):
+
+تثبيت عناصر التسجيل (REC, 00:00:08:15, 50FPS) بخصائص absolute مع إضافة opacity-30 pointer-events-none لتبقى كعنصر جمالي خلفي خفيف ولا تتداخل مع النصوص.
+
+2. الهيكلة التخطيطية العامة (2-Column Layout System)
+تطبيق نظام الشبكة (grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center) لتقسيم المساحة كالتالي:
+
++-------------------------------------------------------+---------------------------------------+
+|  [Right Column - lg:col-span-7]                       |  [Left Column - lg:col-span-5]        |
+|  1. الوسام العلوي (Badge)                             |                                       |
+|  2. العنوان الرئيسي (H1)                               |                                       |
+|  3. الفقرة الشارحة (Paragraph)                        |    المكون الدائري التفاعلي            |
+|  4. شبكة الشارات المترابطة (2x2 Grid)                  |    (10 محطات - تأسيس/تخصصات/قيادة)     |
+|  5. كارت واعتماد تطبيق وجيز (Wajeez Card)              |                                       |
+|  6. أزرار الدعوة للإجراء (CTA Buttons)               |                                       |
++-------------------------------------------------------+---------------------------------------+
+3. تنظيف الهيكل وتنظيم الشارات (Badges & Wajeez Layout)
+أ. حذف التكرار
+إزالة الشارة الصغرى: حذف شارة "شهادة معتمدة من تطبيق وجيز" نهائياً من قائمة الشارات الصغرى، والاعتماد حصراً على الكارت المستقل المخصص لوجيز أسفلها.
+
+ب. شبكة الشارات الأربع (2x2 Badges Grid)
+تحويل الشارات الأربع المتبقية إلى شبكة منتظمة من عمودين وصفين:
+grid grid-cols-1 sm:grid-cols-2 gap-3 my-5
+
+الشارات الأربع:
+
+10 محطات تدريبية متسلسلة (مع أيقونة Layers / Steps)
+
+40 ساعة تدريبية موزعة (مع أيقونة Clock)
+
+8 مشاريع تطبيقية تُسلّم (مع أيقونة Award / FileText)
+
+حضوري في عمان أو Online LIVE (مع أيقونة MapPin / Video)
+
+ستايل الشارة الواحدة:
+flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-slate-900/60 border border-white/10 backdrop-blur-md text-xs lg:text-sm text-slate-200 font-medium
+
+4. التسلسل الهرمي للمحتوى والنصوص (Typography & Spacing)
+1. الوسام العلوي (Top Badge)
+النص: مسار متكامل • 10 محطات
+
+التنسيق: inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold w-fit mb-4
+
+2. العنوان الرئيسي (Main Heading)
+النص: المسار الإعلامي
+
+التنسيق: text-3xl md:text-5xl lg:text-6xl font-black text-white tracking-tight mb-4 leading-tight
+
+3. الفقرة الشارحة (Description)
+النص: منهج واحد متكامل من 10 محطات: يبدأ بالتقديم والحضور أمام الكاميرا، ويمر بكل تخصص إعلامي – صحافة، ميدان، محتوى، بودكاست، متحدث رسمي، وإنتاج – وكل محطة تُسلّم فيها مشروع تطبيقياً.
+
+التنسيق: text-slate-300 text-sm md:text-base lg:text-lg leading-relaxed max-w-2xl mb-6
+
+4. كارت واعتماد وجيز (Wajeez Card)
+التنسيق: flex items-center justify-between p-4 rounded-2xl bg-slate-900/80 border border-amber-500/20 backdrop-blur-md mb-6 max-w-xl
+
+المحتوى:
+
+الجانب الأيمن: أيقونة/شعار وجيز + عنوان "الشهادة معتمدة من تطبيق وجيز" + نص فرعي "أكبر مكتبة صوتية وبودكاست في الشرق الأوسط".
+
+5. أزرار الدعوة للإجراء (CTA Buttons Layout)
+التنظيم: flex flex-wrap items-center gap-4 pt-2
+
+الزر الرئيسي (Primary CTA):
+
+النص: تواصل مع المستشارة – مجاناً
+
+التنسيق: px-6 py-3.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-sm lg:text-base transition-all shadow-lg shadow-amber-500/20 flex items-center gap-2
+
+الزر الثانوي (Secondary CTA):
+
+النص: استكشف شجرة المسار
+
+التنسيق: px-6 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-white font-semibold text-sm lg:text-base transition-all backdrop-blur-md flex items-center gap-2
+
+5. المكون الدائري التفاعلي (Interactive Graphic Component)
+التموضع: يُثبت داخل العمود الأيسر (lg:col-span-5) مع توسيط كامل flex items-center justify-center relative w-full h-full min-h-[320px].
+
+التأثير: مساحة محيطة مريحة تمنع أي تداخل مع كروت وجيز والشارات، لتبرز الدائرة كعنصر بصري تفاعلي مستقل يُظهر رقم "10 محطات" ومستويات المسار (تأسيس – تخصصات – قيادة).

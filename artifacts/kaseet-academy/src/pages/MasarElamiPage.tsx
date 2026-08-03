@@ -374,50 +374,56 @@ export default function MasarElamiPage() {
 
       {/* ════════════════ HERO ════════════════ */}
       <section style={{ position: 'relative', padding: '52px 0 88px', overflow: 'hidden' }}>
-        {/* cover image — full-bleed background */}
+        {/* cover image — full-bleed background, lifted to show presenter's face */}
         <img
           src={coverMasar}
           alt=""
           aria-hidden="true"
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', zIndex: 0 }}
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 15%', zIndex: 0 }}
         />
-        {/* dark gradient overlay */}
+        {/* balanced gradient overlay — lets studio details breathe while keeping text readable */}
         <div style={{
           position: 'absolute', inset: 0, zIndex: 1,
-          background: 'linear-gradient(to bottom, rgba(15,20,32,0.85) 0%, rgba(22,30,43,0.90) 50%, rgba(22,30,43,0.97) 100%)',
+          background: 'linear-gradient(to bottom, rgba(2,6,23,0.75) 0%, rgba(2,6,23,0.50) 45%, rgba(2,6,23,0.90) 100%)',
         }} />
         <div style={{ position: 'relative', zIndex: 2, ...INNER }}>
           <div className="masar-hero-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1.15fr) minmax(0,0.85fr)', gap: 56, alignItems: 'center' }}>
 
             {/* text column */}
             <div>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GLD, color: '#1A1206', fontFamily: F, fontSize: 13, fontWeight: 700, padding: '7px 16px', borderRadius: 999, boxShadow: '0 6px 22px rgba(255,193,7,0.2)' }}>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#1A1206', display: 'block' }} />
+              {/* top badge — amber outline style */}
+              <span style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                background: 'rgba(255,193,7,0.10)', border: '1px solid rgba(255,193,7,0.30)',
+                color: GLD, fontFamily: F, fontSize: 13, fontWeight: 700,
+                padding: '7px 16px', borderRadius: 999,
+              }}>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: GLD, display: 'block' }} />
                 مسار متكامل · 10 محطات
               </span>
 
-              <h1 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(40px,6vw,68px)', lineHeight: 1.2, letterSpacing: -1.4, margin: '22px 0 0', color: OFF }}>
+              <h1 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(36px,5.5vw,64px)', lineHeight: 1.2, letterSpacing: -1.2, margin: '18px 0 0', color: OFF }}>
                 المسار <span style={{ color: GLD }}>الإعلامي</span>
               </h1>
 
-              <p style={{ fontFamily: F, fontSize: 18, color: MUT, maxWidth: 580, marginTop: 18, lineHeight: 1.75 }}>
+              <p style={{ fontFamily: F, fontSize: 'clamp(14px,1.2vw,17px)', color: MUT, maxWidth: 560, marginTop: 16, lineHeight: 1.8 }}>
                 منهج واحد متكامل من 10 محطات: يبدأ بالتقديم والحضور أمام الكاميرا، ويمرّ بكل تخصص إعلامي —
                 صحافة، ميدان، محتوى، بودكاست، متحدث رسمي، وإنتاج — وكل محطة تُسلَّم فيها مشروع تطبيقي.
               </p>
 
-              {/* stat badges — icon grid */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 28 }}>
+              {/* 2×2 badge grid — 4 items only; Wajeez in its own card below */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0,1fr))', gap: 12, marginTop: 24, maxWidth: 520 }}>
                 {([
                   { Icon: Layers,      num: '10', label: 'محطات تدريبية متسلسلة' },
                   { Icon: Clock,       num: '40', label: 'ساعة تدريبية موزَّعة'  },
                   { Icon: FolderCheck, num: '8',  label: 'مشاريع تطبيقية تُسلَّم' },
                   { Icon: MapPin,      num: null, label: 'حضوري في عمّان أو Online LIVE' },
-                  { Icon: Award,       num: null, label: 'شهادة معتمدة من تطبيق وجيز' },
                 ] as const).map(({ Icon, num, label }, i) => (
                   <span key={i} style={{
                     display: 'inline-flex', alignItems: 'center', gap: 9,
-                    background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)',
-                    padding: '10px 16px', borderRadius: 12, fontFamily: F, fontSize: 13.5, color: LT,
+                    background: 'rgba(2,6,23,0.60)', border: '1px solid rgba(255,255,255,0.10)',
+                    backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
+                    padding: '10px 14px', borderRadius: 12, fontFamily: F, fontSize: 13, color: LT,
                   }}>
                     <Icon size={15} color={GLD} strokeWidth={2} style={{ flexShrink: 0 }} />
                     {num && <b style={{ fontFamily: FP, color: OFF, fontWeight: 700 }}>{num}</b>}
@@ -426,11 +432,12 @@ export default function MasarElamiPage() {
                 ))}
               </div>
 
-              {/* Wajeez chip */}
+              {/* Wajeez card — amber border, frosted */}
               <div style={{
-                display: 'inline-flex', alignItems: 'center', gap: 13, marginTop: 26,
-                background: 'rgba(30,122,133,0.14)', border: '1px solid rgba(30,122,133,0.45)',
-                borderRadius: 14, padding: '11px 16px',
+                display: 'flex', alignItems: 'center', gap: 14, marginTop: 20,
+                background: 'rgba(2,6,23,0.80)', border: '1px solid rgba(255,193,7,0.20)',
+                backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
+                borderRadius: 16, padding: '14px 18px', maxWidth: 520,
               }}>
                 <div style={{ flexShrink: 0, width: 40, height: 40, borderRadius: 9, background: '#fff', display: 'grid', placeContent: 'center', padding: 5 }}>
                   <img src={wajeezLogo} alt="وجيز" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
@@ -441,13 +448,14 @@ export default function MasarElamiPage() {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginTop: 32 }}>
+              {/* CTA buttons */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 14, marginTop: 24 }}>
                 <a href={WA_TRACK} target="_blank" rel="noopener noreferrer"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15.5, padding: '15px 30px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 10px 30px rgba(255,193,7,0.22)' }}>
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 28px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 8px 24px rgba(255,193,7,0.22)' }}>
                   تواصل مع المستشارة — مجاناً <ArrowLeft size={15} />
                 </a>
                 <a href="#tree"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,0.04)', border: `1px solid ${HAIR}`, color: OFF, fontFamily: F, fontWeight: 700, fontSize: 15.5, padding: '15px 30px', borderRadius: 999, textDecoration: 'none' }}>
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', color: OFF, fontFamily: F, fontWeight: 700, fontSize: 15, padding: '14px 28px', borderRadius: 12, textDecoration: 'none' }}>
                   استكشف شجرة المسار <ArrowLeft size={15} />
                 </a>
               </div>
