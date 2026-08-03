@@ -17,8 +17,12 @@ import {
 } from './shared/coursePageHelpers';
 import coverOmar   from '@assets/course-omar-bg_1785692015818.png';
 import photoOmar   from '@assets/trainer-omar_1785692015818.jpg';
+import photoRana   from '@assets/trainer-rana-azzam_1785692178863.JPG';
 import ayaImg      from '@assets/اية_القماز_1785619557679.jpeg';
 import yaqoutImg   from '@assets/ياقوت__1785619557679.jpeg';
+
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+const brochurePdf = `${BASE}/voiceover-live-brochure.pdf`;
 
 /* ── tokens ─────────────────────────────────────────────────── */
 const DF   = '#64748b';
@@ -26,25 +30,25 @@ const DF   = '#64748b';
 /* ── schedule ────────────────────────────────────────────────── */
 const ACTIVE_ONLINE: ScheduleEntry[]   = [];
 const UPCOMING_ONLINE: ScheduleEntry[] = [
-  { id:'rm-vl201', group:'دفعة #201 — عن بُعد', course:'التعليق والأداء الصوتي (عن بُعد)',
-    instructor:'عمر درابكة', days:'الجمعة', time:'7:00م – 9:00م',
+  { id:'rm-vl201', group:'دفعة #201 — عن بُعد', course:'أساسيات التعليق والأداء الصوتي (عن بُعد)',
+    instructor:'عمر درابكة + رنا العزام', days:'الجمعة', time:'7:00م – 9:00م',
     month:'أغسطس', day:'01', status:'upcoming',
     batchNumber:'#201', availableSeats:8, registeredCount:4, badgeDate:'أغسطس 2026' },
-  { id:'rm-vl202', group:'دفعة #202 — عن بُعد', course:'التعليق والأداء الصوتي (عن بُعد)',
-    instructor:'عمر درابكة', days:'ثلاثاء / خميس', time:'7:00م – 9:00م',
+  { id:'rm-vl202', group:'دفعة #202 — عن بُعد', course:'أساسيات التعليق والأداء الصوتي (عن بُعد)',
+    instructor:'عمر درابكة + رنا العزام', days:'ثلاثاء / خميس', time:'7:00م – 9:00م',
     month:'أغسطس', day:'01', status:'upcoming',
     batchNumber:'#202', availableSeats:12, registeredCount:3, badgeDate:'أغسطس 2026' },
 ];
 
 /* ── curriculum ──────────────────────────────────────────────── */
 const MODULES: SessionItem[] = [
-  { title:'المفاهيم الأساسية للتعليق الصوتي',   desc:'نبذة عن التعليق الصوتي وأنواعه وتطبيقاته في عالم الإعلام والإنتاج الرقمي — وثائقي، إعلاني، وترفيهي.' },
-  { title:'آليات الصوت والنطق السليم',            desc:'تشريح الجهاز الصوتي وفهم آليات النطق والإخراج الصوتي، وأساسيات ضبط مخارج الحروف والتمييز الصوتي.' },
-  { title:'تمارين الإحماء والتنفس الداعم',        desc:'أساسيات التنفس الداعم للصوت وتمارين الإحماء الصوتي يومياً لبناء عادة صوتية احترافية.' },
-  { title:'الأداء التعبيري والضبط الإيقاعي',      desc:'تقنيات الوقف والابتداء والإيقاع والانفعال الصوتي — كيف تعيش النص لا تقرأه.' },
-  { title:'قراءة أنواع النصوص والتكيّف معها',     desc:'قراءة عملية لنصوص وثائقية وإعلانية وتعليمية مع التحوّل بين الأنماط بسلاسة.' },
-  { title:'أساسيات التسجيل والإنتاج الصوتي',      desc:'معرفة عملية بأدوات التسجيل المنزلي والاحترافي، وإعداد الصوت لاستوديو الإنتاج.' },
-  { title:'مشروع التخرج وتقييم الأداء',           desc:'تسجيل مشروع ختامي كامل (Voice Demo رسمي) مع تقييم تفصيلي مباشر من المدرب وخطة تطوير فردية.' },
+  { title:'الاستوديو المنزلي والمعدات',      desc:'كيفية تجهيز بيئة تسجيل احترافية في المنزل دون ميزانية ضخمة — اختيار الميكروفون، العزل الصوتي بالمواد المتاحة، وبرامج التسجيل للمبتدئين. (لقاء تفاعلي مباشر)' },
+  { title:'أساسيات الصوت والتنفس',           desc:'تأسيس مهاري شامل يبني جسراً بين الصوت الطبيعي والصوت الاحترافي — مناطق الرنين، التنفس الحجابي، وإدارة النَفَس أثناء التسجيل. (لقاء تفاعلي مباشر)' },
+  { title:'النطق ومخارج الحروف',             desc:'تشريح عملي وتدريب مكثّف على النطق السليم لكل حرف عربي — مخارج الحروف الـ 28، التخلص من النطق الرخو، وتمارين اللسان والشفتين يومياً. (لقاء تفاعلي مباشر)' },
+  { title:'اللغة العربية والتحرير اللغوي',   desc:'قواعد لغوية تطبيقية مصممة خصيصاً لاحتياجات المعلق الصوتي — الهمزات والمدود، فن الوقف والابتداء، ومنهجية التحرير قبل التسجيل. (لقاء تفاعلي مباشر)' },
+  { title:'التلوين الانفعالي والمشاعر',      desc:'أداء صادق يستحضر العاطفة دون تمثيل مصطنع — شجرة المشاعر وتصنيفاتها الصوتية، ترميز النص عاطفياً، والتحكم بكثافة الأداء. (لقاء تفاعلي مباشر)' },
+  { title:'تطبيقات التعليق الصوتي',         desc:'ورشة تطبيقية على مختلف أنواع التعليق المطلوبة في السوق — إعلانات، رد آلي IVR، كتب صوتية، وثائقيات، دوبلاج، وبرامج أطفال. (لقاء تفاعلي مباشر)' },
+  { title:'مشروع التخرج والانطلاق في السوق', desc:'خطوتك الفعلية نحو سوق العمل الصوتي — إنتاج Voice Demo CV احترافي، بناء الهوية الصوتية الشخصية، وخطة الـ 100 يوم الأولى. (لقاء تفاعلي مباشر)' },
 ];
 
 /* ── goals grid ─────────────────────────────────────────────── */
@@ -76,6 +80,15 @@ const INSTRUCTORS: InstructorData[] = [
       { icon: GraduationCap, label:'دبلوم إعلام — فلوريدا' },
     ],
     bio:'معلّق صوتي محترف ومدرب أداء وإلقاء. سجّل بصوته مئات الأفلام الوثائقية والإعلانات لكبرى الشركات والمؤسسات الإعلامية في الخليج والشرق الأوسط. حاصل على دبلوم الإعلام من الأكاديمية العالمية للفنون والإبداع بفلوريدا، ويمتلك خبرة واسعة في التدريب الصوتي تتجاوز 12 عامًا.' },
+  { initials:'ر.ع', photo: photoRana,
+    name:'رنا محمد العزام', role:'إعلامية ومختصة تحرير لغوي ومدققة لغة',
+    badges: [
+      { icon: Globe, label:'مجمع اللغة العربية — محررة ومدققة' },
+      { icon: Mic,   label:'رؤيا | صاد | حياة FM' },
+      { icon: Clock, label:'خبرة 10+ سنوات' },
+      { icon: Users, label:'مئات المتدربين' },
+    ],
+    bio:'الإعلامية رنا محمد العزام معدّة ومقدّمة برامج فضائية وإذاعية وبودكاست معتمدة. عملت سنواتٍ محررةً ومدققةً لغوية في مجمع اللغة العربية الأردني — المرجع اللغوي الأول في المنطقة. تمتلك خبرة عريقة في تمكين المتدربين من اللغة العربية الفصيحة للاستخدام المهني والإعلامي.' },
 ];
 
 /* ════════════════════════════════════════════════
@@ -87,7 +100,7 @@ function PricingCard() {
     <div style={{ width:'100%', background: NAVY, borderRadius:22, overflow:'hidden', boxShadow:'0 28px 64px rgba(29,39,56,0.22), 0 8px 20px rgba(0,0,0,0.12)' }}>
       {/* Cover photo */}
       <div style={{ position:'relative', height:200, overflow:'hidden' }}>
-        <img src={coverOmar} alt="دورة التعليق الصوتي" style={{ width:'100%', height:'100%', objectFit:'cover', objectPosition:'center', display:'block' }} />
+        <img src={coverOmar} alt="دورة التعليق الصوتي" style={{ width:'100%', height:'100%', objectFit:'cover', objectPosition:'top center', display:'block' }} />
         <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom,rgba(29,39,56,0.05) 40%,rgba(29,39,56,0.75) 100%)' }} />
       </div>
       {/* Body */}
@@ -112,7 +125,7 @@ function PricingCard() {
         <div style={{ height:1, background:'rgba(255,255,255,0.08)', margin:'0 0 14px' }} />
         {/* Instructor */}
         <div style={{ display:'flex', flexDirection:'column', gap:9, marginBottom:16 }}>
-          {[{ img: photoOmar, name:'عمر درابكة' }].map(({ img, name }) => (
+          {[{ img: photoOmar, name:'عمر درابكة' }, { img: photoRana, name:'رنا محمد العزام' }].map(({ img, name }) => (
             <div key={name} style={{ display:'flex', alignItems:'center', gap:10 }}>
               <img src={img} alt={name} style={{ width:34, height:34, borderRadius:'50%', objectFit:'cover', objectPosition:'center top', border:'2px solid rgba(255,193,7,0.42)', flexShrink:0 }} />
               <span style={{ fontFamily:F, fontWeight:700, fontSize:13.5, color:'rgba(252,251,251,0.88)' }}>{name}</span>
@@ -163,7 +176,7 @@ export default function CourseVoiceoverLivePage() {
             </div>
 
             <h1 style={{ fontFamily:F, fontWeight:900, fontSize:'clamp(26px,3.8vw,46px)', color:'#1e293b', lineHeight:1.2, margin:'0 0 16px' }}>
-              البرنامج الشامل للتعليق والأداء الصوتي
+              أساسيات التعليق والأداء الصوتي
             </h1>
 
             <p style={{ fontFamily:F, fontWeight:500, fontSize:'clamp(14px,1.6vw,17px)', color:GOLD, lineHeight:1.8, margin:'0 0 24px', borderRight:`3px solid ${GOLD}`, paddingRight:14 }}>
@@ -188,13 +201,13 @@ export default function CourseVoiceoverLivePage() {
             {/* Instructor avatars */}
             <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:28 }}>
               <div style={{ display:'inline-flex' }}>
-                {[photoOmar].map((img, i) => (
+                {[photoOmar, photoRana].map((img, i) => (
                   <img key={i} src={img} alt="" style={{ width:44, height:44, borderRadius:'50%', objectFit:'cover', objectPosition:'center top', border:'2px solid rgba(255,193,7,0.60)', marginInlineStart:i > 0 ? -14 : 0, boxShadow:'0 3px 8px rgba(0,0,0,0.18)' }} />
                 ))}
               </div>
               <div>
-                <span style={{ fontFamily:F, fontWeight:700, fontSize:14, color:'#1e293b', display:'block' }}>بإشراف خبير أداء صوتي</span>
-                <span style={{ fontFamily:F, fontSize:12.5, color:'#64748b' }}>عمر درابكة</span>
+                <span style={{ fontFamily:F, fontWeight:700, fontSize:14, color:'#1e293b', display:'block' }}>بإشراف خبراء أداء صوتي</span>
+                <span style={{ fontFamily:F, fontSize:12.5, color:'#64748b' }}>عمر درابكة · رنا العزام</span>
               </div>
             </div>
 
@@ -303,16 +316,22 @@ export default function CourseVoiceoverLivePage() {
               <div style={{ width:4, height:28, background:GOLD, borderRadius:4, flexShrink:0 }} />
               <h2 style={{ fontFamily:F, fontWeight:900, fontSize:'clamp(20px,2.4vw,26px)', color:DH, margin:0, lineHeight:1.2 }}>الخطة الدراسية</h2>
             </div>
-            <button
-              onClick={() => {
-                const rows = MODULES.map((m,i) => `<div class="lec"><div class="num">${i+1}</div><div><div class="lt">${m.title}</div><div class="ld">${m.desc}</div></div></div>`).join('');
-                const html = `<!DOCTYPE html><html dir="rtl" lang="ar"><head><meta charset="utf-8"/><title>الخطة الدراسية — التعليق الصوتي عن بُعد</title><style>@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Tajawal',Arial,sans-serif;direction:rtl;color:#1e293b;max-width:760px;margin:0 auto;padding:32px 28px}h1{font-size:22px;font-weight:900;border-bottom:3px solid #FFC107;padding-bottom:10px;margin-bottom:6px}.sub{font-size:12px;color:#64748b;margin-bottom:28px}.lec{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid #f1f5f9;align-items:flex-start}.num{width:26px;height:26px;border-radius:50%;background:#67e8f9;color:#051520;font-weight:900;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.lt{font-weight:800;font-size:13.5px;margin-bottom:3px}.ld{font-size:12px;color:#475569;line-height:1.7}@media print{body{padding:16px}}</style></head><body><h1>التعليق والأداء الصوتي — عن بُعد</h1><p class="sub">أكاديمية كاسيت ميديا — 7 وحدات · 12 ساعة · شهادة معتمدة</p>${rows}</body></html>`;
-                const win = window.open('','_blank','width=860,height=900');
-                if(win){ win.document.write(html); win.document.close(); win.focus(); setTimeout(()=>win.print(),600); }
-              }}
-              style={{ display:'inline-flex', alignItems:'center', gap:7, background:'#fff', border:'1px solid rgba(0,0,0,0.12)', color:DM, fontFamily:F, fontWeight:700, fontSize:13.5, padding:'9px 18px', borderRadius:10, cursor:'pointer', boxShadow:'0 2px 6px rgba(0,0,0,0.06)' }}>
-              <Printer size={15} color={DM} strokeWidth={2} /> طباعة المنهج
-            </button>
+            <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
+              <a href={brochurePdf} download="كتيب-دورة-التعليق-الصوتي.pdf"
+                style={{ display:'inline-flex', alignItems:'center', gap:7, background:GOLD, color:NAVY, fontFamily:F, fontWeight:700, fontSize:13.5, padding:'9px 18px', borderRadius:10, textDecoration:'none', boxShadow:'0 2px 6px rgba(255,193,7,0.22)' }}>
+                ⬇ تحميل الكتيب
+              </a>
+              <button
+                onClick={() => {
+                  const rows = MODULES.map((m,i) => `<div class="lec"><div class="num">${i+1}</div><div><div class="lt">${m.title}</div><div class="ld">${m.desc}</div></div></div>`).join('');
+                  const html = `<!DOCTYPE html><html dir="rtl" lang="ar"><head><meta charset="utf-8"/><title>الخطة الدراسية — أساسيات التعليق الصوتي</title><style>@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Tajawal',Arial,sans-serif;direction:rtl;color:#1e293b;max-width:760px;margin:0 auto;padding:32px 28px}h1{font-size:22px;font-weight:900;border-bottom:3px solid #FFC107;padding-bottom:10px;margin-bottom:6px}.sub{font-size:12px;color:#64748b;margin-bottom:28px}.lec{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid #f1f5f9;align-items:flex-start}.num{width:26px;height:26px;border-radius:50%;background:#67e8f9;color:#051520;font-weight:900;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.lt{font-weight:800;font-size:13.5px;margin-bottom:3px}.ld{font-size:12px;color:#475569;line-height:1.7}@media print{body{padding:16px}}</style></head><body><h1>أساسيات التعليق والأداء الصوتي — عن بُعد</h1><p class="sub">أكاديمية كاسيت ميديا — 7 وحدات · 12 ساعة · شهادة معتمدة</p>${rows}</body></html>`;
+                  const win = window.open('','_blank','width=860,height=900');
+                  if(win){ win.document.write(html); win.document.close(); win.focus(); setTimeout(()=>win.print(),600); }
+                }}
+                style={{ display:'inline-flex', alignItems:'center', gap:7, background:'#fff', border:'1px solid rgba(0,0,0,0.12)', color:DM, fontFamily:F, fontWeight:700, fontSize:13.5, padding:'9px 18px', borderRadius:10, cursor:'pointer', boxShadow:'0 2px 6px rgba(0,0,0,0.06)' }}>
+                <Printer size={15} color={DM} strokeWidth={2} /> طباعة المنهج
+              </button>
+            </div>
           </div>
 
           {/* Accordion */}

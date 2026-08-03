@@ -19,6 +19,9 @@ import coverPresenter from '@assets/cover_كورس_اﻟﺪورة_اﻟﻤﻜﺜ
 import photoRana     from '@assets/trainer-rana-azzam_1785692178863.JPG';
 import ayaImg        from '@assets/اية_القماز_1785619557679.jpeg';
 
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+const brochurePdf = `${BASE}/presenter-brochure.pdf`;
+
 /* ── tokens ─────────────────────────────────────────────────── */
 const DF   = '#64748b';
 
@@ -87,7 +90,7 @@ function PricingCard() {
     <div style={{ width:'100%', background: NAVY, borderRadius:22, overflow:'hidden', boxShadow:'0 28px 64px rgba(29,39,56,0.22), 0 8px 20px rgba(0,0,0,0.12)' }}>
       {/* Cover photo */}
       <div style={{ position:'relative', height:200, overflow:'hidden' }}>
-        <img src={coverPresenter} alt="الدورة المكثفة" style={{ width:'100%', height:'100%', objectFit:'cover', objectPosition:'center 32%', display:'block' }} />
+        <img src={coverPresenter} alt="الدورة المكثفة" style={{ width:'100%', height:'100%', objectFit:'cover', objectPosition:'top center', display:'block' }} />
         <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom,rgba(29,39,56,0.05) 40%,rgba(29,39,56,0.75) 100%)' }} />
       </div>
       {/* Body */}
@@ -303,9 +306,15 @@ export default function CoursePresenterPage() {
               <div style={{ width:4, height:28, background:GOLD, borderRadius:4, flexShrink:0 }} />
               <h2 style={{ fontFamily:F, fontWeight:900, fontSize:'clamp(20px,2.4vw,26px)', color:DH, margin:0, lineHeight:1.2 }}>الخطة الدراسية</h2>
             </div>
-            <button onClick={() => window.print()} style={{ display:'inline-flex', alignItems:'center', gap:7, background:'#fff', border:'1px solid rgba(0,0,0,0.12)', color:DM, fontFamily:F, fontWeight:700, fontSize:13.5, padding:'9px 18px', borderRadius:10, cursor:'pointer', boxShadow:'0 2px 6px rgba(0,0,0,0.06)' }}>
-              <Printer size={15} color={DM} strokeWidth={2} /> طباعة المنهج
-            </button>
+            <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
+              <a href={brochurePdf} download="كتيب-الدورة-المكثفة-المذيع-المحترف.pdf"
+                style={{ display:'inline-flex', alignItems:'center', gap:7, background:GOLD, color:NAVY, fontFamily:F, fontWeight:700, fontSize:13.5, padding:'9px 18px', borderRadius:10, textDecoration:'none', boxShadow:'0 2px 6px rgba(255,193,7,0.22)' }}>
+                ⬇ تحميل الكتيب
+              </a>
+              <button onClick={() => window.print()} style={{ display:'inline-flex', alignItems:'center', gap:7, background:'#fff', border:'1px solid rgba(0,0,0,0.12)', color:DM, fontFamily:F, fontWeight:700, fontSize:13.5, padding:'9px 18px', borderRadius:10, cursor:'pointer', boxShadow:'0 2px 6px rgba(0,0,0,0.06)' }}>
+                <Printer size={15} color={DM} strokeWidth={2} /> طباعة المنهج
+              </button>
+            </div>
           </div>
 
           <div style={{ borderRadius:18, overflow:'hidden', border:`1px solid ${openCurr ? 'rgba(255,193,7,0.45)' : 'rgba(0,0,0,0.09)'}`, boxShadow: openCurr ? '0 6px 24px rgba(255,193,7,0.10)' : '0 2px 8px rgba(0,0,0,0.05)', transition:'border-color 0.2s,box-shadow 0.2s' }}>
