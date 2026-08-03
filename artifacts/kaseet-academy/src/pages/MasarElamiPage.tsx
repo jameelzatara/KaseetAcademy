@@ -2,29 +2,35 @@
  * صفحة المسار الإعلامي — كاسيت أكاديمي
  */
 import { useState } from 'react';
-import { Link, useLocation } from 'wouter';
-import { ChevronDown, ArrowLeft, MapPin, Wifi, Award, Layers, Clock, FolderCheck, CheckCircle2 } from 'lucide-react';
+import { useLocation } from 'wouter';
+import { ChevronDown, ArrowLeft, MapPin, Wifi, Layers, Clock, FolderCheck, CheckCircle2, MessageCircle } from 'lucide-react';
 import { NAVY, GOLD, OFF, MUTED, F, FP, INNER, LBG, DH, DM, waLink } from './shared/coursePageHelpers';
-import wajeezLogo    from '@assets/wajeez-logo_1785688262989.png';
-import coverMasar    from '@assets/cover_المسار_الاعلامي_1785777356196.png';
+import wajeezLogo     from '@assets/wajeez-logo_1785688262989.png';
+import coverMasar     from '@assets/cover_المسار_الاعلامي_1785777356196.png';
 import instructorRana from '@assets/trainer-rana-azzam_1785692178863.JPG';
 import instructorRami from '@assets/رامي_ابو_جبارة_1785777158127.png';
 
-/* ── tokens ───────────────────────────────────────────── */
-const BG   = '#161E2B';
-const BG2  = '#1A2332';
-const BG3  = '#1D2738';
-const CARD = '#242F40';
-const HAIR = 'rgba(255,255,255,0.08)';
-const GLD  = GOLD;
-const GS   = 'rgba(255,193,7,0.10)';
-const GL   = 'rgba(255,193,7,0.28)';
-const MUT  = '#9AA6B8';
-const LT   = '#CBD4E1';
+/* ── design tokens ─────────────────────────────────────── */
+const GLD  = GOLD;                           // #FFC107
+const GS   = 'rgba(255,193,7,0.09)';
+const GL   = 'rgba(255,193,7,0.26)';
+const MUT  = '#8A97AE';
+const LT   = '#C8D3E2';
+const HAIR = 'rgba(255,255,255,0.07)';
 
-const WA_PHONE = '962700000000';
-const WA_TRACK       = waLink(WA_PHONE, 'مرحباً، أودّ الاستفسار عن المسار الإعلامي');
+// Section backgrounds — deliberate rhythm, never repeating adjacently
+const S1 = '#0B1120';   // deep navy — Tree
+const S2 = '#111827';   // slate — Study / FAQ
+const S3 = '#080D17';   // near-black — Trainers
+const S4 = '#060A14';   // darkest — Enroll spotlight
+const S5 = '#0D1627';   // mid-navy — Advisor
 
+const CARD = 'rgba(255,255,255,0.04)';
+const CARD_BORDER = 'rgba(255,255,255,0.08)';
+
+const WA_PHONE  = '962700000000';
+const WA_TRACK  = waLink(WA_PHONE, 'مرحباً، أودّ الاستفسار عن المسار الإعلامي');
+const WA_CONSULT = waLink(WA_PHONE, 'مرحباً، أودّ حجز استشارة تعليمية مجانية');
 
 /* ── station data ─────────────────────────────────────── */
 const STATIONS = [
@@ -131,44 +137,12 @@ const FAQS = [
 ];
 
 const PHASE_LABELS: Record<number, { label: string; color: string }> = {
-  1: { label: 'مرحلة التأسيس',   color: GLD },
-  2: { label: 'مرحلة التخصص',   color: '#67e8f9' },
-  3: { label: 'مرحلة القيادة',  color: '#a78bfa' },
+  1: { label: 'مرحلة التأسيس', color: GLD },
+  2: { label: 'مرحلة التخصص', color: '#67e8f9' },
+  3: { label: 'مرحلة القيادة', color: '#a78bfa' },
 };
 
-const STANDALONE_COURSES = [
-  {
-    n: '01',
-    title: 'الدورة المكثفة: المذيع المحترف ومهارات الإعلام الرقمي',
-    note: 'محطة 01 بالمسار',
-    desc: 'تدريب متكامل على التقديم التلفزيوني والإذاعي، الحضور أمام الكاميرا، وأساسيات الإعلام الرقمي.',
-    instructor: 'أ. رنا محمد العزام',
-    duration: '16 ساعة · 8 جلسات',
-    route: '/courses/presenter',
-  },
-  {
-    n: '02',
-    title: 'أساسيات التعليق والأداء الصوتي',
-    note: 'نسخة موسَّعة من محطة 02',
-    desc: 'منهج متكامل لبناء أداء صوتي احترافي من الصفر: مخارج الحروف، التنفس، ضبط النبرات، وبناء الملف الصوتي.',
-    instructor: 'أ. يسار عبده · أ. عمر درابكة',
-    duration: '16 ساعة · 8 جلسات',
-    route: '/courses/voiceover',
-  },
-  {
-    n: '03',
-    title: 'تمكين اللغة العربية وفنون التحرير اللغوي',
-    note: 'دورة مستقلة',
-    desc: 'إتقان النحو والإملاء وأساليب التحرير الرقمي بأسلوب تطبيقي، مع حقيبة مرجعية رقمية شاملة.',
-    instructor: 'أ. رنا محمد العزام',
-    duration: '16 ساعة · 8 جلسات',
-    route: '/courses/arabic-language',
-  },
-];
-
-/* only Rana's card */
-
-/* ── Station card ────────────────────────────────────── */
+/* ── Station accordion ───────────────────────────────── */
 function Station({ s, open, onToggle }: { s: StationType; open: boolean; onToggle: () => void }) {
   const phase = PHASE_LABELS[s.phase];
   return (
@@ -177,30 +151,30 @@ function Station({ s, open, onToggle }: { s: StationType; open: boolean; onToggl
       onClick={onToggle}
       onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle(); } }}
       style={{
-        background: open ? `linear-gradient(180deg, ${GS}, ${CARD} 55%)` : CARD,
-        border: `1px solid ${open ? GL : ('optional' in s && s.optional ? 'rgba(167,139,250,0.28)' : HAIR)}`,
+        background: open ? `linear-gradient(160deg, ${GS}, rgba(255,255,255,0.025) 60%)` : CARD,
+        border: `1px solid ${open ? GL : ('optional' in s && s.optional ? 'rgba(167,139,250,0.22)' : CARD_BORDER)}`,
         borderRadius: 14, padding: '20px 22px', cursor: 'pointer',
-        transition: 'border-color .25s, background .25s',
+        transition: 'border-color .2s, background .2s',
       }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
         <div style={{
           flexShrink: 0, width: 44, height: 44, borderRadius: 12,
-          background: BG3, border: `1px solid ${open ? GL : HAIR}`,
+          background: 'rgba(255,255,255,0.04)', border: `1px solid ${open ? GL : CARD_BORDER}`,
           display: 'grid', placeContent: 'center',
-          fontFamily: FP, fontSize: 16, fontWeight: 700,
+          fontFamily: FP, fontSize: 15, fontWeight: 700,
           color: 'optional' in s && s.optional ? '#a78bfa' : GLD,
         }}>{s.n}</div>
 
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-            <span style={{ fontFamily: F, fontSize: 18, fontWeight: 800, color: OFF, lineHeight: 1.5 }}>{s.title}</span>
+            <span style={{ fontFamily: F, fontSize: 17, fontWeight: 800, color: OFF, lineHeight: 1.5 }}>{s.title}</span>
             {'standalone' in s && s.standalone && (
               <span style={{ fontFamily: F, fontSize: 11, fontWeight: 700, background: GLD, color: '#1A1206', padding: '2px 9px', borderRadius: 999 }}>
                 متاحة منفردةً
               </span>
             )}
             {'optional' in s && s.optional && (
-              <span style={{ fontFamily: F, fontSize: 11, fontWeight: 700, background: 'rgba(167,139,250,0.18)', border: '1px solid rgba(167,139,250,0.4)', color: '#c4b5fd', padding: '2px 9px', borderRadius: 999 }}>
+              <span style={{ fontFamily: F, fontSize: 11, fontWeight: 700, background: 'rgba(167,139,250,0.15)', border: '1px solid rgba(167,139,250,0.35)', color: '#c4b5fd', padding: '2px 9px', borderRadius: 999 }}>
                 القيادة
               </span>
             )}
@@ -215,17 +189,17 @@ function Station({ s, open, onToggle }: { s: StationType; open: boolean; onToggl
       </div>
 
       {open && (
-        <div style={{ marginTop: 16, paddingTop: 16, borderTop: `1px solid ${HAIR}` }}>
+        <div style={{ marginTop: 16, paddingTop: 16, borderTop: `1px solid ${CARD_BORDER}` }}>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 14 }}>
             {(s.chips as readonly string[]).map(chip => (
               <span key={chip} style={{
                 fontFamily: F, fontSize: 12.5, color: LT,
-                background: 'rgba(255,255,255,0.045)', border: `1px solid ${HAIR}`,
+                background: 'rgba(255,255,255,0.04)', border: `1px solid ${CARD_BORDER}`,
                 padding: '5px 12px', borderRadius: 999,
               }}>{chip}</span>
             ))}
           </div>
-          <div style={{ fontFamily: F, fontSize: 13.5, color: LT, lineHeight: 1.7 }}>
+          <div style={{ fontFamily: F, fontSize: 13.5, color: LT, lineHeight: 1.75 }}>
             <span style={{ color: GLD, fontWeight: 700 }}>المشروع التطبيقي: </span>{s.project}
           </div>
           <div style={{ display: 'flex', gap: 12, marginTop: 12, flexWrap: 'wrap' }}>
@@ -243,17 +217,17 @@ function FaqItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
     <div style={{
-      background: CARD, border: `1px solid ${open ? GL : HAIR}`,
-      borderRadius: 14, overflow: 'hidden', marginBottom: 12, transition: 'border-color .25s',
+      background: CARD, border: `1px solid ${open ? GL : CARD_BORDER}`,
+      borderRadius: 14, overflow: 'hidden', marginBottom: 10, transition: 'border-color .2s',
     }}>
       <button
         onClick={() => setOpen(o => !o)}
-        style={{ width: '100%', background: 'none', border: 'none', cursor: 'pointer', padding: '20px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
-        <span style={{ fontFamily: F, fontSize: 16, fontWeight: 700, color: OFF, textAlign: 'right' }}>{q}</span>
+        style={{ width: '100%', background: 'none', border: 'none', cursor: 'pointer', padding: '18px 22px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
+        <span style={{ fontFamily: F, fontSize: 15.5, fontWeight: 700, color: OFF, textAlign: 'right' }}>{q}</span>
         <span style={{ color: GLD, fontSize: 22, lineHeight: 1, transform: open ? 'rotate(45deg)' : 'none', transition: 'transform .25s', flexShrink: 0 }}>+</span>
       </button>
       {open && (
-        <div style={{ padding: '0 24px 22px', fontFamily: F, fontSize: 15, color: MUT, lineHeight: 1.85 }}>{a}</div>
+        <div style={{ padding: '0 22px 20px', fontFamily: F, fontSize: 14.5, color: MUT, lineHeight: 1.85 }}>{a}</div>
       )}
     </div>
   );
@@ -270,59 +244,48 @@ function StudyAccordion({
 }) {
   const [open, setOpen] = useState(false);
   const isIP   = variant === 'inperson';
-  const accent = isIP ? GLD         : '#67e8f9';
-  const bgOpen = isIP ? 'rgba(255,193,7,0.06)'   : 'rgba(103,232,249,0.04)';
-  const bdOpen = isIP ? 'rgba(255,193,7,0.45)'   : 'rgba(103,232,249,0.40)';
-  const bdCls  = isIP ? `1px solid rgba(255,193,7,0.28)` : `1px solid rgba(103,232,249,0.26)`;
-  const iconBg = isIP ? 'rgba(255,193,7,0.14)'   : 'rgba(103,232,249,0.13)';
-  const rowBg  = isIP ? 'rgba(255,193,7,0.03)'   : 'rgba(103,232,249,0.03)';
-  const rowBd  = isIP ? 'rgba(255,193,7,0.16)'   : 'rgba(103,232,249,0.16)';
-  const chipBg = isIP ? 'rgba(255,193,7,0.10)'   : 'rgba(103,232,249,0.12)';
-  const chipBd = isIP ? 'rgba(255,193,7,0.28)'   : 'rgba(103,232,249,0.28)';
-  const chipTx = isIP ? '#B8860B'                : '#0e7490';
+  const accent = isIP ? GLD : '#67e8f9';
+  const bgOpen = isIP ? 'rgba(255,193,7,0.05)' : 'rgba(103,232,249,0.04)';
+  const bdOpen = isIP ? 'rgba(255,193,7,0.40)'  : 'rgba(103,232,249,0.35)';
+  const iconBg = isIP ? 'rgba(255,193,7,0.12)'  : 'rgba(103,232,249,0.12)';
 
   return (
     <div style={{
-      borderRadius: 18, overflow: 'hidden', marginBottom: 12,
-      border: `1px solid ${open ? bdOpen : HAIR}`,
-      boxShadow: open ? `0 6px 24px rgba(0,0,0,0.20)` : '0 2px 8px rgba(0,0,0,0.10)',
-      transition: 'border-color 0.2s, box-shadow 0.2s',
+      borderRadius: 16, overflow: 'hidden', marginBottom: 10,
+      border: `1px solid ${open ? bdOpen : CARD_BORDER}`,
+      transition: 'border-color 0.2s',
     }}>
       <button
         onClick={() => setOpen(v => !v)}
-        style={{ width: '100%', background: open ? bgOpen : CARD, border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 22px', cursor: 'pointer', textAlign: 'right', gap: 12 }}
+        style={{ width: '100%', background: open ? bgOpen : CARD, border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '17px 20px', cursor: 'pointer', textAlign: 'right', gap: 12 }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <div style={{ width: 38, height: 38, borderRadius: '50%', flexShrink: 0, background: open ? accent : iconBg, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.2s' }}>
             {isIP
-              ? <MapPin size={17} color={open ? BG : accent} strokeWidth={2.2} />
-              : <Wifi   size={17} color={open ? BG : accent} strokeWidth={2.2} />}
+              ? <MapPin size={16} color={open ? '#060A14' : accent} strokeWidth={2.2} />
+              : <Wifi   size={16} color={open ? '#060A14' : accent} strokeWidth={2.2} />}
           </div>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ fontFamily: F, fontWeight: 900, fontSize: 16, color: OFF }}>{label}</div>
-            <div style={{ fontFamily: F, fontSize: 12.5, color: MUT, marginTop: 2 }}>{sub}</div>
+            <div style={{ fontFamily: F, fontWeight: 800, fontSize: 15.5, color: OFF }}>{label}</div>
+            <div style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 2 }}>{sub}</div>
           </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 7, flexShrink: 0, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
           {badges.map(b => (
-            <span key={b} style={{ fontFamily: FP, fontSize: 11, color: MUT, background: 'rgba(255,255,255,0.05)', border: `1px solid ${HAIR}`, borderRadius: 6, padding: '3px 8px', whiteSpace: 'nowrap' }}>{b}</span>
+            <span key={b} style={{ fontFamily: F, fontSize: 11, color: MUT, background: 'rgba(255,255,255,0.04)', border: `1px solid ${CARD_BORDER}`, borderRadius: 6, padding: '3px 8px', whiteSpace: 'nowrap' }}>{b}</span>
           ))}
-          <ChevronDown size={16} color={open ? accent : MUT} strokeWidth={2.5} style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.25s', flexShrink: 0 }} />
+          <ChevronDown size={15} color={open ? accent : MUT} strokeWidth={2.5} style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.25s', flexShrink: 0 }} />
         </div>
       </button>
       {open && (
-        <div style={{ background: rowBg, borderTop: `1px solid ${rowBd}` }}>
+        <div style={{ borderTop: `1px solid ${open ? bdOpen : CARD_BORDER}` }}>
           {items.map((item, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 14, padding: '16px 22px', borderBottom: i < items.length - 1 ? `1px solid ${HAIR}` : 'none' }}>
-              <span style={{ fontFamily: FP, fontWeight: 800, fontSize: 12, color: BG, background: accent, borderRadius: '50%', flexShrink: 0, width: 28, height: 28, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{i + 1}</span>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontFamily: F, fontWeight: 800, fontSize: 14.5, color: OFF, marginBottom: 5 }}>{item.title}</div>
-                <div style={{ fontFamily: F, fontSize: 13.5, color: MUT, lineHeight: 1.75 }}>{item.desc}</div>
+            <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 14, padding: '15px 20px', borderBottom: i < items.length - 1 ? `1px solid ${CARD_BORDER}` : 'none' }}>
+              <span style={{ fontFamily: FP, fontWeight: 800, fontSize: 11, color: '#060A14', background: accent, borderRadius: '50%', flexShrink: 0, width: 26, height: 26, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{i + 1}</span>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontFamily: F, fontWeight: 800, fontSize: 14, color: OFF, marginBottom: 4 }}>{item.title}</div>
+                <div style={{ fontFamily: F, fontSize: 13, color: MUT, lineHeight: 1.75 }}>{item.desc}</div>
               </div>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, flexShrink: 0, background: chipBg, border: `1px solid ${chipBd}`, borderRadius: 8, padding: '4px 10px', fontFamily: FP, fontWeight: 700, fontSize: 11, color: chipTx, whiteSpace: 'nowrap' }}>
-                {isIP ? <MapPin size={11} strokeWidth={2} color={accent} /> : <Wifi size={11} strokeWidth={2} color={accent} />}
-                {isIP ? 'داخل الاستوديو' : 'بث مباشر'}
-              </span>
             </div>
           ))}
         </div>
@@ -331,74 +294,78 @@ function StudyAccordion({
   );
 }
 
+/* ── Section label pill ──────────────────────────────── */
+function SectionLabel({ text, light = false }: { text: string; light?: boolean }) {
+  return (
+    <span style={{
+      display: 'inline-flex', alignItems: 'center', gap: 7,
+      fontFamily: F, fontSize: 12.5, fontWeight: 700,
+      color: light ? '#92600a' : GLD,
+      background: light ? 'rgba(255,193,7,0.12)' : GS,
+      border: `1px solid ${light ? 'rgba(255,193,7,0.30)' : GL}`,
+      padding: '5px 14px', borderRadius: 999,
+    }}>
+      <span style={{ width: 5, height: 5, borderRadius: '50%', background: light ? '#92600a' : GLD, display: 'block' }} />
+      {text}
+    </span>
+  );
+}
+
 /* ── Page ────────────────────────────────────────────── */
 export default function MasarElamiPage() {
-  const [, navigate]         = useLocation();
+  const [, navigate]          = useLocation();
   const [openIdx, setOpenIdx]   = useState<number | null>(null);
   const [expandAll, setExpandAll] = useState(false);
 
   function toggle(i: number) { setOpenIdx(openIdx === i ? null : i); setExpandAll(false); }
-  function handleExpandAll() { setExpandAll(v => !v); setOpenIdx(null); }
-  function isOpen(i: number) { return expandAll || openIdx === i; }
+  function handleExpandAll()  { setExpandAll(v => !v); setOpenIdx(null); }
+  function isOpen(i: number)  { return expandAll || openIdx === i; }
 
   return (
-    <div dir="rtl" style={{ fontFamily: F, background: BG, color: OFF, minHeight: '100vh', overflowX: 'hidden' }}>
+    <div dir="rtl" style={{ fontFamily: F, background: '#0B1120', color: OFF, minHeight: '100vh', overflowX: 'hidden' }}>
 
-      {/* spinning circle animation */}
       <style>{`
-        @keyframes kaseetSpin {
-          from { transform: rotate(0deg); }
-          to   { transform: rotate(360deg); }
-        }
+        @keyframes kaseetSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes kaPulse    { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.5; transform:scale(.8); } }
         .ka-spin-ring { animation: kaseetSpin 18s linear infinite; transform-origin: 200px 200px; }
         .ka-spin-slow { animation: kaseetSpin 32s linear infinite reverse; transform-origin: 200px 200px; }
+        .ka-pulse-dot { animation: kaPulse 2s ease-in-out infinite; }
         @media (max-width: 768px) {
-          .masar-hero-grid { grid-template-columns: 1fr !important; }
-          .masar-hero-visual { max-width: 280px !important; order: -1; margin: 0 auto 32px; }
-          .masar-standalone-grid { grid-template-columns: 1fr !important; }
-          .masar-study-grid { grid-template-columns: 1fr !important; }
-          .masar-consult-grid { grid-template-columns: 1fr !important; }
-          .masar-enroll-grid { grid-template-columns: 1fr !important; }
+          .masar-hero-grid    { grid-template-columns: 1fr !important; }
+          .masar-hero-visual  { max-width: 260px !important; order: -1; margin: 0 auto 28px; }
+          .masar-study-grid   { grid-template-columns: 1fr !important; }
           .masar-trainer-card { grid-template-columns: 1fr !important; }
-          .masar-trainer-photo { min-height: 240px !important; }
+          .masar-trainer-photo{ min-height: 220px !important; }
+          .masar-advisor-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
 
       {/* ── back nav ─────────────────────────────────── */}
-      <div style={{ ...INNER, paddingTop: 24, paddingBottom: 0 }}>
+      <div style={{ ...INNER, paddingTop: 20, paddingBottom: 0 }}>
         <button onClick={() => navigate('/')}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: F, fontSize: 14, color: MUT, padding: 0 }}>
-          <ArrowLeft size={14} /> الرئيسية
+          style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: F, fontSize: 13.5, color: MUT, padding: 0 }}>
+          <ArrowLeft size={13} /> الرئيسية
         </button>
       </div>
 
-      {/* ════════════════ HERO ════════════════ */}
+      {/* ════════════════ 1. HERO ════════════════════════ */}
       <section style={{ position: 'relative', padding: '52px 0 88px', overflow: 'hidden' }}>
-        {/* cover image — full-bleed background, lifted to show presenter's face */}
-        <img
-          src={coverMasar}
-          alt=""
-          aria-hidden="true"
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 15%', zIndex: 0 }}
-        />
-        {/* balanced gradient overlay — lets studio details breathe while keeping text readable */}
-        <div style={{
-          position: 'absolute', inset: 0, zIndex: 1,
-          background: 'linear-gradient(to bottom, rgba(2,6,23,0.75) 0%, rgba(2,6,23,0.50) 45%, rgba(2,6,23,0.90) 100%)',
-        }} />
+        <img src={coverMasar} alt="" aria-hidden="true"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 15%', zIndex: 0 }} />
+        <div style={{ position: 'absolute', inset: 0, zIndex: 1,
+          background: 'linear-gradient(to bottom, rgba(2,6,23,0.78) 0%, rgba(2,6,23,0.52) 40%, rgba(2,6,23,0.92) 100%)' }} />
+
         <div style={{ position: 'relative', zIndex: 2, ...INNER }}>
           <div className="masar-hero-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1.15fr) minmax(0,0.85fr)', gap: 56, alignItems: 'center' }}>
 
-            {/* text column */}
             <div>
-              {/* top badge — amber outline style */}
               <span style={{
                 display: 'inline-flex', alignItems: 'center', gap: 8,
-                background: 'rgba(255,193,7,0.10)', border: '1px solid rgba(255,193,7,0.30)',
+                background: 'rgba(255,193,7,0.10)', border: '1px solid rgba(255,193,7,0.28)',
                 color: GLD, fontFamily: F, fontSize: 13, fontWeight: 700,
                 padding: '7px 16px', borderRadius: 999,
               }}>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: GLD, display: 'block' }} />
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: GLD }} />
                 مسار متكامل · 10 محطات
               </span>
 
@@ -406,13 +373,12 @@ export default function MasarElamiPage() {
                 المسار <span style={{ color: GLD }}>الإعلامي</span>
               </h1>
 
-              <p style={{ fontFamily: F, fontSize: 'clamp(14px,1.2vw,17px)', color: MUT, maxWidth: 560, marginTop: 16, lineHeight: 1.8 }}>
+              <p style={{ fontFamily: F, fontSize: 'clamp(14px,1.2vw,16.5px)', color: MUT, maxWidth: 540, marginTop: 16, lineHeight: 1.85 }}>
                 منهج واحد متكامل من 10 محطات: يبدأ بالتقديم والحضور أمام الكاميرا، ويمرّ بكل تخصص إعلامي —
                 صحافة، ميدان، محتوى، بودكاست، متحدث رسمي، وإنتاج — وكل محطة تُسلَّم فيها مشروع تطبيقي.
               </p>
 
-              {/* 2×2 badge grid — 4 items only; Wajeez in its own card below */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0,1fr))', gap: 12, marginTop: 24, maxWidth: 520 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0,1fr))', gap: 10, marginTop: 24, maxWidth: 500 }}>
                 {([
                   { Icon: Layers,      num: '10', label: 'محطات تدريبية متسلسلة' },
                   { Icon: Clock,       num: '40', label: 'ساعة تدريبية موزَّعة'  },
@@ -423,40 +389,40 @@ export default function MasarElamiPage() {
                     display: 'inline-flex', alignItems: 'center', gap: 9,
                     background: 'rgba(2,6,23,0.60)', border: '1px solid rgba(255,255,255,0.10)',
                     backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
-                    padding: '10px 14px', borderRadius: 12, fontFamily: F, fontSize: 13, color: LT,
+                    padding: '10px 13px', borderRadius: 11, fontFamily: F, fontSize: 13, color: LT,
                   }}>
-                    <Icon size={15} color={GLD} strokeWidth={2} style={{ flexShrink: 0 }} />
+                    <Icon size={14} color={GLD} strokeWidth={2} style={{ flexShrink: 0 }} />
                     {num && <b style={{ fontFamily: FP, color: OFF, fontWeight: 700 }}>{num}</b>}
                     {label}
                   </span>
                 ))}
               </div>
 
-              {/* Wajeez card — amber border, frosted */}
+              {/* Wajeez badge */}
               <div style={{
-                display: 'flex', alignItems: 'center', gap: 14, marginTop: 20,
-                background: 'rgba(2,6,23,0.80)', border: '1px solid rgba(255,193,7,0.20)',
+                display: 'flex', alignItems: 'center', gap: 14, marginTop: 18,
+                background: 'rgba(2,6,23,0.75)', border: '1px solid rgba(255,193,7,0.18)',
                 backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
-                borderRadius: 16, padding: '14px 18px', maxWidth: 520,
+                borderRadius: 14, padding: '12px 16px', maxWidth: 500,
               }}>
-                <div style={{ flexShrink: 0, width: 40, height: 40, borderRadius: 9, background: '#fff', display: 'grid', placeContent: 'center', padding: 5 }}>
+                <div style={{ flexShrink: 0, width: 38, height: 38, borderRadius: 8, background: '#fff', display: 'grid', placeContent: 'center', padding: 4 }}>
                   <img src={wajeezLogo} alt="وجيز" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                 </div>
                 <div>
-                  <div style={{ fontFamily: F, fontSize: 13.5, fontWeight: 700, color: OFF }}>الشهادة معتمدة من تطبيق وجيز</div>
-                  <div style={{ fontFamily: F, fontSize: 12, color: MUT }}>أكبر مكتبة صوتية وبودكاست في الشرق الأوسط</div>
+                  <div style={{ fontFamily: F, fontSize: 13, fontWeight: 700, color: OFF }}>الشهادة معتمدة من تطبيق وجيز</div>
+                  <div style={{ fontFamily: F, fontSize: 11.5, color: MUT }}>أكبر مكتبة صوتية وبودكاست في الشرق الأوسط</div>
                 </div>
               </div>
 
-              {/* CTA buttons */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 14, marginTop: 24 }}>
+              {/* CTAs */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 12, marginTop: 22 }}>
                 <a href={WA_TRACK} target="_blank" rel="noopener noreferrer"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 28px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 8px 24px rgba(255,193,7,0.22)' }}>
-                  تواصل مع المستشارة — مجاناً <ArrowLeft size={15} />
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 14.5, padding: '13px 26px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 6px 20px rgba(255,193,7,0.22)' }}>
+                  تواصل مع المستشارة — مجاناً <ArrowLeft size={14} />
                 </a>
                 <a href="#tree"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', color: OFF, fontFamily: F, fontWeight: 700, fontSize: 15, padding: '14px 28px', borderRadius: 12, textDecoration: 'none' }}>
-                  استكشف شجرة المسار <ArrowLeft size={15} />
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.13)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', color: OFF, fontFamily: F, fontWeight: 700, fontSize: 14.5, padding: '13px 26px', borderRadius: 12, textDecoration: 'none' }}>
+                  استكشف شجرة المسار <ArrowLeft size={14} />
                 </a>
               </div>
             </div>
@@ -464,452 +430,343 @@ export default function MasarElamiPage() {
             {/* SVG spinning circle */}
             <div className="masar-hero-visual" style={{ position: 'relative', aspectRatio: '1', maxWidth: 400, width: '100%', marginInline: 'auto' }}>
               <svg viewBox="0 0 400 400" style={{ width: '100%', height: '100%', display: 'block' }}>
-                {/* static outer rings */}
-                <circle cx="200" cy="200" r="186" fill="none" stroke="rgba(255,255,255,0.06)" />
-                <circle cx="200" cy="200" r="150" fill="none" stroke="rgba(255,255,255,0.05)" />
-                {/* spinning arc group */}
+                <circle cx="200" cy="200" r="186" fill="none" stroke="rgba(255,255,255,0.05)" />
+                <circle cx="200" cy="200" r="150" fill="none" stroke="rgba(255,255,255,0.04)" />
                 <g className="ka-spin-ring">
                   <circle cx="200" cy="200" r="168" fill="none" stroke="rgba(255,193,7,0.90)" strokeWidth="3" strokeLinecap="round" strokeDasharray="300 1056" transform="rotate(-90 200 200)" />
-                  <circle cx="200" cy="200" r="168" fill="none" stroke="rgba(255,193,7,0.42)" strokeWidth="3" strokeLinecap="round" strokeDasharray="380 1056" strokeDashoffset="-330" transform="rotate(-90 200 200)" />
-                  <circle cx="200" cy="200" r="168" fill="none" stroke="rgba(255,255,255,0.20)" strokeWidth="3" strokeLinecap="round" strokeDasharray="150 1056" strokeDashoffset="-740" transform="rotate(-90 200 200)" />
-                  <circle cx="200" cy="200" r="168" fill="none" stroke="rgba(30,122,133,0.95)" strokeWidth="3" strokeLinecap="round" strokeDasharray="120 1056" strokeDashoffset="-910" transform="rotate(-90 200 200)" />
-                  {/* dots */}
-                  <circle cx="200" cy="32"  r="6" fill="#FFC107" />
-                  <circle cx="352" cy="268" r="6" fill="#FFC107" />
+                  <circle cx="200" cy="200" r="168" fill="none" stroke="rgba(255,193,7,0.40)" strokeWidth="3" strokeLinecap="round" strokeDasharray="380 1056" strokeDashoffset="-330" transform="rotate(-90 200 200)" />
+                  <circle cx="200" cy="200" r="168" fill="none" stroke="rgba(255,255,255,0.18)" strokeWidth="3" strokeLinecap="round" strokeDasharray="150 1056" strokeDashoffset="-740" transform="rotate(-90 200 200)" />
+                  <circle cx="200" cy="200" r="168" fill="none" stroke="rgba(30,122,133,0.90)" strokeWidth="3" strokeLinecap="round" strokeDasharray="120 1056" strokeDashoffset="-910" transform="rotate(-90 200 200)" />
+                  <circle cx="200" cy="32"  r="6" fill={GLD} />
+                  <circle cx="352" cy="268" r="6" fill={GLD} />
                   <circle cx="66"  cy="286" r="6" fill="#1E7A85" />
                 </g>
-                {/* slow counter-spin outer ring */}
                 <g className="ka-spin-slow">
-                  <circle cx="200" cy="200" r="186" fill="none" stroke="rgba(255,193,7,0.08)" strokeWidth="1" strokeDasharray="12 20" />
+                  <circle cx="200" cy="200" r="186" fill="none" stroke="rgba(255,193,7,0.06)" strokeWidth="1" strokeDasharray="12 20" />
                 </g>
               </svg>
-              {/* center content */}
               <div style={{ position: 'absolute', inset: 0, display: 'grid', placeContent: 'center', textAlign: 'center' }}>
                 <div style={{ fontFamily: FP, fontSize: 68, fontWeight: 700, color: OFF, lineHeight: 1 }}>10</div>
-                <div style={{ fontFamily: F, fontSize: 16, color: MUT, marginTop: 4 }}>محطات</div>
-                <div style={{ width: 40, height: 1, background: 'rgba(255,193,7,0.40)', margin: '10px auto' }} />
-                <div style={{ fontFamily: F, fontSize: 12, color: 'rgba(255,193,7,0.70)', letterSpacing: 0.5 }}>تأسيس ← تخصصات ← قيادة</div>
+                <div style={{ fontFamily: F, fontSize: 15, color: MUT, marginTop: 4 }}>محطات</div>
+                <div style={{ width: 36, height: 1, background: 'rgba(255,193,7,0.35)', margin: '10px auto' }} />
+                <div style={{ fontFamily: F, fontSize: 11.5, color: 'rgba(255,193,7,0.65)' }}>تأسيس ← تخصصات ← قيادة</div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ════════════════ TREE ════════════════ */}
-      <section id="tree" style={{ background: BG2, borderBlock: `1px solid ${HAIR}`, padding: '88px 0' }}>
+      {/* ════════════════ 2. TREE ════════════════════════ */}
+      <section id="tree" style={{ background: S1, borderTop: `1px solid ${CARD_BORDER}`, padding: '80px 0' }}>
         <div style={{ ...INNER }}>
-          <div style={{ textAlign: 'center', marginBottom: 52 }}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, border: `1px solid ${GL}`, color: GLD, background: GS, fontFamily: F, fontSize: 13, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>شجرة المسار</span>
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', marginTop: 18, lineHeight: 1.35, color: OFF }}>
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <SectionLabel text="شجرة المسار" />
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,4vw,42px)', marginTop: 16, lineHeight: 1.35, color: OFF }}>
               10 محطات من أول يوم <span style={{ color: GLD }}>حتى الشهادة</span>
             </h2>
-            <p style={{ fontFamily: F, fontSize: 16.5, color: MUT, maxWidth: 640, marginInline: 'auto', marginTop: 14, lineHeight: 1.75 }}>
-              كل محطة إلزامية ومرتَّبة بتسلسل مدروس — كل واحدة تُبنى على التي قبلها. اضغط على أي محطة لاستعراض محاورها ومشروعها.
+            <p style={{ fontFamily: F, fontSize: 15.5, color: MUT, maxWidth: 580, marginInline: 'auto', marginTop: 12, lineHeight: 1.8 }}>
+              كل محطة إلزامية ومرتَّبة بتسلسل مدروس. اضغط على أي محطة لاستعراض محاورها ومشروعها.
             </p>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', maxWidth: 880, marginInline: 'auto', marginBottom: 18 }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', maxWidth: 860, marginInline: 'auto', marginBottom: 16 }}>
             <button onClick={handleExpandAll} style={{
-              background: 'rgba(255,255,255,0.03)', border: `1px solid ${HAIR}`,
+              background: 'rgba(255,255,255,0.03)', border: `1px solid ${CARD_BORDER}`,
               color: MUT, fontFamily: F, fontSize: 13, fontWeight: 700,
-              padding: '9px 18px', borderRadius: 999, cursor: 'pointer',
+              padding: '8px 16px', borderRadius: 999, cursor: 'pointer',
             }}>
               {expandAll ? 'طيّ جميع المحاور' : 'فتح جميع المحاور'}
             </button>
           </div>
 
-          <div style={{ maxWidth: 880, marginInline: 'auto', display: 'flex', flexDirection: 'column', gap: 0 }}>
+          <div style={{ maxWidth: 860, marginInline: 'auto', display: 'flex', flexDirection: 'column', gap: 0 }}>
             {STATIONS.map((s, i) => {
               const prevPhase = i > 0 ? STATIONS[i-1].phase : null;
               const showBand  = s.phase !== prevPhase;
               return (
                 <div key={s.n}>
                   {showBand && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 16, margin: i === 0 ? '0 0 12px' : '20px 0 12px' }}>
-                      <div style={{ flex: 1, height: 1, background: HAIR }} />
-                      <span style={{ fontFamily: F, fontSize: 13, fontWeight: 700, color: PHASE_LABELS[s.phase].color, letterSpacing: '.4px', whiteSpace: 'nowrap', padding: '4px 12px', borderRadius: 999, background: 'rgba(255,255,255,0.04)', border: `1px solid ${HAIR}` }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 14, margin: i === 0 ? '0 0 10px' : '18px 0 10px' }}>
+                      <div style={{ flex: 1, height: 1, background: CARD_BORDER }} />
+                      <span style={{ fontFamily: F, fontSize: 12, fontWeight: 700, color: PHASE_LABELS[s.phase].color, padding: '3px 12px', borderRadius: 999, background: 'rgba(255,255,255,0.03)', border: `1px solid ${CARD_BORDER}` }}>
                         {PHASE_LABELS[s.phase].label}
                       </span>
-                      <div style={{ flex: 1, height: 1, background: HAIR }} />
+                      <div style={{ flex: 1, height: 1, background: CARD_BORDER }} />
                     </div>
                   )}
                   {!showBand && i > 0 && (
-                    <div style={{ width: 2, height: 14, background: `linear-gradient(180deg, ${GL}, rgba(255,193,7,0.5))`, margin: '4px auto', borderRadius: 2 }} />
+                    <div style={{ width: 2, height: 12, background: `linear-gradient(180deg, ${GL}, rgba(255,193,7,0.4))`, margin: '3px auto', borderRadius: 2 }} />
                   )}
                   <Station s={s} open={isOpen(i)} onToggle={() => toggle(i)} />
                 </div>
               );
             })}
 
-            <div style={{ width: 2, height: 24, background: `linear-gradient(180deg, ${GL}, rgba(30,122,133,0.6))`, margin: '8px auto', borderRadius: 2 }} />
+            <div style={{ width: 2, height: 20, background: `linear-gradient(180deg, ${GL}, rgba(30,122,133,0.5))`, margin: '6px auto', borderRadius: 2 }} />
 
-            <div style={{ border: '1px solid rgba(30,122,133,0.45)', borderRadius: 18, background: 'linear-gradient(180deg,rgba(30,122,133,0.16), rgba(29,39,56,0.8) 60%)', padding: '28px 26px', display: 'flex', flexWrap: 'wrap', gap: 20, alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex', gap: 18, alignItems: 'center', flexWrap: 'wrap' }}>
-                <div style={{ width: 60, height: 60, borderRadius: 13, background: '#fff', display: 'grid', placeContent: 'center', padding: 8, flexShrink: 0 }}>
+            <div style={{ border: '1px solid rgba(30,122,133,0.40)', borderRadius: 16, background: 'linear-gradient(160deg,rgba(30,122,133,0.14), rgba(11,17,32,0.8) 60%)', padding: '26px 24px', display: 'flex', flexWrap: 'wrap', gap: 18, alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>
+                <div style={{ width: 54, height: 54, borderRadius: 12, background: '#fff', display: 'grid', placeContent: 'center', padding: 7, flexShrink: 0 }}>
                   <img src={wajeezLogo} alt="وجيز" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                 </div>
                 <div>
-                  <h4 style={{ fontFamily: F, fontWeight: 800, fontSize: 20, color: OFF }}>شهادة كاسيت أكاديمي · معتمدة من تطبيق وجيز</h4>
-                  <p style={{ fontFamily: F, fontSize: 14, color: MUT, marginTop: 4 }}>شهادة المسار الكاملة + محفظة أعمال + توصية مهنية</p>
+                  <h4 style={{ fontFamily: F, fontWeight: 800, fontSize: 18, color: OFF }}>شهادة كاسيت أكاديمي · معتمدة من تطبيق وجيز</h4>
+                  <p style={{ fontFamily: F, fontSize: 13, color: MUT, marginTop: 3 }}>شهادة المسار الكاملة + محفظة أعمال + توصية مهنية</p>
                 </div>
               </div>
               <a href={WA_TRACK} target="_blank" rel="noopener noreferrer"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 700, fontSize: 14, padding: '12px 24px', borderRadius: 999, textDecoration: 'none' }}>
-                التسجيل في المسار <ArrowLeft size={14} />
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 700, fontSize: 13.5, padding: '11px 22px', borderRadius: 12, textDecoration: 'none' }}>
+                التسجيل في المسار <ArrowLeft size={13} />
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ════════════════ OUTCOMES (cream) ════════════════ */}
-      <section style={{ background: LBG, padding: '88px 0' }}>
+      {/* ════════════════ 3. STUDY MODES ═════════════════ */}
+      <section style={{ background: S2, borderTop: `1px solid ${CARD_BORDER}`, padding: '80px 0' }}>
         <div style={{ ...INNER }}>
-          <div style={{ textAlign: 'center', marginBottom: 52 }}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, border: `1px solid rgba(255,193,7,0.35)`, color: '#92600a', background: 'rgba(255,193,7,0.12)', fontFamily: F, fontSize: 13, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>مخرجات المسار</span>
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', marginTop: 18, lineHeight: 1.35, color: DH }}>
-              ما الذي ستُحقّقه <span style={{ color: '#92600a' }}>بعد المسار؟</span>
-            </h2>
-            <p style={{ fontFamily: F, fontSize: 16.5, color: DM, maxWidth: 640, marginInline: 'auto', marginTop: 14 }}>
-              مخرجات ملموسة تُقدّمها لأصحاب العمل والعملاء — لا مجرد شعور عام بالتحسّن.
-            </p>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px,1fr))', gap: 18 }}>
-            {OUTCOMES.map(o => (
-              <div key={o.n} style={{ background: '#fff', border: '1px solid rgba(0,0,0,0.07)', borderRadius: 14, padding: '28px 24px', boxShadow: '0 4px 18px rgba(0,0,0,0.06)' }}>
-                <div style={{ fontFamily: FP, fontSize: 13, fontWeight: 700, color: '#B8860B', letterSpacing: 1, marginBottom: 10 }}>{o.n}</div>
-                <h4 style={{ fontFamily: F, fontWeight: 800, fontSize: 18, color: DH, marginBottom: 10, lineHeight: 1.55 }}>{o.title}</h4>
-                <p style={{ fontFamily: F, fontSize: 14.5, color: DM, lineHeight: 1.75 }}>{o.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ════════════════ TRAINERS / EXPERTS ════════════════ */}
-      <section style={{ background: BG2, borderBlock: `1px solid ${HAIR}`, padding: '88px 0' }}>
-        <div style={{ ...INNER }}>
-          <div style={{ textAlign: 'center', marginBottom: 52 }}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, border: `1px solid ${GL}`, color: GLD, background: GS, fontFamily: F, fontSize: 13, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>خبراء المسار الإعلامي</span>
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', marginTop: 18, lineHeight: 1.35, color: OFF }}>
-              مَن <span style={{ color: GLD }}>يُرشدك</span> في هذا المسار
-            </h2>
-            <p style={{ fontFamily: F, fontSize: 16.5, color: MUT, maxWidth: 580, marginInline: 'auto', marginTop: 14 }}>
-              خبراء إعلاميون بمسيرات مهنية حقيقية — يُرشدونك ويُقيّمونك على مدار المسار.
-            </p>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 920, marginInline: 'auto' }}>
-
-            {/* ── Rami card ── */}
-            <div className="masar-trainer-card" style={{
-              background: `linear-gradient(135deg, rgba(255,193,7,0.05), ${CARD} 50%)`,
-              border: `1px solid ${GL}`, borderRadius: 24, overflow: 'hidden',
-              display: 'grid', gridTemplateColumns: 'minmax(0,300px) 1fr',
-              boxShadow: '0 12px 48px rgba(0,0,0,0.30)',
-            }}>
-              {/* photo */}
-              <div className="masar-trainer-photo" style={{ position: 'relative', minHeight: 360, background: '#0d111a', overflow: 'hidden' }}>
-                <img src={instructorRami} alt="رامي أبو جبارة"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block', position: 'absolute', inset: 0 }} />
-                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, rgba(22,30,43,0.85) 0%, transparent 60%)' }} />
-                {/* wajeez badge */}
-                <div style={{
-                  position: 'absolute', bottom: 18, right: 18,
-                  display: 'inline-flex', alignItems: 'center', gap: 8,
-                  background: 'rgba(0,0,0,0.72)', backdropFilter: 'blur(8px)',
-                  border: '1px solid rgba(255,193,7,0.30)', borderRadius: 12, padding: '8px 14px',
-                }}>
-                  <div style={{ width: 28, height: 28, borderRadius: 7, background: '#fff', display: 'grid', placeContent: 'center', flexShrink: 0, padding: 3 }}>
-                    <img src={wajeezLogo} alt="وجيز" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                  </div>
-                  <span style={{ fontFamily: F, fontSize: 12, fontWeight: 700, color: GLD, lineHeight: 1.3 }}>الشريك المؤسس<br/>لتطبيق وجيز</span>
-                </div>
-              </div>
-
-              {/* info */}
-              <div style={{ padding: '36px 36px 32px', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GS, border: `1px solid ${GL}`, borderRadius: 999, padding: '5px 14px', marginBottom: 14, alignSelf: 'flex-start' }}>
-                  <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD, display: 'block' }} />
-                  <span style={{ fontFamily: F, fontSize: 12.5, fontWeight: 700, color: GLD }}>مدرّب برنامج الإعلامي الشامل</span>
-                </div>
-                <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(22px,2.2vw,30px)', color: OFF, margin: '0 0 8px', lineHeight: 1.25 }}>
-                  رامي أبو جبارة
-                </h3>
-                <p style={{ fontFamily: F, fontSize: 14.5, color: MUT, lineHeight: 1.85, marginBottom: 22 }}>
-                  خبرة تمتد لـ 17 عاماً في الصحافة التلفزيونية والقيادة التحريرية؛ تنقّل خلالها بين كبرى المؤسسات الإعلامية مثل <b style={{ color: LT }}>Sky News عربية</b>، وصولاً إلى رئاسة تحرير <b style={{ color: LT }}>«الشرق مع Bloomberg»</b>.
-                </p>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 26 }}>
-                  {['الصحافة التلفزيونية','القيادة التحريرية','Sky News عربية','الشرق مع Bloomberg'].map(t => (
-                    <span key={t} style={{ fontFamily: F, fontSize: 12.5, color: GLD, background: GS, border: `1px solid ${GL}`, borderRadius: 999, padding: '5px 13px' }}>{t}</span>
-                  ))}
-                </div>
-                <a href={WA_TRACK} target="_blank" rel="noopener noreferrer"
-                  style={{ marginTop: 'auto', display: 'inline-flex', alignItems: 'center', gap: 8, alignSelf: 'flex-start', background: GLD, color: NAVY, fontFamily: F, fontWeight: 800, fontSize: 14, padding: '12px 24px', borderRadius: 12, textDecoration: 'none' }}>
-                  تواصل للاستفسار <ArrowLeft size={14} />
-                </a>
-              </div>
-            </div>
-
-            {/* ── Rana card ── */}
-            <div className="masar-trainer-card" style={{
-              background: `linear-gradient(135deg, rgba(103,232,249,0.04), ${CARD} 50%)`,
-              border: `1px solid rgba(103,232,249,0.22)`, borderRadius: 24, overflow: 'hidden',
-              display: 'grid', gridTemplateColumns: 'minmax(0,300px) 1fr',
-              boxShadow: '0 12px 48px rgba(0,0,0,0.30)',
-            }}>
-              {/* photo */}
-              <div className="masar-trainer-photo" style={{ position: 'relative', minHeight: 320, background: '#0d111a', overflow: 'hidden' }}>
-                <img src={instructorRana} alt="أ. رنا محمد العزام"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block', position: 'absolute', inset: 0 }} />
-                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, rgba(22,30,43,0.85) 0%, transparent 60%)' }} />
-              </div>
-
-              {/* info */}
-              <div style={{ padding: '36px 36px 32px', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(103,232,249,0.08)', border: '1px solid rgba(103,232,249,0.25)', borderRadius: 999, padding: '5px 14px', marginBottom: 14, alignSelf: 'flex-start' }}>
-                  <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#67e8f9', display: 'block' }} />
-                  <span style={{ fontFamily: F, fontSize: 12.5, fontWeight: 700, color: '#67e8f9' }}>مدرّبة الأداء والتحرير اللغوي</span>
-                </div>
-                <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(22px,2.2vw,30px)', color: OFF, margin: '0 0 8px', lineHeight: 1.25 }}>
-                  أ. رنا محمد العزام
-                </h3>
-                <p style={{ fontFamily: F, fontSize: 14.5, color: MUT, lineHeight: 1.85, marginBottom: 22 }}>
-                  إعلامية ومدربة أداء متخصصة في <b style={{ color: LT }}>التقديم التلفزيوني</b> والتحرير اللغوي وتأهيل المتحدث الرسمي — تُدرّس محطتَي التأسيس في المسار.
-                </p>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 26 }}>
-                  {['الإعلام التلفزيوني','التحرير اللغوي','المتحدث الرسمي','الحضور الإعلامي'].map(t => (
-                    <span key={t} style={{ fontFamily: F, fontSize: 12.5, color: '#67e8f9', background: 'rgba(103,232,249,0.08)', border: '1px solid rgba(103,232,249,0.22)', borderRadius: 999, padding: '5px 13px' }}>{t}</span>
-                  ))}
-                </div>
-                <a href={WA_TRACK} target="_blank" rel="noopener noreferrer"
-                  style={{ marginTop: 'auto', display: 'inline-flex', alignItems: 'center', gap: 8, alignSelf: 'flex-start', background: 'rgba(103,232,249,0.12)', border: '1px solid rgba(103,232,249,0.35)', color: '#67e8f9', fontFamily: F, fontWeight: 800, fontSize: 14, padding: '12px 24px', borderRadius: 12, textDecoration: 'none' }}>
-                  تواصل للاستفسار <ArrowLeft size={14} />
-                </a>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* ════════════════ STUDY MODES — "اختر أسلوب تعلّمك" ════════════════ */}
-      <section style={{ padding: '88px 0' }}>
-        <div style={{ ...INNER }}>
-          <div style={{ textAlign: 'center', marginBottom: 48 }}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, border: `1px solid ${GL}`, color: GLD, background: GS, fontFamily: F, fontSize: 13, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>أسلوب الدراسة</span>
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', marginTop: 18, lineHeight: 1.35, color: OFF }}>
+          <div style={{ textAlign: 'center', marginBottom: 44 }}>
+            <SectionLabel text="أسلوب الدراسة" />
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,4vw,42px)', marginTop: 16, lineHeight: 1.35, color: OFF }}>
               اختر <span style={{ color: GLD }}>أسلوب تعلّمك</span>
             </h2>
-            <p style={{ fontFamily: F, fontSize: 16.5, color: MUT, marginTop: 14, maxWidth: 560, marginInline: 'auto' }}>
+            <p style={{ fontFamily: F, fontSize: 15.5, color: MUT, marginTop: 12, maxWidth: 520, marginInline: 'auto', lineHeight: 1.8 }}>
               نفس المنهج ونفس المدربين والشهادة المعتمدة — فقط اختر ما يناسب جدولك وحياتك
             </p>
           </div>
 
-          {/* comparison card */}
-          <div style={{
-            background: CARD,
-            borderRadius: 20,
-            border: `1px solid ${HAIR}`,
-            padding: 'clamp(20px,3vw,32px)',
-            marginBottom: 24,
-            boxShadow: '0 8px 32px rgba(0,0,0,0.25)',
-          }}>
-            <div style={{ marginBottom: 18 }}>
-              <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(16px,2vw,19px)', color: OFF, margin: '0 0 5px' }}>قارن بين الأسلوبين</h3>
-              <p style={{ fontFamily: F, fontSize: 13.5, color: MUT, margin: 0, lineHeight: 1.6 }}>
-                نفس المحتوى والشهادات — فقط الاختلاف في مكان الحضور وتوقيته
-              </p>
+          {/* comparison grid */}
+          <div className="masar-study-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px,1fr))', gap: 14, marginBottom: 14, maxWidth: 820, marginInline: 'auto' }}>
+
+            <div style={{ background: 'rgba(255,193,7,0.05)', border: '1px solid rgba(255,193,7,0.22)', borderRadius: 16, padding: '22px 20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+                <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,193,7,0.14)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <MapPin size={17} color={GLD} strokeWidth={2.2} />
+                </div>
+                <div>
+                  <div style={{ fontFamily: F, fontWeight: 800, fontSize: 14.5, color: GLD }}>حضوري — استوديو كاسيت</div>
+                  <div style={{ fontFamily: F, fontSize: 12, color: MUT }}>حضور فعلي في عمّان</div>
+                </div>
+              </div>
+              <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 9 }}>
+                {['تفاعل مباشر مع المدرب والزملاء','تطبيق عملي داخل الاستوديوهات المجهَّزة','بيئة تعلم منظَّمة بلا إلهاء','تشبيك مع المتدربين وفرص العمل'].map(pt => (
+                  <li key={pt} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontFamily: F, fontSize: 13, color: LT }}>
+                    <CheckCircle2 size={13} color={GLD} strokeWidth={2.2} style={{ flexShrink: 0, marginTop: 2 }} /> {pt}
+                  </li>
+                ))}
+              </ul>
             </div>
 
-            <div className="masar-study-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: 14 }}>
-
-              {/* حضوري tile */}
-              <div style={{ background: 'rgba(255,193,7,0.06)', border: '1.5px solid rgba(255,193,7,0.28)', borderRadius: 14, padding: '18px 20px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
-                  <div style={{ width: 38, height: 38, borderRadius: '50%', background: 'rgba(255,193,7,0.16)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <MapPin size={18} color={GLD} strokeWidth={2.2} />
-                  </div>
-                  <div>
-                    <div style={{ fontFamily: F, fontWeight: 900, fontSize: 15, color: GLD }}>حضوري — استوديو كاسيت</div>
-                    <div style={{ fontFamily: F, fontSize: 12, color: MUT, lineHeight: 1.4 }}>حضور فعلي في استوديو كاسيت وعمّان</div>
-                  </div>
+            <div style={{ background: 'rgba(103,232,249,0.04)', border: '1px solid rgba(103,232,249,0.20)', borderRadius: 16, padding: '22px 20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+                <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(103,232,249,0.12)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <Wifi size={17} color="#67e8f9" strokeWidth={2.2} />
                 </div>
-                <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  {['تفاعل مباشر مع المدرب والزملاء', 'تطبيق عملي داخل الاستوديوهات المجهَّزة', 'بيئة تعلم منظَّمة بلا إلهاء', 'تشبيك مع المتدربين وفرص العمل'].map(pt => (
-                    <li key={pt} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontFamily: F, fontSize: 13, color: LT }}>
-                      <CheckCircle2 size={14} color={GLD} strokeWidth={2.2} style={{ flexShrink: 0, marginTop: 2 }} />
-                      {pt}
-                    </li>
-                  ))}
-                </ul>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,193,7,0.12)', border: '1px solid rgba(255,193,7,0.30)', borderRadius: 999, padding: '5px 12px', marginTop: 14, fontFamily: F, fontWeight: 700, fontSize: 12, color: GLD }}>
-                  <MapPin size={13} color={GLD} strokeWidth={2} />
-                  عمّان — الأردن
+                <div>
+                  <div style={{ fontFamily: F, fontWeight: 800, fontSize: 14.5, color: '#67e8f9' }}>كاسيت لايف — Online LIVE</div>
+                  <div style={{ fontFamily: F, fontSize: 12, color: MUT }}>من أي مكان في العالم العربي</div>
                 </div>
               </div>
-
-              {/* أونلاين tile */}
-              <div style={{ background: 'rgba(103,232,249,0.05)', border: '1.5px solid rgba(103,232,249,0.26)', borderRadius: 14, padding: '18px 20px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
-                  <div style={{ width: 38, height: 38, borderRadius: '50%', background: 'rgba(103,232,249,0.13)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Wifi size={18} color="#67e8f9" strokeWidth={2.2} />
-                  </div>
-                  <div>
-                    <div style={{ fontFamily: F, fontWeight: 900, fontSize: 15, color: '#67e8f9' }}>كاسيت لايف — Online LIVE</div>
-                    <div style={{ fontFamily: F, fontSize: 12, color: MUT, lineHeight: 1.4 }}>جلسات مباشرة تفاعلية من أي مكان</div>
-                  </div>
-                </div>
-                <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  {['جلسات مباشرة مع المدرب في الوقت الفعلي', 'تسجيلات الجلسات متاحة للمراجعة', 'تسليم واجبات وتقييم فردي', 'متاح من أي مكان في العالم العربي'].map(pt => (
-                    <li key={pt} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontFamily: F, fontSize: 13, color: LT }}>
-                      <CheckCircle2 size={14} color="#67e8f9" strokeWidth={2.2} style={{ flexShrink: 0, marginTop: 2 }} />
-                      {pt}
-                    </li>
-                  ))}
-                </ul>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(103,232,249,0.13)', border: '1px solid rgba(103,232,249,0.32)', borderRadius: 999, padding: '5px 12px', marginTop: 14, fontFamily: F, fontWeight: 700, fontSize: 12, color: '#67e8f9' }}>
-                  <Wifi size={13} color="#67e8f9" strokeWidth={2} />
-                  بث مباشر تفاعلي
-                </div>
-              </div>
-
+              <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 9 }}>
+                {['جلسات مباشرة مع المدرب في الوقت الفعلي','تسجيلات الجلسات متاحة للمراجعة','تسليم واجبات وتقييم فردي','متاح من أي مكان في العالم العربي'].map(pt => (
+                  <li key={pt} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontFamily: F, fontSize: 13, color: LT }}>
+                    <CheckCircle2 size={13} color="#67e8f9" strokeWidth={2.2} style={{ flexShrink: 0, marginTop: 2 }} /> {pt}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 
-          {/* حضوري details accordion */}
-          <StudyAccordion
-            variant="inperson"
-            label="حضوري — داخل استوديو كاسيت"
-            sub="تدريب ميداني مع معدات احترافية وتصحيح فوري"
-            badges={['10 محطات', '40 ساعة']}
-            items={[
-              { title: 'تطبيق عملي أمام الكاميرا',     desc: 'كل محطة تنتهي بمشروع مصوَّر أو مسجَّل يُسلَّم ويُقيَّم من لجنة المدربين.' },
-              { title: 'استوديو مجهَّز احترافياً',       desc: 'كاميرات، إضاءة، وأجهزة تسجيل صوتي متاحة طوال فترة التدريب.' },
-              { title: 'مجموعات صغيرة — تصحيح فردي',    desc: 'لا يتجاوز عدد المجموعة 12 متدرباً لضمان اهتمام المدرب بكل متدرب.' },
-              { title: 'تشبيك مهني مع الزملاء',          desc: 'بيئة تعلم جماعية تفتح أبواب الفرص المهنية والتعاون بين المتدربين.' },
-            ]}
-          />
-
-          {/* أونلاين details accordion */}
-          <StudyAccordion
-            variant="online"
-            label="Online LIVE — بث مباشر تفاعلي"
-            sub="من أي مكان في العالم العربي — بث حي لا تسجيلات مسبقة"
-            badges={['10 محطات', '40 ساعة', 'بث مباشر']}
-            items={[
-              { title: 'جلسات حية مع المدرب',           desc: 'كل محطة تُقدَّم مباشرةً في الوقت الفعلي — لا محاضرات مسجَّلة مسبقاً.' },
-              { title: 'تسجيلات للمراجعة',               desc: 'تسجيلات الجلسات محفوظة ومتاحة للمشتركين لمراجعتها في أي وقت.' },
-              { title: 'تسليم مشاريع وتقييم فردي',       desc: 'نفس آلية التسليم والتقييم المطبَّقة في الحضوري — لا تنازل عن المعايير.' },
-              { title: 'متاح من أي مكان',                desc: 'الأردن، السعودية، الإمارات، مصر، أو أي مكان آخر — بشرط اتصال جيد.' },
-            ]}
-          />
-
+          <div style={{ maxWidth: 820, marginInline: 'auto' }}>
+            <StudyAccordion variant="inperson" label="حضوري — داخل استوديو كاسيت" sub="تدريب ميداني مع معدات احترافية وتصحيح فوري" badges={['10 محطات','40 ساعة']}
+              items={[
+                { title:'تطبيق عملي أمام الكاميرا',   desc:'كل محطة تنتهي بمشروع مصوَّر أو مسجَّل يُسلَّم ويُقيَّم من لجنة المدربين.' },
+                { title:'استوديو مجهَّز احترافياً',     desc:'كاميرات، إضاءة، وأجهزة تسجيل صوتي متاحة طوال فترة التدريب.' },
+                { title:'مجموعات صغيرة — تصحيح فردي',  desc:'لا يتجاوز عدد المجموعة 12 متدرباً لضمان اهتمام المدرب بكل متدرب.' },
+                { title:'تشبيك مهني مع الزملاء',        desc:'بيئة تعلم جماعية تفتح أبواب الفرص المهنية والتعاون بين المتدربين.' },
+              ]}
+            />
+            <StudyAccordion variant="online" label="Online LIVE — بث مباشر تفاعلي" sub="من أي مكان في العالم العربي — بث حي لا تسجيلات مسبقة" badges={['10 محطات','40 ساعة','بث مباشر']}
+              items={[
+                { title:'جلسات حية مع المدرب',         desc:'كل محطة تُقدَّم مباشرةً في الوقت الفعلي — لا محاضرات مسجَّلة مسبقاً.' },
+                { title:'تسجيلات للمراجعة',             desc:'تسجيلات الجلسات محفوظة ومتاحة للمشتركين لمراجعتها في أي وقت.' },
+                { title:'تسليم مشاريع وتقييم فردي',     desc:'نفس آلية التسليم والتقييم المطبَّقة في الحضوري — لا تنازل عن المعايير.' },
+                { title:'متاح من أي مكان',              desc:'الأردن، السعودية، الإمارات، مصر، أو أي مكان آخر — بشرط اتصال جيد.' },
+              ]}
+            />
+          </div>
         </div>
       </section>
 
-      {/* ════════════════ STANDALONE COURSES (cream) ════════════════ */}
-      <section style={{ background: LBG, borderBlock: '1px solid rgba(0,0,0,0.08)', padding: '88px 0' }}>
+      {/* ════════════════ 4. OUTCOMES (cream) ═══════════ */}
+      <section style={{ background: LBG, borderTop: '1px solid rgba(0,0,0,0.06)', padding: '80px 0' }}>
         <div style={{ ...INNER }}>
-          <div style={{ textAlign: 'center', marginBottom: 52 }}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, border: '1px solid rgba(255,193,7,0.35)', color: '#92600a', background: 'rgba(255,193,7,0.12)', fontFamily: F, fontSize: 13, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>الدورات المستقلة</span>
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', marginTop: 18, lineHeight: 1.35, color: DH }}>
-              3 دورات <span style={{ color: '#92600a' }}>تشتريها منفردةً</span>
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <SectionLabel text="مخرجات المسار" light />
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,4vw,42px)', marginTop: 16, lineHeight: 1.35, color: DH }}>
+              ما الذي ستُحقّقه <span style={{ color: '#92600a' }}>بعد المسار؟</span>
             </h2>
-            <p style={{ fontFamily: F, fontSize: 16.5, color: DM, maxWidth: 640, marginInline: 'auto', marginTop: 14 }}>
-              ابدأ بدورة واحدة، وقرّر لاحقاً ما إذا كنت تودّ الالتحاق بالمسار الكامل. قيمة أي دورة تُستقطع من سعر المسار.
+            <p style={{ fontFamily: F, fontSize: 15.5, color: DM, maxWidth: 580, marginInline: 'auto', marginTop: 12 }}>
+              مخرجات ملموسة تُقدّمها لأصحاب العمل والعملاء — لا مجرد شعور عام بالتحسّن.
             </p>
           </div>
-
-          <div className="masar-standalone-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
-            {STANDALONE_COURSES.map(c => (
-              <div key={c.n} style={{ background: '#fff', border: '1px solid rgba(0,0,0,0.07)', borderRadius: 18, padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: 0, boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
-                  <span style={{ fontFamily: FP, fontWeight: 800, fontSize: 13, color: '#92600a', background: 'rgba(255,193,7,0.12)', border: '1px solid rgba(255,193,7,0.30)', borderRadius: 999, padding: '4px 12px' }}>{c.n}</span>
-                  <span style={{ fontFamily: F, fontSize: 12, color: DM, background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.08)', borderRadius: 999, padding: '4px 11px' }}>{c.note}</span>
-                </div>
-                <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 17, color: DH, lineHeight: 1.5, marginBottom: 10, flex: 0 }}>{c.title}</h3>
-                <p style={{ fontFamily: F, fontSize: 14, color: DM, lineHeight: 1.75, marginBottom: 16, flex: 1 }}>{c.desc}</p>
-                <div style={{ fontFamily: F, fontSize: 13, color: '#92600a', marginBottom: 6 }}>
-                  <b>المدرب:</b> {c.instructor}
-                </div>
-                <div style={{ fontFamily: F, fontSize: 13, color: DM, marginBottom: 20 }}>
-                  <b>المدة:</b> {c.duration}
-                </div>
-                <Link href={c.route}
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, background: NAVY, color: '#fff', fontFamily: F, fontWeight: 700, fontSize: 14, padding: '12px 20px', borderRadius: 12, textDecoration: 'none', marginTop: 'auto' }}>
-                  عرض التفاصيل والتسجيل <ArrowLeft size={14} />
-                </Link>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px,1fr))', gap: 16 }}>
+            {OUTCOMES.map(o => (
+              <div key={o.n} style={{ background: '#fff', border: '1px solid rgba(0,0,0,0.06)', borderRadius: 16, padding: '26px 22px', boxShadow: '0 2px 16px rgba(0,0,0,0.05)' }}>
+                <div style={{ fontFamily: FP, fontSize: 12, fontWeight: 700, color: '#B8860B', letterSpacing: 1, marginBottom: 10 }}>{o.n}</div>
+                <h4 style={{ fontFamily: F, fontWeight: 800, fontSize: 17, color: DH, marginBottom: 10, lineHeight: 1.5 }}>{o.title}</h4>
+                <p style={{ fontFamily: F, fontSize: 14, color: DM, lineHeight: 1.8 }}>{o.desc}</p>
               </div>
             ))}
           </div>
+        </div>
+      </section>
 
-          <div style={{ marginTop: 24, background: '#fff', border: '1px dashed rgba(255,193,7,0.50)', borderRadius: 14, padding: '20px 26px', display: 'flex', gap: 14, alignItems: 'flex-start', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
-            <div style={{ flexShrink: 0, width: 36, height: 36, borderRadius: 10, background: 'rgba(255,193,7,0.12)', border: '1px solid rgba(255,193,7,0.30)', display: 'grid', placeContent: 'center', color: '#92600a', fontWeight: 800, fontSize: 17 }}>؟</div>
-            <p style={{ fontFamily: F, fontSize: 15.5, color: DM, lineHeight: 1.7 }}>
-              <b style={{ color: DH }}>الفرق باختصار:</b> الدورة تمنحك مهارة، والمسار يمنحك مهنة.
-              ابدأ بدورة إن أردت التجربة، والتحق بالمسار حين تقرّر أن الإعلام هو مستقبلك — عندها ستمرّ بجميع التخصصات دون استثناء.
+      {/* ════════════════ 5. TRAINERS ════════════════════ */}
+      <section style={{ background: S3, borderTop: `1px solid ${CARD_BORDER}`, padding: '80px 0' }}>
+        <div style={{ ...INNER }}>
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <SectionLabel text="خبراء المسار الإعلامي" />
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,4vw,42px)', marginTop: 16, lineHeight: 1.35, color: OFF }}>
+              مَن <span style={{ color: GLD }}>يُرشدك</span> في هذا المسار
+            </h2>
+            <p style={{ fontFamily: F, fontSize: 15.5, color: MUT, maxWidth: 540, marginInline: 'auto', marginTop: 12 }}>
+              خبراء إعلاميون بمسيرات مهنية حقيقية — يُرشدونك ويُقيّمونك على مدار المسار.
             </p>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 18, maxWidth: 900, marginInline: 'auto' }}>
+
+            {/* Rami */}
+            <div className="masar-trainer-card" style={{
+              background: `linear-gradient(135deg, rgba(255,193,7,0.04), rgba(255,255,255,0.025) 60%)`,
+              border: `1px solid ${GL}`, borderRadius: 22, overflow: 'hidden',
+              display: 'grid', gridTemplateColumns: 'minmax(0,290px) 1fr',
+            }}>
+              <div className="masar-trainer-photo" style={{ position: 'relative', minHeight: 340, background: '#050810', overflow: 'hidden' }}>
+                <img src={instructorRami} alt="رامي أبو جبارة"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block', position: 'absolute', inset: 0 }} />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, rgba(8,13,23,0.85) 0%, transparent 55%)' }} />
+                <div style={{ position: 'absolute', bottom: 16, right: 16, display: 'inline-flex', alignItems: 'center', gap: 8,
+                  background: 'rgba(0,0,0,0.68)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,193,7,0.25)', borderRadius: 10, padding: '7px 13px' }}>
+                  <div style={{ width: 26, height: 26, borderRadius: 6, background: '#fff', display: 'grid', placeContent: 'center', flexShrink: 0, padding: 3 }}>
+                    <img src={wajeezLogo} alt="وجيز" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                  </div>
+                  <span style={{ fontFamily: F, fontSize: 11.5, fontWeight: 700, color: GLD, lineHeight: 1.35 }}>الشريك المؤسس<br/>لتطبيق وجيز</span>
+                </div>
+              </div>
+              <div style={{ padding: '32px 32px 28px', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: GS, border: `1px solid ${GL}`, borderRadius: 999, padding: '4px 13px', marginBottom: 12, alignSelf: 'flex-start' }}>
+                  <span style={{ width: 4, height: 4, borderRadius: '50%', background: GLD }} />
+                  <span style={{ fontFamily: F, fontSize: 12, fontWeight: 700, color: GLD }}>مدرّب برنامج الإعلامي الشامل</span>
+                </div>
+                <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(20px,2.2vw,28px)', color: OFF, margin: '0 0 8px' }}>رامي أبو جبارة</h3>
+                <p style={{ fontFamily: F, fontSize: 14, color: MUT, lineHeight: 1.85, marginBottom: 20 }}>
+                  خبرة تمتد لـ <b style={{ color: LT, fontFamily: FP }}>17</b> عاماً في الصحافة التلفزيونية والقيادة التحريرية؛ تنقّل خلالها بين كبرى المؤسسات الإعلامية مثل <b style={{ color: LT }}>Sky News عربية</b>، وصولاً إلى رئاسة تحرير <b style={{ color: LT }}>«الشرق مع Bloomberg»</b>.
+                </p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginBottom: 22 }}>
+                  {['الصحافة التلفزيونية','القيادة التحريرية','Sky News عربية','الشرق مع Bloomberg'].map(t => (
+                    <span key={t} style={{ fontFamily: F, fontSize: 12, color: GLD, background: GS, border: `1px solid ${GL}`, borderRadius: 999, padding: '4px 12px' }}>{t}</span>
+                  ))}
+                </div>
+                <a href={WA_TRACK} target="_blank" rel="noopener noreferrer"
+                  style={{ marginTop: 'auto', display: 'inline-flex', alignItems: 'center', gap: 8, alignSelf: 'flex-start', background: GLD, color: NAVY, fontFamily: F, fontWeight: 800, fontSize: 13.5, padding: '11px 22px', borderRadius: 11, textDecoration: 'none' }}>
+                  تواصل للاستفسار <ArrowLeft size={13} />
+                </a>
+              </div>
+            </div>
+
+            {/* Rana */}
+            <div className="masar-trainer-card" style={{
+              background: `linear-gradient(135deg, rgba(103,232,249,0.04), rgba(255,255,255,0.020) 60%)`,
+              border: '1px solid rgba(103,232,249,0.20)', borderRadius: 22, overflow: 'hidden',
+              display: 'grid', gridTemplateColumns: 'minmax(0,290px) 1fr',
+            }}>
+              <div className="masar-trainer-photo" style={{ position: 'relative', minHeight: 300, background: '#050810', overflow: 'hidden' }}>
+                <img src={instructorRana} alt="أ. رنا محمد العزام"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block', position: 'absolute', inset: 0 }} />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, rgba(8,13,23,0.85) 0%, transparent 55%)' }} />
+              </div>
+              <div style={{ padding: '32px 32px 28px', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: 'rgba(103,232,249,0.07)', border: '1px solid rgba(103,232,249,0.22)', borderRadius: 999, padding: '4px 13px', marginBottom: 12, alignSelf: 'flex-start' }}>
+                  <span style={{ width: 4, height: 4, borderRadius: '50%', background: '#67e8f9' }} />
+                  <span style={{ fontFamily: F, fontSize: 12, fontWeight: 700, color: '#67e8f9' }}>مدرّبة الأداء والتحرير اللغوي</span>
+                </div>
+                <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(20px,2.2vw,28px)', color: OFF, margin: '0 0 8px' }}>أ. رنا محمد العزام</h3>
+                <p style={{ fontFamily: F, fontSize: 14, color: MUT, lineHeight: 1.85, marginBottom: 20 }}>
+                  إعلامية ومدربة أداء متخصصة في <b style={{ color: LT }}>التقديم التلفزيوني</b> والتحرير اللغوي وتأهيل المتحدث الرسمي — تُدرّس محطتَي التأسيس في المسار.
+                </p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginBottom: 22 }}>
+                  {['الإعلام التلفزيوني','التحرير اللغوي','المتحدث الرسمي','الحضور الإعلامي'].map(t => (
+                    <span key={t} style={{ fontFamily: F, fontSize: 12, color: '#67e8f9', background: 'rgba(103,232,249,0.07)', border: '1px solid rgba(103,232,249,0.20)', borderRadius: 999, padding: '4px 12px' }}>{t}</span>
+                  ))}
+                </div>
+                <a href={WA_TRACK} target="_blank" rel="noopener noreferrer"
+                  style={{ marginTop: 'auto', display: 'inline-flex', alignItems: 'center', gap: 8, alignSelf: 'flex-start', background: 'rgba(103,232,249,0.10)', border: '1px solid rgba(103,232,249,0.30)', color: '#67e8f9', fontFamily: F, fontWeight: 800, fontSize: 13.5, padding: '11px 22px', borderRadius: 11, textDecoration: 'none' }}>
+                  تواصل للاستفسار <ArrowLeft size={13} />
+                </a>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
 
-      {/* ════════════════ ENROLL ════════════════ */}
-      <section id="enroll" style={{ position: 'relative', padding: '88px 0', background: '#020617', overflow: 'hidden' }}>
-        {/* spotlight glow */}
-        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 500, height: 500, background: 'rgba(255,193,7,0.10)', borderRadius: '50%', filter: 'blur(120px)', pointerEvents: 'none' }} />
+      {/* ════════════════ 6. ENROLL ══════════════════════ */}
+      <section id="enroll" style={{ position: 'relative', background: S4, borderTop: `1px solid ${CARD_BORDER}`, padding: '80px 0', overflow: 'hidden' }}>
+        {/* glow */}
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 560, height: 360, background: 'rgba(255,193,7,0.07)', borderRadius: '50%', filter: 'blur(100px)', pointerEvents: 'none' }} />
 
         <div style={{ position: 'relative', zIndex: 1, ...INNER }}>
-          {/* header */}
-          <div style={{ textAlign: 'center', maxWidth: 640, margin: '0 auto 48px' }}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: F, fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: GLD, background: 'rgba(255,193,7,0.10)', border: '1px solid rgba(255,193,7,0.20)', padding: '5px 14px', borderRadius: 999 }}>
-              الالتحاق بالمسار
-            </span>
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,4vw,40px)', color: OFF, marginTop: 16, lineHeight: 1.3 }}>
+          <div style={{ textAlign: 'center', maxWidth: 580, margin: '0 auto 44px' }}>
+            <SectionLabel text="الالتحاق بالمسار" />
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,4vw,42px)', color: OFF, marginTop: 16, lineHeight: 1.3 }}>
               اختر <span style={{ color: GLD }}>خيار الالتحاق</span>
             </h2>
-            <p style={{ fontFamily: F, fontSize: 15, color: MUT, marginTop: 10, lineHeight: 1.7 }}>
-              سر في المسار الكامل للتحوّل لإعلامي محترف، أو ابدأ بدورة منفردة.
+            <p style={{ fontFamily: F, fontSize: 15, color: MUT, marginTop: 10, lineHeight: 1.8 }}>
+              التحق بالمسار الكامل وتحوّل إلى إعلامي محترف — أو ابدأ بدورة منفردة واكتشف الأسلوب المناسب لك.
             </p>
           </div>
 
-          {/* centered pricing card */}
-          <div style={{ maxWidth: 640, margin: '0 auto', position: 'relative' }}>
-            {/* glow backdrop */}
-            <div style={{ position: 'absolute', inset: -4, background: 'linear-gradient(135deg, rgba(255,193,7,0.20), rgba(234,88,12,0.20))', borderRadius: 28, filter: 'blur(20px)', opacity: 0.5, pointerEvents: 'none' }} />
+          {/* centered card */}
+          <div style={{ maxWidth: 620, margin: '0 auto', position: 'relative' }}>
+            {/* subtle ring glow */}
+            <div style={{ position: 'absolute', inset: -2, background: `linear-gradient(135deg, rgba(255,193,7,0.18), rgba(103,232,249,0.08))`, borderRadius: 28, filter: 'blur(18px)', opacity: 0.6, pointerEvents: 'none' }} />
 
-            <div style={{ position: 'relative', background: 'rgba(15,23,42,0.90)', border: '1px solid rgba(255,193,7,0.30)', borderRadius: 24, padding: 'clamp(28px,4vw,40px)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', boxShadow: '0 24px 64px rgba(0,0,0,0.40)' }}>
+            <div style={{ position: 'relative', background: 'rgba(11,17,32,0.92)', border: `1px solid ${GL}`, borderRadius: 24, padding: 'clamp(26px,4vw,40px)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)' }}>
 
-              {/* top pill badge */}
-              <div style={{ position: 'absolute', top: -14, left: '50%', transform: 'translateX(-50%)', background: 'linear-gradient(90deg, #f59e0b, #d97706)', color: '#0c0a00', fontFamily: F, fontWeight: 800, fontSize: 12, padding: '5px 18px', borderRadius: 999, whiteSpace: 'nowrap', boxShadow: '0 4px 14px rgba(245,158,11,0.35)' }}>
+              {/* floating badge */}
+              <div style={{ position: 'absolute', top: -13, left: '50%', transform: 'translateX(-50%)', background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 12, padding: '5px 18px', borderRadius: 999, whiteSpace: 'nowrap', boxShadow: '0 4px 16px rgba(255,193,7,0.28)' }}>
                 الأشمل والأوفر
               </div>
 
-              {/* pricing info */}
-              <div style={{ textAlign: 'center', paddingBottom: 28, borderBottom: '1px solid rgba(255,255,255,0.08)', marginBottom: 0 }}>
-                <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 22, color: OFF }}>المسار الإعلامي الكامل</h3>
-                <p style={{ fontFamily: F, fontSize: 13, color: MUT, marginTop: 6, lineHeight: 1.6 }}>
-                  10 محطات كاملة · التأسيس + كل التخصصات الإعلامية + القيادة الإعلامية
+              {/* price block */}
+              <div style={{ textAlign: 'center', paddingBottom: 24, borderBottom: `1px solid ${CARD_BORDER}` }}>
+                <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 21, color: OFF }}>المسار الإعلامي الكامل</h3>
+                <p style={{ fontFamily: F, fontSize: 13, color: MUT, marginTop: 6, lineHeight: 1.65 }}>
+                  10 محطات · التأسيس + التخصصات + القيادة الإعلامية
                 </p>
-
-                <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: 8, margin: '22px 0 0' }}>
-                  <span style={{ fontFamily: FP, fontSize: 56, fontWeight: 900, color: GLD, lineHeight: 1 }}>$1,000</span>
-                  <span style={{ fontFamily: F, fontSize: 13, color: MUT, marginBottom: 8 }}>للمسار الكامل</span>
+                <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: 8, margin: '20px 0 0' }}>
+                  <span style={{ fontFamily: FP, fontSize: 54, fontWeight: 900, color: GLD, lineHeight: 1 }}>$1,000</span>
+                  <span style={{ fontFamily: F, fontSize: 13, color: MUT, marginBottom: 7 }}>للمسار الكامل</span>
                 </div>
 
                 {/* installment chip */}
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 14, background: 'rgba(255,193,7,0.10)', border: '1px solid rgba(255,193,7,0.20)', color: GLD, fontFamily: F, fontSize: 13, padding: '9px 16px', borderRadius: 14 }}>
-                  <span style={{ width: 8, height: 8, borderRadius: '50%', background: GLD, flexShrink: 0, animation: 'pulse 2s infinite' }} />
-                  <span>التقسيط متاح: ادفع الدفعة الأولى <b style={{ color: OFF, fontWeight: 700 }}>$250</b> لتثبيت مقعدك وقسّط الباقي ميسراً</span>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 14, background: GS, border: `1px solid ${GL}`, borderRadius: 12, padding: '9px 15px' }}>
+                  <span className="ka-pulse-dot" style={{ width: 7, height: 7, borderRadius: '50%', background: GLD, flexShrink: 0 }} />
+                  <span style={{ fontFamily: F, fontSize: 13, color: LT }}>
+                    التقسيط متاح · الدفعة الأولى <b style={{ color: GLD, fontFamily: FP }}>$250</b> لتثبيت مقعدك
+                  </span>
                 </div>
 
-                <p style={{ fontFamily: F, fontSize: 13, color: MUT, marginTop: 12 }}>40 ساعة موزَّعة · حضوري أو Online LIVE</p>
+                <p style={{ fontFamily: F, fontSize: 12.5, color: MUT, marginTop: 10 }}>40 ساعة موزَّعة · حضوري أو Online LIVE</p>
               </div>
 
-              {/* features list */}
-              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 14, padding: '28px 0', margin: 0 }}>
+              {/* features */}
+              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 13, padding: '24px 0', margin: 0 }}>
                 {[
-                  '10 محطات متسلسلة (3 مراحل كاملة)',
+                  '10 محطات متسلسلة — 3 مراحل كاملة',
                   'تغطية جميع التخصصات الإعلامية',
                   '8 محطات حصريّة داخل المسار',
                   '8 مشاريع تطبيقية مصوَّرة بإشراف مباشر',
@@ -917,68 +774,136 @@ export default function MasarElamiPage() {
                   'شهادة معتمدة من تطبيق وجيز',
                   'إمكانية خصم قيمة أي دورة درستها سابقاً',
                 ].map(feat => (
-                  <li key={feat} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, fontFamily: F, fontSize: 14.5, color: LT, lineHeight: 1.6 }}>
-                    <span style={{ color: GLD, fontWeight: 800, flexShrink: 0, marginTop: 1 }}>✓</span>
-                    {feat}
+                  <li key={feat} style={{ display: 'flex', alignItems: 'flex-start', gap: 11, fontFamily: F, fontSize: 14, color: LT, lineHeight: 1.65 }}>
+                    <span style={{ color: GLD, fontWeight: 800, flexShrink: 0 }}>✓</span> {feat}
                   </li>
                 ))}
               </ul>
 
               {/* CTA */}
               <a href={WA_TRACK} target="_blank" rel="noopener noreferrer"
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, width: '100%', boxSizing: 'border-box', background: 'linear-gradient(90deg, #f59e0b, #d97706)', color: '#0c0a00', fontFamily: F, fontWeight: 800, fontSize: 15.5, padding: '15px 24px', borderRadius: 16, textDecoration: 'none', boxShadow: '0 8px 24px rgba(245,158,11,0.25)' }}>
-                التسجيل في المسار <ArrowLeft size={16} />
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, width: '100%', boxSizing: 'border-box', background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 24px', borderRadius: 14, textDecoration: 'none', boxShadow: '0 6px 22px rgba(255,193,7,0.20)' }}>
+                التسجيل في المسار <ArrowLeft size={15} />
               </a>
             </div>
           </div>
 
-          {/* down-sell link */}
-          <div style={{ textAlign: 'center', marginTop: 28 }}>
-            <p style={{ fontFamily: F, fontSize: 14, color: MUT }}>
+          {/* down-sell */}
+          <div style={{ textAlign: 'center', marginTop: 24 }}>
+            <p style={{ fontFamily: F, fontSize: 13.5, color: MUT }}>
               تريد البدء بدورة واحدة قبل الالتزام بالمسار الكامل؟{' '}
-              <a href="#standalone" style={{ color: GLD, textDecoration: 'underline', textUnderlineOffset: 4, fontWeight: 700 }}>
-                استعرض الدورات المنفردة ($150 - $250) ←
+              <a href="/" style={{ color: GLD, textDecoration: 'underline', textUnderlineOffset: 3, fontWeight: 700 }}>
+                استعرض الدورات المنفردة ←
               </a>
             </p>
           </div>
         </div>
       </section>
 
-      {/* ════════════════ FAQ (dark alt) ════════════════ */}
-      <section style={{ background: BG2, borderBlock: `1px solid ${HAIR}`, padding: '88px 0' }}>
+      {/* ════════════════ 7. ADVISOR CARD ════════════════ */}
+      <section style={{ background: S5, borderTop: `1px solid ${CARD_BORDER}`, padding: '80px 0' }}>
         <div style={{ ...INNER }}>
-          <div style={{ textAlign: 'center', marginBottom: 48 }}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GLD, color: '#1A1206', fontFamily: F, fontSize: 13, fontWeight: 700, padding: '7px 16px', borderRadius: 999, boxShadow: '0 6px 22px rgba(255,193,7,0.2)' }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#1A1206', display: 'block' }} />
-              أسئلة شائعة
-            </span>
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', marginTop: 18, lineHeight: 1.35, color: OFF }}>
+          <div style={{ textAlign: 'center', marginBottom: 44 }}>
+            <SectionLabel text="الاستشارة التعليمية" />
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,4vw,40px)', marginTop: 16, lineHeight: 1.35, color: OFF }}>
+              غير متأكد؟ <span style={{ color: GLD }}>تحدّث مع مستشارتنا</span>
+            </h2>
+            <p style={{ fontFamily: F, fontSize: 15, color: MUT, marginTop: 10, maxWidth: 520, marginInline: 'auto', lineHeight: 1.8 }}>
+              جلسة استشارية مجانية على واتساب — تساعدك تحدد إذا المسار هو الخيار الصح لك، وكيف تبدأ.
+            </p>
+          </div>
+
+          {/* advisor card */}
+          <div style={{ maxWidth: 720, marginInline: 'auto' }}>
+            <div className="masar-advisor-grid" style={{
+              display: 'grid', gridTemplateColumns: 'minmax(0,220px) 1fr',
+              background: `linear-gradient(135deg, rgba(255,193,7,0.05), rgba(255,255,255,0.02) 60%)`,
+              border: `1px solid ${GL}`, borderRadius: 22, overflow: 'hidden',
+            }}>
+              {/* photo */}
+              <div style={{ position: 'relative', minHeight: 280, background: '#050810', overflow: 'hidden' }}>
+                <img src={instructorRana} alt="أ. رنا محمد العزام"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block', position: 'absolute', inset: 0 }} />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, rgba(8,13,23,0.70) 0%, transparent 50%)' }} />
+                {/* online badge */}
+                <div style={{ position: 'absolute', top: 14, right: 14, display: 'inline-flex', alignItems: 'center', gap: 6,
+                  background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(8px)', border: '1px solid rgba(34,197,94,0.35)',
+                  borderRadius: 999, padding: '5px 12px' }}>
+                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#22c55e', display: 'block' }} />
+                  <span style={{ fontFamily: F, fontSize: 11.5, fontWeight: 700, color: '#86efac' }}>متاحة الآن</span>
+                </div>
+              </div>
+
+              {/* content */}
+              <div style={{ padding: '28px 30px', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: GS, border: `1px solid ${GL}`, borderRadius: 999, padding: '4px 13px', marginBottom: 12, alignSelf: 'flex-start' }}>
+                  <span style={{ width: 4, height: 4, borderRadius: '50%', background: GLD }} />
+                  <span style={{ fontFamily: F, fontSize: 12, fontWeight: 700, color: GLD }}>مستشارة تعليمية</span>
+                </div>
+
+                <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 22, color: OFF, margin: '0 0 6px' }}>أ. رنا محمد العزام</h3>
+                <p style={{ fontFamily: F, fontSize: 13.5, color: MUT, lineHeight: 1.8, marginBottom: 20 }}>
+                  ستساعدك في تقييم مستواك الحالي، ومعرفة ما إذا كان المسار الكامل هو الخيار الأنسب لك — أو إذا كانت دورة منفردة هي نقطة البداية الأفضل.
+                </p>
+
+                {/* what you get */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 9, marginBottom: 24 }}>
+                  {[
+                    'تقييم مستواك ومناسبة المسار لك',
+                    'إجابات على كل أسئلتك قبل التسجيل',
+                    'خيارات الدفع والتقسيط المتاحة',
+                  ].map(item => (
+                    <div key={item} style={{ display: 'flex', alignItems: 'center', gap: 9, fontFamily: F, fontSize: 13.5, color: LT }}>
+                      <span style={{ color: GLD, fontWeight: 800, flexShrink: 0 }}>✓</span> {item}
+                    </div>
+                  ))}
+                </div>
+
+                <a href={WA_CONSULT} target="_blank" rel="noopener noreferrer"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 10, alignSelf: 'flex-start', background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 14, padding: '12px 24px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 6px 20px rgba(255,193,7,0.20)' }}>
+                  <MessageCircle size={16} />
+                  احجز استشارة مجانية — واتساب
+                </a>
+
+                <p style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 10 }}>مجانية تماماً · على واتساب · بدون أي التزام</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════ 8. FAQ ═════════════════════════ */}
+      <section style={{ background: S2, borderTop: `1px solid ${CARD_BORDER}`, padding: '80px 0' }}>
+        <div style={{ ...INNER }}>
+          <div style={{ textAlign: 'center', marginBottom: 44 }}>
+            <SectionLabel text="أسئلة شائعة" />
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,4vw,42px)', marginTop: 16, lineHeight: 1.35, color: OFF }}>
               قبل أن <span style={{ color: GLD }}>تسأل</span>
             </h2>
           </div>
-          <div style={{ maxWidth: 840, marginInline: 'auto' }}>
+          <div style={{ maxWidth: 820, marginInline: 'auto' }}>
             {FAQS.map((faq, i) => <FaqItem key={i} {...faq} />)}
           </div>
         </div>
       </section>
 
-      {/* ════════════════ FINAL CTA ════════════════ */}
-      <section style={{ padding: '20px 0 88px' }}>
+      {/* ════════════════ 9. FINAL CTA ═══════════════════ */}
+      <section style={{ background: S3, borderTop: `1px solid ${CARD_BORDER}`, padding: '24px 0 80px' }}>
         <div style={{ ...INNER }}>
-          <div style={{ background: `linear-gradient(135deg, ${CARD}, ${BG3})`, border: `1px solid ${GL}`, borderRadius: 26, padding: '64px 48px', textAlign: 'center' }}>
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4vw,42px)', lineHeight: 1.4, letterSpacing: -.6, color: OFF }}>
+          <div style={{ background: `linear-gradient(135deg, rgba(255,193,7,0.07), rgba(255,255,255,0.025) 60%)`, border: `1px solid ${GL}`, borderRadius: 24, padding: 'clamp(40px,5vw,64px) clamp(24px,4vw,48px)', textAlign: 'center' }}>
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(24px,3.8vw,40px)', lineHeight: 1.4, color: OFF }}>
               الإعلامي لا يُبنى بدورة واحدة — <span style={{ color: GLD }}>يُبنى بمسار متكامل</span>
             </h2>
-            <p style={{ fontFamily: F, color: MUT, fontSize: 16.5, margin: '16px auto 32px', maxWidth: 560, lineHeight: 1.75 }}>
+            <p style={{ fontFamily: F, color: MUT, fontSize: 15.5, margin: '14px auto 30px', maxWidth: 520, lineHeight: 1.8 }}>
               مقاعد كل مجموعة محدودة للحفاظ على جودة التصحيح الفردي. ابدأ بالاستشارة المجانية وقرّر بعدها.
             </p>
-            <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <a href={WA_TRACK} target="_blank" rel="noopener noreferrer"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15.5, padding: '15px 30px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 10px 30px rgba(255,193,7,0.22)' }}>
-                تواصل مع المستشارة — مجاناً <ArrowLeft size={15} />
+            <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+              <a href={WA_CONSULT} target="_blank" rel="noopener noreferrer"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 28px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 8px 26px rgba(255,193,7,0.22)' }}>
+                <MessageCircle size={15} /> تواصل مع المستشارة — مجاناً
               </a>
               <a href="#tree"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,0.04)', border: `1px solid ${HAIR}`, color: OFF, fontFamily: F, fontWeight: 700, fontSize: 15.5, padding: '15px 30px', borderRadius: 999, textDecoration: 'none' }}>
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,0.04)', border: `1px solid ${CARD_BORDER}`, color: OFF, fontFamily: F, fontWeight: 700, fontSize: 15, padding: '14px 28px', borderRadius: 12, textDecoration: 'none' }}>
                 استكشف شجرة المسار <ArrowLeft size={15} />
               </a>
             </div>
