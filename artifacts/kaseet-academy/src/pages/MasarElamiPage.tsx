@@ -6,7 +6,9 @@ import { Link, useLocation } from 'wouter';
 import { ChevronDown, ArrowLeft, MapPin, Wifi, Award } from 'lucide-react';
 import { NAVY, GOLD, OFF, MUTED, F, FP, INNER, LBG, DH, DM, waLink } from './shared/coursePageHelpers';
 import wajeezLogo    from '@assets/wajeez-logo_1785688262989.png';
+import coverMasar    from '@assets/cover_المسار_الاعلامي_1785777356196.png';
 import instructorRana from '@assets/trainer-rana-azzam_1785692178863.JPG';
+import instructorRami from '@assets/رامي_ابو_جبارة_1785777158127.png';
 
 /* ── tokens ───────────────────────────────────────────── */
 const BG   = '#161E2B';
@@ -22,7 +24,7 @@ const LT   = '#CBD4E1';
 
 const WA_PHONE = '962700000000';
 const WA_TRACK       = waLink(WA_PHONE, 'مرحباً، أودّ الاستفسار عن المسار الإعلامي');
-const WA_CONSULT     = (name: string) => waLink(WA_PHONE, `مرحباً، أودّ حجز جلسة استشارية مع ${name}`);
+
 
 /* ── station data ─────────────────────────────────────── */
 const STATIONS = [
@@ -396,6 +398,19 @@ export default function MasarElamiPage() {
         </div>
       </section>
 
+      {/* ════════════════ COVER IMAGE ════════════════ */}
+      <div style={{ position: 'relative', height: 'clamp(220px,30vw,420px)', overflow: 'hidden' }}>
+        <img
+          src={coverMasar}
+          alt="المسار الإعلامي"
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 35%', display: 'block' }}
+        />
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to bottom, rgba(44,55,75,0.75) 0%, rgba(36,46,64,0.88) 60%, rgba(33,42,61,0.97) 100%)',
+        }} />
+      </div>
+
       {/* ════════════════ TREE ════════════════ */}
       <section id="tree" style={{ background: BG2, borderBlock: `1px solid ${HAIR}`, padding: '88px 0' }}>
         <div style={{ ...INNER }}>
@@ -487,110 +502,109 @@ export default function MasarElamiPage() {
         </div>
       </section>
 
-      {/* ════════════════ CONSULTANT — Rana ════════════════ */}
-      <section style={{ background: '#EEECEA', borderBlock: '1px solid rgba(0,0,0,0.08)', padding: '88px 0' }}>
+      {/* ════════════════ TRAINERS / EXPERTS ════════════════ */}
+      <section style={{ background: BG2, borderBlock: `1px solid ${HAIR}`, padding: '88px 0' }}>
         <div style={{ ...INNER }}>
-          <div style={{ textAlign: 'center', marginBottom: 48 }}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, border: '1px solid rgba(255,193,7,0.35)', color: '#92600a', background: 'rgba(255,193,7,0.12)', fontFamily: F, fontSize: 13, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>الاستشارة الفردية</span>
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,4vw,40px)', marginTop: 18, lineHeight: 1.35, color: DH }}>
-              مش متأكد؟ <span style={{ color: '#92600a' }}>ابدأ باستشارة</span>
+          <div style={{ textAlign: 'center', marginBottom: 52 }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, border: `1px solid ${GL}`, color: GLD, background: GS, fontFamily: F, fontSize: 13, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>خبراء المسار الإعلامي</span>
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', marginTop: 18, lineHeight: 1.35, color: OFF }}>
+              مَن <span style={{ color: GLD }}>يُرشدك</span> في هذا المسار
             </h2>
-            <p style={{ fontFamily: F, fontSize: 16, color: DM, maxWidth: 560, marginInline: 'auto', marginTop: 12 }}>
-              جلسة فردية مع المستشارة التعليمية لتقييم مستواك الحالي وترشيح المسار أو الدورة الأنسب لك.
+            <p style={{ fontFamily: F, fontSize: 16.5, color: MUT, maxWidth: 580, marginInline: 'auto', marginTop: 14 }}>
+              خبراء إعلاميون بمسيرات مهنية حقيقية — يُرشدونك ويُقيّمونك على مدار المسار.
             </p>
           </div>
 
-          {/* Rana's featured card */}
-          <div style={{ maxWidth: 860, marginInline: 'auto' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 920, marginInline: 'auto' }}>
+
+            {/* ── Rami card ── */}
             <div style={{
-              background: '#fff', borderRadius: 24, overflow: 'hidden',
-              boxShadow: '0 8px 40px rgba(0,0,0,0.10)', border: '1px solid rgba(0,0,0,0.07)',
-              display: 'grid', gridTemplateColumns: 'minmax(0,0.85fr) minmax(0,1.15fr)',
+              background: `linear-gradient(135deg, rgba(255,193,7,0.05), ${CARD} 50%)`,
+              border: `1px solid ${GL}`, borderRadius: 24, overflow: 'hidden',
+              display: 'grid', gridTemplateColumns: 'minmax(0,300px) 1fr',
+              boxShadow: '0 12px 48px rgba(0,0,0,0.30)',
             }}>
-              {/* photo column */}
-              <div style={{ position: 'relative', minHeight: 340, background: '#111827', overflow: 'hidden' }}>
-                <img
-                  src={instructorRana}
-                  alt="أ. رنا محمد العزام"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block', position: 'absolute', inset: 0 }}
-                />
-                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 55%)' }} />
-                {/* live badge */}
+              {/* photo */}
+              <div style={{ position: 'relative', minHeight: 360, background: '#0d111a', overflow: 'hidden' }}>
+                <img src={instructorRami} alt="رامي أبو جبارة"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block', position: 'absolute', inset: 0 }} />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, rgba(22,30,43,0.85) 0%, transparent 60%)' }} />
+                {/* wajeez badge */}
                 <div style={{
-                  position: 'absolute', top: 18, right: 18,
-                  display: 'inline-flex', alignItems: 'center', gap: 7,
-                  background: 'rgba(0,0,0,0.60)', backdropFilter: 'blur(8px)',
-                  border: '1px solid rgba(255,255,255,0.18)', borderRadius: 999,
-                  padding: '6px 14px', fontFamily: F, fontSize: 12.5, fontWeight: 700, color: '#fff',
+                  position: 'absolute', bottom: 18, right: 18,
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  background: 'rgba(0,0,0,0.72)', backdropFilter: 'blur(8px)',
+                  border: '1px solid rgba(255,193,7,0.30)', borderRadius: 12, padding: '8px 14px',
                 }}>
-                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#22c55e', display: 'block', boxShadow: '0 0 0 3px rgba(34,197,94,0.30)' }} />
-                  متاحة الآن
+                  <div style={{ width: 28, height: 28, borderRadius: 7, background: '#fff', display: 'grid', placeContent: 'center', flexShrink: 0, padding: 3 }}>
+                    <img src={wajeezLogo} alt="وجيز" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                  </div>
+                  <span style={{ fontFamily: F, fontSize: 12, fontWeight: 700, color: GLD, lineHeight: 1.3 }}>الشريك المؤسس<br/>لتطبيق وجيز</span>
                 </div>
               </div>
 
-              {/* info column */}
+              {/* info */}
               <div style={{ padding: '36px 36px 32px', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ fontFamily: F, fontSize: 12.5, fontWeight: 700, color: '#92600a', letterSpacing: 0.5, marginBottom: 8 }}>المستشارة التعليمية</div>
-                <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(22px,2.4vw,28px)', color: DH, margin: '0 0 6px', lineHeight: 1.3 }}>
-                  أ. رنا محمد العزام
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GS, border: `1px solid ${GL}`, borderRadius: 999, padding: '5px 14px', marginBottom: 14, alignSelf: 'flex-start' }}>
+                  <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD, display: 'block' }} />
+                  <span style={{ fontFamily: F, fontSize: 12.5, fontWeight: 700, color: GLD }}>مدرّب برنامج الإعلامي الشامل</span>
+                </div>
+                <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(22px,2.2vw,30px)', color: OFF, margin: '0 0 8px', lineHeight: 1.25 }}>
+                  رامي أبو جبارة
                 </h3>
-                <div style={{ fontFamily: F, fontSize: 14, color: DM, marginBottom: 20, lineHeight: 1.6 }}>
-                  إعلامية ومدربة أداء — متخصصة في الإعلام التلفزيوني والتحرير اللغوي والمتحدث الرسمي
-                </div>
-
-                {/* specialties */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 24 }}>
-                  {['الإعلام التلفزيوني', 'التحرير اللغوي', 'المتحدث الرسمي', 'الحضور الإعلامي'].map(tag => (
-                    <span key={tag} style={{
-                      fontFamily: F, fontSize: 12.5, color: '#92600a',
-                      background: 'rgba(255,193,7,0.10)', border: '1px solid rgba(255,193,7,0.25)',
-                      borderRadius: 999, padding: '5px 13px',
-                    }}>{tag}</span>
+                <p style={{ fontFamily: F, fontSize: 14.5, color: MUT, lineHeight: 1.85, marginBottom: 22 }}>
+                  خبرة تمتد لـ 17 عاماً في الصحافة التلفزيونية والقيادة التحريرية؛ تنقّل خلالها بين كبرى المؤسسات الإعلامية مثل <b style={{ color: LT }}>Sky News عربية</b>، وصولاً إلى رئاسة تحرير <b style={{ color: LT }}>«الشرق مع Bloomberg»</b>.
+                </p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 26 }}>
+                  {['الصحافة التلفزيونية','القيادة التحريرية','Sky News عربية','الشرق مع Bloomberg'].map(t => (
+                    <span key={t} style={{ fontFamily: F, fontSize: 12.5, color: GLD, background: GS, border: `1px solid ${GL}`, borderRadius: 999, padding: '5px 13px' }}>{t}</span>
                   ))}
                 </div>
-
-                {/* what you get */}
-                <ul style={{ listStyle: 'none', display: 'grid', gap: 10, marginBottom: 28 }}>
-                  {[
-                    'تقييم مستواك الحالي بدقة',
-                    'ترشيح المسار أو الدورة الأنسب لك',
-                    'إجابة كل أسئلتك قبل التسجيل',
-                    'مراجعة مبدئية لملفك الصوتي أو الإعلامي',
-                  ].map(item => (
-                    <li key={item} style={{ display: 'flex', gap: 10, fontFamily: F, fontSize: 14, color: DM, lineHeight: 1.7 }}>
-                      <span style={{ color: '#B8860B', fontWeight: 700, flexShrink: 0 }}>✓</span> {item}
-                    </li>
-                  ))}
-                </ul>
-
-                {/* price + CTA */}
-                <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-                  <div>
-                    <div style={{ fontFamily: F, fontSize: 12, color: DM, marginBottom: 2 }}>سعر الجلسة</div>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 5 }}>
-                      <span style={{ fontFamily: FP, fontSize: 36, fontWeight: 800, color: DH, lineHeight: 1 }}>$70</span>
-                      <span style={{ fontFamily: F, fontSize: 13, color: DM }}> / 45 دقيقة</span>
-                    </div>
-                  </div>
-                  <a
-                    href={WA_CONSULT('أ. رنا محمد العزام')}
-                    target="_blank" rel="noopener noreferrer"
-                    style={{
-                      flex: 1, minWidth: 160, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                      background: NAVY, color: '#fff', fontFamily: F, fontWeight: 800, fontSize: 15,
-                      padding: '14px 24px', borderRadius: 14, textDecoration: 'none',
-                      boxShadow: '0 8px 24px rgba(29,39,56,0.18)',
-                    }}>
-                    احجز جلستك الآن <ArrowLeft size={15} />
-                  </a>
-                </div>
+                <a href={WA_TRACK} target="_blank" rel="noopener noreferrer"
+                  style={{ marginTop: 'auto', display: 'inline-flex', alignItems: 'center', gap: 8, alignSelf: 'flex-start', background: GLD, color: NAVY, fontFamily: F, fontWeight: 800, fontSize: 14, padding: '12px 24px', borderRadius: 12, textDecoration: 'none' }}>
+                  تواصل للاستفسار <ArrowLeft size={14} />
+                </a>
               </div>
             </div>
 
-            {/* note below */}
-            <p style={{ fontFamily: F, fontSize: 14, color: DM, textAlign: 'center', marginTop: 16 }}>
-              الاستشارة ليست إلزامية — يمكنك التسجيل مباشرةً في أي وقت.
-            </p>
+            {/* ── Rana card ── */}
+            <div style={{
+              background: `linear-gradient(135deg, rgba(103,232,249,0.04), ${CARD} 50%)`,
+              border: `1px solid rgba(103,232,249,0.22)`, borderRadius: 24, overflow: 'hidden',
+              display: 'grid', gridTemplateColumns: 'minmax(0,300px) 1fr',
+              boxShadow: '0 12px 48px rgba(0,0,0,0.30)',
+            }}>
+              {/* photo */}
+              <div style={{ position: 'relative', minHeight: 320, background: '#0d111a', overflow: 'hidden' }}>
+                <img src={instructorRana} alt="أ. رنا محمد العزام"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block', position: 'absolute', inset: 0 }} />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, rgba(22,30,43,0.85) 0%, transparent 60%)' }} />
+              </div>
+
+              {/* info */}
+              <div style={{ padding: '36px 36px 32px', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(103,232,249,0.08)', border: '1px solid rgba(103,232,249,0.25)', borderRadius: 999, padding: '5px 14px', marginBottom: 14, alignSelf: 'flex-start' }}>
+                  <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#67e8f9', display: 'block' }} />
+                  <span style={{ fontFamily: F, fontSize: 12.5, fontWeight: 700, color: '#67e8f9' }}>مدرّبة الأداء والتحرير اللغوي</span>
+                </div>
+                <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(22px,2.2vw,30px)', color: OFF, margin: '0 0 8px', lineHeight: 1.25 }}>
+                  أ. رنا محمد العزام
+                </h3>
+                <p style={{ fontFamily: F, fontSize: 14.5, color: MUT, lineHeight: 1.85, marginBottom: 22 }}>
+                  إعلامية ومدربة أداء متخصصة في <b style={{ color: LT }}>التقديم التلفزيوني</b> والتحرير اللغوي وتأهيل المتحدث الرسمي — تُدرّس محطتَي التأسيس في المسار.
+                </p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 26 }}>
+                  {['الإعلام التلفزيوني','التحرير اللغوي','المتحدث الرسمي','الحضور الإعلامي'].map(t => (
+                    <span key={t} style={{ fontFamily: F, fontSize: 12.5, color: '#67e8f9', background: 'rgba(103,232,249,0.08)', border: '1px solid rgba(103,232,249,0.22)', borderRadius: 999, padding: '5px 13px' }}>{t}</span>
+                  ))}
+                </div>
+                <a href={WA_TRACK} target="_blank" rel="noopener noreferrer"
+                  style={{ marginTop: 'auto', display: 'inline-flex', alignItems: 'center', gap: 8, alignSelf: 'flex-start', background: 'rgba(103,232,249,0.12)', border: '1px solid rgba(103,232,249,0.35)', color: '#67e8f9', fontFamily: F, fontWeight: 800, fontSize: 14, padding: '12px 24px', borderRadius: 12, textDecoration: 'none' }}>
+                  تواصل للاستفسار <ArrowLeft size={14} />
+                </a>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
