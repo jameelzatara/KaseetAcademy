@@ -1,10 +1,10 @@
 /**
  * صفحة المسار الإعلامي — كاسيت أكاديمي
  */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { ChevronDown, ArrowLeft, MapPin, Wifi, Layers, Clock, FolderCheck, CheckCircle2, MessageCircle } from 'lucide-react';
-import { NAVY, GOLD, OFF, MUTED, F, FP, INNER, LBG, DH, DM, waLink } from './shared/coursePageHelpers';
+import { NAVY, GOLD, OFF, F, FP, INNER, LBG, DH, DM, waLink } from './shared/coursePageHelpers';
 import wajeezLogo     from '@assets/wajeez-logo_1785688262989.png';
 import coverMasar     from '@assets/cover_المسار_الاعلامي_1785777356196.png';
 import instructorRana from '@assets/trainer-rana-azzam_1785692178863.JPG';
@@ -148,6 +148,8 @@ function Station({ s, open, onToggle }: { s: StationType; open: boolean; onToggl
   return (
     <div
       role="button" tabIndex={0}
+      aria-expanded={open}
+      aria-label={`محطة ${s.n}: ${s.title}`}
       onClick={onToggle}
       onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle(); } }}
       style={{
@@ -222,9 +224,10 @@ function FaqItem({ q, a }: { q: string; a: string }) {
     }}>
       <button
         onClick={() => setOpen(o => !o)}
+        aria-expanded={open}
         style={{ width: '100%', background: 'none', border: 'none', cursor: 'pointer', padding: '18px 22px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
         <span style={{ fontFamily: F, fontSize: 15.5, fontWeight: 700, color: OFF, textAlign: 'right' }}>{q}</span>
-        <span style={{ color: GLD, fontSize: 22, lineHeight: 1, transform: open ? 'rotate(45deg)' : 'none', transition: 'transform .25s', flexShrink: 0 }}>+</span>
+        <span aria-hidden="true" style={{ color: GLD, fontSize: 22, lineHeight: 1, transform: open ? 'rotate(45deg)' : 'none', transition: 'transform .25s', flexShrink: 0 }}>+</span>
       </button>
       {open && (
         <div style={{ padding: '0 22px 20px', fontFamily: F, fontSize: 14.5, color: MUT, lineHeight: 1.85 }}>{a}</div>
@@ -257,6 +260,8 @@ function StudyAccordion({
     }}>
       <button
         onClick={() => setOpen(v => !v)}
+        aria-expanded={open}
+        aria-label={label}
         style={{ width: '100%', background: open ? bgOpen : CARD, border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '17px 20px', cursor: 'pointer', textAlign: 'right', gap: 12 }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -313,9 +318,20 @@ function SectionLabel({ text, light = false }: { text: string; light?: boolean }
 
 /* ── Page ────────────────────────────────────────────── */
 export default function MasarElamiPage() {
-  const [, navigate]          = useLocation();
+  const [, navigate]            = useLocation();
   const [openIdx, setOpenIdx]   = useState<number | null>(null);
   const [expandAll, setExpandAll] = useState(false);
+
+  /* SEO: page-specific title + meta description + scroll reset */
+  useEffect(() => {
+    const prev = document.title;
+    document.title = 'المسار الإعلامي الكامل — كاسيت أكاديمي';
+    const metaDesc = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+    const prevDesc = metaDesc?.content ?? '';
+    if (metaDesc) metaDesc.content = 'منهج إعلامي متكامل من 10 محطات: تأسيس، تخصصات، وقيادة. تقديم تلفزيوني، صحافة، محتوى رقمي، بودكاست، وإنتاج مرئي — مع شهادة معتمدة من وجيز.';
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    return () => { document.title = prev; if (metaDesc) metaDesc.content = prevDesc; };
+  }, []);
 
   function toggle(i: number) { setOpenIdx(openIdx === i ? null : i); setExpandAll(false); }
   function handleExpandAll()  { setExpandAll(v => !v); setOpenIdx(null); }
@@ -330,19 +346,43 @@ export default function MasarElamiPage() {
         .ka-spin-ring { animation: kaseetSpin 18s linear infinite; transform-origin: 200px 200px; }
         .ka-spin-slow { animation: kaseetSpin 32s linear infinite reverse; transform-origin: 200px 200px; }
         .ka-pulse-dot { animation: kaPulse 2s ease-in-out infinite; }
+
+        /* Respect reduced-motion preference */
+        @media (prefers-reduced-motion: reduce) {
+          .ka-spin-ring, .ka-spin-slow { animation: none !important; }
+          .ka-pulse-dot { animation: none !important; }
+        }
+
+        /* Smooth anchor scrolling */
+        html { scroll-behavior: smooth; }
+
+        /* Focus-visible ring for keyboard navigation */
+        :focus-visible {
+          outline: 2px solid #FFC107 !important;
+          outline-offset: 3px !important;
+          border-radius: 4px !important;
+        }
+
+        /* Mobile breakpoints */
         @media (max-width: 768px) {
           .masar-hero-grid    { grid-template-columns: 1fr !important; }
-          .masar-hero-visual  { max-width: 260px !important; order: -1; margin: 0 auto 28px; }
+          .masar-hero-visual  { max-width: 240px !important; order: -1; margin: 0 auto 24px; }
           .masar-study-grid   { grid-template-columns: 1fr !important; }
           .masar-trainer-card { grid-template-columns: 1fr !important; }
           .masar-trainer-photo{ min-height: 220px !important; }
           .masar-advisor-grid { grid-template-columns: 1fr !important; }
+        }
+
+        /* Very small screens */
+        @media (max-width: 400px) {
+          .masar-hero-visual  { max-width: 200px !important; }
         }
       `}</style>
 
       {/* ── back nav ─────────────────────────────────── */}
       <div style={{ ...INNER, paddingTop: 20, paddingBottom: 0 }}>
         <button onClick={() => navigate('/')}
+          aria-label="العودة إلى الصفحة الرئيسية"
           style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: F, fontSize: 13.5, color: MUT, padding: 0 }}>
           <ArrowLeft size={13} /> الرئيسية
         </button>
@@ -351,6 +391,7 @@ export default function MasarElamiPage() {
       {/* ════════════════ 1. HERO ════════════════════════ */}
       <section style={{ position: 'relative', padding: '52px 0 88px', overflow: 'hidden' }}>
         <img src={coverMasar} alt="" aria-hidden="true"
+          fetchPriority="high" decoding="async"
           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 15%', zIndex: 0 }} />
         <div style={{ position: 'absolute', inset: 0, zIndex: 1,
           background: 'linear-gradient(to bottom, rgba(2,6,23,0.78) 0%, rgba(2,6,23,0.52) 40%, rgba(2,6,23,0.92) 100%)' }} />
@@ -646,6 +687,7 @@ export default function MasarElamiPage() {
             }}>
               <div className="masar-trainer-photo" style={{ position: 'relative', minHeight: 340, background: '#050810', overflow: 'hidden' }}>
                 <img src={instructorRami} alt="رامي أبو جبارة"
+                  loading="lazy" decoding="async"
                   style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block', position: 'absolute', inset: 0 }} />
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, rgba(8,13,23,0.85) 0%, transparent 55%)' }} />
                 <div style={{ position: 'absolute', bottom: 16, right: 16, display: 'inline-flex', alignItems: 'center', gap: 8,
@@ -685,6 +727,7 @@ export default function MasarElamiPage() {
             }}>
               <div className="masar-trainer-photo" style={{ position: 'relative', minHeight: 300, background: '#050810', overflow: 'hidden' }}>
                 <img src={instructorRana} alt="أ. رنا محمد العزام"
+                  loading="lazy" decoding="async"
                   style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block', position: 'absolute', inset: 0 }} />
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, rgba(8,13,23,0.85) 0%, transparent 55%)' }} />
               </div>
@@ -822,7 +865,8 @@ export default function MasarElamiPage() {
             }}>
               {/* photo */}
               <div style={{ position: 'relative', minHeight: 280, background: '#050810', overflow: 'hidden' }}>
-                <img src={instructorRana} alt="أ. رنا محمد العزام"
+                <img src={instructorRana} alt="أ. رنا محمد العزام — مستشارة تعليمية"
+                  loading="lazy" decoding="async"
                   style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block', position: 'absolute', inset: 0 }} />
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, rgba(8,13,23,0.70) 0%, transparent 50%)' }} />
                 {/* online badge */}
