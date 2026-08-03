@@ -1,6 +1,7 @@
 // ── Academic Tracks Section ────────────────────────────────
 import { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
+import { Link } from 'wouter';
 import SectionHeader, { Gold } from './SectionHeader';
 
 import mediaTrackImg     from '@assets/media-track_1785431174381.jpeg';
@@ -13,6 +14,7 @@ interface Track {
   desc: string;
   image: string;
   imgPos: string;
+  route?: string;
 }
 
 const TRACKS: Track[] = [
@@ -22,6 +24,7 @@ const TRACKS: Track[] = [
     desc:   'برنامج شامل للتدريب على التقديم التلفزيوني والإذاعي، إعداد البرامج، وإتقان الحضور أمام الكاميرا بثقة واحتراف.',
     image:  mediaTrackImg,
     imgPos: 'center 45%',
+    route:  '/masar-elami',
   },
   {
     id: 2,
@@ -42,26 +45,26 @@ const TRACKS: Track[] = [
 function TrackCard({ track }: { track: Track }) {
   const [hov, setHov] = useState(false);
 
-  return (
-    <div
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      style={{
-        borderRadius:         22,
-        overflow:             'hidden',
-        background:           hov ? 'rgba(255,255,255,0.055)' : 'rgba(255,255,255,0.035)',
-        backdropFilter:       'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        border:     hov ? '1px solid rgba(255,255,255,0.10)' : '1px solid rgba(255,255,255,0.06)',
-        boxShadow:  hov ? '0 20px 45px rgba(0,0,0,0.40)' : '0 10px 30px rgba(0,0,0,0.25)',
-        transform:  hov ? 'translateY(-6px)' : 'translateY(0)',
-        transition: 'all 0.28s ease',
-        display:    'flex',
-        flexDirection: 'column',
-        direction:  'rtl',
-        height:     '100%',
-      }}
-    >
+  const cardStyle: React.CSSProperties = {
+    borderRadius:         22,
+    overflow:             'hidden',
+    background:           hov ? 'rgba(255,255,255,0.055)' : 'rgba(255,255,255,0.035)',
+    backdropFilter:       'blur(16px)',
+    WebkitBackdropFilter: 'blur(16px)',
+    border:     hov ? '1px solid rgba(255,255,255,0.10)' : '1px solid rgba(255,255,255,0.06)',
+    boxShadow:  hov ? '0 20px 45px rgba(0,0,0,0.40)' : '0 10px 30px rgba(0,0,0,0.25)',
+    transform:  hov ? 'translateY(-6px)' : 'translateY(0)',
+    transition: 'all 0.28s ease',
+    display:    'flex',
+    flexDirection: 'column',
+    direction:  'rtl',
+    height:     '100%',
+    textDecoration: 'none',
+    cursor: track.route ? 'pointer' : 'default',
+  };
+
+  const inner = (
+    <>
       {/* Cover image */}
       <div style={{ position: 'relative', aspectRatio: '4/3', overflow: 'hidden', flexShrink: 0 }}>
         <img
@@ -151,6 +154,29 @@ function TrackCard({ track }: { track: Track }) {
           />
         </div>
       </div>
+    </>
+  );
+
+  if (track.route) {
+    return (
+      <Link
+        href={track.route}
+        onMouseEnter={() => setHov(true)}
+        onMouseLeave={() => setHov(false)}
+        style={cardStyle}
+      >
+        {inner}
+      </Link>
+    );
+  }
+
+  return (
+    <div
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={cardStyle}
+    >
+      {inner}
     </div>
   );
 }
