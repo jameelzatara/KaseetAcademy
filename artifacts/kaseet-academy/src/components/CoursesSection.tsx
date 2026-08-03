@@ -8,9 +8,9 @@ import coverOmar        from '@assets/course-omar-bg_1785692015818.png';
 import instructorOmar   from '@assets/trainer-omar_1785692015818.jpg';
 import coverSohaib      from '@assets/cover-public-speaking-tedx_1785692401460.jpeg';
 import instructorSohaib from '@assets/instructor-sohaib_1785692401461.jpeg';
-import coverRana        from '@assets/رنا_عزام_1785757997825.png';
+import coverRana        from '@assets/دورة_اللغة_العربية_1785758462657.png';
 import instructorRana   from '@assets/trainer-rana-azzam_1785692178863.JPG';
-import coverPresenter   from '@assets/رنا_عزام_1785758295559.png';
+import coverPresenter   from '@assets/دورة_الاعلام_1785758462657.png';
 
 /* ── Tokens ─────────────────────────────────────────────── */
 const NAVY    = '#2C374B';
@@ -81,7 +81,7 @@ const GRID: GCard[] = [
     title:    'الدورة المكثفة: المذيع المحترف ومهارات الإعلام الرقمي',
     badge:    'حضوري في عمّان',
     cover:    coverPresenter,
-    imgPos:   'center 32%',
+    imgPos:   'center 42%',
     instructor: { name: 'أ. رنا محمد العزام', role: 'إعلامية ومدربة أداء ومختصة تحرير لغوي', photo: instructorRana },
     price:    '250 د.أ',
     duration: '16 ساعة / 8 جلسات',
@@ -97,7 +97,7 @@ const GRID: GCard[] = [
     title:    'تمكين اللغة العربية وفنون التحرير اللغوي',
     badge:    'عن بُعد — تفاعلية مباشرة',
     cover:    coverRana,
-    imgPos:   'center 20%',
+    imgPos:   'center 42%',
     instructor: { name: 'أ. رنا محمد العزام', role: 'إعلامية ومختصة تحرير لغوي', photo: instructorRana },
     price:    '$150',
     duration: '16 ساعة / 8 جلسات',
