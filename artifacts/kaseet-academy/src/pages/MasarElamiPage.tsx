@@ -287,6 +287,8 @@ export default function MasarElamiPage() {
           .masar-study-grid { grid-template-columns: 1fr !important; }
           .masar-consult-grid { grid-template-columns: 1fr !important; }
           .masar-enroll-grid { grid-template-columns: 1fr !important; }
+          .masar-trainer-card { grid-template-columns: 1fr !important; }
+          .masar-trainer-photo { min-height: 240px !important; }
         }
       `}</style>
 
@@ -398,16 +400,16 @@ export default function MasarElamiPage() {
         </div>
       </section>
 
-      {/* ════════════════ COVER IMAGE ════════════════ */}
-      <div style={{ position: 'relative', height: 'clamp(220px,30vw,420px)', overflow: 'hidden' }}>
+      {/* ════════════════ COVER STRIP ════════════════ */}
+      <div style={{ position: 'relative', height: 'clamp(100px,12vw,160px)', overflow: 'hidden' }}>
         <img
           src={coverMasar}
           alt="المسار الإعلامي"
-          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 35%', display: 'block' }}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 28%', display: 'block' }}
         />
         <div style={{
           position: 'absolute', inset: 0,
-          background: 'linear-gradient(to bottom, rgba(44,55,75,0.75) 0%, rgba(36,46,64,0.88) 60%, rgba(33,42,61,0.97) 100%)',
+          background: 'linear-gradient(to bottom, rgba(22,30,43,0.80) 0%, rgba(36,46,64,0.70) 50%, rgba(22,30,43,0.92) 100%)',
         }} />
       </div>
 
@@ -518,14 +520,14 @@ export default function MasarElamiPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 920, marginInline: 'auto' }}>
 
             {/* ── Rami card ── */}
-            <div style={{
+            <div className="masar-trainer-card" style={{
               background: `linear-gradient(135deg, rgba(255,193,7,0.05), ${CARD} 50%)`,
               border: `1px solid ${GL}`, borderRadius: 24, overflow: 'hidden',
               display: 'grid', gridTemplateColumns: 'minmax(0,300px) 1fr',
               boxShadow: '0 12px 48px rgba(0,0,0,0.30)',
             }}>
               {/* photo */}
-              <div style={{ position: 'relative', minHeight: 360, background: '#0d111a', overflow: 'hidden' }}>
+              <div className="masar-trainer-photo" style={{ position: 'relative', minHeight: 360, background: '#0d111a', overflow: 'hidden' }}>
                 <img src={instructorRami} alt="رامي أبو جبارة"
                   style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block', position: 'absolute', inset: 0 }} />
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, rgba(22,30,43,0.85) 0%, transparent 60%)' }} />
@@ -568,14 +570,14 @@ export default function MasarElamiPage() {
             </div>
 
             {/* ── Rana card ── */}
-            <div style={{
+            <div className="masar-trainer-card" style={{
               background: `linear-gradient(135deg, rgba(103,232,249,0.04), ${CARD} 50%)`,
               border: `1px solid rgba(103,232,249,0.22)`, borderRadius: 24, overflow: 'hidden',
               display: 'grid', gridTemplateColumns: 'minmax(0,300px) 1fr',
               boxShadow: '0 12px 48px rgba(0,0,0,0.30)',
             }}>
               {/* photo */}
-              <div style={{ position: 'relative', minHeight: 320, background: '#0d111a', overflow: 'hidden' }}>
+              <div className="masar-trainer-photo" style={{ position: 'relative', minHeight: 320, background: '#0d111a', overflow: 'hidden' }}>
                 <img src={instructorRana} alt="أ. رنا محمد العزام"
                   style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block', position: 'absolute', inset: 0 }} />
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, rgba(22,30,43,0.85) 0%, transparent 60%)' }} />
