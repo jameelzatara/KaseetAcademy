@@ -8,7 +8,7 @@ import coverOmar        from '@assets/course-omar-bg_1785692015818.png';
 import instructorOmar   from '@assets/trainer-omar_1785692015818.jpg';
 import coverSohaib      from '@assets/cover-public-speaking-tedx_1785692401460.jpeg';
 import instructorSohaib from '@assets/instructor-sohaib_1785692401461.jpeg';
-import coverRana        from '@assets/cover_دورة_ﺗﻤﻜﻴﻦ_اﻟﻠﻐﺔ_اﻟﻌﺮﺑﻴﺔ_وﻓﻨﻮن_اﻟﺘﺤﺮﻳﺮ_اﻟﻠﻐﻮي_1785692339633.png';
+import coverRana        from '@assets/رنا_عزام_1785757997825.png';
 import instructorRana   from '@assets/trainer-rana-azzam_1785692178863.JPG';
 import coverPresenter   from '@assets/cover_كورس_اﻟﺪورة_اﻟﻤﻜﺜﻔﺔ_اﻟﻤﺬﻳﻊ_اﻟﻤﺤﺘﺮف_وﻣﻬﺎرات_اﻹﻋﻼم_اﻟﺮﻗﻤﻲ_1785692222453';
 
@@ -97,7 +97,7 @@ const GRID: GCard[] = [
     title:    'تمكين اللغة العربية وفنون التحرير اللغوي',
     badge:    'عن بُعد — تفاعلية مباشرة',
     cover:    coverRana,
-    imgPos:   'center 22%',
+    imgPos:   'center 20%',
     instructor: { name: 'أ. رنا محمد العزام', role: 'إعلامية ومختصة تحرير لغوي', photo: instructorRana },
     price:    '$150',
     duration: '16 ساعة / 8 جلسات',

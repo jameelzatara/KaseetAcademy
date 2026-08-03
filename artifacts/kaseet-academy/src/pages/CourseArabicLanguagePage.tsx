@@ -15,7 +15,7 @@ import {
   INNER, waLink, SectionTitle, LightSectionTitle, AdvisorMini,
   ScheduleEntry, SessionItem, TrackCard2, PartnerBar,
 } from './shared/coursePageHelpers';
-import coverArabic from '@assets/cover_دورة_ﺗﻤﻜﻴﻦ_اﻟﻠﻐﺔ_اﻟﻌﺮﺑﻴﺔ_وﻓﻨﻮن_اﻟﺘﺤﺮﻳﺮ_اﻟﻠﻐﻮي_1785692339633.png';
+import coverArabic from '@assets/رنا_عزام_1785757997825.png';
 import photoRana   from '@assets/trainer-rana-azzam_1785692178863.JPG';
 import yaqoutImg   from '@assets/ياقوت__1785619557679.jpeg';
 
@@ -90,7 +90,7 @@ function PricingCard() {
     <div style={{ width:'100%', background: NAVY, borderRadius:22, overflow:'hidden', boxShadow:'0 28px 64px rgba(29,39,56,0.22), 0 8px 20px rgba(0,0,0,0.12)' }}>
       {/* Cover photo */}
       <div style={{ position:'relative', height:200, overflow:'hidden' }}>
-        <img src={coverArabic} alt="تمكين اللغة العربية" style={{ width:'100%', height:'100%', objectFit:'cover', objectPosition:'top center', display:'block' }} />
+        <img src={coverArabic} alt="تمكين اللغة العربية" style={{ width:'100%', height:'100%', objectFit:'cover', objectPosition:'center 22%', display:'block' }} />
         <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom,rgba(29,39,56,0.05) 40%,rgba(29,39,56,0.75) 100%)' }} />
       </div>
       {/* Body */}
