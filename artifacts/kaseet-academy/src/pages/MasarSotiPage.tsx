@@ -12,10 +12,6 @@ import heroShot     from '@assets/voiceover-track1_1785854995070.jpeg';
 import trainerYasar from '@assets/المدربة_يسار_عبده_1785855126478.jpeg';
 import trainerOmar  from '@assets/trainer-omar_1785692015818.jpg';
 import advisorImg   from '@assets/ياقوت_الخشاشنة_المستشارة_1785852509109.jpeg';
-import corpPhoto1   from '@assets/WhatsApp_Image_2026-08-04_at_7.40.10_PM_1785863327459.jpeg';
-import corpPhoto2   from '@assets/WhatsApp_Image_2026-08-04_at_7.40.09_PM_(1)_1785863327459.jpeg';
-import corpPhoto3   from '@assets/WhatsApp_Image_2026-08-04_at_7.40.09_PM_(2)_1785863327459.jpeg';
-import corpPhoto4   from '@assets/WhatsApp_Image_2026-08-04_at_7.40.09_PM_(4)_1785863327460.jpeg';
 /* ── reel IDs ────────────────────────────────────── */
 const SOTI_REEL_URLS = [
   'https://www.instagram.com/reel/DaQgWU2sONj/',
@@ -927,86 +923,6 @@ export default function MasarSotiPage() {
       </section>
 
       {/* ═══════════════════════════════════════
-          10. CORPORATE COHORT
-      ═══════════════════════════════════════ */}
-      <section className="sec sec--corporate" style={{ padding: '72px 0' }}>
-        <div style={WRP}>
-          {/* glow halo */}
-          <div style={{ position: 'relative' }}>
-            <div style={{ position: 'absolute', inset: -2, background: 'linear-gradient(135deg, rgba(255,193,7,0.14), rgba(56,189,248,0.06))', borderRadius: 30, filter: 'blur(22px)', opacity: 0.7, pointerEvents: 'none' }} />
-            <div style={{
-              position: 'relative',
-              background: '#131B27',
-              border: '1px solid rgba(255,193,7,.52)',
-              borderRadius: 26,
-              overflow: 'hidden',
-              boxShadow: '0 0 0 1px rgba(255,193,7,.14), 0 32px 72px rgba(0,0,0,.38)',
-            }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0 }}>
-
-                {/* LEFT — photo mosaic */}
-                <div style={{ position: 'relative', minHeight: 340, overflow: 'hidden' }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr', height: '100%', gap: 2 }}>
-                    {[corpPhoto1, corpPhoto2, corpPhoto3, corpPhoto4].map((src, i) => (
-                      <div key={i} style={{ overflow: 'hidden', position: 'relative' }}>
-                        <img src={src} alt="" aria-hidden="true"
-                          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: 'brightness(0.72) saturate(0.85)' }} />
-                      </div>
-                    ))}
-                  </div>
-                  {/* overlay gradient towards content */}
-                  <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, rgba(19,27,39,0.60) 0%, transparent 55%)', pointerEvents: 'none' }} />
-                  <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(19,27,39,0.45) 0%, transparent 60%)', pointerEvents: 'none' }} />
-                </div>
-
-                {/* RIGHT — content */}
-                <div style={{ padding: 'clamp(32px,4vw,52px)', display: 'flex', flexDirection: 'column', gap: 22 }}>
-                  {/* badge */}
-                  <span style={{ display: 'inline-flex', alignSelf: 'flex-start', alignItems: 'center', gap: 8, background: GLD, color: '#1A1206', fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '7px 16px', borderRadius: 999 }}>
-                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#1A1206' }} />
-                    للمؤسسات
-                  </span>
-
-                  {/* title */}
-                  <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(22px,2.8vw,34px)', lineHeight: 1.35, margin: 0, color: OFF }}>
-                    فوج مغلق <span style={{ color: GLD }}>لمؤسستك</span>
-                  </h2>
-
-                  {/* body */}
-                  <p style={{ fontFamily: F, fontSize: 14.5, color: MUT, lineHeight: 1.9, margin: 0 }}>
-                    يُنفَّذ الماستركلاس كاملاً لفريق مؤسستك وحده، في مقرّكم أو في قاعة كاسيت، بجدول يُبنى على أوقات عملكم. ويُخصَّص المحتوى التطبيقي على مواقف حقيقية من بيئة مؤسستكم: عروض مجلس الإدارة، وإبلاغ القرارات، والخطاب في الأزمات.
-                  </p>
-
-                  {/* 3 stat cells */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12 }}>
-                    {[
-                      { label: 'الحجم', value: 'حتى 15 متدرّباً' },
-                      { label: 'المدّة', value: '60 ساعة · جدول مرن' },
-                      { label: 'السعر', value: 'من 9,500 دينار' },
-                    ].map(({ label, value }) => (
-                      <div key={label} style={{ background: 'rgba(255,255,255,.04)', border: `1px solid rgba(255,193,7,.20)`, borderRadius: 14, padding: '14px 16px', textAlign: 'center' }}>
-                        <div style={{ fontFamily: F, fontSize: 11, color: MUT, marginBottom: 6, letterSpacing: 0.5 }}>{label}</div>
-                        <div style={{ fontFamily: F, fontWeight: 800, fontSize: 14, color: GLD, lineHeight: 1.35 }}>{value}</div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* CTA */}
-                  <a href={WA_CONSULT} target="_blank" rel="noopener noreferrer"
-                    style={{ display: 'inline-flex', alignSelf: 'flex-start', alignItems: 'center', gap: 10, background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '13px 26px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 6px 22px rgba(255,193,7,.22)' }}>
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="17" height="17" aria-hidden="true">
-                      <path d="M12.04 2C6.6 2 2.2 6.4 2.2 11.84c0 1.94.55 3.75 1.5 5.28L2 22l5-1.63a9.84 9.84 0 0 0 5.04 1.38c5.44 0 9.84-4.4 9.84-9.84S17.48 2 12.04 2zm0 17.94c-1.6 0-3.1-.44-4.38-1.2l-.31-.19-3.25 1.06 1.07-3.17-.2-.32a7.94 7.94 0 0 1-1.23-4.28c0-4.4 3.6-7.98 8.3-7.98 4.4 0 8 3.58 8 7.98s-3.6 8.1-8 8.1z"/>
-                    </svg>
-                    اطلب عرضاً لمؤسستك <ArrowLeft size={14} />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-            {/* ═══════════════════════════════════════
           11. ADVISOR
       ═══════════════════════════════════════ */}
       <section id="consult" className="sec sec--advisor" style={{ padding: '96px 0' }}>
