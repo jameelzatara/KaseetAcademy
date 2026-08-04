@@ -5,10 +5,8 @@ import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { ChevronDown, ArrowLeft, MapPin, Wifi } from 'lucide-react';
 import { GOLD, OFF, F, FP, INNER, waLink } from './shared/coursePageHelpers';
-import ReelsSection from '../components/ReelsSection';
-import { Gold } from '../components/SectionHeader';
 import wajeezLogo    from '@assets/wajeez-logo_1785688262989.png';
-import heroShot      from '@assets/cover-public-speaking-tedx_1785863331119.jpeg';
+import heroShot      from '@assets/cover-public-speaking-tedx_1785865159100.jpeg';
 import trainerSohaib from '@assets/instructor-sohaib_1785863334821.jpeg';
 import trainerOmar   from '@assets/trainer-omar_1785692015818.jpg';
 import advisorImg    from '@assets/ياقوت_الخشاشنة_المستشارة_1785852509109.jpeg';
@@ -16,6 +14,16 @@ import corpPhoto1    from '@assets/WhatsApp_Image_2026-08-04_at_7.40.10_PM_17858
 import corpPhoto2    from '@assets/WhatsApp_Image_2026-08-04_at_7.40.09_PM_(1)_1785863327459.jpeg';
 import corpPhoto3    from '@assets/WhatsApp_Image_2026-08-04_at_7.40.09_PM_(2)_1785863327459.jpeg';
 import corpPhoto4    from '@assets/WhatsApp_Image_2026-08-04_at_7.40.09_PM_(4)_1785863327460.jpeg';
+import gal1  from '@assets/WhatsApp_Image_2026-08-04_at_7.40.09_PM_(7)_1785864910806.jpeg';
+import gal2  from '@assets/WhatsApp_Image_2026-08-04_at_7.40.09_PM_(6)_1785865142790.jpeg';
+import gal3  from '@assets/WhatsApp_Image_2026-08-04_at_7.40.10_PM_1785865149268.jpeg';
+import gal4  from '@assets/WhatsApp_Image_2026-08-04_at_7.40.09_PM_1785865149268.jpeg';
+import gal5  from '@assets/WhatsApp_Image_2026-08-04_at_7.40.10_PM_(1)_1785865149269.jpeg';
+import gal6  from '@assets/WhatsApp_Image_2026-08-04_at_7.40.09_PM_(5)_1785865156136.jpeg';
+import gal7  from '@assets/WhatsApp_Image_2026-08-04_at_7.40.09_PM_(1)_1785865156137.jpeg';
+import gal8  from '@assets/WhatsApp_Image_2026-08-04_at_7.40.09_PM_(2)_1785865156137.jpeg';
+import gal9  from '@assets/WhatsApp_Image_2026-08-04_at_7.40.09_PM_(3)_1785865156138.jpeg';
+import gal10 from '@assets/WhatsApp_Image_2026-08-04_at_7.40.09_PM_(4)_1785865156138.jpeg';
 
 /* ── data ─────────────────────────────────────────────── */
 const STATIONS = [
@@ -725,13 +733,56 @@ export default function MasarKhatabaPage() {
       </section>
 
       {/* ═══════════════════════════════════════
-          7. REELS
+          7. PHOTO GALLERY
       ═══════════════════════════════════════ */}
-      <ReelsSection
-        badge="من داخل القاعة"
-        heading={<>لحظات <Gold>من المنصّة</Gold></>}
-        description="مقاطع من جلسات التدريب وأعمال متدرّبينا على إنستغرام — شاهد وتابع الفرق بنفسك."
-      />
+      <section className="sec sec--gallery" style={{ padding: '96px 0' }}>
+        <div style={WRP}>
+          {/* header */}
+          <div style={{ ...SH, marginBottom: 48 }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GLD, color: '#1A1206', fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '7px 16px', borderRadius: 999 }}>
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#1A1206' }} />
+              معرض التدريبات
+            </span>
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', lineHeight: 1.35, margin: '18px 0 0', color: OFF }}>
+              على المنصّة —{' '}
+              <span style={{ color: GLD }}>من صنعناهم في القاعة</span>
+            </h2>
+            <p style={{ fontFamily: F, fontSize: 16, color: MUT, maxWidth: 580, marginTop: 14, marginInline: 'auto', lineHeight: 1.8 }}>
+              لحظات من جلسات التدريب ومحطّات الإلقاء — هكذا يبدو تحوّل الخوف من المنصّة إلى ثقة في الخطاب.
+            </p>
+          </div>
+
+          {/* masonry grid */}
+          <style>{`
+            .kh-gallery { columns: 3; column-gap: 14px; }
+            .kh-gallery-item { break-inside: avoid; margin-bottom: 14px; border-radius: 14px; overflow: hidden; position: relative; display: block; }
+            .kh-gallery-item img { width: 100%; height: auto; display: block; transition: transform .45s ease, filter .45s ease; filter: brightness(.88) saturate(.9); }
+            .kh-gallery-item:hover img { transform: scale(1.04); filter: brightness(1) saturate(1); }
+            .kh-gallery-item::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,14,24,.55) 0%, transparent 55%); pointer-events: none; }
+            @media (max-width: 767px)  { .kh-gallery { columns: 2; } }
+            @media (max-width: 480px)  { .kh-gallery { columns: 1; } }
+          `}</style>
+
+          <div className="kh-gallery">
+            {([
+              { src: gal4,  alt: 'خطيب أمام جمهور في قاعة محاضرات' },
+              { src: gal1,  alt: 'منصّة مؤتمر — لجنة تحكيم' },
+              { src: gal6,  alt: 'لقطة من جلسة تدريب' },
+              { src: gal3,  alt: 'حوار تقديمي في بيئة مؤسسية' },
+              { src: gal7,  alt: 'لقطة من جلسة تدريب' },
+              { src: gal2,  alt: 'نقاش جماعي في التدريب' },
+              { src: gal8,  alt: 'لقطة من جلسة تدريب' },
+              { src: gal5,  alt: 'حضور مؤتمر وتواصل' },
+              { src: gal9,  alt: 'لقطة من جلسة تدريب' },
+              { src: gal10, alt: 'لقطة من جلسة تدريب' },
+            ] as { src: string; alt: string }[]).map(({ src, alt }, i) => (
+              <div key={i} className="kh-gallery-item">
+                <img src={src} alt={alt} loading="lazy" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ═══════════════════════════════════════
           8. STUDY MODES
