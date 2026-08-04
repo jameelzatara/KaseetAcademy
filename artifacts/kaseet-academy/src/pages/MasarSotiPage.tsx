@@ -5,24 +5,26 @@ import { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { ChevronDown, ArrowLeft, MapPin, Wifi } from 'lucide-react';
 import { GOLD, OFF, F, FP, INNER, waLink } from './shared/coursePageHelpers';
+import ReelsSection from '../components/ReelsSection';
+import { Gold } from '../components/SectionHeader';
 import wajeezLogo   from '@assets/wajeez-logo_1785688262989.png';
 import heroShot     from '@assets/voiceover-track1_1785854995070.jpeg';
 import trainerYasar from '@assets/المدربة_يسار_عبده_1785855126478.jpeg';
 import trainerOmar  from '@assets/trainer-omar_1785692015818.jpg';
 import advisorImg   from '@assets/ياقوت_الخشاشنة_المستشارة_1785852509109.jpeg';
 /* ── reel IDs ────────────────────────────────────── */
-const SOTI_REELS = [
-  { id: 'DaQgWU2sONj', cap: 'من داخل جلسة تسجيل' },
-  { id: 'DW04mgIDP6v', cap: 'ورشة الأداء الصوتي' },
-  { id: 'DWvrH7_jH_G', cap: 'تمرين على المايك' },
-  { id: 'DWeE1BQjHuZ', cap: 'كواليس الاستوديو' },
-  { id: 'DU8dkRSjHAY', cap: 'من التدريب إلى التسجيل' },
-  { id: 'DUlTk-LDDmy', cap: 'جلسة توجيه فردي' },
-  { id: 'DQmcaCCDHbW', cap: 'لحظة التخرّج' },
-  { id: 'DN5th1WDCW8', cap: 'مقتطف من ورشة' },
-  { id: 'DSUxFDODBOM', cap: 'تسجيل مشروع متدرّب' },
-  { id: 'DWlZzYmjDJp', cap: 'داخل غرفة التسجيل' },
-  { id: 'DYUo0GOMKuR', cap: 'من أعمال متدرّبينا' },
+const SOTI_REEL_URLS = [
+  'https://www.instagram.com/reel/DaQgWU2sONj/',
+  'https://www.instagram.com/reel/DW04mgIDP6v/',
+  'https://www.instagram.com/reel/DWvrH7_jH_G/',
+  'https://www.instagram.com/reel/DWeE1BQjHuZ/',
+  'https://www.instagram.com/reel/DU8dkRSjHAY/',
+  'https://www.instagram.com/reel/DUlTk-LDDmy/',
+  'https://www.instagram.com/reel/DQmcaCCDHbW/',
+  'https://www.instagram.com/reel/DN5th1WDCW8/',
+  'https://www.instagram.com/reel/DSUxFDODBOM/',
+  'https://www.instagram.com/reel/DWlZzYmjDJp/',
+  'https://www.instagram.com/reel/DYUo0GOMKuR/',
 ];
 
 /* ── tokens ─────────────────────────────────────── */
@@ -131,9 +133,9 @@ const STATIONS = [
 ] as const;
 
 const PHASE_BANDS = [
-  { from:0, to:3, label:'المرحلة الأولى', sub:'التأسيس · 12 ساعة · 6 جلسات', color: GLD },
-  { from:3, to:10, label:'المرحلة الثانية', sub:'التخصّصات · 26 ساعة · 10 جلسات', color: '#67e8f9' },
-  { from:10, to:12, label:'المرحلة الثالثة', sub:'الاحتراف والسوق · 4 ساعات · جلستان', color: '#a78bfa' },
+  { from:0, to:3, label:'المرحلة الأولى', sub:'التأسيس · 16 ساعة · 8 جلسات', color: GLD },
+  { from:3, to:10, label:'المرحلة الثانية', sub:'التخصّصات · 36 ساعة · 18 جلسة', color: '#67e8f9' },
+  { from:10, to:12, label:'المرحلة الثالثة', sub:'الاحتراف والسوق · 8 ساعات · 4 جلسات', color: '#a78bfa' },
 ];
 
 const ALBUM = [
@@ -351,14 +353,9 @@ export default function MasarSotiPage() {
     return () => { document.title = prev; };
   }, []);
 
-  const reelsRef = useRef<HTMLDivElement>(null);
-
   function toggle(i: number) { setOpenIdx(openIdx === i ? null : i); setExpandAll(false); }
   function isOpen(i: number) { return expandAll || openIdx === i; }
   function handleExpandAll() { setExpandAll(v => !v); setOpenIdx(null); }
-  function scrollSotiReels(dir: 1 | -1) {
-    if (reelsRef.current) reelsRef.current.scrollBy({ left: dir * -320, behavior: 'smooth' });
-  }
 
   const WRP: React.CSSProperties = { ...INNER };
   const SH: React.CSSProperties = { textAlign: 'center', marginBottom: 52, direction: 'rtl' };
@@ -767,83 +764,12 @@ export default function MasarSotiPage() {
       {/* ═══════════════════════════════════════
           7. REELS
       ═══════════════════════════════════════ */}
-      <section id="reels" className="sec sec--reels" style={{ padding: '96px 0' }}>
-        <div style={WRP}>
-          <div style={SH}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GS, border: `1px solid ${GL}`, color: GLD, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>
-              <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD }} />
-              من داخل الاستوديو
-            </span>
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', lineHeight: 1.35, margin: '18px 0 0', color: OFF }}>
-              أعمال خرجت <span style={{ color: GLD }}>من الاستوديو</span>
-            </h2>
-            <p style={{ fontFamily: F, fontSize: 16, color: MUT, maxWidth: 600, marginTop: 14, marginInline: 'auto', lineHeight: 1.8 }}>
-              مقاطع من جلسات التسجيل وأعمال متدرّبينا على إنستغرام — شاهد وتابع الفرق بنفسك.
-            </p>
-          </div>
-
-          {/* carousel */}
-          <div style={{ position: 'relative', marginTop: 52 }}>
-            {/* scroll track */}
-            <div
-              ref={reelsRef}
-              style={{
-                display: 'flex', gap: 14,
-                overflowX: 'auto', overflowY: 'hidden',
-                scrollSnapType: 'x mandatory',
-                WebkitOverflowScrolling: 'touch',
-                scrollbarWidth: 'none',
-                msOverflowStyle: 'none',
-                padding: '6px 2px 20px',
-              }}
-            >
-              {SOTI_REELS.map(({ id, cap }) => (
-                <div
-                  key={id}
-                  style={{
-                    flex: '0 0 280px',
-                    scrollSnapAlign: 'start',
-                    borderRadius: 18,
-                    overflow: 'hidden',
-                    background: 'rgba(10,15,24,0.72)',
-                    border: '1px solid rgba(255,255,255,0.09)',
-                    backdropFilter: 'blur(10px)',
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.45)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                  }}
-                >
-                  <iframe
-                    src={`https://www.instagram.com/reel/${id}/embed`}
-                    title={cap}
-                    style={{ width: '100%', height: 498, border: 'none', display: 'block', flexShrink: 0 }}
-                    loading="lazy"
-                    allowtransparency="true"
-                    scrolling="no"
-                    frameBorder="0"
-                  />
-                  <div style={{ padding: '10px 14px', fontFamily: F, fontSize: 12, color: MUT, lineHeight: 1.4 }}>{cap}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* nav buttons */}
-            <div style={{ display: 'flex', justifyContent: 'center', gap: 12, marginTop: 8 }}>
-              <button onClick={() => scrollSotiReels(-1)} aria-label="التالي"
-                style={{ width: 44, height: 44, borderRadius: '50%', background: CARD, border: `1px solid ${CBR}`, color: OFF, fontSize: 20, cursor: 'pointer', display: 'grid', placeContent: 'center', transition: 'border-color .2s' }}>←</button>
-              <button onClick={() => scrollSotiReels(1)} aria-label="السابق"
-                style={{ width: 44, height: 44, borderRadius: '50%', background: CARD, border: `1px solid ${CBR}`, color: OFF, fontSize: 20, cursor: 'pointer', display: 'grid', placeContent: 'center', transition: 'border-color .2s' }}>→</button>
-            </div>
-          </div>
-
-          <div style={{ textAlign: 'center', marginTop: 28 }}>
-            <a href="https://www.instagram.com/kaseetmedia/" target="_blank" rel="noopener noreferrer"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: CARD, color: OFF, border: `1px solid ${CBR}`, fontFamily: F, fontWeight: 700, fontSize: 15, padding: '13px 28px', borderRadius: 999, textDecoration: 'none' }}>
-              تابعنا على إنستغرام <ArrowLeft size={14} />
-            </a>
-          </div>
-        </div>
-      </section>
+      <ReelsSection
+        badge="من داخل الاستوديو"
+        heading={<>أعمال خرجت <Gold>من الاستوديو</Gold></>}
+        description="مقاطع من جلسات التسجيل وأعمال متدرّبينا على إنستغرام — شاهد وتابع الفرق بنفسك."
+        urls={SOTI_REEL_URLS}
+      />
 
             {/* ═══════════════════════════════════════
           8. MODES (one-card)

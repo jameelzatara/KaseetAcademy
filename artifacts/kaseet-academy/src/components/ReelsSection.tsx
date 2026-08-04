@@ -6,6 +6,7 @@ interface ReelsSectionProps {
   badge?: string;
   heading?: ReactNode;
   description?: string;
+  urls?: string[];
 }
 
 const REEL_URLS = [
@@ -27,9 +28,9 @@ declare global {
 }
 
 
-function getOffset(i: number, current: number): number {
-  let off = (i - current + N) % N;
-  if (off >= Math.ceil(N / 2)) off -= N;
+function getOffset(i: number, current: number, total: number): number {
+  let off = (i - current + total) % total;
+  if (off >= Math.ceil(total / 2)) off -= total;
   return off;
 }
 
@@ -102,19 +103,22 @@ export default function ReelsSection({
   badge = 'من الاستوديو مباشرةً',
   heading = <><Gold>أصوات</Gold> صنعناها معاً</>,
   description = 'مقاطع حيّة من ورشنا وأعمال متدرّبينا ومدربينا على إنستغرام — اسمع الفرق قبل أن تسجّل.',
+  urls,
 }: ReelsSectionProps = {}) {
+  const activeUrls = urls && urls.length > 0 ? urls : REEL_URLS;
+  const n = activeUrls.length;
   const [cur,     setCur]     = useState(0);
   const [paused,  setPaused]  = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const go = (dir: 1 | -1) => setCur(prev => (prev + dir + N) % N);
+  const go = (dir: 1 | -1) => setCur(prev => (prev + dir + n) % n);
 
   // Autoplay — pauses on hover
   useEffect(() => {
     if (paused) { if (timerRef.current) clearInterval(timerRef.current); return; }
     timerRef.current = setInterval(() => go(1), AUTO_MS);
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
-  }, [paused, cur]);
+  }, [paused, cur, n]);
 
   // Instagram embed
   useEffect(() => {
@@ -178,10 +182,12 @@ export default function ReelsSection({
 
         {/* Stage — overflow visible so adjacent cards peek 40px */}
         <div style={{ position: 'relative', overflow: 'visible', height: CARD_H + 20 }}>
-          {REEL_URLS.map((url, i) => {
-            const off      = getOffset(i, cur);
+          {activeUrls.map((url, i) => {
+            const off      = getOffset(i, cur, n);
             const cstyle   = cardStyle(off);
             const isCenter = off === 0;
+            // only the active centre card is semi-transparent/glass; others are solid
+            const cardBg   = isCenter ? 'rgba(18,26,42,0.88)' : '#0C1220';
 
             return (
               <div
@@ -194,7 +200,7 @@ export default function ReelsSection({
                   marginLeft: -(CARD_W / 2),
                   width:      CARD_W,
                   overflow:   'hidden',
-                  background: 'rgba(18,26,42,0.88)',
+                  background: cardBg,
                   display:    'flex',
                   flexDirection: 'column',
                   transition: 'transform 0.50s cubic-bezier(0.25,0.8,0.25,1), opacity 0.50s ease, box-shadow 0.50s ease, border 0.28s ease',
@@ -256,7 +262,7 @@ export default function ReelsSection({
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           gap: 8, marginTop: 32,
         }}>
-          {REEL_URLS.map((_, i) => (
+          {activeUrls.map((_, i) => (
             <button
               key={i}
               onClick={() => setCur(i)}
