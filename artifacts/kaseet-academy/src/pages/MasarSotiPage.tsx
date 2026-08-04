@@ -10,7 +10,20 @@ import heroShot     from '@assets/voiceover-track1_1785854995070.jpeg';
 import trainerYasar from '@assets/المدربة_يسار_عبده_1785855126478.jpeg';
 import trainerOmar  from '@assets/trainer-omar_1785692015818.jpg';
 import advisorImg   from '@assets/ياقوت_الخشاشنة_المستشارة_1785852509109.jpeg';
-import ReelsSection from '@/components/ReelsSection';
+/* ── reel IDs ────────────────────────────────────── */
+const SOTI_REELS = [
+  { id: 'DaQgWU2sONj', cap: 'من داخل جلسة تسجيل' },
+  { id: 'DW04mgIDP6v', cap: 'ورشة الأداء الصوتي' },
+  { id: 'DWvrH7_jH_G', cap: 'تمرين على المايك' },
+  { id: 'DWeE1BQjHuZ', cap: 'كواليس الاستوديو' },
+  { id: 'DU8dkRSjHAY', cap: 'من التدريب إلى التسجيل' },
+  { id: 'DUlTk-LDDmy', cap: 'جلسة توجيه فردي' },
+  { id: 'DQmcaCCDHbW', cap: 'لحظة التخرّج' },
+  { id: 'DN5th1WDCW8', cap: 'مقتطف من ورشة' },
+  { id: 'DSUxFDODBOM', cap: 'تسجيل مشروع متدرّب' },
+  { id: 'DWlZzYmjDJp', cap: 'داخل غرفة التسجيل' },
+  { id: 'DYUo0GOMKuR', cap: 'من أعمال متدرّبينا' },
+];
 
 /* ── tokens ─────────────────────────────────────── */
 const GLD  = GOLD;
@@ -302,7 +315,7 @@ function StudyRow({ variant }: { variant: 'inperson' | 'online' }) {
           </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 7, flexShrink: 0 }}>
-          {['12 محطة','40 ساعة', isIP ? 'حضوري' : 'بثّ مباشر'].map(b => (
+          {['12 محطة','60 ساعة', isIP ? 'حضوري' : 'بثّ مباشر'].map(b => (
             <span key={b} style={{ fontFamily: F, fontSize: 10.5, color: MUT, background: CARD, border: `1px solid ${CBR}`, borderRadius: 6, padding: '2.5px 7px', whiteSpace: 'nowrap' }}>{b}</span>
           ))}
           <ChevronDown size={15} color={open ? ac : MUT} strokeWidth={2.5} style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform .25s', flexShrink: 0 }} />
@@ -338,9 +351,14 @@ export default function MasarSotiPage() {
     return () => { document.title = prev; };
   }, []);
 
+  const reelsRef = useRef<HTMLDivElement>(null);
+
   function toggle(i: number) { setOpenIdx(openIdx === i ? null : i); setExpandAll(false); }
   function isOpen(i: number) { return expandAll || openIdx === i; }
   function handleExpandAll() { setExpandAll(v => !v); setOpenIdx(null); }
+  function scrollSotiReels(dir: 1 | -1) {
+    if (reelsRef.current) reelsRef.current.scrollBy({ left: dir * -320, behavior: 'smooth' });
+  }
 
   const WRP: React.CSSProperties = { ...INNER };
   const SH: React.CSSProperties = { textAlign: 'center', marginBottom: 52, direction: 'rtl' };
@@ -749,13 +767,83 @@ export default function MasarSotiPage() {
       {/* ═══════════════════════════════════════
           7. REELS
       ═══════════════════════════════════════ */}
-      <div id="reels" className="sec--reels">
-        <ReelsSection
-          badge="من داخل الاستوديو"
-          heading={<>أعمال خرجت <span style={{ color: GLD }}>من الاستوديو</span></>}
-          description="مقاطع من جلسات التسجيل وأعمال متدرّبينا على إنستغرام — تعمل مباشرة، اسمع الفرق قبل أن تسجّل."
-        />
-      </div>
+      <section id="reels" className="sec sec--reels" style={{ padding: '96px 0' }}>
+        <div style={WRP}>
+          <div style={SH}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GS, border: `1px solid ${GL}`, color: GLD, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>
+              <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD }} />
+              من داخل الاستوديو
+            </span>
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', lineHeight: 1.35, margin: '18px 0 0', color: OFF }}>
+              أعمال خرجت <span style={{ color: GLD }}>من الاستوديو</span>
+            </h2>
+            <p style={{ fontFamily: F, fontSize: 16, color: MUT, maxWidth: 600, marginTop: 14, marginInline: 'auto', lineHeight: 1.8 }}>
+              مقاطع من جلسات التسجيل وأعمال متدرّبينا على إنستغرام — شاهد وتابع الفرق بنفسك.
+            </p>
+          </div>
+
+          {/* carousel */}
+          <div style={{ position: 'relative', marginTop: 52 }}>
+            {/* scroll track */}
+            <div
+              ref={reelsRef}
+              style={{
+                display: 'flex', gap: 14,
+                overflowX: 'auto', overflowY: 'hidden',
+                scrollSnapType: 'x mandatory',
+                WebkitOverflowScrolling: 'touch',
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+                padding: '6px 2px 20px',
+              }}
+            >
+              {SOTI_REELS.map(({ id, cap }) => (
+                <div
+                  key={id}
+                  style={{
+                    flex: '0 0 280px',
+                    scrollSnapAlign: 'start',
+                    borderRadius: 18,
+                    overflow: 'hidden',
+                    background: 'rgba(10,15,24,0.72)',
+                    border: '1px solid rgba(255,255,255,0.09)',
+                    backdropFilter: 'blur(10px)',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.45)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}
+                >
+                  <iframe
+                    src={`https://www.instagram.com/reel/${id}/embed`}
+                    title={cap}
+                    style={{ width: '100%', height: 498, border: 'none', display: 'block', flexShrink: 0 }}
+                    loading="lazy"
+                    allowtransparency="true"
+                    scrolling="no"
+                    frameBorder="0"
+                  />
+                  <div style={{ padding: '10px 14px', fontFamily: F, fontSize: 12, color: MUT, lineHeight: 1.4 }}>{cap}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* nav buttons */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 12, marginTop: 8 }}>
+              <button onClick={() => scrollSotiReels(-1)} aria-label="التالي"
+                style={{ width: 44, height: 44, borderRadius: '50%', background: CARD, border: `1px solid ${CBR}`, color: OFF, fontSize: 20, cursor: 'pointer', display: 'grid', placeContent: 'center', transition: 'border-color .2s' }}>←</button>
+              <button onClick={() => scrollSotiReels(1)} aria-label="السابق"
+                style={{ width: 44, height: 44, borderRadius: '50%', background: CARD, border: `1px solid ${CBR}`, color: OFF, fontSize: 20, cursor: 'pointer', display: 'grid', placeContent: 'center', transition: 'border-color .2s' }}>→</button>
+            </div>
+          </div>
+
+          <div style={{ textAlign: 'center', marginTop: 28 }}>
+            <a href="https://www.instagram.com/kaseetmedia/" target="_blank" rel="noopener noreferrer"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: CARD, color: OFF, border: `1px solid ${CBR}`, fontFamily: F, fontWeight: 700, fontSize: 15, padding: '13px 28px', borderRadius: 999, textDecoration: 'none' }}>
+              تابعنا على إنستغرام <ArrowLeft size={14} />
+            </a>
+          </div>
+        </div>
+      </section>
 
             {/* ═══════════════════════════════════════
           8. MODES (one-card)
@@ -1018,7 +1106,7 @@ export default function MasarSotiPage() {
             </div>
             <div>
               <span className="cf-l">المدّة</span>
-              <b>40 ساعة · 18 جلسة + الإنتاج</b>
+              <b>60 ساعة · 30 جلسة + الإنتاج</b>
             </div>
             <div>
               <span className="cf-l">المقاعد</span>

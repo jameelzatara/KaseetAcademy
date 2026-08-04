@@ -1,0 +1,43 @@
+Please execute the following updates on the project:
+
+### TASK 1: Fix Section Overflows & Hero Background Styling
+1. Apply the updated Cover/Hero section background styling:
+   - Base background color: `#101922`.
+   - Subtle grid overlay: 40px spacing with `rgba(255, 255, 255, 0.035)`.
+   - Right radial glow behind text: `rgba(245, 185, 30, 0.12)`.
+   - Left radial glow behind card: `rgba(56, 189, 248, 0.08)`.
+   - Ensure proper `z-index` so content and text stay crisp and fully legible.
+2. Fix background bleeding globally:
+   - Add `position: relative`, `overflow: hidden`, and `isolation: isolate` to all `<section>` elements and container wrappers to keep SVGs, decorations, and glows within their parent section boundaries.
+
+---
+
+### TASK 2: Build Instagram Studio Showcase Section on `/masar-soti`
+Create a dedicated component/section on the `/masar-soti` page for student studio recordings with direct Instagram embedded videos:
+
+1. **Header Details (RTL, Tajawal font):**
+   - Sub-title / Badge: "من داخل الاستوديو"
+   - Main Heading: "أعمال خرجت من الاستوديو"
+   - Description: "مقاطع من جلسات التسجيل وأعمال متدرّبينا على إنستغرام — تعمل مباشرة، اسمع الفرق قبل أن تسجّل."
+
+2. **Instagram Reels Embed Grid / Slider:**
+   - Display the 11 Instagram reels using responsive dark glassmorphism cards.
+   - Use iframe embed URLs in the format `https://www.instagram.com/reel/{REEL_ID}/embed` so videos play directly on page.
+   - Embed URLs list:
+     - https://www.instagram.com/reel/DaQgWU2sONj/embed
+     - https://www.instagram.com/reel/DW04mgIDP6v/embed
+     - https://www.instagram.com/reel/DWvrH7_jH_G/embed
+     - https://www.instagram.com/reel/DWeE1BQjHuZ/embed
+     - https://www.instagram.com/reel/DU8dkRSjHAY/embed
+     - https://www.instagram.com/reel/DUlTk-LDDmy/embed
+     - https://www.instagram.com/reel/DQmcaCCDHbW/embed
+     - https://www.instagram.com/reel/DN5th1WDCW8/embed
+     - https://www.instagram.com/reel/DSUxFDODBOM/embed
+     - https://www.instagram.com/reel/DWlZzYmjDJp/embed
+     - https://www.instagram.com/reel/DYUo0GOMKuR/embed
+
+3. **Styling & Performance Requirements:**
+   - Arrange videos in a responsive Grid (3 columns on desktop, 2 on tablet, 1 on mobile) or a paginated Carousel with Navigation arrows.
+   - Apply `aspect-ratio: 9/16` for proper mobile reel frame fit without extra vertical scrollbars.
+   - Style card container with `#1a2430` background, slight rounded borders (`border-white/10`), and gold outline highlights on hover.
+   - Maintain global RTL alignment, Tajawal font for headings, and Poppins for numbers/counts.
