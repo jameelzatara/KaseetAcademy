@@ -1,0 +1,341 @@
+# `/masar-elami` — نظام الخلفيات فقط
+**لا تعدّل أي كرت، ولا نص، ولا تخطيط. الخلفيات وحدها.**
+
+---
+
+## لماذا التعديل السابق لم يُظهر أي فرق
+
+الفرق بين `#161E2B` و `#1A2332` هو **2.45 وحدة L\*** (الإضاءة المدركة). العين البشرية لا تُميّز أقل من ~4 وحدات على مساحات كبيرة. فالتنفيذ كان صحيحاً والقيم كانت خاطئة.
+
+والمشكلة بنيوية: عند هذا العمق (L\* بين 11 و 14) لا يوجد مجال كافٍ لتباين محسوس بين درجتين من نفس اللون. أي درجتَي كحلي غامق ستُنتج النتيجة نفسها.
+
+**الحل: إلغاء مبدأ "لون خلفية لكل قسم".**
+بدلاً منه: **لوحة أم واحدة** + **طبقات جو ملوّنة** تتجاوز حدود الأقسام وتتداخل مع ما بعدها. العين تُدرك تغيّر اللون والاتجاه، لا فروقات الإضاءة.
+
+القياس: طبقة ذهبية بشفافية 9% فوق اللوحة الأم تُنتج فرقاً قدره **+7.56 L\*** مع انزياح لوني كامل — أي ثلاثة أضعاف الفرق الحالي.
+
+---
+
+# 1 · احذف أولاً
+
+قبل أي إضافة، احذف من **كل** الأقسام في `/masar-elami`:
+
+```css
+/* احذف هذه من كل قسم */
+background: #161E2B;
+background: #1A2332;
+background-color: #161E2B;
+background-color: #1A2332;
+```
+
+لا يبقى أي `background` على أي `<section>`. الأقسام تصبح شفافة بالكامل، واللون يأتي من طبقة واحدة تحتها.
+
+---
+
+# 2 · اللوحة الأم
+
+```css
+body{
+  background: #0C1219;   /* L* = 5.25 — أعمق من الحالي، ليتيح مجالاً لكل ما فوقه */
+}
+```
+
+هذه القيمة مقصودة: كل طبقة جو فوقها ستكون مرئية بوضوح. لو بقيت اللوحة عند `#161E2B` فلن يظهر أي أثر للطبقات.
+
+---
+
+# 3 · بنية الطبقات
+
+كل قسم يحصل على ثلاث طبقات فوق اللوحة الأم:
+
+```css
+.sec{
+  position: relative;
+  background: transparent;      /* إلزامي */
+  isolation: isolate;
+}
+
+/* المحتوى — فوق كل شيء */
+.sec > .wrap{ position: relative; z-index: 3 }
+
+/* الطبقة 1 · الجو اللوني — تتجاوز حدود القسم فتتداخل مع ما بعده */
+.sec::before{
+  content: "";
+  position: absolute;
+  inset: -22% -12%;             /* التجاوز هو ما يخلق التداخل */
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* الطبقة 2 · الشكل الهندسي */
+.sec > .geo{
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+```
+
+> **`inset: -22% -12%` هو جوهر الحل.** طبقة الجو تخرج عن حدود القسم من الأعلى والأسفل، فتتداخل مع القسم المجاور. هذا التداخل هو ما يُنتج الإحساس بأن الصفحة فضاء واحد مُضاء لا صناديق مرصوفة. **لا تضع `overflow: hidden` على `.sec`** — سيقتل التداخل ويعيدنا للمشكلة الأصلية.
+
+---
+
+# 4 · اللغة الهندسية — عدسة الكاميرا وإطار البث
+
+المسار الإعلامي يحتاج لغة بصرية خاصة به تُميّزه عن ماستركلاس التعليق الصوتي (الذي يستخدم الموجة الصوتية). اللغة المختارة: **عدسة الكاميرا وإطار التصوير والبث**.
+
+| الشكل | المعنى | القسم |
+|---|---|---|
+| إطار الثلثين + أقواس الزوايا | إطار الكاميرا | Hero |
+| أعمدة الشاشة | أشرطة البث | الشجرة |
+| دائرتان متقاطعتان | استوديو ∩ بُعد | أسلوب التعلّم |
+| نقاط الهاف‑تون | الطباعة والصحافة | ما ستحققه |
+| أقواس البث المتراكزة | إشارة البث | المدربون |
+| حدقة العدسة السداسية | فتحة العدسة | الأسعار |
+| خطوط المسح | شاشة CRT | المستشارة |
+| قوس ذهبي كاسح | الختام | CTA |
+
+**الأنماط المتكرّرة** (CSS خالص، بلا ملفات):
+
+```css
+/* أعمدة الشاشة — خطوط رأسية كل 96px */
+.geo--columns{
+  background-image: repeating-linear-gradient(
+    to left, rgba(255,255,255,.030) 0 1px, transparent 1px 96px);
+  mask-image: linear-gradient(to bottom, transparent, #000 22%, #000 78%, transparent);
+}
+
+/* خطوط المسح — أفقية كل 4px */
+.geo--scan{
+  background-image: repeating-linear-gradient(
+    to bottom, rgba(255,255,255,.022) 0 1px, transparent 1px 4px);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, #000, transparent 72%);
+}
+
+/* نقاط الهاف‑تون — للقسم الكريمي فقط */
+.geo--halftone{
+  background-image: radial-gradient(rgba(24,32,47,.11) 1.1px, transparent 1.2px);
+  background-size: 14px 14px;
+  mask-image: linear-gradient(to bottom, #000, transparent 65%);
+}
+```
+
+---
+
+# 5 · الخريطة النهائية — قسماً بقسم
+
+## 1 · Hero — ذهبي + إطار الكاميرا
+
+```css
+.sec--hero::before{
+  background:
+    radial-gradient(ellipse 56% 44% at 72% 10%,  rgba(255,193,7,.13), transparent 62%),
+    radial-gradient(ellipse 48% 38% at 16% 82%,  rgba(59,111,168,.10), transparent 66%);
+}
+```
+
+```html
+<div class="geo geo--hero">
+  <svg viewBox="0 0 1440 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g stroke="rgba(255,193,7,.16)" stroke-width="1" fill="none">
+      <!-- إطار الثلثين -->
+      <line x1="480" y1="90" x2="480" y2="710"/>
+      <line x1="960" y1="90" x2="960" y2="710"/>
+      <line x1="120" y1="297" x2="1320" y2="297"/>
+      <line x1="120" y1="503" x2="1320" y2="503"/>
+    </g>
+    <g stroke="rgba(255,193,7,.42)" stroke-width="2.5" fill="none" stroke-linecap="square">
+      <!-- أقواس الزوايا -->
+      <path d="M120,150 L120,90 L186,90"/>
+      <path d="M1320,150 L1320,90 L1254,90"/>
+      <path d="M120,650 L120,710 L186,710"/>
+      <path d="M1320,650 L1320,710 L1254,710"/>
+    </g>
+  </svg>
+</div>
+```
+
+## 2 · الشجرة — أزرق فولاذي + أعمدة البث
+
+```css
+.sec--tree::before{
+  background:
+    linear-gradient(180deg, rgba(59,111,168,.11), transparent 55%),
+    radial-gradient(ellipse 62% 50% at 50% 108%, rgba(30,122,133,.09), transparent 66%);
+}
+```
+```html
+<div class="geo geo--columns"></div>
+```
+
+## 3 · أسلوب التعلّم — تركوازي + دائرتان متقاطعتان
+
+```css
+.sec--modes::before{
+  background:
+    radial-gradient(circle 46% at 30% 46%, rgba(30,122,133,.13), transparent 62%),
+    radial-gradient(circle 42% at 70% 54%, rgba(255,193,7,.08),  transparent 62%);
+}
+```
+
+```html
+<div class="geo">
+  <svg viewBox="0 0 1440 620" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <circle cx="560" cy="310" r="248" fill="none" stroke="rgba(30,122,133,.26)" stroke-width="1.5"/>
+    <circle cx="880" cy="310" r="248" fill="none" stroke="rgba(255,193,7,.22)"  stroke-width="1.5"/>
+  </svg>
+</div>
+```
+
+## 4 · ما الذي ستُحققه — القسم الكريمي
+
+```css
+.sec--outcomes{
+  background: #F4EFE4;              /* الاستثناء الوحيد الذي يحمل لوناً مباشراً */
+  color: #18202F;
+  border-top: 2px solid #FFC107;
+  border-bottom: 2px solid #FFC107;
+}
+.sec--outcomes::before{
+  background: radial-gradient(ellipse 60% 50% at 78% 6%, rgba(138,98,0,.07), transparent 64%);
+}
+```
+
+```html
+<div class="geo geo--halftone"></div>
+<div class="geo">
+  <svg viewBox="0 0 1440 520" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M-100,470 Q420,250 760,360 T1560,190"
+          fill="none" stroke="rgba(255,193,7,.55)" stroke-width="2.5"/>
+  </svg>
+</div>
+```
+
+**الطبقة الكريمية تُلغي التجاوز:** أضف `overflow: hidden` على هذا القسم وحده، لأن حدّه الذهبي يجب أن يكون حاسماً لا متداخلاً.
+
+## 5 · المدربون — بنفسجي كحلي + أقواس البث
+
+```css
+.sec--trainers::before{
+  background:
+    radial-gradient(ellipse 54% 46% at 12% 14%, rgba(91,75,138,.14), transparent 64%),
+    radial-gradient(ellipse 46% 40% at 88% 86%, rgba(255,193,7,.07), transparent 62%);
+}
+```
+
+```html
+<div class="geo">
+  <svg viewBox="0 0 1440 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g fill="none" stroke="rgba(255,255,255,.10)" stroke-width="1.5">
+      <circle cx="80" cy="80" r="190"/>
+      <circle cx="80" cy="80" r="330"/>
+      <circle cx="80" cy="80" r="470"/>
+      <circle cx="80" cy="80" r="610"/>
+    </g>
+  </svg>
+</div>
+```
+
+## 6 · الأسعار — ذهبي + حدقة العدسة
+
+```css
+.sec--pricing::before{
+  background:
+    radial-gradient(ellipse 50% 44% at 50% 48%, rgba(255,193,7,.15), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 50% -6%, rgba(59,111,168,.09), transparent 64%);
+}
+```
+
+```html
+<div class="geo">
+  <svg viewBox="0 0 1440 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g fill="none" stroke="rgba(255,193,7,.20)" stroke-width="1.5">
+      <polygon points="720,150 1010,320 1010,560 720,730 430,560 430,320"/>
+      <polygon points="720,240 930,362 930,608 720,730 510,608 510,362" stroke-opacity=".55"/>
+    </g>
+  </svg>
+</div>
+```
+
+الهالة الذهبية هنا هي الأقوى في الصفحة (15%) — لأنها تضع الضوء على كرت السعر بلا لمس الكرت نفسه.
+
+## 7 · المستشارة — أخضر + خطوط المسح
+
+```css
+.sec--advisor::before{
+  background:
+    radial-gradient(ellipse 44% 52% at 86% 62%, rgba(37,211,102,.07), transparent 62%),
+    radial-gradient(ellipse 54% 44% at 20% 24%, rgba(59,111,168,.10), transparent 66%);
+}
+```
+```html
+<div class="geo geo--scan"></div>
+```
+
+## 8 · FAQ — قسم الراحة
+
+```css
+.sec--faq::before{
+  background: linear-gradient(180deg, rgba(59,111,168,.07), transparent 60%);
+}
+```
+
+بلا شكل هندسي. **الفراغ مقصود** — بعد سبعة أقسام مشغولة، القسم الثامن يجب أن يرتاح، وإلا فقدت كل الأشكال قيمتها.
+
+## 9 · CTA الأخير — قوس ذهبي كاسح
+
+```css
+.sec--final::before{
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 118%, rgba(255,193,7,.16), transparent 64%),
+    linear-gradient(180deg, transparent, rgba(91,75,138,.09));
+}
+```
+
+```html
+<div class="geo">
+  <svg viewBox="0 0 1440 480" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M-120,470 Q400,150 760,270 T1560,120"
+          fill="none" stroke="rgba(255,193,7,.30)" stroke-width="2.5"/>
+    <path d="M-120,500 Q380,220 740,330 T1560,190"
+          fill="none" stroke="rgba(255,255,255,.10)" stroke-width="1.5"/>
+  </svg>
+</div>
+```
+
+---
+
+# 6 · الأرقام المُقاسة
+
+| الطبقة | اللون والشفافية | الناتج فوق اللوحة | فرق الإضاءة |
+|---|---|---|---|
+| ذهبي | `#FFC107` @ 9% | `#222217` | **+7.56 L\*** |
+| تركوازي | `#1E7A85` @ 10% | `#0E1C24` | **+4.29 L\*** |
+| أزرق فولاذي | `#3B6FA8` @ 9% | `#101A26` | **+3.80 L\*** |
+| أخضر | `#25D366` @ 5% | `#0D1C1D` | **+3.66 L\*** |
+| بنفسجي كحلي | `#5B4B8A` @ 8% | `#121722` | **+2.37 L\*** |
+
+للمقارنة: التبادل السابق كان يعطي **+2.45 L\*** بلا أي انزياح لوني. الفرق أن هذه الطبقات تُغيّر **اللون** لا الإضاءة وحدها — وهو ما تُدركه العين فعلاً.
+
+الكرت يبقى ثابتاً في كل الأقسام: `#25303F` (فرق **+14.25 L\*** عن اللوحة)، وعند hover `#2E3A4C`.
+
+---
+
+# 7 · التحقّق قبل التسليم
+
+- [ ] لا يوجد `background` على أي `<section>` — عدا القسم الكريمي
+- [ ] `body` لونه `#0C1219`
+- [ ] لا يوجد `overflow: hidden` على أي قسم — عدا الكريمي
+- [ ] كل قسم فيه `position: relative` و `isolation: isolate`
+- [ ] `.wrap` فيه `z-index: 3`
+- [ ] طبقات `.geo` فيها `pointer-events: none`
+- [ ] كل `<svg>` فيه `aria-hidden="true"`
+- [ ] القسم الكريمي ظاهر فعلاً بحدّيه الذهبيين
+- [ ] FAQ بلا شكل هندسي
+
+**اختبار العين:** مرّر الصفحة بسرعة من الأعلى للأسفل. يجب أن تُحسّ بتغيّر مناخ لوني عند كل قسم. إن بدت الصفحة موحّدة، فالسبب أحد اثنين: بقي `background` على الأقسام، أو `body` ليس بالقيمة `#0C1219`.
+
+---
+
+**لا تعدّل شيئاً غير الخلفيات.** الكروت والنصوص والتخطيط تبقى كما هي.

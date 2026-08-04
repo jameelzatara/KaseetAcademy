@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { ChevronDown, ArrowLeft, MapPin, Wifi, Layers, Clock, FolderCheck, CheckCircle2, MessageCircle } from 'lucide-react';
-import { NAVY, GOLD, OFF, F, FP, INNER, LBG, DH, DM, waLink } from './shared/coursePageHelpers';
+import { NAVY, GOLD, OFF, F, FP, INNER, DH, DM, waLink } from './shared/coursePageHelpers';
 import wajeezLogo     from '@assets/wajeez-logo_1785688262989.png';
 import coverMasar     from '@assets/cover_المسار_الاعلامي_1785777356196.png';
 import instructorRana from '@assets/trainer-rana-azzam_1785692178863.JPG';
@@ -19,12 +19,6 @@ const MUT  = '#8A97AE';
 const LT   = '#C8D3E2';
 const HAIR = 'rgba(255,255,255,0.07)';
 
-// Section backgrounds — alternating rhythm: A=#161E2B · B=#1A2332
-const S1 = '#1A2332';   // B — Tree, FAQ
-const S2 = '#161E2B';   // A — Study
-const S3 = '#161E2B';   // A — Trainers, Final CTA
-const S4 = '#1A2332';   // B — Enroll
-const S5 = '#161E2B';   // A — Advisor
 
 const CARD = 'rgba(255,255,255,0.04)';
 const CARD_BORDER = 'rgba(255,255,255,0.08)';
@@ -390,14 +384,31 @@ export default function MasarElamiPage() {
       </div>
 
       {/* ════════════════ 1. HERO ════════════════════════ */}
-      <section style={{ position: 'relative', background: '#161E2B', padding: '52px 0 88px', overflow: 'hidden' }}>
+      <section className="sec sec--hero" style={{ position: 'relative', padding: '52px 0 88px', overflow: 'hidden' }}>
         <img src={coverMasar} alt="" aria-hidden="true"
           fetchPriority="high" decoding="async"
           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 15%', zIndex: 0 }} />
         <div style={{ position: 'absolute', inset: 0, zIndex: 1,
           background: 'linear-gradient(to bottom, rgba(2,6,23,0.78) 0%, rgba(2,6,23,0.52) 40%, rgba(2,6,23,0.92) 100%)' }} />
+        {/* rule-of-thirds grid + corner brackets */}
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none' }}>
+          <svg viewBox="0 0 1440 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true" style={{ width: '100%', height: '100%' }}>
+            <g stroke="rgba(255,193,7,.16)" strokeWidth="1" fill="none">
+              <line x1="480" y1="90" x2="480" y2="710"/>
+              <line x1="960" y1="90" x2="960" y2="710"/>
+              <line x1="120" y1="297" x2="1320" y2="297"/>
+              <line x1="120" y1="503" x2="1320" y2="503"/>
+            </g>
+            <g stroke="rgba(255,193,7,.42)" strokeWidth="2.5" fill="none" strokeLinecap="square">
+              <path d="M120,150 L120,90 L186,90"/>
+              <path d="M1320,150 L1320,90 L1254,90"/>
+              <path d="M120,650 L120,710 L186,710"/>
+              <path d="M1320,650 L1320,710 L1254,710"/>
+            </g>
+          </svg>
+        </div>
 
-        <div style={{ position: 'relative', zIndex: 2, ...INNER }}>
+        <div style={{ position: 'relative', zIndex: 3, ...INNER }}>
           <div className="masar-hero-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1.15fr) minmax(0,0.85fr)', gap: 56, alignItems: 'center' }}>
 
             <div>
@@ -499,8 +510,9 @@ export default function MasarElamiPage() {
       </section>
 
       {/* ════════════════ 2. TREE ════════════════════════ */}
-      <section id="tree" style={{ background: S1, borderTop: `1px solid ${CARD_BORDER}`, padding: '80px 0' }}>
-        <div style={{ ...INNER }}>
+      <section id="tree" className="sec sec--tree" style={{ borderTop: `1px solid ${CARD_BORDER}`, padding: '80px 0' }}>
+        <div className="geo geo--columns" aria-hidden="true" />
+        <div className="sec-wrap" style={{ ...INNER }}>
           <div style={{ textAlign: 'center', marginBottom: 48 }}>
             <SectionLabel text="شجرة المسار" />
             <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,4vw,42px)', marginTop: 16, lineHeight: 1.35, color: OFF }}>
@@ -566,8 +578,14 @@ export default function MasarElamiPage() {
       </section>
 
       {/* ════════════════ 3. STUDY MODES ═════════════════ */}
-      <section style={{ background: S2, borderTop: `1px solid ${CARD_BORDER}`, padding: '80px 0' }}>
-        <div style={{ ...INNER }}>
+      <section className="sec sec--modes" style={{ borderTop: `1px solid ${CARD_BORDER}`, padding: '80px 0' }}>
+        <div className="geo" aria-hidden="true">
+          <svg viewBox="0 0 1440 620" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <circle cx="560" cy="310" r="248" fill="none" stroke="rgba(30,122,133,.26)" strokeWidth="1.5"/>
+            <circle cx="880" cy="310" r="248" fill="none" stroke="rgba(255,193,7,.22)" strokeWidth="1.5"/>
+          </svg>
+        </div>
+        <div className="sec-wrap" style={{ ...INNER }}>
           <div style={{ textAlign: 'center', marginBottom: 44 }}>
             <SectionLabel text="أسلوب الدراسة" />
             <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,4vw,42px)', marginTop: 16, lineHeight: 1.35, color: OFF }}>
@@ -642,8 +660,14 @@ export default function MasarElamiPage() {
       </section>
 
       {/* ════════════════ 4. OUTCOMES (cream) ═══════════ */}
-      <section style={{ background: LBG, borderTop: '2px solid #FFC107', borderBottom: '2px solid #FFC107', padding: '80px 0' }}>
-        <div style={{ ...INNER }}>
+      <section className="sec sec--outcomes" style={{ padding: '80px 0' }}>
+        <div className="geo geo--halftone" aria-hidden="true" />
+        <div className="geo" aria-hidden="true">
+          <svg viewBox="0 0 1440 520" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M-100,470 Q420,250 760,360 T1560,190" fill="none" stroke="rgba(255,193,7,.55)" strokeWidth="2.5"/>
+          </svg>
+        </div>
+        <div className="sec-wrap" style={{ ...INNER }}>
           <div style={{ textAlign: 'center', marginBottom: 0 }}>
             <SectionLabel text="مخرجات المسار" light />
             <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,4vw,42px)', marginTop: 16, lineHeight: 1.35, color: DH }}>
@@ -666,8 +690,18 @@ export default function MasarElamiPage() {
       </section>
 
       {/* ════════════════ 5. TRAINERS ════════════════════ */}
-      <section style={{ background: S3, borderTop: `1px solid ${CARD_BORDER}`, padding: '80px 0' }}>
-        <div style={{ ...INNER }}>
+      <section className="sec sec--trainers" style={{ borderTop: `1px solid ${CARD_BORDER}`, padding: '80px 0' }}>
+        <div className="geo" aria-hidden="true">
+          <svg viewBox="0 0 1440 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <g fill="none" stroke="rgba(255,255,255,.10)" strokeWidth="1.5">
+              <circle cx="80" cy="80" r="190"/>
+              <circle cx="80" cy="80" r="330"/>
+              <circle cx="80" cy="80" r="470"/>
+              <circle cx="80" cy="80" r="610"/>
+            </g>
+          </svg>
+        </div>
+        <div className="sec-wrap" style={{ ...INNER }}>
           <div style={{ textAlign: 'center', marginBottom: 48 }}>
             <SectionLabel text="خبراء المسار الإعلامي" />
             <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,4vw,42px)', marginTop: 16, lineHeight: 1.35, color: OFF }}>
@@ -758,11 +792,16 @@ export default function MasarElamiPage() {
       </section>
 
       {/* ════════════════ 6. ENROLL ══════════════════════ */}
-      <section id="enroll" style={{ position: 'relative', background: S4, borderTop: `1px solid ${CARD_BORDER}`, padding: '80px 0', overflow: 'hidden' }}>
-        {/* glow */}
-        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 560, height: 360, background: 'rgba(255,193,7,0.07)', borderRadius: '50%', filter: 'blur(100px)', pointerEvents: 'none' }} />
-
-        <div style={{ position: 'relative', zIndex: 1, ...INNER }}>
+      <section id="enroll" className="sec sec--pricing" style={{ position: 'relative', borderTop: `1px solid ${CARD_BORDER}`, padding: '80px 0' }}>
+        <div className="geo" aria-hidden="true">
+          <svg viewBox="0 0 1440 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <g fill="none" stroke="rgba(255,193,7,.20)" strokeWidth="1.5">
+              <polygon points="720,150 1010,320 1010,560 720,730 430,560 430,320"/>
+              <polygon points="720,240 930,362 930,608 720,730 510,608 510,362" strokeOpacity=".55"/>
+            </g>
+          </svg>
+        </div>
+        <div className="sec-wrap" style={{ ...INNER }}>
           <div style={{ textAlign: 'center', maxWidth: 580, margin: '0 auto 44px' }}>
             <SectionLabel text="الالتحاق بالمسار" />
             <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,4vw,42px)', color: OFF, marginTop: 16, lineHeight: 1.3 }}>
@@ -845,8 +884,9 @@ export default function MasarElamiPage() {
       </section>
 
       {/* ════════════════ 7. ADVISOR CARD ════════════════ */}
-      <section style={{ background: S5, borderTop: `1px solid ${CARD_BORDER}`, padding: '80px 0' }}>
-        <div style={{ ...INNER }}>
+      <section className="sec sec--advisor" style={{ borderTop: `1px solid ${CARD_BORDER}`, padding: '80px 0' }}>
+        <div className="geo geo--scan" aria-hidden="true" />
+        <div className="sec-wrap" style={{ ...INNER }}>
           <div style={{ textAlign: 'center', marginBottom: 44 }}>
             <SectionLabel text="الاستشارة التعليمية" />
             <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,4vw,40px)', marginTop: 16, lineHeight: 1.35, color: OFF }}>
@@ -908,8 +948,8 @@ export default function MasarElamiPage() {
       </section>
 
       {/* ════════════════ 8. FAQ ═════════════════════════ */}
-      <section style={{ background: S1, borderTop: `1px solid ${CARD_BORDER}`, padding: '80px 0' }}>
-        <div style={{ ...INNER }}>
+      <section className="sec sec--faq" style={{ borderTop: `1px solid ${CARD_BORDER}`, padding: '80px 0' }}>
+        <div className="sec-wrap" style={{ ...INNER }}>
           <div style={{ textAlign: 'center', marginBottom: 44 }}>
             <SectionLabel text="أسئلة شائعة" />
             <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,4vw,42px)', marginTop: 16, lineHeight: 1.35, color: OFF }}>
@@ -923,8 +963,14 @@ export default function MasarElamiPage() {
       </section>
 
       {/* ════════════════ 9. FINAL CTA ═══════════════════ */}
-      <section style={{ background: S3, borderTop: `1px solid ${CARD_BORDER}`, padding: '24px 0 80px' }}>
-        <div style={{ ...INNER }}>
+      <section className="sec sec--final" style={{ borderTop: `1px solid ${CARD_BORDER}`, padding: '24px 0 80px' }}>
+        <div className="geo" aria-hidden="true">
+          <svg viewBox="0 0 1440 480" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M-120,470 Q400,150 760,270 T1560,120" fill="none" stroke="rgba(255,193,7,.30)" strokeWidth="2.5"/>
+            <path d="M-120,500 Q380,220 740,330 T1560,190" fill="none" stroke="rgba(255,255,255,.10)" strokeWidth="1.5"/>
+          </svg>
+        </div>
+        <div className="sec-wrap" style={{ ...INNER }}>
           <div style={{ background: `linear-gradient(135deg, rgba(255,193,7,0.07), rgba(255,255,255,0.025) 60%)`, border: `1px solid ${GL}`, borderRadius: 24, padding: 'clamp(40px,5vw,64px) clamp(24px,4vw,48px)', textAlign: 'center' }}>
             <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(24px,3.8vw,40px)', lineHeight: 1.4, color: OFF }}>
               الإعلامي لا يُبنى بدورة واحدة — <span style={{ color: GLD }}>يُبنى بمسار متكامل</span>

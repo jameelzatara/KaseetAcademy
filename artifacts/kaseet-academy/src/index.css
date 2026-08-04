@@ -136,6 +136,118 @@
   }
 }
 
+/* ══════════════════════════════════════════════
+   Section ambient-layer system — /masar-elami
+   One dark canvas (#0C1219) + per-section colour glows
+   that overflow ±22%/12% so adjacent sections blend.
+══════════════════════════════════════════════ */
+body { background: #0C1219; }
+
+/* base */
+.sec { position: relative; isolation: isolate; }
+
+/* content always on top */
+.sec > .sec-wrap { position: relative; z-index: 3; }
+
+/* geometric layer — behind content, above glow */
+.sec > .geo {
+  position: absolute; inset: 0;
+  z-index: 1; pointer-events: none; overflow: hidden;
+}
+.sec > .geo svg { width: 100%; height: 100%; display: block; }
+
+/* ambient glow — overflows section bounds intentionally */
+.sec::before {
+  content: ""; position: absolute;
+  inset: -22% -12%;
+  z-index: 0; pointer-events: none;
+}
+
+/* 1 · Hero — golden warm */
+.sec--hero::before {
+  background:
+    radial-gradient(ellipse 56% 44% at 72% 10%,  rgba(255,193,7,.13), transparent 62%),
+    radial-gradient(ellipse 48% 38% at 16% 82%,  rgba(59,111,168,.10), transparent 66%);
+}
+
+/* 2 · Tree — steel blue */
+.sec--tree::before {
+  background:
+    linear-gradient(180deg, rgba(59,111,168,.11), transparent 55%),
+    radial-gradient(ellipse 62% 50% at 50% 108%, rgba(30,122,133,.09), transparent 66%);
+}
+
+/* 3 · Study modes — teal + hint of gold */
+.sec--modes::before {
+  background:
+    radial-gradient(circle 46% at 30% 46%, rgba(30,122,133,.13), transparent 62%),
+    radial-gradient(circle 42% at 70% 54%, rgba(255,193,7,.08),  transparent 62%);
+}
+
+/* 4 · Outcomes — cream (only section with its own background) */
+.sec--outcomes {
+  background: #F4EFE4; color: #18202F;
+  border-top: 2px solid #FFC107;
+  border-bottom: 2px solid #FFC107;
+  overflow: hidden;   /* gold borders must be crisp */
+}
+.sec--outcomes::before {
+  background: radial-gradient(ellipse 60% 50% at 78% 6%, rgba(138,98,0,.07), transparent 64%);
+}
+
+/* 5 · Trainers — purple-navy */
+.sec--trainers::before {
+  background:
+    radial-gradient(ellipse 54% 46% at 12% 14%, rgba(91,75,138,.14), transparent 64%),
+    radial-gradient(ellipse 46% 40% at 88% 86%, rgba(255,193,7,.07),  transparent 62%);
+}
+
+/* 6 · Pricing / Enroll — golden spotlight (strongest) */
+.sec--pricing::before {
+  background:
+    radial-gradient(ellipse 50% 44% at 50% 48%, rgba(255,193,7,.15), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 50% -6%, rgba(59,111,168,.09), transparent 64%);
+}
+
+/* 7 · Advisor — WhatsApp green + blue */
+.sec--advisor::before {
+  background:
+    radial-gradient(ellipse 44% 52% at 86% 62%, rgba(37,211,102,.07), transparent 62%),
+    radial-gradient(ellipse 54% 44% at 20% 24%, rgba(59,111,168,.10), transparent 66%);
+}
+
+/* 8 · FAQ — breathing room, no shape */
+.sec--faq::before {
+  background: linear-gradient(180deg, rgba(59,111,168,.07), transparent 60%);
+}
+
+/* 9 · Final CTA — gold arc from below */
+.sec--final::before {
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 118%, rgba(255,193,7,.16), transparent 64%),
+    linear-gradient(180deg, transparent, rgba(91,75,138,.09));
+}
+
+/* ── Geo texture patterns ────────────────────── */
+.geo--columns {
+  background-image: repeating-linear-gradient(
+    to left, rgba(255,255,255,.030) 0 1px, transparent 1px 96px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 22%, #000 78%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 22%, #000 78%, transparent);
+}
+.geo--scan {
+  background-image: repeating-linear-gradient(
+    to bottom, rgba(255,255,255,.022) 0 1px, transparent 1px 4px);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, #000, transparent 72%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, #000, transparent 72%);
+}
+.geo--halftone {
+  background-image: radial-gradient(rgba(24,32,47,.11) 1.1px, transparent 1.2px);
+  background-size: 14px 14px;
+  -webkit-mask-image: linear-gradient(to bottom, #000, transparent 65%);
+  mask-image: linear-gradient(to bottom, #000, transparent 65%);
+}
+
 /* ── Course detail page — dual-advisor grid ── */
 .advisor-grid {
   grid-template-columns: 1fr 1fr !important;
