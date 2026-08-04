@@ -40,6 +40,7 @@ const TRACKS: Track[] = [
     desc:   'برنامج تطبيقي لبناء الكاريزما والقيادة الصوتية، إتقان لغة الجسد والتأثير في الجمهور والتخلص من رهبة المسرح.',
     image:  publicSpeakingImg,
     imgPos: 'center 30%',
+    route:  '/masar-khataba',
   },
 ];
 

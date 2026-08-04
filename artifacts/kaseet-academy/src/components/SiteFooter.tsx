@@ -16,6 +16,7 @@ const NAV_LINKS = [
   { label: 'الدورات',             href: '#courses' },
   { label: 'المسارات الأكاديمية', href: '#tracks' },
   { label: 'المسار الإعلامي',     href: '/masar-elami' },
+  { label: 'ماستركلاس الخطابة',   href: '/masar-khataba' },
   { label: 'الاستشارة المجانية', href: '#consultant' },
   { label: 'آراء الطلاب',         href: '#testimonials' },
   { label: 'الأسئلة الشائعة',     href: '#faq' },
