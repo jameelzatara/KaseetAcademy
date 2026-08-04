@@ -7,6 +7,7 @@ import CoursePresenterPage      from '@/pages/CoursePresenterPage';
 import CourseArabicLanguagePage from '@/pages/CourseArabicLanguagePage';
 import CoursePublicSpeakingPage from '@/pages/CoursePublicSpeakingPage';
 import MasarElamiPage           from '@/pages/MasarElamiPage';
+import MasarSotiPage            from '@/pages/MasarSotiPage';
 
 function Router() {
   return (
@@ -19,6 +20,7 @@ function Router() {
       <Route path="/courses/arabic-language"  component={CourseArabicLanguagePage} />
       <Route path="/courses/public-speaking"  component={CoursePublicSpeakingPage} />
       <Route path="/masar-elami"              component={MasarElamiPage} />
+      <Route path="/masar-soti"               component={MasarSotiPage} />
       <Route component={() => <div className="text-center p-20">صفحة غير موجودة 404</div>} />
     </Switch>
   );

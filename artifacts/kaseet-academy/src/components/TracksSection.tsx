@@ -32,6 +32,7 @@ const TRACKS: Track[] = [
     desc:   'رحلة متكاملة لتطوير نبرات الصوت، التنفس الصحيح، وتدريب الأداء الصوتي لمختلف الإعلانات، الوثائقيات والبودكاست.',
     image:  voiceoverTrackImg,
     imgPos: 'center 30%',
+    route:  '/masar-soti',
   },
   {
     id: 3,
