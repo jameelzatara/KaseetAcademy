@@ -145,3 +145,159 @@
     grid-template-columns: 1fr !important;
   }
 }
+
+/* ══════════════════════════════════════════════
+   MasarElami — Outcome Panel (cream section)
+══════════════════════════════════════════════ */
+.masar-outcome-panel {
+  margin-top: 52px;
+  background: #fff;
+  border: 1px solid rgba(24,32,47,.10);
+  border-radius: 22px;
+  box-shadow: 0 20px 60px rgba(24,32,47,.10);
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  overflow: hidden;
+}
+.masar-oc {
+  padding: 36px 30px 34px;
+  border-left: 1px solid rgba(24,32,47,.10);
+  transition: background .25s;
+}
+.masar-oc:last-child { border-left: 0; }
+.masar-oc:hover { background: #FBF8F1; }
+.masar-oc-n {
+  display: block;
+  font-family: 'Poppins', sans-serif;
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1;
+  color: #8A6200;
+  opacity: .30;
+}
+.masar-oc-title {
+  position: relative;
+  margin: 20px 0 0;
+  padding-top: 20px;
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.55;
+  color: #18202F;
+  font-family: 'Tajawal', sans-serif;
+}
+.masar-oc-title::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 34px;
+  height: 3px;
+  background: #FFC107;
+  border-radius: 2px;
+}
+.masar-oc-desc {
+  margin-top: 10px;
+  font-size: 14.5px;
+  line-height: 1.8;
+  color: #56617A;
+  font-family: 'Tajawal', sans-serif;
+}
+@media (max-width: 900px) {
+  .masar-outcome-panel { grid-template-columns: repeat(2,1fr); }
+  .masar-oc:nth-child(2) { border-left: 0; }
+  .masar-oc:nth-child(1),
+  .masar-oc:nth-child(2) { border-bottom: 1px solid rgba(24,32,47,.10); }
+}
+@media (max-width: 560px) {
+  .masar-outcome-panel { grid-template-columns: 1fr; }
+  .masar-oc { border-left: 0; border-bottom: 1px solid rgba(24,32,47,.10); }
+  .masar-oc:last-child { border-bottom: 0; }
+}
+
+/* ══════════════════════════════════════════════
+   MasarElami — Advisor Card
+══════════════════════════════════════════════ */
+.masar-advisor {
+  --card: #242F40;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  background: var(--card);
+  border: 1px solid rgba(255,193,7,.28);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0,0,0,.5);
+}
+.masar-advisor-photo {
+  position: relative;
+  min-height: 340px;
+  background: #0E141F;
+}
+/* هالة ذهبية تفصل الشخص عن الخلفية */
+.masar-advisor-photo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: radial-gradient(ellipse 70% 55% at 50% 32%, rgba(255,193,7,.22), transparent 70%);
+}
+.masar-advisor-photo img {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 18%;
+  display: block;
+}
+/* حل السواد بالحواف — تدرّج يذوّب الصورة في لون الكرت */
+.masar-advisor-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    linear-gradient(to left, transparent 55%, var(--card) 100%),
+    linear-gradient(to top, rgba(14,20,31,.85) 0%, transparent 42%);
+}
+.masar-advisor-live {
+  position: absolute;
+  bottom: 18px;
+  right: 18px;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(14,20,31,.78);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(37,211,102,.42);
+  color: #7FE3A6;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 7px 13px;
+  border-radius: 999px;
+  white-space: nowrap;
+  font-family: 'Tajawal', sans-serif;
+}
+.masar-advisor-live i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #25D366;
+  display: block;
+  flex-shrink: 0;
+  font-style: normal;
+}
+.masar-advisor-body {
+  padding: 40px 38px;
+}
+@media (max-width: 860px) {
+  .masar-advisor { grid-template-columns: 1fr; }
+  .masar-advisor-photo { min-height: 300px; }
+  .masar-advisor-photo::after {
+    background:
+      linear-gradient(to top, var(--card) 0%, transparent 52%),
+      linear-gradient(to top, rgba(14,20,31,.70) 0%, transparent 38%);
+  }
+  .masar-advisor-body { padding: 28px 24px 32px; }
+}

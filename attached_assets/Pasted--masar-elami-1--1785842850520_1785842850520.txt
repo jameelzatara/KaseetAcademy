@@ -1,0 +1,173 @@
+الصفحة: /masar-elami — تلاث تعديلات فقط، لا تعدّل أي شي غيرها.
+
+1 · ترتيب خلفيات الأقسام
+الأقسام كلها حالياً بنفس درجة الكحلي، فالصفحة تُقرأ كجدار واحد. طبّق التبادل التالي بالترتيب:
+
+1  Hero                        →  #161E2B
+2  شجرة المسار                 →  #1A2332
+3  اختر أسلوب تعلّمك            →  #161E2B
+4  ما الذي ستُحققه              →  #F6F2E9   ← القسم الفاتح الوحيد
+5  مَن يُرشدك في هذا المسار      →  #161E2B
+6  اختر خيار الالتحاق           →  #1A2332
+7  غير متأكد؟ تحدّث مع مستشارتنا →  #161E2B
+8  قبل أن تسأل (FAQ)            →  #1A2332
+9  CTA الأخير                   →  #161E2B
+القسم الفاتح يحتاج حدّاً حاسماً لا تدرّجاً:
+
+css
+.sec--cream{
+  background:#F6F2E9;
+  color:#18202F;
+  border-top:2px solid #FFC107;
+  border-bottom:2px solid #FFC107;
+}
+لا تستخدم gradient للانتقال بين الكحلي والكريمي — ينتج منطقة رمادية موحلة تبدو كخطأ تقني.
+
+وإذا كانت الشبكة (grid) في الخلفية بلون أبيض شفاف، اقلبها داخل القسم الفاتح:
+
+css
+.sec--cream .ambient-grid{
+  background-image:
+    linear-gradient(to right,rgba(24,32,47,.05) 1px,transparent 1px),
+    linear-gradient(to bottom,rgba(24,32,47,.05) 1px,transparent 1px);
+  background-size:64px 64px;
+}
+2 · قسم "ما الذي ستُحققه بعد المسار؟"
+استبدل الأربعة كروت المنفصلة بـ لوحة بيضاء واحدة مقسّمة داخلياً. الصناديق المتساوية المنفصلة تُقرأ كقائمة عامة؛ السطح الواحد المقسّم يُقرأ كتصميم.
+
+html
+<div class="outcome-panel">
+  <div class="oc">
+    <span class="oc-n">01</span>
+    <h3>صوت ولغة وحضور مضبوطين</h3>
+    <p>إلقاء نظيف، مخارج حروف صحيحة، وثقة أمام الكاميرا بدون تصنّع.</p>
+  </div>
+  <!-- 02 · 03 · 04 بنفس البنية -->
+</div>
+css
+.outcome-panel{
+  margin-top:52px;
+  background:#fff;
+  border:1px solid rgba(24,32,47,.10);
+  border-radius:22px;
+  box-shadow:0 20px 60px rgba(24,32,47,.10);
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  overflow:hidden;                 /* إلزامي — يحتوي الفواصل داخل الزوايا */
+}
+
+.oc{ padding:36px 30px 34px; border-left:1px solid rgba(24,32,47,.10); transition:background .25s }
+.oc:last-child{ border-left:0 }
+.oc:hover{ background:#FBF8F1 }
+
+.oc-n{
+  display:block; font-family:'Poppins',sans-serif;
+  font-size:44px; font-weight:700; line-height:1;
+  color:#8A6200; opacity:.30;      /* لا #FFC107 */
+}
+
+.oc h3{
+  position:relative; margin-top:20px; padding-top:20px;
+  font-size:19px; font-weight:800; line-height:1.55; color:#18202F;
+}
+.oc h3::before{
+  content:""; position:absolute; top:0; right:0;
+  width:34px; height:3px; background:#FFC107; border-radius:2px;
+}
+
+.oc p{ margin-top:10px; font-size:14.5px; line-height:1.8; color:#56617A }
+
+@media(max-width:900px){
+  .outcome-panel{ grid-template-columns:repeat(2,1fr) }
+  .oc:nth-child(2){ border-left:0 }
+  .oc:nth-child(1),.oc:nth-child(2){ border-bottom:1px solid rgba(24,32,47,.10) }
+}
+@media(max-width:560px){
+  .outcome-panel{ grid-template-columns:1fr }
+  .oc{ border-left:0; border-bottom:1px solid rgba(24,32,47,.10) }
+  .oc:last-child{ border-bottom:0 }
+}
+مهم: الأرقام والعناوين الذهبية على خلفية فاتحة تستخدم 
+#8A6200 لا 
+#FFC107 — الأخير تباينه 1.6:1 وغير مقروء. الخط الذهبي فوق العنوان يبقى 
+#FFC107 لأنه شكل مصمت لا نص.
+
+3 · كرت "غير متأكد؟ تحدّث مع مستشارتنا"
+المشكلة: الصورة موضوعة كمستطيل داخلي بفراغ حوله وحواف حادة، وخلفيتها الغامقة تلتحم بالكرت فتطلع بلوك أسود. الحل: الصورة تلامس حدود الكرت + طبقة تدرّج تذوّبها في الكرت.
+
+html
+<div class="advisor">
+  <div class="advisor-photo">
+    <img src="/img/advisor.jpg" alt="المستشارة التعليمية">
+    <span class="advisor-live"><i></i> متواجدة الآن للرد على استفساراتك</span>
+  </div>
+  <div class="advisor-body">
+    <!-- العنوان والنص والقائمة وزر واتساب كما هي -->
+  </div>
+</div>
+css
+.advisor{
+  --card:#242F40;                  /* لازم يطابق خلفية الكرت بالضبط */
+  display:grid;
+  grid-template-columns:300px 1fr;
+  background:var(--card);
+  border:1px solid rgba(255,193,7,.28);
+  border-radius:24px;
+  overflow:hidden;                 /* إلزامي */
+  box-shadow:0 30px 80px rgba(0,0,0,.5);
+}
+
+.advisor-photo{ position:relative; min-height:340px; background:#0E141F }
+
+/* هالة ذهبية تفصل الشخص عن الخلفية الغامقة */
+.advisor-photo::before{
+  content:""; position:absolute; inset:0; z-index:1;
+  background:radial-gradient(ellipse 70% 55% at 50% 32%,rgba(255,193,7,.22),transparent 70%);
+}
+
+.advisor-photo img{
+  position:relative; z-index:2;
+  width:100%; height:100%;
+  object-fit:cover;
+  object-position:50% 18%;         /* الوجه في الثلث الأعلى لا المنتصف */
+  display:block;
+}
+
+/* هذا هو حل "السواد بالحواف" */
+.advisor-photo::after{
+  content:""; position:absolute; inset:0; z-index:3; pointer-events:none;
+  background:
+    linear-gradient(to left,transparent 55%,var(--card) 100%),
+    linear-gradient(to top,rgba(14,20,31,.85) 0%,transparent 42%);
+}
+
+.advisor-live{
+  position:absolute; bottom:18px; right:18px; z-index:4;
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(14,20,31,.78); backdrop-filter:blur(8px);
+  border:1px solid rgba(37,211,102,.42); color:#7FE3A6;
+  font-size:11.5px; font-weight:700; padding:7px 13px; border-radius:999px;
+  white-space:nowrap;
+}
+.advisor-live i{ width:7px; height:7px; border-radius:50%; background:#25D366; display:block }
+
+.advisor-body{ padding:40px 38px }
+
+@media(max-width:860px){
+  .advisor{ grid-template-columns:1fr }
+  .advisor-photo{ min-height:300px }
+  .advisor-photo::after{
+    background:
+      linear-gradient(to top,var(--card) 0%,transparent 52%),
+      linear-gradient(to top,rgba(14,20,31,.70) 0%,transparent 38%);
+  }
+  .advisor-body{ padding:28px 24px 32px }
+}
+نقطتان حرجتان:
+
+--card لازم يطابق لون خلفية الكرت بالضبط. اختلاف درجة واحدة يُنتج خطاً باهتاً مرئياً عند نهاية التدرّج، وهو أسوأ من الحد الحاد.
+اتجاه التدرّج يتحرك من الصورة نحو النص. الصورة على اليمين هنا فالتدرّج to left. لو نقلت الصورة لليسار اقلبه إلى to right.
+لا تعدّل أي قسم أو كرت آخر في الصفحة.
+
+شي واحد بحاجتك: صورة المستشارة بدقتها الأصلية لا لقطة شاشة — التدرّج والهالة بحاجة صورة نظيفة عشان النتيجة تبان.
+

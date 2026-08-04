@@ -19,12 +19,12 @@ const MUT  = '#8A97AE';
 const LT   = '#C8D3E2';
 const HAIR = 'rgba(255,255,255,0.07)';
 
-// Section backgrounds — deliberate rhythm, never repeating adjacently
-const S1 = '#0B1120';   // deep navy — Tree
-const S2 = '#111827';   // slate — Study / FAQ
-const S3 = '#080D17';   // near-black — Trainers
-const S4 = '#060A14';   // darkest — Enroll spotlight
-const S5 = '#0D1627';   // mid-navy — Advisor
+// Section backgrounds — alternating rhythm: A=#161E2B · B=#1A2332
+const S1 = '#1A2332';   // B — Tree, FAQ
+const S2 = '#161E2B';   // A — Study
+const S3 = '#161E2B';   // A — Trainers, Final CTA
+const S4 = '#1A2332';   // B — Enroll
+const S5 = '#161E2B';   // A — Advisor
 
 const CARD = 'rgba(255,255,255,0.04)';
 const CARD_BORDER = 'rgba(255,255,255,0.08)';
@@ -390,7 +390,7 @@ export default function MasarElamiPage() {
       </div>
 
       {/* ════════════════ 1. HERO ════════════════════════ */}
-      <section style={{ position: 'relative', padding: '52px 0 88px', overflow: 'hidden' }}>
+      <section style={{ position: 'relative', background: '#161E2B', padding: '52px 0 88px', overflow: 'hidden' }}>
         <img src={coverMasar} alt="" aria-hidden="true"
           fetchPriority="high" decoding="async"
           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 15%', zIndex: 0 }} />
@@ -642,9 +642,9 @@ export default function MasarElamiPage() {
       </section>
 
       {/* ════════════════ 4. OUTCOMES (cream) ═══════════ */}
-      <section style={{ background: LBG, borderTop: '1px solid rgba(0,0,0,0.06)', padding: '80px 0' }}>
+      <section style={{ background: LBG, borderTop: '2px solid #FFC107', borderBottom: '2px solid #FFC107', padding: '80px 0' }}>
         <div style={{ ...INNER }}>
-          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+          <div style={{ textAlign: 'center', marginBottom: 0 }}>
             <SectionLabel text="مخرجات المسار" light />
             <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,4vw,42px)', marginTop: 16, lineHeight: 1.35, color: DH }}>
               ما الذي ستُحقّقه <span style={{ color: '#92600a' }}>بعد المسار؟</span>
@@ -653,12 +653,12 @@ export default function MasarElamiPage() {
               مخرجات ملموسة تُقدّمها لأصحاب العمل والعملاء — لا مجرد شعور عام بالتحسّن.
             </p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px,1fr))', gap: 16 }}>
+          <div className="masar-outcome-panel">
             {OUTCOMES.map(o => (
-              <div key={o.n} style={{ background: '#fff', border: '1px solid rgba(0,0,0,0.06)', borderRadius: 16, padding: '26px 22px', boxShadow: '0 2px 16px rgba(0,0,0,0.05)' }}>
-                <div style={{ fontFamily: FP, fontSize: 12, fontWeight: 700, color: '#B8860B', letterSpacing: 1, marginBottom: 10 }}>{o.n}</div>
-                <h4 style={{ fontFamily: F, fontWeight: 800, fontSize: 17, color: DH, marginBottom: 10, lineHeight: 1.5 }}>{o.title}</h4>
-                <p style={{ fontFamily: F, fontSize: 14, color: DM, lineHeight: 1.8 }}>{o.desc}</p>
+              <div key={o.n} className="masar-oc">
+                <span className="masar-oc-n">{o.n}</span>
+                <h3 className="masar-oc-title">{o.title}</h3>
+                <p className="masar-oc-desc">{o.desc}</p>
               </div>
             ))}
           </div>
@@ -859,28 +859,18 @@ export default function MasarElamiPage() {
 
           {/* advisor card */}
           <div style={{ maxWidth: 720, marginInline: 'auto' }}>
-            <div className="masar-advisor-grid" style={{
-              display: 'grid', gridTemplateColumns: 'minmax(0,220px) 1fr',
-              background: `linear-gradient(135deg, rgba(255,193,7,0.05), rgba(255,255,255,0.02) 60%)`,
-              border: `1px solid ${GL}`, borderRadius: 22, overflow: 'hidden',
-            }}>
+            <div className="masar-advisor">
               {/* photo */}
-              <div style={{ position: 'relative', minHeight: 280, background: '#050810', overflow: 'hidden' }}>
+              <div className="masar-advisor-photo">
                 <img src={advisorYaqout} alt="ياقوت — مستشارة تعليمية"
-                  loading="lazy" decoding="async"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block', position: 'absolute', inset: 0 }} />
-                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, rgba(8,13,23,0.70) 0%, transparent 50%)' }} />
-                {/* online badge */}
-                <div style={{ position: 'absolute', top: 14, right: 14, display: 'inline-flex', alignItems: 'center', gap: 6,
-                  background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(8px)', border: '1px solid rgba(34,197,94,0.35)',
-                  borderRadius: 999, padding: '5px 12px' }}>
-                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#22c55e', display: 'block' }} />
-                  <span style={{ fontFamily: F, fontSize: 11.5, fontWeight: 700, color: '#86efac' }}>متاحة الآن</span>
-                </div>
+                  loading="lazy" decoding="async" />
+                <span className="masar-advisor-live">
+                  <i />{' '}متواجدة الآن للرد على استفساراتك
+                </span>
               </div>
 
               {/* content */}
-              <div style={{ padding: '28px 30px', display: 'flex', flexDirection: 'column' }}>
+              <div className="masar-advisor-body" style={{ display: 'flex', flexDirection: 'column' }}>
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: GS, border: `1px solid ${GL}`, borderRadius: 999, padding: '4px 13px', marginBottom: 12, alignSelf: 'flex-start' }}>
                   <span style={{ width: 4, height: 4, borderRadius: '50%', background: GLD }} />
                   <span style={{ fontFamily: F, fontSize: 12, fontWeight: 700, color: GLD }}>مستشارة تعليمية</span>
@@ -918,7 +908,7 @@ export default function MasarElamiPage() {
       </section>
 
       {/* ════════════════ 8. FAQ ═════════════════════════ */}
-      <section style={{ background: S2, borderTop: `1px solid ${CARD_BORDER}`, padding: '80px 0' }}>
+      <section style={{ background: S1, borderTop: `1px solid ${CARD_BORDER}`, padding: '80px 0' }}>
         <div style={{ ...INNER }}>
           <div style={{ textAlign: 'center', marginBottom: 44 }}>
             <SectionLabel text="أسئلة شائعة" />
