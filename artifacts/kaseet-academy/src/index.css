@@ -52,9 +52,9 @@
   --font-num: 'Poppins', sans-serif;
 
   /* ── Global canvas colours ── */
-  --page-top:    #1D2738;
-  --page-mid:    #202B3E;
-  --page-bottom: #192233;
+  --page-top:    #2C374B;
+  --page-mid:    #2C374B;
+  --page-bottom: #2C374B;
 }
 
 @layer base {
@@ -72,11 +72,7 @@
 
   body {
     @apply font-sans antialiased text-foreground overflow-x-hidden;
-    /* ONE continuous radial gradient — fixed so the canvas never scrolls */
-    background:
-      radial-gradient(ellipse at 50% 0%, var(--page-top) 0%, var(--page-mid) 52%, var(--page-bottom) 100%)
-      no-repeat fixed;
-    background-color: var(--page-bottom);
+    background: #2C374B;
     min-height: 100vh;
   }
 
@@ -141,7 +137,8 @@
    One dark canvas (#0C1219) + per-section colour glows
    that overflow ±22%/12% so adjacent sections blend.
 ══════════════════════════════════════════════ */
-body { background: #0C1219; }
+/* masar-elami page canvas — scoped so homepage keeps #2C374B */
+.page-masar-canvas { background: #1A2533; }
 
 /* base */
 .sec { position: relative; isolation: isolate; }
@@ -167,21 +164,21 @@ body { background: #0C1219; }
 .sec--hero::before {
   background:
     radial-gradient(ellipse 56% 44% at 72% 10%,  rgba(255,193,7,.13), transparent 62%),
-    radial-gradient(ellipse 48% 38% at 16% 82%,  rgba(59,111,168,.10), transparent 66%);
+    radial-gradient(ellipse 48% 38% at 16% 82%,  rgba(74,130,196,.10), transparent 66%);
 }
 
 /* 2 · Tree — steel blue */
 .sec--tree::before {
   background:
-    linear-gradient(180deg, rgba(59,111,168,.11), transparent 55%),
-    radial-gradient(ellipse 62% 50% at 50% 108%, rgba(30,122,133,.09), transparent 66%);
+    linear-gradient(180deg, rgba(74,130,196,.15), transparent 55%),
+    radial-gradient(ellipse 62% 50% at 50% 108%, rgba(30,122,133,.16), transparent 66%);
 }
 
 /* 3 · Study modes — teal + hint of gold */
 .sec--modes::before {
   background:
-    radial-gradient(circle 46% at 30% 46%, rgba(30,122,133,.13), transparent 62%),
-    radial-gradient(circle 42% at 70% 54%, rgba(255,193,7,.08),  transparent 62%);
+    radial-gradient(circle 46% at 30% 46%, rgba(30,122,133,.16), transparent 62%),
+    radial-gradient(circle 42% at 70% 54%, rgba(255,193,7,.13),  transparent 62%);
 }
 
 /* 4 · Outcomes — cream (only section with its own background) */
@@ -198,7 +195,7 @@ body { background: #0C1219; }
 /* 5 · Trainers — purple-navy */
 .sec--trainers::before {
   background:
-    radial-gradient(ellipse 54% 46% at 12% 14%, rgba(91,75,138,.14), transparent 64%),
+    radial-gradient(ellipse 54% 46% at 12% 14%, rgba(107,91,168,.14), transparent 64%),
     radial-gradient(ellipse 46% 40% at 88% 86%, rgba(255,193,7,.07),  transparent 62%);
 }
 
@@ -206,14 +203,14 @@ body { background: #0C1219; }
 .sec--pricing::before {
   background:
     radial-gradient(ellipse 50% 44% at 50% 48%, rgba(255,193,7,.15), transparent 60%),
-    radial-gradient(ellipse 60% 40% at 50% -6%, rgba(59,111,168,.09), transparent 64%);
+    radial-gradient(ellipse 60% 40% at 50% -6%, rgba(74,130,196,.09), transparent 64%);
 }
 
 /* 7 · Advisor — WhatsApp green + blue */
 .sec--advisor::before {
   background:
-    radial-gradient(ellipse 44% 52% at 86% 62%, rgba(37,211,102,.07), transparent 62%),
-    radial-gradient(ellipse 54% 44% at 20% 24%, rgba(59,111,168,.10), transparent 66%);
+    radial-gradient(ellipse 44% 52% at 86% 62%, rgba(37,211,102,.09), transparent 62%),
+    radial-gradient(ellipse 54% 44% at 20% 24%, rgba(74,130,196,.10), transparent 66%);
 }
 
 /* 8 · FAQ — breathing room, no shape */
@@ -225,7 +222,51 @@ body { background: #0C1219; }
 .sec--final::before {
   background:
     radial-gradient(ellipse 70% 60% at 50% 118%, rgba(255,193,7,.16), transparent 64%),
-    linear-gradient(180deg, transparent, rgba(91,75,138,.09));
+    linear-gradient(180deg, transparent, rgba(107,91,168,.09));
+}
+
+/* 10 · Cohort — gold glow from below + faint purple fade */
+.sec--cohort::before {
+  background:
+    radial-gradient(ellipse 66% 58% at 50% 116%, rgba(255,193,7,.13), transparent 64%),
+    linear-gradient(180deg, transparent, rgba(107,91,168,.08));
+}
+
+/* ── Cohort section layout ───────────────────── */
+.cohort-facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin: 34px auto 32px;
+  max-width: 860px;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 18px;
+  background: rgba(255,255,255,.03);
+  overflow: hidden;
+}
+.cohort-facts > div {
+  padding: 22px 20px;
+  border-left: 1px solid rgba(255,255,255,.10);
+}
+.cohort-facts > div:last-child { border-left: 0; }
+.cf-l {
+  display: block;
+  font-size: 12px;
+  color: #8B98AC;
+  letter-spacing: .4px;
+}
+.cohort-facts b {
+  display: block;
+  margin-top: 6px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  font-family: 'Tajawal', sans-serif;
+}
+@media (max-width: 760px) {
+  .cohort-facts { grid-template-columns: 1fr; }
+  .cohort-facts > div { border-left: 0; border-bottom: 1px solid rgba(255,255,255,.10); }
+  .cohort-facts > div:last-child { border-bottom: 0; }
 }
 
 /* ── Geo texture patterns ────────────────────── */
@@ -330,7 +371,7 @@ body { background: #0C1219; }
    MasarElami — Advisor Card
 ══════════════════════════════════════════════ */
 .masar-advisor {
-  --card: #242F40;
+  --card: #2A3648;
   display: grid;
   grid-template-columns: 300px 1fr;
   background: var(--card);

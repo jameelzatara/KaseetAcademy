@@ -333,7 +333,7 @@ export default function MasarElamiPage() {
   function isOpen(i: number)  { return expandAll || openIdx === i; }
 
   return (
-    <div dir="rtl" style={{ fontFamily: F, background: '#0B1120', color: OFF, minHeight: '100vh', overflowX: 'hidden' }}>
+    <div dir="rtl" className="page-masar-canvas" style={{ fontFamily: F, color: OFF, minHeight: '100vh', overflowX: 'hidden' }}>
 
       <style>{`
         @keyframes kaseetSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
@@ -390,25 +390,7 @@ export default function MasarElamiPage() {
           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 15%', zIndex: 0 }} />
         <div style={{ position: 'absolute', inset: 0, zIndex: 1,
           background: 'linear-gradient(to bottom, rgba(2,6,23,0.78) 0%, rgba(2,6,23,0.52) 40%, rgba(2,6,23,0.92) 100%)' }} />
-        {/* rule-of-thirds grid + corner brackets */}
-        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none' }}>
-          <svg viewBox="0 0 1440 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true" style={{ width: '100%', height: '100%' }}>
-            <g stroke="rgba(255,193,7,.16)" strokeWidth="1" fill="none">
-              <line x1="480" y1="90" x2="480" y2="710"/>
-              <line x1="960" y1="90" x2="960" y2="710"/>
-              <line x1="120" y1="297" x2="1320" y2="297"/>
-              <line x1="120" y1="503" x2="1320" y2="503"/>
-            </g>
-            <g stroke="rgba(255,193,7,.42)" strokeWidth="2.5" fill="none" strokeLinecap="square">
-              <path d="M120,150 L120,90 L186,90"/>
-              <path d="M1320,150 L1320,90 L1254,90"/>
-              <path d="M120,650 L120,710 L186,710"/>
-              <path d="M1320,650 L1320,710 L1254,710"/>
-            </g>
-          </svg>
-        </div>
-
-        <div style={{ position: 'relative', zIndex: 3, ...INNER }}>
+        <div style={{ position: 'relative', zIndex: 2, ...INNER }}>
           <div className="masar-hero-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1.15fr) minmax(0,0.85fr)', gap: 56, alignItems: 'center' }}>
 
             <div>
@@ -579,12 +561,6 @@ export default function MasarElamiPage() {
 
       {/* ════════════════ 3. STUDY MODES ═════════════════ */}
       <section className="sec sec--modes" style={{ borderTop: `1px solid ${CARD_BORDER}`, padding: '80px 0' }}>
-        <div className="geo" aria-hidden="true">
-          <svg viewBox="0 0 1440 620" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-            <circle cx="560" cy="310" r="248" fill="none" stroke="rgba(30,122,133,.26)" strokeWidth="1.5"/>
-            <circle cx="880" cy="310" r="248" fill="none" stroke="rgba(255,193,7,.22)" strokeWidth="1.5"/>
-          </svg>
-        </div>
         <div className="sec-wrap" style={{ ...INNER }}>
           <div style={{ textAlign: 'center', marginBottom: 44 }}>
             <SectionLabel text="أسلوب الدراسة" />
@@ -795,7 +771,7 @@ export default function MasarElamiPage() {
       <section id="enroll" className="sec sec--pricing" style={{ position: 'relative', borderTop: `1px solid ${CARD_BORDER}`, padding: '80px 0' }}>
         <div className="geo" aria-hidden="true">
           <svg viewBox="0 0 1440 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-            <g fill="none" stroke="rgba(255,193,7,.20)" strokeWidth="1.5">
+            <g fill="none" stroke="rgba(138,98,0,.16)" strokeWidth="1.5">
               <polygon points="720,150 1010,320 1010,560 720,730 430,560 430,320"/>
               <polygon points="720,240 930,362 930,608 720,730 510,608 510,362" strokeOpacity=".55"/>
             </g>
@@ -817,7 +793,7 @@ export default function MasarElamiPage() {
             {/* subtle ring glow */}
             <div style={{ position: 'absolute', inset: -2, background: `linear-gradient(135deg, rgba(255,193,7,0.18), rgba(103,232,249,0.08))`, borderRadius: 28, filter: 'blur(18px)', opacity: 0.6, pointerEvents: 'none' }} />
 
-            <div style={{ position: 'relative', background: 'rgba(11,17,32,0.92)', border: `1px solid ${GL}`, borderRadius: 24, padding: 'clamp(26px,4vw,40px)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)' }}>
+            <div style={{ position: 'relative', background: '#131B27', border: `1px solid rgba(255,193,7,.55)`, borderRadius: 24, padding: 'clamp(26px,4vw,40px)', boxShadow: '0 0 0 1px rgba(255,193,7,.20), inset 0 1px 0 rgba(255,193,7,.10), 0 34px 70px rgba(24,32,47,.28)' }}>
 
               {/* floating badge */}
               <div style={{ position: 'absolute', top: -13, left: '50%', transform: 'translateX(-50%)', background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 12, padding: '5px 18px', borderRadius: 999, whiteSpace: 'nowrap', boxShadow: '0 4px 16px rgba(255,193,7,0.28)' }}>
@@ -962,33 +938,36 @@ export default function MasarElamiPage() {
         </div>
       </section>
 
-      {/* ════════════════ 9. FINAL CTA ═══════════════════ */}
-      <section className="sec sec--final" style={{ borderTop: `1px solid ${CARD_BORDER}`, padding: '24px 0 80px' }}>
-        <div className="geo" aria-hidden="true">
-          <svg viewBox="0 0 1440 480" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M-120,470 Q400,150 760,270 T1560,120" fill="none" stroke="rgba(255,193,7,.30)" strokeWidth="2.5"/>
-            <path d="M-120,500 Q380,220 740,330 T1560,190" fill="none" stroke="rgba(255,255,255,.10)" strokeWidth="1.5"/>
-          </svg>
-        </div>
-        <div className="sec-wrap" style={{ ...INNER }}>
-          <div style={{ background: `linear-gradient(135deg, rgba(255,193,7,0.07), rgba(255,255,255,0.025) 60%)`, border: `1px solid ${GL}`, borderRadius: 24, padding: 'clamp(40px,5vw,64px) clamp(24px,4vw,48px)', textAlign: 'center' }}>
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(24px,3.8vw,40px)', lineHeight: 1.4, color: OFF }}>
-              الإعلامي لا يُبنى بدورة واحدة — <span style={{ color: GLD }}>يُبنى بمسار متكامل</span>
-            </h2>
-            <p style={{ fontFamily: F, color: MUT, fontSize: 15.5, margin: '14px auto 30px', maxWidth: 520, lineHeight: 1.8 }}>
-              مقاعد كل مجموعة محدودة للحفاظ على جودة التصحيح الفردي. ابدأ بالاستشارة المجانية وقرّر بعدها.
-            </p>
-            <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <a href={WA_CONSULT} target="_blank" rel="noopener noreferrer"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 28px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 8px 26px rgba(255,193,7,0.22)' }}>
-                <MessageCircle size={15} /> تواصل مع المستشارة — مجاناً
-              </a>
-              <a href="#tree"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,0.04)', border: `1px solid ${CARD_BORDER}`, color: OFF, fontFamily: F, fontWeight: 700, fontSize: 15, padding: '14px 28px', borderRadius: 12, textDecoration: 'none' }}>
-                استكشف شجرة المسار <ArrowLeft size={15} />
-              </a>
+      {/* ════════════════ 9. COHORT ══════════════════════ */}
+      <section className="sec sec--cohort" style={{ borderTop: `1px solid ${CARD_BORDER}`, padding: '64px 0 80px' }}>
+        <div className="sec-wrap" style={{ ...INNER, textAlign: 'center' }}>
+          <SectionLabel text="الفوج القادم" />
+          <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,46px)', marginTop: 16, lineHeight: 1.3, color: OFF }}>
+            يبدأ <span style={{ color: GLD }}>15 أيلول</span>
+          </h2>
+
+          {/* facts grid */}
+          <div className="cohort-facts">
+            <div>
+              <span className="cf-l">الجدول</span>
+              <b>الأحد والثلاثاء · 6:00–8:00 مساءً</b>
+            </div>
+            <div>
+              <span className="cf-l">المدة</span>
+              <b>40 ساعة · 10 محطات · 3 أشهر</b>
+            </div>
+            <div>
+              <span className="cf-l">المقاعد</span>
+              <b>4 مقاعد متبقية من 12</b>
             </div>
           </div>
+
+          <a href="#enroll" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15.5, padding: '15px 32px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 8px 26px rgba(255,193,7,0.24)' }}>
+            احجز مقعدك في هذا الفوج <ArrowLeft size={15} />
+          </a>
+          <p style={{ fontFamily: F, fontSize: 14, color: MUT, marginTop: 18 }}>
+            أو <a href={WA_CONSULT} target="_blank" rel="noopener noreferrer" style={{ color: GLD, textDecoration: 'underline', textUnderlineOffset: 3 }}>احكِ مع المستشارة أولاً</a> — استشارة مجانية بدون التزام.
+          </p>
         </div>
       </section>
 
