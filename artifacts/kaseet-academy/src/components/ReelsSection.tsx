@@ -1,6 +1,12 @@
-import { useState, useEffect, useRef, CSSProperties } from 'react';
+import { useState, useEffect, useRef, CSSProperties, ReactNode } from 'react';
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import SectionHeader, { Gold } from './SectionHeader';
+
+interface ReelsSectionProps {
+  badge?: string;
+  heading?: ReactNode;
+  description?: string;
+}
 
 const REEL_URLS = [
   "https://www.instagram.com/p/DYcvgQesju9/",
@@ -92,7 +98,11 @@ const arrowBase: CSSProperties = {
   flexShrink:           0,
 };
 
-export default function ReelsSection() {
+export default function ReelsSection({
+  badge = 'من الاستوديو مباشرةً',
+  heading = <><Gold>أصوات</Gold> صنعناها معاً</>,
+  description = 'مقاطع حيّة من ورشنا وأعمال متدرّبينا ومدربينا على إنستغرام — اسمع الفرق قبل أن تسجّل.',
+}: ReelsSectionProps = {}) {
   const [cur,     setCur]     = useState(0);
   const [paused,  setPaused]  = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -134,9 +144,9 @@ export default function ReelsSection() {
       {/* Section header — centered */}
       <div className="relative z-10 px-4">
         <SectionHeader
-          badge="من الاستوديو مباشرةً"
-          heading={<>أصوات <Gold>صنعناها معاً</Gold></>}
-          description="مقاطع حيّة من ورشنا وأعمال متدربينا ومدربينا على إنستغرام — اسمع الفرق قبل أن تسجّل."
+          badge={badge}
+          heading={heading}
+          description={description}
           style={{ marginBottom: 48 }}
         />
       </div>

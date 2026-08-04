@@ -5,11 +5,12 @@ import { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { ChevronDown, ArrowLeft, MapPin, Wifi } from 'lucide-react';
 import { GOLD, OFF, F, FP, INNER, waLink } from './shared/coursePageHelpers';
-import wajeezLogo  from '@assets/wajeez-logo_1785688262989.png';
-import heroShot    from '@assets/course_01_cover_new_1785679077227.jpg';
-import trainerRana from '@assets/trainer-rana-azzam_1785692178863.JPG';
-import trainerOmar from '@assets/trainer-omar_1785692015818.jpg';
-import advisorImg  from '@assets/ياقوت_الخشاشنة_المستشارة_1785852509109.jpeg';
+import wajeezLogo   from '@assets/wajeez-logo_1785688262989.png';
+import heroShot     from '@assets/voiceover-track1_1785854995070.jpeg';
+import trainerYasar from '@assets/المدربة_يسار_عبده_1785855126478.jpeg';
+import trainerOmar  from '@assets/trainer-omar_1785692015818.jpg';
+import advisorImg   from '@assets/ياقوت_الخشاشنة_المستشارة_1785852509109.jpeg';
+import ReelsSection from '@/components/ReelsSection';
 
 /* ── tokens ─────────────────────────────────────── */
 const GLD  = GOLD;
@@ -39,17 +40,6 @@ function waveThumb(seed: number, n = 38, w = 120, h = 26): string {
   return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><g stroke="currentColor" stroke-width="1.8" stroke-linecap="round">${lines.join('')}</g></svg>`;
 }
 
-function posterWave(seed: number, n = 48, w = 200, h = 80): string {
-  let s = ((seed * 7919 + 31337) >>> 0);
-  const rand = () => { s = ((s * 1664525 + 1013904223) >>> 0); return s / 4294967296; };
-  const step = w / n;
-  const lines = Array.from({ length: n }, (_, i) => {
-    const a = (0.08 + rand() * 0.92) * (h / 2 - 4);
-    const x = (i * step + step / 2);
-    return `<line x1="${x.toFixed(1)}" y1="${(h/2-a).toFixed(1)}" x2="${x.toFixed(1)}" y2="${(h/2+a).toFixed(1)}"/>`;
-  });
-  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><g stroke="rgba(255,193,7,.32)" stroke-width="2.2" stroke-linecap="round">${lines.join('')}</g></svg>`;
-}
 
 /* ── data ────────────────────────────────────────── */
 const STATIONS = [
@@ -148,29 +138,12 @@ const ALBUM = [
   { n:'12', title:'قائمة أسعار ونموذج عقد', kind:'سوق', hot:false },
 ];
 
-const REELS = [
-  { id:'DaQgWU2sONj', cap:'من داخل جلسة تسجيل' },
-  { id:'DW04mgIDP6v', cap:'ورشة الأداء الصوتي' },
-  { id:'DWvrH7_jH_G', cap:'تمرين على المايك' },
-  { id:'DWeE1BQjHuZ', cap:'كواليس الاستوديو' },
-  { id:'DU8dkRSjHAY', cap:'من التدريب إلى التسجيل' },
-  { id:'DUlTk-LDDmy', cap:'جلسة توجيه فردي' },
-  { id:'DQmcaCCDHbW', cap:'لحظة التخرّج' },
-  { id:'DN5th1WDCW8', cap:'مقتطف من ورشة' },
-  { id:'DSUxFDODBOM', cap:'تسجيل مشروع متدرّب' },
-  { id:'DWlZzYmjDJp', cap:'داخل غرفة التسجيل' },
-  { id:'DYUo0GOMKuR', cap:'من أعمال متدرّبينا' },
-];
 
 const TRAINERS = [
-  { name:'رنا العزام', role:'إعلامية، مدرّبة أداء، ومختصّة في التحرير والتدقيق اللغوي',
-    bio:'معدّة ومقدّمة برامج فضائية وإذاعية وبودكاست. عملت مع قناة رؤيا وقناة صاد وإقرأ وإذاعة حياة FM، ومحرّرة ومدقّقة لغوية في مجمع اللغة العربية. حاصلة على بكالوريوس اللغة العربية بتقدير جيّد جداً من جامعة اليرموك والمركز الثاني عربياً لأفضل إنتاج إعلامي حول المرأة.',
-    chips:['التحرير اللغوي','التدقيق','الإلقاء','تقديم البرامج','البودكاست'],
-    img: trainerRana },
   { name:'يسار عبده', role:'مدرّبة إعلامية، وخبيرة تعليق صوتي، ومختصّة في تطوير الأداء الصوتي',
     bio:'مدرّبة معتمدة لدى الأمم المتحدة والمؤسسات الوطنية، بخبرة تزيد على عشرين عاماً في الإعلام والتعليق الصوتي والتدريب المهني. تحمل بكالوريوس اللغة الإنجليزية وعلم الأصوات (Phonetics)، وماجستير حقوق الإنسان. تشمل خبرتها الدبلجة والأفلام الوثائقية والكتب الصوتية والتعليق الإعلاني.',
     chips:['علم الأصوات','الدبلجة','الكتب الصوتية','التعليق الإعلاني','تطوير الأداء'],
-    img: null },
+    img: trainerYasar },
   { name:'عمر الدرابكة', role:'معلّق صوتي محترف، ومدرّب أداء وإلقاء خطابي',
     bio:'سجّل بصوته مئات الأفلام الوثائقية والإعلانات التجارية لكبرى الشركات والمؤسسات الإعلامية في الخليج والشرق الأوسط. حاصل على دبلوم الإعلام من الأكاديمية العالمية للفنون والإبداع في فلوريدا، بخبرة تزيد على اثنتَي عشرة سنة في التدريب الصوتي.',
     chips:['الوثائقي','الإعلانات','الإلقاء الخطابي','التدريب الصوتي','التمكين اللغوي'],
@@ -357,7 +330,6 @@ export default function MasarSotiPage() {
   const [, navigate]  = useLocation();
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const [expandAll, setExpandAll] = useState(false);
-  const reelsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const prev = document.title;
@@ -369,9 +341,6 @@ export default function MasarSotiPage() {
   function toggle(i: number) { setOpenIdx(openIdx === i ? null : i); setExpandAll(false); }
   function isOpen(i: number) { return expandAll || openIdx === i; }
   function handleExpandAll() { setExpandAll(v => !v); setOpenIdx(null); }
-  function scrollReels(dir: 1 | -1) {
-    if (reelsRef.current) reelsRef.current.scrollBy({ left: dir * 500, behavior: 'smooth' });
-  }
 
   const WRP: React.CSSProperties = { ...INNER };
   const SH: React.CSSProperties = { textAlign: 'center', marginBottom: 52, direction: 'rtl' };
@@ -383,9 +352,6 @@ export default function MasarSotiPage() {
         @keyframes soti-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
         .soti-vu-bar { width:3px;border-radius:2px;background:rgba(255,193,7,.85);animation:vu 1.5s ease-in-out infinite; }
         .soti-live-dot { animation:soti-pulse 2s ease-in-out infinite; }
-        .soti-reels-track { display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-ms-overflow-style:none;padding-bottom:4px; }
-        .soti-reels-track::-webkit-scrollbar { display:none; }
-        .soti-reel-card { flex:0 0 180px;scroll-snap-align:start; }
         @media (max-width:768px) {
           .soti-hero-grid { grid-template-columns:1fr !important; }
           .soti-hero-shot { max-width:260px !important; order:-1; margin:0 auto 20px; }
@@ -414,7 +380,7 @@ export default function MasarSotiPage() {
             <div>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GS, border: `1px solid ${GL}`, color: GLD, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>
                 <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD }} />
-                ماستركلاس · 12 محطة
+                ماستركلاس · 60 ساعة
               </span>
 
               <h1 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(34px,5vw,58px)', lineHeight: 1.22, letterSpacing: -1.2, margin: '18px 0 0', color: OFF }}>
@@ -423,18 +389,18 @@ export default function MasarSotiPage() {
               </h1>
 
               <p style={{ fontFamily: F, fontSize: 17, color: MUT, maxWidth: 560, marginTop: 16, lineHeight: 1.85 }}>
-                اثنتا عشرة محطة تأخذك من أول تنفّس صحيح إلى أوّل فاتورة: أداء، لغة، تقنية، تخصصات السوق، ومشروع تخرّج يُنتَج داخل الاستوديو.
+                ستون ساعة تبني معلّق صوتي من التنفّس لأول فاتورة: 12 محطة، 13 عمل مسجّل، ومشروع تخرّج تنتجه داخل استوديو كاسيت — وصوتك يخرج مؤهّلاً للنشر على تطبيق وجيز.
               </p>
 
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 9, marginTop: 24 }}>
                 {[
-                  { label:'40 ساعة تدريبية', ic:'⏱' },
-                  { label:'12 محطة تخصصية', ic:'🎯' },
-                  { label:'13 عملاً صوتياً', ic:'🎙' },
-                  { label:'شهادة معتمدة وجيز', ic:'✦' },
-                ].map(({ label, ic }) => (
+                  { label:'60 ساعة · 30 جلسة' },
+                  { label:'13 عمل صوتي بمحفظتك' },
+                  { label:'مشروع تخرّج داخل الاستوديو' },
+                  { label:'حضوري في عمّان أو Online LIVE' },
+                ].map(({ label }) => (
                   <span key={label} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,.045)', border: `1px solid ${CBR}`, padding: '9px 14px', borderRadius: 11, fontFamily: F, fontSize: 13.5, color: LT }}>
-                    <span style={{ fontSize: 14 }}>{ic}</span> {label}
+                    <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD, flexShrink: 0 }} />{label}
                   </span>
                 ))}
               </div>
@@ -472,13 +438,13 @@ export default function MasarSotiPage() {
                 {/* pill */}
                 <span style={{ position: 'absolute', top: 18, right: 18, zIndex: 3, display: 'inline-flex', alignItems: 'center', gap: 7, background: 'rgba(26,37,51,.74)', backdropFilter: 'blur(6px)', border: `1px solid ${GL}`, color: GLD, fontSize: 11.5, fontWeight: 700, fontFamily: F, padding: '7px 13px', borderRadius: 999 }}>
                   <span style={{ width: 6, height: 6, borderRadius: '50%', background: GLD }} />
-                  استوديو كاسيت
+                   تسجيل داخل استوديو كاسيت
                 </span>
                 {/* foot */}
                 <div style={{ position: 'absolute', inset: 'auto 0 0 0', zIndex: 3, padding: '22px 22px 24px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16 }}>
                   <div>
-                    <span style={{ fontFamily: FP, fontSize: 38, fontWeight: 700, color: GLD, lineHeight: .95 }}>40</span>
-                    <span style={{ fontFamily: F, fontSize: 12.5, color: LT, marginTop: 4, display: 'block' }}>ساعة تدريبية</span>
+                    <span style={{ fontFamily: FP, fontSize: 38, fontWeight: 700, color: GLD, lineHeight: .95 }}>60</span>
+                    <span style={{ fontFamily: F, fontSize: 12.5, color: LT, marginTop: 4, display: 'block' }}>ساعة · 13 عمل صوتي</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 34 }}>
                     {Array.from({ length: 9 }, (_, i) => (
@@ -783,85 +749,15 @@ export default function MasarSotiPage() {
       {/* ═══════════════════════════════════════
           7. REELS
       ═══════════════════════════════════════ */}
-      <section id="reels" className="sec sec--reels" style={{ padding: '96px 0' }}>
-        <div style={WRP}>
-          <div style={SH}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GLD, color: '#1A1206', fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '7px 16px', borderRadius: 999 }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#1A1206' }} />
-              من داخل الاستوديو
-            </span>
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', lineHeight: 1.35, margin: '18px 0 0', color: OFF }}>
-              أصوات <span style={{ color: GLD }}>صنعناها معاً</span>
-            </h2>
-            <p style={{ fontFamily: F, fontSize: 16, color: MUT, maxWidth: 660, marginTop: 14, marginInline: 'auto', lineHeight: 1.8 }}>
-              مقاطع من ورشنا وجلسات التسجيل وأعمال متدرّبينا على إنستغرام — استمع إلى الفرق قبل أن تسجّل.
-            </p>
-          </div>
+      <div id="reels" className="sec--reels">
+        <ReelsSection
+          badge="من داخل الاستوديو"
+          heading={<>أعمال خرجت <span style={{ color: GLD }}>من الاستوديو</span></>}
+          description="مقاطع من جلسات التسجيل وأعمال متدرّبينا على إنستغرام — تعمل مباشرة، اسمع الفرق قبل أن تسجّل."
+        />
+      </div>
 
-          <div style={{ position: 'relative', marginTop: 52 }}>
-            <div ref={reelsRef} className="soti-reels-track">
-              {REELS.map((reel, i) => (
-                <a key={reel.id} className="soti-reel-card"
-                  href={`https://www.instagram.com/reel/${reel.id}/`}
-                  target="_blank" rel="noopener noreferrer"
-                  style={{ textDecoration: 'none', color: 'inherit', display: 'flex', flexDirection: 'column' }}>
-                  {/* Phone mockup frame */}
-                  <div style={{ border: '2px solid rgba(255,255,255,.15)', borderRadius: 22, overflow: 'hidden', background: '#0D1520', boxShadow: '0 16px 40px rgba(0,0,0,.5)', transition: 'border-color .25s, box-shadow .25s' }}>
-                    {/* Instagram top bar */}
-                    <div style={{ padding: '10px 12px 8px', borderBottom: '1px solid rgba(255,255,255,.08)', display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'linear-gradient(135deg, #F58529, #DD2A7B, #8134AF)', flexShrink: 0 }} />
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontFamily: F, fontSize: 9.5, fontWeight: 700, color: OFF, lineHeight: 1.2 }}>kaseetmedia</div>
-                        <div style={{ fontFamily: F, fontSize: 8.5, color: MUT, lineHeight: 1.2 }}>Original audio</div>
-                      </div>
-                    </div>
-
-                    {/* Video poster — wave + play btn */}
-                    <div style={{ aspectRatio: '9/14', position: 'relative', background: 'linear-gradient(180deg, #0A1623 0%, #131E2E 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                      {/* wave */}
-                      <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: .6 }}
-                        dangerouslySetInnerHTML={{ __html: posterWave(700 + i) }} />
-                      {/* glow */}
-                      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(255,193,7,.06), transparent 70%)' }} />
-                      {/* play button */}
-                      <div style={{ position: 'relative', zIndex: 2, width: 42, height: 42, borderRadius: '50%', background: GLD, display: 'grid', placeContent: 'center', boxShadow: '0 6px 20px rgba(255,193,7,.4)' }}>
-                        <svg width="14" height="16" viewBox="0 0 14 16" fill="#1A1206"><path d="M1 1.5v13L13 8z"/></svg>
-                      </div>
-                    </div>
-
-                    {/* Meta bar */}
-                    <div style={{ padding: '10px 12px', borderTop: '1px solid rgba(255,255,255,.08)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
-                      {/* IG icon */}
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={MUT} strokeWidth="1.7" style={{ flexShrink: 0 }}>
-                        <rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/>
-                        <circle cx="17.2" cy="6.8" r="1.1" fill={MUT} stroke="none"/>
-                      </svg>
-                      <span style={{ fontFamily: F, fontSize: 9.5, color: MUT, flex: 1, lineHeight: 1.3 }}>{reel.cap}</span>
-                    </div>
-                  </div>
-                </a>
-              ))}
-            </div>
-
-            {/* nav buttons */}
-            <div style={{ display: 'flex', justifyContent: 'center', gap: 12, marginTop: 22 }}>
-              <button onClick={() => scrollReels(1)} aria-label="السابق"
-                style={{ width: 44, height: 44, borderRadius: '50%', background: CARD, border: `1px solid ${CBR}`, color: OFF, fontSize: 18, cursor: 'pointer', display: 'grid', placeContent: 'center' }}>→</button>
-              <button onClick={() => scrollReels(-1)} aria-label="التالي"
-                style={{ width: 44, height: 44, borderRadius: '50%', background: CARD, border: `1px solid ${CBR}`, color: OFF, fontSize: 18, cursor: 'pointer', display: 'grid', placeContent: 'center' }}>←</button>
-            </div>
-          </div>
-
-          <div style={{ textAlign: 'center', marginTop: 28 }}>
-            <a href="https://www.instagram.com/kaseetmedia/" target="_blank" rel="noopener noreferrer"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: CARD, color: OFF, border: `1px solid ${CBR}`, fontFamily: F, fontWeight: 700, fontSize: 15, padding: '13px 28px', borderRadius: 999, textDecoration: 'none' }}>
-              تابعنا على إنستغرام <ArrowLeft size={14} />
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════
+            {/* ═══════════════════════════════════════
           8. MODES (one-card)
       ═══════════════════════════════════════ */}
       <section className="sec sec--modes" style={{ padding: '96px 0' }}>
@@ -950,143 +846,70 @@ export default function MasarSotiPage() {
       </section>
 
       {/* ═══════════════════════════════════════
-          9. ACCESS
+          9. PRICING (single card)
       ═══════════════════════════════════════ */}
       <section className="sec sec--access" style={{ padding: '96px 0' }}>
         <div style={WRP}>
           <div style={SH}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GS, border: `1px solid ${GL}`, color: GLD, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>خيارات الالتحاق</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GS, border: `1px solid ${GL}`, color: GLD, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>
+              <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD }} />
+              خيار الالتحاق
+            </span>
             <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', lineHeight: 1.35, margin: '18px 0 0', color: OFF }}>
-              ماذا يُتاح <span style={{ color: GLD }}>منفرداً</span>، وماذا لا؟
-            </h2>
-            <p style={{ fontFamily: F, fontSize: 16, color: MUT, maxWidth: 620, marginTop: 14, marginInline: 'auto' }}>
-              الماستركلاس يُدرَس وحدةً واحدة. وتبقى دورتان مستقلّتان لمن أراد التجربة أوّلاً.
-            </p>
-          </div>
-
-          <div className="soti-acc-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 22, marginTop: 52, alignItems: 'start' }}>
-            <div style={{ background: CARD, border: `1px solid ${CBR}`, borderRadius: 20, padding: '30px 28px' }}>
-              <div style={{ fontFamily: F, fontSize: 12.5, fontWeight: 700, color: MUT, marginBottom: 8 }}>متاح كدورة مستقلّة</div>
-              <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 20, color: OFF, lineHeight: 1.4 }}>دورتان تُشترى كلٌّ منهما منفردة</h3>
-              <div style={{ width: 44, height: 2, background: CBR, borderRadius: 2, margin: '14px 0 20px' }} />
-              <ul style={{ listStyle: 'none', display: 'grid', gap: 12, margin: 0, padding: 0 }}>
-                {['أساسيات التعليق والأداء الصوتي — المحطة 01', 'تمكين اللغة العربية وفنون التحرير اللغوي — المحطة 02'].map(item => (
-                  <li key={item} style={{ display: 'flex', gap: 11, fontFamily: F, fontSize: 14.5, color: LT, lineHeight: 1.7 }}>
-                    <span style={{ width: 7, height: 7, borderRadius: 2, background: CBR, marginTop: 10, flexShrink: 0 }} />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <p style={{ fontFamily: F, fontSize: 13, color: MUT, marginTop: 20, lineHeight: 1.8 }}>
-                نسخة كلٍّ منهما داخل الماستركلاس أضيق من الدورة المستقلّة. وإن سبق لك حضور إحداهما، تُخصم قيمتها من سعر الماستركلاس.
-              </p>
-            </div>
-
-            <div style={{ background: `linear-gradient(180deg, rgba(255,193,7,.08), ${CARD} 44%)`, border: `1px solid ${GL}`, borderRadius: 20, padding: '30px 28px' }}>
-              <div style={{ fontFamily: F, fontSize: 12.5, fontWeight: 700, color: GLD, marginBottom: 8 }}>حصري داخل الماستركلاس</div>
-              <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 20, color: OFF, lineHeight: 1.4 }}>عشر محطات لا تُفتَح إلا بالتسجيل الكامل</h3>
-              <div style={{ width: 44, height: 2, background: GLD, borderRadius: 2, margin: '14px 0 20px' }} />
-              <ul style={{ listStyle: 'none', display: 'grid', gap: 12, margin: 0, padding: 0 }}>
-                {['التقنية والاستوديو', 'الإعلانات والراديو · الوثائقي والسردي', 'الكتب الصوتية · الدوبلاج وأداء الشخصيات', 'التعليمي · التسجيلات المؤسسية · البودكاست', 'الـ Demo Reel والهوية الصوتية', 'احتراف السوق: التسعير والعقود'].map(item => (
-                  <li key={item} style={{ display: 'flex', gap: 11, fontFamily: F, fontSize: 14.5, color: LT, lineHeight: 1.7 }}>
-                    <span style={{ width: 7, height: 7, borderRadius: 2, background: GLD, marginTop: 10, flexShrink: 0 }} />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <p style={{ fontFamily: F, fontSize: 13, color: MUT, marginTop: 20, lineHeight: 1.8 }}>
-                هذه المحطات مبنيّة على مرحلة التأسيس وعلى بعضها، فلا تصلح أن تُدرَّس مفكوكة. قرار أكاديمي لا تسويقي.
-              </p>
-            </div>
-          </div>
-
-          <div style={{ textAlign: 'center', marginTop: 34 }}>
-            <a href="#cohort" style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15.5, padding: '14px 30px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 10px 30px rgba(255,193,7,.24)' }}>
-              اطّلع على الأسعار وطرق الدفع <ArrowLeft size={14} />
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════
-          10. PRICING (cream)
-      ═══════════════════════════════════════ */}
-      <section className="sec sec--cream" style={{ padding: '96px 0' }}>
-        <div className="geo geo--halftone" style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none' }} />
-        <div style={{ ...WRP, position: 'relative', zIndex: 3 }}>
-          <div style={{ textAlign: 'center', marginBottom: 48 }}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(138,98,0,.09)', border: '1px solid rgba(138,98,0,.28)', color: '#8A6200', fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>الأسعار والتسجيل</span>
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', lineHeight: 1.35, margin: '18px 0 0', color: INK }}>
-              اختر <span style={{ color: '#8A6200' }}>طريقك</span> إلى الاحتراف
+              سعر <span style={{ color: GLD }}>الماستركلاس</span>
             </h2>
           </div>
 
-          <div className="soti-enroll-grid" style={{ display: 'grid', gridTemplateColumns: '1.1fr .9fr', gap: 20, alignItems: 'start', marginBottom: 20 }}>
-            {/* dark plan */}
-            <div style={{ background: '#131B27', color: '#fff', border: '1px solid rgba(255,193,7,.55)', borderRadius: 24, padding: '36px 32px', position: 'relative', boxShadow: '0 0 0 1px rgba(255,193,7,.20), 0 34px 70px rgba(24,32,47,.28)', display: 'flex', flexDirection: 'column' }}>
-              <span style={{ position: 'absolute', top: 22, left: 26, fontFamily: F, fontSize: 11.5, fontWeight: 700, background: GLD, color: '#1A1206', padding: '5px 12px', borderRadius: 999 }}>الأكثر شمولاً</span>
-              <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 22, color: OFF, margin: '28px 0 0' }}>الماستركلاس الكامل</h3>
-              <p style={{ fontFamily: F, fontSize: 15, color: MUT, marginTop: 10 }}>40 ساعة · 12 محطة · 13 عملاً صوتياً · مشروع تخرّج مُهندَس · شهادة معتمدة من وجيز.</p>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, margin: '22px 0 6px', flexWrap: 'wrap' }}>
-                <span style={{ fontFamily: FP, fontSize: 40, fontWeight: 700, color: GLD, lineHeight: 1 }}>—</span>
-                <span style={{ fontFamily: F, fontSize: 15, color: MUT }}>ديناراً / حضوري</span>
+          <div style={{ maxWidth: 560, margin: '48px auto 0', position: 'relative' }}>
+            <div style={{ position: 'absolute', inset: -2, background: 'linear-gradient(135deg, rgba(255,193,7,0.18), rgba(103,232,249,0.08))', borderRadius: 28, filter: 'blur(18px)', opacity: 0.6, pointerEvents: 'none' }} />
+            <div style={{ position: 'relative', background: '#131B27', border: '1px solid rgba(255,193,7,.55)', borderRadius: 24, padding: 'clamp(26px,4vw,40px)', boxShadow: '0 0 0 1px rgba(255,193,7,.20), inset 0 1px 0 rgba(255,193,7,.10), 0 34px 70px rgba(24,32,47,.28)' }}>
+              <div style={{ position: 'absolute', top: -13, left: '50%', transform: 'translateX(-50%)', background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 12, padding: '5px 18px', borderRadius: 999, whiteSpace: 'nowrap', boxShadow: '0 4px 16px rgba(255,193,7,0.28)' }}>
+                الأشمل والأوفر
               </div>
-              <p style={{ fontFamily: F, fontSize: 13.5, color: MUT }}>أو — دولاراً عن بُعد · التقسيط متاح</p>
-              <ul style={{ listStyle: 'none', margin: '22px 0', display: 'grid', gap: 11, padding: 0, flex: 1 }}>
-                {['40 ساعة تدريبية على 18 جلسة', 'عشر محطات لا تُتاح خارج الماستركلاس', '13 عملاً صوتياً بتصحيح فردي لكلٍّ منها', 'ثلاث جلسات إنتاج مع مهندس صوت', 'محطة كاملة للتسعير والعقود', 'مسار التأهيل للنشر على وجيز'].map(li => (
-                  <li key={li} style={{ display: 'flex', gap: 10, fontFamily: F, fontSize: 14.5, color: LT, lineHeight: 1.7 }}>
-                    <span style={{ color: GLD, fontWeight: 700, flexShrink: 0 }}>✓</span>{li}
+
+              <div style={{ textAlign: 'center', paddingBottom: 24, borderBottom: `1px solid ${CBR}`, paddingTop: 10 }}>
+                <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 21, color: OFF }}>الماستركلاس الكامل</h3>
+                <p style={{ fontFamily: F, fontSize: 13, color: MUT, marginTop: 6, lineHeight: 1.65 }}>
+                  60 ساعة · 12 محطة · 13 عمل صوتي · مشروع تخرّج مُهندَس
+                </p>
+
+                <div style={{ display: 'flex', justifyContent: 'center', gap: 28, margin: '20px 0 0', flexWrap: 'wrap', alignItems: 'flex-end' }}>
+                  <div style={{ textAlign: 'center' }}>
+                    <span style={{ fontFamily: FP, fontSize: 48, fontWeight: 700, color: GLD, lineHeight: 1, display: 'block' }}>500</span>
+                    <span style={{ fontFamily: F, fontSize: 13, color: MUT, display: 'block', marginTop: 4 }}>JOD · حضوري عمّان</span>
+                  </div>
+                  <div style={{ width: 1, height: 52, background: CBR, flexShrink: 0 }} />
+                  <div style={{ textAlign: 'center' }}>
+                    <span style={{ fontFamily: FP, fontSize: 48, fontWeight: 700, color: GLD, lineHeight: 1, display: 'block' }}>700</span>
+                    <span style={{ fontFamily: F, fontSize: 13, color: MUT, display: 'block', marginTop: 4 }}>USD · Online LIVE</span>
+                  </div>
+                </div>
+
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 16, background: GS, border: `1px solid ${GL}`, borderRadius: 12, padding: '9px 15px' }}>
+                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: GLD, flexShrink: 0 }} />
+                  <span style={{ fontFamily: F, fontSize: 13, color: LT }}>التقسيط متاح · تُثبَّت مقعدك بالدفعة الأولى</span>
+                </div>
+              </div>
+
+              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 13, padding: '24px 0', margin: 0 }}>
+                {['60 ساعة تدريبية على 30 جلسة', '12 محطة متسلسلة تشمل جميع تخصصات السوق', '13 عملاً صوتياً بتصحيح فردي لكلٍّ منها', 'مشروع تخرّج مُنتَج داخل استوديو كاسيت', 'مسار التأهيل للنشر على تطبيق وجيز', 'شهادة معتمدة من تطبيق وجيز'].map(feat => (
+                  <li key={feat} style={{ display: 'flex', alignItems: 'flex-start', gap: 11, fontFamily: F, fontSize: 14, color: LT, lineHeight: 1.65 }}>
+                    <span style={{ color: GLD, fontWeight: 800, flexShrink: 0 }}>✓</span> {feat}
                   </li>
                 ))}
               </ul>
+
               <a href={WA_ENROLL} target="_blank" rel="noopener noreferrer"
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 22px', borderRadius: 999, textDecoration: 'none', marginTop: 'auto' }}>
-                احجز مقعدك في الفوج القادم <ArrowLeft size={14} />
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, width: '100%', boxSizing: 'border-box', background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 24px', borderRadius: 14, textDecoration: 'none', boxShadow: '0 6px 22px rgba(255,193,7,0.20)' }}>
+                التسجيل في الماستركلاس <ArrowLeft size={15} />
               </a>
-            </div>
-
-            {/* light plan */}
-            <div style={{ background: '#FFFFFF', border: '1px solid rgba(24,32,47,.10)', borderRadius: 24, padding: '36px 32px', boxShadow: '0 16px 44px rgba(24,32,47,.10)', display: 'flex', flexDirection: 'column' }}>
-              <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 21, color: INK }}>دورة مستقلّة</h3>
-              <p style={{ fontFamily: F, fontSize: 15, color: INK2, marginTop: 10 }}>للتجربة قبل الالتزام: المحطة 01 أو المحطة 02 منفردة.</p>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, margin: '22px 0 6px', flexWrap: 'wrap' }}>
-                <span style={{ fontFamily: FP, fontSize: 38, fontWeight: 700, color: '#8A6200', lineHeight: 1 }}>—</span>
-                <span style={{ fontFamily: F, fontSize: 15, color: INK2 }}>ديناراً / للدورة</span>
-              </div>
-              <p style={{ fontFamily: F, fontSize: 13, color: INK2 }}>متاح للمحطتين التأسيسيتين فقط</p>
-              <ul style={{ listStyle: 'none', margin: '22px 0', display: 'grid', gap: 11, padding: 0, flex: 1 }}>
-                {['الدورة المستقلّة أطول من نسختها داخل الماستركلاس', 'مشروع تطبيقي واحد', 'شهادة إتمام الدورة', 'قيمتها تُخصم عند إكمال الماستركلاس'].map(li => (
-                  <li key={li} style={{ display: 'flex', gap: 10, fontFamily: F, fontSize: 14.5, color: INK2, lineHeight: 1.7 }}>
-                    <span style={{ color: '#8A6200', fontWeight: 700, flexShrink: 0 }}>✓</span>{li}
-                  </li>
-                ))}
-              </ul>
-              <a href="/courses"
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9, background: 'transparent', color: INK, border: '1px solid rgba(24,32,47,.22)', fontFamily: F, fontWeight: 700, fontSize: 15, padding: '13px 22px', borderRadius: 999, textDecoration: 'none', marginTop: 'auto' }}>
-                تصفّح الدورات المستقلّة <ArrowLeft size={14} />
-              </a>
-            </div>
-          </div>
-
-          {/* payment strip */}
-          <div style={{ background: 'rgba(24,32,47,.045)', border: '1px solid rgba(24,32,47,.10)', borderRadius: 14, padding: '18px 22px', display: 'flex', flexWrap: 'wrap', gap: 18, alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ fontFamily: F, fontSize: 14, fontWeight: 700, color: INK }}>
-              الدفع الإلكتروني بالكامل
-              <span style={{ display: 'block', fontFamily: F, fontSize: 12.5, fontWeight: 400, color: INK2, marginTop: 2 }}>تُسجَّل، وتدفع، ويصلك تأكيد المقعد فوراً</span>
-            </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 9 }}>
-              {['فيزا / ماستركارد', 'إي فواتيركم', 'CliQ', 'تقسيط على دفعات'].map(m => (
-                <span key={m} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#fff', border: '1px solid rgba(24,32,47,.10)', borderRadius: 10, padding: '7px 13px', fontFamily: F, fontSize: 13, color: INK2 }}>
-                  <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#8A6200', flexShrink: 0 }} />
-                  {m}
-                </span>
-              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════
+      
+            {/* ═══════════════════════════════════════
           11. ADVISOR
       ═══════════════════════════════════════ */}
       <section id="consult" className="sec sec--advisor" style={{ padding: '96px 0' }}>

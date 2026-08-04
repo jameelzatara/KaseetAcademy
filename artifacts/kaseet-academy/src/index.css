@@ -138,7 +138,20 @@
    that overflow ±22%/12% so adjacent sections blend.
 ══════════════════════════════════════════════ */
 /* masar-elami page canvas — scoped so homepage keeps #2C374B */
-.page-masar-canvas { background: #1A2533; }
+.page-masar-canvas { background: #1A2533; position: relative; }
+
+/* subtle 64px grid texture scoped to masar pages */
+.page-masar-canvas::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right,  rgba(255,255,255,.018) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,.018) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
 
 /* base */
 .sec { position: relative; isolation: isolate; }

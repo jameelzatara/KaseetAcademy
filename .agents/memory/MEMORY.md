@@ -1,2 +1,4 @@
 - [Assets alias path](assets-alias.md) — `@assets` in Vite resolves to `attached_assets/` (root), NOT `src/assets/`; convert/copy files there before importing
 - [Course page structure](course-page-structure.md) — light #F5F4F0 sections + dark #0D0B14 registration; neon blob CSS classes ka-blob-1/2/3 in index.css
+- [ReelsSection props](reels-section-props.md) — ReelsSection accepts badge/heading/description props with defaults matching the homepage; wire new values from caller
+- [MasarSotiPage trainers](masar-soti-trainers.md) — يسار عبده photo: `المدربة_يسار_عبده_1785855126478.jpeg`; رنا العزام removed permanently from this page
