@@ -24,6 +24,7 @@ import gal7  from '@assets/WhatsApp_Image_2026-08-04_at_7.40.09_PM_(1)_178586515
 import gal8  from '@assets/WhatsApp_Image_2026-08-04_at_7.40.09_PM_(2)_1785865156137.jpeg';
 import gal9  from '@assets/WhatsApp_Image_2026-08-04_at_7.40.09_PM_(3)_1785865156138.jpeg';
 import gal10 from '@assets/WhatsApp_Image_2026-08-04_at_7.40.09_PM_(4)_1785865156138.jpeg';
+import corpPhoto5 from '@assets/WhatsApp_Image_2026-08-04_at_7.40.09_PM_(7)_1785865787231.jpeg';
 
 /* ── data ─────────────────────────────────────────────── */
 const STATIONS = [
@@ -325,92 +326,81 @@ export default function MasarKhatabaPage() {
       `}</style>
 
       {/* ═══════════════════════════════════════
-          1. HERO
+          1. HERO — full-cover background
       ═══════════════════════════════════════ */}
-      <section className="sec sec--hero" style={{ padding: '96px 0 80px', position: 'relative' }}>
-        {/* arcs (spread from bottom-left speaker point) */}
-        {[240, 360, 480, 600].map((r, i) => (
-          <div key={i} className="kh-arc" style={{ width: r, height: r, bottom: -r/3, right: `calc(50% + 120px)`, opacity: 0.6 - i*0.12 }} />
+      <section className="sec sec--hero" style={{ position: 'relative', padding: 'clamp(72px,9vw,120px) 0 clamp(80px,10vw,130px)', overflow: 'hidden', minHeight: 600 }}>
+        {/* full-cover background image */}
+        <img src={heroShot} alt="" aria-hidden="true" fetchPriority="high" decoding="async"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 22%', zIndex: 0 }} />
+        {/* dark gradient overlay */}
+        <div style={{ position: 'absolute', inset: 0, zIndex: 1,
+          background: 'linear-gradient(to bottom, rgba(2,6,23,0.80) 0%, rgba(2,6,23,0.48) 40%, rgba(2,6,23,0.92) 100%)' }} />
+        {/* subtle arc decorations */}
+        {[320, 500, 680].map((r, i) => (
+          <div key={i} className="kh-arc" style={{ width: r, height: r, bottom: -r*0.4, left: '50%', transform: 'translateX(-50%)', opacity: 0.28 - i*0.08, zIndex: 2 }} />
         ))}
-        {/* horizontal lines (audience rows) */}
-        {[0,1,2,3].map(i => (
-          <div key={i} className="kh-hline" style={{ top: `${28 + i*14}%`, left: 0, right: 0, opacity: 0.6 - i*0.12 }} />
-        ))}
 
-        <div style={{ ...WRP, display: 'grid', gridTemplateColumns: '1fr auto', gap: 'clamp(32px,5vw,72px)', alignItems: 'center' }}>
-          {/* left — copy */}
-          <div style={{ direction: 'rtl' }}>
-            {/* top chip */}
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GS, border: `1px solid ${GL}`, borderRadius: 999, padding: '6px 14px', marginBottom: 28 }}>
-              <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD }} />
-              <span style={{ fontFamily: F, fontSize: 12.5, fontWeight: 700, color: GLD }}>ماستركلاس · 42 ساعة تدريبية</span>
-            </div>
-
-            <h1 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.2vw,52px)', lineHeight: 1.25, margin: '0 0 20px', color: OFF, letterSpacing: -0.5 }}>
-              ماستركلاس<br />
-              <span style={{ color: GLD }}>فن الخطابة</span><br />
-              والتواصل القيادي
-            </h1>
-
-            <p style={{ fontFamily: F, fontSize: 16, color: MUT, lineHeight: 1.85, maxWidth: 540, marginBottom: 32 }}>
-              برنامج مهني متكامل يُعِدّك للحديث أمام جمهور والتأثير فيه: اثنتا عشرة محطة تبدأ من تحليل الجمهور وضبط رهبة المنصّة، وتمرّ ببناء الخطاب والحجاج والسرد، وتُختَم بمشروع تخرّج مصوَّر أمام جمهور حقيقي.
-            </p>
-
-            {/* fact chips */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 32 }}>
-              {[
-                { icon: '⏱', text: '42 ساعة · 21 جلسة' },
-                { icon: '📁', text: '13 مخرجاً موثَّقاً' },
-                { icon: '🎙', text: 'فيديو خطاب احترافي' },
-                { icon: '🌐', text: 'حضوري أو عن بُعد' },
-              ].map(({ icon, text }) => (
-                <span key={text} style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: CARD, border: `1px solid ${CBR}`, fontFamily: F, fontSize: 13.5, color: LT, padding: '8px 14px', borderRadius: 10 }}>
-                  <span>{icon}</span>{text}
-                </span>
-              ))}
-            </div>
-
-            {/* wajeez badge */}
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,0.04)', border: `1px solid ${CBR}`, borderRadius: 12, padding: '10px 16px', marginBottom: 36 }}>
-              <div style={{ width: 38, height: 38, borderRadius: 9, background: '#fff', display: 'grid', placeContent: 'center', padding: 5, flexShrink: 0 }}>
-                <img src={wajeezLogo} alt="وجيز" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-              </div>
-              <span style={{ fontFamily: F, fontSize: 13, color: MUT, lineHeight: 1.5 }}>
-                <strong style={{ color: OFF }}>شهادة معتمدة من تطبيق وجيز</strong><br />
-                أكبر مكتبة صوتية وبودكاست في الشرق الأوسط
-              </span>
-            </div>
-
-            {/* CTAs */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-              <a href={WA_ENROLL} target="_blank" rel="noopener noreferrer"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: INK, fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 28px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 8px 24px rgba(255,193,7,.24)' }}>
-                سجّل في الماستركلاس <ArrowLeft size={14} />
-              </a>
-              <a href="#tree"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: CARD, color: OFF, border: `1px solid ${CBR}`, fontFamily: F, fontWeight: 700, fontSize: 15, padding: '14px 28px', borderRadius: 12, textDecoration: 'none' }}>
-                تصفّح المحطات الاثنتَي عشرة <ArrowLeft size={14} />
-              </a>
-            </div>
+        <div style={{ position: 'relative', zIndex: 3, ...WRP, direction: 'rtl' }}>
+          {/* top chip */}
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GS, border: `1px solid ${GL}`, borderRadius: 999, padding: '6px 14px', marginBottom: 28 }}>
+            <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD }} />
+            <span style={{ fontFamily: F, fontSize: 12.5, fontWeight: 700, color: GLD }}>ماستركلاس · 42 ساعة تدريبية</span>
           </div>
 
-          {/* right — hero card */}
-          <div style={{ flexShrink: 0, width: 'clamp(220px,25vw,300px)', position: 'relative' }}>
-            <div style={{ borderRadius: 22, overflow: 'hidden', border: `1px solid ${CBR}`, boxShadow: '0 32px 64px rgba(0,0,0,0.55)', position: 'relative' }}>
-              {/* top-right chip */}
-              <div style={{ position: 'absolute', top: 14, right: 14, zIndex: 4, display: 'flex', gap: 6 }}>
-                <span style={{ background: GLD, color: INK, fontFamily: F, fontSize: 11, fontWeight: 800, padding: '4px 10px', borderRadius: 999 }}>TEDx Speaker</span>
-              </div>
-              <img src={heroShot} alt="ماستركلاس الخطابة"
-                style={{ width: '100%', aspectRatio: '3/4', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
-              {/* gradient */}
-              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(13,11,20,0.88) 0%, transparent 50%)', pointerEvents: 'none' }} />
-              {/* bottom numbers */}
-              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '18px 16px', zIndex: 3 }}>
-                <div style={{ fontFamily: FP, fontSize: 52, fontWeight: 700, color: GLD, lineHeight: 1, display: 'block' }}>42</div>
-                <div style={{ fontFamily: F, fontSize: 12.5, color: LT, marginTop: 4 }}>ساعة · 12 محطة · 13 مخرجاً</div>
-              </div>
+          <h1 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(34px,5vw,60px)', lineHeight: 1.22, margin: '0 0 20px', color: OFF, letterSpacing: -0.8, maxWidth: 720 }}>
+            ماستركلاس<br />
+            <span style={{ color: GLD }}>فن الخطابة</span><br />
+            والتواصل القيادي
+          </h1>
+
+          <p style={{ fontFamily: F, fontSize: 16.5, color: MUT, lineHeight: 1.88, maxWidth: 560, marginBottom: 32,
+            background: 'rgba(2,6,23,.50)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+            border: '1px solid rgba(255,255,255,.07)', borderRadius: 14, padding: '16px 20px' }}>
+            برنامج مهني متكامل يُعِدّك للحديث أمام جمهور والتأثير فيه: اثنتا عشرة محطة تبدأ من تحليل الجمهور وضبط رهبة المنصّة، وتمرّ ببناء الخطاب والحجاج والسرد، وتُختَم بمشروع تخرّج مصوَّر أمام جمهور حقيقي.
+          </p>
+
+          {/* fact chips */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 32 }}>
+            {[
+              { icon: '⏱', text: '42 ساعة · 21 جلسة' },
+              { icon: '📁', text: '13 مخرجاً موثَّقاً' },
+              { icon: '🎙', text: 'فيديو خطاب احترافي' },
+              { icon: '🌐', text: 'حضوري أو عن بُعد' },
+            ].map(({ icon, text }) => (
+              <span key={text} style={{ display: 'inline-flex', alignItems: 'center', gap: 7,
+                background: 'rgba(2,6,23,.55)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+                border: `1px solid ${CBR}`, fontFamily: F, fontSize: 13.5, color: LT, padding: '8px 14px', borderRadius: 10 }}>
+                <span>{icon}</span>{text}
+              </span>
+            ))}
+          </div>
+
+          {/* wajeez badge */}
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10,
+            background: 'rgba(2,6,23,.60)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
+            border: `1px solid ${CBR}`, borderRadius: 12, padding: '10px 16px', marginBottom: 36 }}>
+            <div style={{ width: 38, height: 38, borderRadius: 9, background: '#fff', display: 'grid', placeContent: 'center', padding: 5, flexShrink: 0 }}>
+              <img src={wajeezLogo} alt="وجيز" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             </div>
+            <span style={{ fontFamily: F, fontSize: 13, color: MUT, lineHeight: 1.5 }}>
+              <strong style={{ color: OFF }}>شهادة معتمدة من تطبيق وجيز</strong><br />
+              أكبر مكتبة صوتية وبودكاست في الشرق الأوسط
+            </span>
+          </div>
+
+          {/* CTAs */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+            <a href={WA_ENROLL} target="_blank" rel="noopener noreferrer"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: INK, fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 28px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 8px 24px rgba(255,193,7,.28)' }}>
+              سجّل في الماستركلاس <ArrowLeft size={14} />
+            </a>
+            <a href="#tree"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 9,
+                background: 'rgba(255,255,255,.08)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+                color: OFF, border: 'rgba(255,255,255,.18)', fontFamily: F, fontWeight: 700, fontSize: 15, padding: '14px 28px', borderRadius: 12, textDecoration: 'none',
+                boxShadow: 'inset 0 0 0 1px rgba(255,255,255,.18)' }}>
+              تصفّح المحطات الاثنتَي عشرة <ArrowLeft size={14} />
+            </a>
           </div>
         </div>
       </section>
@@ -544,57 +534,56 @@ export default function MasarKhatabaPage() {
       </section>
 
       {/* ═══════════════════════════════════════
-          3. PORTFOLIO (album)
+          3. PORTFOLIO (album) — cream bg
       ═══════════════════════════════════════ */}
-      <section className="sec sec--album" style={{ padding: '96px 0' }}>
+      <section className="sec sec--album" style={{ padding: '96px 0', background: '#F5F4F0' }}>
         <div style={WRP}>
-          <div style={SH}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GS, border: `1px solid ${GL}`, color: GLD, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>
-              <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD }} />
+          <div style={{ ...SH }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(138,98,0,.09)', border: '1px solid rgba(138,98,0,.28)', color: '#8A6200', fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>
               محفظة الأعمال
             </span>
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', lineHeight: 1.35, margin: '18px 0 0', color: OFF }}>
-              تتخرّج بأدلّة <span style={{ color: GLD }}>لا بشهادة</span>
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', lineHeight: 1.35, margin: '18px 0 0', color: '#18202F' }}>
+              تتخرّج بأدلّة <span style={{ color: '#8A6200' }}>لا بشهادة</span>
             </h2>
-            <p style={{ fontFamily: F, fontSize: 16, color: MUT, maxWidth: 620, marginTop: 14, marginInline: 'auto', lineHeight: 1.8 }}>
+            <p style={{ fontFamily: F, fontSize: 16, color: '#4B5563', maxWidth: 620, marginTop: 14, marginInline: 'auto', lineHeight: 1.8 }}>
               الجهة المنظِّمة لا تسأل عن شهادتك، بل تطلب أن ترى تسجيلاً سابقاً لأدائك. هذه محفظتك عند إتمام الماستركلاس: ثلاثة عشر مخرجاً موثَّقاً بين فيديو ووثيقة.
             </p>
           </div>
 
-          <div style={{ maxWidth: 760, margin: '0 auto' }}>
+          <div style={{ maxWidth: 760, margin: '0 auto', background: '#fff', borderRadius: 22, boxShadow: '0 22px 60px rgba(24,32,47,.12)', overflow: 'hidden', border: '1px solid rgba(24,32,47,.10)' }}>
             {/* header row */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 0 16px', borderBottom: `1px solid ${GL}` }}>
-              <span style={{ fontFamily: F, fontWeight: 700, fontSize: 14, color: LT }}>محفظتك · 12 مخرجاً + مشروع التخرّج</span>
-              <span style={{ background: GLD, color: INK, fontFamily: FP, fontSize: 12, fontWeight: 800, padding: '4px 14px', borderRadius: 999 }}>13 مخرجاً</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 28px', borderBottom: '1px solid rgba(24,32,47,.10)' }}>
+              <span style={{ fontFamily: F, fontWeight: 700, fontSize: 14, color: '#374151' }}>محفظتك · 12 مخرجاً + مشروع التخرّج</span>
+              <span style={{ background: '#8A6200', color: '#fff', fontFamily: FP, fontSize: 12, fontWeight: 800, padding: '4px 14px', borderRadius: 999 }}>13 مخرجاً</span>
             </div>
 
             {/* rows */}
             {ALBUM.map(item => (
-              <div key={item.n} className="kh-album-row">
-                <span style={{ fontFamily: FP, fontWeight: 700, fontSize: 12, color: item.hot ? GLD : MUT, flexShrink: 0, width: 28, paddingTop: 2 }}>{item.n}</span>
-                <span style={{ fontFamily: F, fontSize: 14, color: item.hot ? OFF : LT, flex: 1, lineHeight: 1.55 }}>
+              <div key={item.n} style={{ display: 'flex', alignItems: 'flex-start', gap: 16, padding: '13px 28px', borderBottom: '1px solid rgba(24,32,47,.08)', background: item.hot ? 'rgba(255,193,7,.07)' : 'transparent' }}>
+                <span style={{ fontFamily: FP, fontWeight: 700, fontSize: 12, color: item.hot ? '#8A6200' : '#9CA3AF', flexShrink: 0, width: 28, paddingTop: 2 }}>{item.n}</span>
+                <span style={{ fontFamily: F, fontSize: 14, color: item.hot ? '#8A6200' : '#18202F', flex: 1, lineHeight: 1.55, fontWeight: item.hot ? 700 : 400 }}>
                   {item.title}
-                  {item.hot && <span style={{ marginInlineStart: 8, background: GLD, color: INK, fontSize: 10, fontWeight: 800, padding: '1px 7px', borderRadius: 999 }}>★ ذهبي</span>}
+                  {item.hot && <span style={{ marginInlineStart: 8, background: '#8A6200', color: '#fff', fontSize: 10, fontWeight: 800, padding: '1px 7px', borderRadius: 999 }}>★ ذهبي</span>}
                 </span>
-                <span style={{ fontFamily: F, fontSize: 12, color: MUT, flexShrink: 0 }}>{item.kind}</span>
+                <span style={{ fontFamily: F, fontSize: 12, color: '#6B7280', flexShrink: 0 }}>{item.kind}</span>
               </div>
             ))}
 
             {/* graduation row */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, padding: '16px 0', background: GS, border: `1px solid ${GL}`, borderRadius: 12, marginTop: 8, paddingInlineStart: 16, paddingInlineEnd: 16 }}>
-              <span style={{ fontFamily: FP, fontWeight: 900, fontSize: 14, color: GLD, flexShrink: 0, paddingTop: 2 }}>★</span>
-              <span style={{ fontFamily: F, fontSize: 14, color: GLD, flex: 1, fontWeight: 700, lineHeight: 1.55 }}>مشروع التخرّج: فيديو احترافي + تقرير تحليل أداء</span>
-              <span style={{ fontFamily: F, fontSize: 12, color: MUT, flexShrink: 0 }}>إنتاج كامل</span>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, padding: '16px 28px', background: 'linear-gradient(90deg, rgba(255,193,7,.18), rgba(255,193,7,.06))', borderTop: '1px solid rgba(138,98,0,.28)' }}>
+              <span style={{ fontFamily: FP, fontWeight: 900, fontSize: 14, color: '#8A6200', flexShrink: 0, paddingTop: 2 }}>★</span>
+              <span style={{ fontFamily: F, fontSize: 14, color: '#8A6200', flex: 1, fontWeight: 800, lineHeight: 1.55 }}>مشروع التخرّج: فيديو احترافي + تقرير تحليل أداء</span>
+              <span style={{ fontFamily: F, fontSize: 12, color: '#8A6200', flexShrink: 0, border: '1px solid rgba(138,98,0,.32)', background: 'rgba(138,98,0,.08)', padding: '3px 11px', borderRadius: 999 }}>إنتاج كامل</span>
             </div>
 
-            <p style={{ fontFamily: F, fontSize: 13, color: MUT, lineHeight: 1.8, marginTop: 20, paddingTop: 16, borderTop: `1px solid ${CBR}` }}>
-              <strong style={{ color: OFF }}>المخرجان المميّزان بالذهبي</strong> هما الأكثر أثراً عملياً: الخطاب الإقناعي يُثبت قدرتك على بناء حجّة، والحكاية الشخصية هي ما يُذكَر منك بعد انتهاء الخطاب. أمّا مشروع التخرّج فهو ما يُطلَب منك حين تُرشَّح للحديث في مؤتمر أو فعالية.
-            </p>
+            <div style={{ padding: '20px 28px', borderTop: '1px solid rgba(24,32,47,.10)', fontFamily: F, fontSize: 13.5, color: '#6B7280', lineHeight: 1.85 }}>
+              <strong style={{ color: '#18202F' }}>المخرجان المميّزان بالذهبي</strong> هما الأكثر أثراً عملياً: الخطاب الإقناعي يُثبت قدرتك على بناء حجّة، والحكاية الشخصية هي ما يُذكَر منك بعد انتهاء الخطاب. أمّا مشروع التخرّج فهو ما يُطلَب منك حين تُرشَّح للحديث في مؤتمر أو فعالية.
+            </div>
           </div>
 
           <div style={{ textAlign: 'center', marginTop: 34 }}>
             <a href="#trainers"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: CARD, color: OFF, border: `1px solid ${CBR}`, fontFamily: F, fontWeight: 700, fontSize: 15, padding: '13px 28px', borderRadius: 999, textDecoration: 'none' }}>
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: 'transparent', color: '#18202F', border: '1px solid rgba(24,32,47,.22)', fontFamily: F, fontWeight: 700, fontSize: 15, padding: '13px 28px', borderRadius: 999, textDecoration: 'none' }}>
               تعرّف على المدرّبين <ArrowLeft size={14} />
             </a>
           </div>
@@ -602,49 +591,7 @@ export default function MasarKhatabaPage() {
       </section>
 
       {/* ═══════════════════════════════════════
-          4. OUTCOMES
-      ═══════════════════════════════════════ */}
-      <section className="sec sec--outcomes" style={{ padding: '96px 0' }}>
-        <div style={WRP}>
-          <div style={SH}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GS, border: `1px solid ${GL}`, color: GLD, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>
-              <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD }} />
-              مخرجات الماستركلاس
-            </span>
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', lineHeight: 1.35, margin: '18px 0 0', color: OFF }}>
-              ما الذي ستُحقّقه <span style={{ color: GLD }}>بعد الماستركلاس؟</span>
-            </h2>
-            <p style={{ fontFamily: F, fontSize: 16, color: MUT, maxWidth: 560, marginTop: 14, marginInline: 'auto' }}>
-              مخرجات ملموسة تُقدّمها لأصحاب العمل والجهات المنظِّمة — لا مجرّد شعور عام بالتحسّن.
-            </p>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 20, marginTop: 52 }}>
-            {[
-              { n:'01', t:'خطاب مبنيّ لا مرتجَل', d:'تُنشئ مخطَّطاً قبل أن تكتب، وتكتب للأذن لا للعين، فتُلقي في زمن أقلّ وبأثر أعلى.' },
-              { n:'02', t:'حضور منصّي مضبوط', d:'صوت ثابت، وإيماءة مقصودة، وتواصل بصري موزَّع — وإجراء ثابت لضبط رهبة المنصّة.' },
-              { n:'03', t:'قدرة إقناعية موثَّقة', d:'حجّة مكتملة الأركان، وتفنيد للحجّة المضادّة، وحكاية شخصية تحمل رسالتك.' },
-              { n:'04', t:'فيديو خطاب احترافي وشهادة معتمدة', d:'مخرج منتَج بجودة النشر، مرفَق بتقرير تحليل أداء، وشهادة معتمدة من تطبيق وجيز.' },
-            ].map(({ n, t, d }) => (
-              <div key={n} style={{ background: CARD, border: `1px solid ${CBR}`, borderRadius: 18, padding: 'clamp(20px,2.5vw,28px)' }}>
-                <div style={{ fontFamily: FP, fontSize: 11, fontWeight: 700, color: GLD, letterSpacing: 1.2, marginBottom: 12 }}>{n}</div>
-                <h4 style={{ fontFamily: F, fontWeight: 800, fontSize: 18, color: OFF, marginBottom: 10, lineHeight: 1.4 }}>{t}</h4>
-                <p style={{ fontFamily: F, fontSize: 13.5, color: MUT, lineHeight: 1.8, margin: 0 }}>{d}</p>
-              </div>
-            ))}
-          </div>
-
-          <div style={{ textAlign: 'center', marginTop: 34 }}>
-            <a href="#tree"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: CARD, color: OFF, border: `1px solid ${CBR}`, fontFamily: F, fontWeight: 700, fontSize: 15, padding: '13px 28px', borderRadius: 999, textDecoration: 'none' }}>
-              تصفّح منهج المحطات <ArrowLeft size={14} />
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════
-          5. WAJEEZ
+          4. WAJEEZ
       ═══════════════════════════════════════ */}
       <section className="sec sec--wajeez" style={{ padding: '96px 0' }}>
         <div style={WRP}>
@@ -858,68 +805,7 @@ export default function MasarKhatabaPage() {
       </section>
 
       {/* ═══════════════════════════════════════
-          9. ACCESS OPTIONS
-      ═══════════════════════════════════════ */}
-      <section className="sec sec--access-opt" style={{ padding: '96px 0' }}>
-        <div style={WRP}>
-          <div style={SH}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GS, border: `1px solid ${GL}`, color: GLD, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>
-              <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD }} />
-              خيارات الالتحاق
-            </span>
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', lineHeight: 1.35, margin: '18px 0 0', color: OFF }}>
-              ماذا يُتاح منفرداً، <span style={{ color: GLD }}>وماذا لا؟</span>
-            </h2>
-            <p style={{ fontFamily: F, fontSize: 16, color: MUT, maxWidth: 600, marginTop: 14, marginInline: 'auto' }}>
-              الماستركلاس يُدرَس وحدةً واحدة، ولا يُتاح التسجيل في محطة منفردة داخله. وتبقى دورة مستقلّة واحدة لمن أراد التجربة أوّلاً.
-            </p>
-          </div>
-
-          <div className="kh-modes-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18, marginTop: 52 }}>
-            {/* independent course card */}
-            <div style={{ background: CARD, border: `1px solid ${CBR}`, borderRadius: 20, padding: 'clamp(22px,2.5vw,28px)' }}>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: 'rgba(255,255,255,.06)', border: `1px solid ${CBR}`, borderRadius: 999, padding: '5px 13px', marginBottom: 18 }}>
-                <span style={{ fontFamily: F, fontSize: 12, color: LT, fontWeight: 700 }}>متاح كدورة مستقلّة</span>
-              </div>
-              <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 19, color: OFF, marginBottom: 8 }}>دورة واحدة تُشترى منفردة</h3>
-              <p style={{ fontFamily: F, fontSize: 14, color: MUT, lineHeight: 1.75, marginBottom: 18 }}>
-                «فن الخطابة والإلقاء الجماهيري المؤثّر» — <strong style={{ color: LT }}>16 ساعة · 8 جلسات</strong>
-              </p>
-              <p style={{ fontFamily: F, fontSize: 13, color: MUT, lineHeight: 1.7, paddingTop: 12, borderTop: `1px solid ${CBR}` }}>
-                تُغطّي في نسخة مكثّفة ما يقابل المرحلة الأولى من الماستركلاس، وتُخصم قيمتها عند إكمال الماستركلاس.
-              </p>
-            </div>
-
-            {/* exclusive card */}
-            <div style={{ background: GS, border: `1px solid ${GL}`, borderRadius: 20, padding: 'clamp(22px,2.5vw,28px)' }}>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: GLD, borderRadius: 999, padding: '5px 13px', marginBottom: 18 }}>
-                <span style={{ fontFamily: F, fontSize: 12, color: INK, fontWeight: 800 }}>حصري داخل الماستركلاس</span>
-              </div>
-              <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 19, color: OFF, marginBottom: 12 }}>ثماني محطات لا تُفتَح إلا بالتسجيل الكامل</h3>
-              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8, padding: 0, margin: '0 0 14px' }}>
-                {['هندسة بناء الخطاب · الحجاج والإقناع','الأساليب البلاغية · السرد الشخصي وصناعة الحكاية','العرض التقديمي · الحديث المرتجل وإدارة الأسئلة','التواصل القيادي والحوارات الصعبة · الخطابة الجماهيرية','مشروع التخرّج المصوَّر وتقرير تحليل الأداء','شهادة الماستركلاس المعتمدة من تطبيق وجيز'].map(item => (
-                  <li key={item} style={{ display: 'flex', gap: 10, fontFamily: F, fontSize: 13.5, color: LT, lineHeight: 1.65 }}>
-                    <span style={{ color: GLD, flexShrink: 0, marginTop: 2 }}>✓</span>{item}
-                  </li>
-                ))}
-              </ul>
-              <p style={{ fontFamily: F, fontSize: 12.5, color: MUT, lineHeight: 1.7, paddingTop: 12, borderTop: `1px solid ${GL}` }}>
-                هذه المحطات مبنيّة على مرحلة التأسيس وعلى بعضها؛ فمحطّة الحجاج تفترض إتمام هندسة البناء. وفتحُها منفردةً يعني تدريب من ليس مؤهَّلاً.
-              </p>
-            </div>
-          </div>
-
-          <div style={{ textAlign: 'center', marginTop: 34 }}>
-            <a href="#pricing"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: CARD, color: OFF, border: `1px solid ${CBR}`, fontFamily: F, fontWeight: 700, fontSize: 15, padding: '13px 28px', borderRadius: 999, textDecoration: 'none' }}>
-              اطّلع على الأسعار وطرق الدفع <ArrowLeft size={14} />
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════
-          10. PRICING
+          9. PRICING
       ═══════════════════════════════════════ */}
       <section id="pricing" className="sec sec--access" style={{ padding: '96px 0' }}>
         <div style={WRP}>
@@ -1000,75 +886,43 @@ export default function MasarKhatabaPage() {
             </div>
           </div>
 
+          {/* institutional card — full width */}
+          <div style={{ maxWidth: 860, margin: '20px auto 0', background: CARD, border: `1px solid ${CBR}`, borderRadius: 22, padding: 'clamp(24px,3.5vw,40px)', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 28 }}>
+            {/* photo strip */}
+            <div style={{ display: 'flex', gap: 5, flexShrink: 0 }}>
+              {[corpPhoto5, corpPhoto1, corpPhoto2].map((src, i) => (
+                <div key={i} style={{ width: 64, height: 64, borderRadius: 10, overflow: 'hidden', flexShrink: 0 }}>
+                  <img src={src} alt="" aria-hidden="true" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(.82) saturate(.88)' }} />
+                </div>
+              ))}
+            </div>
+            {/* text */}
+            <div style={{ flex: 1, minWidth: 280 }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: GS, border: `1px solid ${GL}`, borderRadius: 999, padding: '4px 12px', marginBottom: 10 }}>
+                <span style={{ fontFamily: F, fontSize: 11.5, color: GLD, fontWeight: 700 }}>للمؤسسات والشركات</span>
+              </div>
+              <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 19, color: OFF, marginBottom: 8, lineHeight: 1.3 }}>هل أنت مؤسسة تعليمية أو شركة؟</h3>
+              <p style={{ fontFamily: F, fontSize: 14, color: MUT, lineHeight: 1.78, margin: 0 }}>
+                يُنفَّذ الماستركلاس كاملاً لفريق مؤسستك وحده، في مقرّكم أو في قاعة كاسيت، بجدول يُبنى على أوقات عملكم. ويُخصَّص المحتوى التطبيقي على مواقف حقيقية من بيئة مؤسستكم: عروض مجلس الإدارة، وإبلاغ القرارات، والخطاب في الأزمات.
+              </p>
+            </div>
+            {/* CTA */}
+            <a href={WA_CORP} target="_blank" rel="noopener noreferrer"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 28px', borderRadius: 14, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0, boxShadow: '0 6px 22px rgba(255,193,7,.22)' }}>
+              <svg viewBox="0 0 24 24" fill="currentColor" width="17" height="17" aria-hidden="true">
+                <path d="M12.04 2C6.6 2 2.2 6.4 2.2 11.84c0 1.94.55 3.75 1.5 5.28L2 22l5-1.63a9.84 9.84 0 0 0 5.04 1.38c5.44 0 9.84-4.4 9.84-9.84S17.48 2 12.04 2zm0 17.94c-1.6 0-3.1-.44-4.38-1.2l-.31-.19-3.25 1.06 1.07-3.17-.2-.32a7.94 7.94 0 0 1-1.23-4.28c0-4.4 3.6-7.98 8.3-7.98 4.4 0 8 3.58 8 7.98s-3.6 8.1-8 8.1z"/>
+              </svg>
+              طلب استشارة مؤسسية <ArrowLeft size={14} />
+            </a>
+          </div>
+
           {/* payment strip */}
-          <div style={{ maxWidth: 860, margin: '24px auto 0', background: CARD, border: `1px solid ${CBR}`, borderRadius: 16, padding: '16px 24px', display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ maxWidth: 860, margin: '20px auto 0', background: CARD, border: `1px solid ${CBR}`, borderRadius: 16, padding: '16px 24px', display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'center', justifyContent: 'space-between' }}>
             <span style={{ fontFamily: F, fontSize: 13.5, color: MUT }}>الدفع إلكتروني بالكامل — تُسجَّل، وتدفع، ويصلك تأكيد المقعد فوراً</span>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
               {['فيزا / ماستركارد','إي فواتيركم','CliQ','تقسيط على دفعات'].map(m => (
                 <span key={m} style={{ fontFamily: F, fontSize: 12, color: LT, background: 'rgba(255,255,255,.04)', border: `1px solid ${CBR}`, padding: '5px 12px', borderRadius: 8 }}>{m}</span>
               ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════
-          11. CORPORATE COHORT
-      ═══════════════════════════════════════ */}
-      <section className="sec sec--corporate" style={{ padding: '72px 0' }}>
-        <div style={WRP}>
-          <div style={{ position: 'relative' }}>
-            <div style={{ position: 'absolute', inset: -2, background: 'linear-gradient(135deg,rgba(255,193,7,0.14),rgba(56,189,248,0.06))', borderRadius: 30, filter: 'blur(22px)', opacity: 0.7, pointerEvents: 'none' }} />
-            <div style={{ position: 'relative', background: '#131B27', border: '1px solid rgba(255,193,7,.52)', borderRadius: 26, overflow: 'hidden', boxShadow: '0 0 0 1px rgba(255,193,7,.14),0 32px 72px rgba(0,0,0,.38)' }}>
-              <div className="kh-corp-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0 }}>
-
-                {/* photo mosaic */}
-                <div style={{ position: 'relative', minHeight: 340, overflow: 'hidden' }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr', height: '100%', gap: 2 }}>
-                    {[corpPhoto1, corpPhoto2, corpPhoto3, corpPhoto4].map((src, i) => (
-                      <div key={i} style={{ overflow: 'hidden' }}>
-                        <img src={src} alt="" aria-hidden="true"
-                          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: 'brightness(0.70) saturate(0.85)' }} />
-                      </div>
-                    ))}
-                  </div>
-                  <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left,rgba(19,27,39,0.65) 0%,transparent 55%)', pointerEvents: 'none' }} />
-                  <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top,rgba(19,27,39,0.45) 0%,transparent 60%)', pointerEvents: 'none' }} />
-                </div>
-
-                {/* content */}
-                <div style={{ padding: 'clamp(32px,4vw,52px)', display: 'flex', flexDirection: 'column', gap: 22 }}>
-                  <span style={{ display: 'inline-flex', alignSelf: 'flex-start', alignItems: 'center', gap: 8, background: GLD, color: '#1A1206', fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '7px 16px', borderRadius: 999 }}>
-                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#1A1206' }} />
-                    للمؤسسات
-                  </span>
-                  <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(22px,2.8vw,34px)', lineHeight: 1.35, margin: 0, color: OFF }}>
-                    فوج مغلق <span style={{ color: GLD }}>لمؤسستك</span>
-                  </h2>
-                  <p style={{ fontFamily: F, fontSize: 14.5, color: MUT, lineHeight: 1.9, margin: 0 }}>
-                    يُنفَّذ الماستركلاس كاملاً لفريق مؤسستك وحده، في مقرّكم أو في قاعة كاسيت، بجدول يُبنى على أوقات عملكم. ويُخصَّص المحتوى التطبيقي على مواقف حقيقية من بيئة مؤسستكم: عروض مجلس الإدارة، وإبلاغ القرارات، والخطاب في الأزمات.
-                  </p>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12 }}>
-                    {[
-                      { label:'الحجم', value:'حتى 15 متدرّباً' },
-                      { label:'المدّة', value:'42 ساعة · جدول مرن' },
-                      { label:'السعر', value:'من 9,500 دينار' },
-                    ].map(({ label, value }) => (
-                      <div key={label} style={{ background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,193,7,.20)', borderRadius: 14, padding: '14px 16px', textAlign: 'center' }}>
-                        <div style={{ fontFamily: F, fontSize: 11, color: MUT, marginBottom: 6 }}>{label}</div>
-                        <div style={{ fontFamily: F, fontWeight: 800, fontSize: 14, color: GLD, lineHeight: 1.35 }}>{value}</div>
-                      </div>
-                    ))}
-                  </div>
-                  <a href={WA_CORP} target="_blank" rel="noopener noreferrer"
-                    style={{ display: 'inline-flex', alignSelf: 'flex-start', alignItems: 'center', gap: 10, background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '13px 26px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 6px 22px rgba(255,193,7,.22)' }}>
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="17" height="17" aria-hidden="true">
-                      <path d="M12.04 2C6.6 2 2.2 6.4 2.2 11.84c0 1.94.55 3.75 1.5 5.28L2 22l5-1.63a9.84 9.84 0 0 0 5.04 1.38c5.44 0 9.84-4.4 9.84-9.84S17.48 2 12.04 2zm0 17.94c-1.6 0-3.1-.44-4.38-1.2l-.31-.19-3.25 1.06 1.07-3.17-.2-.32a7.94 7.94 0 0 1-1.23-4.28c0-4.4 3.6-7.98 8.3-7.98 4.4 0 8 3.58 8 7.98s-3.6 8.1-8 8.1z"/>
-                    </svg>
-                    اطلب عرضاً لمؤسستك <ArrowLeft size={14} />
-                  </a>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -1196,6 +1050,48 @@ export default function MasarKhatabaPage() {
           <p style={{ fontFamily: F, fontSize: 14, color: MUT, marginTop: 18 }}>
             أو <a href="#consult" style={{ color: GLD, textDecoration: 'underline', textUnderlineOffset: 3 }}>تحدّث مع ياقوت أوّلاً</a> — استشارة مجانية دون التزام.
           </p>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════
+          FINAL. OUTCOMES — navy bg
+      ═══════════════════════════════════════ */}
+      <section className="sec sec--outcomes" style={{ padding: '96px 0', background: '#0B1628' }}>
+        <div style={WRP}>
+          <div style={SH}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GS, border: `1px solid ${GL}`, color: GLD, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>
+              <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD }} />
+              مخرجات الماستركلاس
+            </span>
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', lineHeight: 1.35, margin: '18px 0 0', color: OFF }}>
+              ما الذي ستُحقّقه <span style={{ color: GLD }}>بعد الماستركلاس؟</span>
+            </h2>
+            <p style={{ fontFamily: F, fontSize: 16, color: MUT, maxWidth: 560, marginTop: 14, marginInline: 'auto' }}>
+              مخرجات ملموسة تُقدّمها لأصحاب العمل والجهات المنظِّمة — لا مجرّد شعور عام بالتحسّن.
+            </p>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 20, marginTop: 52 }}>
+            {[
+              { n:'01', t:'خطاب مبنيّ لا مرتجَل', d:'تُنشئ مخطَّطاً قبل أن تكتب، وتكتب للأذن لا للعين، فتُلقي في زمن أقلّ وبأثر أعلى.' },
+              { n:'02', t:'حضور منصّي مضبوط', d:'صوت ثابت، وإيماءة مقصودة، وتواصل بصري موزَّع — وإجراء ثابت لضبط رهبة المنصّة.' },
+              { n:'03', t:'قدرة إقناعية موثَّقة', d:'حجّة مكتملة الأركان، وتفنيد للحجّة المضادّة، وحكاية شخصية تحمل رسالتك.' },
+              { n:'04', t:'فيديو خطاب احترافي وشهادة معتمدة', d:'مخرج منتَج بجودة النشر، مرفَق بتقرير تحليل أداء، وشهادة معتمدة من تطبيق وجيز.' },
+            ].map(({ n, t, d }) => (
+              <div key={n} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 18, padding: 'clamp(20px,2.5vw,28px)' }}>
+                <div style={{ fontFamily: FP, fontSize: 11, fontWeight: 700, color: GLD, letterSpacing: 1.2, marginBottom: 12 }}>{n}</div>
+                <h4 style={{ fontFamily: F, fontWeight: 800, fontSize: 18, color: OFF, marginBottom: 10, lineHeight: 1.4 }}>{t}</h4>
+                <p style={{ fontFamily: F, fontSize: 13.5, color: MUT, lineHeight: 1.8, margin: 0 }}>{d}</p>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ textAlign: 'center', marginTop: 48 }}>
+            <a href={WA_ENROLL} target="_blank" rel="noopener noreferrer"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: INK, fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 32px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 8px 24px rgba(255,193,7,.24)' }}>
+              ابدأ مسيرتك على المنصّة <ArrowLeft size={14} />
+            </a>
+          </div>
         </div>
       </section>
     </div>
