@@ -31,7 +31,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative w-full min-h-[100dvh] flex flex-col overflow-hidden">
+    <section className="sec sec--hero relative w-full min-h-[100dvh] flex flex-col overflow-hidden">
       {/* Background Image & Gradient Overlays */}
       <div
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
@@ -43,6 +43,20 @@ export default function HeroSection() {
           background: 'linear-gradient(to bottom, rgba(44,55,75,0.75) 0%, rgba(36,46,64,0.88) 60%, rgba(33,42,61,0.97) 100%)',
         }}
       />
+
+      {/* ── Cassette reel geometry (top-right, decorative) ── */}
+      <div className="geo" aria-hidden="true">
+        <svg viewBox="0 0 560 300" fill="none" xmlns="http://www.w3.org/2000/svg"
+          style={{position:'absolute',top:0,right:0,width:'46%',height:'auto',maxWidth:520}}>
+          <circle cx="420" cy="90" r="180" stroke="rgba(255,193,7,.06)" strokeWidth="1"/>
+          <circle cx="420" cy="90" r="116" stroke="rgba(255,193,7,.08)" strokeWidth="1"/>
+          <circle cx="420" cy="90" r="40" fill="rgba(255,193,7,.03)" stroke="rgba(255,193,7,.15)" strokeWidth="1.5"/>
+          <circle cx="200" cy="70" r="120" stroke="rgba(255,193,7,.05)" strokeWidth="1"/>
+          <circle cx="200" cy="70" r="76" stroke="rgba(255,193,7,.07)" strokeWidth="1"/>
+          <circle cx="200" cy="70" r="26" fill="rgba(255,193,7,.03)" stroke="rgba(255,193,7,.12)" strokeWidth="1.5"/>
+          <path d="M226 70 Q310 80 380 90" stroke="rgba(255,193,7,.06)" strokeWidth="1" strokeDasharray="4 6" fill="none"/>
+        </svg>
+      </div>
 
       <Navbar />
 

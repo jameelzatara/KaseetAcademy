@@ -72,7 +72,7 @@
 
   body {
     @apply font-sans antialiased text-foreground overflow-x-hidden;
-    background: #2C374B;
+    background: #1A2533;
     min-height: 100vh;
   }
 
@@ -81,6 +81,15 @@
     position: relative;
     isolation: isolate;
   }
+}
+
+/* ── Global 64-px technical grid (sits behind everything) ── */
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(to right,  rgba(255,255,255,.018) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,.018) 1px, transparent 1px);
+  background-size: 64px 64px;
 }
 
 /* ── Responsive section spacing (replaces all inline padding hacks) ── */
@@ -169,7 +178,7 @@
 /* ambient glow — overflows section bounds intentionally */
 .sec::before {
   content: ""; position: absolute;
-  inset: -22% -12%;
+  inset: 0;
   z-index: 0; pointer-events: none;
 }
 
@@ -545,4 +554,102 @@
       linear-gradient(to top, rgba(14,20,31,.70) 0%, transparent 38%);
   }
   .masar-advisor-body { padding: 28px 24px 32px; }
+}
+
+/* ══════════════════════════════════════════════
+   Homepage Visual System — Brief 1
+   Design tokens · section atmospheres ·
+   geometric shapes · neon cards
+══════════════════════════════════════════════ */
+
+/* ── Extra design tokens ── */
+:root {
+  --canvas:    #1A2533;
+  --footer:    #111925;
+  --cream:     #F4EFE4;
+  --gold-ink:  #8A6200;
+  --gold-soft: rgba(255,193,7,.10);
+  --gold-line: rgba(255,193,7,.28);
+  --teal:      #1E7A85;
+  --steel:     #4A82C4;
+  --violet:    #6B5BA8;
+  --green:     #25D366;
+}
+
+/* ── Section separator ── */
+.sec + .sec { border-top: 1px solid rgba(255,255,255,.07); }
+
+/* ── Geometric layer direction helpers ── */
+.geo--btm { inset: auto 0 0 0 !important; height: 52% !important; }
+.geo--top  { inset: 0 0 auto 0 !important; height: 52% !important; }
+
+/* ── Per-section atmospheric gradients ── */
+.sec--hero::before {
+  background:
+    radial-gradient(ellipse 62% 52% at 74%  8%, rgba(255,193,7,.15),  transparent 68%),
+    radial-gradient(ellipse 54% 46% at 14% 92%, rgba(74,130,196,.14), transparent 70%);
+}
+.sec--reels::before {
+  background:
+    radial-gradient(ellipse 80% 40% at 50%   0%, rgba(255,193,7,.07),  transparent 66%),
+    radial-gradient(ellipse 60% 40% at 50% 108%, rgba(30,122,133,.09), transparent 66%);
+}
+.sec--tracks::before {
+  background:
+    radial-gradient(ellipse 56% 50% at 12% 50%, rgba(30,122,133,.12), transparent 66%),
+    radial-gradient(ellipse 50% 44% at 86% 50%, rgba(255,193,7,.10),  transparent 64%);
+}
+.sec--courses::before {
+  background:
+    radial-gradient(ellipse 70% 50% at 50%  0%, rgba(255,193,7,.08),  transparent 68%),
+    radial-gradient(ellipse 46% 42% at 88% 60%, rgba(74,130,196,.08), transparent 64%);
+}
+.sec--reviews::before {
+  background:
+    radial-gradient(ellipse 60% 50% at 80% 10%, rgba(255,193,7,.10),  transparent 64%),
+    radial-gradient(ellipse 50% 40% at 20% 90%, rgba(255,193,7,.06),  transparent 60%);
+}
+.sec--advisor::before {
+  background:
+    radial-gradient(ellipse 48% 56% at 84% 56%, rgba(37,211,102,.09), transparent 66%),
+    radial-gradient(ellipse 58% 48% at 16% 20%, rgba(74,130,196,.13), transparent 70%);
+}
+.sec--faq::before {
+  background: radial-gradient(ellipse 80% 70% at 50% 0%, rgba(107,91,168,.14), transparent 72%);
+}
+
+/* ── Reel card fade-mask (::after on .reel-wrap) ── */
+.reel-wrap { position: relative; }
+.reel-wrap::after {
+  content: ""; position: absolute; inset: 0; z-index: 2;
+  pointer-events: none; border-radius: inherit;
+  background: linear-gradient(to bottom, transparent 65%, rgba(12,18,32,.70) 100%);
+}
+
+/* ── Featured course card — persistent neon gold ring ── */
+.course-featured {
+  border-color: rgba(255,193,7,.55) !important;
+  box-shadow:
+    0 0  0  1px rgba(255,193,7,.18),
+    0 0 28px 4px rgba(255,193,7,.20),
+    0 0 64px 8px rgba(255,193,7,.09),
+    0 20px 50px rgba(0,0,0,.40) !important;
+}
+
+/* ── Advisor card — neon ring ── */
+.advisor-card {
+  border-color: rgba(255,193,7,.28) !important;
+  box-shadow:
+    0 0  0 1px rgba(255,193,7,.09),
+    0 0 24px 4px rgba(255,193,7,.10),
+    0 20px 60px rgba(0,0,0,.35),
+    inset 0 1px 0 rgba(255,255,255,.07) !important;
+}
+.advisor-card:hover {
+  border-color: rgba(255,193,7,.48) !important;
+  box-shadow:
+    0 0  0 1px rgba(255,193,7,.20),
+    0 0 40px 8px rgba(255,193,7,.18),
+    0 28px 70px rgba(0,0,0,.40),
+    inset 0 1px 0 rgba(255,255,255,.09) !important;
 }

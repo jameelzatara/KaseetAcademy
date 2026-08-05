@@ -135,10 +135,23 @@ export default function ReelsSection({
 
   return (
     <section
-      className="section-block relative overflow-hidden text-center"
+      className="sec sec--reels section-block relative overflow-hidden text-center"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
+      {/* ── Audio waveform geometry (bottom) ── */}
+      <div className="geo geo--btm" aria-hidden="true">
+        <svg viewBox="0 0 1440 120" preserveAspectRatio="none" fill="none"
+          style={{width:'100%',height:'100%',display:'block'}}>
+          <path d="M0 80 C200 20 400 100 600 60 S1000 20 1200 60 S1440 90 1440 80"
+            stroke="rgba(74,130,196,.12)" strokeWidth="1.5" fill="none"/>
+          <path d="M0 60 C200 100 400 20 600 60 S1000 100 1200 60 S1440 40 1440 60"
+            stroke="rgba(74,130,196,.07)" strokeWidth="1" fill="none"/>
+          <path d="M0 90 C360 50 720 90 1080 50 S1440 90 1440 90"
+            stroke="rgba(255,193,7,.05)" strokeWidth="1" fill="none"/>
+        </svg>
+      </div>
+
       {/* Top warm glow */}
       <div className="absolute inset-x-0 top-0 pointer-events-none" style={{
         height: 160,
@@ -192,6 +205,7 @@ export default function ReelsSection({
             return (
               <div
                 key={i}
+                className={isCenter ? 'reel-wrap is-active' : 'reel-wrap'}
                 onClick={() => { if (off !== 0) go(off > 0 ? 1 : -1); }}
                 style={{
                   position:   'absolute',

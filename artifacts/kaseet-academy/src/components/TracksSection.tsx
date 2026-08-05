@@ -198,7 +198,28 @@ function TrackCard({ track }: { track: Track }) {
 
 export default function TracksSection() {
   return (
-    <section className="section-block relative overflow-hidden">
+    <section className="sec sec--tracks section-block relative overflow-hidden">
+      {/* ── Windscreen foam geometry (left) ── */}
+      <div className="geo" aria-hidden="true">
+        <svg viewBox="0 0 260 280" fill="none" xmlns="http://www.w3.org/2000/svg"
+          style={{position:'absolute',left:0,top:'50%',transform:'translateY(-50%)',width:'13%',minWidth:70,height:'auto'}}>
+          {[0,1,2,3,4,5].flatMap(row =>
+            [0,1,2,3,4].map(col => (
+              <circle key={`${row}-${col}`}
+                cx={col * 48 + (row % 2) * 24 + 10}
+                cy={row * 44 + 10}
+                r={6}
+                fill={`rgba(30,122,133,${0.12 + ((row + col) % 3) * 0.05})`}
+              />
+            ))
+          )}
+          <circle cx="220" cy="40" r="5" fill="rgba(255,193,7,.09)"/>
+          <circle cx="240" cy="80" r="4" fill="rgba(255,193,7,.07)"/>
+          <circle cx="215" cy="120" r="5" fill="rgba(255,193,7,.09)"/>
+          <circle cx="238" cy="160" r="4" fill="rgba(255,193,7,.07)"/>
+        </svg>
+      </div>
+
       <div className="absolute pointer-events-none" style={{
         top: -80, left: '50%', transform: 'translateX(-50%)',
         width: '80%', height: 200,

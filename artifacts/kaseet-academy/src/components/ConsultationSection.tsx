@@ -25,7 +25,20 @@ function WhatsAppIcon() {
 
 export default function ConsultationSection() {
   return (
-    <section id="consultant" className="section-block relative overflow-hidden">
+    <section id="consultant" className="sec sec--advisor section-block relative overflow-hidden">
+      {/* ── Scan lines geometry (right edge) ── */}
+      <div className="geo" aria-hidden="true">
+        <svg viewBox="0 0 280 400" fill="none" xmlns="http://www.w3.org/2000/svg"
+          style={{position:'absolute',right:0,top:'50%',transform:'translateY(-50%)',width:'16%',minWidth:80,height:'auto',opacity:0.55}}>
+          {Array.from({length:22}).map((_, i) => (
+            <line key={i}
+              x1={0} y1={i * 18} x2={280} y2={i * 18}
+              stroke={i % 4 === 0 ? 'rgba(74,130,196,.22)' : 'rgba(74,130,196,.09)'}
+              strokeWidth={i % 4 === 0 ? 1.2 : 0.7}/>
+          ))}
+        </svg>
+      </div>
+
       {/* Gold radial glow */}
       <div className="absolute pointer-events-none" style={{
         top: -60, left: '50%', transform: 'translateX(-50%)',
@@ -36,7 +49,7 @@ export default function ConsultationSection() {
       <div className="relative z-10 mx-auto px-4" style={{ maxWidth: 1160 }}>
 
         {/* ── Compact unified card ── */}
-        <div style={{
+        <div className="advisor-card" style={{
           background:          'rgba(49,61,84,0.55)',
           border:              '1px solid rgba(255,255,255,0.10)',
           borderRadius:        24,

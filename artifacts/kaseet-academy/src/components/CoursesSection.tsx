@@ -305,7 +305,25 @@ export default function CoursesSection() {
   const noResults   = featHidden && visibleGrid.length === 0;
 
   return (
-    <section id="courses" className="section-block relative overflow-hidden">
+    <section id="courses" className="sec sec--courses section-block relative overflow-hidden">
+      {/* ── VU meter bar geometry (left edge) ── */}
+      <div className="geo" aria-hidden="true">
+        <svg viewBox="0 0 180 280" fill="none" xmlns="http://www.w3.org/2000/svg"
+          style={{position:'absolute',left:'1%',bottom:0,width:'7%',minWidth:52,height:'auto'}}>
+          {[
+            { h:140, x:0,   c:'rgba(255,193,7,.22)' },
+            { h:192, x:24,  c:'rgba(255,193,7,.18)' },
+            { h:100, x:48,  c:'rgba(255,193,7,.15)' },
+            { h:232, x:72,  c:'rgba(255,193,7,.22)' },
+            { h:162, x:96,  c:'rgba(255,193,7,.15)' },
+            { h:118, x:120, c:'rgba(74,130,196,.18)' },
+            { h:202, x:144, c:'rgba(74,130,196,.14)' },
+          ].map(({ h, x, c }, i) => (
+            <rect key={i} x={x} y={280 - h} width={18} height={h} rx={3} fill={c}/>
+          ))}
+        </svg>
+      </div>
+
       {/* subtle top glow */}
       <div className="absolute pointer-events-none" style={{
         top: -60, left: '50%', transform: 'translateX(-50%)',
@@ -377,7 +395,7 @@ export default function CoursesSection() {
             transition: 'transform 0.35s, box-shadow 0.35s',
             marginBottom: 24,
           }}
-          className="course-hero-card"
+          className="course-hero-card course-featured"
         >
           {/* ── text column (right in RTL) ── */}
           <div style={{

@@ -30,16 +30,6 @@ export default function Home() {
         }} />
       </div>
 
-      {/* ── Global technical grid (fixed, 42 px, opacity 0.025) ── */}
-      <div aria-hidden="true" style={{
-        position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none',
-        backgroundImage: [
-          'linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)',
-          'linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)',
-        ].join(', '),
-        backgroundSize: '42px 42px',
-      }} />
-
       {/* ── Page content — z-index above global layers ── */}
       <main className="w-full" dir="rtl" style={{ position: 'relative', zIndex: 1 }}>
         <HeroSection />

@@ -169,7 +169,26 @@ export default function TestimonialsSection() {
   const isLast     = page === totalPages - 1;
 
   return (
-    <section className="section-block relative overflow-hidden" style={{ direction: 'rtl' }}>
+    <section className="sec sec--reviews section-block relative overflow-hidden" style={{ direction: 'rtl' }}>
+      {/* ── Golden arc + halftone geometry (bottom) ── */}
+      <div className="geo geo--btm" aria-hidden="true">
+        <svg viewBox="0 0 1440 180" preserveAspectRatio="none" fill="none"
+          style={{width:'100%',height:'100%',display:'block'}}>
+          <path d="M0 180 Q720 -40 1440 180" stroke="rgba(255,193,7,.14)" strokeWidth="1.5"/>
+          <path d="M0 180 Q720 10 1440 180"  stroke="rgba(255,193,7,.07)" strokeWidth="1"/>
+          {[0,1,2,3,4].flatMap(row => [0,1,2,3].map(col => (
+            <circle key={`l-${row}-${col}`}
+              cx={col * 28 + 22} cy={row * 26 + 76}
+              r={2.5} fill={`rgba(255,193,7,${0.08 + row * 0.02})`}/>
+          )))}
+          {[0,1,2,3,4].flatMap(row => [0,1,2,3].map(col => (
+            <circle key={`r-${row}-${col}`}
+              cx={1440 - col * 28 - 22} cy={row * 26 + 76}
+              r={2.5} fill={`rgba(255,193,7,${0.08 + row * 0.02})`}/>
+          )))}
+        </svg>
+      </div>
+
       {/* Subtle top glow */}
       <div className="absolute pointer-events-none" style={{
         top: -60, left: '50%', transform: 'translateX(-50%)',

@@ -28,7 +28,7 @@ const FAQS: FAQItem[] = [
 ];
 
 function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
-  const [open, setOpen]   = useState(false);
+  const [open, setOpen]   = useState(index === 0);
   const [hov,  setHov]    = useState(false);
 
   return (
@@ -89,7 +89,7 @@ function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
           textAlign: 'right',
           transition: 'color 220ms',
         }}>
-          {`${index + 1}. ${item.q}`}
+          {item.q}
         </span>
       </button>
 
@@ -123,7 +123,7 @@ function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
 
 export default function FAQSection() {
   return (
-    <section id="faq" className="section-block relative overflow-hidden">
+    <section id="faq" className="sec sec--faq section-block relative overflow-hidden">
       {/* Subtle top glow */}
       <div className="absolute pointer-events-none" style={{
         top: -60, left: '50%', transform: 'translateX(-50%)',

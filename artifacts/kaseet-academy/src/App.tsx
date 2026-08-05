@@ -10,6 +10,12 @@ import MasarElamiPage           from '@/pages/MasarElamiPage';
 import MasarSotiPage            from '@/pages/MasarSotiPage';
 import MasarKhatabaPage         from '@/pages/MasarKhatabaPage';
 import VoiceTestPage             from '@/pages/VoiceTestPage';
+import PrivacyPolicyPage         from '@/pages/PrivacyPolicyPage';
+import TermsPage                 from '@/pages/TermsPage';
+import RefundPolicyPage          from '@/pages/RefundPolicyPage';
+import CookiesPage               from '@/pages/CookiesPage';
+import ApplyVoiceTalentPage      from '@/pages/ApplyVoiceTalentPage';
+import ApplyTrainerPage          from '@/pages/ApplyTrainerPage';
 
 function Router() {
   return (
@@ -24,7 +30,13 @@ function Router() {
       <Route path="/masar-elami"              component={MasarElamiPage} />
       <Route path="/masar-soti"               component={MasarSotiPage} />
       <Route path="/masar-khataba"            component={MasarKhatabaPage} />
-      <Route path="/voice-test"              component={VoiceTestPage} />
+      <Route path="/voice-test"               component={VoiceTestPage} />
+      <Route path="/privacy-policy"           component={PrivacyPolicyPage} />
+      <Route path="/terms"                    component={TermsPage} />
+      <Route path="/refund-policy"            component={RefundPolicyPage} />
+      <Route path="/cookies"                  component={CookiesPage} />
+      <Route path="/apply/voice-talent"       component={ApplyVoiceTalentPage} />
+      <Route path="/apply/trainer"            component={ApplyTrainerPage} />
       <Route component={() => <div className="text-center p-20">صفحة غير موجودة 404</div>} />
     </Switch>
   );
