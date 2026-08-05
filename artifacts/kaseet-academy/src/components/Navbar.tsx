@@ -15,13 +15,15 @@ export default function Navbar() {
         <div className="flex items-center gap-3 md:gap-5">
           
           {/* CTA Button */}
-          <motion.button 
+          <motion.a
+            href={`${import.meta.env.BASE_URL}voice-test.html`}
             whileHover={{ y: -2, boxShadow: '0 8px 25px rgba(255, 193, 7, 0.4)' }}
             whileTap={{ y: 0 }}
             className="bg-[#FFC107] text-[#121927] font-bold px-5 md:px-7 py-2.5 md:py-3 rounded-full text-sm md:text-base transition-all"
+            style={{ textDecoration: 'none', display: 'inline-block' }}
           >
-            ابدأ رحلتك الصوتية
-          </motion.button>
+            سمّعنا صوتك
+          </motion.a>
 
           {/* Currency Pill */}
           <div className="glass-panel hidden md:flex items-center justify-center px-4 py-2.5 rounded-full border border-[rgba(255,255,255,0.1)]">
