@@ -380,7 +380,7 @@ export default function CourseVoiceoverPage() {
               }}
             >
               <ArrowLeft size={16} />
-              الرجوع إلى قائمة الدورات
+              العودة إلى الدورات
             </button>
 
             {/* tags row */}

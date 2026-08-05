@@ -575,7 +575,7 @@ export default function CourseBasicsPage() {
               color: DF, fontFamily: F, fontSize: 14, padding: 0, marginBottom: 22,
             }}>
               <ArrowLeft size={16} />
-              الرجوع إلى قائمة الدورات
+              العودة إلى الدورات
             </button>
 
             {/* Tags */}

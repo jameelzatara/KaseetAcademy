@@ -377,9 +377,9 @@ export default function MasarElamiPage() {
       {/* ── back nav ─────────────────────────────────── */}
       <div style={{ ...INNER, paddingTop: 20, paddingBottom: 0 }}>
         <button onClick={() => navigate('/')}
-          aria-label="العودة إلى الصفحة الرئيسية"
+          aria-label="العودة إلى الدورات"
           style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: F, fontSize: 13.5, color: MUT, padding: 0 }}>
-          <ArrowLeft size={13} /> الرئيسية
+          <ArrowLeft size={13} /> العودة إلى الدورات
         </button>
       </div>
 

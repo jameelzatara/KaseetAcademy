@@ -325,6 +325,14 @@ export default function MasarKhatabaPage() {
         }
       `}</style>
 
+      {/* back nav */}
+      <div style={{ ...WRP, paddingTop: 18, paddingBottom: 0 }}>
+        <button onClick={() => navigate('/')} aria-label="العودة إلى الدورات"
+          style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: F, fontSize: 13, color: MUT, padding: 0 }}>
+          <ArrowLeft size={13} /> العودة إلى الدورات
+        </button>
+      </div>
+
       {/* ═══════════════════════════════════════
           1. HERO — full-cover background
       ═══════════════════════════════════════ */}

@@ -166,7 +166,7 @@ export default function CourseVoiceoverLivePage() {
           {/* Right — text */}
           <div style={{ flex:1, minWidth:0, direction:'rtl' }}>
             <button onClick={() => navigate('/')} style={{ background:'none', border:'none', cursor:'pointer', display:'inline-flex', alignItems:'center', gap:6, color:'#64748b', fontFamily:F, fontSize:14, padding:0, marginBottom:22 }}>
-              <ArrowLeft size={16} /> الرجوع إلى قائمة الدورات
+              <ArrowLeft size={16} /> العودة إلى الدورات
             </button>
 
             <div style={{ display:'flex', flexWrap:'wrap', gap:8, marginBottom:18 }}>
