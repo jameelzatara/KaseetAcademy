@@ -642,7 +642,7 @@ h2.sec-title span{color:var(--gold)}
 /* ════════ الإعداد ════════ */
 /*  ضع رابط الـWeb App من Google Apps Script هنا.
     ما دام فارغاً، النموذج يعمل بوضع العرض فقط ولا يُرسل شيئاً. */
-var ENDPOINT = 'https://script.google.com/macros/s/AKfycbyHh2hfg_w8zZD5GOvtufgv_23ENBv6P06o_vR3_OSzkljc44khQMeaY3mMGtyA0b_x/exec';
+var ENDPOINT = 'https://script.google.com/macros/s/AKfycbyUj7mniLEcBTkL3ACT3iFQ6OluilWrafSRCpQUXuv8t1hGxarDIDibg29OibDYIM8/exec';
 
 var ST={cat:'ads',lvl:'l1',goal:'g1',when:'w1'};
 var CODE='KS-VC-'+String(Math.floor(1000+Math.random()*8999));
@@ -735,7 +735,9 @@ async function toggleRec(){
       cx.fillRect(i*bw+bw*0.22,(cv.height-h)/2,bw*0.56,h);}}
   rec.ondataavailable=function(e){if(e.data&&e.data.size)chunks.push(e.data)};
   rec.onstop=async function(){
-    blob=new Blob(chunks,{type:rec.mimeType||'audio/webm'});
+    /* نستخدم النوع الأساسي فقط بدون تفاصيل الـ codec لضمان التوافق */
+    var blobMime=(rec.mimeType||mime||'audio/webm').split(';')[0]||'audio/webm';
+    blob=new Blob(chunks,{type:blobMime});
     dur=(Date.now()-t0)/1000;
     document.getElementById('ap').src=URL.createObjectURL(blob);
     document.getElementById('prev').classList.remove('hide');
@@ -827,8 +829,22 @@ function showErr(m){var e=document.getElementById('err');e.innerHTML=m;e.classLi
   e.scrollIntoView({behavior:'smooth',block:'center'})}
 function hideErr(){document.getElementById('err').classList.remove('on')}
 
-function blobToB64(b){return new Promise(function(res,rej){var r=new FileReader();
-  r.onload=function(){res(r.result)};r.onerror=function(){rej(new Error('read'))};r.readAsDataURL(b)})}
+function blobToB64(b){
+  return new Promise(function(res,rej){
+    if(!b||b.size===0){rej(new Error('الملف الصوتي فارغ — أعِد التسجيل'));return}
+    var r=new FileReader();
+    /* نستخدم onloadend بدلاً من onload لضمان اكتمال القراءة 100% قبل المتابعة */
+    r.onloadend=function(){
+      if(r.readyState!==FileReader.DONE){rej(new Error('FileReader لم يكتمل'));return}
+      var result=r.result;
+      if(!result||typeof result!=='string'||result.length<30){
+        rej(new Error('تحويل الصوت إلى Base64 فشل — حجم الناتج صفر'));return}
+      res(result);
+    };
+    r.onerror=function(){rej(new Error('FileReader: فشل في قراءة الملف الصوتي'))};
+    r.readAsDataURL(b);
+  });
+}
 
 document.getElementById('frm').addEventListener('submit',async function(e){
   e.preventDefault();hideErr();
@@ -844,6 +860,10 @@ document.getElementById('frm').addEventListener('submit',async function(e){
     country:document.getElementById('cn').value,
     city:document.getElementById('ct').value.trim(),
     category:ST.cat,level:ST.lvl,goal:ST.goal,when:ST.when,
+    /* حقول مسطّحة يتوقّعها الباك إند صراحةً */
+    durationSec:METRICS.duration?parseFloat(METRICS.duration):Math.round(dur),
+    purityDb:METRICS.snr||0,
+    startTime:t0?new Date(t0).toISOString():'',
     metrics:METRICS,
     consent:document.getElementById('c1').checked,
     marketing:document.getElementById('c2').checked
