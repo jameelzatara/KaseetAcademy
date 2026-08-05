@@ -875,17 +875,27 @@ document.getElementById('frm').addEventListener('submit',async function(e){
       await new Promise(function(r){setTimeout(r,700)});
     }else{
       payload.audio=await blobToB64(blob);
+      console.log('[KS] payload size (chars):', JSON.stringify(payload).length);
+      console.log('[KS] blob size (bytes):', blob.size, '| type:', blob.type);
       var res=await fetch(ENDPOINT,{method:'POST',
         headers:{'Content-Type':'text/plain;charset=utf-8'},   /* text/plain يتجنّب preflight */
         body:JSON.stringify(payload)});
-      if(!res.ok) throw new Error('HTTP '+res.status);
-      var data=await res.json();
+      console.log('[KS] HTTP status:', res.status, res.statusText);
+      var rawText=await res.text();
+      console.log('[KS] raw response:', rawText);
+      if(!res.ok) throw new Error('HTTP '+res.status+' — '+rawText.slice(0,200));
+      var data;
+      try{data=JSON.parse(rawText)}
+      catch(je){throw new Error('الباك إند أرجع رداً غير JSON — '+rawText.slice(0,300))}
+      console.log('[KS] parsed response:', JSON.stringify(data));
       if(!data.ok){
         var msgs={CAP_REACHED:'اكتمل عدد التقييمات لهذا الأسبوع. اتركنا رسالة على واتساب ونحفظ لك مكاناً للأسبوع القادم.',
                   DUPLICATE:'لديك تقديم قيد المعالجة بالفعل — تقريرك في الطريق.',
                   NO_CONSENT:'الموافقة على معالجة البيانات مطلوبة.',
                   BAD_EMAIL:'البريد الإلكتروني غير صحيح.'};
-        throw new Error(msgs[data.error]||data.msg||'تعذّر إتمام الإرسال.');
+        /* نُظهر تفاصيل الرد كاملاً لتسهيل التشخيص */
+        var detail=msgs[data.error]||data.msg||data.error||('رد الخادم: '+JSON.stringify(data));
+        throw new Error(detail);
       }
       if(typeof data.remaining==='number') document.getElementById('capLeft').textContent=data.remaining;
       if(data.code){CODE=data.code;document.getElementById('tokCode').textContent=CODE}
