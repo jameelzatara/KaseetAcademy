@@ -888,12 +888,11 @@ document.getElementById('frm').addEventListener('submit',async function(e){
       try{data=JSON.parse(rawText)}
       catch(je){throw new Error('الباك إند أرجع رداً غير JSON — '+rawText.slice(0,300))}
       console.log('[KS] parsed response:', JSON.stringify(data));
-      if(!data.ok){
+      if(data.ok!==true && data.status!=='success'){
         var msgs={CAP_REACHED:'اكتمل عدد التقييمات لهذا الأسبوع. اتركنا رسالة على واتساب ونحفظ لك مكاناً للأسبوع القادم.',
                   DUPLICATE:'لديك تقديم قيد المعالجة بالفعل — تقريرك في الطريق.',
                   NO_CONSENT:'الموافقة على معالجة البيانات مطلوبة.',
                   BAD_EMAIL:'البريد الإلكتروني غير صحيح.'};
-        /* نُظهر تفاصيل الرد كاملاً لتسهيل التشخيص */
         var detail=msgs[data.error]||data.msg||data.error||('رد الخادم: '+JSON.stringify(data));
         throw new Error(detail);
       }
