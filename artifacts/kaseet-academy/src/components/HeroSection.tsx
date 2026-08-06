@@ -46,16 +46,11 @@ export default function HeroSection() {
           backgroundPosition: '62% 34%',
         }}
       />
-      {/* Scrim — multi-layer glass with colour overlaps, lighter at bottom so Waveform shows */}
+      {/* Dark Overlay — 65% flat + fade at bottom so Waveform shows */}
       <div
         className="absolute inset-0 z-0"
         style={{
-          background: [
-            'linear-gradient(to bottom, rgba(12,18,32,0.75) 0%, rgba(12,18,32,0.58) 60%, rgba(12,18,32,0.12) 100%)',
-            'radial-gradient(ellipse 70% 55% at 72% 6%,  rgba(255,193,7,0.13),   transparent 68%)',
-            'radial-gradient(ellipse 58% 48% at 12% 95%, rgba(74,130,196,0.15),  transparent 70%)',
-            'radial-gradient(ellipse 40% 36% at 50% 50%, rgba(37,51,74,0.22),    transparent 72%)',
-          ].join(', '),
+          background: 'linear-gradient(to bottom, rgba(10,14,22,0.65) 0%, rgba(10,14,22,0.65) 72%, rgba(10,14,22,0.15) 100%)',
         }}
       />
 
