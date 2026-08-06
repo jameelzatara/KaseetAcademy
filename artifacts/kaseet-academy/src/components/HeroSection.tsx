@@ -46,14 +46,13 @@ export default function HeroSection() {
           backgroundPosition: '62% 34%',
         }}
       />
-      {/* Glassmorphism overlay — dark navy glass across entire hero */}
+      {/* Glassmorphism overlay — subtle dark navy glass, full height */}
       <div
         className="absolute inset-0 z-0"
         style={{
-          background: 'linear-gradient(to bottom, rgba(8,14,36,0.72) 0%, rgba(8,14,36,0.68) 68%, rgba(8,14,36,0.14) 100%)',
-          backdropFilter: 'blur(6px)',
-          WebkitBackdropFilter: 'blur(6px)',
-          borderBottom: '1px solid rgba(255,255,255,0.07)',
+          background: 'linear-gradient(to bottom, rgba(8,14,36,0.58) 0%, rgba(8,14,36,0.55) 80%, rgba(8,14,36,0.40) 100%)',
+          backdropFilter: 'blur(2px)',
+          WebkitBackdropFilter: 'blur(2px)',
         }}
       />
 
