@@ -46,14 +46,10 @@ export default function HeroSection() {
           backgroundPosition: '62% 34%',
         }}
       />
-      {/* Glassmorphism overlay — subtle dark navy glass, full height */}
+      {/* Dark overlay — uniform slate-navy, full height, no blur */}
       <div
         className="absolute inset-0 z-0"
-        style={{
-          background: 'linear-gradient(to bottom, rgba(8,14,36,0.58) 0%, rgba(8,14,36,0.55) 80%, rgba(8,14,36,0.40) 100%)',
-          backdropFilter: 'blur(2px)',
-          WebkitBackdropFilter: 'blur(2px)',
-        }}
+        style={{ background: 'rgba(18,26,50,0.62)' }}
       />
 
       {/* ── Cassette reel geometry (top-right, decorative) ── */}
