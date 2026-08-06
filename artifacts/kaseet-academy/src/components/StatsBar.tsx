@@ -1,51 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion } from 'framer-motion';
 import wajeezLogo from '@assets/wajeez-logo_1785422080937.png';
 import { STATS } from '../data/stats';
-
-function CountUpNumber({
-  end,
-  duration = 1.6,
-  decimals = 0,
-}: {
-  end: number;
-  duration?: number;
-  decimals?: number;
-}) {
-  const [count, setCount] = useState(0);
-  const nodeRef = useRef<HTMLSpanElement>(null);
-  const inView = useInView(nodeRef, { once: true, margin: '-50px' });
-  const done = useRef(false);
-
-  useEffect(() => {
-    if (!inView || done.current) return;
-    // Respect prefers-reduced-motion
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setCount(end); done.current = true; return;
-    }
-    let t0: number | null = null;
-    let af: number;
-
-    function step(t: number) {
-      if (!t0) t0 = t;
-      const p = Math.min((t - t0) / (duration * 1000), 1);
-      const e = 1 - Math.pow(1 - p, 4); // easeOutQuart
-      const val = e * end;
-      setCount(parseFloat(val.toFixed(decimals)));
-      if (p < 1) af = requestAnimationFrame(step);
-      else { setCount(end); done.current = true; }
-    }
-
-    af = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(af);
-  }, [inView, end, duration, decimals]);
-
-  return (
-    <span ref={nodeRef} className="font-poppins">
-      {decimals > 0 ? count.toFixed(decimals) : new Intl.NumberFormat('en').format(count)}
-    </span>
-  );
-}
 
 export default function StatsBar() {
   return (
@@ -60,9 +15,8 @@ export default function StatsBar() {
 
         {/* متدرب احترافي */}
         <div className="flex flex-col items-center">
-          <div className="text-[#FFC107] font-bold text-[clamp(18px,2.2vw,26px)] leading-none mb-1 flex items-center" dir="ltr">
-            <CountUpNumber end={STATS.students} />
-            <span>+</span>
+          <div className="text-[#FFC107] font-bold text-[clamp(18px,2.2vw,26px)] leading-none mb-1 flex items-center font-poppins" dir="ltr">
+            {STATS.students}<span>+</span>
           </div>
           <div className="text-[rgba(252,251,251,0.72)] text-[12.5px] font-medium relative pb-1 mb-1">
             متدرب احترافي
@@ -74,9 +28,8 @@ export default function StatsBar() {
 
         {/* دفعة تدريبية */}
         <div className="flex flex-col items-center">
-          <div className="text-[#FFC107] font-bold text-[clamp(18px,2.2vw,26px)] leading-none mb-1 flex items-center" dir="ltr">
-            <CountUpNumber end={STATS.batches} />
-            <span>+</span>
+          <div className="text-[#FFC107] font-bold text-[clamp(18px,2.2vw,26px)] leading-none mb-1 flex items-center font-poppins" dir="ltr">
+            {STATS.batches}<span>+</span>
           </div>
           <div className="text-[rgba(252,251,251,0.72)] text-[12.5px] font-medium relative pb-1 mb-1">
             دفعة تدريبية
@@ -88,9 +41,8 @@ export default function StatsBar() {
 
         {/* Google rating */}
         <div className="flex flex-col items-center">
-          <div className="text-[#FFC107] font-bold text-[clamp(18px,2.2vw,26px)] leading-none mb-1 flex items-center" dir="ltr">
-            <CountUpNumber end={STATS.googleRating} decimals={1} />
-            <span className="text-[14px] ml-0.5">★</span>
+          <div className="text-[#FFC107] font-bold text-[clamp(18px,2.2vw,26px)] leading-none mb-1 flex items-center font-poppins" dir="ltr">
+            {STATS.googleRating.toFixed(1)}<span className="text-[14px] ml-0.5">★</span>
           </div>
           <div className="text-[rgba(252,251,251,0.72)] text-[12.5px] font-medium relative pb-1 mb-1">
             تقييم Google
@@ -105,11 +57,11 @@ export default function StatsBar() {
 
       {/* Wajeez badge — linked */}
       <a
-        href="https://wajez.com/"
+        href="https://wajeez.com/"
         target="_blank"
         rel="noopener noreferrer"
         className="flex items-center gap-3 order-1 md:order-3 no-underline"
-        style={{ textDecoration: 'none' }}
+        style={{ textDecoration: 'none', cursor: 'pointer' }}
       >
         <div className="text-right">
           <div className="text-white font-bold text-[14px]">شهادة معتمدة من تطبيق وجيز</div>

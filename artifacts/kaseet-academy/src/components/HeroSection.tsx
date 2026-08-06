@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from './Navbar';
 import StatsBar from './StatsBar';
+import Waveform from './Waveform';
 import heroBg from '@assets/hero-bg_1785422080937.jpg';
 
 const rotatingWords = [
@@ -11,39 +12,6 @@ const rotatingWords = [
   'موهبةٍ فرصة',
   'حلمٍ بداية',
 ];
-
-// Two thin decorative polylines replacing the old thick Waveform
-function TwoLineWave() {
-  return (
-    <svg
-      viewBox="0 0 1440 90"
-      preserveAspectRatio="none"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      style={{ width: '100%', height: 90, display: 'block' }}
-      aria-hidden="true"
-    >
-      {/* Line 1 — higher amplitude */}
-      <polyline
-        points="0,70 60,54 120,72 180,44 240,68 300,50 360,73 420,40 480,65 540,52 600,70 660,38 720,60 780,50 840,72 900,42 960,66 1020,48 1080,70 1140,40 1200,62 1260,52 1320,70 1380,44 1440,60"
-        stroke="rgba(255,193,7,0.28)"
-        strokeWidth="1.4"
-        fill="none"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      {/* Line 2 — lower amplitude, offset */}
-      <polyline
-        points="0,82 80,72 160,80 240,75 320,82 400,70 480,80 560,74 640,82 720,72 800,80 880,76 960,82 1040,70 1120,80 1200,74 1280,82 1360,73 1440,80"
-        stroke="rgba(255,193,7,0.14)"
-        strokeWidth="0.9"
-        fill="none"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
 
 export default function HeroSection() {
   const [activeWordIndex, setActiveWordIndex] = useState(0);
@@ -73,17 +41,8 @@ export default function HeroSection() {
           backgroundPosition: '62% 34%',
         }}
       />
-      {/* Scrim — strong horizontal + bottom, lighter at top so faces show */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          background: [
-            'linear-gradient(to left, rgba(26,37,51,.96) 0%, rgba(26,37,51,.82) 28%, rgba(26,37,51,.50) 60%, rgba(26,37,51,.18) 100%)',
-            'linear-gradient(to top, rgba(13,11,20,1.0) 0%, rgba(26,37,51,.55) 28%, transparent 55%)',
-            'linear-gradient(to bottom, rgba(26,37,51,.38) 0%, transparent 22%)',
-          ].join(', '),
-        }}
-      />
+      {/* Scrim */}
+      <div className="absolute inset-0 z-0 bg-[rgba(10,14,22,0.55)]" />
 
       {/* ── Cassette reel geometry (top-right, decorative) ── */}
       <div className="geo" aria-hidden="true">
@@ -101,9 +60,9 @@ export default function HeroSection() {
 
       <Navbar />
 
-      {/* Thin polyline waveform at bottom — replaces old Waveform component */}
+      {/* Waveform at bottom */}
       <div className="absolute bottom-0 left-0 right-0 z-0 pointer-events-none">
-        <TwoLineWave />
+        <Waveform />
       </div>
 
       {/* Main Hero Content */}
