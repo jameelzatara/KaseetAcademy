@@ -2,6 +2,8 @@ import { motion } from 'framer-motion';
 import wajeezLogo from '@assets/wajeez-logo_1785422080937.png';
 import { STATS } from '../data/stats';
 
+const fmt = (n: number) => new Intl.NumberFormat('en').format(n);
+
 export default function StatsBar() {
   return (
     <motion.div
@@ -10,42 +12,42 @@ export default function StatsBar() {
       transition={{ duration: 0.8, delay: 1, ease: 'easeOut' }}
       className="glass-panel w-full max-w-[950px] rounded-[15px] border border-[rgba(255,193,7,0.32)] shadow-[0_8px_30px_rgba(10,14,22,0.45)] py-4 px-5 md:px-8 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-0"
     >
-      {/* Stats — RTL start side */}
+      {/* Stats */}
       <div className="flex items-center justify-center gap-[clamp(16px,2.6vw,40px)] w-full md:w-auto order-2 md:order-1">
 
-        {/* متدرب احترافي */}
+        {/* طالب مسجل */}
         <div className="flex flex-col items-center">
           <div className="text-[#FFC107] font-bold text-[clamp(18px,2.2vw,26px)] leading-none mb-1 flex items-center font-poppins" dir="ltr">
-            {STATS.students}<span>+</span>
+            {fmt(STATS.students)}<span>+</span>
           </div>
           <div className="text-[rgba(252,251,251,0.72)] text-[12.5px] font-medium relative pb-1 mb-1">
-            متدرب احترافي
+            طالب مسجل
             <span className="absolute bottom-0 left-[12.5%] w-[75%] h-[2px] bg-[#FFC107] rounded-full" />
           </div>
         </div>
 
         <div className="w-[1px] h-10 bg-[rgba(255,255,255,0.1)]" />
 
-        {/* دفعة تدريبية */}
+        {/* دورة تدريبية */}
         <div className="flex flex-col items-center">
           <div className="text-[#FFC107] font-bold text-[clamp(18px,2.2vw,26px)] leading-none mb-1 flex items-center font-poppins" dir="ltr">
-            {STATS.batches}<span>+</span>
+            {fmt(STATS.courses)}<span>+</span>
           </div>
           <div className="text-[rgba(252,251,251,0.72)] text-[12.5px] font-medium relative pb-1 mb-1">
-            دفعة تدريبية
+            دورة تدريبية
             <span className="absolute bottom-0 left-[12.5%] w-[75%] h-[2px] bg-[#FFC107] rounded-full" />
           </div>
         </div>
 
         <div className="w-[1px] h-10 bg-[rgba(255,255,255,0.1)]" />
 
-        {/* Google rating */}
+        {/* ساعة تدريب مباشر */}
         <div className="flex flex-col items-center">
           <div className="text-[#FFC107] font-bold text-[clamp(18px,2.2vw,26px)] leading-none mb-1 flex items-center font-poppins" dir="ltr">
-            {STATS.googleRating.toFixed(1)}<span className="text-[14px] ml-0.5">★</span>
+            {fmt(STATS.trainingHours)}<span>+</span>
           </div>
           <div className="text-[rgba(252,251,251,0.72)] text-[12.5px] font-medium relative pb-1 mb-1">
-            تقييم Google
+            ساعة تدريب مباشر
             <span className="absolute bottom-0 left-[12.5%] w-[75%] h-[2px] bg-[#FFC107] rounded-full" />
           </div>
         </div>
@@ -55,7 +57,7 @@ export default function StatsBar() {
       {/* Separator */}
       <div className="hidden md:block w-[1px] h-12 bg-[rgba(255,255,255,0.15)] mx-4 order-2" />
 
-      {/* Wajeez badge — linked */}
+      {/* Wajeez badge */}
       <a
         href="https://wajeez.com/"
         target="_blank"
