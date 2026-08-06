@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import {
   ChevronDown, Calendar, Clock, MapPin, Wifi,
@@ -541,6 +541,7 @@ function AdvisorMini({ name, role, photo, href }: { name: string; role: string; 
 export default function CourseBasicsPage() {
   const [, navigate] = useLocation();
   const [openAccordion, setOpenAccordion] = useState<'inperson' | 'online' | null>(null);
+  useEffect(() => { window.scrollTo({ top: 0, left: 0, behavior: 'instant' }); }, []);
   const [openCurrInperson, setOpenCurrInperson] = useState(false);
   const [openCurrOnline, setOpenCurrOnline] = useState(false);
   const [partnerBarOpen, setPartnerBarOpen] = useState(false);

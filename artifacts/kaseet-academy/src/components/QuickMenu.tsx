@@ -36,7 +36,13 @@ export default function QuickMenu({ open, onClose, onOpenAuth }: Props) {
             }}
           />
 
-          {/* Panel — centered */}
+          {/* Panel — centered via flexbox wrapper so framer-motion y-animation doesn't break centering */}
+          <div style={{
+            position: 'fixed', inset: 0, zIndex: 901,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            pointerEvents: 'none',
+            padding: '20px 14px',
+          }}>
           <motion.div
             key="qm-panel"
             initial={{ opacity: 0, scale: 0.94, y: 20 }}
@@ -44,10 +50,8 @@ export default function QuickMenu({ open, onClose, onOpenAuth }: Props) {
             exit={{ opacity: 0, scale: 0.94,    y: 20 }}
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
             style={{
-              position: 'fixed', zIndex: 901,
-              top: '50%', left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: 'min(400px, calc(100vw - 28px))',
+              pointerEvents: 'auto',
+              width: 'min(400px, 100%)',
               background: '#fdf8f5',
               borderRadius: 28,
               boxShadow: '0 0 0 1px rgba(0,0,0,0.07), 0 24px 70px rgba(0,0,0,0.28)',
@@ -164,6 +168,7 @@ export default function QuickMenu({ open, onClose, onOpenAuth }: Props) {
               </div>
             )}
           </motion.div>
+          </div>{/* /centering wrapper */}
         </>
       )}
     </AnimatePresence>

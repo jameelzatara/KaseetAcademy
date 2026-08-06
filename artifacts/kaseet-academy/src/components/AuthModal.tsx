@@ -83,17 +83,22 @@ export default function AuthModal({ open, defaultMode = 'login', onClose }: Prop
             }}
           />
 
+          {/* Centering wrapper — flexbox handles positioning, framer-motion handles animation */}
+          <div style={{
+            position: 'fixed', inset: 0, zIndex: 1001,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            pointerEvents: 'none',
+            padding: '20px 16px',
+          }}>
           <motion.div
             key="am-modal"
-            initial={{ opacity: 0, scale: 0.93, y: 28 }}
+            initial={{ opacity: 0, scale: 0.93, y: 24 }}
             animate={{ opacity: 1, scale: 1,   y: 0 }}
-            exit={{ opacity: 0, scale: 0.93,   y: 28 }}
+            exit={{ opacity: 0, scale: 0.93,   y: 24 }}
             transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
             style={{
-              position: 'fixed', zIndex: 1001,
-              top: '50%', left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: 'min(480px, calc(100vw - 32px))',
+              pointerEvents: 'auto',
+              width: 'min(480px, 100%)',
               background: '#fdf8f5',
               borderRadius: 28,
               boxShadow: '0 0 0 1px rgba(0,0,0,0.06), 0 24px 80px rgba(0,0,0,0.22)',
@@ -272,6 +277,7 @@ export default function AuthModal({ open, defaultMode = 'login', onClose }: Prop
               )}
             </p>
           </motion.div>
+          </div>{/* /centering wrapper */}
         </>
       )}
     </AnimatePresence>
