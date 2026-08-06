@@ -4,6 +4,8 @@ import logo from '@assets/logo_1785422080938.png';
 import { useCurrency } from '../context/CurrencyContext';
 import { CURRENCY_LIST, CURRENCY_SYMBOLS, CURRENCY_NAMES } from '../data/currency';
 import AuthModal from './AuthModal';
+import QuickMenu from './QuickMenu';
+import { useAuth } from '../context/AuthContext';
 
 export default function Navbar() {
   const [solid,        setSolid]        = useState(false);
@@ -12,8 +14,8 @@ export default function Navbar() {
   const [showAuth,     setShowAuth]     = useState(false);
   const [authMode,     setAuthMode]     = useState<'login' | 'register'>('login');
   const { currency, setCurrency } = useCurrency();
+  const { user } = useAuth();
   const dropRef  = useRef<HTMLDivElement>(null);
-  const menuRef  = useRef<HTMLDivElement>(null);
 
   const openAuth = (mode: 'login' | 'register') => {
     setAuthMode(mode);
@@ -33,19 +35,16 @@ export default function Navbar() {
     return () => obs.disconnect();
   }, []);
 
-  // ── Close dropdowns on outside click ──────────────────────
+  // ── Close currency dropdown on outside click ───────────────
   useEffect(() => {
     function handle(e: MouseEvent) {
       if (showCurrency && dropRef.current && !dropRef.current.contains(e.target as Node)) {
         setShowCurrency(false);
       }
-      if (showMenu && menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setShowMenu(false);
-      }
     }
     document.addEventListener('mousedown', handle);
     return () => document.removeEventListener('mousedown', handle);
-  }, [showCurrency, showMenu]);
+  }, [showCurrency]);
 
   return (
     <>
@@ -170,141 +169,38 @@ export default function Navbar() {
               </AnimatePresence>
             </div>
 
-            {/* Hamburger */}
-            <div ref={menuRef} style={{ position: 'relative' }}>
-              <button
-                aria-label="القائمة"
-                aria-expanded={showMenu}
-                onClick={() => setShowMenu(v => !v)}
-                className="glass-panel"
-                style={{
-                  width: 48, height: 48, display: 'flex', flexDirection: 'column',
-                  alignItems: 'center', justifyContent: 'center', gap: 5,
-                  borderRadius: '50%', border: '1px solid rgba(255,255,255,0.10)',
-                  cursor: 'pointer', background: showMenu ? 'rgba(44,55,75,.95)' : 'rgba(255,255,255,0.04)',
-                  transition: 'background .2s',
-                }}
-                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(44,55,75,.95)')}
-                onMouseLeave={e => { if (!showMenu) e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; }}
-              >
-                <span style={{ width: 20, height: 2, background: '#FFC107', borderRadius: 2, display: 'block',
-                  transition: 'transform .2s, opacity .2s',
-                  transform: showMenu ? 'translateY(7px) rotate(45deg)' : 'none',
-                }} />
-                <span style={{ width: 20, height: 2, background: '#FFC107', borderRadius: 2, display: 'block',
-                  transition: 'opacity .2s',
-                  opacity: showMenu ? 0 : 1,
-                }} />
-                <span style={{ width: 20, height: 2, background: '#FFC107', borderRadius: 2, display: 'block',
-                  transition: 'transform .2s, opacity .2s',
-                  transform: showMenu ? 'translateY(-7px) rotate(-45deg)' : 'none',
-                }} />
-              </button>
-
-              {/* Menu dropdown */}
-              <AnimatePresence>
-                {showMenu && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -8, scale: 0.96 }}
-                    animate={{ opacity: 1, y: 0,  scale: 1 }}
-                    exit={{ opacity: 0, y: -8, scale: 0.96 }}
-                    transition={{ duration: 0.2 }}
-                    style={{
-                      position: 'absolute', top: 'calc(100% + 10px)', left: 0,
-                      background: 'rgba(20,30,46,0.98)',
-                      backdropFilter: 'blur(16px)',
-                      WebkitBackdropFilter: 'blur(16px)',
-                      border: '1px solid rgba(255,193,7,0.18)',
-                      borderRadius: 16, overflow: 'hidden',
-                      boxShadow: '0 16px 48px rgba(0,0,0,0.55)',
-                      minWidth: 240, zIndex: 9999,
-                      direction: 'rtl',
-                    }}
-                  >
-                    {/* Header */}
-                    <div style={{
-                      padding: '14px 18px 10px',
-                      borderBottom: '1px solid rgba(255,255,255,0.06)',
-                    }}>
-                      <p style={{
-                        margin: 0,
-                        fontFamily: 'Tajawal, sans-serif', fontSize: 12, fontWeight: 500,
-                        color: 'rgba(252,251,251,0.40)', letterSpacing: '0.04em',
-                      }}>
-                        حسابي في كاسيت أكاديمي
-                      </p>
-                    </div>
-
-                    {/* Sign in */}
-                    <button
-                      onClick={() => openAuth('login')}
-                      style={{
-                        display: 'flex', alignItems: 'center', gap: 12,
-                        padding: '14px 18px', width: '100%',
-                        background: 'transparent', border: 'none', cursor: 'pointer',
-                        color: 'rgba(252,251,251,0.88)',
-                        fontFamily: 'Tajawal, sans-serif', fontSize: 15, fontWeight: 600,
-                        transition: 'background .15s', textAlign: 'right',
-                        borderBottom: '1px solid rgba(255,255,255,0.05)',
-                      }}
-                      onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.05)')}
-                      onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-                    >
-                      <span style={{
-                        width: 34, height: 34, borderRadius: '50%',
-                        background: 'rgba(255,193,7,0.12)',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        flexShrink: 0,
-                      }}>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFC107" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
-                          <polyline points="10 17 15 12 10 7"/>
-                          <line x1="15" y1="12" x2="3" y2="12"/>
-                        </svg>
-                      </span>
-                      <span>تسجيل الدخول</span>
-                    </button>
-
-                    {/* Register */}
-                    <button
-                      onClick={() => openAuth('register')}
-                      style={{
-                        display: 'flex', alignItems: 'center', gap: 12,
-                        padding: '14px 18px', width: '100%',
-                        background: 'transparent', border: 'none', cursor: 'pointer',
-                        color: 'rgba(252,251,251,0.88)',
-                        fontFamily: 'Tajawal, sans-serif', fontSize: 15, fontWeight: 600,
-                        transition: 'background .15s', textAlign: 'right',
-                      }}
-                      onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.05)')}
-                      onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-                    >
-                      <span style={{
-                        width: 34, height: 34, borderRadius: '50%',
-                        background: 'rgba(255,193,7,0.12)',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        flexShrink: 0,
-                      }}>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFC107" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-                          <circle cx="9" cy="7" r="4"/>
-                          <line x1="19" y1="8" x2="19" y2="14"/>
-                          <line x1="22" y1="11" x2="16" y2="11"/>
-                        </svg>
-                      </span>
-                      <span>إنشاء حساب جديد</span>
-                    </button>
-
-                    {/* Footer note */}
-                    <div style={{ padding: '10px 18px 14px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-                      <p style={{ margin: 0, fontFamily: 'Tajawal, sans-serif', fontSize: 11, color: 'rgba(252,251,251,0.30)' }}>
-                        سجّل الدخول لمتابعة دوراتك وشهاداتك
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+            {/* Hamburger — opens QuickMenu overlay */}
+            <button
+              aria-label="القائمة"
+              aria-expanded={showMenu}
+              onClick={() => setShowMenu(v => !v)}
+              className="glass-panel"
+              style={{
+                width: 48, height: 48, display: 'flex', flexDirection: 'column',
+                alignItems: 'center', justifyContent: 'center', gap: 5,
+                borderRadius: '50%', border: '1px solid rgba(255,255,255,0.10)',
+                cursor: 'pointer', background: 'rgba(255,255,255,0.04)',
+                transition: 'background .2s',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(44,55,75,.95)')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.04)')}
+            >
+              {/* Show initials when logged in, bars when not */}
+              {user ? (
+                <span style={{
+                  fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 15,
+                  color: '#FFC107', lineHeight: 1,
+                }}>
+                  {user.firstName.charAt(0)}
+                </span>
+              ) : (
+                <>
+                  <span style={{ width: 20, height: 2, background: '#FFC107', borderRadius: 2, display: 'block' }} />
+                  <span style={{ width: 20, height: 2, background: '#FFC107', borderRadius: 2, display: 'block' }} />
+                  <span style={{ width: 20, height: 2, background: '#FFC107', borderRadius: 2, display: 'block' }} />
+                </>
+              )}
+            </button>
 
           </div>
         </div>
@@ -315,6 +211,13 @@ export default function Navbar() {
           .currency-pill-btn { display: inline-flex !important; }
         }
       `}</style>
+
+      {/* Quick Menu — centered overlay panel */}
+      <QuickMenu
+        open={showMenu}
+        onClose={() => setShowMenu(false)}
+        onOpenAuth={openAuth}
+      />
 
       {/* Auth Modal */}
       <AuthModal

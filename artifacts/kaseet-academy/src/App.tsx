@@ -1,5 +1,6 @@
 import { Route, Switch, Router as WouterRouter, Redirect } from 'wouter';
 import { CurrencyProvider } from '@/context/CurrencyContext';
+import { AuthProvider } from '@/context/AuthContext';
 import Home from '@/pages/Home';
 import CourseVoiceoverPage      from '@/pages/CourseVoiceoverPage';
 import CourseBasicsPage         from '@/pages/CourseBasicsPage';
@@ -59,11 +60,13 @@ function Router() {
 
 function App() {
   return (
-    <CurrencyProvider>
-      <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
-        <Router />
-      </WouterRouter>
-    </CurrencyProvider>
+    <AuthProvider>
+      <CurrencyProvider>
+        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
+          <Router />
+        </WouterRouter>
+      </CurrencyProvider>
+    </AuthProvider>
   );
 }
 
