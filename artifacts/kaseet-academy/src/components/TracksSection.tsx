@@ -1,4 +1,4 @@
-// ── Academic Tracks Section ────────────────────────────────
+// ── Academic Tracks Section — Masterclass terminology ────────
 import { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { Link } from 'wouter';
@@ -9,10 +9,11 @@ import voiceoverTrackImg from '@assets/voiceover-track_1785431174382.jpeg';
 import publicSpeakingImg from '@assets/public-speaking-track_1785431174381.jpg';
 
 interface Track {
-  id: number;
-  title: string;
-  desc: string;
-  image: string;
+  id:     number;
+  title:  string;
+  desc:   string;
+  hours:  string;
+  image:  string;
   imgPos: string;
   route?: string;
 }
@@ -20,27 +21,30 @@ interface Track {
 const TRACKS: Track[] = [
   {
     id: 1,
-    title:  'المسار الإعلامي',
+    title:  'ماستركلاس الإعلام',
     desc:   'برنامج شامل للتدريب على التقديم التلفزيوني والإذاعي، إعداد البرامج، وإتقان الحضور أمام الكاميرا بثقة واحتراف.',
+    hours:  '40 ساعة · 10 محطات · 8 مشاريع',
     image:  mediaTrackImg,
     imgPos: 'center 45%',
-    route:  '/masar-elami',
+    route:  '/masterclass-elam',
   },
   {
     id: 2,
     title:  'ماستركلاس التعليق والأداء الصوتي',
     desc:   'رحلة متكاملة لتطوير نبرات الصوت، التنفس الصحيح، وتدريب الأداء الصوتي لمختلف الإعلانات، الوثائقيات والبودكاست.',
+    hours:  '42 ساعة · 12 محطة · 13 عملاً',
     image:  voiceoverTrackImg,
     imgPos: 'center 30%',
-    route:  '/masar-soti',
+    route:  '/masterclass-voice',
   },
   {
     id: 3,
-    title:  'مسار فن الخطابة',
+    title:  'ماستركلاس فن الخطابة والتواصل القيادي',
     desc:   'برنامج تطبيقي لبناء الكاريزما والقيادة الصوتية، إتقان لغة الجسد والتأثير في الجمهور والتخلص من رهبة المسرح.',
+    hours:  '42 ساعة · 12 محطة · 13 مخرجاً',
     image:  publicSpeakingImg,
     imgPos: 'center 30%',
-    route:  '/masar-khataba',
+    route:  '/masterclass-khataba',
   },
 ];
 
@@ -93,7 +97,7 @@ function TrackCard({ track }: { track: Track }) {
             pointerEvents: 'none',
           }} />
         )}
-        {/* Badge for clickable tracks */}
+        {/* Badge */}
         {track.route && (
           <span style={{
             position: 'absolute', top: 12, right: 12, zIndex: 1,
@@ -113,10 +117,10 @@ function TrackCard({ track }: { track: Track }) {
         display: 'flex', flexDirection: 'column', gap: 12,
         textAlign: 'right', flex: 1,
       }}>
-        {/* Title — 22px / 600 */}
+        {/* Title */}
         <h3 style={{
           fontFamily: 'Tajawal, sans-serif', fontWeight: 600,
-          fontSize: 22,
+          fontSize: 20,
           color: hov ? '#FFFFFF' : 'rgba(252,251,251,0.96)',
           lineHeight: 1.3, margin: 0,
           letterSpacing: '0.01em',
@@ -124,6 +128,23 @@ function TrackCard({ track }: { track: Track }) {
         }}>
           {track.title}
         </h3>
+
+        {/* Hours strip */}
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          padding: '4px 10px', borderRadius: 999,
+          background: 'rgba(255,193,7,0.08)',
+          border: '1px solid rgba(255,193,7,0.20)',
+          alignSelf: 'flex-start',
+        }}>
+          <span style={{
+            fontFamily: 'Poppins, sans-serif', fontSize: 11, fontWeight: 600,
+            color: 'rgba(255,193,7,0.85)', letterSpacing: '0.02em',
+            direction: 'rtl',
+          }}>
+            {track.hours}
+          </span>
+        </div>
 
         {/* Gold accent */}
         <div style={{
@@ -134,10 +155,10 @@ function TrackCard({ track }: { track: Track }) {
           alignSelf: 'flex-start',
         }} />
 
-        {/* Description — 16px / 1.9lh / grows */}
+        {/* Description */}
         <p style={{
           fontFamily: 'Tajawal, sans-serif', fontWeight: 400,
-          fontSize: 16,
+          fontSize: 15,
           color: 'rgba(252,251,251,0.58)',
           lineHeight: 1.9, margin: 0,
           flexGrow: 1, textAlign: 'right',
@@ -160,7 +181,7 @@ function TrackCard({ track }: { track: Track }) {
             color: hov ? '#FFC107' : 'rgba(252,251,251,0.42)',
             transition: 'color 0.25s', cursor: 'pointer',
           }}>
-            اكتشف المسار
+            اكتشف الماستركلاس
           </span>
           <ArrowLeft
             size={14}
@@ -198,7 +219,7 @@ function TrackCard({ track }: { track: Track }) {
 
 export default function TracksSection() {
   return (
-    <section className="sec sec--tracks section-block relative overflow-hidden">
+    <section id="section-2" className="sec sec--tracks section-block relative overflow-hidden">
       {/* ── Windscreen foam geometry (left) ── */}
       <div className="geo" aria-hidden="true">
         <svg viewBox="0 0 260 280" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -213,8 +234,8 @@ export default function TracksSection() {
               />
             ))
           )}
-          <circle cx="220" cy="40" r="5" fill="rgba(255,193,7,.09)"/>
-          <circle cx="240" cy="80" r="4" fill="rgba(255,193,7,.07)"/>
+          <circle cx="220" cy="40"  r="5" fill="rgba(255,193,7,.09)"/>
+          <circle cx="240" cy="80"  r="4" fill="rgba(255,193,7,.07)"/>
           <circle cx="215" cy="120" r="5" fill="rgba(255,193,7,.09)"/>
           <circle cx="238" cy="160" r="4" fill="rgba(255,193,7,.07)"/>
         </svg>
@@ -228,11 +249,11 @@ export default function TracksSection() {
 
       <div className="relative z-10 mx-auto px-4" style={{ maxWidth: 1160 }}>
 
-        {/* Centered section header */}
+        {/* Section header */}
         <SectionHeader
-          badge="المسارات الأكاديمية"
-          heading={<>كل صوت يستحق <Gold>مساراً احترافياً</Gold></>}
-          description="اختر من بين برامجنا الأكثر طلباً — كل مسار صُمِّم ليأخذك خطوة أبعد في عالم الإعلام والصوت والخطابة."
+          badge="الماستركلاسات"
+          heading={<>كل صوت يستحق <Gold>ماستركلاس احترافياً</Gold></>}
+          description="اختر من بين ماستركلاساتنا الأكثر طلباً — كل برنامج صُمِّم ليأخذك خطوة أبعد في عالم الإعلام والصوت والخطابة."
           style={{ marginBottom: 48 }}
         />
 
@@ -246,7 +267,7 @@ export default function TracksSection() {
           {TRACKS.map(track => <TrackCard key={track.id} track={track} />)}
         </div>
 
-        {/* Secondary button */}
+        {/* Browse all button */}
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: 40 }}>
           <button style={{
             height: 50, padding: '0 32px', borderRadius: 14,
@@ -260,7 +281,7 @@ export default function TracksSection() {
             onMouseEnter={e => Object.assign(e.currentTarget.style, { color: '#FFC107', borderColor: 'rgba(255,193,7,0.40)', background: 'rgba(255,255,255,0.04)' })}
             onMouseLeave={e => Object.assign(e.currentTarget.style, { color: 'rgba(252,251,251,0.60)', borderColor: 'rgba(255,255,255,0.16)', background: 'transparent' })}
           >
-            استعراض كل المسارات <ArrowLeft size={16} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineStart: 4 }} />
+            استعراض كل الماستركلاسات <ArrowLeft size={16} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineStart: 4 }} />
           </button>
         </div>
       </div>

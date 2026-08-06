@@ -1,4 +1,5 @@
-import { Route, Switch, Router as WouterRouter } from 'wouter';
+import { Route, Switch, Router as WouterRouter, Redirect } from 'wouter';
+import { CurrencyProvider } from '@/context/CurrencyContext';
 import Home from '@/pages/Home';
 import CourseVoiceoverPage      from '@/pages/CourseVoiceoverPage';
 import CourseBasicsPage         from '@/pages/CourseBasicsPage';
@@ -16,20 +17,32 @@ import RefundPolicyPage          from '@/pages/RefundPolicyPage';
 import CookiesPage               from '@/pages/CookiesPage';
 import ApplyVoiceTalentPage      from '@/pages/ApplyVoiceTalentPage';
 import ApplyTrainerPage          from '@/pages/ApplyTrainerPage';
+import NotFoundPage              from '@/pages/not-found';
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+
+      {/* Course detail pages */}
       <Route path="/courses/voiceover"        component={CourseVoiceoverPage} />
       <Route path="/courses/voiceover-basics" component={CourseBasicsPage} />
       <Route path="/courses/voiceover-live"   component={CourseVoiceoverLivePage} />
       <Route path="/courses/presenter"        component={CoursePresenterPage} />
       <Route path="/courses/arabic-language"  component={CourseArabicLanguagePage} />
       <Route path="/courses/public-speaking"  component={CoursePublicSpeakingPage} />
-      <Route path="/masar-elami"              component={MasarElamiPage} />
-      <Route path="/masar-soti"               component={MasarSotiPage} />
-      <Route path="/masar-khataba"            component={MasarKhatabaPage} />
+
+      {/* Masterclass pages — new canonical routes */}
+      <Route path="/masterclass-elam"    component={MasarElamiPage} />
+      <Route path="/masterclass-voice"   component={MasarSotiPage} />
+      <Route path="/masterclass-khataba" component={MasarKhatabaPage} />
+
+      {/* Client-side 301 redirects from old paths */}
+      <Route path="/masar-elami"    component={() => <Redirect to="/masterclass-elam" />} />
+      <Route path="/masar-soti"     component={() => <Redirect to="/masterclass-voice" />} />
+      <Route path="/masar-khataba"  component={() => <Redirect to="/masterclass-khataba" />} />
+
+      {/* Utility */}
       <Route path="/voice-test"               component={VoiceTestPage} />
       <Route path="/privacy-policy"           component={PrivacyPolicyPage} />
       <Route path="/terms"                    component={TermsPage} />
@@ -37,16 +50,20 @@ function Router() {
       <Route path="/cookies"                  component={CookiesPage} />
       <Route path="/apply/voice-talent"       component={ApplyVoiceTalentPage} />
       <Route path="/apply/trainer"            component={ApplyTrainerPage} />
-      <Route component={() => <div className="text-center p-20">صفحة غير موجودة 404</div>} />
+
+      {/* 404 */}
+      <Route component={NotFoundPage} />
     </Switch>
   );
 }
 
 function App() {
   return (
-    <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
-      <Router />
-    </WouterRouter>
+    <CurrencyProvider>
+      <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
+        <Router />
+      </WouterRouter>
+    </CurrencyProvider>
   );
 }
 

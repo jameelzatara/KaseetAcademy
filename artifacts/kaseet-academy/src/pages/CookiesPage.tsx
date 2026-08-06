@@ -1,95 +1,154 @@
-// ── Cookies Policy Page ───────────────────────────────────────
+// ── Cookies Policy — بيركلي للصوتيات المسموعة (كاسيت أكاديمي) ─
+// مسوّدة مهنية — تحتاج مراجعة محامٍ أردني مرخَّص قبل النشر
 import Navbar from '@/components/Navbar';
 import SiteFooter from '@/components/SiteFooter';
 
-const F = 'Tajawal, sans-serif';
-const GOLD = '#FFC107';
+const S = {
+  page:  { minHeight: '100dvh', background: '#0D0B14', direction: 'rtl' as const },
+  wrap:  { maxWidth: 820, margin: '0 auto', padding: '140px 24px 80px', direction: 'rtl' as const },
+  badge: { display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 14px', borderRadius: 999, background: 'rgba(255,193,7,0.10)', border: '1px solid rgba(255,193,7,0.28)', color: '#FFC107', fontSize: 13, fontWeight: 700, marginBottom: 18 },
+  h1:    { fontFamily: 'Tajawal, sans-serif', fontWeight: 900, fontSize: 'clamp(26px,4vw,40px)', color: 'rgba(252,251,251,0.97)', margin: '0 0 8px', lineHeight: 1.25 },
+  date:  { fontFamily: 'Poppins, sans-serif', fontSize: 12.5, color: 'rgba(203,213,225,0.44)', margin: '0 0 48px', direction: 'ltr' as const, display: 'block' },
+  rule:  { height: 1, background: 'linear-gradient(to left, rgba(255,193,7,0.22), transparent)', margin: '40px 0' },
+  h2:    { fontFamily: 'Tajawal, sans-serif', fontWeight: 800, fontSize: 'clamp(17px,2.2vw,22px)', color: '#FFC107', margin: '0 0 16px' },
+  p:     { fontFamily: 'Tajawal, sans-serif', fontWeight: 400, fontSize: 15.5, color: 'rgba(226,232,240,0.75)', lineHeight: 1.95, margin: '0 0 14px', textAlign: 'right' as const },
+  ul:    { paddingRight: 20, margin: '0 0 14px', listStyleType: 'disc' as const },
+  li:    { fontFamily: 'Tajawal, sans-serif', fontSize: 15.5, color: 'rgba(226,232,240,0.72)', lineHeight: 1.9, marginBottom: 6 },
+  info:  { background: 'rgba(255,193,7,0.05)', border: '1px solid rgba(255,193,7,0.18)', borderRadius: 14, padding: '20px 22px', marginBottom: 14 },
+  table: { width: '100%', borderCollapse: 'collapse' as const, marginBottom: 20 },
+  th:    { fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 13.5, color: '#FFC107', padding: '10px 14px', textAlign: 'right' as const, borderBottom: '1px solid rgba(255,193,7,0.20)', background: 'rgba(255,193,7,0.06)' },
+  td:    { fontFamily: 'Tajawal, sans-serif', fontSize: 13.5, color: 'rgba(226,232,240,0.72)', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.06)', lineHeight: 1.7, textAlign: 'right' as const },
+};
 
-const COOKIE_TYPES = [
-  {
-    name: 'ملفات الارتباط الضرورية',
-    desc: 'ضرورية لعمل الموقع وتوفير الخدمات الأساسية كالتنقل وتأمين الصفحات. لا يمكن إيقافها.',
-    examples: 'جلسة المتصفح، الأمان، تفضيلات اللغة.',
-    required: true,
-  },
-  {
-    name: 'ملفات الارتباط التحليلية',
-    desc: 'تساعدنا على فهم كيفية استخدام الزوار للموقع، وذلك بشكل مُجمَّع ومجهول الهوية.',
-    examples: 'Google Analytics — عدد الزيارات، مصادر الزيارة، أكثر الصفحات مشاهدةً.',
-    required: false,
-  },
-  {
-    name: 'ملفات الارتباط الوظيفية',
-    desc: 'تتذكّر تفضيلاتك وإعداداتك لتقديم تجربة أكثر تخصيصاً.',
-    examples: 'تفضيلات اللغة، آخر الصفحات التي زرتها.',
-    required: false,
-  },
-];
+const CONTACT = {
+  email: 'info@kaseet.com',
+  wa:    '+962 77 105 2222',
+};
 
 export default function CookiesPage() {
   return (
-    <div dir="rtl" style={{ background: '#1A2533', minHeight: '100vh', color: '#fff' }}>
+    <div style={S.page}>
       <Navbar />
+      <main id="main" style={S.wrap}>
 
-      <div style={{ background: 'rgba(0,0,0,0.30)', borderBottom: '1px solid rgba(255,193,7,0.12)', padding: '120px 24px 52px' }}>
-        <div style={{ maxWidth: 820, margin: '0 auto' }}>
-          <span style={{
-            display: 'inline-block', padding: '4px 14px', borderRadius: 999,
-            background: 'rgba(255,193,7,0.10)', border: '1px solid rgba(255,193,7,0.28)',
-            color: GOLD, fontSize: 12.5, fontFamily: F, fontWeight: 700, marginBottom: 16,
-          }}>قانوني</span>
-          <h1 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(28px,4vw,40px)', color: '#fff', margin: '0 0 12px', lineHeight: 1.2 }}>
-            سياسة ملفات الارتباط (Cookies)
-          </h1>
-          <p style={{ fontFamily: F, fontSize: 14, color: 'rgba(203,213,225,0.55)', margin: 0 }}>
-            آخر تحديث: يوليو 2025
-          </p>
-        </div>
-      </div>
+        <div style={S.badge}>سياسة الكوكيز</div>
+        <h1 style={S.h1}>سياسة ملفات تعريف الارتباط (Cookies)</h1>
+        <span style={S.date}>آخر تحديث: [تاريخ النشر] — إصدار 1.0</span>
 
-      <main style={{ maxWidth: 820, margin: '0 auto', padding: '52px 24px 80px' }}>
-        <p style={{ fontFamily: F, fontSize: 16, color: 'rgba(226,232,240,0.80)', lineHeight: 1.9, margin: '0 0 40px' }}>
-          تشرح هذه السياسة ما هي ملفات الارتباط وكيف يستخدمها موقع أكاديمية كاسيت ميديا. ملفات الارتباط (Cookies) ملفات نصية صغيرة تُخزَّن على جهازك عند زيارة الموقع.
+        {/* ── 1 ── */}
+        <h2 style={S.h2}>1. ما هي ملفات الكوكيز؟</h2>
+        <p style={S.p}>
+          ملفات الكوكيز هي ملفات نصية صغيرة تُخزَّن على جهازك (حاسوباً أو هاتفاً أو جهازاً لوحياً) عند زيارتك لموقع kaseet.com. تُستخدم هذه الملفات لتحسين تجربتك وتمكين وظائف الموقع الأساسية.
         </p>
+        <div style={S.rule} />
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 20, marginBottom: 44 }}>
-          {COOKIE_TYPES.map((c, i) => (
-            <div key={i} style={{
-              background: 'rgba(255,255,255,0.03)',
-              border: `1px solid ${c.required ? 'rgba(37,211,102,0.20)' : 'rgba(255,255,255,0.07)'}`,
-              borderRadius: 16, padding: '24px 26px',
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-                <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 16.5, color: GOLD, margin: 0 }}>{c.name}</h2>
-                {c.required && (
-                  <span style={{
-                    fontFamily: F, fontSize: 11, fontWeight: 700, padding: '2px 10px', borderRadius: 999,
-                    background: 'rgba(37,211,102,0.12)', border: '1px solid rgba(37,211,102,0.28)',
-                    color: '#4ade80', flexShrink: 0,
-                  }}>ضروري</span>
-                )}
-              </div>
-              <p style={{ fontFamily: F, fontSize: 14.5, color: 'rgba(226,232,240,0.75)', margin: '0 0 10px', lineHeight: 1.85 }}>
-                {c.desc}
-              </p>
-              <p style={{ fontFamily: F, fontSize: 12.5, color: 'rgba(203,213,225,0.45)', margin: 0 }}>
-                <strong style={{ color: 'rgba(255,255,255,0.55)' }}>أمثلة: </strong>{c.examples}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        <div style={{
-          background: 'rgba(255,193,7,0.06)', border: '1px solid rgba(255,193,7,0.18)',
-          borderRadius: 14, padding: '22px 26px',
-        }}>
-          <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: GOLD, margin: '0 0 10px' }}>التحكم في ملفات الارتباط</h3>
-          <p style={{ fontFamily: F, fontSize: 14.5, color: 'rgba(226,232,240,0.75)', margin: 0, lineHeight: 1.85 }}>
-            يمكنك في أي وقت ضبط إعدادات ملفات الارتباط من متصفحك أو حذفها. ابحث في إعدادات متصفحك عن "ملفات تعريف الارتباط" أو "Cookies" للاطلاع على التعليمات المناسبة. ملاحظة: تعطيل بعض ملفات الارتباط قد يؤثر على أداء الموقع.
+        {/* ── 2 ── */}
+        <h2 style={S.h2}>2. إعلان عدم التتبع</h2>
+        <div style={S.info}>
+          <p style={{ ...S.p, margin: 0, color: '#4ade80', fontWeight: 600 }}>
+            ✓ لا نستخدم أي أدوات تتبع إعلاني تابعة لأطراف ثالثة (مثل Facebook Pixel أو Google Ads).<br/>
+            ✓ لا نشارك بياناتك السلوكية مع شبكات الإعلانات.<br/>
+            ✓ لا نقوم بتتبع نشاطك على مواقع أخرى خارج kaseet.com.
           </p>
         </div>
-      </main>
+        <div style={S.rule} />
 
+        {/* ── 3 ── */}
+        <h2 style={S.h2}>3. أنواع الكوكيز التي نستخدمها</h2>
+        <table style={S.table}>
+          <thead>
+            <tr>
+              <th style={S.th}>النوع</th>
+              <th style={S.th}>الغرض</th>
+              <th style={S.th}>مدة الصلاحية</th>
+              <th style={S.th}>إلزامي؟</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style={S.td}>ضرورية (Session)</td>
+              <td style={S.td}>الحفاظ على جلسة المستخدم، منع الطلبات المزوّرة (CSRF)</td>
+              <td style={S.td}>حتى إغلاق المتصفح</td>
+              <td style={{ ...S.td, color: '#4ade80', fontWeight: 700 }}>نعم</td>
+            </tr>
+            <tr>
+              <td style={S.td}>تفضيلات</td>
+              <td style={S.td}>حفظ اللغة والعملة المختارة</td>
+              <td style={S.td}>30 يوماً</td>
+              <td style={{ ...S.td, color: '#FFA500' }}>اختياري</td>
+            </tr>
+            <tr>
+              <td style={S.td}>تحليلية (أولى)</td>
+              <td style={S.td}>قياس عدد الزوار والصفحات الأكثر زيارة (بيانات مجمّعة مجهولة)</td>
+              <td style={S.td}>90 يوماً</td>
+              <td style={{ ...S.td, color: '#FFA500' }}>اختياري</td>
+            </tr>
+            <tr>
+              <td style={S.td}>أمنية</td>
+              <td style={S.td}>كشف المحاولات المشبوهة وحماية الحسابات</td>
+              <td style={S.td}>جلسة + 7 أيام</td>
+              <td style={{ ...S.td, color: '#4ade80', fontWeight: 700 }}>نعم</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style={S.p}>
+          <strong style={{ color: 'rgba(252,251,251,0.88)' }}>ملاحظة:</strong> الكوكيز الضرورية والأمنية لا يمكن تعطيلها إذ أنها ضرورية لعمل الموقع بشكل آمن وسليم.
+        </p>
+        <div style={S.rule} />
+
+        {/* ── 4 ── */}
+        <h2 style={S.h2}>4. كيف تدير كوكيز المتصفح</h2>
+        <p style={S.p}>يمكنك التحكم في الكوكيز عبر إعدادات متصفحك:</p>
+        <ul style={S.ul}>
+          <li style={S.li}><strong>Chrome:</strong> الإعدادات ← الخصوصية والأمان ← ملفات تعريف الارتباط</li>
+          <li style={S.li}><strong>Firefox:</strong> الإعدادات ← الخصوصية والحماية</li>
+          <li style={S.li}><strong>Safari:</strong> الإعدادات ← Safari ← الخصوصية</li>
+          <li style={S.li}><strong>Edge:</strong> الإعدادات ← ملفات تعريف الارتباط والبيانات</li>
+        </ul>
+        <p style={S.p}>
+          تنبيه: تعطيل الكوكيز الضرورية قد يُعطّل وظائف جوهرية في الموقع مثل نماذج الحجز وصفحات المحتوى التدريبي.
+        </p>
+        <div style={S.rule} />
+
+        {/* ── 5 ── */}
+        <h2 style={S.h2}>5. الكوكيز المُضمَّنة من أطراف ثالثة</h2>
+        <p style={S.p}>يستخدم موقعنا المحتوى المُضمَّن التالي والذي قد يُولّد كوكيز خاصة بتلك المنصات:</p>
+        <ul style={S.ul}>
+          <li style={S.li}><strong>Instagram (Meta):</strong> مقاطع ريلز مُضمَّنة — تخضع لسياسة خصوصية Meta.</li>
+          <li style={S.li}><strong>خرائط Google:</strong> لعرض موقع الاستوديو — تخضع لسياسة خصوصية Google.</li>
+          <li style={S.li}><strong>بوابات الدفع:</strong> لإتمام المعاملات المالية بأمان.</li>
+        </ul>
+        <p style={S.p}>
+          لا نتحكم في كوكيز هذه الأطراف. ننصحك بمراجعة سياسات الخصوصية الخاصة بكل منها.
+        </p>
+        <div style={S.rule} />
+
+        {/* ── 6 ── */}
+        <h2 style={S.h2}>6. موافقة الكوكيز وسحبها</h2>
+        <p style={S.p}>
+          بزيارة موقعنا لأول مرة، ستظهر لك نافذة تطلب موافقتك على الكوكيز الاختيارية (التفضيلية والتحليلية). يمكنك:
+        </p>
+        <ul style={S.ul}>
+          <li style={S.li}>قبول جميع الكوكيز بنقرة واحدة.</li>
+          <li style={S.li}>قبول الكوكيز الضرورية فقط.</li>
+          <li style={S.li}>تعديل تفضيلاتك لاحقاً عبر زر "إعدادات الكوكيز" في أسفل الصفحة.</li>
+          <li style={S.li}>سحب الموافقة في أي وقت دون أن يؤثر ذلك على مشروعية المعالجة السابقة.</li>
+        </ul>
+        <div style={S.rule} />
+
+        {/* ── 7 ── */}
+        <h2 style={S.h2}>7. تحديثات السياسة والتواصل</h2>
+        <p style={S.p}>
+          قد نُحدّث هذه السياسة دورياً. سيُشار إلى تاريخ آخر تحديث أعلى الصفحة. للاستفسار:
+        </p>
+        <div style={S.info}>
+          <p style={{ ...S.p, margin: 0 }}>
+            البريد: <a href={`mailto:${CONTACT.email}`} style={{ color: '#FFC107' }}>{CONTACT.email}</a><br/>
+            واتساب: <span dir="ltr">{CONTACT.wa}</span>
+          </p>
+        </div>
+
+      </main>
       <SiteFooter />
     </div>
   );

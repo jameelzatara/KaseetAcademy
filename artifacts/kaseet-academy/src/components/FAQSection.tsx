@@ -1,40 +1,52 @@
-// ── Kaseet FAQ Section ────────────────────────────────────
+// ── Kaseet FAQ Section — 8 questions + FAQPage schema ────────
 import { useState } from 'react';
 import SectionHeader, { Gold } from './SectionHeader';
 
-interface FAQItem { q: string; a: string; }
+interface FAQItem { q: string; a: string; defaultOpen?: boolean; }
 
 const FAQS: FAQItem[] = [
   {
-    q: 'ما الفرق بين دوراتكم الوجاهية والمباشرة أونلاين؟',
-    a: 'الدورات الوجاهية تُعقد في استوديوهات كاسيت ميديا بعمّان وتتيح تدريباً عملياً مباشراً على المعدات الاحترافية وأمام الكاميرا. أما الدورات المباشرة أونلاين فتُعقد عبر منصة بث تفاعلي بجدول أسبوعي ثابت، وتُتيح للمشاركين من خارج الأردن الاستفادة ذاتها مع تفاعل حي مع المدرب.',
+    q: 'صوتي عادي — هل ينفع أتدرب؟',
+    a: 'بالتأكيد. ما يُسمَّع "صوتاً عادياً" هو في الغالب طاقة لم تُصقَل بعد. كل الأصوات الاحترافية التي تسمعها في الإعلام والإعلانات مرّت بتدريب ممنهج. ما نقيسه في الجلسة الأولى هو قابليتك للتطور، لا المستوى الحالي، والغالبية العظمى من المتدربين يُفاجَؤون بما يكتشفونه في أنفسهم خلال أسابيع.',
+    defaultOpen: true,
   },
   {
-    q: 'هل أحتاج إلى خبرة مسبقة للالتحاق بالبرامج؟',
-    a: 'لا، معظم برامجنا مصممة لاستقبال المبتدئين الكاملين إلى جانب المتوسطين. في صفحة كل دورة ستجد مستوى البرنامج المطلوب. يمكنك أيضاً التواصل مع مستشارتنا التعليمية للحصول على توصية مجانية بالمسار الأنسب لمستواك الحالي.',
+    q: 'ما الفرق بين الحضوري والمباشر أونلاين؟',
+    a: 'الدورات الحضورية تُعقد في استوديو كاسيت بعمّان وتتيح تدريباً ميدانياً على معدات تسجيل احترافية، أمام المايكروفون فعلياً. أما المباشر أونلاين فيُبثّ تفاعلياً بجدول أسبوعي ثابت ويتيح لك الانضمام من أي مكان في العالم مع تفاعل حي مع المدرب ومجموعة دراسية متقاربة. كلا الشكلين يمنحان شهادة رسمية.',
   },
   {
-    q: 'كيف يمكنني التسجيل والدفع؟',
-    a: 'التسجيل يتم عبر نموذج الحجز في صفحة كل دورة أو مباشرةً عبر واتساب. نقبل التحويل البنكي، الدفع الإلكتروني، وكروت الفيزا/ماستركارد. يتوفر أيضاً خيار الدفع على دفعتين لبعض البرامج عند الطلب.',
+    q: 'أنا مبتدئ تماماً — من أين أبدأ؟',
+    a: 'ابدأ بدورة "أساسيات التعليق والأداء الصوتي". صُمِّمت خصيصاً لمن لا خبرة سابقة لديهم؛ تأخذك من التحكم في التنفس وضبط مخارج الحروف إلى بناء أول ملفك الصوتي الاحترافي. إذا لم تكن متأكداً، تواصل مع ياقوت المستشارة التعليمية وستوجّهك مجاناً للمسار الأنسب.',
   },
   {
-    q: 'هل أحصل على شهادة إتمام معتمدة؟',
-    a: 'نعم، يحصل كل خريج على شهادة إتمام موقّعة من أكاديمية كاسيت ميديا معتمدة من تطبيق وجيز — أكبر منصة صوتية في الشرق الأوسط. الشهادة قابلة للمشاركة على LinkedIn وتُثبت اجتيازك للبرنامج الاحترافي.',
+    q: 'كم يستغرق البرنامج وما الجدول؟',
+    a: 'تتراوح الدورات الأساسية بين 12 و16 ساعة (6-8 لقاءات)، أما الماستركلاسات الشاملة فتصل إلى 40-42 ساعة موزّعة على عدة أشهر. كل دورة تُنشر جداولها الزمنية المفصّلة في صفحتها. اللقاءات الأسبوعية عادةً مساءً أو في عطل نهاية الأسبوع لتناسب جداول العمل.',
   },
   {
-    q: 'ماذا يحدث إذا فاتني لقاء؟',
-    a: 'تُسجَّل جميع لقاءات الدورات المباشرة أونلاين وتُرفع خلال 24 ساعة في مساحتك الخاصة على المنصة. بالنسبة للدورات الوجاهية، يتم تزويدك بملخص اللقاء والمواد، مع إمكانية حضور جلسة تعويضية حسب الجدول المتاح.',
+    q: 'كيف أسجّل وأدفع وهل الدفع آمن؟',
+    a: 'التسجيل عبر نموذج الحجز في صفحة كل دورة أو مباشرةً عبر واتساب. نقبل التحويل البنكي، الدفع الإلكتروني عبر بوابة آمنة، وكروت الفيزا/ماستركارد. يتوفر خيار الدفع على دفعتين لبعض البرامج عند الطلب. جميع معاملات الدفع مؤمَّنة بتشفير SSL.',
+  },
+  {
+    q: 'هل الشهادة معتمدة ومن أي جهة؟',
+    a: 'نعم. يحصل كل خريج على شهادة إتمام رسمية موقّعة من أكاديمية كاسيت ومعتمدة من تطبيق وجيز — أكبر منصّة صوتية في الشرق الأوسط. الشهادة قابلة للمشاركة على LinkedIn وتُثبت اجتيازك للبرنامج الاحترافي بمعايير الصناعة.',
+  },
+  {
+    q: 'ماذا لو فاتتني جلسة؟',
+    a: 'تُسجَّل جميع لقاءات الدورات المباشرة أونلاين وتُرفع في مساحتك الخاصة على المنصة خلال 24 ساعة. بالنسبة للدورات الحضورية، يتم تزويدك بملخص اللقاء والمواد، مع إمكانية حضور جلسة تعويضية حسب الجدول المتاح.',
+  },
+  {
+    q: 'هل أستطيع الدراسة من خارج الأردن؟',
+    a: 'بالتأكيد. دوراتنا المباشرة أونلاين متاحة من أي دولة في العالم. يكفي اتصال إنترنت جيد وسمّاعات. المتدربون الحضوريون من خارج الأردن مرحَّب بهم أيضاً ونساعد في تنسيق المواعيد. تواصل معنا لنحدد الخيار الأنسب لموقعك.',
   },
 ];
 
-function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
-  const [open, setOpen]   = useState(index === 0);
+function AccordionItem({ item, defaultOpen = false }: { item: FAQItem; defaultOpen?: boolean }) {
+  const [open, setOpen]   = useState(defaultOpen);
   const [hov,  setHov]    = useState(false);
 
   return (
     <div style={{
       borderRadius: 18,
-      /* bg: open → gold tint, hover → slightly brighter, default → base */
       background: open
         ? 'rgba(255,193,7,0.04)'
         : hov
@@ -47,17 +59,18 @@ function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
       boxShadow: '0 10px 30px rgba(0,0,0,0.22)',
       transition: 'background 220ms, border 220ms, box-shadow 220ms',
     }}>
-      {/* Trigger row — exactly 64px, padding-inline 24px */}
+      {/* Trigger row */}
       <button
         onClick={() => setOpen(v => !v)}
         onMouseEnter={() => setHov(true)}
         onMouseLeave={() => setHov(false)}
         style={{
           width:          '100%',
-          height:         64,
+          minHeight:      64,
           display:        'flex',
           alignItems:     'center',
           paddingInline:  24,
+          paddingBlock:   14,
           background:     'none',
           border:         'none',
           cursor:         'pointer',
@@ -65,7 +78,7 @@ function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
           gap:            14,
         }}
       >
-        {/* Toggle icon — first in DOM → visual RIGHT in RTL */}
+        {/* Toggle icon */}
         <span style={{
           flexShrink: 0,
           width: 28, height: 28,
@@ -79,7 +92,7 @@ function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
           transform: open ? 'rotate(45deg)' : 'rotate(0)',
         }}>+</span>
 
-        {/* Question text — center-vertically via height:64px on parent */}
+        {/* Question text */}
         <span style={{
           fontFamily: 'Tajawal, sans-serif', fontWeight: 700,
           fontSize: 'clamp(14px,1.4vw,16px)',
@@ -93,14 +106,13 @@ function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
         </span>
       </button>
 
-      {/* Expand panel — 220ms animation */}
+      {/* Expand panel */}
       <div style={{
-        maxHeight:  open ? 560 : 0,
+        maxHeight:  open ? 600 : 0,
         overflow:   'hidden',
-        transition: 'max-height 220ms cubic-bezier(0.4,0,0.2,1)',
+        transition: 'max-height 240ms cubic-bezier(0.4,0,0.2,1)',
       }}>
         <div style={{ padding: '0 24px 24px', direction: 'rtl' }}>
-          {/* Thin gold rule */}
           <div style={{
             height: 1,
             background: 'linear-gradient(to left, rgba(255,193,7,0.22), transparent)',
@@ -121,9 +133,26 @@ function AccordionItem({ item, index }: { item: FAQItem; index: number }) {
   );
 }
 
+/* ── FAQPage JSON-LD schema ── */
+const FAQ_LD = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQS.map(f => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
 export default function FAQSection() {
   return (
     <section id="faq" className="sec sec--faq section-block relative overflow-hidden">
+      {/* FAQPage structured data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_LD) }}
+      />
+
       {/* Subtle top glow */}
       <div className="absolute pointer-events-none" style={{
         top: -60, left: '50%', transform: 'translateX(-50%)',
@@ -133,7 +162,6 @@ export default function FAQSection() {
 
       <div className="relative z-10 mx-auto px-4" style={{ maxWidth: 820 }}>
 
-        {/* Centered section header */}
         <SectionHeader
           badge="الأسئلة الشائعة"
           heading={<>الأسئلة الشائعة <Gold>حول برامج كاسيت</Gold></>}
@@ -144,7 +172,7 @@ export default function FAQSection() {
         {/* Accordion */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {FAQS.map((item, i) => (
-            <AccordionItem key={i} item={item} index={i} />
+            <AccordionItem key={i} item={item} defaultOpen={!!item.defaultOpen} />
           ))}
         </div>
       </div>

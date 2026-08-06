@@ -1,7 +1,8 @@
-// ── Testimonials — arrow carousel ────────────────────────────
+// ── Testimonials — cream background, wrap-around carousel ────
 import { useState, useEffect } from 'react';
-import { Globe, ChevronRight, ChevronLeft, Star } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Star } from 'lucide-react';
 import SectionHeader, { Gold } from './SectionHeader';
+import { STATS } from '../data/stats';
 
 import avatarDina    from '@assets/Dina Raad-Yaghnam.png';
 import avatarHiba    from '@assets/Hiba Abu Hijleh.png';
@@ -23,13 +24,15 @@ const REVIEWS: Review[] = [
   { id: 4,  name: 'الـ مجدلاوي',    avatar: avatarMajd,   text: 'منظومة تعليمية متكاملة، اهتمام بالتفاصيل ونبرات الصوت بشكل احترافي دقيق.' },
   { id: 5,  name: 'أمجد قاسم',      avatar: avatarAmjad,  text: 'من أفضل الدورات التي شاركت بها. التوجيهات كانت دقيقة ومباشرة وساعدتني على تجاوز التوتر تماماً.' },
   { id: 6,  name: 'خالد الخض',      avatar: avatarKhaled, text: 'بيئة تحفيزية واحترافية بأعلى المستويات. المدربون يمتلكون خبرة عميقة وشغفاً حقيقياً.' },
-  { id: 7,  name: 'فؤاد حمتي',      avatar: avatarFouad,  text: 'تدريب عملي ممتاز ومعدات استوديوهات على أعلى مستوى، الاستفادة كانت مضاعفة.' },
+  { id: 7,  name: 'فؤاد حمتي',      avatar: avatarFouad,  text: 'تدريب عملي ممتاز ومعدات استوديو على أعلى مستوى، الاستفادة كانت مضاعفة.' },
   { id: 8,  name: 'سحر العساف',     avatar: avatarSahar,  text: 'كاسيت أكاديمي أضافت لي الكثير على المستوى الشخصي والمهني في مجال الخطابة والتواصل.' },
   { id: 9,  name: 'يزن مصاروة',     avatar: avatarYazan,  text: 'أسلوب التدريب عملي ومتخصص جداً، شعرت بتطور حقيقي في أدائي الصوتي منذ الجلسة الأولى.' },
   { id: 10, name: 'أحلام العيساوي', avatar: avatarAhlam,  text: 'كاسيت ليست مجرد أكاديمية، هي منظومة دعم كاملة. المدربون ملتزمون والمحتوى على مستوى عالمي.' },
 ];
 
-/** Returns cards-per-page based on current window width. */
+// Long-text threshold (~4 lines ≈ 120 chars)
+const CLAMP_THRESHOLD = 120;
+
 function getPerPage(): number {
   if (typeof window === 'undefined') return 3;
   if (window.innerWidth >= 1024) return 3;
@@ -37,106 +40,125 @@ function getPerPage(): number {
   return 1;
 }
 
+/* ── Review card (cream background variant) ── */
+function ReviewCard({
+  review, open, onToggle,
+}: { review: Review; open: boolean; onToggle: () => void }) {
+  const isLong = review.text.length > CLAMP_THRESHOLD;
 
-function ReviewCard({ review }: { review: Review }) {
   return (
     <div style={{
-      background:           'rgba(255,255,255,0.035)',
-      backdropFilter:       'blur(16px)',
-      WebkitBackdropFilter: 'blur(16px)',
-      border:               '1px solid rgba(255,255,255,0.06)',
-      borderRadius:         22,
-      padding:              'clamp(20px,2.5vw,28px)',
-      display:              'flex',
-      flexDirection:        'column',
-      gap:                  16,
-      textAlign:            'right',
-      boxShadow:            '0 10px 30px rgba(0,0,0,0.25)',
-      direction:            'rtl',
-      minWidth:             0,
+      background:   'rgba(255,255,255,0.80)',
+      backdropFilter: 'blur(12px)',
+      WebkitBackdropFilter: 'blur(12px)',
+      border:       '1px solid rgba(26,37,51,0.09)',
+      borderRadius: 20,
+      padding:      'clamp(18px,2.2vw,26px)',
+      display:      'flex',
+      flexDirection:'column',
+      gap:           14,
+      textAlign:    'right',
+      boxShadow:    '0 4px 18px rgba(26,37,51,0.10)',
+      direction:    'rtl',
+      minWidth:     0,
     }}>
+      {/* Header row: avatar + name + "موثّق" badge */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ fontWeight: 700, fontSize: 15, color: 'rgba(252,251,251,0.95)', lineHeight: 1.3 }}>
+            <div style={{ fontWeight: 700, fontSize: 15, color: '#1A2533', lineHeight: 1.3 }}>
               {review.name}
             </div>
-            <div style={{ display: 'inline-flex', gap: 2, alignItems: 'center', direction: 'ltr', marginTop: 4 }}>
+            <div style={{ display: 'inline-flex', gap: 2, alignItems: 'center', direction: 'ltr', marginTop: 3 }}>
               {[...Array(5)].map((_, i) => (
-                <Star key={i} size={13} fill="#FFC107" color="#FFC107" />
+                <Star key={i} size={12} fill="#FFC107" color="#FFC107" />
               ))}
             </div>
           </div>
           <img
             src={review.avatar}
             alt={review.name}
+            width={54}
+            height={54}
             style={{
-              width: 58, height: 58, borderRadius: '50%',
+              width: 54, height: 54, borderRadius: '50%',
               objectFit: 'cover', objectPosition: 'center top',
-              border: '2px solid rgba(255,193,7,0.45)',
-              boxShadow: '0 0 14px rgba(255,193,7,0.16)',
+              border: '2px solid rgba(255,193,7,0.55)',
               flexShrink: 0,
             }}
-            onError={e => { (e.currentTarget as HTMLImageElement).style.background = '#2d3748'; }}
+            onError={e => { (e.currentTarget as HTMLImageElement).style.background = '#d1d5db'; }}
           />
         </div>
         <div style={{
-          display: 'flex', alignItems: 'center', gap: 5,
-          padding: '4px 10px', borderRadius: 999,
-          background: 'rgba(255,255,255,0.05)',
-          border: '1px solid rgba(255,255,255,0.09)',
+          display: 'flex', alignItems: 'center', gap: 4,
+          padding: '3px 9px', borderRadius: 999,
+          background: 'rgba(26,37,51,0.06)',
+          border: '1px solid rgba(26,37,51,0.08)',
           flexShrink: 0,
         }}>
-          <Globe size={14} color="rgba(252,251,251,0.46)" />
-          <span style={{
-            fontFamily: 'Poppins, sans-serif', fontSize: 10,
-            color: 'rgba(252,251,251,0.46)', fontWeight: 500, direction: 'ltr',
-          }}>موثّق</span>
+          <span style={{ fontSize: 10, color: '#4285F4', fontWeight: 700 }}>G</span>
+          <span style={{ fontSize: 10, color: 'rgba(26,37,51,0.55)', fontWeight: 500 }}>موثّق</span>
         </div>
       </div>
 
-      <div style={{ height: 1, background: 'rgba(255,255,255,0.07)' }} />
+      <div style={{ height: 1, background: 'rgba(26,37,51,0.07)' }} />
 
-      <p style={{
-        fontWeight: 400, fontSize: 15,
-        color: 'rgba(226,232,240,0.75)',
-        lineHeight: 1.85, margin: 0, flex: 1, textAlign: 'right',
-      }}>
-        "{review.text}"
-      </p>
+      {/* Review text with optional expand */}
+      <div>
+        <p style={{
+          fontWeight: 400, fontSize: 14.5,
+          color: 'rgba(26,37,51,0.72)',
+          lineHeight: 1.85, margin: 0, textAlign: 'right',
+          display: isLong && !open ? '-webkit-box' : 'block',
+          WebkitLineClamp: isLong && !open ? 4 : undefined,
+          WebkitBoxOrient: isLong && !open ? 'vertical' as const : undefined,
+          overflow: isLong && !open ? 'hidden' : 'visible',
+        }}>
+          "{review.text}"
+        </p>
+        {isLong && (
+          <button
+            onClick={onToggle}
+            style={{
+              display: 'inline-block', marginTop: 6,
+              fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 13,
+              color: '#FFC107', background: 'none', border: 'none', cursor: 'pointer',
+              padding: 0, textDecoration: 'underline',
+            }}
+          >
+            {open ? 'طيّ النص' : 'اقرأ المزيد'}
+          </button>
+        )}
+      </div>
     </div>
   );
 }
 
+/* ── Arrow button (dark border on cream background) ── */
 function ArrowBtn({
-  onClick, disabled, children,
-}: { onClick: () => void; disabled: boolean; children: React.ReactNode }) {
+  onClick, children,
+}: { onClick: () => void; children: React.ReactNode }) {
   return (
     <button
       onClick={onClick}
-      disabled={disabled}
       style={{
         flexShrink: 0,
         width: 46, height: 46, borderRadius: '50%',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: disabled ? 'rgba(255,255,255,0.04)' : 'rgba(255,193,7,0.12)',
-        border: `1px solid ${disabled ? 'rgba(255,255,255,0.08)' : 'rgba(255,193,7,0.35)'}`,
-        color: disabled ? 'rgba(255,255,255,0.20)' : '#FFC107',
-        cursor: disabled ? 'not-allowed' : 'pointer',
+        background: 'rgba(255,193,7,0.10)',
+        border: '1px solid rgba(255,193,7,0.35)',
+        color: '#9a7200',
+        cursor: 'pointer',
         transition: 'all 200ms',
       }}
-      onMouseEnter={e => {
-        if (!disabled) Object.assign(e.currentTarget.style, {
-          background: 'rgba(255,193,7,0.22)',
-          transform: 'scale(1.07)',
-        });
-      }}
-      onMouseLeave={e => {
-        Object.assign(e.currentTarget.style, {
-          background: disabled ? 'rgba(255,255,255,0.04)' : 'rgba(255,193,7,0.12)',
-          transform: 'scale(1)',
-        });
-      }}
+      onMouseEnter={e => Object.assign(e.currentTarget.style, {
+        background: 'rgba(255,193,7,0.20)',
+        transform: 'scale(1.07)',
+      })}
+      onMouseLeave={e => Object.assign(e.currentTarget.style, {
+        background: 'rgba(255,193,7,0.10)',
+        transform: 'scale(1)',
+      })}
     >
       {children}
     </button>
@@ -144,16 +166,21 @@ function ArrowBtn({
 }
 
 export default function TestimonialsSection() {
-  const [perPage, setPerPage]   = useState(getPerPage);
-  const [page,    setPage]      = useState(0);
+  const [perPage, setPerPage] = useState(getPerPage);
+  const [page,    setPage]    = useState(0);
+  const [openIds, setOpenIds] = useState<Set<number>>(new Set());
 
-  /* Recompute perPage on resize; clamp active page if needed */
+  const toggleOpen = (id: number) => setOpenIds(prev => {
+    const next = new Set(prev);
+    if (next.has(id)) next.delete(id); else next.add(id);
+    return next;
+  });
+
   useEffect(() => {
     function handleResize() {
       const next = getPerPage();
       setPerPage(prev => {
         if (prev === next) return prev;
-        /* Clamp page so no empty page can appear */
         const maxPage = Math.ceil(REVIEWS.length / next) - 1;
         setPage(p => Math.min(p, maxPage));
         return next;
@@ -165,36 +192,34 @@ export default function TestimonialsSection() {
 
   const totalPages = Math.ceil(REVIEWS.length / perPage);
   const visible    = REVIEWS.slice(page * perPage, (page + 1) * perPage);
-  const isFirst    = page === 0;
-  const isLast     = page === totalPages - 1;
+
+  // Wrap-around — never disabled
+  const prevPage = () => setPage(p => (p - 1 + totalPages) % totalPages);
+  const nextPage = () => setPage(p => (p + 1) % totalPages);
 
   return (
-    <section className="sec sec--reviews section-block relative overflow-hidden" style={{ direction: 'rtl' }}>
-      {/* ── Golden arc + halftone geometry (bottom) ── */}
+    <section
+      className="sec sec--reviews section-block relative overflow-hidden"
+      style={{ background: '#F5F4F0', direction: 'rtl' }}
+    >
+      {/* Decorative arcs */}
       <div className="geo geo--btm" aria-hidden="true">
         <svg viewBox="0 0 1440 180" preserveAspectRatio="none" fill="none"
           style={{width:'100%',height:'100%',display:'block'}}>
-          <path d="M0 180 Q720 -40 1440 180" stroke="rgba(255,193,7,.14)" strokeWidth="1.5"/>
-          <path d="M0 180 Q720 10 1440 180"  stroke="rgba(255,193,7,.07)" strokeWidth="1"/>
+          <path d="M0 180 Q720 -40 1440 180" stroke="rgba(255,193,7,.18)" strokeWidth="1.5"/>
+          <path d="M0 180 Q720 10 1440 180"  stroke="rgba(255,193,7,.09)" strokeWidth="1"/>
           {[0,1,2,3,4].flatMap(row => [0,1,2,3].map(col => (
             <circle key={`l-${row}-${col}`}
               cx={col * 28 + 22} cy={row * 26 + 76}
-              r={2.5} fill={`rgba(255,193,7,${0.08 + row * 0.02})`}/>
+              r={2.5} fill={`rgba(26,37,51,${0.06 + row * 0.015})`}/>
           )))}
           {[0,1,2,3,4].flatMap(row => [0,1,2,3].map(col => (
             <circle key={`r-${row}-${col}`}
               cx={1440 - col * 28 - 22} cy={row * 26 + 76}
-              r={2.5} fill={`rgba(255,193,7,${0.08 + row * 0.02})`}/>
+              r={2.5} fill={`rgba(26,37,51,${0.06 + row * 0.015})`}/>
           )))}
         </svg>
       </div>
-
-      {/* Subtle top glow */}
-      <div className="absolute pointer-events-none" style={{
-        top: -60, left: '50%', transform: 'translateX(-50%)',
-        width: '70%', height: 200,
-        background: 'radial-gradient(ellipse at top, rgba(255,193,7,0.07) 0%, transparent 70%)',
-      }} />
 
       <div className="relative z-10 px-4" style={{ maxWidth: 1160, margin: '0 auto' }}>
         <SectionHeader
@@ -204,52 +229,65 @@ export default function TestimonialsSection() {
           style={{ marginBottom: 20 }}
         />
 
-        {/* Rating badge */}
+        {/* Google Maps badge — clickable chip */}
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 48 }}>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: 10,
-            padding: '8px 20px', borderRadius: 999,
-            background: 'rgba(255,255,255,0.05)',
-            border: '1px solid rgba(255,255,255,0.11)',
-            backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
-          }}>
-            <Globe size={18} color="#4285F4" />
-            <span style={{
-              fontWeight: 700, fontSize: 13.5,
-              color: 'rgba(252,251,251,0.85)',
-              display: 'flex', alignItems: 'center', gap: 6,
-            }}>
-              <span style={{ display: 'inline-flex', gap: 1, alignItems: 'center' }}>
-                {[...Array(5)].map((_, i) => <Star key={i} size={13} fill="#FFC107" color="#FFC107" style={{ filter: 'drop-shadow(0 0 3px rgba(255,193,7,0.25))' }} />)}
-              </span>
-              <span>5.0 / 5 بناءً على تقييمات Google</span>
-            </span>
-          </div>
+          <a
+            href={STATS.googleMapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 10,
+              padding: '10px 20px', borderRadius: 999,
+              background: 'rgba(255,255,255,0.85)',
+              border: '1px solid rgba(26,37,51,0.12)',
+              boxShadow: '0 4px 18px rgba(26,37,51,0.10)',
+              textDecoration: 'none', transition: 'transform .18s, box-shadow .18s',
+            }}
+            onMouseEnter={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, {
+              transform: 'translateY(-2px)', boxShadow: '0 8px 24px rgba(26,37,51,0.16)',
+            })}
+            onMouseLeave={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, {
+              transform: 'none', boxShadow: '0 4px 18px rgba(26,37,51,0.10)',
+            })}
+          >
+            <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: 18, fontWeight: 900, color: '#4285F4', letterSpacing: -1 }}>G</span>
+            <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: 20, fontWeight: 700, color: '#1A2533' }}>{STATS.googleRating.toFixed(1)}</span>
+            <span style={{ color: '#FFC107', fontSize: 14, letterSpacing: 1 }}>★★★★★</span>
+            <span style={{ fontSize: 13, color: 'rgba(26,37,51,0.62)' }}>{STATS.googleReviews} مراجعة على خرائط Google</span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: '#9a7200' }}>اقرأها كلّها ↗</span>
+          </a>
         </div>
 
-        {/* ── Carousel row: arrow · cards · arrow ── */}
+        {/* ── Carousel row ── */}
         <div style={{
           display: 'flex', alignItems: 'center',
           gap: 'clamp(12px,2vw,20px)',
           direction: 'rtl',
         }}>
-          {/* Right arrow → previous page (RTL: right = start) */}
-          <ArrowBtn onClick={() => setPage(p => p - 1)} disabled={isFirst}>
+          {/* Right arrow → previous */}
+          <ArrowBtn onClick={prevPage}>
             <ChevronRight size={22} strokeWidth={2.5} />
           </ArrowBtn>
 
-          {/* Cards — columns driven by perPage so grid always matches visible count */}
+          {/* Cards */}
           <div style={{
             flex: 1,
             display: 'grid',
             gridTemplateColumns: `repeat(${perPage}, 1fr)`,
-            gap: 'clamp(14px,2vw,22px)',
+            gap: 'clamp(14px,2vw,20px)',
           }}>
-            {visible.map(r => <ReviewCard key={r.id} review={r} />)}
+            {visible.map(r => (
+              <ReviewCard
+                key={r.id}
+                review={r}
+                open={openIds.has(r.id)}
+                onToggle={() => toggleOpen(r.id)}
+              />
+            ))}
           </div>
 
-          {/* Left arrow → next page */}
-          <ArrowBtn onClick={() => setPage(p => p + 1)} disabled={isLast}>
+          {/* Left arrow → next */}
+          <ArrowBtn onClick={nextPage}>
             <ChevronLeft size={22} strokeWidth={2.5} />
           </ArrowBtn>
         </div>
@@ -266,7 +304,7 @@ export default function TestimonialsSection() {
               style={{
                 width: i === page ? 24 : 8, height: 8,
                 borderRadius: 4,
-                background: i === page ? '#FFC107' : 'rgba(255,255,255,0.18)',
+                background: i === page ? '#FFC107' : 'rgba(26,37,51,0.18)',
                 border: 'none', cursor: 'pointer', padding: 0,
                 transition: 'all 250ms',
               }}

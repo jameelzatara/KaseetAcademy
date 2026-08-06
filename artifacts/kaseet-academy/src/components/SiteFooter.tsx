@@ -1,66 +1,69 @@
-// ── Kaseet Academy Site Footer — Full Rebuild per Brief 2 ─────
+// ── Kaseet Academy Site Footer ─────────────────────────────
 import { useState, useEffect } from 'react';
 import {
   Instagram, Facebook, Linkedin, Youtube, Music2,
-  MessageCircle, ArrowLeft, MapPin, Phone, Mail,
-  Clock, Star, ChevronUp,
+  MessageCircle, MapPin, Phone, Mail,
+  Clock, ChevronUp,
 } from 'lucide-react';
 import { Link } from 'wouter';
 import logoImg from '@assets/logo_1785422080938.png';
 
-/* ── JSON-LD ────────────────────────────────── */
+/* ── JSON-LD — EducationalOrganization (no aggregateRating) ── */
 const JSON_LD = {
   '@context': 'https://schema.org',
   '@type': 'EducationalOrganization',
   name: 'كاسيت أكاديمي',
   alternateName: 'Kaseet Academy',
-  url: 'https://kaseetmedia.com',
+  url: 'https://kaseet.com',
   description: 'الأكاديمية الأولى في الشرق الأوسط لتدريب الأداء الصوتي والتعليق والبودكاست والإعلام المرئي',
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'عمّان',
     addressCountry: 'JO',
-    streetAddress: 'استوديوهات كاسيت ميديا',
+    streetAddress: 'شارع باريس، مجمع حجازي البيّر، شارع عبد الرحيم الحاج محمد 67',
   },
-  telephone: '+962771052222',
-  email: 'info@kaseetmedia.com',
+  telephone: '+962790234483',
+  email: 'info@kaseet.com',
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Sunday','Monday','Tuesday','Wednesday','Thursday'],
+      opens: '09:00',
+      closes: '19:00',
+    },
+  ],
   sameAs: [
     'https://www.instagram.com/kaseetmedia/',
     'https://www.facebook.com/kaseetmedia',
     'https://jo.linkedin.com/company/kaseetmedia',
     'https://www.youtube.com/@Kaseetmedia',
   ],
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '5.0',
-    reviewCount: '88',
-    bestRating: '5',
-  },
 };
 
-/* ── Constants ──────────────────────────────── */
+/* ── Constants ── */
 const F    = 'Tajawal, sans-serif';
 const GOLD = '#FFC107';
 const T2   = 'rgba(203,213,225,0.60)';
 const T3   = 'rgba(203,213,225,0.36)';
 
 const SOCIAL = [
-  { label: 'Instagram', href: 'https://www.instagram.com/kaseetmedia/',         icon: <Instagram size={17}/> },
-  { label: 'Facebook',  href: 'https://www.facebook.com/kaseetmedia',            icon: <Facebook  size={17}/> },
-  { label: 'LinkedIn',  href: 'https://jo.linkedin.com/company/kaseetmedia',     icon: <Linkedin  size={17}/> },
-  { label: 'YouTube',   href: 'https://www.youtube.com/@Kaseetmedia',            icon: <Youtube   size={17}/> },
-  { label: 'TikTok',    href: 'https://www.tiktok.com/@.kaseet',                 icon: <Music2    size={17}/> },
+  { label: 'Instagram', href: 'https://www.instagram.com/kaseetmedia/',     icon: <Instagram size={17}/> },
+  { label: 'Facebook',  href: 'https://www.facebook.com/kaseetmedia',        icon: <Facebook  size={17}/> },
+  { label: 'LinkedIn',  href: 'https://jo.linkedin.com/company/kaseetmedia', icon: <Linkedin  size={17}/> },
+  { label: 'YouTube',   href: 'https://www.youtube.com/@Kaseetmedia',        icon: <Youtube   size={17}/> },
+  { label: 'TikTok',    href: 'https://www.tiktok.com/@.kaseet',             icon: <Music2    size={17}/> },
 ];
 
-const NAV_LINKS = [
-  { label: 'الرئيسية',            href: '/',            internal: true },
-  { label: 'الدورات',             href: '/#courses',    internal: false },
-  { label: 'المسارات',            href: '/#tracks',     internal: false },
-  { label: 'المسار الإعلامي',     href: '/masar-elami', internal: true },
-  { label: 'المسار الصوتي',       href: '/masar-soti',  internal: true },
-  { label: 'ماستركلاس الخطابة',   href: '/masar-khataba', internal: true },
-  { label: 'الاستشارة المجانية',  href: '/#consultant', internal: false },
-  { label: 'سمّعنا صوتك',         href: `${import.meta.env.BASE_URL ?? '/'}voice-test.html`, internal: false },
+interface NavLink { label: string; href: string; internal: boolean; gold?: boolean; }
+
+const NAV_LINKS: NavLink[] = [
+  { label: 'الرئيسية',                              href: '/',                  internal: true },
+  { label: 'الدورات',                               href: '/#courses',          internal: false },
+  { label: 'ماستركلاس الإعلام',                     href: '/masterclass-elam',  internal: true },
+  { label: 'ماستركلاس التعليق والأداء الصوتي',      href: '/masterclass-voice', internal: true },
+  { label: 'ماستركلاس الخطابة والتواصل القيادي',    href: '/masterclass-khataba', internal: true },
+  { label: 'الاستشارة المجانية',                    href: '/#consultant',       internal: false },
+  { label: 'سمّعنا صوتك',  href: `${import.meta.env.BASE_URL ?? '/'}voice-test.html`, internal: false, gold: true },
 ];
 
 const LEGAL_LINKS = [
@@ -70,7 +73,8 @@ const LEGAL_LINKS = [
   { label: 'سياسة الكوكيز',   href: '/cookies' },
 ];
 
-/* ── Component ──────────────────────────────── */
+const MAPS_URL = 'https://maps.app.goo.gl/WmBQBMA6f3nbb6gn7';
+
 export default function SiteFooter() {
   const [showTop, setShowTop] = useState(false);
 
@@ -82,60 +86,31 @@ export default function SiteFooter() {
 
   const toTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  const linkStyle: React.CSSProperties = {
+  const baseLinkStyle: React.CSSProperties = {
     fontFamily: F, fontSize: 13.5, color: T2,
-    textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6,
+    textDecoration: 'none', display: 'block',
     transition: 'color 0.2s',
+  };
+  const goldLinkStyle: React.CSSProperties = {
+    ...baseLinkStyle,
+    color: GOLD, fontWeight: 700,
   };
   const lEnter = (e: React.MouseEvent<HTMLAnchorElement>) =>
     Object.assign(e.currentTarget.style, { color: GOLD });
   const lLeave = (e: React.MouseEvent<HTMLAnchorElement>) =>
     Object.assign(e.currentTarget.style, { color: T2 });
+  const goldLeave = (e: React.MouseEvent<HTMLAnchorElement>) =>
+    Object.assign(e.currentTarget.style, { color: GOLD });
 
   return (
     <>
-      {/* ── JSON-LD structured data ── */}
+      {/* JSON-LD structured data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
       />
 
       <footer id="footer" dir="rtl" style={{ background: '#111925', borderTop: '1px solid rgba(255,193,7,0.14)' }}>
-
-        {/* ── Conversion strip ── */}
-        <div style={{
-          background: 'rgba(0,0,0,0.38)', borderBottom: '1px solid rgba(255,193,7,0.10)',
-          padding: '22px 24px',
-        }}>
-          <div style={{
-            maxWidth: 1160, margin: '0 auto',
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            flexWrap: 'wrap', gap: 14,
-          }}>
-            <p style={{ fontFamily: F, fontWeight: 700, fontSize: 'clamp(14px,1.6vw,17px)', color: 'rgba(255,255,255,0.88)', margin: 0 }}>
-              ابدأ رحلتك الصوتية اليوم — انضم إلى أكثر من{' '}
-              <span style={{ color: GOLD }}>٦٠٠ متدرب</span> احترافي
-            </p>
-            <a
-              href="https://wa.me/962771052222"
-              target="_blank" rel="noopener noreferrer"
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: 8,
-                fontFamily: F, fontWeight: 700, fontSize: 13.5,
-                padding: '10px 22px', borderRadius: 12,
-                background: 'rgba(37,211,102,0.14)',
-                border: '1px solid rgba(37,211,102,0.38)',
-                color: '#4ade80', textDecoration: 'none', flexShrink: 0,
-                transition: 'background 0.2s',
-              }}
-              onMouseEnter={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, { background: 'rgba(37,211,102,0.24)' })}
-              onMouseLeave={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, { background: 'rgba(37,211,102,0.14)' })}
-            >
-              <MessageCircle size={16}/>
-              احجز مقعدك الآن
-            </a>
-          </div>
-        </div>
 
         {/* ── Main 4-column grid ── */}
         <div style={{ maxWidth: 1160, margin: '0 auto', padding: '52px 24px 36px' }}>
@@ -151,7 +126,7 @@ export default function SiteFooter() {
 
             {/* ── Col 1: Brand ── */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              <img src={logoImg} alt="كاسيت أكاديمي" style={{ width: 58, height: 'auto', objectFit: 'contain' }}/>
+              <img src={logoImg} alt="كاسيت أكاديمي" width={58} style={{ width: 58, height: 'auto', objectFit: 'contain' }}/>
               <p style={{ fontFamily: F, fontSize: 13.5, color: T2, lineHeight: 1.85, margin: 0, maxWidth: 260 }}>
                 الأكاديمية الأولى في الشرق الأوسط لتدريب الأداء الصوتي، التعليق، البودكاست، والإعلام المرئي.
               </p>
@@ -179,19 +154,6 @@ export default function SiteFooter() {
                   </a>
                 ))}
               </div>
-
-              {/* Google 5.0 chip */}
-              <div style={{
-                display: 'inline-flex', alignItems: 'center', gap: 6,
-                padding: '5px 12px', borderRadius: 999, width: 'fit-content',
-                background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)',
-              }}>
-                <Star size={12} fill={GOLD} color={GOLD}/>
-                <span style={{ fontFamily: F, fontSize: 12, color: 'rgba(255,255,255,0.82)', fontWeight: 700 }}>
-                  Google — 5.0
-                </span>
-                <span style={{ fontFamily: F, fontSize: 11, color: T3 }}>· 88 تقييم</span>
-              </div>
             </div>
 
             {/* ── Col 2: Quick links ── */}
@@ -203,14 +165,22 @@ export default function SiteFooter() {
                 {NAV_LINKS.map(l => (
                   <li key={l.label}>
                     {l.internal ? (
-                      <Link href={l.href} style={linkStyle} onMouseEnter={lEnter} onMouseLeave={lLeave}>
+                      <Link
+                        href={l.href}
+                        style={l.gold ? goldLinkStyle : baseLinkStyle}
+                        onMouseEnter={l.gold ? undefined : lEnter}
+                        onMouseLeave={l.gold ? goldLeave : lLeave}
+                      >
                         {l.label}
-                        <ArrowLeft size={9} color="rgba(255,193,7,0.40)" style={{ marginInlineStart: 'auto', flexShrink: 0 }}/>
                       </Link>
                     ) : (
-                      <a href={l.href} style={linkStyle} onMouseEnter={lEnter} onMouseLeave={lLeave}>
+                      <a
+                        href={l.href}
+                        style={l.gold ? goldLinkStyle : baseLinkStyle}
+                        onMouseEnter={l.gold ? undefined : lEnter}
+                        onMouseLeave={l.gold ? goldLeave : lLeave}
+                      >
                         {l.label}
-                        <ArrowLeft size={9} color="rgba(255,193,7,0.40)" style={{ marginInlineStart: 'auto', flexShrink: 0 }}/>
                       </a>
                     )}
                   </li>
@@ -225,33 +195,45 @@ export default function SiteFooter() {
               </h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 13 }}>
 
+                {/* Address — clickable, full address */}
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: 9 }}>
                   <MapPin size={14} color={GOLD} style={{ flexShrink: 0, marginTop: 2 }}/>
-                  <p style={{ fontFamily: F, fontSize: 13, color: T2, margin: 0, lineHeight: 1.65 }}>
-                    عمّان، الأردن<br/>استوديوهات كاسيت ميديا
-                  </p>
+                  <a
+                    href={MAPS_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ fontFamily: F, fontSize: 13, color: T2, lineHeight: 1.65, textDecoration: 'none', transition: 'color .2s' }}
+                    onMouseEnter={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, { color: GOLD })}
+                    onMouseLeave={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, { color: T2 })}
+                  >
+                    استوديو كاسيت<br/>
+                    شارع باريس، مجمع حجازي البيّر<br/>
+                    عمّان، الأردن
+                  </a>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
                   <Phone size={13} color={GOLD} style={{ flexShrink: 0 }}/>
-                  <a href="tel:+962771052222"
+                  <a href="tel:+96279023483"
                     style={{ fontFamily: 'Poppins, sans-serif', fontSize: 12.5, color: T2, textDecoration: 'none', direction: 'ltr' }}>
-                    +962 77 105 2222
+                    +962 79 023 4483
                   </a>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
                   <Mail size={13} color={GOLD} style={{ flexShrink: 0 }}/>
-                  <a href="mailto:info@kaseetmedia.com"
+                  <a href="mailto:info@kaseet.com"
                     style={{ fontFamily: 'Poppins, sans-serif', fontSize: 12, color: T2, textDecoration: 'none' }}>
-                    info@kaseetmedia.com
+                    info@kaseet.com
                   </a>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: 9 }}>
                   <Clock size={13} color={GOLD} style={{ flexShrink: 0, marginTop: 2 }}/>
-                  <p style={{ fontFamily: F, fontSize: 12, color: T3, margin: 0, lineHeight: 1.65 }}>
-                    السبت – الخميس<br/>٩ صباحاً – ٩ مساءً
+                  <p style={{ fontFamily: F, fontSize: 12, color: T3, margin: 0, lineHeight: 1.75 }}>
+                    الأحد – الخميس<br/>
+                    9:00 ص – 7:00 م<br/>
+                    <span style={{ color: 'rgba(203,213,225,0.28)' }}>الجمعة والسبت مغلق</span>
                   </p>
                 </div>
 
@@ -282,7 +264,6 @@ export default function SiteFooter() {
                 الاعتماد والتقديم
               </h4>
 
-              {/* Wajeez badge */}
               <div style={{
                 background: 'rgba(255,255,255,0.04)',
                 border: '1px solid rgba(255,193,7,0.15)',
@@ -299,10 +280,12 @@ export default function SiteFooter() {
                   }}>W</div>
                   <div>
                     <p style={{ fontFamily: F, fontWeight: 700, fontSize: 13, color: 'rgba(255,255,255,0.90)', margin: 0 }}>
-                      معتمد من وجيز
+                      <a href="https://wajez.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
+                        شهادة معتمدة من تطبيق وجيز
+                      </a>
                     </p>
                     <p style={{ fontFamily: F, fontSize: 11, color: T3, margin: '2px 0 0' }}>
-                      أكبر منصة صوتية بالشرق الأوسط
+                      أكبر منصّة صوتية في الشرق الأوسط
                     </p>
                   </div>
                 </div>
@@ -366,7 +349,7 @@ export default function SiteFooter() {
             flexWrap: 'wrap', gap: 12,
           }}>
             <p style={{ fontFamily: F, fontSize: 12, color: T3, margin: 0 }}>
-              جميع الحقوق محفوظة © كاسيت ميديا {new Date().getFullYear()}
+              © 2026 بيركلي للصوتيات المسموعة — جميع الحقوق محفوظة
             </p>
             <div style={{ display: 'flex', gap: 18, flexWrap: 'wrap', alignItems: 'center' }}>
               {LEGAL_LINKS.map(l => (
@@ -383,14 +366,14 @@ export default function SiteFooter() {
                 </Link>
               ))}
               <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: 10.5, color: 'rgba(255,255,255,0.18)', direction: 'ltr' }}>
-                kaseetmedia.com
+                kaseet.com
               </span>
             </div>
           </div>
         </div>
       </footer>
 
-      {/* ── Back-to-top button (46 px gold circle) ── */}
+      {/* ── Back-to-top button ── */}
       {showTop && (
         <button
           onClick={toTop}
@@ -405,12 +388,10 @@ export default function SiteFooter() {
             transition: 'transform 0.2s, box-shadow 0.2s',
           }}
           onMouseEnter={e => Object.assign(e.currentTarget.style, {
-            transform: 'translateY(-3px)',
-            boxShadow: '0 8px 28px rgba(255,193,7,0.55)',
+            transform: 'translateY(-3px)', boxShadow: '0 8px 28px rgba(255,193,7,0.55)',
           })}
           onMouseLeave={e => Object.assign(e.currentTarget.style, {
-            transform: 'translateY(0)',
-            boxShadow: '0 4px 20px rgba(255,193,7,0.45)',
+            transform: 'translateY(0)', boxShadow: '0 4px 20px rgba(255,193,7,0.45)',
           })}
         >
           <ChevronUp size={22} color="#18202F" strokeWidth={2.5}/>

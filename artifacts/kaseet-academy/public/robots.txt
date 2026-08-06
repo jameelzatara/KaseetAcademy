@@ -1,2 +1,8 @@
 User-agent: *
 Allow: /
+
+# Disallow private/apply pages from indexing
+Disallow: /apply/
+Disallow: /voice-test
+
+Sitemap: https://kaseet.com/sitemap.xml

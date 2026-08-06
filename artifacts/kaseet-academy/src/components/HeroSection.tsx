@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from './Navbar';
 import StatsBar from './StatsBar';
-import Waveform from './Waveform';
 import heroBg from '@assets/hero-bg_1785422080937.jpg';
 
 const rotatingWords = [
@@ -12,6 +11,39 @@ const rotatingWords = [
   'موهبةٍ فرصة',
   'حلمٍ بداية',
 ];
+
+// Two thin decorative polylines replacing the old thick Waveform
+function TwoLineWave() {
+  return (
+    <svg
+      viewBox="0 0 1440 90"
+      preserveAspectRatio="none"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ width: '100%', height: 90, display: 'block' }}
+      aria-hidden="true"
+    >
+      {/* Line 1 — higher amplitude */}
+      <polyline
+        points="0,70 60,54 120,72 180,44 240,68 300,50 360,73 420,40 480,65 540,52 600,70 660,38 720,60 780,50 840,72 900,42 960,66 1020,48 1080,70 1140,40 1200,62 1260,52 1320,70 1380,44 1440,60"
+        stroke="rgba(255,193,7,0.28)"
+        strokeWidth="1.4"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      {/* Line 2 — lower amplitude, offset */}
+      <polyline
+        points="0,82 80,72 160,80 240,75 320,82 400,70 480,80 560,74 640,82 720,72 800,80 880,76 960,82 1040,70 1120,80 1200,74 1280,82 1360,73 1440,80"
+        stroke="rgba(255,193,7,0.14)"
+        strokeWidth="0.9"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 export default function HeroSection() {
   const [activeWordIndex, setActiveWordIndex] = useState(0);
@@ -32,15 +64,24 @@ export default function HeroSection() {
 
   return (
     <section className="sec sec--hero relative w-full min-h-[100dvh] flex flex-col overflow-hidden">
-      {/* Background Image & Gradient Overlays */}
-      <div
-        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${heroBg})` }}
-      />
+      {/* Background Image */}
       <div
         className="absolute inset-0 z-0"
         style={{
-          background: 'linear-gradient(to bottom, rgba(44,55,75,0.75) 0%, rgba(36,46,64,0.88) 60%, rgba(33,42,61,0.97) 100%)',
+          backgroundImage: `url(${heroBg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: '62% 34%',
+        }}
+      />
+      {/* Scrim — strong horizontal + bottom, lighter at top so faces show */}
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          background: [
+            'linear-gradient(to left, rgba(26,37,51,.96) 0%, rgba(26,37,51,.82) 28%, rgba(26,37,51,.50) 60%, rgba(26,37,51,.18) 100%)',
+            'linear-gradient(to top, rgba(13,11,20,1.0) 0%, rgba(26,37,51,.55) 28%, transparent 55%)',
+            'linear-gradient(to bottom, rgba(26,37,51,.38) 0%, transparent 22%)',
+          ].join(', '),
         }}
       />
 
@@ -60,13 +101,17 @@ export default function HeroSection() {
 
       <Navbar />
 
-      {/* Ambient Waveform behind content at the bottom */}
-      <div className="absolute bottom-0 left-0 right-0 z-0 opacity-80 pointer-events-none">
-        <Waveform />
+      {/* Thin polyline waveform at bottom — replaces old Waveform component */}
+      <div className="absolute bottom-0 left-0 right-0 z-0 pointer-events-none">
+        <TwoLineWave />
       </div>
 
       {/* Main Hero Content */}
-      <div className="relative z-10 flex-1 flex flex-col justify-center items-center text-center px-4 mt-20 md:mt-0">
+      <div
+        id="main"
+        className="relative z-10 flex-1 flex flex-col justify-center items-center text-center px-4"
+        style={{ paddingTop: 'clamp(120px,18vh,200px)' }}
+      >
 
         {/* Static Headline */}
         <motion.h1
@@ -74,11 +119,15 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1, ease: 'easeOut' }}
           className="text-[clamp(30px,6vw,62px)] font-black leading-[1.2]"
+          style={{ textShadow: '0 2px 18px rgba(0,0,0,.55)' }}
         >
           <span className="text-[rgba(252,251,251,0.92)] block">
-            اخفض صوت العالم<span className="text-[#FFC107]">...</span>
+            اخفض صوت العالم<span style={{ color: '#FFC107' }}>...</span>
           </span>
-          <span className="text-[#FFC107] block mt-1 text-glow-gold">
+          <span
+            className="block mt-1"
+            style={{ color: '#FFC107', textShadow: '0 0 24px rgba(255,193,7,.28)' }}
+          >
             وارفع صوت الكاسيت
           </span>
         </motion.h1>
@@ -88,7 +137,8 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3, ease: 'easeOut' }}
-          className="mt-5 md:mt-7 flex flex-col items-center justify-center gap-2"
+          className="flex flex-col items-center justify-center gap-2"
+          style={{ marginTop: 'clamp(20px,4vh,36px)' }}
         >
           <span
             className="font-normal"
@@ -112,10 +162,11 @@ export default function HeroSection() {
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: '-110%', opacity: 0 }}
                 transition={{ duration: 0.5, ease: 'easeInOut' }}
-                className="absolute inset-0 flex items-center justify-center text-[#FFC107] font-black"
+                className="absolute inset-0 flex items-center justify-center font-black"
                 style={{
                   fontFamily: 'Tajawal, sans-serif',
                   fontSize: 'clamp(28px,4.5vw,52px)',
+                  color: '#FFC107',
                   textShadow: '0 4px 30px rgba(255,193,7,0.35)',
                   whiteSpace: 'nowrap',
                 }}
@@ -131,10 +182,66 @@ export default function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-8 text-[rgba(252,251,251,0.80)] font-medium text-lg md:text-xl max-w-[640px] leading-relaxed"
+          className="text-[rgba(252,251,251,0.80)] font-medium text-lg md:text-xl max-w-[640px] leading-relaxed"
+          style={{ marginTop: 'clamp(16px,3vh,28px)' }}
         >
           الأكاديمية الأولى في تدريب التعليق الصوتي، صناعة البودكاست، والإنتاج المرئي.
         </motion.p>
+
+        {/* ── Two CTA buttons ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.8 }}
+          style={{ marginTop: 'clamp(24px,4vh,40px)', display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}
+        >
+          <a
+            href={`${import.meta.env.BASE_URL}voice-test.html`}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              fontFamily: 'Tajawal, sans-serif', fontWeight: 800,
+              fontSize: 'clamp(14px,1.4vw,16px)',
+              background: '#FFC107', color: '#121927',
+              padding: '14px 28px', borderRadius: 999,
+              textDecoration: 'none',
+              boxShadow: '0 6px 24px rgba(255,193,7,0.40)',
+              transition: 'transform .2s, box-shadow .2s',
+              letterSpacing: '0.01em',
+            }}
+            onMouseEnter={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, {
+              transform: 'translateY(-2px)', boxShadow: '0 10px 32px rgba(255,193,7,.55)',
+            })}
+            onMouseLeave={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, {
+              transform: 'none', boxShadow: '0 6px 24px rgba(255,193,7,.40)',
+            })}
+          >
+            سمّعنا صوتك مجاناً ✦
+          </a>
+          <button
+            onClick={scrollToNextSection}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              fontFamily: 'Tajawal, sans-serif', fontWeight: 700,
+              fontSize: 'clamp(14px,1.4vw,16px)',
+              background: 'rgba(255,255,255,0.07)',
+              border: '1px solid rgba(255,255,255,0.24)',
+              color: 'rgba(252,251,251,0.88)',
+              padding: '14px 28px', borderRadius: 999, cursor: 'pointer',
+              backdropFilter: 'blur(8px)',
+              transition: 'background .2s, border-color .2s, transform .2s',
+            }}
+            onMouseEnter={e => Object.assign(e.currentTarget.style, {
+              background: 'rgba(255,255,255,0.13)', borderColor: 'rgba(255,193,7,0.40)',
+              transform: 'translateY(-2px)',
+            })}
+            onMouseLeave={e => Object.assign(e.currentTarget.style, {
+              background: 'rgba(255,255,255,0.07)', borderColor: 'rgba(255,255,255,0.24)',
+              transform: 'none',
+            })}
+          >
+            تصفّح الماستركلاسات ↗
+          </button>
+        </motion.div>
 
         {/* Scroll Indicator — equalizer bars */}
         <motion.button
@@ -142,7 +249,8 @@ export default function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1 }}
-          className="mt-16 group flex flex-col items-center gap-3 cursor-pointer p-4 hover:opacity-80 transition-opacity"
+          className="group flex flex-col items-center gap-3 cursor-pointer p-4 hover:opacity-80 transition-opacity"
+          style={{ marginTop: 'clamp(20px,5vh,48px)' }}
         >
           <div className="flex items-end justify-center gap-1 h-[20px]">
             {[1, 2, 3, 4, 5].map((i) => {

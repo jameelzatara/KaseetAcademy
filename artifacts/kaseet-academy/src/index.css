@@ -653,3 +653,39 @@ body::before {
     0 28px 70px rgba(0,0,0,.40),
     inset 0 1px 0 rgba(255,255,255,.09) !important;
 }
+
+/* ── Global focus-visible outline ── */
+:focus-visible {
+  outline: 2px solid #FFC107;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ── Currency pill — shown on md+ (JS also sets display:inline-flex) ── */
+@media (min-width: 768px) {
+  .currency-pill-btn {
+    display: inline-flex !important;
+  }
+}
+
+/* ── Cream section for reviews ── */
+.sec--reviews {
+  --card-bg: rgba(255,255,255,0.80);
+  --card-border: rgba(26,37,51,0.09);
+}
+
+/* ── Reel wrap overlay: hide Instagram raw UI chrome ── */
+.reel-wrap {
+  position: relative;
+  overflow: hidden;
+}
+.reel-wrap::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 52px;
+  background: linear-gradient(to top, rgba(26,37,51,0.96) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+

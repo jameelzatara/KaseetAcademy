@@ -565,13 +565,58 @@ export default function CoursesSection() {
           {/* empty state */}
           {noResults && (
             <div style={{
-              gridColumn: '1 / -1', textAlign: 'center',
-              fontFamily: F, fontSize: 16,
-              color: 'rgba(252,251,251,0.60)', padding: 30,
+              gridColumn: '1 / -1', textAlign: 'center', padding: '40px 20px',
+              fontFamily: F, direction: 'rtl',
             }}>
-              لا توجد دورة مطابقة لبحثك.
+              <div style={{ fontSize: 36, marginBottom: 12 }}>🔍</div>
+              <p style={{ fontSize: 17, fontWeight: 700, color: 'rgba(252,251,251,0.82)', margin: '0 0 8px' }}>
+                لا توجد دورة مطابقة لـ "{q}"
+              </p>
+              <p style={{ fontSize: 14, color: 'rgba(252,251,251,0.46)', margin: '0 0 20px', lineHeight: 1.7 }}>
+                جرّب كلمة مختلفة — أو تواصل مع ياقوت المستشارة التعليمية لتوجيهك للدورة المناسبة.
+              </p>
+              <a
+                href="https://wa.me/962771052222"
+                target="_blank" rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  fontFamily: F, fontWeight: 700, fontSize: 14,
+                  padding: '10px 22px', borderRadius: 12,
+                  background: 'rgba(37,211,102,0.12)',
+                  border: '1px solid rgba(37,211,102,0.30)',
+                  color: '#4ade80', textDecoration: 'none',
+                }}
+              >
+                استشر ياقوت مجاناً
+              </a>
             </div>
           )}
+        </div>
+
+        {/* ── Browse-all button ── */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 36 }}>
+          <a
+            href="https://wa.me/962771052222"
+            target="_blank" rel="noopener noreferrer"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              fontFamily: F, fontWeight: 600, fontSize: 15.5,
+              height: 50, padding: '0 32px', borderRadius: 14,
+              color: 'rgba(252,251,251,0.62)',
+              background: 'transparent',
+              border: '1px solid rgba(255,255,255,0.16)',
+              textDecoration: 'none',
+              transition: 'color .22s, border-color .22s, background .22s',
+            }}
+            onMouseEnter={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, {
+              color: GOLD, borderColor: 'rgba(255,193,7,0.40)', background: 'rgba(255,255,255,0.04)',
+            })}
+            onMouseLeave={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, {
+              color: 'rgba(252,251,251,0.62)', borderColor: 'rgba(255,255,255,0.16)', background: 'transparent',
+            })}
+          >
+            استعرض كل الدورات
+          </a>
         </div>
       </div>
 

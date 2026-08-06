@@ -1,84 +1,167 @@
-// ── Refund Policy Page ────────────────────────────────────────
+// ── Refund Policy — بيركلي للصوتيات المسموعة (كاسيت أكاديمي) ─
+// مسوّدة مهنية — تحتاج مراجعة محامٍ أردني مرخَّص قبل النشر
 import Navbar from '@/components/Navbar';
 import SiteFooter from '@/components/SiteFooter';
 
-const F = 'Tajawal, sans-serif';
-const GOLD = '#FFC107';
+const S = {
+  page:  { minHeight: '100dvh', background: '#0D0B14', direction: 'rtl' as const },
+  wrap:  { maxWidth: 820, margin: '0 auto', padding: '140px 24px 80px', direction: 'rtl' as const },
+  badge: { display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 14px', borderRadius: 999, background: 'rgba(255,193,7,0.10)', border: '1px solid rgba(255,193,7,0.28)', color: '#FFC107', fontSize: 13, fontWeight: 700, marginBottom: 18 },
+  h1:    { fontFamily: 'Tajawal, sans-serif', fontWeight: 900, fontSize: 'clamp(26px,4vw,40px)', color: 'rgba(252,251,251,0.97)', margin: '0 0 8px', lineHeight: 1.25 },
+  date:  { fontFamily: 'Poppins, sans-serif', fontSize: 12.5, color: 'rgba(203,213,225,0.44)', margin: '0 0 48px', direction: 'ltr' as const, display: 'block' },
+  rule:  { height: 1, background: 'linear-gradient(to left, rgba(255,193,7,0.22), transparent)', margin: '40px 0' },
+  h2:    { fontFamily: 'Tajawal, sans-serif', fontWeight: 800, fontSize: 'clamp(17px,2.2vw,22px)', color: '#FFC107', margin: '0 0 16px' },
+  p:     { fontFamily: 'Tajawal, sans-serif', fontWeight: 400, fontSize: 15.5, color: 'rgba(226,232,240,0.75)', lineHeight: 1.95, margin: '0 0 14px', textAlign: 'right' as const },
+  ul:    { paddingRight: 20, margin: '0 0 14px', listStyleType: 'disc' as const },
+  li:    { fontFamily: 'Tajawal, sans-serif', fontSize: 15.5, color: 'rgba(226,232,240,0.72)', lineHeight: 1.9, marginBottom: 6 },
+  info:  { background: 'rgba(255,193,7,0.05)', border: '1px solid rgba(255,193,7,0.18)', borderRadius: 14, padding: '20px 22px', marginBottom: 14 },
+  table: { width: '100%', borderCollapse: 'collapse' as const, marginBottom: 20 },
+  th:    { fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 13.5, color: '#FFC107', padding: '10px 14px', textAlign: 'right' as const, borderBottom: '1px solid rgba(255,193,7,0.20)', background: 'rgba(255,193,7,0.06)' },
+  td:    { fontFamily: 'Tajawal, sans-serif', fontSize: 13.5, color: 'rgba(226,232,240,0.72)', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.06)', lineHeight: 1.7, textAlign: 'right' as const },
+};
 
-const TIERS = [
-  { period: 'قبل ٧ أيام أو أكثر من بدء الدورة', refund: 'استرداد كامل ١٠٠٪', color: 'rgba(37,211,102,0.14)', border: 'rgba(37,211,102,0.30)', text: '#4ade80' },
-  { period: 'بين ٣ و٧ أيام من بدء الدورة',       refund: 'استرداد ٥٠٪ من قيمة الاشتراك', color: 'rgba(255,193,7,0.10)', border: 'rgba(255,193,7,0.28)', text: GOLD },
-  { period: 'أقل من ٣ أيام من بدء الدورة',       refund: 'لا يوجد استرداد نقدي (رصيد دراسي)', color: 'rgba(255,255,255,0.04)', border: 'rgba(255,255,255,0.10)', text: 'rgba(255,255,255,0.65)' },
-  { period: 'بعد بدء الدورة',                    refund: 'لا يوجد استرداد', color: 'rgba(239,68,68,0.06)', border: 'rgba(239,68,68,0.18)', text: 'rgba(252,165,165,0.80)' },
-];
+const CONTACT = {
+  name:  'بيركلي للصوتيات المسموعة',
+  brand: 'كاسيت أكاديمي',
+  email: 'info@kaseet.com',
+  wa:    '+962 77 105 2222',
+};
 
 export default function RefundPolicyPage() {
   return (
-    <div dir="rtl" style={{ background: '#1A2533', minHeight: '100vh', color: '#fff' }}>
+    <div style={S.page}>
       <Navbar />
+      <main id="main" style={S.wrap}>
 
-      <div style={{ background: 'rgba(0,0,0,0.30)', borderBottom: '1px solid rgba(255,193,7,0.12)', padding: '120px 24px 52px' }}>
-        <div style={{ maxWidth: 820, margin: '0 auto' }}>
-          <span style={{
-            display: 'inline-block', padding: '4px 14px', borderRadius: 999,
-            background: 'rgba(255,193,7,0.10)', border: '1px solid rgba(255,193,7,0.28)',
-            color: GOLD, fontSize: 12.5, fontFamily: F, fontWeight: 700, marginBottom: 16,
-          }}>قانوني</span>
-          <h1 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(28px,4vw,40px)', color: '#fff', margin: '0 0 12px', lineHeight: 1.2 }}>
-            سياسة الاسترداد
-          </h1>
-          <p style={{ fontFamily: F, fontSize: 14, color: 'rgba(203,213,225,0.55)', margin: 0 }}>
-            آخر تحديث: يوليو 2025
+        <div style={S.badge}>سياسة الاسترداد</div>
+        <h1 style={S.h1}>سياسة الاسترداد والإلغاء</h1>
+        <span style={S.date}>آخر تحديث: [تاريخ النشر] — إصدار 1.0</span>
+
+        {/* ── 1 ── */}
+        <h2 style={S.h2}>1. نظرة عامة والمبادئ الأساسية</h2>
+        <p style={S.p}>
+          تؤمن <strong style={{ color: 'rgba(252,251,251,0.92)' }}>{CONTACT.brand}</strong> بأن رضاك أولوية. هذه السياسة توضّح حقوقك بشكل شفاف، وتُحدّد الإجراءات المتبعة عند طلب الاسترداد أو الإلغاء.
+        </p>
+        <p style={S.p}>
+          تُحسَب مدد الاسترداد من تاريخ إتمام الدفع. المبالغ غير القابلة للاسترداد تُستثنى منها رسوم معالجة الدفع التي تُحتجزها بوابات الدفع الخارجية.
+        </p>
+        <div style={S.rule} />
+
+        {/* ── 2 ── */}
+        <h2 style={S.h2}>2. جدول الاسترداد التفصيلي</h2>
+        <table style={S.table}>
+          <thead>
+            <tr>
+              <th style={S.th}>توقيت طلب الإلغاء</th>
+              <th style={S.th}>نسبة الاسترداد</th>
+              <th style={S.th}>المبلغ المُسترَد</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style={S.td}>قبل بدء الدورة بأكثر من 14 يوم</td>
+              <td style={{ ...S.td, color: '#4ade80', fontWeight: 700 }}>100%</td>
+              <td style={S.td}>المبلغ كاملاً (ناقص رسوم البوابة)</td>
+            </tr>
+            <tr>
+              <td style={S.td}>قبل بدء الدورة بـ 7–14 يوم</td>
+              <td style={{ ...S.td, color: '#FFC107', fontWeight: 700 }}>75%</td>
+              <td style={S.td}>75% من المبلغ المدفوع</td>
+            </tr>
+            <tr>
+              <td style={S.td}>قبل بدء الدورة بأقل من 7 أيام</td>
+              <td style={{ ...S.td, color: '#FFA500', fontWeight: 700 }}>50%</td>
+              <td style={S.td}>50% من المبلغ المدفوع</td>
+            </tr>
+            <tr>
+              <td style={S.td}>بعد بدء الجلسة الأولى</td>
+              <td style={{ ...S.td, color: '#f87171', fontWeight: 700 }}>0%</td>
+              <td style={S.td}>لا يوجد استرداد (رصيد تدريبي بديل)</td>
+            </tr>
+            <tr>
+              <td style={S.td}>إلغاء الدورة من طرف الأكاديمية</td>
+              <td style={{ ...S.td, color: '#4ade80', fontWeight: 700 }}>100%</td>
+              <td style={S.td}>المبلغ كاملاً خلال 7 أيام عمل</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style={S.rule} />
+
+        {/* ── 3 ── */}
+        <h2 style={S.h2}>3. الرصيد التدريبي البديل</h2>
+        <p style={S.p}>
+          في الحالات التي لا تستوفي شروط الاسترداد النقدي (الانسحاب بعد بدء الجلسة الأولى)، يمكن تحويل المبلغ المدفوع إلى رصيد تدريبي يُستخدم في أي دورة أخرى خلال 12 شهراً من تاريخ الإلغاء.
+        </p>
+        <div style={S.rule} />
+
+        {/* ── 4 ── */}
+        <h2 style={S.h2}>4. حالات الاسترداد الاستثنائي</h2>
+        <p style={S.p}>قد يُمنح استرداد جزئي أو كامل خارج الجدول أعلاه في الحالات التالية (مع تقديم وثائق داعمة):</p>
+        <ul style={S.ul}>
+          <li style={S.li}>حالة طبية طارئة موثّقة بشهادة طبية رسمية.</li>
+          <li style={S.li}>وفاة أحد أفراد الأسرة المباشرين.</li>
+          <li style={S.li}>نزاع مسلح أو قوة قاهرة تمنع الحضور.</li>
+          <li style={S.li}>منح تأشيرة مرفوضة لمتدربين قادمين من خارج الأردن (للدورات الحضورية فقط).</li>
+        </ul>
+        <p style={S.p}>تُدرَس هذه الطلبات حالة بحالة خلال 5 أيام عمل من استلام الوثائق.</p>
+        <div style={S.rule} />
+
+        {/* ── 5 ── */}
+        <h2 style={S.h2}>5. تأجيل الانضمام إلى دفعة لاحقة</h2>
+        <p style={S.p}>
+          يحق للمتدرب طلب تأجيل انضمامه إلى الدفعة التالية من نفس الدورة مرة واحدة بدون رسوم إضافية، شريطة تقديم الطلب قبل بدء الدورة بـ 48 ساعة على الأقل. التأجيل الثاني يخضع لرسوم إدارية قدرها 15 د.أ.
+        </p>
+        <div style={S.rule} />
+
+        {/* ── 6 ── */}
+        <h2 style={S.h2}>6. طريقة الاسترداد ومدته</h2>
+        <ul style={S.ul}>
+          <li style={S.li}>يُعاد المبلغ بنفس طريقة الدفع الأصلية قدر الإمكان.</li>
+          <li style={S.li}>التحويل البنكي: 3–5 أيام عمل.</li>
+          <li style={S.li}>كروت الائتمان: 5–10 أيام عمل حسب الجهة المُصدِرة.</li>
+          <li style={S.li}>المحافظ الإلكترونية: 1–3 أيام عمل.</li>
+        </ul>
+        <div style={S.rule} />
+
+        {/* ── 7 ── */}
+        <h2 style={S.h2}>7. الحالات غير المشمولة بالاسترداد</h2>
+        <ul style={S.ul}>
+          <li style={S.li}>رسوم الاستشارة المجانية (مجانية بطبيعتها، لا شيء يُسترَد).</li>
+          <li style={S.li}>المواد التدريبية الرقمية التي تم تنزيلها أو الاطلاع عليها.</li>
+          <li style={S.li}>جلسات التسجيل الصوتي في الاستوديو التي تمّت فعلاً.</li>
+          <li style={S.li}>حالات الفصل بسبب انتهاك قواعد السلوك.</li>
+        </ul>
+        <div style={S.rule} />
+
+        {/* ── 8 ── */}
+        <h2 style={S.h2}>8. إلغاء خدمات الاشتراك</h2>
+        <p style={S.p}>
+          في حال وجود اشتراكات شهرية أو دورية، يُمكن إلغاؤها في أي وقت مع سريان الإلغاء من الدورة الفوترية التالية. لا يُسترَد الجزء المتبقي من الفترة الحالية.
+        </p>
+        <div style={S.rule} />
+
+        {/* ── 9 ── */}
+        <h2 style={S.h2}>9. إجراءات تقديم طلب الاسترداد</h2>
+        <ol style={{ ...S.ul, listStyleType: 'decimal' }}>
+          <li style={S.li}>أرسل بريداً إلكترونياً إلى <a href={`mailto:${CONTACT.email}`} style={{ color: '#FFC107' }}>{CONTACT.email}</a> أو رسالة واتساب على {CONTACT.wa}.</li>
+          <li style={S.li}>اذكر: الاسم الكامل، اسم الدورة، تاريخ الدفع، سبب الإلغاء، والمبلغ المدفوع.</li>
+          <li style={S.li}>أرفق إيصال الدفع ووثيقة الهوية.</li>
+          <li style={S.li}>ستتلقى تأكيداً باستلام الطلب خلال 24 ساعة، وقراراً نهائياً خلال 3 أيام عمل.</li>
+        </ol>
+        <div style={S.rule} />
+
+        {/* ── 10 ── */}
+        <h2 style={S.h2}>10. التواصل والنزاعات</h2>
+        <div style={S.info}>
+          <p style={{ ...S.p, margin: 0 }}>
+            للاستفسار أو الطعن في قرار الاسترداد:<br/>
+            البريد: <a href={`mailto:${CONTACT.email}`} style={{ color: '#FFC107' }}>{CONTACT.email}</a><br/>
+            واتساب: <span dir="ltr">{CONTACT.wa}</span><br/><br/>
+            في حال عدم التوصل إلى حل وديّ، يحق لك اللجوء إلى الجهات التحكيمية المختصة أو القضاء الأردني.
           </p>
         </div>
-      </div>
 
-      <main style={{ maxWidth: 820, margin: '0 auto', padding: '52px 24px 80px' }}>
-        <p style={{ fontFamily: F, fontSize: 16, color: 'rgba(226,232,240,0.80)', lineHeight: 1.9, margin: '0 0 40px' }}>
-          نسعى دائماً لضمان رضاك التام. فيما يلي سياستنا الواضحة للاسترداد بحسب توقيت طلب الإلغاء.
-        </p>
-
-        {/* Refund tiers table */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 44 }}>
-          <div style={{
-            display: 'grid', gridTemplateColumns: '1fr 1fr',
-            background: 'rgba(255,255,255,0.05)', borderRadius: '12px 12px 0 0',
-            padding: '12px 20px',
-          }}>
-            <span style={{ fontFamily: F, fontWeight: 800, fontSize: 13.5, color: 'rgba(255,255,255,0.55)' }}>التوقيت</span>
-            <span style={{ fontFamily: F, fontWeight: 800, fontSize: 13.5, color: 'rgba(255,255,255,0.55)' }}>نسبة الاسترداد</span>
-          </div>
-          {TIERS.map((t, i) => (
-            <div key={i} style={{
-              display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12,
-              background: t.color, border: `1px solid ${t.border}`,
-              borderRadius: 12, padding: '16px 20px', alignItems: 'center',
-            }}>
-              <p style={{ fontFamily: F, fontSize: 14, color: 'rgba(255,255,255,0.82)', margin: 0, lineHeight: 1.5 }}>{t.period}</p>
-              <p style={{ fontFamily: F, fontWeight: 700, fontSize: 14, color: t.text, margin: 0 }}>{t.refund}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Additional notes */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-          {[
-            { title: 'الرصيد الدراسي', body: 'يمكن استخدام الرصيد الدراسي في الالتحاق بأي دورة أخرى من دوراتنا خلال سنة كاملة من تاريخ منحه.' },
-            { title: 'حالات الاسترداد الاستثنائية', body: 'في حالة إلغاء الدورة من قِبل الأكاديمية لأي سبب كان، يحق للمتدرب استرداد كامل المبلغ المدفوع أو تحويله إلى دورة بديلة.' },
-            { title: 'طريقة الاسترداد', body: 'يُعاد المبلغ إلى نفس وسيلة الدفع المستخدمة خلال ٥–١٠ أيام عمل من تأكيد طلب الاسترداد.' },
-            { title: 'تقديم طلب الاسترداد', body: 'لتقديم طلب الاسترداد يُرجى التواصل عبر واتساب +962 77 105 2222 أو البريد الإلكتروني info@kaseetmedia.com مع ذكر اسمك وتاريخ التسجيل.' },
-          ].map((n, i) => (
-            <div key={i} style={{
-              background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)',
-              borderRadius: 14, padding: '22px 24px',
-            }}>
-              <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: GOLD, margin: '0 0 10px' }}>{n.title}</h3>
-              <p style={{ fontFamily: F, fontSize: 14.5, color: 'rgba(226,232,240,0.75)', margin: 0, lineHeight: 1.85 }}>{n.body}</p>
-            </div>
-          ))}
-        </div>
       </main>
-
       <SiteFooter />
     </div>
   );
