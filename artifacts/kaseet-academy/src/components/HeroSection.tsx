@@ -23,11 +23,16 @@ export default function HeroSection() {
     return () => clearInterval(interval);
   }, []);
 
-  const scrollToNextSection = () => {
+  // "استكشف" → first section after hero (TracksSection)
+  const scrollToFirstSection = () => {
     const section = document.getElementById('section-2');
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth' });
-    }
+    if (section) section.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // "تصفح دوراتنا" → courses section
+  const scrollToCourses = () => {
+    const section = document.getElementById('courses');
+    if (section) section.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -41,8 +46,18 @@ export default function HeroSection() {
           backgroundPosition: '62% 34%',
         }}
       />
-      {/* Scrim */}
-      <div className="absolute inset-0 z-0 bg-[rgba(10,14,22,0.55)]" />
+      {/* Scrim — multi-layer glass with colour overlaps, lighter at bottom so Waveform shows */}
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          background: [
+            'linear-gradient(to bottom, rgba(12,18,32,0.75) 0%, rgba(12,18,32,0.58) 60%, rgba(12,18,32,0.12) 100%)',
+            'radial-gradient(ellipse 70% 55% at 72% 6%,  rgba(255,193,7,0.13),   transparent 68%)',
+            'radial-gradient(ellipse 58% 48% at 12% 95%, rgba(74,130,196,0.15),  transparent 70%)',
+            'radial-gradient(ellipse 40% 36% at 50% 50%, rgba(37,51,74,0.22),    transparent 72%)',
+          ].join(', '),
+        }}
+      />
 
       {/* ── Cassette reel geometry (top-right, decorative) ── */}
       <div className="geo" aria-hidden="true">
@@ -177,7 +192,7 @@ export default function HeroSection() {
             سمّعنا صوتك مجاناً ✦
           </a>
           <button
-            onClick={scrollToNextSection}
+            onClick={scrollToCourses}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
               fontFamily: 'Tajawal, sans-serif', fontWeight: 700,
@@ -198,13 +213,13 @@ export default function HeroSection() {
               transform: 'none',
             })}
           >
-            تصفّح الماستركلاسات ↗
+            تصفح دوراتنا المتميزة ↗
           </button>
         </motion.div>
 
-        {/* Scroll Indicator — equalizer bars */}
+        {/* Scroll Indicator — equalizer bars → first section */}
         <motion.button
-          onClick={scrollToNextSection}
+          onClick={scrollToFirstSection}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1 }}

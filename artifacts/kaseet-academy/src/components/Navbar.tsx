@@ -3,14 +3,23 @@ import { motion, AnimatePresence } from 'framer-motion';
 import logo from '@assets/logo_1785422080938.png';
 import { useCurrency } from '../context/CurrencyContext';
 import { CURRENCY_LIST, CURRENCY_SYMBOLS, CURRENCY_NAMES } from '../data/currency';
+import AuthModal from './AuthModal';
 
 export default function Navbar() {
   const [solid,        setSolid]        = useState(false);
   const [showCurrency, setShowCurrency] = useState(false);
   const [showMenu,     setShowMenu]     = useState(false);
+  const [showAuth,     setShowAuth]     = useState(false);
+  const [authMode,     setAuthMode]     = useState<'login' | 'register'>('login');
   const { currency, setCurrency } = useCurrency();
   const dropRef  = useRef<HTMLDivElement>(null);
   const menuRef  = useRef<HTMLDivElement>(null);
+
+  const openAuth = (mode: 'login' | 'register') => {
+    setAuthMode(mode);
+    setShowMenu(false);
+    setShowAuth(true);
+  };
 
   // ── Solid nav when hero scrolls out ───────────────────────
   useEffect(() => {
@@ -227,22 +236,20 @@ export default function Navbar() {
                     </div>
 
                     {/* Sign in */}
-                    <a
-                      href="/login"
-                      onClick={() => setShowMenu(false)}
+                    <button
+                      onClick={() => openAuth('login')}
                       style={{
                         display: 'flex', alignItems: 'center', gap: 12,
-                        padding: '14px 18px',
-                        textDecoration: 'none',
+                        padding: '14px 18px', width: '100%',
+                        background: 'transparent', border: 'none', cursor: 'pointer',
                         color: 'rgba(252,251,251,0.88)',
                         fontFamily: 'Tajawal, sans-serif', fontSize: 15, fontWeight: 600,
-                        transition: 'background .15s',
+                        transition: 'background .15s', textAlign: 'right',
                         borderBottom: '1px solid rgba(255,255,255,0.05)',
                       }}
                       onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.05)')}
                       onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                     >
-                      {/* Icon */}
                       <span style={{
                         width: 34, height: 34, borderRadius: '50%',
                         background: 'rgba(255,193,7,0.12)',
@@ -256,24 +263,22 @@ export default function Navbar() {
                         </svg>
                       </span>
                       <span>تسجيل الدخول</span>
-                    </a>
+                    </button>
 
                     {/* Register */}
-                    <a
-                      href="/register"
-                      onClick={() => setShowMenu(false)}
+                    <button
+                      onClick={() => openAuth('register')}
                       style={{
                         display: 'flex', alignItems: 'center', gap: 12,
-                        padding: '14px 18px',
-                        textDecoration: 'none',
+                        padding: '14px 18px', width: '100%',
+                        background: 'transparent', border: 'none', cursor: 'pointer',
                         color: 'rgba(252,251,251,0.88)',
                         fontFamily: 'Tajawal, sans-serif', fontSize: 15, fontWeight: 600,
-                        transition: 'background .15s',
+                        transition: 'background .15s', textAlign: 'right',
                       }}
                       onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.05)')}
                       onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                     >
-                      {/* Icon */}
                       <span style={{
                         width: 34, height: 34, borderRadius: '50%',
                         background: 'rgba(255,193,7,0.12)',
@@ -288,18 +293,11 @@ export default function Navbar() {
                         </svg>
                       </span>
                       <span>إنشاء حساب جديد</span>
-                    </a>
+                    </button>
 
                     {/* Footer note */}
-                    <div style={{
-                      padding: '10px 18px 14px',
-                      borderTop: '1px solid rgba(255,255,255,0.06)',
-                    }}>
-                      <p style={{
-                        margin: 0,
-                        fontFamily: 'Tajawal, sans-serif', fontSize: 11,
-                        color: 'rgba(252,251,251,0.30)',
-                      }}>
+                    <div style={{ padding: '10px 18px 14px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                      <p style={{ margin: 0, fontFamily: 'Tajawal, sans-serif', fontSize: 11, color: 'rgba(252,251,251,0.30)' }}>
                         سجّل الدخول لمتابعة دوراتك وشهاداتك
                       </p>
                     </div>
@@ -317,6 +315,13 @@ export default function Navbar() {
           .currency-pill-btn { display: inline-flex !important; }
         }
       `}</style>
+
+      {/* Auth Modal */}
+      <AuthModal
+        open={showAuth}
+        defaultMode={authMode}
+        onClose={() => setShowAuth(false)}
+      />
     </>
   );
 }
