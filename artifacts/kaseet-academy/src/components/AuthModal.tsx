@@ -242,23 +242,23 @@ export default function AuthModal({ open, defaultMode = 'login', onClose }: Prop
               </div>
             )}
 
-            {/* Submit — Kaseet YELLOW */}
+            {/* Submit — Maroon accent */}
             <button
               onClick={handleSubmit}
               disabled={loading}
               style={{
                 width: '100%', padding: '14px',
-                background: loading ? '#e5e7eb' : '#FFC107',
-                color: loading ? '#9ca3af' : '#121927',
+                background: loading ? '#e5e7eb' : ACCENT,
+                color: loading ? '#9ca3af' : '#fff',
                 border: 'none', borderRadius: 12,
                 fontFamily: 'Tajawal, sans-serif', fontWeight: 900, fontSize: 17,
                 cursor: loading ? 'not-allowed' : 'pointer',
-                boxShadow: loading ? 'none' : '0 4px 18px rgba(255,193,7,0.40)',
+                boxShadow: loading ? 'none' : `0 4px 18px ${ACCENT}55`,
                 transition: 'transform .15s, box-shadow .15s, background .15s',
                 marginBottom: 16,
               }}
-              onMouseEnter={e => { if (!loading) Object.assign(e.currentTarget.style, { background: '#e6ac00', transform: 'translateY(-1px)' }); }}
-              onMouseLeave={e => { if (!loading) Object.assign(e.currentTarget.style, { background: '#FFC107', transform: 'none' }); }}
+              onMouseEnter={e => { if (!loading) Object.assign(e.currentTarget.style, { background: '#6a2553', transform: 'translateY(-1px)' }); }}
+              onMouseLeave={e => { if (!loading) Object.assign(e.currentTarget.style, { background: ACCENT, transform: 'none' }); }}
             >
               {loading ? '...' : mode === 'login' ? 'دخول' : 'إنشاء الحساب'}
             </button>

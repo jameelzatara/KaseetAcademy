@@ -46,11 +46,14 @@ export default function HeroSection() {
           backgroundPosition: '62% 34%',
         }}
       />
-      {/* Dark Overlay — 65% flat + fade at bottom so Waveform shows */}
+      {/* Glassmorphism overlay — dark navy glass across entire hero */}
       <div
         className="absolute inset-0 z-0"
         style={{
-          background: 'linear-gradient(to bottom, rgba(10,14,22,0.65) 0%, rgba(10,14,22,0.65) 72%, rgba(10,14,22,0.15) 100%)',
+          background: 'linear-gradient(to bottom, rgba(8,14,36,0.72) 0%, rgba(8,14,36,0.68) 68%, rgba(8,14,36,0.14) 100%)',
+          backdropFilter: 'blur(6px)',
+          WebkitBackdropFilter: 'blur(6px)',
+          borderBottom: '1px solid rgba(255,255,255,0.07)',
         }}
       />
 
