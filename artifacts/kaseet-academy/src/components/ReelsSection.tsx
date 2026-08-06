@@ -235,13 +235,6 @@ export default function ReelsSection({
                   />
                 </div>
 
-                {isCenter && (
-                  <div style={{
-                    position: 'absolute', bottom: 46, left: 0, right: 0, height: 60,
-                    background: 'linear-gradient(to top, rgba(8,12,24,0.85) 0%, transparent 100%)',
-                    pointerEvents: 'none',
-                  }} />
-                )}
 
                 {/* Footer */}
                 <div style={{

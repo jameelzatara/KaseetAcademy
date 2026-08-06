@@ -26,10 +26,10 @@ export default function Waveform() {
   }, [barsCount]);
 
   return (
-    <div className="relative w-full h-[170px] flex justify-between items-end overflow-hidden px-4 md:px-10">
-      
-      {/* Back Layer (Taller, more transparent) */}
-      <div className="absolute bottom-0 left-0 right-0 w-full flex justify-between items-end gap-[4px] md:gap-[7px] px-4 md:px-10">
+    <div className="relative w-full h-[170px] flex justify-between items-end overflow-hidden">
+
+      {/* Back Layer (Taller, more transparent) — no padding, reaches both edges */}
+      <div className="absolute bottom-0 left-0 right-0 w-full flex justify-between items-end gap-[3px]">
         {backLayer.map((bar, i) => (
           <div
             key={`back-${i}`}
@@ -42,8 +42,8 @@ export default function Waveform() {
         ))}
       </div>
 
-      {/* Front Layer (Shorter, more visible) */}
-      <div className="absolute bottom-0 left-0 right-0 w-full flex justify-between items-end gap-[4px] md:gap-[7px] px-4 md:px-10">
+      {/* Front Layer (Shorter, more visible) — no padding, reaches both edges */}
+      <div className="absolute bottom-0 left-0 right-0 w-full flex justify-between items-end gap-[3px]">
         {frontLayer.map((bar, i) => (
           <div
             key={`front-${i}`}
@@ -55,7 +55,11 @@ export default function Waveform() {
           />
         ))}
       </div>
-      
+
+      {/* Heavy dark gradient at very bottom — blends into next section */}
+      <div className="absolute bottom-0 left-0 right-0 h-[64px] pointer-events-none"
+        style={{ background: 'linear-gradient(to top, rgba(8,12,24,0.92) 0%, rgba(8,12,24,0.55) 50%, transparent 100%)' }}
+      />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { Route, Switch, Router as WouterRouter, Redirect } from 'wouter';
 import { CurrencyProvider } from '@/context/CurrencyContext';
 import { AuthProvider } from '@/context/AuthContext';
+import ScrollToTop from '@/components/ScrollToTop';
 import Home from '@/pages/Home';
 import CourseVoiceoverPage      from '@/pages/CourseVoiceoverPage';
 import CourseBasicsPage         from '@/pages/CourseBasicsPage';
@@ -15,46 +16,48 @@ import VoiceTestPage             from '@/pages/VoiceTestPage';
 import PrivacyPolicyPage         from '@/pages/PrivacyPolicyPage';
 import TermsPage                 from '@/pages/TermsPage';
 import RefundPolicyPage          from '@/pages/RefundPolicyPage';
-import CookiesPage               from '@/pages/CookiesPage';
 import ApplyVoiceTalentPage      from '@/pages/ApplyVoiceTalentPage';
 import ApplyTrainerPage          from '@/pages/ApplyTrainerPage';
 import NotFoundPage              from '@/pages/not-found';
 
 function Router() {
   return (
-    <Switch>
-      <Route path="/" component={Home} />
+    <>
+      <ScrollToTop />
+      <Switch>
+        <Route path="/" component={Home} />
 
-      {/* Course detail pages */}
-      <Route path="/courses/voiceover"        component={CourseVoiceoverPage} />
-      <Route path="/courses/voiceover-basics" component={CourseBasicsPage} />
-      <Route path="/courses/voiceover-live"   component={CourseVoiceoverLivePage} />
-      <Route path="/courses/presenter"        component={CoursePresenterPage} />
-      <Route path="/courses/arabic-language"  component={CourseArabicLanguagePage} />
-      <Route path="/courses/public-speaking"  component={CoursePublicSpeakingPage} />
+        {/* Course detail pages */}
+        <Route path="/courses/voiceover"        component={CourseVoiceoverPage} />
+        <Route path="/courses/voiceover-basics" component={CourseBasicsPage} />
+        <Route path="/courses/voiceover-live"   component={CourseVoiceoverLivePage} />
+        <Route path="/courses/presenter"        component={CoursePresenterPage} />
+        <Route path="/courses/arabic-language"  component={CourseArabicLanguagePage} />
+        <Route path="/courses/public-speaking"  component={CoursePublicSpeakingPage} />
 
-      {/* Masterclass pages — new canonical routes */}
-      <Route path="/masterclass-elam"    component={MasarElamiPage} />
-      <Route path="/masterclass-voice"   component={MasarSotiPage} />
-      <Route path="/masterclass-khataba" component={MasarKhatabaPage} />
+        {/* Masterclass pages — new canonical routes */}
+        <Route path="/masterclass-elam"    component={MasarElamiPage} />
+        <Route path="/masterclass-voice"   component={MasarSotiPage} />
+        <Route path="/masterclass-khataba" component={MasarKhatabaPage} />
 
-      {/* Client-side 301 redirects from old paths */}
-      <Route path="/masar-elami"    component={() => <Redirect to="/masterclass-elam" />} />
-      <Route path="/masar-soti"     component={() => <Redirect to="/masterclass-voice" />} />
-      <Route path="/masar-khataba"  component={() => <Redirect to="/masterclass-khataba" />} />
+        {/* Client-side 301 redirects from old paths */}
+        <Route path="/masar-elami"    component={() => <Redirect to="/masterclass-elam" />} />
+        <Route path="/masar-soti"     component={() => <Redirect to="/masterclass-voice" />} />
+        <Route path="/masar-khataba"  component={() => <Redirect to="/masterclass-khataba" />} />
 
-      {/* Utility */}
-      <Route path="/voice-test"               component={VoiceTestPage} />
-      <Route path="/privacy-policy"           component={PrivacyPolicyPage} />
-      <Route path="/terms"                    component={TermsPage} />
-      <Route path="/refund-policy"            component={RefundPolicyPage} />
-      <Route path="/cookies"                  component={CookiesPage} />
-      <Route path="/apply/voice-talent"       component={ApplyVoiceTalentPage} />
-      <Route path="/apply/trainer"            component={ApplyTrainerPage} />
+        {/* Utility */}
+        <Route path="/voice-test"               component={VoiceTestPage} />
+        <Route path="/privacy-policy"           component={PrivacyPolicyPage} />
+        <Route path="/terms"                    component={TermsPage} />
+        <Route path="/refund-policy"            component={RefundPolicyPage} />
+        {/* /cookies removed — Cookie Policy page deleted */}
+        <Route path="/apply/voice-talent"       component={ApplyVoiceTalentPage} />
+        <Route path="/apply/trainer"            component={ApplyTrainerPage} />
 
-      {/* 404 */}
-      <Route component={NotFoundPage} />
-    </Switch>
+        {/* 404 */}
+        <Route component={NotFoundPage} />
+      </Switch>
+    </>
   );
 }
 

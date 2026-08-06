@@ -1,20 +1,22 @@
 // ── Terms & Conditions — بيركلي للصوتيات المسموعة (كاسيت أكاديمي) ─
 // مسوّدة مهنية — تحتاج مراجعة محامٍ أردني مرخَّص قبل النشر
+import { useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import SiteFooter from '@/components/SiteFooter';
+import BackButton from '@/components/BackButton';
 
 const S = {
-  page:  { minHeight: '100dvh', background: '#0D0B14', direction: 'rtl' as const },
+  page:  { minHeight: '100dvh', background: '#FDFBF7', direction: 'rtl' as const },
   wrap:  { maxWidth: 820, margin: '0 auto', padding: '140px 24px 80px', direction: 'rtl' as const },
-  badge: { display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 14px', borderRadius: 999, background: 'rgba(255,193,7,0.10)', border: '1px solid rgba(255,193,7,0.28)', color: '#FFC107', fontSize: 13, fontWeight: 700, marginBottom: 18 },
-  h1:    { fontFamily: 'Tajawal, sans-serif', fontWeight: 900, fontSize: 'clamp(26px,4vw,40px)', color: 'rgba(252,251,251,0.97)', margin: '0 0 8px', lineHeight: 1.25 },
-  date:  { fontFamily: 'Poppins, sans-serif', fontSize: 12.5, color: 'rgba(203,213,225,0.44)', margin: '0 0 48px', direction: 'ltr' as const, display: 'block' },
-  rule:  { height: 1, background: 'linear-gradient(to left, rgba(255,193,7,0.22), transparent)', margin: '40px 0' },
-  h2:    { fontFamily: 'Tajawal, sans-serif', fontWeight: 800, fontSize: 'clamp(17px,2.2vw,22px)', color: '#FFC107', margin: '0 0 16px' },
-  p:     { fontFamily: 'Tajawal, sans-serif', fontWeight: 400, fontSize: 15.5, color: 'rgba(226,232,240,0.75)', lineHeight: 1.95, margin: '0 0 14px', textAlign: 'right' as const },
+  badge: { display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 14px', borderRadius: 999, background: 'rgba(123,45,96,0.08)', border: '1px solid rgba(123,45,96,0.22)', color: '#7B2D60', fontSize: 13, fontWeight: 700, marginBottom: 18 },
+  h1:    { fontFamily: 'Tajawal, sans-serif', fontWeight: 900, fontSize: 'clamp(26px,4vw,40px)', color: '#1A2533', margin: '0 0 8px', lineHeight: 1.25 },
+  date:  { fontFamily: 'Poppins, sans-serif', fontSize: 12.5, color: 'rgba(26,37,51,0.44)', margin: '0 0 48px', direction: 'ltr' as const, display: 'block' },
+  rule:  { height: 1, background: 'linear-gradient(to left, rgba(123,45,96,0.18), transparent)', margin: '40px 0' },
+  h2:    { fontFamily: 'Tajawal, sans-serif', fontWeight: 800, fontSize: 'clamp(17px,2.2vw,22px)', color: '#7B2D60', margin: '0 0 16px' },
+  p:     { fontFamily: 'Tajawal, sans-serif', fontWeight: 400, fontSize: 15.5, color: 'rgba(26,37,51,0.75)', lineHeight: 1.95, margin: '0 0 14px', textAlign: 'right' as const },
   ul:    { paddingRight: 20, margin: '0 0 14px', listStyleType: 'disc' as const },
-  li:    { fontFamily: 'Tajawal, sans-serif', fontSize: 15.5, color: 'rgba(226,232,240,0.72)', lineHeight: 1.9, marginBottom: 6 },
-  info:  { background: 'rgba(255,193,7,0.05)', border: '1px solid rgba(255,193,7,0.18)', borderRadius: 14, padding: '20px 22px', marginBottom: 14 },
+  li:    { fontFamily: 'Tajawal, sans-serif', fontSize: 15.5, color: 'rgba(26,37,51,0.72)', lineHeight: 1.9, marginBottom: 6 },
+  info:  { background: 'rgba(255,193,7,0.05)', border: '1px solid rgba(255,193,7,0.20)', borderRadius: 14, padding: '20px 22px', marginBottom: 14 },
 };
 
 const CONTACT = {
@@ -25,9 +27,11 @@ const CONTACT = {
 };
 
 export default function TermsPage() {
+  useEffect(() => { window.scrollTo({ top: 0, left: 0, behavior: 'instant' }); }, []);
   return (
     <div style={S.page}>
       <Navbar />
+      <BackButton />
       <main id="main" style={S.wrap}>
 
         <div style={S.badge}>الشروط والأحكام</div>
@@ -37,7 +41,7 @@ export default function TermsPage() {
         {/* ── 1 ── */}
         <h2 style={S.h2}>1. الأطراف والقبول</h2>
         <p style={S.p}>
-          تُبرَم هذه الاتفاقية بينك ("المتدرب" أو "المستخدم") وبين شركة <strong style={{ color: 'rgba(252,251,251,0.92)' }}>{CONTACT.name}</strong>، المسجّلة في الأردن والمشغّلة تحت علامة <strong style={{ color: 'rgba(252,251,251,0.92)' }}>{CONTACT.brand}</strong>.
+          تُبرَم هذه الاتفاقية بينك ("المتدرب" أو "المستخدم") وبين شركة <strong style={{ color: '#1A2533' }}>{CONTACT.name}</strong>، المسجّلة في الأردن والمشغّلة تحت علامة <strong style={{ color: '#1A2533' }}>{CONTACT.brand}</strong>.
         </p>
         <p style={S.p}>
           بتسجيلك في أي برنامج أو دورة أو باستخدام الموقع الإلكتروني، فإنك تُقرّ بقراءة هذه الشروط وفهمها والموافقة عليها. إذا كنت لا توافق على أي من هذه الشروط، يُرجى عدم استخدام خدماتنا.

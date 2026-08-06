@@ -62,43 +62,31 @@ function ReviewCard({
       direction:    'rtl',
       minWidth:     0,
     }}>
-      {/* Header row: avatar + name + "موثّق" badge */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ fontWeight: 700, fontSize: 15, color: '#1A2533', lineHeight: 1.3 }}>
-              {review.name}
-            </div>
-            <div style={{ display: 'inline-flex', gap: 2, alignItems: 'center', direction: 'ltr', marginTop: 3 }}>
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} size={12} fill="#FFC107" color="#FFC107" />
-              ))}
-            </div>
+      {/* Header row: avatar + name */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div style={{ textAlign: 'right', flex: 1 }}>
+          <div style={{ fontWeight: 700, fontSize: 15, color: '#1A2533', lineHeight: 1.3 }}>
+            {review.name}
           </div>
-          <img
-            src={review.avatar}
-            alt={review.name}
-            width={54}
-            height={54}
-            style={{
-              width: 54, height: 54, borderRadius: '50%',
-              objectFit: 'cover', objectPosition: 'center top',
-              border: '2px solid rgba(255,193,7,0.55)',
-              flexShrink: 0,
-            }}
-            onError={e => { (e.currentTarget as HTMLImageElement).style.background = '#d1d5db'; }}
-          />
+          <div style={{ display: 'inline-flex', gap: 2, alignItems: 'center', direction: 'ltr', marginTop: 3 }}>
+            {[...Array(5)].map((_, i) => (
+              <Star key={i} size={12} fill="#FFC107" color="#FFC107" />
+            ))}
+          </div>
         </div>
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: 4,
-          padding: '3px 9px', borderRadius: 999,
-          background: 'rgba(26,37,51,0.06)',
-          border: '1px solid rgba(26,37,51,0.08)',
-          flexShrink: 0,
-        }}>
-          <span style={{ fontSize: 10, color: '#4285F4', fontWeight: 700 }}>G</span>
-          <span style={{ fontSize: 10, color: 'rgba(26,37,51,0.55)', fontWeight: 500 }}>موثّق</span>
-        </div>
+        <img
+          src={review.avatar}
+          alt={review.name}
+          width={54}
+          height={54}
+          style={{
+            width: 54, height: 54, borderRadius: '50%',
+            objectFit: 'cover', objectPosition: 'center top',
+            border: '2px solid rgba(255,193,7,0.55)',
+            flexShrink: 0,
+          }}
+          onError={e => { (e.currentTarget as HTMLImageElement).style.background = '#d1d5db'; }}
+        />
       </div>
 
       <div style={{ height: 1, background: 'rgba(26,37,51,0.07)' }} />
@@ -229,34 +217,6 @@ export default function TestimonialsSection() {
           style={{ marginBottom: 20 }}
         />
 
-        {/* Google Maps badge — clickable chip */}
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 48 }}>
-          <a
-            href={STATS.googleMapsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: 10,
-              padding: '10px 20px', borderRadius: 999,
-              background: 'rgba(255,255,255,0.85)',
-              border: '1px solid rgba(26,37,51,0.12)',
-              boxShadow: '0 4px 18px rgba(26,37,51,0.10)',
-              textDecoration: 'none', transition: 'transform .18s, box-shadow .18s',
-            }}
-            onMouseEnter={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, {
-              transform: 'translateY(-2px)', boxShadow: '0 8px 24px rgba(26,37,51,0.16)',
-            })}
-            onMouseLeave={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, {
-              transform: 'none', boxShadow: '0 4px 18px rgba(26,37,51,0.10)',
-            })}
-          >
-            <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: 18, fontWeight: 900, color: '#4285F4', letterSpacing: -1 }}>G</span>
-            <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: 20, fontWeight: 700, color: '#1A2533' }}>{STATS.googleRating.toFixed(1)}</span>
-            <span style={{ color: '#FFC107', fontSize: 14, letterSpacing: 1 }}>★★★★★</span>
-            <span style={{ fontSize: 13, color: 'rgba(26,37,51,0.62)' }}>{STATS.googleReviews} مراجعة على خرائط Google</span>
-            <span style={{ fontSize: 12, fontWeight: 700, color: '#9a7200' }}>اقرأها كلّها ↗</span>
-          </a>
-        </div>
 
         {/* ── Carousel row ── */}
         <div style={{

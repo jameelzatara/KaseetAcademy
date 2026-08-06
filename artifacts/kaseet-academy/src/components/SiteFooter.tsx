@@ -70,7 +70,6 @@ const LEGAL_LINKS = [
   { label: 'سياسة الخصوصية',  href: '/privacy-policy' },
   { label: 'الشروط والأحكام', href: '/terms' },
   { label: 'سياسة الاسترداد', href: '/refund-policy' },
-  { label: 'سياسة الكوكيز',   href: '/cookies' },
 ];
 
 const MAPS_URL = 'https://maps.app.goo.gl/WmBQBMA6f3nbb6gn7';

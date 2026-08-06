@@ -23,10 +23,13 @@ export default function Navbar() {
     setShowAuth(true);
   };
 
-  // ── Solid nav when hero scrolls out ───────────────────────
+  // ── Solid nav: always solid on non-hero pages; follows scroll on hero page ──
   useEffect(() => {
     const hero = document.querySelector('.sec--hero');
-    if (!hero) return;
+    if (!hero) {
+      setSolid(true);   // sub-pages have no hero — always solid
+      return;
+    }
     const obs = new IntersectionObserver(
       ([entry]) => setSolid(!entry.isIntersecting),
       { rootMargin: '-72px 0px 0px 0px' },
