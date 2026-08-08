@@ -1,4 +1,5 @@
 - [Homepage Brief 2026](homepage-brief-2026.md) — full implementation: brand facts, routes, terminology, architecture decisions for stats/currency/legal/FAQ
+- [Artifact previewPath fix](artifact-previewpath-fix.md) — previewPath="/" + BASE_PATH="/" breaks Wouter routing; must match actual /kaseet-academy/ proxy prefix
 - [Auth System](auth-system.md) — express-session + bcryptjs; sameSite:none required for Replit path-routing; AuthProvider > CurrencyProvider in App.tsx
 - [Assets alias path](assets-alias.md) — `@assets` in Vite resolves to `attached_assets/` (root), NOT `src/assets/`; convert/copy files there before importing
 - [Course page structure](course-page-structure.md) — light #F5F4F0 sections + dark #0D0B14 registration; neon blob CSS classes ka-blob-1/2/3 in index.css
