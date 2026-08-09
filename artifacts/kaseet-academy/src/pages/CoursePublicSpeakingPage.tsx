@@ -38,7 +38,7 @@ const UPCOMING_IP:   ScheduleEntry[] = [
     batchNumber:'#101', availableSeats:12, registeredCount:3, badgeDate:'أغسطس 2026' },
 ];
 const UPCOMING_ONLINE: ScheduleEntry[] = [
-  { id:'rm-ps201', group:'دفعة #201 — عن بُعد', course:'فن الخطابة والإلقاء',
+  { id:'rm-ps201', group:'دفعة #201 — مباشر تفاعلي (Online LIVE)', course:'فن الخطابة والإلقاء',
     instructor:'د. صهيب الخوالدة', days:'سيتم التحديد', time:'تحدد المواعيد قريباً',
     month:'أغسطس', day:'--', status:'upcoming',
     batchNumber:'#201', availableSeats:15, registeredCount:5, badgeDate:'أغسطس 2026' },
@@ -92,7 +92,7 @@ const INSTRUCTORS: InstructorData[] = [
 ════════════════════════════════════════════════ */
 function PricingCard() {
   const waMsgIP     = 'السلام عليكم، أرغب في التسجيل في دورة فن الخطابة والإلقاء الجماهيري (حضوري).';
-  const waMsgOnline = 'السلام عليكم، أرغب في التسجيل في دورة فن الخطابة والإلقاء الجماهيري (عن بُعد).';
+  const waMsgOnline = 'السلام عليكم، أرغب في التسجيل في دورة فن الخطابة والإلقاء الجماهيري (مباشر تفاعلي Online LIVE).';
   return (
     <div style={{ width:'100%', background: NAVY, borderRadius:22, overflow:'hidden', boxShadow:'0 28px 64px rgba(29,39,56,0.22), 0 8px 20px rgba(0,0,0,0.12)' }}>
       {/* Cover photo */}
@@ -120,7 +120,7 @@ function PricingCard() {
           <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.09)', borderRadius:10, padding:'9px 12px' }}>
             <div style={{ display:'flex', alignItems:'center', gap:6 }}>
               <Wifi size={13} color='rgba(252,251,251,0.55)' strokeWidth={2.5} />
-              <span style={{ fontFamily:F, fontWeight:700, fontSize:13, color:'rgba(252,251,251,0.72)' }}>عن بُعد</span>
+              <span style={{ fontFamily:F, fontWeight:700, fontSize:13, color:'rgba(252,251,251,0.72)' }}>مباشر تفاعلي (Online LIVE)</span>
             </div>
             <div style={{ display:'flex', alignItems:'baseline', gap:4, direction:'ltr' }}>
               <span style={{ fontFamily:FP, fontWeight:900, fontSize:18, color:GOLD }}>$150</span>
@@ -150,7 +150,7 @@ function PricingCard() {
           </a>
           <a href={waLink('962771052222', waMsgOnline)} target="_blank" rel="noopener noreferrer"
             style={{ display:'block', textAlign:'center', background:'rgba(168,85,247,0.18)', border:'1px solid rgba(168,85,247,0.45)', color:'rgba(252,251,251,0.90)', fontFamily:F, fontWeight:800, fontSize:13, padding:'10px 0', borderRadius:10, textDecoration:'none' }}>
-            سجّل عن بُعد <ArrowLeft size={13} style={{ display:'inline-block', verticalAlign:'middle', marginInlineStart:4 }} />
+            سجّل مباشر تفاعلي <ArrowLeft size={13} style={{ display:'inline-block', verticalAlign:'middle', marginInlineStart:4 }} />
           </a>
         </div>
       </div>
@@ -171,7 +171,7 @@ export default function CoursePublicSpeakingPage() {
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const waMsgIP     = 'السلام عليكم، أرغب في التسجيل في دورة فن الخطابة والإلقاء الجماهيري (حضوري).';
-  const waMsgOnline = 'السلام عليكم، أرغب في التسجيل في دورة فن الخطابة والإلقاء الجماهيري (عن بُعد).';
+  const waMsgOnline = 'السلام عليكم، أرغب في التسجيل في دورة فن الخطابة والإلقاء الجماهيري (مباشر تفاعلي Online LIVE).';
   const INNER_S: React.CSSProperties = { maxWidth:1120, margin:'0 auto', padding:'0 clamp(16px,4vw,40px)' };
 
   return (
@@ -188,7 +188,7 @@ export default function CoursePublicSpeakingPage() {
             </button>
 
             <div style={{ display:'flex', flexWrap:'wrap', gap:8, marginBottom:18 }}>
-              {['فن الخطابة', 'قيادة وتواصل', 'حضوري وعن بُعد', 'للمحترفين والقياديين'].map(t => (
+              {['فن الخطابة', 'قيادة وتواصل', 'حضوري ومباشر تفاعلي (Online LIVE)', 'للمحترفين والقياديين'].map(t => (
                 <span key={t} style={{ display:'inline-flex', alignItems:'center', background:'rgba(255,193,7,0.12)', border:'1px solid rgba(255,193,7,0.35)', color:'#92670a', borderRadius:999, fontFamily:F, fontWeight:700, fontSize:12, padding:'5px 13px', whiteSpace:'nowrap' }}>{t}</span>
               ))}
             </div>
@@ -206,7 +206,7 @@ export default function CoursePublicSpeakingPage() {
               {[
                 { icon:<Users size={13} />,  label:'مقاعد محدودة' },
                 { icon:<Award size={13} />,  label:'شهادة معتمدة' },
-                { icon:<MapPin size={13} />, label:'حضوري وعن بُعد' },
+                { icon:<MapPin size={13} />, label:'حضوري ومباشر تفاعلي (Online LIVE)' },
                 { icon:<Clock size={13} />,  label:'16 ساعة تدريبية' },
                 { icon:<Globe size={13} />,  label:'عربي' },
               ].map(({ icon, label }) => (
@@ -248,7 +248,7 @@ export default function CoursePublicSpeakingPage() {
               </a>
               <a href={waLink('962771052222', waMsgOnline)} target="_blank" rel="noopener noreferrer"
                 style={{ background:'rgba(168,85,247,0.18)', border:'1px solid rgba(168,85,247,0.45)', color:'#c084fc', fontFamily:F, fontWeight:800, fontSize:15, padding:'13px 30px', borderRadius:12, textDecoration:'none', display:'inline-block' }}>
-                سجّل عن بُعد <ArrowLeft size={14} style={{ display:'inline-block', verticalAlign:'middle', marginInlineStart:4 }} />
+                سجّل مباشر تفاعلي <ArrowLeft size={14} style={{ display:'inline-block', verticalAlign:'middle', marginInlineStart:4 }} />
               </a>
             </div>
           </div>
@@ -268,7 +268,7 @@ export default function CoursePublicSpeakingPage() {
         <div style={{ ...INNER_S, position:'relative', zIndex:1 }}>
           <SectionTitle>المواعيد المتاحة للتسجيل</SectionTitle>
           <p style={{ fontFamily:F, fontSize:15, color:MUTED, lineHeight:1.8, margin:'0 0 32px' }}>
-            اختر مسارك التعليمي — حضوري مع تفاعل مباشر في القاعة، أو عن بُعد عبر زوم بنفس المحتوى والشهادة
+            اختر مسارك التعليمي — حضوري مع تفاعل مباشر في القاعة، أو مباشر تفاعلي (Online LIVE) بنفس المحتوى والشهادة
           </p>
           <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
             <TrackCard2 variant="inperson" activeBatches={ACTIVE_IP} upcomingBatches={UPCOMING_IP} expanded={expandIP} onToggle={() => setExpandIP(v => !v)} price="180 د.أ" priceStrike="240 د.أ" waPhone="962790234483" waMsg={waMsgIP} />
@@ -303,12 +303,12 @@ export default function CoursePublicSpeakingPage() {
           <div style={{ width:'clamp(260px,26vw,310px)', flexShrink:0, position:'sticky', top:24 }}>
             <div style={{ background:'#181325', borderRadius:20, padding:'24px 20px', boxShadow:'0 20px 50px rgba(0,0,0,0.20)' }}>
               <h3 style={{ fontFamily:F, fontWeight:900, fontSize:18, color:OFF, margin:'0 0 8px' }}>هل تحتاج مساعدة في التسجيل؟</h3>
-              <p style={{ fontFamily:F, fontSize:12.5, color:MUTED, lineHeight:1.7, margin:'0 0 20px' }}>تواصل مع مستشاراتنا الأكاديميات مباشرة — نحن هنا للمساعدة</p>
+              <p style={{ fontFamily:F, fontSize:12.5, color:MUTED, lineHeight:1.7, margin:'0 0 20px' }}>تحدّث مع مستشارتك الأكاديمية 💬</p>
               <div style={{ height:1, background:'rgba(255,255,255,0.08)', marginBottom:20 }} />
               <div style={{ display:'flex', flexDirection:'column', gap:20 }}>
                 <AdvisorMini name="آية القماز" role="مستشارة التسجيل — وجاهي" photo={ayaImg} href={waLink('962790234483', waMsgIP)} />
                 <div style={{ height:1, background:'rgba(255,255,255,0.06)' }} />
-                <AdvisorMini name="ياقوت الخشاشنة" role="مستشارة التسجيل — عن بُعد" photo={yaqoutImg} href={waLink('962771052222', waMsgOnline)} />
+                <AdvisorMini name="ياقوت الخشاشنة" role="مستشارة التسجيل — مباشر تفاعلي (Online LIVE)" photo={yaqoutImg} href={waLink('962771052222', waMsgOnline)} />
               </div>
               <div style={{ marginTop:20, padding:'12px 14px', background:'rgba(255,193,7,0.08)', border:'1px solid rgba(255,193,7,0.22)', borderRadius:10 }}>
                 <p style={{ fontFamily:F, fontSize:12, color:'rgba(255,193,7,0.80)', lineHeight:1.65, margin:0 }}>⏱ أوقات التواصل: يومياً من 9 صباحاً حتى 10 مساءً</p>
@@ -385,7 +385,7 @@ export default function CoursePublicSpeakingPage() {
                 </div>
                 <div style={{ textAlign:'right' }}>
                   <div style={{ fontFamily:F, fontWeight:900, fontSize:16, color:DH }}>المحتوى التفصيلي — 8 جلسات</div>
-                  <div style={{ fontFamily:F, fontSize:12.5, color:DF, marginTop:2 }}>3 وحدات متكاملة · حضوري وعن بُعد</div>
+                  <div style={{ fontFamily:F, fontSize:12.5, color:DF, marginTop:2 }}>3 وحدات متكاملة · حضوري ومباشر تفاعلي (Online LIVE)</div>
                 </div>
               </div>
               <div style={{ display:'flex', alignItems:'center', gap:7, flexShrink:0 }}>

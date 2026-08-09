@@ -28,11 +28,11 @@ const DF   = '#64748b';
 /* ── schedule ────────────────────────────────────────────────── */
 const ACTIVE_ONLINE:   ScheduleEntry[] = [];
 const UPCOMING_ONLINE: ScheduleEntry[] = [
-  { id:'rm-al101', group:'دفعة #101 — عن بُعد', course:'تمكين اللغة العربية وفنون التحرير',
+  { id:'rm-al101', group:'دفعة #101 — مباشر تفاعلي (Online LIVE)', course:'تمكين اللغة العربية وفنون التحرير',
     instructor:'رنا العزام', days:'سيتم التحديد', time:'تحدد المواعيد قريباً',
     month:'أغسطس', day:'--', status:'upcoming',
     batchNumber:'#101', availableSeats:15, registeredCount:5, badgeDate:'أغسطس 2026' },
-  { id:'rm-al102', group:'دفعة #102 — عن بُعد', course:'تمكين اللغة العربية وفنون التحرير',
+  { id:'rm-al102', group:'دفعة #102 — مباشر تفاعلي (Online LIVE)', course:'تمكين اللغة العربية وفنون التحرير',
     instructor:'رنا العزام', days:'سيتم التحديد', time:'تحدد المواعيد قريباً',
     month:'أغسطس', day:'--', status:'upcoming',
     batchNumber:'#102', availableSeats:25, registeredCount:0, badgeDate:'أغسطس 2026' },
@@ -100,7 +100,7 @@ function PricingCard() {
           <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.09)', borderRadius:10, padding:'9px 12px' }}>
             <div style={{ display:'flex', alignItems:'center', gap:6 }}>
               <Wifi size={13} color='rgba(252,251,251,0.55)' strokeWidth={2.5} />
-              <span style={{ fontFamily:F, fontWeight:700, fontSize:13, color:'rgba(252,251,251,0.72)' }}>عن بُعد</span>
+              <span style={{ fontFamily:F, fontWeight:700, fontSize:13, color:'rgba(252,251,251,0.72)' }}>مباشر تفاعلي (Online LIVE)</span>
             </div>
             <div style={{ display:'flex', alignItems:'baseline', gap:4, direction:'ltr' }}>
               <span style={{ fontFamily:FP, fontWeight:900, fontSize:18, color:GOLD }}>$150</span>
@@ -160,7 +160,7 @@ export default function CourseArabicLanguagePage() {
             </button>
 
             <div style={{ display:'flex', flexWrap:'wrap', gap:8, marginBottom:18 }}>
-              {['اللغة العربية', 'تحرير لغوي', 'عن بُعد — تفاعلية مباشرة', 'جميع المستويات'].map(t => (
+              {['اللغة العربية', 'تحرير لغوي', 'مباشر تفاعلي (Online LIVE)', 'جميع المستويات'].map(t => (
                 <span key={t} style={{ display:'inline-flex', alignItems:'center', background:'rgba(255,193,7,0.12)', border:'1px solid rgba(255,193,7,0.35)', color:'#92670a', borderRadius:999, fontFamily:F, fontWeight:700, fontSize:12, padding:'5px 13px', whiteSpace:'nowrap' }}>{t}</span>
               ))}
             </div>
@@ -268,9 +268,9 @@ export default function CourseArabicLanguagePage() {
           <div style={{ width:'clamp(260px,26vw,310px)', flexShrink:0, position:'sticky', top:24 }}>
             <div style={{ background:'#181325', borderRadius:20, padding:'24px 20px', boxShadow:'0 20px 50px rgba(0,0,0,0.20)' }}>
               <h3 style={{ fontFamily:F, fontWeight:900, fontSize:18, color:OFF, margin:'0 0 8px' }}>هل تحتاج مساعدة في التسجيل؟</h3>
-              <p style={{ fontFamily:F, fontSize:12.5, color:MUTED, lineHeight:1.7, margin:'0 0 20px' }}>تواصل مع مستشارتنا الأكاديمية مباشرة — نحن هنا للمساعدة</p>
+              <p style={{ fontFamily:F, fontSize:12.5, color:MUTED, lineHeight:1.7, margin:'0 0 20px' }}>تحدّث مع مستشارتك الأكاديمية 💬</p>
               <div style={{ height:1, background:'rgba(255,255,255,0.08)', marginBottom:20 }} />
-              <AdvisorMini name="ياقوت الخشاشنة" role="مستشارة التسجيل — عن بُعد" photo={yaqoutImg} href={waLink('962771052222', waMsg)} />
+              <AdvisorMini name="ياقوت الخشاشنة" role="مستشارة التسجيل — مباشر تفاعلي (Online LIVE)" photo={yaqoutImg} href={waLink('962771052222', waMsg)} />
               <div style={{ marginTop:20, padding:'12px 14px', background:'rgba(255,193,7,0.08)', border:'1px solid rgba(255,193,7,0.22)', borderRadius:10 }}>
                 <p style={{ fontFamily:F, fontSize:12, color:'rgba(255,193,7,0.80)', lineHeight:1.65, margin:0 }}>⏱ أوقات التواصل: يومياً من 9 صباحاً حتى 10 مساءً</p>
               </div>
@@ -323,7 +323,7 @@ export default function CourseArabicLanguagePage() {
                   <Wifi size={17} color={openCurr ? '#0a1020' : '#67e8f9'} strokeWidth={2.2} />
                 </div>
                 <div style={{ textAlign:'right' }}>
-                  <div style={{ fontFamily:F, fontWeight:900, fontSize:16, color:DH }}>عن بُعد — تفاعلية مباشرة</div>
+                  <div style={{ fontFamily:F, fontWeight:900, fontSize:16, color:DH }}>مباشر تفاعلي (Online LIVE)</div>
                   <div style={{ fontFamily:F, fontSize:12.5, color:DF, marginTop:2 }}>من أي مكان في العالم عبر زوم</div>
                 </div>
               </div>

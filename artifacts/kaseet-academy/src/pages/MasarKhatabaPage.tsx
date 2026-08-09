@@ -206,7 +206,7 @@ function StudyRow({ variant }: { variant: 'inperson' | 'online' }) {
           </div>
           <div style={{ textAlign: 'right' }}>
             <div style={{ fontFamily: F, fontWeight: 800, fontSize: 15, color: 'rgba(252,251,251,0.96)' }}>
-              {isIP ? 'حضوري — قاعة كاسيت في عمّان' : 'عن بُعد — بثّ حيّ تفاعلي'}
+              {isIP ? 'حضوري — قاعة كاسيت في عمّان' : 'مباشر تفاعلي (Online LIVE)'}
             </div>
             <div style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 2 }}>
               {isIP ? 'قاعة إلقاء بمنصّة وميكروفون وإضاءة احترافية' : 'من أي مكان في العالم — بث حيّ لا تسجيلات مسبقة'}
@@ -214,7 +214,7 @@ function StudyRow({ variant }: { variant: 'inperson' | 'online' }) {
           </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 7, flexShrink: 0 }}>
-          {['12 محطة','42 ساعة', isIP ? 'حضوري' : 'عن بُعد'].map(b => (
+          {['12 محطة','42 ساعة', isIP ? 'حضوري' : 'مباشر تفاعلي (Online LIVE)'].map(b => (
             <span key={b} style={{ fontFamily: F, fontSize: 10.5, color: MUT, background: CARD, border: `1px solid ${CBR}`, borderRadius: 6, padding: '2.5px 7px', whiteSpace: 'nowrap' }}>{b}</span>
           ))}
           <ChevronDown size={15} color={open ? ac : MUT} strokeWidth={2.5} style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform .25s', flexShrink: 0 }} />
@@ -373,7 +373,7 @@ export default function MasarKhatabaPage() {
               { icon: '⏱', text: '42 ساعة · 21 جلسة' },
               { icon: '📁', text: '13 مخرجاً موثَّقاً' },
               { icon: '🎙', text: 'فيديو خطاب احترافي' },
-              { icon: '🌐', text: 'حضوري أو عن بُعد' },
+              { icon: '🌐', text: 'حضوري أو مباشر تفاعلي (Online LIVE)' },
             ].map(({ icon, text }) => (
               <span key={text} style={{ display: 'inline-flex', alignItems: 'center', gap: 7,
                 background: 'rgba(2,6,23,.55)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
@@ -762,7 +762,7 @@ export default function MasarKhatabaPage() {
             {[
               { label:'حضوري — قاعة كاسيت في عمّان', sub:'حضور فعلي في عمّان', icon:<MapPin size={18} color="#1A1206" strokeWidth={2.2} />, ac:GLD, acRgb:'255,193,7',
                 items:['قاعة إلقاء بمنصّة وميكروفون وإضاءة','تصوير كلّ أداء والمراجعة عليه فوراً','جمهور حقيقي من المتدرّبين لمحطّات المنصّة','ثلاث زيارات لمرحلة الإنتاج الفعلي'] },
-              { label:'عن بُعد — بثّ حيّ تفاعلي', sub:'من أي مكان في العالم العربي', icon:<Wifi size={18} color="#1A1206" strokeWidth={2.2} />, ac:'#67e8f9', acRgb:'103,232,249',
+              { label:'مباشر تفاعلي (Online LIVE)', sub:'من أي مكان في العالم العربي', icon:<Wifi size={18} color="#1A1206" strokeWidth={2.2} />, ac:'#67e8f9', acRgb:'103,232,249',
                 items:['جلسات مباشرة تفاعلية بالكامل دون تسجيلات مسبقة','تسليم أدائك مصوَّراً للمراجعة الفردية','تسجيلات الجلسات متاحة للمراجعة','الإلقاء النهائي حضوري أمام جمهور'] },
             ].map(m => (
               <div key={m.label} style={{ background: CARD, border: `1px solid rgba(${m.acRgb},.22)`, borderRadius: 20, padding: 'clamp(22px,2.5vw,28px)' }}>
@@ -848,7 +848,7 @@ export default function MasarKhatabaPage() {
                     <div style={{ width: 1, height: 52, background: CBR, flexShrink: 0 }} />
                     <div style={{ textAlign: 'center' }}>
                       <span style={{ fontFamily: FP, fontSize: 30, fontWeight: 700, color: GLD, lineHeight: 1, display: 'block' }}>690</span>
-                      <span style={{ fontFamily: F, fontSize: 13, color: MUT, display: 'block', marginTop: 4 }}>JOD · عن بُعد</span>
+                      <span style={{ fontFamily: F, fontSize: 13, color: MUT, display: 'block', marginTop: 4 }}>JOD · مباشر تفاعلي</span>
                     </div>
                   </div>
                   <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 16, background: GS, border: `1px solid ${GL}`, borderRadius: 12, padding: '9px 15px' }}>

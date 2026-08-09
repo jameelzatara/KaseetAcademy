@@ -11,8 +11,9 @@ import {
   CreditCard, Video, User, Lock, PlayCircle, AudioLines, Volume2,
   SlidersHorizontal, Mic, Sparkles, Briefcase, AudioWaveform,
   GraduationCap, Printer, ChevronDown, MessageCircle, ArrowLeft,
-  TrendingUp, Info, FileText, Receipt, ShieldCheck,
+  TrendingUp, Info, FileText, Receipt, ShieldCheck, Share2,
 } from 'lucide-react';
+import ShareModal from '../components/ShareModal';
 
 /* ── Asset imports ──────────────────────────────────────────── */
 import ayaImg    from '@assets/اية_القماز_1785619557679.jpeg';
@@ -800,7 +801,7 @@ function TrainersSection() {
 }
 
 /* ── Hero section ──────────────────────────────────────────── */
-function HeroSection({ mode, onModeChange }: { mode: 'onsite' | 'online'; onModeChange: (m: 'onsite' | 'online') => void }) {
+function HeroSection({ mode, onModeChange, onShare }: { mode: 'onsite' | 'online'; onModeChange: (m: 'onsite' | 'online') => void; onShare: () => void }) {
   const cohortsRef = useRef<HTMLElement | null>(null);
 
   const scrollToCohorts = (m: 'onsite' | 'online') => {
@@ -913,7 +914,7 @@ function HeroSection({ mode, onModeChange }: { mode: 'onsite' | 'online'; onMode
               })}
             </div>
 
-            {/* Installment + download */}
+            {/* Installment + download + share */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginTop: 16, flexWrap: 'wrap' }}>
               <span style={{ fontFamily: F, fontSize: 13, color: GOLD_INK, display: 'flex', alignItems: 'center', gap: 5 }}>
                 <CreditCard size={15} strokeWidth={1.8} /> بإمكانية التقسيط
@@ -928,6 +929,19 @@ function HeroSection({ mode, onModeChange }: { mode: 'onsite' | 'online'; onMode
                 onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
               >
                 <Download size={14} strokeWidth={1.8} /> تحميل الكتيّب
+              </button>
+              <button
+                onClick={onShare}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 6,
+                  background: 'transparent', border: `1px solid ${CREAM_LINE}`,
+                  borderRadius: 9, padding: '7px 14px', cursor: 'pointer',
+                  fontFamily: F, fontWeight: 700, fontSize: 12.5, color: INK2, transition: 'background .15s',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(24,32,47,.07)')}
+                onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+              >
+                <Share2 size={14} strokeWidth={1.8} /> مشاركة الدورة
               </button>
             </div>
           </div>
@@ -973,7 +987,8 @@ function HeroSection({ mode, onModeChange }: { mode: 'onsite' | 'online'; onMode
 
 /* ── Main page ─────────────────────────────────────────────── */
 export default function CourseBasicsPage() {
-  const [heroMode, setHeroMode] = useState<'onsite' | 'online'>('onsite');
+  const [heroMode,  setHeroMode]  = useState<'onsite' | 'online'>('onsite');
+  const [shareOpen, setShareOpen] = useState(false);
 
   useEffect(() => { window.scrollTo({ top: 0, left: 0, behavior: 'instant' }); }, []);
 
@@ -992,12 +1007,19 @@ export default function CourseBasicsPage() {
         }
       `}</style>
 
-      <HeroSection mode={heroMode} onModeChange={setHeroMode} />
+      <HeroSection mode={heroMode} onModeChange={setHeroMode} onShare={() => setShareOpen(true)} />
       <CohortsSection defaultMode={heroMode} />
       <AboutSection />
       <OutcomesSection />
       <CurriculumSection />
       <TrainersSection />
+
+      <ShareModal
+        open={shareOpen}
+        onClose={() => setShareOpen(false)}
+        title="أساسيات التعليق والأداء الصوتي — كاسيت أكاديمي"
+        description="البرنامج التأسيسي الشامل لتعليق الصوت وإنتاج ديمو صوتي احترافي"
+      />
     </div>
   );
 }

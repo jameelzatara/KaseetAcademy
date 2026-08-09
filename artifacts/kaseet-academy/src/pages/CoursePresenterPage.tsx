@@ -269,7 +269,7 @@ export default function CoursePresenterPage() {
           <div style={{ width:'clamp(260px,26vw,310px)', flexShrink:0, position:'sticky', top:24 }}>
             <div style={{ background:'#181325', borderRadius:20, padding:'24px 20px', boxShadow:'0 20px 50px rgba(0,0,0,0.20)' }}>
               <h3 style={{ fontFamily:F, fontWeight:900, fontSize:18, color:OFF, margin:'0 0 8px' }}>هل تحتاج مساعدة في التسجيل؟</h3>
-              <p style={{ fontFamily:F, fontSize:12.5, color:MUTED, lineHeight:1.7, margin:'0 0 20px' }}>تواصل مع مستشارتنا الأكاديمية مباشرة — نحن هنا للمساعدة</p>
+              <p style={{ fontFamily:F, fontSize:12.5, color:MUTED, lineHeight:1.7, margin:'0 0 20px' }}>تحدّث مع مستشارتك الأكاديمية 💬</p>
               <div style={{ height:1, background:'rgba(255,255,255,0.08)', marginBottom:20 }} />
               <AdvisorMini name="آية القماز" role="مستشارة التسجيل — وجاهي" photo={ayaImg} href={waLink('962790234483', waMsg)} />
               <div style={{ marginTop:20, padding:'12px 14px', background:'rgba(255,193,7,0.08)', border:'1px solid rgba(255,193,7,0.22)', borderRadius:10 }}>

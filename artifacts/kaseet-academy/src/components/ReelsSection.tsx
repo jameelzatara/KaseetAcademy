@@ -152,11 +152,6 @@ export default function ReelsSection({
         </svg>
       </div>
 
-      {/* Top warm glow */}
-      <div className="absolute inset-x-0 top-0 pointer-events-none" style={{
-        height: 160,
-        background: 'linear-gradient(to bottom, rgba(255,193,7,0.07) 0%, transparent 100%)',
-      }} />
 
       {/* Section header — centered */}
       <div className="relative z-10 px-4">

@@ -288,7 +288,7 @@ export function TrackCard2({
         </div>
 
         <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(30px,3.8vw,40px)', color: '#fff', margin: '0 0 6px', lineHeight: 1.1 }}>
-          {isInperson ? 'حضوري' : 'عن بُعد'}
+          {isInperson ? 'حضوري' : 'مباشر تفاعلي (Online LIVE)'}
         </h3>
         <div style={{ fontFamily: F, fontWeight: 700, fontSize: 14, color: accent, marginBottom: 14 }}>
           {isInperson ? 'تعلّم وجهاً لوجه' : 'تعلّم من أي مكان'}

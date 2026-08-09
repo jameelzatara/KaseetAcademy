@@ -1,5 +1,5 @@
 /**
- * دورة التعليق والأداء الصوتي — عن بُعد (تفاعلية مباشرة)
+ * دورة التعليق والأداء الصوتي — مباشر تفاعلي (Online LIVE)
  * المدرب: عمر درابكة | السعر: $150 | 7 وحدات / 12 ساعة
  */
 import { useState, useEffect } from 'react';
@@ -30,11 +30,11 @@ const DF   = '#64748b';
 /* ── schedule ────────────────────────────────────────────────── */
 const ACTIVE_ONLINE: ScheduleEntry[]   = [];
 const UPCOMING_ONLINE: ScheduleEntry[] = [
-  { id:'rm-vl201', group:'دفعة #201 — عن بُعد', course:'أساسيات التعليق والأداء الصوتي (عن بُعد)',
+  { id:'rm-vl201', group:'دفعة #201 — مباشر تفاعلي (Online LIVE)', course:'أساسيات التعليق والأداء الصوتي (مباشر تفاعلي)',
     instructor:'عمر درابكة + رنا العزام', days:'الجمعة', time:'7:00م – 9:00م',
     month:'أغسطس', day:'01', status:'upcoming',
     batchNumber:'#201', availableSeats:8, registeredCount:4, badgeDate:'أغسطس 2026' },
-  { id:'rm-vl202', group:'دفعة #202 — عن بُعد', course:'أساسيات التعليق والأداء الصوتي (عن بُعد)',
+  { id:'rm-vl202', group:'دفعة #202 — مباشر تفاعلي (Online LIVE)', course:'أساسيات التعليق والأداء الصوتي (مباشر تفاعلي)',
     instructor:'عمر درابكة + رنا العزام', days:'ثلاثاء / خميس', time:'7:00م – 9:00م',
     month:'أغسطس', day:'01', status:'upcoming',
     batchNumber:'#202', availableSeats:12, registeredCount:3, badgeDate:'أغسطس 2026' },
@@ -95,7 +95,7 @@ const INSTRUCTORS: InstructorData[] = [
    PRICING CARD — reference style (NAVY bg)
 ════════════════════════════════════════════════ */
 function PricingCard() {
-  const waMsg = 'السلام عليكم، أرغب في التسجيل في دورة التعليق والأداء الصوتي (عن بُعد — تفاعلية مباشرة).';
+  const waMsg = 'السلام عليكم، أرغب في التسجيل في دورة التعليق والأداء الصوتي (مباشر تفاعلي Online LIVE).';
   return (
     <div style={{ width:'100%', background: NAVY, borderRadius:22, overflow:'hidden', boxShadow:'0 28px 64px rgba(29,39,56,0.22), 0 8px 20px rgba(0,0,0,0.12)' }}>
       {/* Cover photo */}
@@ -110,7 +110,7 @@ function PricingCard() {
           <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.09)', borderRadius:10, padding:'9px 12px' }}>
             <div style={{ display:'flex', alignItems:'center', gap:6 }}>
               <Wifi size={13} color='rgba(252,251,251,0.55)' strokeWidth={2.5} />
-              <span style={{ fontFamily:F, fontWeight:700, fontSize:13, color:'rgba(252,251,251,0.72)' }}>عن بُعد</span>
+              <span style={{ fontFamily:F, fontWeight:700, fontSize:13, color:'rgba(252,251,251,0.72)' }}>مباشر تفاعلي (Online LIVE)</span>
             </div>
             <div style={{ display:'flex', alignItems:'baseline', gap:4, direction:'ltr' }}>
               <span style={{ fontFamily:FP, fontWeight:900, fontSize:18, color:GOLD }}>$150</span>
@@ -153,7 +153,7 @@ export default function CourseVoiceoverLivePage() {
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
-  const waMsg   = 'السلام عليكم، أرغب في التسجيل في دورة التعليق والأداء الصوتي (عن بُعد — تفاعلية مباشرة).';
+  const waMsg   = 'السلام عليكم، أرغب في التسجيل في دورة التعليق والأداء الصوتي (مباشر تفاعلي Online LIVE).';
   const INNER_S: React.CSSProperties = { maxWidth:1120, margin:'0 auto', padding:'0 clamp(16px,4vw,40px)' };
 
   return (
@@ -170,7 +170,7 @@ export default function CourseVoiceoverLivePage() {
             </button>
 
             <div style={{ display:'flex', flexWrap:'wrap', gap:8, marginBottom:18 }}>
-              {['التعليق الصوتي', 'عن بُعد — تفاعلية مباشرة', 'مستوى متوسط', 'أداء إعلامي'].map(t => (
+              {['التعليق الصوتي', 'مباشر تفاعلي (Online LIVE)', 'مستوى متوسط', 'أداء إعلامي'].map(t => (
                 <span key={t} style={{ display:'inline-flex', alignItems:'center', background:'rgba(255,193,7,0.12)', border:'1px solid rgba(255,193,7,0.35)', color:'#92670a', borderRadius:999, fontFamily:F, fontWeight:700, fontSize:12, padding:'5px 13px', whiteSpace:'nowrap' }}>{t}</span>
               ))}
             </div>
@@ -260,7 +260,7 @@ export default function CourseVoiceoverLivePage() {
           <div style={{ flex:1, minWidth:0 }}>
             <LightSectionTitle>نبذة عن البرنامج وأهدافه</LightSectionTitle>
             <p style={{ fontFamily:F, fontSize:'clamp(14px,1.5vw,16.5px)', color:DM, lineHeight:2, marginBottom:40, maxWidth:720 }}>
-              يسعى هذا البرنامج إلى تأسيس وتطوير مهارات التعليق الصوتي والأداء الإعلامي عن بُعد عبر لقاءات تفاعلية مباشرة. ترتكز أهدافنا على ضبط مخارج الحروف والنطق السليم، والتمكن من إدارة الطبقات الصوتية وضبط الإيقاع، بالإضافة إلى كسر رهبة الميكروفون وبناء هوية صوتية احترافية جاهزة لسوق العمل.
+              يسعى هذا البرنامج إلى تأسيس وتطوير مهارات التعليق الصوتي والأداء الإعلامي عبر لقاءات مباشرة تفاعلية (Online LIVE). ترتكز أهدافنا على ضبط مخارج الحروف والنطق السليم، والتمكن من إدارة الطبقات الصوتية وضبط الإيقاع، بالإضافة إلى كسر رهبة الميكروفون وبناء هوية صوتية احترافية جاهزة لسوق العمل.
             </p>
             <LightSectionTitle>الأهداف المتحققة</LightSectionTitle>
             <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))', gap:14 }}>
@@ -278,9 +278,9 @@ export default function CourseVoiceoverLivePage() {
           <div style={{ width:'clamp(260px,26vw,310px)', flexShrink:0, position:'sticky', top:24 }}>
             <div style={{ background:'#181325', borderRadius:20, padding:'24px 20px', boxShadow:'0 20px 50px rgba(0,0,0,0.20)' }}>
               <h3 style={{ fontFamily:F, fontWeight:900, fontSize:18, color:OFF, margin:'0 0 8px' }}>هل تحتاج مساعدة في التسجيل؟</h3>
-              <p style={{ fontFamily:F, fontSize:12.5, color:MUTED, lineHeight:1.7, margin:'0 0 20px' }}>تواصل مع مستشارتنا الأكاديمية مباشرة — نحن هنا للمساعدة</p>
+              <p style={{ fontFamily:F, fontSize:12.5, color:MUTED, lineHeight:1.7, margin:'0 0 20px' }}>تحدّث مع مستشارتك الأكاديمية 💬</p>
               <div style={{ height:1, background:'rgba(255,255,255,0.08)', marginBottom:20 }} />
-              <AdvisorMini name="ياقوت الخشاشنة" role="مستشارة التسجيل — عن بُعد" photo={yaqoutImg} href={waLink('962771052222', waMsg)} />
+              <AdvisorMini name="ياقوت الخشاشنة" role="مستشارة التسجيل — مباشر تفاعلي (Online LIVE)" photo={yaqoutImg} href={waLink('962771052222', waMsg)} />
               <div style={{ marginTop:20, padding:'12px 14px', background:'rgba(255,193,7,0.08)', border:'1px solid rgba(255,193,7,0.22)', borderRadius:10 }}>
                 <p style={{ fontFamily:F, fontSize:12, color:'rgba(255,193,7,0.80)', lineHeight:1.65, margin:0 }}>⏱ أوقات التواصل: يومياً من 9 صباحاً حتى 10 مساءً</p>
               </div>
@@ -324,7 +324,7 @@ export default function CourseVoiceoverLivePage() {
               <button
                 onClick={() => {
                   const rows = MODULES.map((m,i) => `<div class="lec"><div class="num">${i+1}</div><div><div class="lt">${m.title}</div><div class="ld">${m.desc}</div></div></div>`).join('');
-                  const html = `<!DOCTYPE html><html dir="rtl" lang="ar"><head><meta charset="utf-8"/><title>الخطة الدراسية — أساسيات التعليق الصوتي</title><style>@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Tajawal',Arial,sans-serif;direction:rtl;color:#1e293b;max-width:760px;margin:0 auto;padding:32px 28px}h1{font-size:22px;font-weight:900;border-bottom:3px solid #FFC107;padding-bottom:10px;margin-bottom:6px}.sub{font-size:12px;color:#64748b;margin-bottom:28px}.lec{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid #f1f5f9;align-items:flex-start}.num{width:26px;height:26px;border-radius:50%;background:#67e8f9;color:#051520;font-weight:900;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.lt{font-weight:800;font-size:13.5px;margin-bottom:3px}.ld{font-size:12px;color:#475569;line-height:1.7}@media print{body{padding:16px}}</style></head><body><h1>أساسيات التعليق والأداء الصوتي — عن بُعد</h1><p class="sub">أكاديمية كاسيت ميديا — 7 وحدات · 12 ساعة · شهادة معتمدة</p>${rows}</body></html>`;
+                  const html = `<!DOCTYPE html><html dir="rtl" lang="ar"><head><meta charset="utf-8"/><title>الخطة الدراسية — أساسيات التعليق الصوتي</title><style>@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Tajawal',Arial,sans-serif;direction:rtl;color:#1e293b;max-width:760px;margin:0 auto;padding:32px 28px}h1{font-size:22px;font-weight:900;border-bottom:3px solid #FFC107;padding-bottom:10px;margin-bottom:6px}.sub{font-size:12px;color:#64748b;margin-bottom:28px}.lec{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid #f1f5f9;align-items:flex-start}.num{width:26px;height:26px;border-radius:50%;background:#67e8f9;color:#051520;font-weight:900;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.lt{font-weight:800;font-size:13.5px;margin-bottom:3px}.ld{font-size:12px;color:#475569;line-height:1.7}@media print{body{padding:16px}}</style></head><body><h1>أساسيات التعليق والأداء الصوتي — مباشر تفاعلي (Online LIVE)</h1><p class="sub">أكاديمية كاسيت ميديا — 7 وحدات · 12 ساعة · شهادة معتمدة</p>${rows}</body></html>`;
                   const win = window.open('','_blank','width=860,height=900');
                   if(win){ win.document.write(html); win.document.close(); win.focus(); setTimeout(()=>win.print(),600); }
                 }}
@@ -342,7 +342,7 @@ export default function CourseVoiceoverLivePage() {
                   <Wifi size={17} color={openCurr ? '#0a1020' : '#67e8f9'} strokeWidth={2.2} />
                 </div>
                 <div style={{ textAlign:'right' }}>
-                  <div style={{ fontFamily:F, fontWeight:900, fontSize:16, color:DH }}>عن بُعد — تفاعلية مباشرة</div>
+                  <div style={{ fontFamily:F, fontWeight:900, fontSize:16, color:DH }}>مباشر تفاعلي (Online LIVE)</div>
                   <div style={{ fontFamily:F, fontSize:12.5, color:DF, marginTop:2 }}>من أي مكان في العالم عبر زوم</div>
                 </div>
               </div>
