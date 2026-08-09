@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, Clock, CheckCircle2, ArrowLeft, Star } from 'lucide-react';
+import { Clock, CheckCircle2, ArrowLeft, Star } from 'lucide-react';
 import { Link } from 'wouter';
 
 import coverYasar       from '@assets/voiceover-group-photo_1785690181212.jpg';
@@ -41,7 +41,7 @@ const FEATURED = {
   trainerLine: 'يسار عبده · رنا العزام · عمر درابكة',
   priceA: 'JD 218', labelA: 'حضوري',
   priceB: '$150',   labelB: 'مباشر تفاعلي',
-  duration: '16 ساعة (8 لقاءات)',
+  duration: '16 ساعة (8 لقاءات) حضوري · 12 ساعة (6 لقاءات) مباشر تفاعلي (Online LIVE)',
   cover:   coverYasar,
   imgPos:  'center 25%',
 };
@@ -63,7 +63,7 @@ interface GCard {
 const GRID: GCard[] = [
   {
     title:    'التعليق والأداء الصوتي',
-    badge:    'عن بُعد — تفاعلية مباشرة',
+    badge:    'مباشر تفاعلي (Online LIVE)',
     cover:    coverOmar,
     imgPos:   'center',
     instructor: { name: 'أ. عمر درابكة', role: 'معلّق صوتي ومدرب أداء', photo: instructorOmar },
@@ -95,7 +95,7 @@ const GRID: GCard[] = [
   },
   {
     title:    'تمكين اللغة العربية وفنون التحرير اللغوي',
-    badge:    'عن بُعد — تفاعلية مباشرة',
+    badge:    'مباشر تفاعلي (Online LIVE)',
     cover:    coverRana,
     imgPos:   'center 42%',
     instructor: { name: 'أ. رنا محمد العزام', role: 'إعلامية ومختصة تحرير لغوي', photo: instructorRana },
@@ -111,7 +111,7 @@ const GRID: GCard[] = [
   },
   {
     title:    'فن الخطابة والإلقاء الجماهيري المؤثر',
-    badge:    'حضوري وعن بُعد',
+    badge:    'حضوري ومباشر تفاعلي (Online LIVE)',
     cover:    coverSohaib,
     imgPos:   'center',
     instructor: { name: 'د. صهيب الخوالدة', role: 'خبير خطابة وتواصل قيادي', photo: instructorSohaib },
@@ -296,13 +296,9 @@ function GridCard({ card, hidden }: { card: GCard; hidden: boolean }) {
 
 /* ── Main section export ─────────────────────────────────── */
 export default function CoursesSection() {
-  const [query, setQuery] = useState('');
   const [featHov, setFeatHov] = useState(false);
-  const q = query.trim().toLowerCase();
-
-  const featHidden  = q !== '' && !FEATURED.searchData.toLowerCase().includes(q);
-  const visibleGrid = GRID.filter(c => q === '' || c.searchData.toLowerCase().includes(q));
-  const noResults   = featHidden && visibleGrid.length === 0;
+  const featHidden  = false;
+  const noResults   = false;
 
   return (
     <section id="courses" className="sec sec--courses section-block relative overflow-hidden">
@@ -355,26 +351,6 @@ export default function CoursesSection() {
             اختر من بين برامجنا الأكثر طلباً — حضوري أو مباشر تفاعلي (Online LIVE)، ومقاعد محدودة.
           </p>
 
-          {/* search bar */}
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: 11, marginTop: 22,
-            background: CARD_BG,
-            border: '1px solid rgba(255,255,255,0.10)',
-            borderRadius: 14, padding: '14px 18px',
-            color: 'rgba(255,255,255,0.50)',
-          }}>
-            <Search size={18} style={{ flexShrink: 0 }} />
-            <input
-              type="text"
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-              placeholder="اكتب اسم الدورة أو المدرب أو التخصص..."
-              style={{
-                flex: 1, background: 'transparent', border: 0, outline: 'none',
-                color: OFF, fontFamily: F, fontSize: 15, direction: 'rtl',
-              }}
-            />
-          </div>
         </header>
 
         {/* ── Featured (hero) card ── */}
@@ -558,7 +534,7 @@ export default function CoursesSection() {
             <GridCard
               key={i}
               card={card}
-              hidden={q !== '' && !card.searchData.toLowerCase().includes(q)}
+              hidden={false}
             />
           ))}
 
@@ -570,7 +546,7 @@ export default function CoursesSection() {
             }}>
               <div style={{ fontSize: 36, marginBottom: 12 }}>🔍</div>
               <p style={{ fontSize: 17, fontWeight: 700, color: 'rgba(252,251,251,0.82)', margin: '0 0 8px' }}>
-                لا توجد دورة مطابقة لـ "{q}"
+                لا توجد نتائج مطابقة
               </p>
               <p style={{ fontSize: 14, color: 'rgba(252,251,251,0.46)', margin: '0 0 20px', lineHeight: 1.7 }}>
                 جرّب كلمة مختلفة — أو تواصل مع ياقوت المستشارة التعليمية لتوجيهك للدورة المناسبة.

@@ -23,9 +23,9 @@ export default function HeroSection() {
     return () => clearInterval(interval);
   }, []);
 
-  // "استكشف" → first section after hero (TracksSection)
+  // "استكشف" → first section after hero (ReelsSection)
   const scrollToFirstSection = () => {
-    const section = document.getElementById('section-2');
+    const section = document.getElementById('reels');
     if (section) section.scrollIntoView({ behavior: 'smooth' });
   };
 

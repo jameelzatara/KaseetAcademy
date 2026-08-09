@@ -6,7 +6,8 @@ import {
   Clock, ChevronUp,
 } from 'lucide-react';
 import { Link } from 'wouter';
-import logoImg from '@assets/logo_1785422080938.png';
+import logoImg    from '@assets/logo_1785422080938.png';
+import wajeezLogo from '@assets/wajeez-logo_1785422080937.png';
 
 /* ── JSON-LD — EducationalOrganization (no aggregateRating) ── */
 const JSON_LD = {
@@ -270,16 +271,19 @@ export default function SiteFooter() {
                 display: 'flex', flexDirection: 'column', gap: 11,
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <div style={{
-                    width: 36, height: 36, borderRadius: 9,
-                    background: 'linear-gradient(135deg, #1A6B5A 0%, #25D366 100%)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontFamily: 'Poppins, sans-serif', fontWeight: 900, fontSize: 14, color: '#fff',
-                    flexShrink: 0,
-                  }}>W</div>
+                  <a href="https://wajeez.com/" target="_blank" rel="noopener noreferrer" style={{ flexShrink: 0, display: 'block' }}>
+                    <div style={{
+                      width: 36, height: 36, borderRadius: 9,
+                      background: '#fff',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      flexShrink: 0,
+                    }}>
+                      <img src={wajeezLogo} alt="وجيز" style={{ width: 28, height: 28, objectFit: 'contain' }} />
+                    </div>
+                  </a>
                   <div>
                     <p style={{ fontFamily: F, fontWeight: 700, fontSize: 13, color: 'rgba(255,255,255,0.90)', margin: 0 }}>
-                      <a href="https://wajez.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
+                      <a href="https://wajeez.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
                         شهادة معتمدة من تطبيق وجيز
                       </a>
                     </p>

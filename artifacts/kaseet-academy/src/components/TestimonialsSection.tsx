@@ -188,23 +188,23 @@ export default function TestimonialsSection() {
   return (
     <section
       className="sec sec--reviews section-block relative overflow-hidden"
-      style={{ background: '#F5F4F0', direction: 'rtl' }}
+      style={{ direction: 'rtl' }}
     >
       {/* Decorative arcs */}
       <div className="geo geo--btm" aria-hidden="true">
         <svg viewBox="0 0 1440 180" preserveAspectRatio="none" fill="none"
           style={{width:'100%',height:'100%',display:'block'}}>
-          <path d="M0 180 Q720 -40 1440 180" stroke="rgba(255,193,7,.18)" strokeWidth="1.5"/>
-          <path d="M0 180 Q720 10 1440 180"  stroke="rgba(255,193,7,.09)" strokeWidth="1"/>
+          <path d="M0 180 Q720 -40 1440 180" stroke="rgba(255,193,7,.22)" strokeWidth="1.5"/>
+          <path d="M0 180 Q720 10 1440 180"  stroke="rgba(255,193,7,.10)" strokeWidth="1"/>
           {[0,1,2,3,4].flatMap(row => [0,1,2,3].map(col => (
             <circle key={`l-${row}-${col}`}
               cx={col * 28 + 22} cy={row * 26 + 76}
-              r={2.5} fill={`rgba(26,37,51,${0.06 + row * 0.015})`}/>
+              r={2.5} fill={`rgba(255,255,255,${0.05 + row * 0.01})`}/>
           )))}
           {[0,1,2,3,4].flatMap(row => [0,1,2,3].map(col => (
             <circle key={`r-${row}-${col}`}
               cx={1440 - col * 28 - 22} cy={row * 26 + 76}
-              r={2.5} fill={`rgba(26,37,51,${0.06 + row * 0.015})`}/>
+              r={2.5} fill={`rgba(255,255,255,${0.05 + row * 0.01})`}/>
           )))}
         </svg>
       </div>
@@ -264,7 +264,7 @@ export default function TestimonialsSection() {
               style={{
                 width: i === page ? 24 : 8, height: 8,
                 borderRadius: 4,
-                background: i === page ? '#FFC107' : 'rgba(26,37,51,0.18)',
+                background: i === page ? '#FFC107' : 'rgba(255,255,255,0.22)',
                 border: 'none', cursor: 'pointer', padding: 0,
                 transition: 'all 250ms',
               }}

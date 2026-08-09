@@ -243,7 +243,7 @@ function CohortsSection({ defaultMode }: { defaultMode: 'onsite' | 'online' }) {
   const handleRegister = (cohortId: number) => {
     const c = COHORTS.find(x => x.id === cohortId);
     if (!c) return;
-    const msg = `السلام عليكم، أرغب في التسجيل في دورة أساسيات التعليق والأداء الصوتي — الدفعة #${cohortId} — ${c.mode === 'onsite' ? 'حضوري' : 'عن بُعد'}`;
+    const msg = `السلام عليكم، أرغب في التسجيل في دورة أساسيات التعليق والأداء الصوتي — الدفعة #${cohortId} — ${c.mode === 'onsite' ? 'حضوري' : 'مباشر تفاعلي (Online LIVE)'}`;
     window.open(waLink('962771052222', msg), '_blank');
   };
 
@@ -286,7 +286,7 @@ function CohortsSection({ defaultMode }: { defaultMode: 'onsite' | 'online' }) {
         <div style={{ display: 'flex', gap: 12, marginBottom: 32, direction: 'rtl', flexWrap: 'wrap' }}>
           {([
             { key: 'onsite', label: 'حضوري', count: openOnsite.length, icon: <MapPin size={16} strokeWidth={1.8} /> },
-            { key: 'online', label: 'عن بُعد', count: openOnline.length, icon: <Wifi size={16} strokeWidth={1.8} /> },
+            { key: 'online', label: 'مباشر تفاعلي (Online LIVE)', count: openOnline.length, icon: <Wifi size={16} strokeWidth={1.8} /> },
           ] as const).map(({ key, label, count, icon }) => {
             const active = tab === key;
             return (
@@ -397,7 +397,7 @@ function AboutSection() {
     { icon: <Briefcase size={22} strokeWidth={1.8} color={GOLD_INK} />,  title: 'التواصل المهني', text: 'فهم سوق العمل الصوتي والتفاعل مع التوجيهات الإخراجية بكفاءة.' },
   ];
   const waAya   = waLink('962790234483', 'السلام عليكم، أرغب في الاستفسار عن التسجيل في دورة أساسيات التعليق والأداء الصوتي (حضوري)');
-  const waYaqt  = waLink('962771052222', 'السلام عليكم، أرغب في الاستفسار عن التسجيل في دورة أساسيات التعليق والأداء الصوتي (عن بُعد)');
+  const waYaqt  = waLink('962771052222', 'السلام عليكم، أرغب في الاستفسار عن التسجيل في دورة أساسيات التعليق والأداء الصوتي (مباشر تفاعلي Online LIVE)');
 
   return (
     <section style={{ background: CREAM, padding: '80px 0' }}>
@@ -408,7 +408,7 @@ function AboutSection() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px,1fr))', gap: 16, marginBottom: 56 }}>
           {[
             { name: 'آية القماز', role: 'مستشارة التسجيل · وجاهي', img: ayaImg, href: waAya, phone: '+962 79 023 4483' },
-            { name: 'ياقوت الخشاشنة', role: 'مستشارة التسجيل · عن بُعد', img: yaqoutImg, href: waYaqt, phone: '+962 77 105 2222' },
+            { name: 'ياقوت الخشاشنة', role: 'مستشارة التسجيل · مباشر تفاعلي (Online LIVE)', img: yaqoutImg, href: waYaqt, phone: '+962 77 105 2222' },
           ].map(({ name, role, img, href, phone }) => (
             <div key={name} style={{
               background: CANVAS, borderRadius: 18, padding: '20px',
@@ -627,7 +627,7 @@ function CurriculumSection() {
         <div style={{ display: 'flex', gap: 8, marginBottom: 28, background: 'rgba(24,32,47,.07)', borderRadius: 14, padding: 4 }}>
           {([
             { key: 'onsite', label: 'حضوري — 8 لقاءات · 16 ساعة', icon: <MapPin size={14} strokeWidth={1.8} /> },
-            { key: 'online', label: 'عن بُعد — 6 محاضرات · 12 ساعة', icon: <Wifi size={14} strokeWidth={1.8} /> },
+            { key: 'online', label: 'مباشر تفاعلي (Online LIVE) — 6 محاضرات · 12 ساعة', icon: <Wifi size={14} strokeWidth={1.8} /> },
           ] as const).map(({ key, label, icon }) => (
             <button key={key} onClick={() => { setTab(key); setOpenLec(null); }} style={{
               flex: 1, padding: '11px 0', borderRadius: 11, border: 'none', cursor: 'pointer',
@@ -697,7 +697,7 @@ function CurriculumSection() {
             borderRadius: 12, padding: '14px 18px', marginBottom: 20, direction: 'rtl',
           }}>
             <p style={{ fontFamily: F, fontSize: 13.5, color: TEAL, margin: 0, fontWeight: 700 }}>
-              + مشروع التخرّج: ثلاث جلسات إنتاج مباشرة مع مهندس الصوت — تماماً كما في الحضوري، لكن عن بُعد.
+              + مشروع التخرّج: ثلاث جلسات إنتاج مباشرة مع مهندس الصوت — تماماً كما في الحضوري، مباشر تفاعلي (Online LIVE).
             </p>
           </div>
         )}
@@ -876,7 +876,7 @@ function HeroSection({ mode, onModeChange }: { mode: 'onsite' | 'online'; onMode
             <div role="radiogroup" aria-label="اختر طريقة الدراسة" style={{ display: 'flex', flexDirection: 'column', gap: 10, maxWidth: 520 }}>
               {([
                 { m: 'onsite', label: 'حضوري', icon: <MapPin size={18} strokeWidth={1.8} />, price: '218', unit: 'JOD', strike: '260', note: 'استوديو كاسيت' },
-                { m: 'online', label: 'عن بُعد', icon: <Wifi size={18} strokeWidth={1.8} />,    price: '$150', unit: '', strike: '$200', note: 'Google Meet' },
+                { m: 'online', label: 'مباشر تفاعلي (Online LIVE)', icon: <Wifi size={18} strokeWidth={1.8} />,    price: '$150', unit: '', strike: '$200', note: 'Google Meet' },
               ] as const).map(({ m, label, icon, price, unit, strike, note }) => {
                 const active = mode === m;
                 return (

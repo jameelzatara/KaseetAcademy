@@ -1,18 +1,12 @@
-// ── Free Consultation Section — ياقوت المستشارة التعليمية ───
+// ── Free Consultation Section — ياقوت الخشاشنة المستشارة التعليمية ───
 import consultantImg from '@assets/consultant_1785431795181.jpeg';
 
 const GOLD = '#FFC107';
 
 const BENEFITS = [
   'تقييم شامل لمستواك الصوتي والإعلامي',
-  'ترشيح الماستركلاس والأستاذ الأنسب لأهدافك',
+  'ترشيح البرنامج والأستاذ الأنسب لأهدافك',
   'خطة عمل واضحة بدون أي التزام مالي',
-];
-
-// Only 2 stats — removed the unprovable "100% رضا المتدربين"
-const MICRO_STATS = [
-  { value: '+600', label: 'متدرب' },
-  { value: '+40',  label: 'دفعة' },
 ];
 
 function WhatsAppIcon() {
@@ -92,8 +86,8 @@ export default function ConsultationSection() {
                 lineHeight: 1.3,
                 color: 'rgba(252,251,251,0.97)',
               }}>
-                محتار في اختيار الماستركلاس الأنسب{' '}
-                <span style={{ color: GOLD }}>لصوتك؟</span>
+                محتار في اختيار البرنامج الأنسب{' '}
+                <span style={{ color: GOLD }}>لأهدافك؟</span>
               </h2>
 
               {/* Subtitle */}
@@ -104,7 +98,7 @@ export default function ConsultationSection() {
                 color: 'rgba(252,251,251,0.62)',
                 lineHeight: 1.75,
               }}>
-                تواصل مع ياقوت، المستشارة التعليمية، لتحديد مستواك الحالي وبناء خطتك التدريبية المخصصة — بدون أي التزام.
+                متاحة للإجابة عن استفساراتك
               </p>
 
               {/* Benefits */}
@@ -154,7 +148,7 @@ export default function ConsultationSection() {
                     boxShadow: '0 4px 20px rgba(6,95,70,0.40)',
                   })}
                 >
-                  تواصل مع ياقوت
+                  تحدّث مع ياقوت عبر واتساب 💬
                   <WhatsAppIcon />
                 </a>
 
@@ -170,7 +164,7 @@ export default function ConsultationSection() {
                   onMouseEnter={e => Object.assign(e.currentTarget.style, { color: GOLD, borderColor: 'rgba(255,193,7,0.4)', background: 'rgba(255,255,255,0.04)' })}
                   onMouseLeave={e => Object.assign(e.currentTarget.style, { color: 'rgba(252,251,251,0.55)', borderColor: 'rgba(255,255,255,0.18)', background: 'transparent' })}
                 >
-                  استكشف كل الماستركلاسات
+                  استكشف كل البرامج
                 </button>
               </div>
             </div>
@@ -197,7 +191,7 @@ export default function ConsultationSection() {
                 }} />
                 <img
                   src={consultantImg}
-                  alt="ياقوت — المستشارة التعليمية"
+                  alt="ياقوت الخشاشنة — المستشارة التعليمية"
                   width={140}
                   height={140}
                   style={{
@@ -213,14 +207,14 @@ export default function ConsultationSection() {
               {/* Name + title */}
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontWeight: 800, fontSize: 19, color: 'rgba(252,251,251,0.95)' }}>
-                  ياقوت
+                  ياقوت الخشاشنة
                 </div>
                 <div style={{ fontSize: 12.5, color: 'rgba(252,251,251,0.52)', marginTop: 4 }}>
                   المستشارة التعليمية — كاسيت أكاديمي
                 </div>
               </div>
 
-              {/* Online status + response time */}
+              {/* Online status */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'center' }}>
                 <div style={{
                   display: 'inline-flex', alignItems: 'center', gap: 8,
@@ -233,7 +227,7 @@ export default function ConsultationSection() {
                     background: '#4ade80', boxShadow: '0 0 8px rgba(74,222,128,0.9)',
                   }} />
                   <span style={{ fontWeight: 600, fontSize: 12, color: 'rgba(252,251,251,0.90)' }}>
-                    متواجدة للرد على استفساراتك
+                    متاحة للإجابة عن استفساراتك
                   </span>
                 </div>
                 {/* WhatsApp number visible */}
@@ -249,30 +243,8 @@ export default function ConsultationSection() {
                   +962 77 105 2222
                 </a>
                 <div style={{ fontSize: 11, color: 'rgba(252,251,251,0.38)', textAlign: 'center' }}>
-                  الرد عادةً خلال ساعتين في أوقات العمل
+                  يومياً من 10 صباحاً حتى 7 مساءً
                 </div>
-              </div>
-
-              {/* Micro stats */}
-              <div style={{
-                display: 'flex', gap: 0, width: '100%',
-                background: 'rgba(255,255,255,0.04)',
-                border: '1px solid rgba(255,255,255,0.07)',
-                borderRadius: 12, overflow: 'hidden',
-              }}>
-                {MICRO_STATS.map((s, i) => (
-                  <div key={i} style={{
-                    flex: 1, textAlign: 'center', padding: '10px 4px',
-                    borderInlineStart: i > 0 ? '1px solid rgba(255,255,255,0.07)' : 'none',
-                  }}>
-                    <div style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: 16, color: GOLD, direction: 'ltr' }}>
-                      {s.value}
-                    </div>
-                    <div style={{ fontSize: 10, color: 'rgba(252,251,251,0.44)', marginTop: 2 }}>
-                      {s.label}
-                    </div>
-                  </div>
-                ))}
               </div>
             </div>
           </div>
