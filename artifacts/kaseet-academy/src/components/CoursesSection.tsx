@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Clock, CheckCircle2, ArrowLeft, Star } from 'lucide-react';
+import { Clock, CheckCircle2, ArrowLeft, Star, MapPin, Wifi } from 'lucide-react';
 import { Link } from 'wouter';
 
 import coverYasar       from '@assets/voiceover-group-photo_1785690181212.jpg';
@@ -69,7 +69,7 @@ const GRID: GCard[] = [
     instructor: { name: 'أ. عمر درابكة', role: 'معلّق صوتي ومدرب أداء', photo: instructorOmar },
     price:    '$150',
     duration: '12 ساعة / 7 وحدات',
-    searchData: 'التعليق الصوتي اونلاين عمر درابكة voice over online',
+    searchData: 'التعليق الصوتي مباشر تفاعلي عمر درابكة voice over online',
     outcomes: [
       'شهادة معتمدة من تطبيق وجيز وأكاديمية كاسيت.',
       'ملف صوتي احترافي (Voice Demo) جاهز لسوق العمل.',
@@ -89,7 +89,7 @@ const GRID: GCard[] = [
     outcomes: [
       'إنتاج تقرير صحفي متكامل بمعايير غرف الأخبار العالمية.',
       'تقديم احترافي أمام الكاميرا مقيّم من المدربة.',
-      'شهادة رسمية معتمدة من كاسيت ميديا وتطبيق وجيز.',
+      'شهادة رسمية معتمدة من كاسيت أكاديمي وتطبيق وجيز.',
     ],
     route: '/courses/presenter',
   },
@@ -297,8 +297,6 @@ function GridCard({ card, hidden }: { card: GCard; hidden: boolean }) {
 /* ── Main section export ─────────────────────────────────── */
 export default function CoursesSection() {
   const [featHov, setFeatHov] = useState(false);
-  const featHidden  = false;
-  const noResults   = false;
 
   return (
     <section id="courses" className="sec sec--courses section-block relative overflow-hidden">
@@ -358,7 +356,7 @@ export default function CoursesSection() {
           onMouseEnter={() => setFeatHov(true)}
           onMouseLeave={() => setFeatHov(false)}
           style={{
-            display:  featHidden ? 'none' : 'grid',
+            display:  'grid',
             gridTemplateColumns: '1.05fr 1fr',
             direction: 'rtl',
             background: CARD_BG,
@@ -441,38 +439,49 @@ export default function CoursesSection() {
               </div>
             </div>
 
-            {/* footer: meta + CTA */}
+            {/* footer: mode rows + CTA */}
             <div style={{
               marginTop: 'auto', paddingTop: 16,
               borderTop: '1px solid rgba(255,255,255,0.10)',
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
               gap: 14, flexWrap: 'wrap',
             }}>
-              {/* meta */}
-              <div style={{
-                display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap',
-                fontFamily: F, fontSize: 13.5, color: 'rgba(252,251,251,0.80)',
-              }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7 }}>
-                  <em style={{ fontStyle: 'normal', fontWeight: 500, fontSize: 12, color: 'rgba(252,251,251,0.55)' }}>
-                    {FEATURED.labelA}
-                  </em>
-                  <b style={{ fontFamily: FP, fontWeight: 800, fontSize: 16, color: GOLD }}>
-                    {FEATURED.priceA}
+              {/* dual-mode display */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {/* حضوري */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                  <span style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 5,
+                    fontFamily: F, fontWeight: 700, fontSize: 12.5,
+                    color: 'rgba(252,251,251,0.70)',
+                  }}>
+                    <MapPin size={14} color={GOLD} />
+                    حضوري
+                  </span>
+                  <span style={{ fontFamily: F, fontSize: 12, color: 'rgba(252,251,251,0.50)' }}>
+                    16 ساعة · 8 لقاءات
+                  </span>
+                  <b style={{ fontFamily: FP, fontWeight: 800, fontSize: 15, color: GOLD }}>
+                    218 <small style={{ fontSize: 11, fontFamily: F }}>د.أ</small>
                   </b>
-                </span>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7 }}>
-                  <em style={{ fontStyle: 'normal', fontWeight: 500, fontSize: 12, color: 'rgba(252,251,251,0.55)' }}>
-                    {FEATURED.labelB}
-                  </em>
-                  <b style={{ fontFamily: FP, fontWeight: 800, fontSize: 16, color: GOLD }}>
-                    {FEATURED.priceB}
+                </div>
+                {/* مباشر تفاعلي */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                  <span style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 5,
+                    fontFamily: F, fontWeight: 700, fontSize: 12.5,
+                    color: 'rgba(252,251,251,0.70)',
+                  }}>
+                    <Wifi size={14} color={GOLD} />
+                    مباشر تفاعلي (Online LIVE)
+                  </span>
+                  <span style={{ fontFamily: F, fontSize: 12, color: 'rgba(252,251,251,0.50)' }}>
+                    12 ساعة · 6 لقاءات
+                  </span>
+                  <b style={{ fontFamily: FP, fontWeight: 800, fontSize: 15, color: GOLD }}>
+                    150 <small style={{ fontSize: 11, fontFamily: F }}>$</small>
                   </b>
-                </span>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                  {FEATURED.duration}
-                  <Clock size={16} style={{ flexShrink: 0 }} />
-                </span>
+                </div>
               </div>
 
               {/* CTA */}
@@ -538,35 +547,6 @@ export default function CoursesSection() {
             />
           ))}
 
-          {/* empty state */}
-          {noResults && (
-            <div style={{
-              gridColumn: '1 / -1', textAlign: 'center', padding: '40px 20px',
-              fontFamily: F, direction: 'rtl',
-            }}>
-              <div style={{ fontSize: 36, marginBottom: 12 }}>🔍</div>
-              <p style={{ fontSize: 17, fontWeight: 700, color: 'rgba(252,251,251,0.82)', margin: '0 0 8px' }}>
-                لا توجد نتائج مطابقة
-              </p>
-              <p style={{ fontSize: 14, color: 'rgba(252,251,251,0.46)', margin: '0 0 20px', lineHeight: 1.7 }}>
-                جرّب كلمة مختلفة — أو تحدّث مع ياقوت عبر واتساب 💬 لتوجيهك للدورة المناسبة.
-              </p>
-              <a
-                href="https://wa.me/962771052222"
-                target="_blank" rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 8,
-                  fontFamily: F, fontWeight: 700, fontSize: 14,
-                  padding: '10px 22px', borderRadius: 12,
-                  background: 'rgba(37,211,102,0.12)',
-                  border: '1px solid rgba(37,211,102,0.30)',
-                  color: '#4ade80', textDecoration: 'none',
-                }}
-              >
-                استشر ياقوت مجاناً
-              </a>
-            </div>
-          )}
         </div>
 
         {/* ── Browse-all button ── */}

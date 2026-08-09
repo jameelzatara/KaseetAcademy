@@ -71,7 +71,7 @@ export default function Navbar() {
         className={`nav${solid ? ' is-solid' : ''}`}
         style={{
           position: 'fixed', top: 0, left: 0, right: 0,
-          zIndex: 80, height: solid ? 62 : 72,
+          zIndex: 9999, height: solid ? 62 : 72,
           background: solid ? 'rgba(26,37,51,.92)' : 'transparent',
           backdropFilter: solid ? 'blur(10px)' : 'none',
           WebkitBackdropFilter: solid ? 'blur(10px)' : 'none',

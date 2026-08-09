@@ -3,6 +3,7 @@
  */
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
+import { usePageMeta } from '../hooks/usePageMeta';
 import { ChevronDown, ArrowLeft, MapPin, Wifi } from 'lucide-react';
 import { GOLD, OFF, F, FP, INNER, waLink } from './shared/coursePageHelpers';
 import wajeezLogo    from '@assets/wajeez-logo_1785688262989.png';
@@ -262,12 +263,11 @@ export default function MasarKhatabaPage() {
   const [openIdx, setOpenIdx]   = useState<number | null>(null);
   const [expandAll, setExpandAll] = useState(false);
 
-  useEffect(() => {
-    const prev = document.title;
-    document.title = 'ماستركلاس فن الخطابة والتواصل القيادي — كاسيت أكاديمي';
-    window.scrollTo({ top: 0, behavior: 'instant' });
-    return () => { document.title = prev; };
-  }, []);
+  usePageMeta({
+    title: 'ماستركلاس فن الخطابة والتواصل القيادي',
+    description: 'ماستركلاس 44 ساعة في فن الخطابة والتواصل القيادي مع د. صهيب الخوالدة. بناء الحضور والثقة أمام الجمهور. شهادة معتمدة من وجيز — كاسيت أكاديمي.',
+  });
+  useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }); }, []);
 
   function toggle(i: number) { setOpenIdx(openIdx === i ? null : i); setExpandAll(false); }
   function isOpen(i: number)  { return expandAll || openIdx === i; }
@@ -326,7 +326,7 @@ export default function MasarKhatabaPage() {
       `}</style>
 
       {/* back nav */}
-      <div style={{ ...WRP, paddingTop: 18, paddingBottom: 0 }}>
+      <div style={{ ...WRP, paddingTop: 92, paddingBottom: 0 }}>
         <button onClick={() => navigate('/')} aria-label="العودة إلى الدورات"
           style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: F, fontSize: 13, color: MUT, padding: 0 }}>
           <ArrowLeft size={13} /> العودة إلى الدورات

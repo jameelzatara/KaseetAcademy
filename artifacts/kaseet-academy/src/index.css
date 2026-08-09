@@ -562,19 +562,55 @@ body::before {
    geometric shapes · neon cards
 ══════════════════════════════════════════════ */
 
-/* ── Extra design tokens ── */
+/* ── Design tokens — file 01 canonical set ── */
 :root {
+  /* الأسطح الداكنة */
   --canvas:    #1A2533;
+  --card:      #22303F;
+  --card-hi:   #2B3B4E;
+  --card-line: rgba(255,255,255,.09);
   --footer:    #111925;
-  --cream:     #F4EFE4;
+  --nav-solid: rgba(26,37,51,.92);
+
+  /* الأسطح الفاتحة */
+  --cream:      #F4EFE4;
+  --cream-card: #FFFFFF;
+  --cream-line: rgba(24,32,47,.10);
+  --ink:        #18202F;
+  --ink-2:      #56617A;
+
+  /* الذهبي */
+  --gold:      #FFC107;
   --gold-ink:  #8A6200;
   --gold-soft: rgba(255,193,7,.10);
   --gold-line: rgba(255,193,7,.28);
-  --teal:      #1E7A85;
-  --steel:     #4A82C4;
-  --violet:    #6B5BA8;
-  --green:     #25D366;
+
+  /* أجواء ثانوية */
+  --teal:   #1E7A85;
+  --steel:  #4A82C4;
+  --violet: #6B5BA8;
+  --green:  #1F9D57;
+  --red:    #C2453C;
+
+  /* نصوص على الداكن */
+  --t1: #FFFFFF;
+  --t2: #C7D1DF;
+  --t3: #9DA9BB;
+  --t4: #7B879B;
+  --line-1: rgba(255,255,255,.10);
+  --line-2: rgba(255,255,255,.16);
+
+  /* z-index ladder */
+  --z-nav: 9999;
 }
+
+/* ── Typography scale — file 01 ── */
+body   { font-size: 16.5px; line-height: 1.9 }
+h1     { font-size: clamp(30px,4.8vw,52px); line-height: 1.25; letter-spacing: -1px }
+h2     { font-size: clamp(26px,4vw,40px);   line-height: 1.35; letter-spacing: -.5px }
+h3     { font-size: clamp(18px,2.2vw,23px); line-height: 1.45 }
+p      { font-size: 16px; line-height: 1.95 }
+small, .meta { font-size: 13.5px }
 
 /* ── Section separator ── */
 .sec + .sec { border-top: 1px solid rgba(255,255,255,.07); }

@@ -231,9 +231,12 @@ export default function SiteFooter() {
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: 9 }}>
                   <Clock size={13} color={GOLD} style={{ flexShrink: 0, marginTop: 2 }}/>
                   <p style={{ fontFamily: F, fontSize: 12, color: T3, margin: 0, lineHeight: 1.75 }}>
-                    الأحد – الخميس<br/>
-                    9:00 ص – 7:00 م<br/>
-                    <span style={{ color: 'rgba(203,213,225,0.28)' }}>الجمعة والسبت مغلق</span>
+                    السبت – الخميس<br/>
+                    10:00 صباحاً – 8:00 مساءً<br/>
+                    <span style={{ color: 'rgba(203,213,225,0.28)' }}>الجمعة مغلق</span><br/>
+                    <span style={{ fontSize: 10.5, color: 'rgba(203,213,225,0.22)', display: 'block', marginTop: 3 }}>
+                      جلسات الدورات تُعقد وفق جدول كلّ دفعة، وقد تشمل الجمعة.
+                    </span>
                   </p>
                 </div>
 

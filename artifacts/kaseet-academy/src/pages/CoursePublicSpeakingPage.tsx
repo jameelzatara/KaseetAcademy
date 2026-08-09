@@ -1,9 +1,10 @@
 /**
  * دورة فن الخطابة والإلقاء الجماهيري المؤثر
- * المدرب: د. صهيب الخوالدة | حضوري: 180 د.أ | عن بُعد: $150 | 3 وحدات / 8 جلسات / 16 ساعة
+ * المدرب: د. صهيب الخوالدة | حضوري: 180 د.أ | مباشر تفاعلي: $150 | 3 وحدات / 8 جلسات / 16 ساعة
  */
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
+import { usePageMeta } from '../hooks/usePageMeta';
 import {
   ArrowLeft, Clock, Users, Award, GraduationCap,
   Star, Zap, Mic, MapPin, Wifi, Globe, Sliders, Briefcase,
@@ -68,7 +69,7 @@ const GOALS_GRID = [
 
 /* ── outcomes ───────────────────────────────────────────────── */
 const OUTCOMES = [
-  { Icon: Award,    title:'شهادة معتمدة رسمياً',                  desc:'شهادة إتمام البرنامج معتمدة رسمياً من منصة "وجيز" وأكاديمية "كاسيت ميديا".' },
+  { Icon: Award,    title:'شهادة معتمدة رسمياً',                  desc:'شهادة إتمام البرنامج معتمدة رسمياً من منصة "وجيز" وأكاديمية "كاسيت أكاديمي".' },
   { Icon: Mic,      title:'خطاب TED x متكامل',                    desc:'تصميم وتقديم خطاب TED x أمام لجنة تقييم متخصصة وتسجيل رسمي للمحفظة الشخصية.' },
   { Icon: Star,     title:'تقرير هوية خطابية فردي',               desc:'تقرير تفصيلي يحدد هويتك الخطابية الشخصية ونقاط القوة والتطوير مع خريطة طريق.' },
   { Icon: Zap,      title:'وصول كامل لتسجيلات اللقاءات',          desc:'تسجيلات الجلسات الثماني متاحة مدى الحياة للمراجعة والتطوير المستمر بعد انتهاء البرنامج.' },
@@ -116,7 +117,7 @@ function PricingCard() {
               <span style={{ fontFamily:FP, fontSize:11.5, color:'rgba(252,251,251,0.28)', textDecoration:'line-through' }}>240</span>
             </div>
           </div>
-          {/* عن بُعد */}
+          {/* مباشر تفاعلي (Online LIVE) */}
           <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.09)', borderRadius:10, padding:'9px 12px' }}>
             <div style={{ display:'flex', alignItems:'center', gap:6 }}>
               <Wifi size={13} color='rgba(252,251,251,0.55)' strokeWidth={2.5} />
@@ -168,6 +169,10 @@ export default function CoursePublicSpeakingPage() {
   const [expandOnline, setExpandOnline] = useState(false);
   const [partnerOpen, setPartner]       = useState(false);
 
+  usePageMeta({
+    title: 'دورة فن الخطابة والإلقاء الجماهيري المؤثر',
+    description: 'دورة 16 ساعة مع د. صهيب الخوالدة. إتقان الخطابة والإلقاء أمام الجمهور بثقة واحترافية. حضوري ومباشر تفاعلي — شهادة معتمدة من وجيز.',
+  });
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const waMsgIP     = 'السلام عليكم، أرغب في التسجيل في دورة فن الخطابة والإلقاء الجماهيري (حضوري).';
@@ -178,7 +183,7 @@ export default function CoursePublicSpeakingPage() {
     <div dir="rtl" style={{ position:'relative', zIndex:1, minHeight:'100vh', color:OFF }}>
 
       {/* ══════════════════ HERO ══════════════════ */}
-      <section style={{ paddingTop:'clamp(24px,4vw,56px)', paddingBottom:'clamp(36px,4vw,64px)', background:'#F5F3EF', borderBottom:'1px solid rgba(0,0,0,0.08)' }}>
+      <section style={{ paddingTop:'clamp(98px,9vw,130px)', paddingBottom:'clamp(36px,4vw,64px)', background:'#F5F3EF', borderBottom:'1px solid rgba(0,0,0,0.08)' }}>
         <div style={{ ...INNER_S, display:'flex', gap:'clamp(24px,3vw,48px)', alignItems:'flex-start' }}>
 
           {/* Right — text */}

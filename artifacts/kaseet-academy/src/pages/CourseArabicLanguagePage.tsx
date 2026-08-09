@@ -1,9 +1,10 @@
 /**
  * دورة تمكين اللغة العربية وفنون التحرير اللغوي
- * المدربة: رنا العزام | السعر: $150 | 8 جلسات / 16 ساعة | عن بُعد
+ * المدربة: رنا العزام | السعر: $150 | 8 جلسات / 16 ساعة | مباشر تفاعلي (Online LIVE)
  */
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
+import { usePageMeta } from '../hooks/usePageMeta';
 import {
   ArrowLeft, Clock, Users, Tv, Award, GraduationCap,
   BookOpen, Globe, Zap, Briefcase, Star, Sliders, Wifi,
@@ -62,7 +63,7 @@ const GOALS_GRID = [
 
 /* ── outcomes ───────────────────────────────────────────────── */
 const OUTCOMES = [
-  { Icon: Award,    title:'شهادة معتمدة رسمياً',               desc:'شهادة إتمام البرنامج معتمدة رسمياً من منصة "وجيز" وأكاديمية "كاسيت ميديا".' },
+  { Icon: Award,    title:'شهادة معتمدة رسمياً',               desc:'شهادة إتمام البرنامج معتمدة رسمياً من منصة "وجيز" وأكاديمية "كاسيت أكاديمي".' },
   { Icon: BookOpen, title:'حقيبة مرجعية رقمية شاملة',          desc:'أدلة رقمية تلخّص قواعد النحو والإملاء للتدقيق الذاتي والمراجعة السريعة.' },
   { Icon: Globe,    title:'أسلوب عربي متميز ومؤثر',            desc:'القدرة على الكتابة بأسلوب عربي فصيح مؤثر يناسب كل سياق مهني أو أدبي.' },
   { Icon: Star,     title:'مشروع ختامي محرَّر احترافياً',        desc:'نص محرَّر بمعايير مجمع اللغة العربية مُقيَّم مباشرةً من المدربة مع تغذية راجعة.' },
@@ -141,6 +142,10 @@ export default function CourseArabicLanguagePage() {
   const [expanded, setExpanded] = useState(false);
   const [partnerOpen, setPartner] = useState(false);
 
+  usePageMeta({
+    title: 'دورة تمكين اللغة العربية وفنون التحرير اللغوي',
+    description: 'دورة 16 ساعة مباشر تفاعلي مع المدربة رنا العزام. صقّل أسلوبك وارتقِ بلغتك العربية وفنون التحرير. شهادة معتمدة من وجيز — كاسيت أكاديمي.',
+  });
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const waMsg   = 'السلام عليكم، أرغب في التسجيل في دورة تمكين اللغة العربية وفنون التحرير اللغوي.';
@@ -150,7 +155,7 @@ export default function CourseArabicLanguagePage() {
     <div dir="rtl" style={{ position:'relative', zIndex:1, minHeight:'100vh', color:OFF }}>
 
       {/* ══════════════════ HERO ══════════════════ */}
-      <section style={{ paddingTop:'clamp(24px,4vw,56px)', paddingBottom:'clamp(36px,4vw,64px)', background:'#F5F3EF', borderBottom:'1px solid rgba(0,0,0,0.08)' }}>
+      <section style={{ paddingTop:'clamp(98px,9vw,130px)', paddingBottom:'clamp(36px,4vw,64px)', background:'#F5F3EF', borderBottom:'1px solid rgba(0,0,0,0.08)' }}>
         <div style={{ ...INNER_S, display:'flex', gap:'clamp(24px,3vw,48px)', alignItems:'flex-start' }}>
 
           {/* Right — text */}

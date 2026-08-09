@@ -4,6 +4,7 @@
  */
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
+import { usePageMeta } from '../hooks/usePageMeta';
 import {
   ArrowLeft, Clock, Users, Tv, Award, GraduationCap,
   Star, Mic, Globe, BookOpen, Zap, Briefcase, MapPin,
@@ -62,7 +63,7 @@ const GOALS_GRID = [
 
 /* ── outcomes ───────────────────────────────────────────────── */
 const OUTCOMES = [
-  { Icon: Award,    title:'شهادة معتمدة رسمياً',             desc:'شهادة إتمام البرنامج معتمدة رسمياً من منصة "وجيز" وأكاديمية "كاسيت ميديا".' },
+  { Icon: Award,    title:'شهادة معتمدة رسمياً',             desc:'شهادة إتمام البرنامج معتمدة رسمياً من منصة "وجيز" وأكاديمية "كاسيت أكاديمي".' },
   { Icon: Tv,       title:'تقرير صحفي مرئي متكامل',           desc:'إنتاج تقرير صحفي احترافي بمعايير غرف الأخبار يمكن استخدامه في المحفظة المهنية.' },
   { Icon: Mic,      title:'تسجيل تقديمي أمام الكاميرا',       desc:'تسجيل تقديمي مقيَّم ومراجَع مباشرةً من المدربة لتقييم الأداء الإعلامي.' },
   { Icon: Star,     title:'توصية مهنية وعضوية شبكة الخريجين', desc:'توصية مهنية وفرصة الانضمام لشبكة خريجي كاسيت الإعلاميين والوصول لفرص التوظيف.' },
@@ -142,6 +143,10 @@ export default function CoursePresenterPage() {
   const [expanded, setExpanded] = useState(false);
   const [partnerOpen, setPartner] = useState(false);
 
+  usePageMeta({
+    title: 'دورة المذيع المحترف ومهارات الإعلام الرقمي',
+    description: 'دورة مكثفة 16 ساعة مع المدربة رنا العزام. مهارات التقديم والإلقاء والإعلام الرقمي الاحترافي. شهادة معتمدة من وجيز — كاسيت أكاديمي بعمّان.',
+  });
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const waMsg   = 'السلام عليكم، أرغب في التسجيل في الدورة المكثفة: المذيع المحترف ومهارات الإعلام الرقمي.';
@@ -151,7 +156,7 @@ export default function CoursePresenterPage() {
     <div dir="rtl" style={{ position:'relative', zIndex:1, minHeight:'100vh', color:OFF }}>
 
       {/* ══════════════════ HERO ══════════════════ */}
-      <section style={{ paddingTop:'clamp(24px,4vw,56px)', paddingBottom:'clamp(36px,4vw,64px)', background:'#F5F3EF', borderBottom:'1px solid rgba(0,0,0,0.08)' }}>
+      <section style={{ paddingTop:'clamp(98px,9vw,130px)', paddingBottom:'clamp(36px,4vw,64px)', background:'#F5F3EF', borderBottom:'1px solid rgba(0,0,0,0.08)' }}>
         <div style={{ ...INNER_S, display:'flex', gap:'clamp(24px,3vw,48px)', alignItems:'flex-start' }}>
 
           {/* Right — text */}

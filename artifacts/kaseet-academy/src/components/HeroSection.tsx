@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Navbar from './Navbar';
 import StatsBar from './StatsBar';
 import Waveform from './Waveform';
 import heroBg from '@assets/hero-bg_1785422080937.jpg';
@@ -23,9 +22,9 @@ export default function HeroSection() {
     return () => clearInterval(interval);
   }, []);
 
-  // "استكشف" → first section after hero (ReelsSection)
+  // "استكشف" → stats strip at bottom of hero
   const scrollToFirstSection = () => {
-    const section = document.getElementById('reels');
+    const section = document.getElementById('stats');
     if (section) section.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -65,8 +64,6 @@ export default function HeroSection() {
           <path d="M226 70 Q310 80 380 90" stroke="rgba(255,193,7,.06)" strokeWidth="1" strokeDasharray="4 6" fill="none"/>
         </svg>
       </div>
-
-      <Navbar />
 
       {/* Waveform at bottom */}
       <div className="absolute bottom-0 left-0 right-0 z-0 pointer-events-none">

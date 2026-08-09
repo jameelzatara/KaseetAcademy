@@ -1,7 +1,6 @@
 // ── Terms & Conditions — بيركلي للصوتيات المسموعة (كاسيت أكاديمي) ─
 // مسوّدة مهنية — تحتاج مراجعة محامٍ أردني مرخَّص قبل النشر
 import { useEffect } from 'react';
-import Navbar from '@/components/Navbar';
 import SiteFooter from '@/components/SiteFooter';
 import BackButton from '@/components/BackButton';
 
@@ -30,7 +29,6 @@ export default function TermsPage() {
   useEffect(() => { window.scrollTo({ top: 0, left: 0, behavior: 'instant' }); }, []);
   return (
     <div style={S.page}>
-      <Navbar />
       <BackButton />
       <main id="main" style={S.wrap}>
 
@@ -85,7 +83,7 @@ export default function TermsPage() {
         <h2 style={S.h2}>5. الجدول الزمني والحضور</h2>
         <ul style={S.ul}>
           <li style={S.li}>يُنشر الجدول المفصّل لكل دورة قبل بدئها بما لا يقل عن 7 أيام.</li>
-          <li style={S.li}>تُسجَّل الجلسات الأونلاين وتُرفع خلال 24 ساعة في مساحة المتدرب.</li>
+          <li style={S.li}>تُسجَّل جلسات مباشر تفاعلي (Online LIVE) وتُرفع خلال 24 ساعة في مساحة المتدرب.</li>
           <li style={S.li}>الغياب لا يُسقط الرسوم إلا في حالات مقبولة وموثّقة طبياً أو قانونياً.</li>
           <li style={S.li}>تحتفظ الأكاديمية بحق تأجيل أي جلسة أو تغيير مكانها مع إشعار 48 ساعة.</li>
           <li style={S.li}>في حالة إلغاء الدورة كاملاً من طرف الأكاديمية، يُعاد المبلغ كاملاً خلال 7 أيام عمل.</li>
@@ -99,14 +97,14 @@ export default function TermsPage() {
         </p>
         <ul style={S.ul}>
           <li style={S.li}>يُحظر إعادة نشر أي مادة تدريبية أو بيعها أو توزيعها دون إذن خطي.</li>
-          <li style={S.li}>يُحظر تسجيل الجلسات الحضورية أو الأونلاين دون موافقة صريحة مسبقة.</li>
+          <li style={S.li}>يُحظر تسجيل الجلسات الحضورية أو المباشرة دون موافقة صريحة مسبقة.</li>
           <li style={S.li}>يحق للمتدرب الاحتفاظ بالمواد لاستخدامه الشخصي والتعليمي فحسب.</li>
         </ul>
         <div style={S.rule} />
 
         {/* ── 7 ── */}
         <h2 style={S.h2}>7. قواعد السلوك</h2>
-        <p style={S.p}>يلتزم المتدرب بما يلي داخل الجلسات (حضورياً وأونلاين):</p>
+        <p style={S.p}>يلتزم المتدرب بما يلي داخل الجلسات (حضورياً ومباشر تفاعلي):</p>
         <ul style={S.ul}>
           <li style={S.li}>الاحترام الكامل للمدربين والمتدربين الآخرين.</li>
           <li style={S.li}>الالتزام بالجداول الزمنية والتعليمات الإدارية.</li>

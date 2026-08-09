@@ -1,11 +1,8 @@
 // ── 404 Not Found — Branded ─────────────────────────────────
 import { Link } from 'wouter';
-import Navbar from '@/components/Navbar';
-
 export default function NotFoundPage() {
   return (
     <div style={{ minHeight: '100dvh', background: '#0D0B14', direction: 'rtl', display: 'flex', flexDirection: 'column' }}>
-      <Navbar />
 
       <main id="main" style={{
         flex: 1, display: 'flex', flexDirection: 'column',

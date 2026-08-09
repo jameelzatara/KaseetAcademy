@@ -3,6 +3,7 @@
  */
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
+import { usePageMeta } from '../hooks/usePageMeta';
 import { ChevronDown, ArrowLeft, MapPin, Wifi, Layers, Clock, FolderCheck, CheckCircle2, MessageCircle } from 'lucide-react';
 import { NAVY, GOLD, OFF, F, FP, INNER, DH, DM, waLink } from './shared/coursePageHelpers';
 import wajeezLogo     from '@assets/wajeez-logo_1785688262989.png';
@@ -24,7 +25,7 @@ const CARD = 'rgba(255,255,255,0.04)';
 const CARD_BORDER = 'rgba(255,255,255,0.08)';
 
 const WA_PHONE  = '962771052222';
-const WA_TRACK  = waLink(WA_PHONE, 'مرحباً، أودّ الاستفسار عن المسار الإعلامي');
+const WA_TRACK  = waLink(WA_PHONE, 'مرحباً، أودّ الاستفسار عن ماستركلاس الإعلام');
 const WA_CONSULT = waLink(WA_PHONE, 'مرحباً، أودّ حجز استشارة تعليمية مجانية');
 
 /* ── station data ─────────────────────────────────────── */
@@ -317,16 +318,11 @@ export default function MasarElamiPage() {
   const [openIdx, setOpenIdx]   = useState<number | null>(null);
   const [expandAll, setExpandAll] = useState(false);
 
-  /* SEO: page-specific title + meta description + scroll reset */
-  useEffect(() => {
-    const prev = document.title;
-    document.title = 'المسار الإعلامي الكامل — كاسيت أكاديمي';
-    const metaDesc = document.querySelector<HTMLMetaElement>('meta[name="description"]');
-    const prevDesc = metaDesc?.content ?? '';
-    if (metaDesc) metaDesc.content = 'منهج إعلامي متكامل من 10 محطات: تأسيس، تخصصات، وقيادة. تقديم تلفزيوني، صحافة، محتوى رقمي، بودكاست، وإنتاج مرئي — مع شهادة معتمدة من وجيز.';
-    window.scrollTo({ top: 0, behavior: 'instant' });
-    return () => { document.title = prev; if (metaDesc) metaDesc.content = prevDesc; };
-  }, []);
+  usePageMeta({
+    title: 'ماستركلاس الإعلام',
+    description: 'منهج إعلامي متكامل من 10 محطات: تقديم تلفزيوني، صحافة، محتوى رقمي، بودكاست، وإنتاج مرئي. 44 ساعة مع شهادة معتمدة من وجيز — كاسيت أكاديمي.',
+  });
+  useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }); }, []);
 
   function toggle(i: number) { setOpenIdx(openIdx === i ? null : i); setExpandAll(false); }
   function handleExpandAll()  { setExpandAll(v => !v); setOpenIdx(null); }
@@ -375,7 +371,7 @@ export default function MasarElamiPage() {
       `}</style>
 
       {/* ── back nav ─────────────────────────────────── */}
-      <div style={{ ...INNER, paddingTop: 20, paddingBottom: 0 }}>
+      <div style={{ ...INNER, paddingTop: 94, paddingBottom: 0 }}>
         <button onClick={() => navigate('/')}
           aria-label="العودة إلى الدورات"
           style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: F, fontSize: 13.5, color: MUT, padding: 0 }}>
@@ -679,7 +675,7 @@ export default function MasarElamiPage() {
         </div>
         <div className="sec-wrap" style={{ ...INNER }}>
           <div style={{ textAlign: 'center', marginBottom: 48 }}>
-            <SectionLabel text="خبراء المسار الإعلامي" />
+            <SectionLabel text="خبراء ماستركلاس الإعلام" />
             <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,4vw,42px)', marginTop: 16, lineHeight: 1.35, color: OFF }}>
               مَن <span style={{ color: GLD }}>يُرشدك</span> في هذا المسار
             </h2>
@@ -802,7 +798,7 @@ export default function MasarElamiPage() {
 
               {/* price block */}
               <div style={{ textAlign: 'center', paddingBottom: 24, borderBottom: `1px solid ${CARD_BORDER}` }}>
-                <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 21, color: OFF }}>المسار الإعلامي الكامل</h3>
+                <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 21, color: OFF }}>ماستركلاس الإعلام</h3>
                 <p style={{ fontFamily: F, fontSize: 13, color: MUT, marginTop: 6, lineHeight: 1.65 }}>
                   10 محطات · التأسيس + التخصصات + القيادة الإعلامية
                 </p>

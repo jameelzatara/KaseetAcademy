@@ -1,6 +1,5 @@
 // ── Apply — Trainer Page ──────────────────────────────────────
 import { useState, useEffect } from 'react';
-import Navbar from '@/components/Navbar';
 import SiteFooter from '@/components/SiteFooter';
 import BackButton from '@/components/BackButton';
 import { CheckCircle, GraduationCap, ChevronDown } from 'lucide-react';
@@ -28,7 +27,7 @@ const INITIAL: FormData = {
 
 const SPEC_OPTIONS   = ['التعليق الصوتي', 'الإعلام والتقديم التلفزيوني', 'الخطابة والتواصل العام', 'التمثيل الصوتي', 'البودكاست والمحتوى الرقمي', 'اللغة العربية والنطق', 'أخرى'];
 const AVAIL_OPTIONS  = ['أيام الأسبوع (السبت–الأربعاء)', 'الخميس', 'الجمعة', 'عطل نهاية الأسبوع', 'مساءً فقط'];
-const FORMAT_OPTIONS = ['حضوري في الاستوديو', 'مباشر أونلاين', 'كلاهما'];
+const FORMAT_OPTIONS = ['حضوري في الاستوديو', 'مباشر تفاعلي (Online LIVE)', 'كلاهما'];
 
 function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
   return (
@@ -83,7 +82,6 @@ export default function ApplyTrainerPage() {
   if (submitted) {
     return (
       <div dir="rtl" style={{ background: '#0D0B14', minHeight: '100vh', color: '#fff', display: 'flex', flexDirection: 'column' }}>
-        <Navbar />
         <BackButton />
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '120px 24px 80px' }}>
           <div style={{ textAlign: 'center', maxWidth: 520 }}>
@@ -109,7 +107,6 @@ export default function ApplyTrainerPage() {
 
   return (
     <div dir="rtl" style={{ background: '#0D0B14', minHeight: '100vh', color: '#fff' }}>
-      <Navbar />
       <BackButton />
 
       {/* Hero */}

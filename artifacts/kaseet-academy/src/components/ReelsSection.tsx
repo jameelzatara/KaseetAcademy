@@ -135,6 +135,7 @@ export default function ReelsSection({
 
   return (
     <section
+      id="voices"
       className="sec sec--reels section-block relative overflow-hidden text-center"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}

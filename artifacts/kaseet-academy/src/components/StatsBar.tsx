@@ -43,6 +43,7 @@ export default function StatsBar() {
 
   return (
     <div
+      id="stats"
       ref={ref}
       className="glass-panel w-full max-w-[950px] rounded-[15px] border border-[rgba(255,193,7,0.32)] shadow-[0_8px_30px_rgba(10,14,22,0.45)] py-4 px-5 md:px-8 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-0"
       style={{ opacity: 1, transform: 'none' }}

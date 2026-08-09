@@ -1,6 +1,5 @@
 // ── Apply — Voice Talent Page ─────────────────────────────────
 import { useState, useEffect } from 'react';
-import Navbar from '@/components/Navbar';
 import SiteFooter from '@/components/SiteFooter';
 import BackButton from '@/components/BackButton';
 import { CheckCircle, Mic, ChevronDown } from 'lucide-react';
@@ -81,7 +80,6 @@ export default function ApplyVoiceTalentPage() {
   if (submitted) {
     return (
       <div dir="rtl" style={{ background: '#0D0B14', minHeight: '100vh', color: '#fff', display: 'flex', flexDirection: 'column' }}>
-        <Navbar />
         <BackButton />
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '120px 24px 80px' }}>
           <div style={{ textAlign: 'center', maxWidth: 520 }}>
@@ -113,7 +111,6 @@ export default function ApplyVoiceTalentPage() {
   /* ── Form ── */
   return (
     <div dir="rtl" style={{ background: '#0D0B14', minHeight: '100vh', color: '#fff' }}>
-      <Navbar />
       <BackButton />
 
       {/* Hero */}

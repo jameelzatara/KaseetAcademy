@@ -23,7 +23,7 @@ const TRACKS: Track[] = [
     id: 1,
     title:  'ماستركلاس التعليق والأداء الصوتي',
     desc:   'رحلة متكاملة لتطوير نبرات الصوت، التنفس الصحيح، وتدريب الأداء الصوتي لمختلف الإعلانات، الوثائقيات والبودكاست.',
-    hours:  '44 ساعة · 12 محطة · 13 عملاً',
+    hours:  '44 ساعة · 12 محطة · 13 مخرجاً',
     image:  voiceoverTrackImg,
     imgPos: 'center 30%',
     route:  '/masterclass-voice',
@@ -98,17 +98,6 @@ function TrackCard({ track }: { track: Track }) {
           }} />
         )}
         {/* Badge */}
-        {track.route && (
-          <span style={{
-            position: 'absolute', top: 12, right: 12, zIndex: 1,
-            fontFamily: 'Tajawal, sans-serif', fontWeight: 800, fontSize: 11,
-            color: '#121927', background: '#FFC107',
-            padding: '5px 12px', borderRadius: 999,
-            boxShadow: '0 4px 12px rgba(255,193,7,0.45)',
-          }}>
-            اكتشف الآن ↗
-          </span>
-        )}
       </div>
 
       {/* Card body */}
@@ -219,7 +208,7 @@ function TrackCard({ track }: { track: Track }) {
 
 export default function TracksSection() {
   return (
-    <section id="section-2" className="sec sec--tracks section-block relative overflow-hidden">
+    <section id="masterclasses" className="sec sec--tracks section-block relative overflow-hidden">
       {/* ── Windscreen foam geometry (left) ── */}
       <div className="geo" aria-hidden="true">
         <svg viewBox="0 0 260 280" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -252,7 +241,7 @@ export default function TracksSection() {
         {/* Section header */}
         <SectionHeader
           badge="الماستركلاسات"
-          heading={<>كل صوت يستحق <Gold>ماستركلاس احترافياً</Gold></>}
+          heading={<>كل صوت يستحق <Gold>ماستركلاساً احترافياً</Gold></>}
           description="اختر من بين ماستركلاساتنا الأكثر طلباً — كل برنامج صُمِّم ليأخذك خطوة أبعد في عالم الإعلام والصوت والخطابة."
           style={{ marginBottom: 48 }}
         />

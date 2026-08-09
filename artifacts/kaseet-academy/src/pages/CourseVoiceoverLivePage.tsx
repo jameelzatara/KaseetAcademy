@@ -4,6 +4,7 @@
  */
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
+import { usePageMeta } from '../hooks/usePageMeta';
 import {
   ArrowLeft, Clock, Users, Mic, Award, GraduationCap,
   Star, Volume2, Sliders, Zap, Briefcase, Wifi,
@@ -63,7 +64,7 @@ const GOALS_GRID = [
 
 /* ── outcomes ───────────────────────────────────────────────── */
 const OUTCOMES = [
-  { Icon: Award,    title:'شهادة معتمدة رسمياً',               desc:'شهادة إتمام البرنامج معتمدة رسمياً من منصة "وجيز" وأكاديمية "كاسيت ميديا".' },
+  { Icon: Award,    title:'شهادة معتمدة رسمياً',               desc:'شهادة إتمام البرنامج معتمدة رسمياً من منصة "وجيز" وأكاديمية "كاسيت أكاديمي".' },
   { Icon: Mic,      title:'ملف صوتي احترافي (Voice Demo CV)',  desc:'ملف صوتي متكامل يستعرض خامات صوتك في مختلف ألوان التعليق الصوتي.' },
   { Icon: Volume2,  title:'هوية صوتية متميزة',                 desc:'تحديد بصمتك الصوتية الشخصية وأسلوبك في الأداء الاحترافي وبناء الثقة.' },
   { Icon: Star,     title:'عضوية قاعدة بيانات كاسيت',          desc:'إدراج اسمك وصوتك في بنك الأصوات المعتمد للحصول على فرص ترشيح لمشاريع إنتاجية.' },
@@ -151,6 +152,10 @@ export default function CourseVoiceoverLivePage() {
   const [expanded, setExpanded] = useState(false);
   const [partnerOpen, setPartner] = useState(false);
 
+  usePageMeta({
+    title: 'دورة التعليق والأداء الصوتي — مباشر تفاعلي (Online LIVE)',
+    description: 'دورة 12 ساعة مباشر تفاعلي مع عمر درابكة. 7 وحدات تدريبية متكاملة في التعليق والأداء الصوتي الاحترافي. شهادة معتمدة من وجيز — كاسيت أكاديمي.',
+  });
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const waMsg   = 'السلام عليكم، أرغب في التسجيل في دورة التعليق والأداء الصوتي (مباشر تفاعلي Online LIVE).';
@@ -160,7 +165,7 @@ export default function CourseVoiceoverLivePage() {
     <div dir="rtl" style={{ position:'relative', zIndex:1, minHeight:'100vh', color:OFF }}>
 
       {/* ══════════════════ HERO ══════════════════ */}
-      <section style={{ paddingTop:'clamp(24px,4vw,56px)', paddingBottom:'clamp(36px,4vw,64px)', background:'#F5F3EF', borderBottom:'1px solid rgba(0,0,0,0.08)' }}>
+      <section style={{ paddingTop:'clamp(98px,9vw,130px)', paddingBottom:'clamp(36px,4vw,64px)', background:'#F5F3EF', borderBottom:'1px solid rgba(0,0,0,0.08)' }}>
         <div style={{ ...INNER_S, display:'flex', gap:'clamp(24px,3vw,48px)', alignItems:'flex-start' }}>
 
           {/* Right — text */}
@@ -324,7 +329,7 @@ export default function CourseVoiceoverLivePage() {
               <button
                 onClick={() => {
                   const rows = MODULES.map((m,i) => `<div class="lec"><div class="num">${i+1}</div><div><div class="lt">${m.title}</div><div class="ld">${m.desc}</div></div></div>`).join('');
-                  const html = `<!DOCTYPE html><html dir="rtl" lang="ar"><head><meta charset="utf-8"/><title>الخطة الدراسية — أساسيات التعليق الصوتي</title><style>@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Tajawal',Arial,sans-serif;direction:rtl;color:#1e293b;max-width:760px;margin:0 auto;padding:32px 28px}h1{font-size:22px;font-weight:900;border-bottom:3px solid #FFC107;padding-bottom:10px;margin-bottom:6px}.sub{font-size:12px;color:#64748b;margin-bottom:28px}.lec{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid #f1f5f9;align-items:flex-start}.num{width:26px;height:26px;border-radius:50%;background:#67e8f9;color:#051520;font-weight:900;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.lt{font-weight:800;font-size:13.5px;margin-bottom:3px}.ld{font-size:12px;color:#475569;line-height:1.7}@media print{body{padding:16px}}</style></head><body><h1>أساسيات التعليق والأداء الصوتي — مباشر تفاعلي (Online LIVE)</h1><p class="sub">أكاديمية كاسيت ميديا — 7 وحدات · 12 ساعة · شهادة معتمدة</p>${rows}</body></html>`;
+                  const html = `<!DOCTYPE html><html dir="rtl" lang="ar"><head><meta charset="utf-8"/><title>الخطة الدراسية — أساسيات التعليق الصوتي</title><style>@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Tajawal',Arial,sans-serif;direction:rtl;color:#1e293b;max-width:760px;margin:0 auto;padding:32px 28px}h1{font-size:22px;font-weight:900;border-bottom:3px solid #FFC107;padding-bottom:10px;margin-bottom:6px}.sub{font-size:12px;color:#64748b;margin-bottom:28px}.lec{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid #f1f5f9;align-items:flex-start}.num{width:26px;height:26px;border-radius:50%;background:#67e8f9;color:#051520;font-weight:900;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.lt{font-weight:800;font-size:13.5px;margin-bottom:3px}.ld{font-size:12px;color:#475569;line-height:1.7}@media print{body{padding:16px}}</style></head><body><h1>أساسيات التعليق والأداء الصوتي — مباشر تفاعلي (Online LIVE)</h1><p class="sub">كاسيت أكاديمي — 7 وحدات · 12 ساعة · شهادة معتمدة</p>${rows}</body></html>`;
                   const win = window.open('','_blank','width=860,height=900');
                   if(win){ win.document.write(html); win.document.close(); win.focus(); setTimeout(()=>win.print(),600); }
                 }}

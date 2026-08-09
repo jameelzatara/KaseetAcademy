@@ -242,8 +242,8 @@ export default function ConsultationSection() {
                 >
                   +962 77 105 2222
                 </a>
-                <div style={{ fontSize: 11, color: 'rgba(252,251,251,0.38)', textAlign: 'center' }}>
-                  يومياً من 10 صباحاً حتى 7 مساءً
+                <div style={{ fontSize: 11, color: 'rgba(252,251,251,0.38)', textAlign: 'center', lineHeight: 1.6 }}>
+                  السبت – الخميس · 10:00 صباحاً – 8:00 مساءً<br/>الجمعة مغلق
                 </div>
               </div>
             </div>

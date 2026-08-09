@@ -187,6 +187,7 @@ export default function TestimonialsSection() {
 
   return (
     <section
+      id="reviews"
       className="sec sec--reviews section-block relative overflow-hidden"
       style={{ direction: 'rtl' }}
     >

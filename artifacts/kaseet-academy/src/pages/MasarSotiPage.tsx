@@ -3,6 +3,7 @@
  */
 import { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'wouter';
+import { usePageMeta } from '../hooks/usePageMeta';
 import { ChevronDown, ArrowLeft, MapPin, Wifi } from 'lucide-react';
 import { GOLD, OFF, F, FP, INNER, waLink } from './shared/coursePageHelpers';
 import ReelsSection from '../components/ReelsSection';
@@ -346,12 +347,11 @@ export default function MasarSotiPage() {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const [expandAll, setExpandAll] = useState(false);
 
-  useEffect(() => {
-    const prev = document.title;
-    document.title = 'ماستركلاس التعليق والأداء الصوتي — كاسيت أكاديمي';
-    window.scrollTo({ top: 0, behavior: 'instant' });
-    return () => { document.title = prev; };
-  }, []);
+  usePageMeta({
+    title: 'ماستركلاس التعليق والأداء الصوتي',
+    description: 'ماستركلاس 44 ساعة في التعليق والأداء الصوتي الاحترافي. تدريب حضوري ومباشر تفاعلي في كاسيت أكاديمي. ابدأ مسيرتك الصوتية مع شهادة معتمدة من وجيز.',
+  });
+  useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }); }, []);
 
   function toggle(i: number) { setOpenIdx(openIdx === i ? null : i); setExpandAll(false); }
   function isOpen(i: number) { return expandAll || openIdx === i; }
@@ -378,7 +378,7 @@ export default function MasarSotiPage() {
       `}</style>
 
       {/* back nav */}
-      <div style={{ ...WRP, paddingTop: 18, paddingBottom: 0 }}>
+      <div style={{ ...WRP, paddingTop: 92, paddingBottom: 0 }}>
         <button onClick={() => navigate('/')} aria-label="العودة إلى الدورات"
           style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: F, fontSize: 13, color: MUT, padding: 0 }}>
           <ArrowLeft size={13} /> العودة إلى الدورات

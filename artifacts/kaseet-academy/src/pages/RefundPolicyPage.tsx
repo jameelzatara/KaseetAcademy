@@ -1,7 +1,6 @@
 // ── Refund Policy — بيركلي للصوتيات المسموعة (كاسيت أكاديمي) ─
 // مسوّدة مهنية — تحتاج مراجعة محامٍ أردني مرخَّص قبل النشر
 import { useEffect } from 'react';
-import Navbar from '@/components/Navbar';
 import SiteFooter from '@/components/SiteFooter';
 import BackButton from '@/components/BackButton';
 
@@ -33,7 +32,6 @@ export default function RefundPolicyPage() {
   useEffect(() => { window.scrollTo({ top: 0, left: 0, behavior: 'instant' }); }, []);
   return (
     <div style={S.page}>
-      <Navbar />
       <BackButton />
       <main id="main" style={S.wrap}>
 
