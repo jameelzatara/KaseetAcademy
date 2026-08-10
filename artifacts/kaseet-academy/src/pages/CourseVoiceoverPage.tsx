@@ -186,9 +186,10 @@ function CohortRow({ c, onRegister }: { c: Cohort; onRegister: (id: number) => v
           </div>
         </div>
 
-        {/* Register column — fill bar + button stacked */}
+        {/* Register column — button + fill bar in one row */}
         {isOpen && !full && (
-          <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+          <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+            <FillBar fill={c.fill} remaining={c.remaining} />
             <button
               onClick={() => onRegister(c.id)}
               style={{
@@ -212,8 +213,6 @@ function CohortRow({ c, onRegister }: { c: Cohort; onRegister: (id: number) => v
             >
               سجّل الآن <ArrowLeft size={13} strokeWidth={2} />
             </button>
-            {/* Fill bar under button */}
-            <FillBar fill={c.fill} remaining={c.remaining} />
           </div>
         )}
       </div>
@@ -405,24 +404,26 @@ function AboutSection() {
       <div style={{ ...WRAP, direction: 'rtl' }}>
         <SecTitle>نبذة عن البرنامج وأهدافه</SecTitle>
 
-        {/* Program description */}
-        <div style={{
-          background: CREAM_CARD, border: `1px solid ${CREAM_LINE}`,
-          borderRadius: 18, padding: '24px 28px', marginBottom: 24,
-          boxShadow: '0 4px 16px rgba(24,32,47,.05)',
-        }}>
-          <p style={{ fontFamily: F, fontSize: 15.5, color: INK2, lineHeight: 2.05, margin: 0 }}>
-            يسعى هذا البرنامج إلى إعداد وتأهيل المتدربين لاحتراف مجال التعليق الصوتي وتجهيزهم بالمهارات اللازمة للاندماج في سوق العمل. ترتكز أهدافنا على تطوير مخارج الحروف والنطق السليم، والتمكن من التحكم في الطبقات الصوتية وضبط الإيقاع، بالإضافة إلى كسر رهبة الميكروفون تماماً لتعزيز الثقة بالنفس وتنمية مهارات الإلقاء والتواصل المهني.
-          </p>
-        </div>
+        {/* ── Top row: description + advisors side by side ── */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 48, alignItems: 'start' }}>
 
-        {/* Unified advisors box */}
-        <div style={{
-          background: CANVAS, borderRadius: 20,
-          padding: 'clamp(20px,3vw,32px)',
-          boxShadow: '0 16px 48px rgba(24,32,47,.22)',
-          marginBottom: 48,
-        }}>
+          {/* Program description */}
+          <div style={{
+            background: CREAM_CARD, border: `1px solid ${CREAM_LINE}`,
+            borderRadius: 18, padding: '24px 28px', height: '100%',
+            boxShadow: '0 4px 16px rgba(24,32,47,.05)',
+          }}>
+            <p style={{ fontFamily: F, fontSize: 15.5, color: INK2, lineHeight: 2.05, margin: 0 }}>
+              يسعى هذا البرنامج إلى إعداد وتأهيل المتدربين لاحتراف مجال التعليق الصوتي وتجهيزهم بالمهارات اللازمة للاندماج في سوق العمل. ترتكز أهدافنا على تطوير مخارج الحروف والنطق السليم، والتمكن من التحكم في الطبقات الصوتية وضبط الإيقاع، بالإضافة إلى كسر رهبة الميكروفون تماماً لتعزيز الثقة بالنفس وتنمية مهارات الإلقاء والتواصل المهني.
+            </p>
+          </div>
+
+          {/* Unified advisors box */}
+          <div style={{
+            background: CANVAS, borderRadius: 20,
+            padding: 'clamp(20px,3vw,28px)',
+            boxShadow: '0 16px 48px rgba(24,32,47,.22)',
+          }}>
           {/* Header */}
           <div style={{ marginBottom: 20, direction: 'rtl' }}>
             <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(17px,2vw,21px)', color: OFF, margin: '0 0 6px' }}>
@@ -433,8 +434,8 @@ function AboutSection() {
             </p>
           </div>
 
-          {/* Advisor cards — side by side */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))', gap: 12 }}>
+          {/* Advisor cards — stacked */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {ADVISORS.map(({ name, role, img, href }) => (
               <a key={name} href={href} target="_blank" rel="noopener noreferrer"
                 style={{
@@ -462,7 +463,8 @@ function AboutSection() {
               </a>
             ))}
           </div>
-        </div>
+          </div>
+        </div>{/* end top row */}
 
         {/* Goals title */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20, direction: 'rtl' }}>
@@ -719,30 +721,30 @@ type TrainerBadge = { label: string; type: BadgeType };
 
 const TRAINERS = [
   {
-    img: rana, name: 'رنا العزام', title: 'مدرّبة التعليق الصوتي',
-    bio: 'مدرّبة معتمدة ورائدة في التعليق الصوتي العربي، تجمع بين الأكاديمية والتطبيق الميداني في سوق الإنتاج الإذاعي والمرئي.',
+    img: yasar, name: 'يسار عبده', title: 'مدربة إعلامية وخبيرة تعليق صوتي',
+    bio: 'مدربة معتمدة لدى الأمم المتحدة والمؤسسات الوطنية، بخبرة تزيد على عشرين عاماً في الإعلام والتعليق الصوتي والتدريب المهني. تحمل درجة البكالوريوس في اللغة الإنجليزية وعلم الأصوات (Phonetics)، ودرجة الماجستير في حقوق الإنسان والتنمية البشرية. خبرتها تشمل الدبلجة، الأخبار، الأفلام الوثائقية، الكتب الصوتية، والتعليق الصوتي الإعلاني.',
     badges: [
-      { label: '+3,000 طالب مدرَّب', type: 'achieve' },
-      { label: 'خبرة +10 سنوات',     type: 'achieve' },
-      { label: 'مدرّبة معتمدة',       type: 'cert'    },
+      { label: '+3,000 طالب مدرَّب',      type: 'achieve' },
+      { label: 'خبرة +20 سنة',             type: 'achieve' },
+      { label: 'معتمدة لدى الأمم المتحدة', type: 'cert'    },
     ] as TrainerBadge[],
   },
   {
-    img: yasar, name: 'يسار عبده', title: 'مدرّب التعليق والأداء الصوتي',
-    bio: 'صوت إذاعي ومسرحي متمرّس، يتخصص في تقنيات الأداء الاحترافي وتطوير الأصوات الناشئة في سوق المحتوى الصوتي.',
+    img: rana, name: 'رنا العزام', title: 'إعلامية ومدربة أداء ومختصة بالتحرير اللغوي',
+    bio: 'الإعلامية رنا محمد العزام معدة ومقدمة برامج فضائية وإذاعية وبودكاست معتمدة. تنقلت بين كبرى المؤسسات الإعلامية مثل: قناة رؤيا الفضائية وقناة صاد وإذاعة حياة FM. عملت لسنوات محررة ومدققة لغوية في مجمع اللغة العربية ومذيعة في إذاعة المجمع. قدمت برامج تدريبية متخصصة لطلبة الإعلام في جامعة البترا ولمؤسسات حكومية كبرى، وحازت لأفضل إنتاج إعلاني حول المرأة العربية.',
     badges: [
-      { label: 'خبرة +15 سنة',       type: 'achieve' },
-      { label: 'مدرّب معتمد دولياً', type: 'cert'    },
-      { label: 'إذاعة ومسرح',        type: 'qual'    },
+      { label: 'قنوات فضائية وإذاعات',        type: 'qual'    },
+      { label: 'جوائز إعلامية',               type: 'achieve' },
+      { label: 'بكالوريوس لغة عربية — اليرموك', type: 'qual'    },
     ] as TrainerBadge[],
   },
   {
-    img: omar, name: 'عمر الدرابكة', title: 'مدرّب الأداء والإنتاج الصوتي',
-    bio: 'منتج صوتي ومهندس بث محترف، يربط بين التقنية والأداء الصوتي ليمنح المتدرّب إمكانات استوديو حقيقية من يومه الأول.',
+    img: omar, name: 'عمر الدرابكة', title: 'معلق صوتي محترف ومدرب أداء وإلقاء',
+    bio: 'معلق صوتي محترف ومدرب أداء وإلقاء. سجّل بصوته مئات الأفلام الوثائقية والإعلانات التجارية لكبرى الشركات والمؤسسات الإعلامية في الخليج والشرق الأوسط. حاصل على دبلوم الإعلام من الأكاديمية العالمية للفنون والإبداع بفلوريدا، ويمتلك خبرة واسعة في التدريب الصوتي والتمكين اللغوي تتجاوز 12 عاماً.',
     badges: [
-      { label: 'هندسة الصوت والبث',  type: 'qual'    },
-      { label: 'إنتاج صوتي محترف',  type: 'achieve' },
-      { label: 'مدرّب ومهندس معتمد', type: 'cert'    },
+      { label: 'مئات الأعمال المسجلة', type: 'achieve' },
+      { label: 'خبرة +12 سنة',         type: 'achieve' },
+      { label: 'دبلوم إعلام — فلوريدا', type: 'qual'    },
     ] as TrainerBadge[],
   },
 ];
@@ -933,9 +935,9 @@ function HeroSection({ mode, onModeChange, onShare }: { mode: 'onsite' | 'online
                     style={{
                       width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14,
                       background: active ? ONSITE_BG : 'rgba(24,32,47,.03)',
-                      border: `2px solid ${active ? 'rgba(255,193,7,.68)' : 'rgba(255,193,7,.24)'}`,
+                      border: `2px solid ${active ? GOLD : 'rgba(255,193,7,.24)'}`,
                       borderRadius: 14, padding: '14px 18px', cursor: 'pointer', transition: '.22s',
-                      direction: 'rtl', boxShadow: active ? '0 4px 18px rgba(255,193,7,.18)' : 'none',
+                      direction: 'rtl', boxShadow: active ? '0 4px 18px rgba(255,193,7,.26)' : 'none',
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -944,13 +946,13 @@ function HeroSection({ mode, onModeChange, onShare }: { mode: 'onsite' | 'online
                         background: active ? GOLD : 'rgba(255,193,7,.16)', color: active ? INK : GOLD_INK,
                       }}><MapPin size={18} strokeWidth={1.8} /></div>
                       <div style={{ textAlign: 'right' }}>
-                        <div style={{ fontFamily: F, fontWeight: 800, fontSize: 15, color: active ? GOLD_INK : INK }}>حضوري</div>
+                        <div style={{ fontFamily: F, fontWeight: 800, fontSize: 15, color: active ? GOLD : INK }}>حضوري</div>
                         <div style={{ fontFamily: F, fontSize: 12, color: INK2, opacity: .7 }}>استوديو كاسيت</div>
                       </div>
                     </div>
                     <div style={{ direction: 'ltr', textAlign: 'left', flexShrink: 0 }}>
                       <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-                        <span style={{ fontFamily: FP, fontWeight: 900, fontSize: 24, color: active ? GOLD_INK : INK2 }}>218</span>
+                        <span style={{ fontFamily: FP, fontWeight: 900, fontSize: 24, color: active ? GOLD : INK2 }}>218</span>
                         <span style={{ fontFamily: F, fontWeight: 600, fontSize: 12, color: INK2 }}>JOD</span>
                         <span style={{ fontFamily: FP, fontSize: 12, color: INK2, opacity: .42, textDecoration: 'line-through' }}>260</span>
                       </div>
