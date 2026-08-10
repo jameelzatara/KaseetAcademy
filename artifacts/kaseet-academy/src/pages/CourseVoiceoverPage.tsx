@@ -404,65 +404,67 @@ function AboutSection() {
       <div style={{ ...WRAP, direction: 'rtl' }}>
         <SecTitle>نبذة عن البرنامج وأهدافه</SecTitle>
 
-        {/* ── Top row: description + advisors side by side ── */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 48, alignItems: 'start' }}>
+        {/* ── Top row: description (right) + advisors (left) — RTL: first = right ── */}
+        <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: 24, marginBottom: 48, alignItems: 'stretch' }}>
 
-          {/* Program description */}
+          {/* Description — RIGHT column in RTL (first child) */}
           <div style={{
             background: CREAM_CARD, border: `1px solid ${CREAM_LINE}`,
-            borderRadius: 18, padding: '24px 28px', height: '100%',
+            borderRadius: 20, padding: '28px 32px',
             boxShadow: '0 4px 16px rgba(24,32,47,.05)',
+            display: 'flex', alignItems: 'center',
           }}>
-            <p style={{ fontFamily: F, fontSize: 15.5, color: INK2, lineHeight: 2.05, margin: 0 }}>
+            <p style={{ fontFamily: F, fontSize: 16, color: INK2, lineHeight: 2.1, margin: 0 }}>
               يسعى هذا البرنامج إلى إعداد وتأهيل المتدربين لاحتراف مجال التعليق الصوتي وتجهيزهم بالمهارات اللازمة للاندماج في سوق العمل. ترتكز أهدافنا على تطوير مخارج الحروف والنطق السليم، والتمكن من التحكم في الطبقات الصوتية وضبط الإيقاع، بالإضافة إلى كسر رهبة الميكروفون تماماً لتعزيز الثقة بالنفس وتنمية مهارات الإلقاء والتواصل المهني.
             </p>
           </div>
 
-          {/* Unified advisors box */}
+          {/* Advisors box — LEFT column in RTL (second child) */}
           <div style={{
             background: CANVAS, borderRadius: 20,
-            padding: 'clamp(20px,3vw,28px)',
+            padding: '24px 22px',
             boxShadow: '0 16px 48px rgba(24,32,47,.22)',
+            display: 'flex', flexDirection: 'column',
           }}>
-          {/* Header */}
-          <div style={{ marginBottom: 20, direction: 'rtl' }}>
-            <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(17px,2vw,21px)', color: OFF, margin: '0 0 6px' }}>
-              هل تحتاج مساعدة في التسجيل؟
-            </h3>
-            <p style={{ fontFamily: F, fontSize: 13.5, color: MUTED, margin: 0 }}>
-              تواصل مع مستشاراتنا الأكاديميات مباشرة — نحن هنا للمساعدة
-            </p>
-          </div>
+            {/* Header */}
+            <div style={{ marginBottom: 16, direction: 'rtl' }}>
+              <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(15px,1.6vw,19px)', color: OFF, margin: '0 0 5px' }}>
+                هل تحتاج مساعدة في التسجيل؟
+              </h3>
+              <p style={{ fontFamily: F, fontSize: 12.5, color: MUTED, margin: 0 }}>
+                تواصل مع مستشاراتنا الأكاديميات مباشرة — نحن هنا للمساعدة
+              </p>
+            </div>
 
-          {/* Advisor cards — stacked */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {ADVISORS.map(({ name, role, img, href }) => (
-              <a key={name} href={href} target="_blank" rel="noopener noreferrer"
-                style={{
-                  display: 'flex', alignItems: 'center', gap: 14,
-                  background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.10)',
-                  borderRadius: 14, padding: '14px 18px', textDecoration: 'none',
-                  transition: 'background .18s, border-color .18s, transform .18s',
-                  direction: 'rtl',
-                }}
-                onMouseEnter={e => Object.assign(e.currentTarget.style, { background:'rgba(255,193,7,.10)', borderColor:'rgba(255,193,7,.30)', transform:'translateY(-2px)' })}
-                onMouseLeave={e => Object.assign(e.currentTarget.style, { background:'rgba(255,255,255,.05)', borderColor:'rgba(255,255,255,.10)', transform:'none' })}
-              >
-                <div style={{ position: 'relative', flexShrink: 0 }}>
-                  <img src={img} alt={name} style={{ width: 52, height: 52, borderRadius: '50%', objectFit: 'cover', objectPosition: 'center top', border: `2px solid ${GOLD_LINE}` }} />
-                  <span style={{ position: 'absolute', bottom: 2, right: 2, width: 11, height: 11, borderRadius: '50%', background: '#22c55e', border: '2px solid #1A2533' }} />
-                </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontFamily: F, fontWeight: 800, fontSize: 14.5, color: OFF }}>{name}</div>
-                  <div style={{ fontFamily: F, fontSize: 12, color: MUTED, marginTop: 3 }}>{role}</div>
-                  <div style={{ fontFamily: F, fontSize: 12, color: 'rgba(255,193,7,.70)', marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <MessageCircle size={12} strokeWidth={1.8} /> تواصل عبر واتساب
+            {/* Advisor cards — stacked, stretch to fill */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, flex: 1 }}>
+              {ADVISORS.map(({ name, role, img, href }) => (
+                <a key={name} href={href} target="_blank" rel="noopener noreferrer"
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 12,
+                    background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.10)',
+                    borderRadius: 14, padding: '12px 16px', textDecoration: 'none',
+                    transition: 'background .18s, border-color .18s, transform .18s',
+                    direction: 'rtl', flex: 1,
+                  }}
+                  onMouseEnter={e => Object.assign(e.currentTarget.style, { background:'rgba(255,193,7,.10)', borderColor:'rgba(255,193,7,.30)', transform:'translateY(-2px)' })}
+                  onMouseLeave={e => Object.assign(e.currentTarget.style, { background:'rgba(255,255,255,.05)', borderColor:'rgba(255,255,255,.10)', transform:'none' })}
+                >
+                  <div style={{ position: 'relative', flexShrink: 0 }}>
+                    <img src={img} alt={name} style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover', objectPosition: 'center top', border: `2px solid ${GOLD_LINE}` }} />
+                    <span style={{ position: 'absolute', bottom: 1, right: 1, width: 10, height: 10, borderRadius: '50%', background: '#22c55e', border: '2px solid #1A2533' }} />
                   </div>
-                </div>
-                <ArrowLeft size={16} strokeWidth={2} color={MUTED} style={{ flexShrink: 0 }} />
-              </a>
-            ))}
-          </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontFamily: F, fontWeight: 800, fontSize: 14, color: OFF }}>{name}</div>
+                    <div style={{ fontFamily: F, fontSize: 11.5, color: MUTED, marginTop: 2 }}>{role}</div>
+                    <div style={{ fontFamily: F, fontSize: 11.5, color: 'rgba(255,193,7,.70)', marginTop: 3, display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <MessageCircle size={11} strokeWidth={1.8} /> تواصل عبر واتساب
+                    </div>
+                  </div>
+                  <ArrowLeft size={15} strokeWidth={2} color={MUTED} style={{ flexShrink: 0 }} />
+                </a>
+              ))}
+            </div>
           </div>
         </div>{/* end top row */}
 
