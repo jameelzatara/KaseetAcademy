@@ -26,7 +26,8 @@ _Populate as you build — short repo map plus pointers to the source-of-truth f
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- **أيقونات الموقع**: النوع المعتمد لجميع الأيقونات هو مكوّنات React مبنية على متجهات SVG من مكتبة `lucide-react`. لا تُستخدم أيقونات صور أو emoji أو مكتبات أخرى.
+- Icons: All icons across the site are **lucide-react** React vector-SVG components. No other icon system is used.
 
 ## Product
 

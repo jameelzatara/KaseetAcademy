@@ -6,7 +6,7 @@
     {
       "id": 137,
       "mode": "onsite",
-      "status": "open",
+      "status": "running",
       "trainer": "رنا العزام",
       "start": "2026-08-10",
       "end": "2026-09-02",
@@ -16,10 +16,10 @@
       "time_24": "12:00-14:00",
       "time_ar": "12:00 ظهراً – 2:00 بعد الظهر",
       "platform": "استوديو كاسيت",
-      "enrolled": 4,
+      "enrolled": 8,
       "capacity": 10,
-      "remaining": 6,
-      "fill": 40
+      "remaining": 2,
+      "fill": 80
     },
     {
       "id": 139,

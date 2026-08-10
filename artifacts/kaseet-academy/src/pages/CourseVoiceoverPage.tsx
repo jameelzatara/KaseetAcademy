@@ -17,8 +17,8 @@ import {
 import ShareModal from '../components/ShareModal';
 
 /* ── Asset imports ──────────────────────────────────────────── */
-import ayaImg    from '@assets/اية_القماز_1785619557679.jpeg';
-import yaqoutImg from '@assets/ياقوت__1785619557679.jpeg';
+import ayaImg    from '@assets/اية_القماز_1786367975413.jpeg';
+import yaqoutImg from '@assets/ياقوت_الخشاشنة_المستشارة_1786367971950.jpeg';
 import yasar     from '@assets/المدربة_يسار_عبده_1785855126478.jpeg';
 import rana      from '@assets/trainer-rana-azzam_1785428982698.JPG';
 import omar      from '@assets/trainer-omar_1785428945248.jpg';
@@ -115,9 +115,8 @@ function CohortRow({ c, onRegister }: { c: Cohort; onRegister: (id: number) => v
       opacity: isRunning ? 0.72 : 1,
       direction: 'rtl',
     }}>
-      {/* Top row */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14, flexWrap: 'wrap' }}>
-        {/* Date box — 56×56 §4.1 */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
+        {/* Date box */}
         <div style={{
           width: 56, height: 56, borderRadius: 12, flexShrink: 0,
           background: isOpen ? 'rgba(255,193,7,.12)' : 'rgba(255,255,255,.06)',
@@ -128,11 +127,10 @@ function CohortRow({ c, onRegister }: { c: Cohort; onRegister: (id: number) => v
           <span style={{ fontFamily: F,  fontSize: 11, color: isOpen ? 'rgba(255,193,7,.70)' : 'rgba(252,251,251,.40)', lineHeight: 1, marginTop: 2 }}>{monthAr}</span>
         </div>
 
-        {/* Info */}
+        {/* Info — fills available space */}
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 8, marginBottom: 8 }}>
             <span style={{ fontFamily: F, fontWeight: 700, fontSize: 14, color: OFF }}>الدفعة #{c.id}</span>
-
             {isOpen && (
               <span style={{
                 background: 'rgba(255,193,7,.14)', border: '1px solid rgba(255,193,7,.35)',
@@ -150,15 +148,15 @@ function CohortRow({ c, onRegister }: { c: Cohort; onRegister: (id: number) => v
             )}
             {isOpen && !full && (
               <span style={{
-                background: 'rgba(255,193,7,.10)', color: GOLD,
-                borderRadius: 999, fontFamily: F, fontWeight: 700, fontSize: 11,
+                background: 'rgba(255,193,7,.10)', color: GOLD, borderRadius: 999,
+                fontFamily: F, fontWeight: 700, fontSize: 11,
                 padding: '2px 10px', border: '1px solid rgba(255,193,7,.22)',
               }}>متاح التسجيل</span>
             )}
             {full && (
               <span style={{
-                background: 'rgba(255,255,255,.06)', color: 'rgba(252,251,251,.45)',
-                borderRadius: 999, fontFamily: F, fontWeight: 700, fontSize: 11,
+                background: 'rgba(255,255,255,.06)', color: 'rgba(252,251,251,.45)', borderRadius: 999,
+                fontFamily: F, fontWeight: 700, fontSize: 11,
                 padding: '2px 10px', border: '1px solid rgba(255,255,255,.10)',
                 display: 'inline-flex', alignItems: 'center', gap: 4,
               }}>
@@ -166,14 +164,12 @@ function CohortRow({ c, onRegister }: { c: Cohort; onRegister: (id: number) => v
               </span>
             )}
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: F, fontSize: 11.5, color: 'rgba(252,251,251,.58)' }}>
-              {c.mode === 'online'
-                ? <Video  size={12} strokeWidth={1.8} />
-                : <MapPin size={12} strokeWidth={1.8} />}
+              {c.mode === 'online' ? <Video size={12} strokeWidth={1.8} /> : <MapPin size={12} strokeWidth={1.8} />}
               {c.platform}
             </span>
           </div>
 
-          {/* Fill bar + seats — §4.2, §4.3 no enrolled count */}
+          {/* Fill bar */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
             <FillBar fill={c.fill} remaining={c.remaining} />
             <span style={{
@@ -184,7 +180,7 @@ function CohortRow({ c, onRegister }: { c: Cohort; onRegister: (id: number) => v
             </span>
           </div>
 
-          {/* Lower detail line — §4.1 §4.1, time_ar as-is per addendum §1 */}
+          {/* Detail line */}
           <div style={{ fontFamily: F, fontSize: 12.5, color: 'rgba(252,251,251,.52)', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 6 }}>
             <span>من {c.start_ar} إلى {c.end_ar}</span>
             <span style={{ color: 'rgba(252,251,251,.25)' }}>·</span>
@@ -199,26 +195,39 @@ function CohortRow({ c, onRegister }: { c: Cohort; onRegister: (id: number) => v
             </span>
           </div>
         </div>
-      </div>
 
-      {/* Register button — open only, §4.4 */}
-      {isOpen && !full && (
-        <div style={{ marginTop: 14, display: 'flex', justifyContent: 'flex-start' }}>
-          <button
-            onClick={() => onRegister(c.id)}
-            style={{
-              background: GOLD, color: INK, border: 'none', borderRadius: 10, cursor: 'pointer',
-              fontFamily: F, fontWeight: 800, fontSize: 14, padding: '10px 22px',
-              display: 'inline-flex', alignItems: 'center', gap: 6,
-              boxShadow: '0 4px 16px rgba(255,193,7,.35)', transition: 'transform .15s, box-shadow .15s',
-            }}
-            onMouseEnter={e => Object.assign(e.currentTarget.style, { transform:'translateY(-1px)', boxShadow:'0 6px 20px rgba(255,193,7,.45)' })}
-            onMouseLeave={e => Object.assign(e.currentTarget.style, { transform:'none', boxShadow:'0 4px 16px rgba(255,193,7,.35)' })}
-          >
-            سجّل الآن <ArrowLeft size={14} strokeWidth={2} />
-          </button>
-        </div>
-      )}
+        {/* Register column — other side (flex-end in RTL = left visually) */}
+        {isOpen && !full && (
+          <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+            <button
+              onClick={() => onRegister(c.id)}
+              style={{
+                background: GOLD, color: INK, border: 'none', borderRadius: 10, cursor: 'pointer',
+                fontFamily: F, fontWeight: 800, fontSize: 13.5, padding: '10px 18px',
+                display: 'inline-flex', alignItems: 'center', gap: 5,
+                boxShadow: '0 4px 16px rgba(255,193,7,.35)', transition: 'transform .15s, box-shadow .15s',
+                whiteSpace: 'nowrap',
+              }}
+              onMouseEnter={e => Object.assign(e.currentTarget.style, { transform:'translateY(-1px)', boxShadow:'0 6px 20px rgba(255,193,7,.45)' })}
+              onMouseLeave={e => Object.assign(e.currentTarget.style, { transform:'none', boxShadow:'0 4px 16px rgba(255,193,7,.35)' })}
+            >
+              سجّل الآن <ArrowLeft size={13} strokeWidth={2} />
+            </button>
+            {/* Seat counter */}
+            <span style={{
+              display: 'inline-flex', alignItems: 'center', gap: 4,
+              fontFamily: F, fontSize: 12, fontWeight: 700,
+              color: hot ? '#E8836F' : 'rgba(252,251,251,.55)',
+              background: hot ? 'rgba(232,131,111,.12)' : 'rgba(255,255,255,.07)',
+              border: `1px solid ${hot ? 'rgba(232,131,111,.30)' : 'rgba(255,255,255,.12)'}`,
+              borderRadius: 999, padding: '3px 10px',
+            }}>
+              <Users size={11} strokeWidth={1.8} />
+              {hot ? `${c.remaining} فقط` : `${c.remaining} مقعد`}
+            </span>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -385,10 +394,9 @@ function SecTitle({ children }: { children: React.ReactNode }) {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   § About — §5 · consultants + 6 goal cards
+   § About — §5 · program overview + advisors side-by-side + 6 goals
    ══════════════════════════════════════════════════════════════ */
 function AboutSection() {
-  /* «جميع» not «كافة» — §5.2 */
   const GOALS = [
     { icon: <AudioLines size={22} strokeWidth={1.8} color={GOLD_INK} />,        title: 'ألوان التعليق الصوتي',     text: 'إتقان جميع ألوان التعليق الصوتي: الإعلانات، الرد الآلي، الكتب الصوتية، الوثائقيات، الأخبار والدوبلاج.' },
     { icon: <Volume2 size={22} strokeWidth={1.8} color={GOLD_INK} />,           title: 'مخارج الحروف والنطق',     text: 'تحسين مخارج الحروف وضبط الأداء اللغوي والتخلص من عيوب النطق.' },
@@ -398,64 +406,82 @@ function AboutSection() {
     { icon: <Briefcase size={22} strokeWidth={1.8} color={GOLD_INK} />,         title: 'التواصل المهني',           text: 'فهم سوق العمل الصوتي والتفاعل مع التوجيهات الإخراجية بكفاءة.' },
   ];
 
-  const waAya  = waLink('962790234483', 'السلام عليكم، أرغب في الاستفسار عن التسجيل في دورة أساسيات التعليق والأداء الصوتي (حضوري)');
-  const waYaqt = waLink('962771052222', 'السلام عليكم، أرغب في الاستفسار عن التسجيل في دورة أساسيات التعليق والأداء الصوتي (مباشر تفاعلي Online LIVE)');
-
   return (
     <section style={{ background: CREAM, padding: '80px 0' }}>
       <div style={{ ...WRAP, direction: 'rtl' }}>
         <SecTitle>نبذة عن البرنامج وأهدافه</SecTitle>
 
-        {/* Consultant cards — §5.1 */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 16, marginBottom: 56 }}>
-          {[
-            { name: 'آية القماز',      role: 'مستشارة التسجيل · وجاهي',  img: ayaImg,    href: waAya,  phone: '+962 79 023 4483' },
-            { name: 'ياقوت الخشاشنة', role: 'مستشارة التسجيل · مباشر تفاعلي (Online LIVE)', img: yaqoutImg, href: waYaqt, phone: '+962 77 105 2222' },
-          ].map(({ name, role, img, href, phone }) => (
-            <div key={name} style={{
-              background: CANVAS, borderRadius: 18, padding: 20,
-              boxShadow: '0 12px 36px rgba(24,32,47,.16)', direction: 'rtl',
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
-                <div style={{ position: 'relative', flexShrink: 0 }}>
-                  <img src={img} alt={name} style={{ width: 56, height: 56, borderRadius: '50%', objectFit: 'cover', objectPosition: 'center top', border: `2px solid ${GOLD_LINE}` }} />
-                  <span style={{ position: 'absolute', bottom: 2, right: 2, width: 12, height: 12, borderRadius: '50%', background: '#22c55e', border: '2px solid #1A2533' }} />
-                </div>
-                <div>
-                  <div style={{ fontFamily: F, fontWeight: 800, fontSize: 15, color: OFF }}>{name}</div>
-                  <div style={{ fontFamily: F, fontSize: 12, color: MUTED, marginTop: 2 }}>{role}</div>
-                  <div style={{ fontFamily: F, fontSize: 11.5, color: 'rgba(255,193,7,.70)', marginTop: 2, display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <Clock size={11} strokeWidth={1.8} />يومياً 10:00 صباحاً – 7:00 مساءً
+        {/* 2-col: program description | advisor cards */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr min(330px,42%)', gap: 20, marginBottom: 52, alignItems: 'start' }}>
+
+          {/* Program description */}
+          <div style={{
+            background: CREAM_CARD, border: `1px solid ${CREAM_LINE}`,
+            borderRadius: 18, padding: '28px 28px',
+            boxShadow: '0 6px 20px rgba(24,32,47,.06)',
+          }}>
+            <p style={{ fontFamily: F, fontSize: 15.5, color: INK2, lineHeight: 2.05, margin: 0 }}>
+              يسعى هذا البرنامج إلى إعداد وتأهيل المتدربين لاحتراف مجال التعليق الصوتي وتجهيزهم بالمهارات اللازمة للاندماج في سوق العمل. ترتكز أهدافنا على تطوير مخارج الحروف والنطق السليم، والتمكن من التحكم في الطبقات الصوتية وضبط الإيقاع، بالإضافة إلى كسر رهبة الميكروفون تماماً لتعزيز الثقة بالنفس وتنمية مهارات الإلقاء والتواصل المهني.
+            </p>
+          </div>
+
+          {/* Advisor cards stacked */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {[
+              { name: 'آية القماز',      role: 'مستشارة التسجيل · حضوري',           img: ayaImg,    href: 'https://wa.me/962790234483', phone: '+962 79 023 4483' },
+              { name: 'ياقوت الخشاشنة', role: 'مستشارة التسجيل · مباشر تفاعلي',    img: yaqoutImg, href: 'https://wa.me/962771052222',  phone: '+962 77 105 2222' },
+            ].map(({ name, role, img, href, phone }) => (
+              <div key={name} style={{
+                background: CANVAS, borderRadius: 16, padding: '16px 18px',
+                boxShadow: '0 8px 24px rgba(24,32,47,.14)', direction: 'rtl',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+                  <div style={{ position: 'relative', flexShrink: 0 }}>
+                    <img src={img} alt={name} style={{ width: 50, height: 50, borderRadius: '50%', objectFit: 'cover', objectPosition: 'center top', border: `2px solid ${GOLD_LINE}` }} />
+                    <span style={{ position: 'absolute', bottom: 1, right: 1, width: 11, height: 11, borderRadius: '50%', background: '#22c55e', border: '2px solid #1A2533' }} />
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: F, fontWeight: 800, fontSize: 14, color: OFF }}>{name}</div>
+                    <div style={{ fontFamily: F, fontSize: 11.5, color: MUTED, marginTop: 2 }}>{role}</div>
+                    <div style={{ fontFamily: F, fontSize: 11, color: 'rgba(255,193,7,.65)', marginTop: 2, display: 'flex', alignItems: 'center', gap: 3 }}>
+                      <Clock size={10} strokeWidth={1.8} />يومياً 10:00 صباحاً – 7:00 مساءً
+                    </div>
                   </div>
                 </div>
+                <a href={href} target="_blank" rel="noopener noreferrer" style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
+                  background: GOLD, color: INK, fontFamily: F, fontWeight: 800, fontSize: 13,
+                  padding: '9px 0', borderRadius: 9, textDecoration: 'none', marginBottom: 6,
+                }}>
+                  <MessageCircle size={14} strokeWidth={1.8} /> تواصل الآن
+                </a>
+                <div style={{ textAlign: 'center', fontFamily: F, fontSize: 11.5, color: MUTED }}>{phone}</div>
               </div>
-              <a href={href} target="_blank" rel="noopener noreferrer" style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
-                background: GOLD, color: INK, fontFamily: F, fontWeight: 800, fontSize: 13.5,
-                padding: '10px 0', borderRadius: 10, textDecoration: 'none', marginBottom: 8,
-              }}>
-                <MessageCircle size={15} strokeWidth={1.8} /> تواصل الآن
-              </a>
-              <div style={{ textAlign: 'center', fontFamily: F, fontSize: 12, color: MUTED }}>{phone}</div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
-        {/* Goal cards — §5.2 */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 16 }}>
+        {/* Goals sub-title */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 22, direction: 'rtl' }}>
+          <div style={{ width: 4, height: 26, background: GOLD, borderRadius: 4, flexShrink: 0 }} />
+          <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(18px,2.2vw,24px)', color: INK, margin: 0 }}>الأهداف المتحققة</h3>
+        </div>
+
+        {/* Goal cards */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 14 }}>
           {GOALS.map(({ icon, title, text }) => (
             <div key={title} style={{
               background: CREAM_CARD, border: `1px solid ${CREAM_LINE}`,
-              borderRadius: 18, padding: '26px 24px',
-              boxShadow: '0 12px 34px rgba(24,32,47,.07)',
+              borderRadius: 16, padding: '22px 20px',
+              boxShadow: '0 6px 20px rgba(24,32,47,.06)',
               transition: 'transform .25s, box-shadow .25s, border-color .25s',
             }}
-              onMouseEnter={e => Object.assign((e.currentTarget as HTMLElement).style, { transform:'translateY(-3px)', boxShadow:'0 18px 44px rgba(24,32,47,.12)', borderColor:'rgba(138,98,0,.30)' })}
-              onMouseLeave={e => Object.assign((e.currentTarget as HTMLElement).style, { transform:'none', boxShadow:'0 12px 34px rgba(24,32,47,.07)', borderColor:CREAM_LINE })}
+              onMouseEnter={e => Object.assign((e.currentTarget as HTMLElement).style, { transform:'translateY(-3px)', boxShadow:'0 14px 36px rgba(24,32,47,.11)', borderColor:'rgba(138,98,0,.30)' })}
+              onMouseLeave={e => Object.assign((e.currentTarget as HTMLElement).style, { transform:'none', boxShadow:'0 6px 20px rgba(24,32,47,.06)', borderColor:CREAM_LINE })}
             >
-              <div style={{ width: 46, height: 46, borderRadius: 13, background: 'rgba(255,193,7,.16)', display: 'grid', placeContent: 'center', marginBottom: 16 }}>{icon}</div>
-              <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 15, color: INK, margin: '0 0 8px' }}>{title}</h3>
-              <p style={{ fontFamily: F, fontSize: 13.5, color: INK2, lineHeight: 1.75, margin: 0 }}>{text}</p>
+              <div style={{ width: 42, height: 42, borderRadius: 12, background: 'rgba(255,193,7,.16)', display: 'grid', placeContent: 'center', marginBottom: 14 }}>{icon}</div>
+              <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 14.5, color: INK, margin: '0 0 7px' }}>{title}</h3>
+              <p style={{ fontFamily: F, fontSize: 13, color: INK2, lineHeight: 1.75, margin: 0 }}>{text}</p>
             </div>
           ))}
         </div>
@@ -588,13 +614,19 @@ function CurriculumSection() {
   const badgeIcon   = isOnsite ? <MapPin size={12} strokeWidth={1.8} /> : <Wifi size={12} strokeWidth={1.8} />;
 
   return (
-    <section style={{ background: CREAM, padding: '80px 0', borderTop: `1px solid ${CREAM_LINE}` }}>
+    <section className="vo-curriculum" style={{ background: CREAM, padding: '80px 0', borderTop: `1px solid ${CREAM_LINE}` }}>
       <div style={{ ...WRAP, direction: 'rtl' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, marginBottom: 32 }}>
           <SecTitle>الخطة الدراسية</SecTitle>
-          {/* Print button — §7.3 */}
+          {/* Print button — curriculum only */}
           <button
-            onClick={() => window.print()}
+            onClick={() => {
+              document.body.classList.add('print-curriculum-only');
+              window.print();
+              window.addEventListener('afterprint', () => {
+                document.body.classList.remove('print-curriculum-only');
+              }, { once: true });
+            }}
             style={{
               display: 'flex', alignItems: 'center', gap: 6,
               background: 'transparent', border: `1px solid ${CREAM_LINE}`,
@@ -788,8 +820,12 @@ function TrainersSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   § Hero — §2 · cream bg · sticky cover · mode picker
+   § Hero — §2 · cream bg · frosted navbar · colored mode cards
    ══════════════════════════════════════════════════════════════ */
+const WAJIZ_GREEN = '#009688';
+const ONSITE_BG   = 'linear-gradient(135deg,rgba(255,193,7,.13) 0%,rgba(255,168,0,.07) 100%)';
+const ONLINE_BG   = 'linear-gradient(135deg,rgba(30,122,133,.13) 0%,rgba(0,150,136,.07) 100%)';
+
 function HeroSection({ mode, onModeChange, onShare }: { mode: 'onsite' | 'online'; onModeChange: (m: 'onsite' | 'online') => void; onShare: () => void }) {
   const scrollToCohorts = (m: 'onsite' | 'online') => {
     onModeChange(m);
@@ -813,34 +849,40 @@ function HeroSection({ mode, onModeChange, onShare }: { mode: 'onsite' | 'online
   ];
   const badges = mode === 'onsite' ? BADGES_ONSITE : BADGES_ONLINE;
 
-  return (
-    <section style={{ background: CREAM, paddingTop: 'clamp(80px,10vw,120px)', paddingBottom: 60 }}>
-      <div style={{ ...WRAP, direction: 'rtl' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr min(400px,38vw)', gap: 'clamp(24px,4vw,56px)', alignItems: 'start' }}>
+  /* inline hover helpers for <a> tags */
+  const hoverIn  = (e: React.MouseEvent<HTMLElement>) => (e.currentTarget.style.background = 'rgba(24,32,47,.07)');
+  const hoverOut = (e: React.MouseEvent<HTMLElement>) => (e.currentTarget.style.background = 'transparent');
 
-          {/* ─── Left: text ─── */}
+  return (
+    <section className="sec--hero" style={{ background: CREAM, paddingTop: 'clamp(80px,10vw,120px)', paddingBottom: 60 }}>
+      <div style={{ ...WRAP, direction: 'rtl' }}>
+        <div className="vo-hero-grid" style={{ display: 'grid', gridTemplateColumns: '1fr min(400px,38vw)', gap: 'clamp(24px,4vw,56px)', alignItems: 'start' }}>
+
+          {/* ─── Right side: text ─── */}
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+            {/* Tag row: أساسيات التعليق + مبتدئ لمتوسط */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
               <span style={{
                 fontFamily: F, fontSize: 12, fontWeight: 700, color: GOLD_INK,
                 background: 'rgba(255,193,7,.14)', border: '1px solid rgba(255,193,7,.28)',
                 borderRadius: 999, padding: '3px 12px',
               }}>أساسيات التعليق</span>
+              <span style={{
+                fontFamily: F, fontSize: 12, fontWeight: 700, color: INK2,
+                background: 'rgba(24,32,47,.07)', border: `1px solid ${CREAM_LINE}`,
+                borderRadius: 999, padding: '3px 12px',
+              }}>مبتدئ لمتوسط</span>
             </div>
 
-            {/* §2.1 correct title */}
-            <h1 style={{
-              fontFamily: F, fontWeight: 900, fontSize: 'clamp(26px,3.8vw,46px)',
-              color: INK, margin: '0 0 16px', lineHeight: 1.2,
-            }}>
+            <h1 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(26px,3.8vw,46px)', color: INK, margin: '0 0 16px', lineHeight: 1.2 }}>
               أساسيات التعليق والأداء الصوتي
             </h1>
             <p style={{ fontFamily: F, fontSize: 'clamp(14px,1.5vw,17px)', color: INK2, lineHeight: 1.85, margin: '0 0 28px', maxWidth: 560 }}>
               البرنامج التأسيسي الشامل لتعليق الصوت: من بناء الصوت وتطوير النطق إلى إنتاج ديمو صوتي احترافي في استوديوهات كاسيت.
             </p>
 
-            {/* §2.4 dynamic badges — change with mode */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 32 }}>
+            {/* Fact badges + وجيز (brand green) */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 28 }}>
               {badges.map(({ icon, label }) => (
                 <span key={label} style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
@@ -851,102 +893,172 @@ function HeroSection({ mode, onModeChange, onShare }: { mode: 'onsite' | 'online
                   <span style={{ color: GOLD_INK }}>{icon}</span>{label}
                 </span>
               ))}
-              {/* §2.5 wajeez certification badge */}
               <a href="https://wajeez.com/" target="_blank" rel="noopener noreferrer" style={{
                 display: 'inline-flex', alignItems: 'center', gap: 6,
-                background: 'rgba(255,193,7,.14)', border: '1px solid rgba(255,193,7,.28)',
+                background: 'rgba(0,150,136,.10)', border: '1px solid rgba(0,150,136,.32)',
                 borderRadius: 999, padding: '6px 13px',
-                fontFamily: F, fontWeight: 700, fontSize: 12.5, color: GOLD_INK, textDecoration: 'none',
+                fontFamily: F, fontWeight: 700, fontSize: 12.5, color: WAJIZ_GREEN, textDecoration: 'none',
               }}>
                 <Award size={16} strokeWidth={1.8} />شهادة معتمدة من وجيز
               </a>
             </div>
 
-            {/* §2.3 interactive mode picker — scrolls to cohorts */}
+            {/* ── Mode picker: colored cards ── */}
             <div role="radiogroup" aria-label="اختر طريقة الدراسة" style={{ display: 'flex', flexDirection: 'column', gap: 10, maxWidth: 520 }}>
-              {([
-                { m: 'onsite', label: 'حضوري', icon: <MapPin size={18} strokeWidth={1.8} />, price: '218', unit: 'JOD', strike: '260', note: 'استوديو كاسيت' },
-                { m: 'online', label: 'مباشر تفاعلي (Online LIVE)', icon: <Wifi  size={18} strokeWidth={1.8} />, price: '$150', unit: '',    strike: '$200', note: 'Google Meet' },
-              ] as const).map(({ m, label, icon, price, unit, strike, note }) => {
-                const active = mode === m;
+
+              {/* Onsite — warm amber */}
+              {(() => {
+                const active = mode === 'onsite';
                 return (
-                  <button key={m}
-                    role="radio" aria-checked={active}
-                    onClick={() => scrollToCohorts(m)}
+                  <button role="radio" aria-checked={active} onClick={() => scrollToCohorts('onsite')}
                     style={{
                       width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14,
-                      background: active ? 'rgba(255,193,7,.10)' : 'rgba(24,32,47,.04)',
-                      border: `1.5px solid ${active ? GOLD : CREAM_LINE}`,
-                      borderRadius: 14, padding: '14px 18px', cursor: 'pointer', transition: '.2s',
-                      direction: 'rtl', textAlign: 'right',
-                      boxShadow: active ? `0 0 0 1px ${GOLD_LINE}` : 'none',
+                      background: active ? ONSITE_BG : 'rgba(24,32,47,.03)',
+                      border: `2px solid ${active ? 'rgba(255,193,7,.68)' : 'rgba(255,193,7,.24)'}`,
+                      borderRadius: 14, padding: '14px 18px', cursor: 'pointer', transition: '.22s',
+                      direction: 'rtl', boxShadow: active ? '0 4px 18px rgba(255,193,7,.18)' : 'none',
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                       <div style={{
-                        width: 36, height: 36, borderRadius: 10, display: 'grid', placeContent: 'center',
-                        background: active ? GOLD : 'rgba(24,32,47,.08)',
-                        color: active ? INK : INK2, flexShrink: 0,
-                      }}>{icon}</div>
-                      <div>
-                        <div style={{ fontFamily: F, fontWeight: 800, fontSize: 15, color: active ? INK : INK2 }}>{label}</div>
-                        <div style={{ fontFamily: F, fontSize: 12, color: INK2, opacity: .65 }}>{note}</div>
+                        width: 38, height: 38, borderRadius: 10, display: 'grid', placeContent: 'center', flexShrink: 0,
+                        background: active ? GOLD : 'rgba(255,193,7,.16)', color: active ? INK : GOLD_INK,
+                      }}><MapPin size={18} strokeWidth={1.8} /></div>
+                      <div style={{ textAlign: 'right' }}>
+                        <div style={{ fontFamily: F, fontWeight: 800, fontSize: 15, color: active ? GOLD_INK : INK }}>حضوري</div>
+                        <div style={{ fontFamily: F, fontSize: 12, color: INK2, opacity: .7 }}>استوديو كاسيت</div>
                       </div>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, direction: 'ltr' }}>
-                      <span style={{ fontFamily: FP, fontWeight: 900, fontSize: 22, color: active ? GOLD_INK : INK2 }}>{price}</span>
-                      {unit && <span style={{ fontFamily: F, fontWeight: 600, fontSize: 12, color: INK2, opacity: .7 }}>{unit}</span>}
-                      <span style={{ fontFamily: FP, fontSize: 12, color: INK2, opacity: .45, textDecoration: 'line-through' }}>{strike}</span>
+                    <div style={{ direction: 'ltr', textAlign: 'left', flexShrink: 0 }}>
+                      <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+                        <span style={{ fontFamily: FP, fontWeight: 900, fontSize: 24, color: active ? GOLD_INK : INK2 }}>218</span>
+                        <span style={{ fontFamily: F, fontWeight: 600, fontSize: 12, color: INK2 }}>JOD</span>
+                        <span style={{ fontFamily: FP, fontSize: 12, color: INK2, opacity: .42, textDecoration: 'line-through' }}>260</span>
+                      </div>
                     </div>
                   </button>
                 );
-              })}
+              })()}
+
+              {/* Online — cool teal */}
+              {(() => {
+                const active = mode === 'online';
+                return (
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <button role="radio" aria-checked={active} onClick={() => scrollToCohorts('online')}
+                      style={{
+                        width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14,
+                        background: active ? ONLINE_BG : 'rgba(24,32,47,.03)',
+                        border: `2px solid ${active ? 'rgba(30,122,133,.60)' : 'rgba(30,122,133,.24)'}`,
+                        borderRadius: '14px 14px 0 0', borderBottom: 'none',
+                        padding: '14px 18px', cursor: 'pointer', transition: '.22s',
+                        direction: 'rtl', boxShadow: active ? '0 4px 18px rgba(30,122,133,.16)' : 'none',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <div style={{
+                          width: 38, height: 38, borderRadius: 10, display: 'grid', placeContent: 'center', flexShrink: 0,
+                          background: active ? TEAL : 'rgba(30,122,133,.14)', color: active ? '#fff' : TEAL,
+                        }}><Wifi size={18} strokeWidth={1.8} /></div>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontFamily: F, fontWeight: 800, fontSize: 15, color: active ? TEAL : INK }}>مباشر تفاعلي (Online LIVE)</div>
+                          <div style={{ fontFamily: F, fontSize: 12, color: INK2, opacity: .7 }}>Google Meet</div>
+                        </div>
+                      </div>
+                      <div style={{ direction: 'ltr', textAlign: 'left', flexShrink: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+                          <span style={{ fontFamily: FP, fontWeight: 900, fontSize: 24, color: active ? TEAL : INK2 }}>$150</span>
+                          <span style={{ fontFamily: FP, fontSize: 12, color: INK2, opacity: .42, textDecoration: 'line-through' }}>$200</span>
+                        </div>
+                      </div>
+                    </button>
+                    {/* Trainer mini cover — always visible below online card */}
+                    <div style={{
+                      background: 'rgba(30,122,133,.06)',
+                      border: `2px solid ${active ? 'rgba(30,122,133,.60)' : 'rgba(30,122,133,.24)'}`,
+                      borderTop: '1px solid rgba(30,122,133,.14)',
+                      borderRadius: '0 0 14px 14px',
+                      padding: '10px 18px',
+                      display: 'flex', alignItems: 'center', gap: 12, direction: 'rtl',
+                      transition: '.22s',
+                    }}>
+                      <div style={{ display: 'flex' }}>
+                        {[rana, yasar, omar].map((img, i) => (
+                          <img key={i} src={img} alt="" style={{
+                            width: 28, height: 28, borderRadius: '50%',
+                            objectFit: 'cover', objectPosition: 'center top',
+                            border: '2px solid rgba(255,255,255,.9)',
+                            marginInlineStart: i > 0 ? -9 : 0, flexShrink: 0,
+                          }} />
+                        ))}
+                      </div>
+                      <span style={{ fontFamily: F, fontSize: 12.5, color: TEAL, fontWeight: 700 }}>
+                        رنا العزام · يسار عبده · عمر الدرابكة
+                      </span>
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
 
-            {/* Installment + brochure + share */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginTop: 16, flexWrap: 'wrap' }}>
-              <span style={{ fontFamily: F, fontSize: 13, color: GOLD_INK, display: 'flex', alignItems: 'center', gap: 5 }}>
+            {/* ── Action box: installment (green) + share + 2 downloads ── */}
+            <div style={{
+              marginTop: 14, background: 'rgba(24,32,47,.04)',
+              border: `1px solid ${CREAM_LINE}`, borderRadius: 14, padding: '14px 18px',
+              display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 10, direction: 'rtl',
+            }}>
+              <span style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+                background: 'rgba(34,197,94,.12)', border: '1px solid rgba(34,197,94,.32)',
+                borderRadius: 999, padding: '7px 13px',
+                fontFamily: F, fontWeight: 700, fontSize: 13, color: '#16a34a',
+              }}>
                 <CreditCard size={15} strokeWidth={1.8} /> بإمكانية التقسيط
               </span>
-              <button style={{
-                display: 'flex', alignItems: 'center', gap: 6,
+              <button onClick={onShare} style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6,
                 background: 'transparent', border: `1px solid ${CREAM_LINE}`,
-                borderRadius: 9, padding: '7px 14px', cursor: 'pointer',
-                fontFamily: F, fontWeight: 700, fontSize: 12.5, color: INK2, transition: 'background .15s',
+                borderRadius: 999, padding: '7px 13px', cursor: 'pointer',
+                fontFamily: F, fontWeight: 700, fontSize: 13, color: INK2, transition: 'background .15s',
               }}
-                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(24,32,47,.07)')}
-                onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-              >
-                <Download size={14} strokeWidth={1.8} /> تحميل الكتيّب
-              </button>
-              <button
-                onClick={onShare}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: 6,
-                  background: 'transparent', border: `1px solid ${CREAM_LINE}`,
-                  borderRadius: 9, padding: '7px 14px', cursor: 'pointer',
-                  fontFamily: F, fontWeight: 700, fontSize: 12.5, color: INK2, transition: 'background .15s',
-                }}
                 onMouseEnter={e => (e.currentTarget.style.background = 'rgba(24,32,47,.07)')}
                 onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
               >
                 <Share2 size={14} strokeWidth={1.8} /> مشاركة الدورة
               </button>
+              <a href={`${import.meta.env.BASE_URL}voiceover-inperson.pdf`} download
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 6,
+                  background: 'transparent', border: `1px solid ${CREAM_LINE}`,
+                  borderRadius: 999, padding: '7px 13px',
+                  fontFamily: F, fontWeight: 700, fontSize: 13, color: INK2, textDecoration: 'none', transition: 'background .15s',
+                }}
+                onMouseEnter={hoverIn} onMouseLeave={hoverOut}
+              >
+                <Download size={14} strokeWidth={1.8} /> كتيّب حضوري
+              </a>
+              <a href={`${import.meta.env.BASE_URL}voiceover-online.pdf`} download
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 6,
+                  background: 'transparent', border: `1px solid ${CREAM_LINE}`,
+                  borderRadius: 999, padding: '7px 13px',
+                  fontFamily: F, fontWeight: 700, fontSize: 13, color: INK2, textDecoration: 'none', transition: 'background .15s',
+                }}
+                onMouseEnter={hoverIn} onMouseLeave={hoverOut}
+              >
+                <Download size={14} strokeWidth={1.8} /> كتيّب مباشر تفاعلي
+              </a>
             </div>
           </div>
 
-          {/* ─── Right: cover image + trainers strip ─── */}
-          <div style={{ position: 'sticky', top: 84 }}>
-            {/* §2.2 object-position 50% 78% */}
+          {/* ─── Left side: sticky cover + trainers strip ─── */}
+          <div className="vo-hero-sticky" style={{ position: 'sticky', top: 84 }}>
             <div style={{
               aspectRatio: '4/3', overflow: 'hidden', borderRadius: 18,
               boxShadow: '0 24px 64px rgba(24,32,47,.18)', border: `1px solid ${CREAM_LINE}`,
             }}>
-              <img
-                src={heroCover}
-                alt="أساسيات التعليق والأداء الصوتي"
-                style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 78%' }}
-              />
+              <img src={heroCover} alt="أساسيات التعليق والأداء الصوتي"
+                style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 78%' }} />
             </div>
             {/* Trainers mini strip */}
             <div style={{
@@ -990,13 +1102,16 @@ export default function CourseVoiceoverPage() {
   useEffect(() => { window.scrollTo({ top: 0, left: 0, behavior: 'instant' }); }, []);
 
   return (
-    <div dir="rtl" style={{ background: CREAM, minHeight: '100vh' }}>
+    <div dir="rtl" className="vo-page" style={{ background: CREAM, minHeight: '100vh' }}>
       <style>{`
         @media print {
-          .nav, .site-footer, button { display: none !important; }
+          .nav, .site-footer { display: none !important; }
           body { background: #fff; color: #000; }
           .curriculum { break-inside: avoid; }
         }
+        /* Print curriculum only */
+        body.print-curriculum-only .vo-page > *:not(.vo-curriculum) { display: none !important; }
+        body.print-curriculum-only .vo-curriculum button { display: none !important; }
         @media (max-width: 700px) {
           .vo-hero-grid  { grid-template-columns: 1fr !important; }
           .vo-hero-sticky { position: static !important; }
