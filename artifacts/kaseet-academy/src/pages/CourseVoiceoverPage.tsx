@@ -14,7 +14,8 @@ import {
   GraduationCap, Printer, ChevronDown, MessageCircle, ArrowLeft,
   ShieldCheck, Share2,
 } from 'lucide-react';
-import ShareModal from '../components/ShareModal';
+import ShareModal  from '../components/ShareModal';
+import SiteFooter  from '../components/SiteFooter';
 
 /* ── Asset imports ──────────────────────────────────────────── */
 import ayaImg    from '@assets/اية_القماز_1786367975413.jpeg';
@@ -1123,6 +1124,7 @@ export default function CourseVoiceoverPage() {
       <OutcomesSection />
       <CurriculumSection />
       <TrainersSection />
+      <SiteFooter />
 
       <ShareModal
         open={shareOpen}
