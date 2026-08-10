@@ -860,7 +860,7 @@ function HeroSection({ mode, onModeChange, onShare }: { mode: 'onsite' | 'online
   const hoverOut = (e: React.MouseEvent<HTMLElement>) => (e.currentTarget.style.background = 'transparent');
 
   return (
-    <section className="sec--hero" style={{ background: CREAM, paddingTop: 'clamp(72px,9vw,110px)', paddingBottom: 60 }}>
+    <section className="sec--hero" data-nav-theme="light" style={{ background: CREAM, paddingTop: 'clamp(72px,9vw,110px)', paddingBottom: 60 }}>
       <div style={{ ...WRAP, direction: 'rtl' }}>
 
         {/* ── Breadcrumb ── */}

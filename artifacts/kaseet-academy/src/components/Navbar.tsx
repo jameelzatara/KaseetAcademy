@@ -23,11 +23,18 @@ export default function Navbar() {
     setShowAuth(true);
   };
 
-  // ── Solid nav: always solid on non-hero pages; follows scroll on hero page ──
+  // ── Solid nav: always solid on non-hero pages or light-hero pages; follows scroll on dark hero ──
   useEffect(() => {
     const hero = document.querySelector('.sec--hero');
     if (!hero) {
       setSolid(true);   // sub-pages have no hero — always solid
+      return;
+    }
+    // If hero has a light background, keep nav solid always
+    const isLightHero = hero.classList.contains('sec--hero-light') ||
+      (hero as HTMLElement).dataset.navTheme === 'light';
+    if (isLightHero) {
+      setSolid(true);
       return;
     }
     const obs = new IntersectionObserver(
