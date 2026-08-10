@@ -777,31 +777,40 @@ function TrainersSection() {
       }} />
       <div style={{ ...WRAP, direction: 'rtl', position: 'relative', zIndex: 1 }}>
         <SecTitle>خبراؤنا في التدريس</SecTitle>
-        {/* Full-width horizontal cards stacked */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+
+        {/* Stacked full-width cards */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           {TRAINERS.map(({ img, name, title, bio, badges }) => (
             <div key={name} style={{
               background: CREAM_CARD, border: `1px solid ${CREAM_LINE}`,
-              borderRadius: 20, padding: '24px 28px',
+              borderRadius: 20, overflow: 'hidden',
               boxShadow: '0 8px 28px rgba(24,32,47,.07)',
-              display: 'flex', alignItems: 'flex-start', gap: 24, direction: 'rtl',
+              direction: 'rtl',
             }}>
-              {/* Photo */}
-              <img src={img} alt={name} style={{
-                width: 80, height: 80, borderRadius: '50%',
-                objectFit: 'cover', objectPosition: 'center top',
-                border: '3px solid rgba(255,193,7,.35)', flexShrink: 0,
-              }} />
-              {/* Content */}
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 6, flexWrap: 'wrap' }}>
-                  <span style={{ fontFamily: F, fontWeight: 900, fontSize: 18, color: INK }}>{name}</span>
-                  <span style={{ fontFamily: F, fontSize: 13, color: INK2 }}>{title}</span>
+              {/* ── Card header: photo (visual right in RTL) + text ── */}
+              <div style={{ padding: '24px 28px', display: 'flex', alignItems: 'flex-start', gap: 22 }}>
+                {/* Photo — first child in RTL = visual right */}
+                <img src={img} alt={name} style={{
+                  width: 88, height: 88, borderRadius: '50%',
+                  objectFit: 'cover', objectPosition: 'center top',
+                  border: '3px solid rgba(255,193,7,.38)', flexShrink: 0,
+                }} />
+                {/* Name / subtitle / badges */}
+                <div style={{ flex: 1, minWidth: 0, paddingTop: 2 }}>
+                  <div style={{ fontFamily: F, fontWeight: 900, fontSize: 20, color: INK, marginBottom: 5 }}>{name}</div>
+                  <div style={{ fontFamily: F, fontWeight: 600, fontSize: 13.5, color: GOLD_INK, marginBottom: 14 }}>{title}</div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
+                    {badges.map(b => <BadgeChip key={b.label} badge={b} />)}
+                  </div>
                 </div>
-                <p style={{ fontFamily: F, fontSize: 14, color: INK2, lineHeight: 1.8, margin: '0 0 14px' }}>{bio}</p>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
-                  {badges.map(b => <BadgeChip key={b.label} badge={b} />)}
-                </div>
+              </div>
+
+              {/* ── Bio — separate cream strip at the bottom ── */}
+              <div style={{
+                background: CREAM, borderTop: `1px solid ${CREAM_LINE}`,
+                padding: '16px 28px',
+              }}>
+                <p style={{ fontFamily: F, fontSize: 14, color: INK2, lineHeight: 1.95, margin: 0 }}>{bio}</p>
               </div>
             </div>
           ))}
@@ -854,15 +863,13 @@ function HeroSection({ mode, onModeChange, onShare }: { mode: 'onsite' | 'online
           <button
             onClick={() => window.history.back()}
             style={{
-              display: 'inline-flex', alignItems: 'center', gap: 7,
-              background: CREAM_CARD, border: `1px solid ${CREAM_LINE}`,
-              borderRadius: 10, padding: '8px 16px', cursor: 'pointer',
+              display: 'inline-flex', alignItems: 'center', gap: 6,
+              background: 'none', border: 'none', padding: '4px 0', cursor: 'pointer',
               fontFamily: F, fontWeight: 700, fontSize: 13.5, color: INK2,
-              boxShadow: '0 2px 8px rgba(24,32,47,.08)',
-              transition: 'background .15s, box-shadow .15s',
+              transition: 'color .15s',
             }}
-            onMouseEnter={e => Object.assign(e.currentTarget.style, { background: '#f0ebe0', boxShadow: '0 4px 14px rgba(24,32,47,.12)' })}
-            onMouseLeave={e => Object.assign(e.currentTarget.style, { background: CREAM_CARD, boxShadow: '0 2px 8px rgba(24,32,47,.08)' })}
+            onMouseEnter={e => (e.currentTarget.style.color = INK)}
+            onMouseLeave={e => (e.currentTarget.style.color = INK2)}
           >
             <ArrowLeft size={15} strokeWidth={2} /> العودة إلى الدورات
           </button>
@@ -972,7 +979,7 @@ function HeroSection({ mode, onModeChange, onShare }: { mode: 'onsite' | 'online
                       }}><Wifi size={18} strokeWidth={1.8} /></div>
                       <div style={{ textAlign: 'right' }}>
                         <div style={{ fontFamily: F, fontWeight: 800, fontSize: 15, color: active ? TEAL : INK }}>مباشر تفاعلي (Online LIVE)</div>
-                        <div style={{ fontFamily: F, fontSize: 12, color: INK2, opacity: .7 }}>Google Meet</div>
+                        <div style={{ fontFamily: F, fontSize: 12, color: INK2, opacity: .7 }}>{openOnline.length} دفعات متاحة</div>
                       </div>
                     </div>
                     <div style={{ direction: 'ltr', textAlign: 'left', flexShrink: 0 }}>
@@ -1024,10 +1031,12 @@ function HeroSection({ mode, onModeChange, onShare }: { mode: 'onsite' | 'online
                   style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 78%' }} />
               </div>
 
-              {/* Trainers strip */}
-              <div style={{ padding: '16px 18px', borderBottom: `1px solid ${CREAM_LINE}` }}>
-                <div style={{ fontFamily: F, fontSize: 11.5, color: MUTED, marginBottom: 10, textTransform: 'uppercase', letterSpacing: '.06em' }}>المدرّبون</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {/* Trainers strip — label directly under image */}
+              <div style={{ borderBottom: `1px solid ${CREAM_LINE}` }}>
+                <div style={{ padding: '10px 18px 4px', fontFamily: F, fontSize: 11, fontWeight: 700, color: INK2, textTransform: 'uppercase', letterSpacing: '.07em' }}>
+                  المدرّبون
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, padding: '0 18px 14px' }}>
                   {[
                     { img: rana,  name: 'رنا العزام' },
                     { img: yasar, name: 'يسار عبده' },
@@ -1045,28 +1054,28 @@ function HeroSection({ mode, onModeChange, onShare }: { mode: 'onsite' | 'online
                 </div>
               </div>
 
-              {/* Installment + Share */}
-              <div style={{ padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+              {/* Installment + Share — one row, no wrap */}
+              <div style={{ padding: '12px 18px', display: 'flex', alignItems: 'center', gap: 8 }}>
                 <span style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
                   background: 'rgba(34,197,94,.12)', border: '1px solid rgba(34,197,94,.32)',
-                  borderRadius: 999, padding: '8px 14px',
-                  fontFamily: F, fontWeight: 700, fontSize: 13, color: '#16a34a',
-                  flex: 1, justifyContent: 'center',
+                  borderRadius: 999, padding: '8px 12px',
+                  fontFamily: F, fontWeight: 700, fontSize: 12.5, color: '#16a34a',
+                  flex: 1, justifyContent: 'center', whiteSpace: 'nowrap',
                 }}>
-                  <CreditCard size={15} strokeWidth={1.8} /> بإمكانية التقسيط
+                  <CreditCard size={14} strokeWidth={1.8} /> بإمكانية التقسيط
                 </span>
                 <button onClick={onShare} style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
-                  background: 'transparent', border: `1px solid ${CREAM_LINE}`,
-                  borderRadius: 999, padding: '8px 14px', cursor: 'pointer',
-                  fontFamily: F, fontWeight: 700, fontSize: 13, color: INK2, transition: 'background .15s',
-                  flex: 1, justifyContent: 'center',
+                  background: GOLD, border: 'none',
+                  borderRadius: 999, padding: '8px 12px', cursor: 'pointer',
+                  fontFamily: F, fontWeight: 700, fontSize: 12.5, color: GOLD_INK,
+                  transition: 'filter .15s', flex: 1, justifyContent: 'center', whiteSpace: 'nowrap',
                 }}
-                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(24,32,47,.06)')}
-                  onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                  onMouseEnter={e => (e.currentTarget.style.filter = 'brightness(1.08)')}
+                  onMouseLeave={e => (e.currentTarget.style.filter = 'none')}
                 >
-                  <Share2 size={14} strokeWidth={1.8} /> مشاركة الدورة
+                  <Share2 size={13} strokeWidth={1.8} /> مشاركة الدورة
                 </button>
               </div>
             </div>
