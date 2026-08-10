@@ -80,7 +80,7 @@ function FillBar({ fill, remaining }: { fill: number; remaining: number }) {
     ? 'linear-gradient(90deg,#FFC107,#E8836F)'
     : '#FFC107';
   return (
-    <div style={{
+    <div className="vo-fill-bar" style={{
       width: 120, height: 6, borderRadius: 999,
       background: 'rgba(255,255,255,.10)', overflow: 'hidden', flexShrink: 0,
     }}>
@@ -117,7 +117,7 @@ function CohortRow({ c, onRegister }: { c: Cohort; onRegister: (id: number) => v
       opacity: isRunning ? 0.72 : 1,
       direction: 'rtl',
     }}>
-      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
+      <div className="vo-cohort-row-inner" style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
         {/* Date box */}
         <div style={{
           width: 56, height: 56, borderRadius: 12, flexShrink: 0,
@@ -189,7 +189,7 @@ function CohortRow({ c, onRegister }: { c: Cohort; onRegister: (id: number) => v
 
         {/* Register column — button + fill bar in one row */}
         {isOpen && !full && (
-          <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+          <div className="vo-cohort-register" style={{ flexShrink: 0, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
             <FillBar fill={c.fill} remaining={c.remaining} />
             <button
               onClick={() => onRegister(c.id)}
@@ -406,7 +406,7 @@ function AboutSection() {
         <SecTitle>نبذة عن البرنامج وأهدافه</SecTitle>
 
         {/* ── Top row: description (right) + advisors (left) — RTL: first = right ── */}
-        <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: 24, marginBottom: 48, alignItems: 'stretch' }}>
+        <div className="vo-about-grid" style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: 24, marginBottom: 48, alignItems: 'stretch' }}>
 
           {/* Description — RIGHT column in RTL (first child) */}
           <div style={{
@@ -476,7 +476,7 @@ function AboutSection() {
         </div>
 
         {/* Goal cards — fixed 3-col */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12 }}>
+        <div className="vo-goals-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12 }}>
           {GOALS.map(({ icon, title, text }) => (
             <div key={title} style={{
               background: CREAM_CARD, border: `1px solid ${CREAM_LINE}`,
@@ -645,7 +645,7 @@ function CurriculumSection() {
         </div>
 
         {/* Mode tabs */}
-        <div style={{ display: 'flex', gap: 8, marginBottom: 28, background: 'rgba(24,32,47,.07)', borderRadius: 14, padding: 4 }}>
+        <div className="vo-curriculum-tabs-wrap" style={{ display: 'flex', gap: 8, marginBottom: 28, background: 'rgba(24,32,47,.07)', borderRadius: 14, padding: 4 }}>
           {([
             { key: 'onsite', label: 'حضوري — 8 لقاءات · 16 ساعة',                    icon: <MapPin size={14} strokeWidth={1.8} /> },
             { key: 'online', label: 'مباشر تفاعلي (Online LIVE) — 6 لقاءات · 12 ساعة', icon: <Wifi   size={14} strokeWidth={1.8} /> },
@@ -663,7 +663,7 @@ function CurriculumSection() {
         </div>
 
         {/* Always-expanded 2-col grid cards */}
-        <div className="curriculum" style={{
+        <div className="curriculum vo-curriculum-cards" style={{
           display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 10, marginBottom: 16,
         }}>
           {lecs.map((lec, i) => (
@@ -1113,8 +1113,40 @@ export default function CourseVoiceoverPage() {
         body.print-curriculum-only .vo-page > *:not(.vo-curriculum) { display: none !important; }
         body.print-curriculum-only .vo-curriculum button { display: none !important; }
         @media (max-width: 700px) {
-          .vo-hero-grid  { grid-template-columns: 1fr !important; }
+          /* Hero */
+          .vo-hero-grid   { grid-template-columns: 1fr !important; }
           .vo-hero-sticky { position: static !important; }
+
+          /* Cohort row — wrap so register column drops below on narrow screens */
+          .vo-cohort-row-inner { flex-wrap: wrap !important; }
+          .vo-cohort-register  {
+            flex-shrink: 0 !important;
+            width: 100% !important;
+            flex-direction: row !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            padding-top: 10px !important;
+            border-top: 1px solid rgba(255,255,255,.08) !important;
+          }
+          .vo-fill-bar { flex: 1 !important; width: auto !important; }
+
+          /* About section — stack columns */
+          .vo-about-grid  { grid-template-columns: 1fr !important; }
+
+          /* Goals — 2 cols instead of 3 on small phones, 1 col on very small */
+          .vo-goals-grid  { grid-template-columns: repeat(2,1fr) !important; }
+
+          /* Curriculum tabs — stack vertically */
+          .vo-curriculum-tabs-wrap { flex-direction: column !important; }
+          .vo-curriculum-tabs-wrap button { border-radius: 10px !important; padding: 10px 14px !important; justify-content: flex-start !important; }
+
+          /* Curriculum cards — single column */
+          .vo-curriculum-cards { grid-template-columns: 1fr !important; }
+        }
+
+        @media (max-width: 420px) {
+          /* Very small phones: goals also single column */
+          .vo-goals-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
 
