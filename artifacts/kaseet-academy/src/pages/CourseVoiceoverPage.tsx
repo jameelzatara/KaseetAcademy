@@ -1002,33 +1002,26 @@ function HeroSection({ mode, onModeChange, onShare }: { mode: 'onsite' | 'online
             </div>
 
             {/* ── Downloads ── */}
-            <div style={{
-              marginTop: 14, background: 'rgba(24,32,47,.04)',
-              border: `1px solid ${CREAM_LINE}`, borderRadius: 14, padding: '12px 18px',
-              display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 10, direction: 'rtl',
-            }}>
-              <a href={`${import.meta.env.BASE_URL}voiceover-inperson.pdf`} download
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 6,
-                  background: 'transparent', border: `1px solid ${CREAM_LINE}`,
-                  borderRadius: 999, padding: '7px 14px',
-                  fontFamily: F, fontWeight: 700, fontSize: 13, color: INK2, textDecoration: 'none', transition: 'background .15s',
-                }}
-                onMouseEnter={hoverIn} onMouseLeave={hoverOut}
-              >
-                <Download size={14} strokeWidth={1.8} /> كتيّب حضوري
-              </a>
-              <a href={`${import.meta.env.BASE_URL}voiceover-online.pdf`} download
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 6,
-                  background: 'transparent', border: `1px solid ${CREAM_LINE}`,
-                  borderRadius: 999, padding: '7px 14px',
-                  fontFamily: F, fontWeight: 700, fontSize: 13, color: INK2, textDecoration: 'none', transition: 'background .15s',
-                }}
-                onMouseEnter={hoverIn} onMouseLeave={hoverOut}
-              >
-                <Download size={14} strokeWidth={1.8} /> كتيّب مباشر تفاعلي
-              </a>
+            <div style={{ marginTop: 12, display: 'flex', gap: 10, direction: 'rtl', flexWrap: 'wrap' }}>
+              {[
+                { href: `${import.meta.env.BASE_URL}voiceover-inperson.pdf`, label: 'كتيّب حضوري',           accent: GOLD_INK,  bg: 'rgba(255,193,7,.10)',  border: 'rgba(255,193,7,.35)' },
+                { href: `${import.meta.env.BASE_URL}voiceover-online.pdf`,   label: 'كتيّب مباشر تفاعلي',  accent: TEAL,      bg: 'rgba(30,122,133,.10)', border: 'rgba(30,122,133,.35)' },
+              ].map(({ href, label, accent, bg, border }) => (
+                <a key={label} href={href} download
+                  style={{
+                    flex: 1, minWidth: 140,
+                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 7,
+                    background: bg, border: `1.5px solid ${border}`,
+                    borderRadius: 12, padding: '10px 16px',
+                    fontFamily: F, fontWeight: 700, fontSize: 13, color: accent,
+                    textDecoration: 'none', transition: 'filter .18s, transform .18s',
+                  }}
+                  onMouseEnter={e => Object.assign(e.currentTarget.style, { filter: 'brightness(1.08)', transform: 'translateY(-1px)' })}
+                  onMouseLeave={e => Object.assign(e.currentTarget.style, { filter: 'none', transform: 'none' })}
+                >
+                  <Download size={14} strokeWidth={2} /> {label}
+                </a>
+              ))}
             </div>
           </div>
 
