@@ -1001,36 +1001,17 @@ function HeroSection({ mode, onModeChange, onShare }: { mode: 'onsite' | 'online
               })()}
             </div>
 
-            {/* ── Action box: installment (green) + share + 2 downloads ── */}
+            {/* ── Downloads ── */}
             <div style={{
               marginTop: 14, background: 'rgba(24,32,47,.04)',
-              border: `1px solid ${CREAM_LINE}`, borderRadius: 14, padding: '14px 18px',
+              border: `1px solid ${CREAM_LINE}`, borderRadius: 14, padding: '12px 18px',
               display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 10, direction: 'rtl',
             }}>
-              <span style={{
-                display: 'inline-flex', alignItems: 'center', gap: 6,
-                background: 'rgba(34,197,94,.12)', border: '1px solid rgba(34,197,94,.32)',
-                borderRadius: 999, padding: '7px 13px',
-                fontFamily: F, fontWeight: 700, fontSize: 13, color: '#16a34a',
-              }}>
-                <CreditCard size={15} strokeWidth={1.8} /> بإمكانية التقسيط
-              </span>
-              <button onClick={onShare} style={{
-                display: 'inline-flex', alignItems: 'center', gap: 6,
-                background: 'transparent', border: `1px solid ${CREAM_LINE}`,
-                borderRadius: 999, padding: '7px 13px', cursor: 'pointer',
-                fontFamily: F, fontWeight: 700, fontSize: 13, color: INK2, transition: 'background .15s',
-              }}
-                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(24,32,47,.07)')}
-                onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-              >
-                <Share2 size={14} strokeWidth={1.8} /> مشاركة الدورة
-              </button>
               <a href={`${import.meta.env.BASE_URL}voiceover-inperson.pdf`} download
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
                   background: 'transparent', border: `1px solid ${CREAM_LINE}`,
-                  borderRadius: 999, padding: '7px 13px',
+                  borderRadius: 999, padding: '7px 14px',
                   fontFamily: F, fontWeight: 700, fontSize: 13, color: INK2, textDecoration: 'none', transition: 'background .15s',
                 }}
                 onMouseEnter={hoverIn} onMouseLeave={hoverOut}
@@ -1041,7 +1022,7 @@ function HeroSection({ mode, onModeChange, onShare }: { mode: 'onsite' | 'online
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
                   background: 'transparent', border: `1px solid ${CREAM_LINE}`,
-                  borderRadius: 999, padding: '7px 13px',
+                  borderRadius: 999, padding: '7px 14px',
                   fontFamily: F, fontWeight: 700, fontSize: 13, color: INK2, textDecoration: 'none', transition: 'background .15s',
                 }}
                 onMouseEnter={hoverIn} onMouseLeave={hoverOut}
@@ -1051,37 +1032,64 @@ function HeroSection({ mode, onModeChange, onShare }: { mode: 'onsite' | 'online
             </div>
           </div>
 
-          {/* ─── Left side: sticky cover + trainers strip ─── */}
+          {/* ─── Left side: unified card (cover + trainers + installment + share) ─── */}
           <div className="vo-hero-sticky" style={{ position: 'sticky', top: 84 }}>
             <div style={{
-              aspectRatio: '4/3', overflow: 'hidden', borderRadius: 18,
-              boxShadow: '0 24px 64px rgba(24,32,47,.18)', border: `1px solid ${CREAM_LINE}`,
+              background: CREAM_CARD, border: `1px solid ${CREAM_LINE}`,
+              borderRadius: 20, overflow: 'hidden',
+              boxShadow: '0 20px 56px rgba(24,32,47,.14)',
+              direction: 'rtl',
             }}>
-              <img src={heroCover} alt="أساسيات التعليق والأداء الصوتي"
-                style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 78%' }} />
-            </div>
-            {/* Trainers mini strip */}
-            <div style={{
-              marginTop: 14, background: CREAM_CARD, borderRadius: 14, padding: '12px 16px',
-              border: `1px solid ${CREAM_LINE}`, direction: 'rtl',
-              boxShadow: '0 4px 16px rgba(24,32,47,.07)',
-            }}>
-              <div style={{ fontFamily: F, fontSize: 12, color: INK2, marginBottom: 10 }}>المدرّبون</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {[
-                  { img: rana,  name: 'رنا العزام' },
-                  { img: yasar, name: 'يسار عبده' },
-                  { img: omar,  name: 'عمر الدرابكة' },
-                ].map(({ img, name }) => (
-                  <div key={name} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <img src={img} alt={name} style={{
-                      width: 34, height: 34, borderRadius: '50%',
-                      objectFit: 'cover', objectPosition: 'center top',
-                      border: '2px solid rgba(255,193,7,.35)', flexShrink: 0,
-                    }} />
-                    <span style={{ fontFamily: F, fontWeight: 700, fontSize: 13.5, color: INK }}>{name}</span>
-                  </div>
-                ))}
+              {/* Cover image */}
+              <div style={{ aspectRatio: '4/3', overflow: 'hidden' }}>
+                <img src={heroCover} alt="أساسيات التعليق والأداء الصوتي"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 78%' }} />
+              </div>
+
+              {/* Trainers strip */}
+              <div style={{ padding: '16px 18px', borderBottom: `1px solid ${CREAM_LINE}` }}>
+                <div style={{ fontFamily: F, fontSize: 11.5, color: MUTED, marginBottom: 10, textTransform: 'uppercase', letterSpacing: '.06em' }}>المدرّبون</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  {[
+                    { img: rana,  name: 'رنا العزام' },
+                    { img: yasar, name: 'يسار عبده' },
+                    { img: omar,  name: 'عمر الدرابكة' },
+                  ].map(({ img, name }) => (
+                    <div key={name} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <img src={img} alt={name} style={{
+                        width: 34, height: 34, borderRadius: '50%',
+                        objectFit: 'cover', objectPosition: 'center top',
+                        border: '2px solid rgba(255,193,7,.40)', flexShrink: 0,
+                      }} />
+                      <span style={{ fontFamily: F, fontWeight: 700, fontSize: 13.5, color: INK }}>{name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Installment + Share */}
+              <div style={{ padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                <span style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 6,
+                  background: 'rgba(34,197,94,.12)', border: '1px solid rgba(34,197,94,.32)',
+                  borderRadius: 999, padding: '8px 14px',
+                  fontFamily: F, fontWeight: 700, fontSize: 13, color: '#16a34a',
+                  flex: 1, justifyContent: 'center',
+                }}>
+                  <CreditCard size={15} strokeWidth={1.8} /> بإمكانية التقسيط
+                </span>
+                <button onClick={onShare} style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 6,
+                  background: 'transparent', border: `1px solid ${CREAM_LINE}`,
+                  borderRadius: 999, padding: '8px 14px', cursor: 'pointer',
+                  fontFamily: F, fontWeight: 700, fontSize: 13, color: INK2, transition: 'background .15s',
+                  flex: 1, justifyContent: 'center',
+                }}
+                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(24,32,47,.06)')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                >
+                  <Share2 size={14} strokeWidth={1.8} /> مشاركة الدورة
+                </button>
               </div>
             </div>
           </div>
