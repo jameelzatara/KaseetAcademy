@@ -25,7 +25,7 @@ const CARD = 'rgba(255,255,255,0.04)';
 const CARD_BORDER = 'rgba(255,255,255,0.08)';
 
 const WA_PHONE  = '962771052222';
-const WA_TRACK  = waLink(WA_PHONE, 'مرحباً، أودّ الاستفسار عن ماستركلاس الإعلام');
+const WA_TRACK  = waLink(WA_PHONE, 'مرحباً، أودّ الاستفسار عن المسار الإعلامي');
 const WA_CONSULT = waLink(WA_PHONE, 'مرحباً، أودّ حجز استشارة تعليمية مجانية');
 
 /* ── station data ─────────────────────────────────────── */
