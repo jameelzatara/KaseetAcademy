@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { db, ordersTable, holdsTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
-import { getUncachableStripeClient, getStripeCredentials } from "../lib/stripeClient.js";
+import { getUncachableStripeClient, getStripeSync } from "../lib/stripeClient.js";
 import {
   CHARGE_CURRENCY,
   DEPOSIT_JOD,
@@ -183,8 +183,9 @@ router.post("/checkout/session", async (req, res) => {
       payment_intent_data: {
         description: `كاسيت أكاديمي — طلب ${orderId}`,
       },
-      success_url: `${BASE_URL}/kaseet-academy/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${BASE_URL}/kaseet-academy/courses/${courseSlug}`,
+      // BASE_PATH="/" so kaseet-academy is served from root — no /kaseet-academy prefix needed
+      success_url: `${BASE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${BASE_URL}/courses/${courseSlug}`,
       expires_at: Math.floor(Date.now() / 1000) + 30 * 60,
     });
 
@@ -233,17 +234,17 @@ export async function handleStripeWebhook(
   rawBody: Buffer,
   signature: string,
 ): Promise<void> {
-  const { secretKey, webhookSecret } = await getStripeCredentials();
-  if (!webhookSecret) throw new Error("STRIPE webhook secret missing");
+  // stripe-replit-sync stores the webhook secret in the DB (not in connector settings).
+  // processWebhook verifies the signature using that DB-stored secret + syncs to stripe schema.
+  const stripeSync = await getStripeSync();
+  await stripeSync.processWebhook(rawBody, signature);
 
-  const { default: Stripe } = await import("stripe");
-  const stripe = new Stripe(secretKey, { apiVersion: "2025-06-30.basil" });
-
+  // After verification, parse the event body directly for our custom business logic
   let event: import("stripe").Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
+    event = JSON.parse(rawBody.toString()) as import("stripe").Stripe.Event;
   } catch (err: any) {
-    throw new Error(`Webhook signature verification failed: ${err.message}`);
+    throw new Error(`Failed to parse webhook body: ${err.message}`);
   }
 
   if (event.type === "checkout.session.completed") {
