@@ -1,5 +1,6 @@
 import app from "./app.js";
 import { logger } from "./lib/logger.js";
+import { syncToSheet } from "./lib/sheetsSync.js";
 
 // ── Stripe init (non-blocking) ────────────────────────────
 async function initStripe() {
@@ -37,7 +38,24 @@ if (!rawPort) throw new Error("PORT environment variable is required");
 const port = Number(rawPort);
 if (Number.isNaN(port) || port <= 0) throw new Error(`Invalid PORT: "${rawPort}"`);
 
-// Start listening first, then init Stripe in the background
+// ── Google Sheets sync (non-blocking) ────────────────────
+function startSheetsSync() {
+  const INTERVAL_MS = 15 * 60 * 1000; // 15 minutes
+
+  // First run after 20 s (let DB connections stabilise)
+  setTimeout(() => {
+    syncToSheet().catch((err) => logger.error({ err }, "Sheets sync failed (startup)"));
+  }, 20_000);
+
+  // Recurring every 15 min
+  setInterval(() => {
+    syncToSheet().catch((err) => logger.error({ err }, "Sheets sync failed"));
+  }, INTERVAL_MS);
+
+  logger.info({ intervalMs: INTERVAL_MS }, "Sheets sync scheduled");
+}
+
+// ── Start server ──────────────────────────────────────────
 app.listen(port, async (err) => {
   if (err) {
     logger.error({ err }, "Error listening on port");
@@ -45,4 +63,5 @@ app.listen(port, async (err) => {
   }
   logger.info({ port }, "Server listening");
   await initStripe();
+  startSheetsSync();
 });

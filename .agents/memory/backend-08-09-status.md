@@ -45,13 +45,15 @@ description: Status of DB migration, webhook hardening, KPI panel, phone field, 
 - inputMode="numeric"
 - Validation per country min/max digit count, Arabic error messages
 
-## ❌ Not yet implemented
-
-### Google Sheet sync (file 08 — step 5)
-- Sheet ID: 1L138tP7iWFLNectfQ4LCC5n01dUcwlXMiu_PCAIZp4g
-- Two tabs: الطلبات + الدفعات المستحقّة
-- Blocked: service account email needs to be shared as editor on the sheet
-- Also needs Google Sheets integration configured in Replit
+## ✅ Google Sheet sync (file 08 — step 5) — COMPLETE
+- Sheet ID stored in GOOGLE_SHEET_ID env var (shared)
+- Integration: Replit Google Sheets OAuth connector (conn_google-sheet_01KZS4QSJNHWE0DC0FN66S6V68)
+- Two tabs created automatically on first run: الطلبات + الدفعات المستحقّة
+- Full overwrite every 15 min; startup sync after 20 s delay
+- `artifacts/api-server/src/lib/sheetsSync.ts` — uses ReplitConnectors.proxy("google-sheet", ...)
+- Tab names with Arabic text need single-quote wrapping in A1 notation: `'الطلبات'`
+- @replit/connectors-sdk marked external in build.mjs; added to api-server/package.json
+- No service account needed — OAuth connector uses the authorized Google account directly
 
 ### Stripe real keys (file 09 — §7)
 - Still test mode; prerequisites in §7 not yet met
