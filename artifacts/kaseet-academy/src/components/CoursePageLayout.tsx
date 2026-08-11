@@ -504,12 +504,12 @@ function CurriculumSection({ curriculumModes, brochureHref, brochureLabel }: {
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, marginBottom: 32 }}>
           <SecTitle>الخطة الدراسية</SecTitle>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            {brochureHref && brochureLabel && (
+            {brochureHref && (
               <a href={brochureHref} download style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'transparent', border: `1px solid ${CREAM_LINE}`, borderRadius: 10, padding: '8px 16px', cursor: 'pointer', fontFamily: F, fontWeight: 700, fontSize: 13, color: INK2, textDecoration: 'none', transition: 'background .15s' }}
                 onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = 'rgba(24,32,47,.05)')}
                 onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
               >
-                <Download size={15} strokeWidth={1.8} color={INK2} /> {brochureLabel}
+                <Download size={15} strokeWidth={1.8} color={INK2} /> تحميل الكتيّب
               </a>
             )}
             <button
@@ -657,26 +657,22 @@ function HeroSection({ props, activeMode, openCounts, onModeChange, onShare }: {
   // Brochures: collect per mode
   const brochures = modes.flatMap(m => m.brochure ? [{ ...m.brochure, modeKey: m.key }] : []);
 
-  // Installment chip style
-  const installChip: React.CSSProperties = installmentStyle === 'muted'
-    ? { background: 'rgba(255,255,255,.06)', border: '1px solid rgba(255,255,255,.14)', color: 'rgba(252,251,251,.55)' }
-    : { background: 'rgba(34,197,94,.12)', border: '1px solid rgba(34,197,94,.32)', color: '#16a34a' };
+  // Installment chip — always green for all courses
+  const installChip: React.CSSProperties = { background: 'rgba(34,197,94,.12)', border: '1px solid rgba(34,197,94,.32)', color: '#16a34a' };
 
   return (
     <section className="sec--hero" data-nav-theme="light" style={{ background: CREAM, paddingTop: 'clamp(72px,9vw,110px)', paddingBottom: 60 }}>
       <div style={{ ...WRAP, direction: 'rtl' }}>
 
-        {/* Back link */}
-        {showBackLink && (
-          <div style={{ marginBottom: 24 }}>
-            <button onClick={() => window.history.back()} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', padding: '4px 0', cursor: 'pointer', fontFamily: F, fontWeight: 700, fontSize: 13.5, color: INK2, transition: 'color .15s' }}
-              onMouseEnter={e => (e.currentTarget.style.color = INK)}
-              onMouseLeave={e => (e.currentTarget.style.color = INK2)}
-            >
-              <ArrowLeft size={15} strokeWidth={2} /> العودة إلى الدورات
-            </button>
-          </div>
-        )}
+        {/* Back link — always visible */}
+        <div style={{ marginBottom: 24 }}>
+          <button onClick={() => window.history.back()} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', padding: '4px 0', cursor: 'pointer', fontFamily: F, fontWeight: 700, fontSize: 13.5, color: INK2, transition: 'color .15s' }}
+            onMouseEnter={e => (e.currentTarget.style.color = INK)}
+            onMouseLeave={e => (e.currentTarget.style.color = INK2)}
+          >
+            <ArrowLeft size={15} strokeWidth={2} /> العودة إلى الدورات
+          </button>
+        </div>
 
         <div className="ka-hero-grid" style={{ display: 'grid', gridTemplateColumns: '1fr min(400px,38vw)', gap: 'clamp(24px,4vw,56px)', alignItems: 'start' }}>
 
@@ -755,17 +751,21 @@ function HeroSection({ props, activeMode, openCounts, onModeChange, onShare }: {
             {/* Brochure downloads */}
             {brochures.length > 0 && (
               <div style={{ marginTop: 12, display: 'flex', gap: 10, direction: 'rtl', flexWrap: 'wrap' }}>
-                {brochures.map(({ href, label, style: s }) => {
+                {brochures.map(({ href, style: s }, idx) => {
                   const isGold = (s ?? 'gold') === 'gold';
                   const accent = isGold ? GOLD_INK : TEAL;
                   const bg     = isGold ? 'rgba(255,193,7,.10)' : 'rgba(30,122,133,.10)';
                   const border = isGold ? 'rgba(255,193,7,.35)' : 'rgba(30,122,133,.35)';
+                  // Always label as "كتيّب"; if dual-brochure page distinguish by style
+                  const displayLabel = brochures.length === 1
+                    ? 'تحميل الكتيّب'
+                    : isGold ? 'كتيّب الحضوري' : 'كتيّب الأونلاين';
                   return (
-                    <a key={label} href={href} download style={{ flex: 1, minWidth: 140, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 7, background: bg, border: `1.5px solid ${border}`, borderRadius: 12, padding: '10px 16px', fontFamily: F, fontWeight: 700, fontSize: 13, color: accent, textDecoration: 'none', transition: 'filter .18s, transform .18s' }}
+                    <a key={idx} href={href} download style={{ flex: 1, minWidth: 140, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 7, background: bg, border: `1.5px solid ${border}`, borderRadius: 12, padding: '10px 16px', fontFamily: F, fontWeight: 700, fontSize: 13, color: accent, textDecoration: 'none', transition: 'filter .18s, transform .18s' }}
                       onMouseEnter={e => Object.assign(e.currentTarget.style, { filter:'brightness(1.08)', transform:'translateY(-1px)' })}
                       onMouseLeave={e => Object.assign(e.currentTarget.style, { filter:'none', transform:'none' })}
                     >
-                      <Download size={14} strokeWidth={2} /> {label}
+                      <Download size={14} strokeWidth={2} /> {displayLabel}
                     </a>
                   );
                 })}
