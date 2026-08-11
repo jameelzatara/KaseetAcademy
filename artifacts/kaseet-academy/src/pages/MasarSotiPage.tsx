@@ -13,6 +13,7 @@ import heroShot     from '@assets/voiceover-track1_1785854995070.jpeg';
 import trainerYasar from '@assets/المدربة_يسار_عبده_1785855126478.jpeg';
 import trainerOmar  from '@assets/trainer-omar_1785692015818.jpg';
 import advisorImg   from '@assets/ياقوت_الخشاشنة_المستشارة_1785852509109.jpeg';
+import advisorAyaImg from '@assets/0_اية_القماز_1786476075148.jpeg';
 
 /* ── reel IDs ────────────────────────────────────── */
 const SOTI_REEL_URLS = [
@@ -993,7 +994,9 @@ export default function MasarSotiPage() {
               </div>
               <div style={{ padding: 'clamp(22px,2.8vw,32px)', display: 'flex', flexDirection: 'column', gap: 16 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                  <div style={{ width: 64, height: 64, borderRadius: '50%', flexShrink: 0, background: 'linear-gradient(135deg, #3A2800, #5A3F00)', border: `2px solid rgba(255,193,7,.40)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: F, fontWeight: 800, fontSize: 22, color: GLD }}>آ</div>
+                  <div className="adv-ava" style={{ flexShrink: 0 }}>
+                    <img src={advisorAyaImg} alt="آية — المستشارة التعليمية" />
+                  </div>
                   <div>
                     <div style={{ fontFamily: F, fontWeight: 800, fontSize: 18, color: OFF }}>آية</div>
                     <div style={{ fontFamily: F, fontSize: 12.5, color: MUT, marginTop: 3, lineHeight: 1.5 }}>المستشارة التعليمية<br />ماستركلاس الحضوري</div>
