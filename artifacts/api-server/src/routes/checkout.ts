@@ -167,13 +167,46 @@ router.get("/checkout/status", async (req, res) => {
     return;
   }
   try {
-    const [order] = await db
+    // 1. Fast path: order already created (by webhook or a previous status check)
+    const [existingOrder] = await db
       .select()
       .from(ordersTable)
       .where(eq(ordersTable.sessionId, session_id))
       .limit(1);
 
-    res.json(order ? { status: order.status, order } : { status: "pending" });
+    if (existingOrder) {
+      res.json({ status: existingOrder.status, order: existingOrder });
+      return;
+    }
+
+    // 2. Order not in DB yet — ask Stripe directly so we don't wait for webhook
+    try {
+      const stripe = await getUncachableStripeClient();
+      const session = await stripe.checkout.sessions.retrieve(session_id);
+
+      if (session.payment_status === "paid") {
+        // Payment confirmed by Stripe: create the order now (idempotent)
+        await onSessionCompleted(session);
+
+        // Fetch the newly created order
+        const [newOrder] = await db
+          .select()
+          .from(ordersTable)
+          .where(eq(ordersTable.sessionId, session_id))
+          .limit(1);
+
+        if (newOrder) {
+          res.json({ status: newOrder.status, order: newOrder });
+          return;
+        }
+      }
+      // Payment not confirmed yet (still processing or unpaid)
+    } catch (stripeErr) {
+      // Non-fatal: fall through to pending so client can retry
+      logger.warn({ stripeErr, session_id }, "Stripe session fetch failed in status check");
+    }
+
+    res.json({ status: "pending" });
   } catch (err) {
     logger.error({ err }, "checkout/status error");
     res.status(500).json({ error: "خطأ في الخادم" });

@@ -50,19 +50,26 @@ export default function CheckoutSuccessPage() {
 
   const [status, setStatus] = useState<'loading' | 'confirmed' | 'pending' | 'error'>('loading');
   const [order, setOrder] = useState<Order | null>(null);
-  const [attempts, setAttempts] = useState(0);
 
   useEffect(() => {
     if (!sessionId) { setStatus('error'); return; }
 
     let timeout: ReturnType<typeof setTimeout>;
+    let cancelled = false;
 
-    async function poll() {
+    // Back-off schedule: fast first attempt, then slow down gracefully
+    // Total: up to ~20 seconds before falling back to "pending"
+    const DELAYS = [0, 1000, 2000, 3000, 3000, 3000, 3000, 3000]; // ms between retries
+
+    async function poll(attempt: number) {
+      if (cancelled) return;
       try {
         const resp = await fetch(`${API}/checkout/status?session_id=${encodeURIComponent(sessionId)}`, {
           credentials: 'include',
         });
         const data = await resp.json();
+
+        if (cancelled) return;
 
         if (data.status && data.status !== 'pending') {
           setOrder(data.order);
@@ -70,20 +77,22 @@ export default function CheckoutSuccessPage() {
           return;
         }
 
-        setAttempts(a => a + 1);
-        if (attempts < 30) {
-          // Poll every 2 seconds for up to 60 seconds
-          timeout = setTimeout(poll, 2000);
+        const nextAttempt = attempt + 1;
+        if (nextAttempt < DELAYS.length) {
+          timeout = setTimeout(() => poll(nextAttempt), DELAYS[nextAttempt]);
         } else {
           setStatus('pending');
         }
       } catch {
-        setStatus('error');
+        if (!cancelled) setStatus('error');
       }
     }
 
-    poll();
-    return () => clearTimeout(timeout);
+    poll(0);
+    return () => {
+      cancelled = true;
+      clearTimeout(timeout);
+    };
   }, [sessionId]);
 
   const courseName = order ? (COURSE_NAMES[order.courseSlug] ?? order.courseSlug) : '';
