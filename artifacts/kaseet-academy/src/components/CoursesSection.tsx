@@ -100,7 +100,7 @@ const GRID: GCard[] = [
     imgPos:   'center 42%',
     instructor: { name: 'أ. رنا محمد العزام', role: 'إعلامية ومختصة تحرير لغوي', photo: instructorRana },
     price:    '$150',
-    duration: '16 ساعة / 8 جلسات',
+    duration: '12 ساعة / 6 جلسات',
     searchData: 'تمكين اللغة العربية التحرير اللغوي نحو صرف تدقيق رنا العزام',
     outcomes: [
       'كتابة عربية سليمة خالية من أخطاء النحو والإملاء.',

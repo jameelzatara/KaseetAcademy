@@ -8,8 +8,9 @@ import {
   CreditCard, Lock, PlayCircle, BookOpen, Sliders,
   Mic, Sparkles, Briefcase, Zap,
   GraduationCap, Printer, ChevronDown, MessageCircle, ArrowLeft,
-  Share2, ShieldCheck, Star, FileDown,
+  Share2, ShieldCheck, Star, FileDown, User,
 } from 'lucide-react';
+import cohortsRaw from '../data/cohorts.json';
 import ShareModal from '../components/ShareModal';
 import { usePageMeta } from '../hooks/usePageMeta';
 
@@ -40,34 +41,27 @@ function waLink(phone: string, msg: string) {
   return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
 }
 
-/* ── Cohort data (online only) ── */
+/* ── Cohort data from unified JSON ── */
 type Cohort = {
-  id: number; mode: 'online'; status: 'open' | 'running';
+  id: number; course: string; mode: string; status: 'open' | 'running';
   trainer: string; start: string; end: string;
   start_ar: string; end_ar: string; days: string;
-  time_24: string; time_ar: string; platform: string;
-  enrolled: number; capacity: number; remaining: number; fill: number;
+  time_24: string | null; time_ar: string | null; platform: string;
+  enrolled: number | null; capacity: number; remaining: number | null; fill: number | null;
 };
-const COHORTS: Cohort[] = [
-  { id: 1, mode: 'online', status: 'open', trainer: 'رنا العزام',
-    start: '2026-09-15', end: '2026-11-03', start_ar: '15 سبتمبر', end_ar: '3 نوفمبر',
-    days: 'الاثنين والأربعاء', time_24: '19:00', time_ar: '7:00م – 9:00م',
-    platform: 'Google Meet', enrolled: 8, capacity: 25, remaining: 17, fill: 32 },
-  { id: 2, mode: 'online', status: 'open', trainer: 'رنا العزام',
-    start: '2026-10-06', end: '2026-11-24', start_ar: '6 أكتوبر', end_ar: '24 نوفمبر',
-    days: 'الثلاثاء والخميس', time_24: '19:00', time_ar: '7:00م – 9:00م',
-    platform: 'Google Meet', enrolled: 3, capacity: 25, remaining: 22, fill: 12 },
-];
-const openCohorts = COHORTS.filter(c => c.status === 'open');
-const runCohorts  = COHORTS.filter(c => c.status === 'running');
+const ALL_AL = (cohortsRaw.cohorts as Cohort[]).filter(
+  c => c.course === 'arabic-language' && c.mode === 'live' && c.time_ar
+);
+const openCohorts = ALL_AL.filter(c => c.status === 'open');
+const runCohorts  = ALL_AL.filter(c => c.status === 'running');
 
 /* ── FillBar ── */
-function FillBar({ fill, remaining }: { fill: number; remaining: number }) {
-  const hot  = remaining <= 3 && remaining > 0;
-  const full = remaining === 0;
+function FillBar({ fill, remaining }: { fill: number | null; remaining: number | null }) {
+  const f = fill ?? 0; const r = remaining ?? 0;
+  const hot  = r <= 3 && r > 0; const full = r === 0;
   return (
     <div style={{ width: 120, height: 6, borderRadius: 999, background: 'rgba(255,255,255,.10)', overflow: 'hidden', flexShrink: 0 }}>
-      <div style={{ height: '100%', width: `${fill}%`, borderRadius: 999, transition: 'width .5s',
+      <div style={{ height: '100%', width: `${f}%`, borderRadius: 999, transition: 'width .5s',
         background: full ? 'rgba(255,255,255,.22)' : hot ? 'linear-gradient(90deg,#FFC107,#E8836F)' : GOLD }} />
     </div>
   );
@@ -76,7 +70,8 @@ function FillBar({ fill, remaining }: { fill: number; remaining: number }) {
 /* ── CohortRow ── */
 function CohortRow({ c, onRegister }: { c: Cohort; onRegister: (id: number) => void }) {
   const isOpen = c.status === 'open'; const isRunning = c.status === 'running';
-  const hot = c.remaining <= 3 && c.remaining > 0; const full = c.remaining === 0;
+  const r = c.remaining ?? 0;
+  const hot = r <= 3 && r > 0; const full = r === 0;
   const dayNum = new Date(c.start).getDate().toString();
   const monthMap: Record<string,string> = {
     '01':'يناير','02':'فبراير','03':'مارس','04':'أبريل','05':'مايو','06':'يونيو',
@@ -102,7 +97,7 @@ function CohortRow({ c, onRegister }: { c: Cohort; onRegister: (id: number) => v
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
             <FillBar fill={c.fill} remaining={c.remaining} />
             <span style={{ fontFamily: F, fontSize: 12, fontWeight: hot ? 700 : 500, color: hot ? '#E8836F' : full ? 'rgba(252,251,251,.42)' : 'rgba(252,251,251,.62)' }}>
-              {full ? 'نفدت المقاعد' : hot ? `${c.remaining} مقاعد متبقية فقط` : `${c.remaining} مقاعد متبقية`}
+              {full ? 'نفدت المقاعد' : hot ? `${r} مقاعد متبقية فقط` : `${r} مقاعد متبقية`}
             </span>
           </div>
           <div style={{ fontFamily: F, fontSize: 12.5, color: 'rgba(252,251,251,.52)', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 6 }}>
@@ -111,6 +106,8 @@ function CohortRow({ c, onRegister }: { c: Cohort; onRegister: (id: number) => v
             <span>{c.days}</span>
             <span style={{ color: 'rgba(252,251,251,.25)' }}>·</span>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}><Clock size={11} strokeWidth={1.8} />{c.time_ar}</span>
+            <span style={{ color: 'rgba(252,251,251,.25)' }}>·</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}><User size={11} strokeWidth={1.8} />{c.trainer}</span>
           </div>
         </div>
       </div>
@@ -148,9 +145,20 @@ function CohortsSection() {
           <h2 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(24px,3vw,34px)', color: OFF, margin: '0 0 8px' }}>المواعيد المتاحة للتسجيل</h2>
           <p style={{ fontFamily: F, fontSize: 14, color: MUTED, margin: 0 }}>جميع المواعيد بتوقيت عمّان (GMT+3) · Google Meet · حدّ أقصى 25 متدرّباً</p>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 28 }}>
-          {openCohorts.map(c => <CohortRow key={c.id} c={c} onRegister={handleRegister} />)}
-        </div>
+        {openCohorts.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '40px 20px', background: 'rgba(255,255,255,.04)', borderRadius: 16, border: '1px solid rgba(255,255,255,.08)', direction: 'rtl', marginBottom: 28 }}>
+            <CalendarDays size={32} color={MUTED} strokeWidth={1.5} style={{ marginBottom: 12 }} />
+            <p style={{ fontFamily: F, fontWeight: 700, fontSize: 15, color: OFF, margin: '0 0 6px' }}>الدفعات القادمة ستُعلَن قريباً</p>
+            <p style={{ fontFamily: F, fontSize: 13, color: MUTED, margin: '0 0 20px' }}>سجّل اهتمامك الآن وسيتواصل معك الفريق فور فتح التسجيلات</p>
+            <a href={waLink('962771052222', waMsg)} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: GOLD, color: INK, fontFamily: F, fontWeight: 800, fontSize: 14, padding: '10px 24px', borderRadius: 10, textDecoration: 'none' }}>
+              <MessageCircle size={15} strokeWidth={1.8} /> أبلغني فور الإطلاق
+            </a>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 28 }}>
+            {openCohorts.map(c => <CohortRow key={c.id} c={c} onRegister={handleRegister} />)}
+          </div>
+        )}
         {runCohorts.length > 0 && (
           <div style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid rgba(255,255,255,.08)' }}>
             <button onClick={() => setShowRunning(v => !v)} style={{ width: '100%', background: CARD, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', direction: 'rtl', gap: 10 }}>

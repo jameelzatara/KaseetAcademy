@@ -24,20 +24,20 @@ import omar      from '@assets/trainer-omar_1785428945248.jpg';
 import heroCover from '@assets/course_02_cover_1785675184235.jpg';
 
 /* ── Cohorts data ──────────────────────────────────────────── */
-import cohortsRaw from '../data/cohorts-basics.json';
+import cohortsRaw from '../data/cohorts.json';
 
 type Cohort = {
-  id: number; mode: 'onsite' | 'online'; status: 'open' | 'running';
+  id: number; course: string; mode: string; status: 'open' | 'running';
   trainer: string; start: string; end: string;
   start_ar: string; end_ar: string; days: string;
-  time_24: string; time_ar: string; platform: string;
-  enrolled: number; capacity: number; remaining: number; fill: number;
+  time_24: string | null; time_ar: string | null; platform: string;
+  enrolled: number | null; capacity: number; remaining: number | null; fill: number | null;
 };
-const COHORTS = cohortsRaw.cohorts as Cohort[];
-const openOnsite  = COHORTS.filter(c => c.status === 'open'    && c.mode === 'onsite');
-const openOnline  = COHORTS.filter(c => c.status === 'open'    && c.mode === 'online');
-const runOnsite   = COHORTS.filter(c => c.status === 'running' && c.mode === 'onsite');
-const runOnline   = COHORTS.filter(c => c.status === 'running' && c.mode === 'online');
+const ALL_COHORTS = (cohortsRaw.cohorts as Cohort[]).filter(c => c.course === 'voiceover' && c.time_ar);
+const openOnsite  = ALL_COHORTS.filter(c => c.status === 'open'    && c.mode === 'onsite');
+const openOnline  = ALL_COHORTS.filter(c => c.status === 'open'    && c.mode === 'live');
+const runOnsite   = ALL_COHORTS.filter(c => c.status === 'running' && c.mode === 'onsite');
+const runOnline   = ALL_COHORTS.filter(c => c.status === 'running' && c.mode === 'live');
 
 /* ── Design tokens (from brief §1) ──────────────────────────── */
 const CREAM      = '#F4EFE4';
@@ -67,9 +67,10 @@ function waLink(phone: string, msg: string) {
 }
 
 /* ── Cohort fill bar ───────────────────────────────────────── */
-function FillBar({ fill, remaining }: { fill: number; remaining: number }) {
-  const hot  = remaining <= 3 && remaining > 0;
-  const full = remaining === 0;
+function FillBar({ fill, remaining }: { fill: number | null; remaining: number | null }) {
+  const f = fill ?? 0; const r = remaining ?? 0;
+  const hot  = r <= 3 && r > 0;
+  const full = r === 0;
   const barColor = full
     ? 'rgba(255,255,255,.22)'
     : hot
@@ -81,7 +82,7 @@ function FillBar({ fill, remaining }: { fill: number; remaining: number }) {
       background: 'rgba(255,255,255,.10)', overflow: 'hidden', flexShrink: 0,
     }}>
       <div style={{
-        height: '100%', width: `${fill}%`, borderRadius: 999,
+        height: '100%', width: `${f}%`, borderRadius: 999,
         background: barColor, transition: 'width .5s',
       }} />
     </div>
@@ -92,8 +93,8 @@ function FillBar({ fill, remaining }: { fill: number; remaining: number }) {
 function CohortRow({ c, onRegister }: { c: Cohort; onRegister: (id: number) => void }) {
   const isOpen    = c.status === 'open';
   const isRunning = c.status === 'running';
-  const hot       = c.remaining <= 3 && c.remaining > 0;
-  const full      = c.remaining === 0;
+  const hot       = (c.remaining ?? 0) <= 3 && (c.remaining ?? 0) > 0;
+  const full      = (c.remaining ?? 0) === 0;
   const dayNum    = new Date(c.start).getDate().toString();
   const monthMap: Record<string,string> = {
     '01':'يناير','02':'فبراير','03':'مارس','04':'أبريل','05':'مايو','06':'يونيو',
@@ -170,7 +171,7 @@ function CohortRow({ c, onRegister }: { c: Cohort; onRegister: (id: number) => v
               display: 'inline-flex', alignItems: 'center', gap: 4,
               fontFamily: F, fontSize: 11.5, color: 'rgba(252,251,251,.58)',
             }}>
-              {c.mode === 'online'
+              {c.mode === 'live'
                 ? <Video size={12} strokeWidth={1.8} />
                 : <MapPin size={12} strokeWidth={1.8} />}
               {c.platform}
@@ -184,7 +185,7 @@ function CohortRow({ c, onRegister }: { c: Cohort; onRegister: (id: number) => v
               fontFamily: F, fontSize: 12, fontWeight: hot ? 700 : 500,
               color: hot ? '#E8836F' : full ? 'rgba(252,251,251,.42)' : 'rgba(252,251,251,.62)',
             }}>
-              {full ? 'نفدت المقاعد' : hot ? `${c.remaining} مقاعد متبقية فقط` : `${c.remaining} مقاعد متبقية`}
+              {full ? 'نفدت المقاعد' : hot ? `${c.remaining} مقاعد متبقية فقط` : `${c.remaining ?? c.capacity} مقاعد متبقية`}
             </span>
           </div>
 
@@ -242,7 +243,7 @@ function CohortsSection({ defaultMode }: { defaultMode: 'onsite' | 'online' }) {
   const runCount = running.length;
 
   const handleRegister = (cohortId: number) => {
-    const c = COHORTS.find(x => x.id === cohortId);
+    const c = ALL_COHORTS.find(x => x.id === cohortId);
     if (!c) return;
     const msg = `السلام عليكم، أرغب في التسجيل في دورة أساسيات التعليق والأداء الصوتي — الدفعة #${cohortId} — ${c.mode === 'onsite' ? 'حضوري' : 'مباشر تفاعلي (Online LIVE)'}`;
     window.open(waLink('962771052222', msg), '_blank');

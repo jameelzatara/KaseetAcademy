@@ -8,8 +8,9 @@ import {
   CreditCard, Video, Lock, PlayCircle, Mic, Zap,
   Sliders, Briefcase, Star,
   GraduationCap, Printer, ChevronDown, MessageCircle, ArrowLeft,
-  Share2, ShieldCheck, FileDown,
+  Share2, ShieldCheck, FileDown, User,
 } from 'lucide-react';
+import cohortsRaw from '../data/cohorts.json';
 import ShareModal from '../components/ShareModal';
 import { usePageMeta } from '../hooks/usePageMeta';
 
@@ -41,36 +42,29 @@ function waLink(phone: string, msg: string) {
   return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
 }
 
-/* ── Cohort data (both modes) ── */
+/* ── Cohort data from unified JSON ── */
 type Cohort = {
-  id: number; mode: 'onsite' | 'online'; status: 'open' | 'running';
+  id: number; course: string; mode: string; status: 'open' | 'running';
   trainer: string; start: string; end: string;
   start_ar: string; end_ar: string; days: string;
-  time_24: string; time_ar: string; platform: string;
-  enrolled: number; capacity: number; remaining: number; fill: number;
+  time_24: string | null; time_ar: string | null; platform: string;
+  enrolled: number | null; capacity: number; remaining: number | null; fill: number | null;
 };
-const COHORTS: Cohort[] = [
-  { id: 1, mode: 'onsite', status: 'open', trainer: 'د. صهيب الخوالدة',
-    start: '2026-09-06', end: '2026-10-25', start_ar: '6 سبتمبر', end_ar: '25 أكتوبر',
-    days: 'الأحد', time_24: '10:00', time_ar: '10:00ص – 12:00م',
-    platform: 'استوديو كاسيت — عمّان', enrolled: 3, capacity: 12, remaining: 9, fill: 25 },
-  { id: 2, mode: 'online', status: 'open', trainer: 'د. صهيب الخوالدة',
-    start: '2026-09-08', end: '2026-10-27', start_ar: '8 سبتمبر', end_ar: '27 أكتوبر',
-    days: 'الثلاثاء', time_24: '19:00', time_ar: '7:00م – 9:00م',
-    platform: 'Google Meet', enrolled: 5, capacity: 15, remaining: 10, fill: 33 },
-];
-const openOnsite  = COHORTS.filter(c => c.status === 'open'    && c.mode === 'onsite');
-const openOnline  = COHORTS.filter(c => c.status === 'open'    && c.mode === 'online');
-const runOnsite   = COHORTS.filter(c => c.status === 'running' && c.mode === 'onsite');
-const runOnline   = COHORTS.filter(c => c.status === 'running' && c.mode === 'online');
+const ALL_PS = (cohortsRaw.cohorts as Cohort[]).filter(
+  c => c.course === 'public-speaking' && c.time_ar
+);
+const openOnsite  = ALL_PS.filter(c => c.status === 'open'    && c.mode === 'onsite');
+const openOnline  = ALL_PS.filter(c => c.status === 'open'    && c.mode === 'live');
+const runOnsite   = ALL_PS.filter(c => c.status === 'running' && c.mode === 'onsite');
+const runOnline   = ALL_PS.filter(c => c.status === 'running' && c.mode === 'live');
 
 /* ── FillBar ── */
-function FillBar({ fill, remaining }: { fill: number; remaining: number }) {
-  const hot  = remaining <= 3 && remaining > 0;
-  const full = remaining === 0;
+function FillBar({ fill, remaining }: { fill: number | null; remaining: number | null }) {
+  const f = fill ?? 0; const r = remaining ?? 0;
+  const hot  = r <= 3 && r > 0; const full = r === 0;
   return (
     <div style={{ width: 120, height: 6, borderRadius: 999, background: 'rgba(255,255,255,.10)', overflow: 'hidden', flexShrink: 0 }}>
-      <div style={{ height: '100%', width: `${fill}%`, borderRadius: 999, transition: 'width .5s',
+      <div style={{ height: '100%', width: `${f}%`, borderRadius: 999, transition: 'width .5s',
         background: full ? 'rgba(255,255,255,.22)' : hot ? 'linear-gradient(90deg,#FFC107,#E8836F)' : GOLD }} />
     </div>
   );
@@ -79,7 +73,8 @@ function FillBar({ fill, remaining }: { fill: number; remaining: number }) {
 /* ── CohortRow ── */
 function CohortRow({ c, onRegister }: { c: Cohort; onRegister: (id: number) => void }) {
   const isOpen = c.status === 'open'; const isRunning = c.status === 'running';
-  const hot = c.remaining <= 3 && c.remaining > 0; const full = c.remaining === 0;
+  const r = c.remaining ?? 0;
+  const hot = r <= 3 && r > 0; const full = r === 0;
   const dayNum = new Date(c.start).getDate().toString();
   const monthMap: Record<string,string> = {
     '01':'يناير','02':'فبراير','03':'مارس','04':'أبريل','05':'مايو','06':'يونيو',
@@ -101,13 +96,13 @@ function CohortRow({ c, onRegister }: { c: Cohort; onRegister: (id: number) => v
             {isOpen && !full && <span style={{ background: 'rgba(255,193,7,.10)', color: GOLD, borderRadius: 999, fontFamily: F, fontWeight: 700, fontSize: 11, padding: '2px 10px', border: '1px solid rgba(255,193,7,.22)' }}>متاح التسجيل</span>}
             {full && <span style={{ background: 'rgba(255,255,255,.06)', color: 'rgba(252,251,251,.45)', borderRadius: 999, fontFamily: F, fontWeight: 700, fontSize: 11, padding: '2px 10px', border: '1px solid rgba(255,255,255,.10)', display: 'inline-flex', alignItems: 'center', gap: 4 }}><Lock size={11} strokeWidth={1.8} /> نفدت المقاعد</span>}
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: F, fontSize: 11.5, color: 'rgba(252,251,251,.58)' }}>
-              {c.mode === 'online' ? <Video size={12} strokeWidth={1.8} /> : <MapPin size={12} strokeWidth={1.8} />}{c.platform}
+              {c.mode === 'live' ? <Video size={12} strokeWidth={1.8} /> : <MapPin size={12} strokeWidth={1.8} />}{c.platform}
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
             <FillBar fill={c.fill} remaining={c.remaining} />
             <span style={{ fontFamily: F, fontSize: 12, fontWeight: hot ? 700 : 500, color: hot ? '#E8836F' : full ? 'rgba(252,251,251,.42)' : 'rgba(252,251,251,.62)' }}>
-              {full ? 'نفدت المقاعد' : hot ? `${c.remaining} مقاعد متبقية فقط` : `${c.remaining} مقاعد متبقية`}
+              {full ? 'نفدت المقاعد' : hot ? `${r} مقاعد متبقية فقط` : `${r} مقاعد متبقية`}
             </span>
           </div>
           <div style={{ fontFamily: F, fontSize: 12.5, color: 'rgba(252,251,251,.52)', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 6 }}>
@@ -116,6 +111,8 @@ function CohortRow({ c, onRegister }: { c: Cohort; onRegister: (id: number) => v
             <span>{c.days}</span>
             <span style={{ color: 'rgba(252,251,251,.25)' }}>·</span>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}><Clock size={11} strokeWidth={1.8} />{c.time_ar}</span>
+            <span style={{ color: 'rgba(252,251,251,.25)' }}>·</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}><User size={11} strokeWidth={1.8} />{c.trainer}</span>
           </div>
         </div>
       </div>
@@ -141,7 +138,7 @@ function CohortsSection({ defaultMode }: { defaultMode: 'onsite' | 'online' }) {
   const waMsg   = `السلام عليكم، أرغب في التسجيل في دورة فن الخطابة والإلقاء الجماهيري المؤثر (${tab === 'onsite' ? 'حضوري' : 'مباشر تفاعلي Online LIVE'}).`;
   const phone   = tab === 'onsite' ? '962790234483' : '962771052222';
   const handleRegister = (id: number) => {
-    const c = COHORTS.find(x => x.id === id);
+    const c = ALL_PS.find(x => x.id === id);
     if (!c) return;
     window.open(waLink(phone, `${waMsg} — الدفعة #${id}`), '_blank');
   };
@@ -180,9 +177,20 @@ function CohortsSection({ defaultMode }: { defaultMode: 'onsite' | 'online' }) {
             );
           })}
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 28 }}>
-          {open.map(c => <CohortRow key={c.id} c={c} onRegister={handleRegister} />)}
-        </div>
+        {open.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '40px 20px', background: 'rgba(255,255,255,.04)', borderRadius: 16, border: '1px solid rgba(255,255,255,.08)', direction: 'rtl', marginBottom: 28 }}>
+            <CalendarDays size={32} color={MUTED} strokeWidth={1.5} style={{ marginBottom: 12 }} />
+            <p style={{ fontFamily: F, fontWeight: 700, fontSize: 15, color: OFF, margin: '0 0 6px' }}>الدفعات القادمة ستُعلَن قريباً</p>
+            <p style={{ fontFamily: F, fontSize: 13, color: MUTED, margin: '0 0 20px' }}>سجّل اهتمامك الآن وسيتواصل معك الفريق فور فتح التسجيلات</p>
+            <a href={waLink(phone, waMsg)} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: GOLD, color: INK, fontFamily: F, fontWeight: 800, fontSize: 14, padding: '10px 24px', borderRadius: 10, textDecoration: 'none' }}>
+              <MessageCircle size={15} strokeWidth={1.8} /> أبلغني فور الإطلاق
+            </a>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 28 }}>
+            {open.map(c => <CohortRow key={c.id} c={c} onRegister={handleRegister} />)}
+          </div>
+        )}
         {running.length > 0 && (
           <div style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid rgba(255,255,255,.08)' }}>
             <button onClick={() => setShowRunning(v => !v)} style={{ width: '100%', background: CARD, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', direction: 'rtl', gap: 10 }}>
