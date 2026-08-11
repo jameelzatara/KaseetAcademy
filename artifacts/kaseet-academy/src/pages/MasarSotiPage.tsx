@@ -995,7 +995,7 @@ export default function MasarSotiPage() {
               <div style={{ padding: 'clamp(22px,2.8vw,32px)', display: 'flex', flexDirection: 'column', gap: 16 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
                   <div className="adv-ava" style={{ flexShrink: 0 }}>
-                    <img src={advisorAyaImg} alt="آية — المستشارة التعليمية" />
+                    <img src={advisorAyaImg} alt="آية — المستشارة التعليمية" style={{ objectPosition: '50% 15%' }} />
                   </div>
                   <div>
                     <div style={{ fontFamily: F, fontWeight: 800, fontSize: 18, color: OFF }}>آية</div>
