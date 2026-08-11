@@ -12,7 +12,7 @@ declare module "express-session" {
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "kaseet-admin-2026";
 
 // ── POST /admin/login ──────────────────────────────────────
-router.post("/admin/login", async (req, res) => {
+router.post("/login", async (req, res) => {
   const { password } = req.body as { password: string };
   if (!password) { res.status(400).json({ error: "كلمة المرور مطلوبة" }); return; }
 
@@ -26,7 +26,7 @@ router.post("/admin/login", async (req, res) => {
 });
 
 // ── POST /admin/logout ─────────────────────────────────────
-router.post("/admin/logout", (req, res) => {
+router.post("/logout", (req, res) => {
   req.session.isAdmin = false;
   res.json({ ok: true });
 });
@@ -39,7 +39,7 @@ function requireAdmin(req: any, res: any, next: any) {
 
 // ── GET /admin/kpi ─────────────────────────────────────────
 // 5 indicators per spec §09-1
-router.get("/admin/kpi", requireAdmin, async (req, res) => {
+router.get("/kpi", requireAdmin, async (req, res) => {
   try {
     // 1. Revenue collected this month (SUM of paid installments this month)
     const revThisMonth = await pool.query(`
@@ -154,7 +154,7 @@ router.get("/admin/kpi", requireAdmin, async (req, res) => {
 });
 
 // ── GET /admin/orders ──────────────────────────────────────
-router.get("/admin/orders", requireAdmin, async (req, res) => {
+router.get("/orders", requireAdmin, async (req, res) => {
   try {
     const { status, cohortId, hasDues } = req.query as {
       status?: string;
@@ -179,7 +179,7 @@ router.get("/admin/orders", requireAdmin, async (req, res) => {
 });
 
 // ── GET /admin/orders/:id ─────────────────────────────────
-router.get("/admin/orders/:id", requireAdmin, async (req, res) => {
+router.get("/orders/:id", requireAdmin, async (req, res) => {
   try {
     const [order] = await db
       .select()
@@ -205,7 +205,7 @@ router.get("/admin/orders/:id", requireAdmin, async (req, res) => {
 // ── POST /admin/orders/:id/payment ────────────────────────
 // Records a manual installment payment.
 // Updates both: relational installments table + orders JSONB (for backward compat).
-router.post("/admin/orders/:id/payment", requireAdmin, async (req, res) => {
+router.post("/orders/:id/payment", requireAdmin, async (req, res) => {
   try {
     const { seq, method, reference } = req.body as {
       seq: 1 | 2 | 3;
@@ -302,7 +302,7 @@ router.post("/admin/orders/:id/payment", requireAdmin, async (req, res) => {
 
 // ── POST /admin/orders/:id/status ─────────────────────────
 // Cancel/update order status — no DELETE ever
-router.post("/admin/orders/:id/status", requireAdmin, async (req, res) => {
+router.post("/orders/:id/status", requireAdmin, async (req, res) => {
   try {
     const { status, notes } = req.body as { status: string; notes?: string };
     const allowed = ["cancelled", "refunded", "completed", "partially_paid", "deposit_paid"];
@@ -321,7 +321,7 @@ router.post("/admin/orders/:id/status", requireAdmin, async (req, res) => {
 });
 
 // ── GET /admin/cohorts ─────────────────────────────────────
-router.get("/admin/cohorts", requireAdmin, async (req, res) => {
+router.get("/cohorts", requireAdmin, async (req, res) => {
   try {
     const seats = await db.select().from(cohortSeatsTable);
     res.json({ seats });
@@ -332,7 +332,7 @@ router.get("/admin/cohorts", requireAdmin, async (req, res) => {
 
 // ── POST /admin/cohorts/:id/seats ─────────────────────────
 // Manual seat adjustment (walk-in registrations etc.)
-router.post("/admin/cohorts/:id/seats", requireAdmin, async (req, res) => {
+router.post("/cohorts/:id/seats", requireAdmin, async (req, res) => {
   try {
     const { enrolled, capacity, isOpen } = req.body as {
       enrolled?: number; capacity?: number; isOpen?: boolean;
