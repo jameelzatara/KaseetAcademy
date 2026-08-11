@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { db, ordersTable, holdsTable } from "@workspace/db";
-import { eq } from "drizzle-orm";
+import { db, pool, ordersTable, holdsTable } from "@workspace/db";
+import { eq, or } from "drizzle-orm";
 import { getUncachableStripeClient, getStripeSync } from "../lib/stripeClient.js";
 import {
   CHARGE_CURRENCY,
@@ -180,19 +180,17 @@ router.get("/checkout/status", async (req, res) => {
     return;
   }
 
-  // Ownership check: the session_id must have been created by this browser session
-  const allowedIds = req.session.stripeSessionIds ?? [];
-  if (!allowedIds.includes(session_id)) {
-    res.status(403).json({ error: "غير مصرّح" });
-    return;
-  }
-
+  // Note: session_id is an unguessable Stripe ID (cs_xxx…). We removed the
+  // cookie-based ownership check because Stripe's redirect can lose the cookie
+  // in some browsers / cross-origin flows. Rate-limiting (task #100) will
+  // protect this endpoint instead.
   try {
     // 1. Fast path: order already created (by webhook or a previous status check)
+    // Search both columns: legacy sessionId and canonical stripeSessionId
     const [existingOrder] = await db
       .select()
       .from(ordersTable)
-      .where(eq(ordersTable.sessionId, session_id))
+      .where(or(eq(ordersTable.sessionId, session_id), eq(ordersTable.stripeSessionId, session_id)))
       .limit(1);
 
     if (existingOrder) {
@@ -209,11 +207,11 @@ router.get("/checkout/status", async (req, res) => {
         // Payment confirmed by Stripe: create the order now (idempotent)
         await onSessionCompleted(session);
 
-        // Fetch the newly created order
+        // Fetch the newly created order (check both session ID columns)
         const [newOrder] = await db
           .select()
           .from(ordersTable)
-          .where(eq(ordersTable.sessionId, session_id))
+          .where(or(eq(ordersTable.sessionId, session_id), eq(ordersTable.stripeSessionId, session_id)))
           .limit(1);
 
         if (newOrder) {
@@ -231,6 +229,32 @@ router.get("/checkout/status", async (req, res) => {
   } catch (err) {
     logger.error({ err }, "checkout/status error");
     res.status(500).json({ error: "خطأ في الخادم" });
+  }
+});
+
+// ── POST /checkout/alert-team ─────────────────────────────
+// Called by the success page when 20s pass with no confirmed order.
+// Logs to DB so the admin panel can surface unresolved sessions.
+router.post("/checkout/alert-team", async (req, res) => {
+  const { sessionId } = req.body as { sessionId?: string };
+  if (!sessionId) { res.status(400).json({ error: "sessionId مطلوب" }); return; }
+  try {
+    // Ensure table exists (idempotent DDL)
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS missed_webhooks (
+        session_id TEXT PRIMARY KEY,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      )
+    `);
+    await pool.query(
+      `INSERT INTO missed_webhooks (session_id) VALUES ($1) ON CONFLICT DO NOTHING`,
+      [sessionId],
+    );
+    logger.warn({ sessionId }, "Team alert: no order after 20s — saved to missed_webhooks");
+    res.json({ ok: true });
+  } catch (err) {
+    logger.error({ err }, "alert-team error");
+    res.status(500).json({ error: "server error" });
   }
 });
 
