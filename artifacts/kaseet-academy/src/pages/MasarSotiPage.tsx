@@ -1,7 +1,7 @@
 /**
  * صفحة ماستركلاس التعليق والأداء الصوتي — كاسيت أكاديمي
  */
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { ChevronDown, ArrowLeft, MapPin, Wifi } from 'lucide-react';
@@ -13,6 +13,7 @@ import heroShot     from '@assets/voiceover-track1_1785854995070.jpeg';
 import trainerYasar from '@assets/المدربة_يسار_عبده_1785855126478.jpeg';
 import trainerOmar  from '@assets/trainer-omar_1785692015818.jpg';
 import advisorImg   from '@assets/ياقوت_الخشاشنة_المستشارة_1785852509109.jpeg';
+
 /* ── reel IDs ────────────────────────────────────── */
 const SOTI_REEL_URLS = [
   'https://www.instagram.com/reel/DaQgWU2sONj/',
@@ -134,24 +135,24 @@ const STATIONS = [
 ] as const;
 
 const PHASE_BANDS = [
-  { from:0, to:3, label:'المرحلة الأولى', sub:'التأسيس · 16 ساعة · 8 جلسات', color: GLD },
-  { from:3, to:10, label:'المرحلة الثانية', sub:'التخصّصات · 36 ساعة · 18 جلسة', color: '#67e8f9' },
-  { from:10, to:12, label:'المرحلة الثالثة', sub:'الاحتراف والسوق · 8 ساعات · 4 جلسات', color: '#a78bfa' },
+  { from:0,  to:3,  label:'المرحلة الأولى',  sub:'التأسيس · 16 ساعة · 8 جلسات',       color: GLD },
+  { from:3,  to:10, label:'المرحلة الثانية', sub:'التخصّصات · 24 ساعة · 12 جلسة',     color: '#67e8f9' },
+  { from:10, to:12, label:'المرحلة الثالثة', sub:'الاحتراف والسوق · 4 ساعات · 2 جلسة', color: '#a78bfa' },
 ];
 
 const ALBUM = [
-  { n:'01', title:'نصّ محايد · قبل وبعد', kind:'تأسيس', hot:false },
-  { n:'02', title:'قراءة نصّ مشكّل كامل', kind:'لغة', hot:false },
-  { n:'03', title:'ملفّ بمواصفات البثّ', kind:'تقنية', hot:false },
-  { n:'04', title:'ثلاثة إعلانات · ثلاث نبرات', kind:'إعلان', hot:false },
-  { n:'05', title:'تعليق وثائقي · ثلاث دقائق', kind:'وثائقي', hot:false },
-  { n:'06', title:'فصل رواية · 15–20 دقيقة', kind:'كتاب صوتي', hot:true },
-  { n:'07', title:'دوبلاج مشهد + ثلاث شخصيات', kind:'دوبلاج', hot:false },
-  { n:'08', title:'وحدة تعليمية صوتية', kind:'تعليمي', hot:false },
-  { n:'09', title:'حزمة IVR كاملة لشركة', kind:'مؤسسي', hot:false },
-  { n:'10', title:'حلقة بودكاست بصوتك', kind:'بودكاست', hot:false },
-  { n:'11', title:'ملفّ تعريفي احترافي', kind:'هوية', hot:true },
-  { n:'12', title:'قائمة أسعار ونموذج عقد', kind:'سوق', hot:false },
+  { n:'01', title:'نصّ محايد · قبل وبعد',          kind:'تأسيس',    hot:false },
+  { n:'02', title:'قراءة نصّ مشكّل كامل',           kind:'لغة',       hot:false },
+  { n:'03', title:'ملفّ بمواصفات البثّ',            kind:'تقنية',    hot:false },
+  { n:'04', title:'ثلاثة إعلانات · ثلاث نبرات',    kind:'إعلان',    hot:false },
+  { n:'05', title:'تعليق وثائقي · ثلاث دقائق',     kind:'وثائقي',   hot:false },
+  { n:'06', title:'فصل رواية · 15–20 دقيقة',        kind:'كتاب صوتي', hot:true  },
+  { n:'07', title:'دوبلاج مشهد + ثلاث شخصيات',      kind:'دوبلاج',   hot:false },
+  { n:'08', title:'وحدة تعليمية صوتية',             kind:'تعليمي',   hot:false },
+  { n:'09', title:'حزمة IVR كاملة لشركة',           kind:'مؤسسي',    hot:false },
+  { n:'10', title:'حلقة بودكاست بصوتك',             kind:'بودكاست',  hot:false },
+  { n:'11', title:'ملفّ تعريفي احترافي',            kind:'هوية',     hot:true  },
+  { n:'12', title:'قائمة أسعار ونموذج عقد',         kind:'سوق',      hot:false },
 ];
 
 
@@ -167,8 +168,8 @@ const TRAINERS = [
 ];
 
 const OUTCOMES = [
-  { n:'01', title:'أداء صوتي مضبوط', desc:'تنفّس محكم، ومخارج حروف سليمة، وقدرة على تلوين النبرة عند الطلب لا بالمصادفة.' },
-  { n:'02', title:'لغة عربية سليمة', desc:'قراءة نصّ مشكّل دون خطأ، وتحرير النصّ ليُقرأ بالأذن لا بالعين.' },
+  { n:'01', title:'أداء صوتي مضبوط',    desc:'تنفّس محكم، ومخارج حروف سليمة، وقدرة على تلوين النبرة عند الطلب لا بالمصادفة.' },
+  { n:'02', title:'لغة عربية سليمة',    desc:'قراءة نصّ مشكّل دون خطأ، وتحرير النصّ ليُقرأ بالأذن لا بالعين.' },
   { n:'03', title:'محفظة من 13 عملاً', desc:'ملفّات مسجّلة ومعالَجة تغطّي كلّ قطاعات السوق، تُرسل إلى العميل كما هي.' },
   { n:'04', title:'أدوات العمل الحرّ', desc:'قائمة أسعار، ونموذج عقد، وملفّ تعريفي مُهندَس — وشهادة معتمدة من تطبيق وجيز.' },
 ];
@@ -176,18 +177,28 @@ const OUTCOMES = [
 const FAQS = [
   { q:'صوتي عادي — هل أستطيع أن أصبح معلّقاً صوتياً؟',
     a:'التعليق الصوتي مهارة تُتعلَّم لا موهبة تُولَد. المطلوب صوت سليم، وأذن تُدرك الفرق، واستعداد للتدريب. والسوق لا يطلب نوعاً واحداً من الأصوات؛ فالصوت العادي يجد عملاً في الوثائقي والتعليمي أكثر ممّا يجده الصوت الرنّان. تحدّث مع ياقوت وسيُقيَّم صوتك مجاناً قبل أيّ التزام.' },
+  { q:'هل أستطيع الالتحاق بالماستركلاس إذا لم أدرس التعليق الصوتي من قبل؟',
+    a:'نعم، الماستركلاس مصمَّم ليبدأ من الصفر. المحطتان الأولى والثانية (الأساسيات واللغة العربية) تضعانك على أرضية صلبة قبل الدخول في التخصّصات. الشرط الوحيد: صوت سليم واستعداد للتدريب.' },
   { q:'هل يمكنني اختيار بعض المحطات فقط؟',
     a:'لا، والقرار مقصود. المعلّق الذي يعيش من صوته في السوق العربي لا يعتمد على تخصّص واحد: الإعلانات موسمية، والكتب الصوتية طويلة الأمد، والتسجيلات المؤسسية ثابتة. ومعرفتك بها جميعاً تحمي دخلك من خمود قطاع بعينه.' },
-  { q:'متى يبدأ الفوج القادم؟ وما الجدول الأسبوعي؟',
-    a:'الفوج القادم يبدأ في الثامن والعشرين من آب على جلستَي الأحد والثلاثاء. أمّا عدد المقاعد المتبقية فتجده في قسم "الفوج القادم" أسفل الصفحة، ويمكنك تأكيده مع ياقوت قبل التسجيل.' },
+  { q:'ما الفرق بين الحضوري والمباشر التفاعلي (Online LIVE)؟',
+    a:'المنهج والمدرّبون ومستوى التدريب واحد في الحالتين. الفرق في بيئة التعلّم: في الحضوري تسجّل داخل استوديو كاسيت بميكروفون كوندنسر وغرفة معالَجة صوتياً مع تصحيح فوري. وفي المباشر التفاعلي تتدرّب من موقعك عبر جلسات مباشرة حيّة مع المدرّب، وتُحفظ لك تسجيلات الجلسات للمراجعة.' },
   { q:'هل أحتاج استوديو ومعدّات خاصة؟',
     a:'لا في الحضوري، إذ تُسجّل في استوديو كاسيت. وفي المباشر التفاعلي (Online LIVE)، المحطة الثالثة مخصّصة لتعليمك تجهيز مساحة تسجيل مقبولة بأقلّ تكلفة. أمّا مشروع التخرّج فيُهندَس بيد مهندس الصوت في الحالتين.' },
-  { q:'هل الدفع آمن؟ وهل التقسيط متاح؟',
-    a:'الدفع إلكتروني بالكامل عبر بوّابة دفع آمنة. والتقسيط متاح: تُثبَّت مقعدك بالدفعة الأولى، وتُوزَّع باقي الدفعات على مراحل الماستركلاس.' },
+  { q:'هل التسجيلات متاحة في Online LIVE؟',
+    a:'نعم، تسجيلات الجلسات متاحة للمراجعة في مسار المباشر التفاعلي (Online LIVE). تعود إليها متى شئت طوال فترة الماستركلاس.' },
+  { q:'هل التقسيط متاح؟',
+    a:'نعم، التقسيط متاح. تُثبَّت مقعدك بالدفعة الأولى، وتُوزَّع باقي الدفعات على مراحل الماستركلاس. للتفاصيل تحدّث مع ياقوت مباشرة.' },
+  { q:'هل أستطيع دراسة بعض الدورات أولًا ثم الالتحاق بالماستركلاس؟',
+    a:'نعم. المحطتان الأولى والثانية متاحتان كدورات مستقلة أطول. إن أتممتَهما مسبقاً يُحتسب لك ذلك عند الالتحاق بالماستركلاس. تحدّث مع ياقوت لمعرفة كيفية احتساب ما أتممتَه.' },
+  { q:'ما الذي أحصل عليه عند إكمال الماستركلاس؟',
+    a:'تتخرّج بمحفظة من 13 مخرجاً صوتياً يغطّون كلّ قطاعات السوق، وملفّ تعريفي احترافي، وقائمة أسعار، ونموذج عقد — بالإضافة إلى شهادة معتمدة من تطبيق وجيز، ومسار التأهيل للنشر على المنصّة.' },
+  { q:'كيف يعمل الاعتماد من وجيز؟',
+    a:'وجيز — أكبر مكتبة صوتية وبودكاست في الشرق الأوسط — هي جهة الاعتماد الرسمية. بعد إتمام الماستركلاس تُسلّم مشروعك لمراجعة فنية؛ باجتيازك التقييم تصبح مؤهَّلاً للترشيح لأعمال تسجيل على المنصّة كمعلّق صوتي. الشهادة والاعتماد مضمونان لكلّ من يُكمل الماستركلاس.' },
+  { q:'هل الماستركلاس يضمن لي عملًا بعد التخرج؟',
+    a:'لا يضمن الماستركلاس عقد عمل. ما يضمنه هو تخرّجك بمحفظة أعمال حقيقية، وأدوات الدخول للسوق من تسعير وعقود وملفّ تعريفي. الترشيح لأعمال وجيز مرتبط باجتياز التقييم الفني وبتوفّر مشاريع تناسب نبرة صوتك.' },
   { q:'ما الفرق بين هذا الماستركلاس وماستركلاس الإعلام؟',
     a:'ماستركلاس الإعلام يبنيك إعلامياً: تقديماً وصحافةً وعملاً ميدانياً وإنتاجاً — والصوت فيه أداة من أدوات عدّة. وهذا الماستركلاس يبنيك معلّقاً صوتياً: الصوت هو المنتَج نفسه من التنفّس إلى الدوبلاج إلى التسعير.' },
-  { q:'أين أعمل بعد التخرّج؟',
-    a:'تتخرّج بمحفظة من ثلاثة عشر عملاً، وملفّ تعريفي مُهندَس، وقائمة أسعار. وثمّة مسار تأهيل للنشر على تطبيق وجيز: تُسلّم عملك، فيُقيَّم فنياً، وباجتيازك التقييم تصبح مؤهَّلاً للترشيح لأعمال تسجيل على المنصّة.' },
 ];
 
 /* ── sub-components ──────────────────────────────── */
@@ -289,16 +300,16 @@ function StudyRow({ variant }: { variant: 'inperson' | 'online' }) {
   const acRgb = isIP ? '255,193,7' : '103,232,249';
   const items = isIP
     ? [
-        { t:'تسجيل بميكروفون كوندنسر', d:'في غرفة معالَجة صوتياً — الفرق يُسمع في الثانية الأولى.' },
-        { t:'تصحيح فوري أثناء التسجيل', d:'عيوب الصوت شخصية؛ كلٌّ يُصحَّح على أذنه وحدها.' },
-        { t:'ثلاث زيارات للإنتاج الفعلي', d:'مشروع التخرّج يُهندَس بيد مهندس صوت متخصّص.' },
-        { t:'تشبيك مع المدرّبين والمتدرّبين', d:'علاقات مهنية حقيقية تبقى بعد انتهاء الماستركلاس.' },
+        { t:'تسجيل داخل بيئة استوديو احترافية',      d:'تطبيق مباشر وتصحيح أثناء التسجيل.' },
+        { t:'تصحيح الأداء على الميكروفون',           d:'ملاحظات فورية مخصّصة لأداء كل متدرّب.' },
+        { t:'مشروع تخرّج بإنتاج فعلي',               d:'3 ساعات إنتاج مع المدرّب ومهندس الصوت.' },
+        { t:'تجربة تدريبية داخل بيئة مهنية',          d:'تدريب يحاكي طبيعة العمل الحقيقي في الاستوديو.' },
       ]
     : [
-        { t:'جلسات مباشرة تفاعلية كاملاً', d:'لا تسجيلات مسبقة — التفاعل حيّ في الوقت الفعلي.' },
-        { t:'المحطة الثالثة: تجهيز مساحتك', d:'تتعلّم تجهيز غرفة تسجيل مقبولة بأقلّ تكلفة.' },
-        { t:'ثلاث جلسات حيّة مع مهندس الصوت', d:'الإنتاج النهائي بنفس المستوى بغضّ النظر عن مكانك.' },
-        { t:'تسجيلات الجلسات متاحة للمراجعة', d:'تعود إليها متى شئت طوال فترة الماستركلاس.' },
+        { t:'تدريب مباشر في الوقت الفعلي',           d:'لا يعتمد البرنامج على محتوى مسجّل مسبقاً.' },
+        { t:'تجهيز مساحة التسجيل',                  d:'تتعلّم تجهيز مساحة مناسبة للتسجيل من المنزل.' },
+        { t:'تطبيق وتصحيح فردي',                    d:'تسجّل أعمالك وتحصل على ملاحظات وتصحيح أثناء التدريب.' },
+        { t:'مشروع تخرّج بإنتاج فعلي',              d:'3 ساعات إنتاج بإشراف المدرّب ومهندس الصوت.' },
       ];
   return (
     <div style={{ borderRadius: 14, overflow: 'hidden', border: `1px solid ${open ? `rgba(${acRgb},.40)` : CBR}`, transition: 'border-color .2s' }}>
@@ -310,15 +321,15 @@ function StudyRow({ variant }: { variant: 'inperson' | 'online' }) {
           </div>
           <div style={{ textAlign: 'right' }}>
             <div style={{ fontFamily: F, fontWeight: 800, fontSize: 15, color: OFF }}>
-              {isIP ? 'حضوري — داخل استوديو كاسيت' : 'Online LIVE — بثّ مباشر تفاعلي'}
+              {isIP ? 'حضوري — داخل استوديو كاسيت' : 'مباشر تفاعلي (Online LIVE)'}
             </div>
             <div style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 2 }}>
-              {isIP ? 'تدريب ميداني مع معدّات احترافية وتصحيح فوري' : 'من أي مكان في العالم — بث حيّ لا تسجيلات مسبقة'}
+              {isIP ? '12 محطة · 44 ساعة · 22 جلسة' : '12 محطة · 44 ساعة · 22 جلسة'}
             </div>
           </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 7, flexShrink: 0 }}>
-          {['12 محطة','60 ساعة', isIP ? 'حضوري' : 'بثّ مباشر'].map(b => (
+          {['12 محطة', '44 ساعة', isIP ? 'حضوري' : 'مباشر تفاعلي'].map(b => (
             <span key={b} style={{ fontFamily: F, fontSize: 10.5, color: MUT, background: CARD, border: `1px solid ${CBR}`, borderRadius: 6, padding: '2.5px 7px', whiteSpace: 'nowrap' }}>{b}</span>
           ))}
           <ChevronDown size={15} color={open ? ac : MUT} strokeWidth={2.5} style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform .25s', flexShrink: 0 }} />
@@ -328,7 +339,9 @@ function StudyRow({ variant }: { variant: 'inperson' | 'online' }) {
         <div style={{ borderTop: `1px solid rgba(${acRgb},.18)` }}>
           {items.map((item, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '13px 20px', borderBottom: i < items.length - 1 ? `1px solid ${CBR}` : 'none' }}>
-              <span style={{ fontFamily: FP, fontWeight: 800, fontSize: 11, color: '#060A14', background: ac, borderRadius: '50%', flexShrink: 0, width: 24, height: 24, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{i + 1}</span>
+              <span style={{ fontFamily: FP, fontWeight: 800, fontSize: 11, color: '#060A14', background: ac, borderRadius: '50%', flexShrink: 0, width: 24, height: 24, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                {String(i + 1).padStart(2, '0')}
+              </span>
               <div style={{ flex: 1 }}>
                 <div style={{ fontFamily: F, fontWeight: 800, fontSize: 13.5, color: OFF, marginBottom: 3 }}>{item.t}</div>
                 <div style={{ fontFamily: F, fontSize: 12.5, color: MUT, lineHeight: 1.7 }}>{item.d}</div>
@@ -349,7 +362,7 @@ export default function MasarSotiPage() {
 
   usePageMeta({
     title: 'ماستركلاس التعليق والأداء الصوتي',
-    description: 'ماستركلاس 44 ساعة في التعليق والأداء الصوتي الاحترافي. تدريب حضوري ومباشر تفاعلي في كاسيت أكاديمي. ابدأ مسيرتك الصوتية مع شهادة معتمدة من وجيز.',
+    description: 'ماستركلاس 44 ساعة · 22 جلسة في التعليق والأداء الصوتي الاحترافي. 12 محطة تدريبية و13 مخرجاً صوتياً. حضوري ومباشر تفاعلي. شهادة معتمدة من وجيز.',
   });
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }); }, []);
 
@@ -386,7 +399,7 @@ export default function MasarSotiPage() {
       </div>
 
       {/* ═══════════════════════════════════════
-          1. HERO
+          01. HERO
       ═══════════════════════════════════════ */}
       <section className="sec sec--hero" style={{ padding: '52px 0 88px' }}>
         <div style={WRP}>
@@ -395,7 +408,7 @@ export default function MasarSotiPage() {
             <div>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GS, border: `1px solid ${GL}`, color: GLD, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>
                 <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD }} />
-                ماستركلاس · 60 ساعة
+                ماستركلاس · 44 ساعة
               </span>
 
               <h1 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(34px,5vw,58px)', lineHeight: 1.22, letterSpacing: -1.2, margin: '18px 0 0', color: OFF }}>
@@ -404,20 +417,27 @@ export default function MasarSotiPage() {
               </h1>
 
               <p style={{ fontFamily: F, fontSize: 17, color: MUT, maxWidth: 560, marginTop: 16, lineHeight: 1.85 }}>
-                ستون ساعة تبني معلّق صوتي من التنفّس لأول فاتورة: 12 محطة، 13 عمل مسجّل، ومشروع تخرّج تنتجه داخل استوديو كاسيت — وصوتك يخرج مؤهّلاً للنشر على تطبيق وجيز.
+                برنامج تدريبي يأخذك من تأسيس الصوت إلى التعامل مع السوق: 12 محطة متسلسلة، 13 مخرجاً صوتياً في محفظتك، ومشروع تخرّج تنتجه داخل استوديو كاسيت — وصوتك يخرج مؤهَّلاً للنشر على تطبيق وجيز.
               </p>
 
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 9, marginTop: 24 }}>
+              {/* stats boxes */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 28 }}>
                 {[
-                  { label:'60 ساعة · 30 جلسة' },
-                  { label:'13 عمل صوتي بمحفظتك' },
-                  { label:'مشروع تخرّج داخل الاستوديو' },
-                  { label:'حضوري في عمّان أو Online LIVE' },
-                ].map(({ label }) => (
-                  <span key={label} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,.045)', border: `1px solid ${CBR}`, padding: '9px 14px', borderRadius: 11, fontFamily: F, fontSize: 13.5, color: LT }}>
-                    <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD, flexShrink: 0 }} />{label}
-                  </span>
+                  { num: '44',  label: 'ساعة تدريبية' },
+                  { num: '22',  label: 'جلسة مباشرة' },
+                  { num: '12',  label: 'محطة تدريبية' },
+                  { num: '13',  label: 'مخرجاً صوتياً' },
+                ].map(({ num, label }) => (
+                  <div key={label} style={{ background: 'rgba(255,255,255,.045)', border: `1px solid ${CBR}`, borderRadius: 12, padding: '10px 16px', textAlign: 'center', minWidth: 80 }}>
+                    <div style={{ fontFamily: FP, fontSize: 24, fontWeight: 700, color: GLD, lineHeight: 1 }}>{num}</div>
+                    <div style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 4 }}>{label}</div>
+                  </div>
                 ))}
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 18, fontFamily: F, fontSize: 13.5, color: LT }}>
+                <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD, flexShrink: 0 }} />
+                حضوري في عمّان أو مباشر تفاعلي (Online LIVE)
               </div>
 
               {/* wajeez chip */}
@@ -434,11 +454,11 @@ export default function MasarSotiPage() {
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 24 }}>
                 <a href={WA_ENROLL} target="_blank" rel="noopener noreferrer"
                   style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '13px 26px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 6px 20px rgba(255,193,7,.22)' }}>
-                  احجز مقعدك الآن <ArrowLeft size={14} />
+                  التسجيل في الماستركلاس <ArrowLeft size={14} />
                 </a>
                 <a href="#tree"
                   style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: 'rgba(255,255,255,.05)', border: `1px solid ${CBR}`, color: OFF, fontFamily: F, fontWeight: 700, fontSize: 15, padding: '13px 26px', borderRadius: 12, textDecoration: 'none' }}>
-                  استكشف المحطات <ArrowLeft size={14} />
+                  استكشف المنهج <ArrowLeft size={14} />
                 </a>
               </div>
             </div>
@@ -458,8 +478,8 @@ export default function MasarSotiPage() {
                 {/* foot */}
                 <div style={{ position: 'absolute', inset: 'auto 0 0 0', zIndex: 3, padding: '22px 22px 24px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16 }}>
                   <div>
-                    <span style={{ fontFamily: FP, fontSize: 38, fontWeight: 700, color: GLD, lineHeight: .95 }}>60</span>
-                    <span style={{ fontFamily: F, fontSize: 12.5, color: LT, marginTop: 4, display: 'block' }}>ساعة · 13 عمل صوتي</span>
+                    <span style={{ fontFamily: FP, fontSize: 38, fontWeight: 700, color: GLD, lineHeight: .95 }}>44</span>
+                    <span style={{ fontFamily: F, fontSize: 12.5, color: LT, marginTop: 4, display: 'block' }}>ساعة · 13 مخرجاً صوتياً</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 34 }}>
                     {Array.from({ length: 9 }, (_, i) => (
@@ -475,7 +495,17 @@ export default function MasarSotiPage() {
       </section>
 
       {/* ═══════════════════════════════════════
-          2. STATION TREE
+          02. أصوات تخرّجت من الماستركلاس
+      ═══════════════════════════════════════ */}
+      <ReelsSection
+        badge="أصوات تخرّجت من الماستركلاس"
+        heading={<>أصوات تخرّجت <Gold>من الماستركلاس</Gold></>}
+        description="استمع إلى أصوات متدرّبينا وشاهد ما خرج من التدريب إلى التسجيل الفعلي."
+        urls={SOTI_REEL_URLS}
+      />
+
+      {/* ═══════════════════════════════════════
+          03. STATION TREE
       ═══════════════════════════════════════ */}
       <section id="tree" className="sec sec--tree" style={{ padding: '96px 0' }}>
         <div style={WRP}>
@@ -488,7 +518,7 @@ export default function MasarSotiPage() {
               الطريق من التنفّس <span style={{ color: GLD }}>إلى أوّل فاتورة</span>
             </h2>
             <p style={{ fontFamily: F, fontSize: 16.5, color: MUT, maxWidth: 680, marginTop: 14, marginInline: 'auto', lineHeight: 1.8 }}>
-              اثنتا عشرة محطة على ثماني عشرة جلسة، مُختَمة بمرحلة إنتاج فعلي داخل الاستوديو.
+              اثنتا عشرة محطة على اثنتَين وعشرين جلسة، مُختَمة بمرحلة إنتاج فعلي داخل الاستوديو.
               كلّ محطة إلزامية وبترتيب مقصود.
             </p>
           </div>
@@ -536,15 +566,15 @@ export default function MasarSotiPage() {
                 </div>
               </div>
               <span style={{ fontFamily: F, fontSize: 12.5, fontWeight: 700, color: GLD, background: 'rgba(0,0,0,.3)', border: `1px solid ${GL}`, padding: '7px 14px', borderRadius: 999, whiteSpace: 'nowrap', flexShrink: 0 }}>
-                3 جلسات + الهندسة الصوتية
+                3 ساعات + الهندسة الصوتية
               </span>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
               {[
-                { n:'01', t:'تحليل النصّ وتفكيك الأداء', d:'اختيار نصّ مشروعك وتفكيكه كاملاً مع المدرّب ومهندس الصوت.' },
-                { n:'02', t:'التوجيه المباشر على المايك', d:'تدريب حيّ وتصحيح الأداء جملةً بجملة قبل التسجيل النهائي.' },
-                { n:'03', t:'التسجيل النهائي الاحترافي', d:'جلسة استوديو حقيقية بشروط العمل المهني مع مهندس الصوت.' },
-                { n:'★', t:'الهندسة والتسليم', d:'مكساج وماسترنج وتصدير بأعلى مواصفات البثّ العالمية.' },
+                { n:'01', t:'تحليل النصّ وتفكيك الأداء',    d:'اختيار نصّ مشروعك وتفكيكه كاملاً مع المدرّب ومهندس الصوت.' },
+                { n:'02', t:'التوجيه المباشر على المايك',    d:'تدريب حيّ وتصحيح الأداء جملةً بجملة قبل التسجيل النهائي.' },
+                { n:'03', t:'التسجيل النهائي الاحترافي',     d:'جلسة استوديو حقيقية بشروط العمل المهني مع مهندس الصوت.' },
+                { n:'★',  t:'الهندسة والتسليم',              d:'مكساج وماسترنج وتصدير بأعلى مواصفات البثّ العالمية.' },
               ].map(({ n, t, d }) => (
                 <div key={n} style={{ background: 'rgba(0,0,0,.24)', border: `1px solid ${CBR}`, borderRadius: 14, padding: '16px 15px' }}>
                   <div style={{ fontFamily: FP, fontSize: 11.5, fontWeight: 700, color: GLD, letterSpacing: 1, marginBottom: 6 }}>الجلسة {n}</div>
@@ -561,14 +591,14 @@ export default function MasarSotiPage() {
           <div style={{ textAlign: 'center', marginTop: 34 }}>
             <a href={WA_ENROLL} target="_blank" rel="noopener noreferrer"
               style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15.5, padding: '14px 30px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 10px 30px rgba(255,193,7,.24)' }}>
-              احجز مقعدك في الفوج القادم <ArrowLeft size={14} />
+              التسجيل في الماستركلاس <ArrowLeft size={14} />
             </a>
           </div>
         </div>
       </section>
 
       {/* ═══════════════════════════════════════
-          3. ALBUM (cream)
+          04. ALBUM (cream)
       ═══════════════════════════════════════ */}
       <section className="sec sec--cream" style={{ padding: '96px 0' }}>
         <div className="geo geo--halftone" style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none' }} />
@@ -587,9 +617,9 @@ export default function MasarSotiPage() {
             <div style={{ padding: '24px 28px', borderBottom: '1px solid rgba(24,32,47,.10)', display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
                 <div style={{ fontFamily: F, fontWeight: 800, fontSize: 20, color: INK }}>محفظتك الصوتية</div>
-                <div style={{ fontFamily: F, fontSize: 13, color: INK2, marginTop: 3 }}>اثنا عشر عملاً من المحطات، ومشروع التخرّج المُهندَس في الاستوديو</div>
+                <div style={{ fontFamily: F, fontSize: 13, color: INK2, marginTop: 3 }}>اثنا عشر مخرجاً من المحطات، ومشروع التخرّج المُهندَس في الاستوديو</div>
               </div>
-              <span style={{ fontFamily: FP, fontSize: 13, fontWeight: 700, color: '#8A6200', border: '1px solid rgba(138,98,0,.32)', background: 'rgba(138,98,0,.07)', padding: '7px 15px', borderRadius: 999, whiteSpace: 'nowrap' }}>13 عملاً</span>
+              <span style={{ fontFamily: FP, fontSize: 13, fontWeight: 700, color: '#8A6200', border: '1px solid rgba(138,98,0,.32)', background: 'rgba(138,98,0,.07)', padding: '7px 15px', borderRadius: 999, whiteSpace: 'nowrap' }}>13 مخرجاً</span>
             </div>
 
             {ALBUM.map((trk, i) => (
@@ -620,18 +650,11 @@ export default function MasarSotiPage() {
               <strong style={{ color: INK }}>الأعمال المميّزة بالذهبي</strong> هي الأكثر أثراً في السوق: فصل الرواية أوّل عمل مؤهَّل للنشر على وجيز، والملفّ التعريفي بطاقتك أمام العملاء، ومشروع التخرّج أثقل قطعة في محفظتك.
             </div>
           </div>
-
-          <div style={{ textAlign: 'center', marginTop: 34 }}>
-            <a href="#reels"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: 'transparent', color: INK, border: '1px solid rgba(24,32,47,.22)', fontFamily: F, fontWeight: 700, fontSize: 15, padding: '13px 28px', borderRadius: 999, textDecoration: 'none' }}>
-              استمع إلى أعمال متدرّبينا <ArrowLeft size={14} />
-            </a>
-          </div>
         </div>
       </section>
 
       {/* ═══════════════════════════════════════
-          4. OUTCOMES
+          05. OUTCOMES
       ═══════════════════════════════════════ */}
       <section className="sec sec--out" style={{ padding: '96px 0' }}>
         <div style={WRP}>
@@ -668,7 +691,7 @@ export default function MasarSotiPage() {
       </section>
 
       {/* ═══════════════════════════════════════
-          5. WAJEEZ
+          06. WAJEEZ
       ═══════════════════════════════════════ */}
       <section className="sec sec--wajeez" style={{ padding: '96px 0' }}>
         <div style={WRP}>
@@ -682,14 +705,14 @@ export default function MasarSotiPage() {
                   من متدرّب <span style={{ color: '#8FDAE3' }}>إلى معلّق على وجيز</span>
                 </h2>
                 <p style={{ fontFamily: F, fontSize: 15, color: MUT, marginTop: 8, maxWidth: 540 }}>
-                  فوجيز — أكبر مكتبة صوتية وبودكاست في الشرق الأوسط — هي جهة الاعتماد، وهي المنصّة التي يصل صوتك إلى جمهورها.
+                  وجيز — أكبر مكتبة صوتية وبودكاست في الشرق الأوسط — هي جهة الاعتماد، وهي المنصّة التي يصل صوتك إلى جمهورها.
                 </p>
               </div>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16 }}>
               {[
                 { n:'STEP 01', t:'تتخرّج بعمل قابل للنشر', d:'مشروع المحطة السادسة — فصل رواية كامل بجودة النشر — مبنيّ على مواصفات وجيز الفنية.' },
-                { n:'STEP 02', t:'يُقيَّم صوتك فنياً', d:'تُسلّم عملك للمراجعة الفنية، وتصلك ملاحظات محدّدة إن احتاج الأمر تعديلاً قبل النشر.' },
+                { n:'STEP 02', t:'يُقيَّم صوتك فنياً',      d:'تُسلّم عملك للمراجعة الفنية، وتصلك ملاحظات محدّدة إن احتاج الأمر تعديلاً قبل النشر.' },
                 { n:'STEP 03', t:'تبدأ بتسجيل أعمال فعلية', d:'باجتيازك التقييم تصبح مؤهَّلاً للترشيح لأعمال تسجيل على المنصّة كمعلّق صوتي.' },
               ].map(({ n, t, d }) => (
                 <div key={n} style={{ background: 'rgba(255,255,255,.05)', border: `1px solid ${CBR}`, borderRadius: 14, padding: '22px 20px' }}>
@@ -707,7 +730,7 @@ export default function MasarSotiPage() {
       </section>
 
       {/* ═══════════════════════════════════════
-          6. TRAINERS
+          07. TRAINERS
       ═══════════════════════════════════════ */}
       <section className="sec sec--trainers" style={{ padding: '96px 0' }}>
         <div style={WRP}>
@@ -720,7 +743,7 @@ export default function MasarSotiPage() {
               مَن <span style={{ color: GLD }}>يُدرّبك</span>
             </h2>
             <p style={{ fontFamily: F, fontSize: 16, color: MUT, maxWidth: 620, marginTop: 14, marginInline: 'auto' }}>
-              ثلاثة مدرّبين، لكلٍّ منهم تخصّص مختلف: الأداء الصوتي، والتحرير اللغوي، وعلم الأصوات.
+              مدرّبان متخصّصان: الأداء الصوتي، والتحرير اللغوي وعلم الأصوات.
             </p>
           </div>
 
@@ -762,17 +785,7 @@ export default function MasarSotiPage() {
       </section>
 
       {/* ═══════════════════════════════════════
-          7. REELS
-      ═══════════════════════════════════════ */}
-      <ReelsSection
-        badge="من داخل الاستوديو"
-        heading={<>أعمال خرجت <Gold>من الاستوديو</Gold></>}
-        description="مقاطع من جلسات التسجيل وأعمال متدرّبينا على إنستغرام — شاهد وتابع الفرق بنفسك."
-        urls={SOTI_REEL_URLS}
-      />
-
-            {/* ═══════════════════════════════════════
-          8. MODES (one-card)
+          08. MODES
       ═══════════════════════════════════════ */}
       <section className="sec sec--modes" style={{ padding: '96px 0' }}>
         <div style={WRP}>
@@ -785,7 +798,7 @@ export default function MasarSotiPage() {
               اختر <span style={{ color: GLD }}>أسلوب تعلّمك</span>
             </h2>
             <p style={{ fontFamily: F, fontSize: 16, color: MUT, maxWidth: 620, marginTop: 14, marginInline: 'auto' }}>
-              نفس المنهج، ونفس المدرّبين، ونفس الشهادة المعتمدة — فقط اختر ما يناسب جدولك وحياتك.
+              نفس المنهج، ونفس المدرّبين، ونفس مستوى التدريب — اختر الطريقة التي تناسبك.
             </p>
           </div>
 
@@ -798,15 +811,25 @@ export default function MasarSotiPage() {
                 sub: 'حضور فعلي في عمّان',
                 icon: <MapPin size={18} color="#1A1206" strokeWidth={2.2} />,
                 ac: GLD, acRgb: '255,193,7',
-                items: ['تفاعل مباشر مع المدرّب والزملاء','تطبيق عملي داخل الاستوديوهات المجهّزة','بيئة تعلّم منظّمة بلا إلهاء','تشبيك مع المتدرّبين وفرص العمل'],
+                items: [
+                  'تدريب مباشر داخل استوديو كاسيت',
+                  'تطبيق وتسجيل وتصحيح فوري',
+                  'تعامل مباشر مع الميكروفون وبيئة التسجيل',
+                  'تفاعل مباشر مع المدرّب والمتدرّبين',
+                ],
               },
               {
                 variant: 'online' as const,
-                label: 'كاسيت لايف — Online LIVE',
+                label: 'مباشر تفاعلي (Online LIVE)',
                 sub: 'من أي مكان في العالم العربي',
                 icon: <Wifi size={18} color="#1A1206" strokeWidth={2.2} />,
                 ac: '#67e8f9', acRgb: '103,232,249',
-                items: ['جلسات مباشرة مع المدرّب في الوقت الفعلي','تسجيلات الجلسات متاحة للمراجعة','تسليم واجبات وتقييم فردي','متاح من أي مكان في العالم العربي'],
+                items: [
+                  'جلسات مباشرة مع المدرّب في الوقت الفعلي',
+                  'تطبيق وتقييم فردي أثناء التدريب',
+                  'تسجيلات الجلسات متاحة للمراجعة',
+                  'مشروع التخرّج بإشراف مباشر مع مهندس الصوت',
+                ],
               },
             ].map(m => (
               <div key={m.label} style={{ background: CARD, border: `1px solid rgba(${m.acRgb},.22)`, borderRadius: 20, padding: 'clamp(22px,2.5vw,28px)' }}>
@@ -844,10 +867,10 @@ export default function MasarSotiPage() {
             </h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 18 }}>
               {[
-                { t:'الاستوديو ليس زينة', d:'الفرق بين تسجيل في غرفة معالَجة وتسجيل في غرفة عادية يُسمع في الثانية الأولى.' },
-                { t:'تصحيح على أذنك وحدك', d:'عيوب الصوت شخصية: أحدهم يُدغم الحروف وآخر يقطع نفسه في غير موضعه.' },
-                { t:'مهندس صوت في مشروعك', d:'الملفّ النهائي يُهندَس ويُمكسَج ويُصدَّر بيد متخصّص، لا بيدك وحدك.' },
-                { t:'جهة الاعتماد هي السوق', d:'وجيز أكبر مكتبة صوتية في المنطقة؛ فمن يعتمد شهادتك هو من ينشر صوتك.' },
+                { t:'الاستوديو ليس زينة',       d:'الفرق بين تسجيل في غرفة معالَجة وتسجيل في غرفة عادية يُسمع في الثانية الأولى.' },
+                { t:'تصحيح على أذنك وحدك',      d:'عيوب الصوت شخصية: أحدهم يُدغم الحروف وآخر يقطع نفسه في غير موضعه.' },
+                { t:'مهندس صوت في مشروعك',      d:'الملفّ النهائي يُهندَس ويُمكسَج ويُصدَّر بيد متخصّص، لا بيدك وحدك.' },
+                { t:'جهة الاعتماد هي السوق',    d:'وجيز أكبر مكتبة صوتية في المنطقة؛ فمن يعتمد شهادتك هو من ينشر صوتك.' },
               ].map(({ t, d }) => (
                 <div key={t} style={{ padding: '18px 16px', background: 'rgba(255,255,255,.03)', borderRadius: 14, border: `1px solid ${CBR}` }}>
                   <h4 style={{ fontFamily: F, fontWeight: 800, fontSize: 15.5, color: OFF, marginBottom: 8 }}>{t}</h4>
@@ -860,7 +883,7 @@ export default function MasarSotiPage() {
       </section>
 
       {/* ═══════════════════════════════════════
-          9. PRICING (single card)
+          09. PRICING
       ═══════════════════════════════════════ */}
       <section className="sec sec--access" style={{ padding: '96px 0' }}>
         <div style={WRP}>
@@ -877,14 +900,11 @@ export default function MasarSotiPage() {
           <div style={{ maxWidth: 560, margin: '48px auto 0', position: 'relative' }}>
             <div style={{ position: 'absolute', inset: -2, background: 'linear-gradient(135deg, rgba(255,193,7,0.18), rgba(103,232,249,0.08))', borderRadius: 28, filter: 'blur(18px)', opacity: 0.6, pointerEvents: 'none' }} />
             <div style={{ position: 'relative', background: '#131B27', border: '1px solid rgba(255,193,7,.55)', borderRadius: 24, padding: 'clamp(26px,4vw,40px)', boxShadow: '0 0 0 1px rgba(255,193,7,.20), inset 0 1px 0 rgba(255,193,7,.10), 0 34px 70px rgba(24,32,47,.28)' }}>
-              <div style={{ position: 'absolute', top: -13, left: '50%', transform: 'translateX(-50%)', background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 12, padding: '5px 18px', borderRadius: 999, whiteSpace: 'nowrap', boxShadow: '0 4px 16px rgba(255,193,7,0.28)' }}>
-                الأشمل والأوفر
-              </div>
 
-              <div style={{ textAlign: 'center', paddingBottom: 24, borderBottom: `1px solid ${CBR}`, paddingTop: 10 }}>
+              <div style={{ textAlign: 'center', paddingBottom: 24, borderBottom: `1px solid ${CBR}` }}>
                 <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 21, color: OFF }}>الماستركلاس الكامل</h3>
                 <p style={{ fontFamily: F, fontSize: 13, color: MUT, marginTop: 6, lineHeight: 1.65 }}>
-                  60 ساعة · 12 محطة · 13 عمل صوتي · مشروع تخرّج مُهندَس
+                  44 ساعة · 22 جلسة · 12 محطة · 13 مخرجاً + مشروع تخرّج
                 </p>
 
                 <div style={{ display: 'flex', justifyContent: 'center', gap: 28, margin: '20px 0 0', flexWrap: 'wrap', alignItems: 'flex-end' }}>
@@ -895,7 +915,7 @@ export default function MasarSotiPage() {
                   <div style={{ width: 1, height: 52, background: CBR, flexShrink: 0 }} />
                   <div style={{ textAlign: 'center' }}>
                     <span style={{ fontFamily: FP, fontSize: 48, fontWeight: 700, color: GLD, lineHeight: 1, display: 'block' }}>700</span>
-                    <span style={{ fontFamily: F, fontSize: 13, color: MUT, display: 'block', marginTop: 4 }}>USD · Online LIVE</span>
+                    <span style={{ fontFamily: F, fontSize: 13, color: MUT, display: 'block', marginTop: 4 }}>USD · مباشر تفاعلي (Online LIVE)</span>
                   </div>
                 </div>
 
@@ -906,7 +926,15 @@ export default function MasarSotiPage() {
               </div>
 
               <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 13, padding: '24px 0', margin: 0 }}>
-                {['60 ساعة تدريبية على 30 جلسة', '12 محطة متسلسلة تشمل جميع تخصصات السوق', '13 عملاً صوتياً بتصحيح فردي لكلٍّ منها', 'مشروع تخرّج مُنتَج داخل استوديو كاسيت', 'مسار التأهيل للنشر على تطبيق وجيز', 'شهادة معتمدة من تطبيق وجيز'].map(feat => (
+                {[
+                  '44 ساعة تدريبية على 22 جلسة',
+                  '12 محطة تدريبية متسلسلة',
+                  '13 مخرجاً ضمن محفظة المتدرّب',
+                  'مشروع تخرّج من 3 ساعات',
+                  'إنتاج داخل استوديو كاسيت للحضوري',
+                  'مسار التأهيل للنشر على وجيز',
+                  'اعتماد من تطبيق وجيز',
+                ].map(feat => (
                   <li key={feat} style={{ display: 'flex', alignItems: 'flex-start', gap: 11, fontFamily: F, fontSize: 14, color: LT, lineHeight: 1.65 }}>
                     <span style={{ color: GLD, fontWeight: 800, flexShrink: 0 }}>✓</span> {feat}
                   </li>
@@ -923,7 +951,7 @@ export default function MasarSotiPage() {
       </section>
 
       {/* ═══════════════════════════════════════
-          11. ADVISOR
+          10. ADVISOR
       ═══════════════════════════════════════ */}
       <section id="consult" className="sec sec--advisor" style={{ padding: '96px 0' }}>
         <div style={WRP}>
@@ -978,7 +1006,7 @@ export default function MasarSotiPage() {
       </section>
 
       {/* ═══════════════════════════════════════
-          12. FAQ
+          11. FAQ
       ═══════════════════════════════════════ */}
       <section className="sec sec--faq" style={{ padding: '96px 0' }}>
         <div style={WRP}>
@@ -1006,7 +1034,7 @@ export default function MasarSotiPage() {
       </section>
 
       {/* ═══════════════════════════════════════
-          13. COHORT
+          12. COHORT
       ═══════════════════════════════════════ */}
       <section id="cohort" className="sec sec--cohort" style={{ padding: '96px 0' }}>
         <div style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none', overflow: 'hidden' }}>
@@ -1021,7 +1049,7 @@ export default function MasarSotiPage() {
             الفوج القادم
           </span>
           <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(30px,4.4vw,46px)', lineHeight: 1.3, margin: '16px 0 0', letterSpacing: -.6, color: OFF }}>
-            يبدأ في <span style={{ color: GLD }}>28 / 8</span>
+            يبدأ <span style={{ color: GLD }}>الأحد، 9 آب</span>
           </h2>
 
           <div className="cohort-facts" style={{ maxWidth: 880 }}>
@@ -1031,7 +1059,7 @@ export default function MasarSotiPage() {
             </div>
             <div>
               <span className="cf-l">المدّة</span>
-              <b>60 ساعة · 30 جلسة + الإنتاج</b>
+              <b>44 ساعة تدريبية · 22 جلسة<br />+ 3 ساعات لإنتاج مشروع التخرّج</b>
             </div>
             <div>
               <span className="cf-l">المقاعد</span>
@@ -1041,7 +1069,7 @@ export default function MasarSotiPage() {
 
           <a href={WA_ENROLL} target="_blank" rel="noopener noreferrer"
             style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15.5, padding: '15px 32px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 10px 30px rgba(255,193,7,.28)' }}>
-            احجز مقعدك في هذا الفوج <ArrowLeft size={14} />
+            التسجيل في الماستركلاس <ArrowLeft size={14} />
           </a>
           <p style={{ fontFamily: F, fontSize: 14, color: MUT, marginTop: 18 }}>
             أو <a href="#consult" style={{ color: GLD, textDecoration: 'underline', textUnderlineOffset: 3 }}>تحدّث مع ياقوت أوّلاً</a> — استشارة مجانية دون التزام.
