@@ -1,5 +1,5 @@
 /**
- * usePageMeta — updates <title> and OG/Twitter meta tags dynamically.
+ * usePageMeta — updates <title>, canonical, and OG/Twitter meta tags dynamically.
  * Since this is a client-side SPA, social bots see the static index.html
  * tags (homepage values). This hook updates the live DOM so that Google's
  * JS-rendering crawler and browser tab titles stay accurate.
@@ -9,11 +9,11 @@ import { useEffect } from 'react';
 interface PageMeta {
   title: string;
   description?: string;
-  ogImage?: string; // absolute URL — defaults to /og-image.jpg
+  ogImage?: string; // absolute URL — defaults to https://kaseet.com/og-image.jpg
 }
 
-const SITE_NAME = 'كاسيت أكاديمي';
-const OG_BASE   = 'https://kaseet.com';
+const SITE_NAME      = 'كاسيت أكاديمي';
+const OG_BASE        = 'https://kaseet.com';
 const OG_IMG_DEFAULT = `${OG_BASE}/og-image.jpg`;
 
 function setMeta(selector: string, attr: string, value: string) {
@@ -29,13 +29,29 @@ function setMeta(selector: string, attr: string, value: string) {
   el.setAttribute(attr, value);
 }
 
+function setCanonical(url: string) {
+  let el = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+  if (!el) {
+    el = document.createElement('link');
+    el.setAttribute('rel', 'canonical');
+    document.head.appendChild(el);
+  }
+  el.setAttribute('href', url);
+}
+
 export function usePageMeta({ title, description, ogImage }: PageMeta) {
   useEffect(() => {
     const fullTitle = `${title} | ${SITE_NAME}`;
     const img       = ogImage ?? OG_IMG_DEFAULT;
-    const url       = window.location.href;
+
+    // Build canonical from OG_BASE + current pathname (strip hash/search)
+    const canonical = `${OG_BASE}${window.location.pathname}`.replace(/\/$/, '') || OG_BASE + '/';
+    const url       = canonical; // og:url matches canonical
 
     document.title = fullTitle;
+
+    // Canonical link
+    setCanonical(canonical);
 
     if (description) {
       setMeta('meta[name="description"]', 'content', description);

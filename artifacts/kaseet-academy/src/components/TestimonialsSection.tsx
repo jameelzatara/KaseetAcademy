@@ -387,45 +387,6 @@ export default function TestimonialsSection() {
           {page * perPage + 1}–{Math.min((page + 1) * perPage, REVIEWS.length)} من {REVIEWS.length} مراجعة
         </p>
 
-        {/* ── CTA strip ── */}
-        <div style={{
-          marginTop: 52, display: 'flex', justifyContent: 'center',
-          flexWrap: 'wrap', gap: 14, direction: 'rtl',
-        }}>
-          <a
-            href={PLACE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8,
-              fontFamily: F, fontWeight: 800, fontSize: 14.5,
-              padding: '13px 28px', borderRadius: 14,
-              background: GOLD_BG, border: `1.5px solid ${GOLD_LINE}`,
-              color: GOLD, textDecoration: 'none', transition: 'all .2s',
-            }}
-            onMouseEnter={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, { background: 'rgba(255,193,7,.16)', borderColor: 'rgba(255,193,7,.55)' })}
-            onMouseLeave={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, { background: GOLD_BG, borderColor: GOLD_LINE })}
-          >
-            <Star size={16} fill={GOLD} color={GOLD} />
-            اترك رأيك على خرائط جوجل
-          </a>
-
-          <a
-            href="#consultant"
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8,
-              fontFamily: F, fontWeight: 800, fontSize: 14.5,
-              padding: '13px 28px', borderRadius: 14,
-              background: GOLD, color: '#121927',
-              textDecoration: 'none', transition: 'all .2s',
-              boxShadow: '0 4px 18px rgba(255,193,7,.30)',
-            }}
-            onMouseEnter={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, { boxShadow: '0 8px 28px rgba(255,193,7,.45)', transform: 'translateY(-2px)' })}
-            onMouseLeave={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, { boxShadow: '0 4px 18px rgba(255,193,7,.30)', transform: 'none' })}
-          >
-            استشر مجاناً
-          </a>
-        </div>
       </div>
     </section>
   );
