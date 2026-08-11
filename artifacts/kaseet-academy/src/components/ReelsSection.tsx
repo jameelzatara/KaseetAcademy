@@ -197,13 +197,15 @@ export default function ReelsSection({
             const off      = getOffset(i, cur, n);
             const cstyle   = cardStyle(off);
             const isCenter = off === 0;
-            // only the active centre card is semi-transparent/glass; others are solid
-            const cardBg   = isCenter ? 'rgba(18,26,42,0.88)' : '#0C1220';
+            // light mode: white card so Instagram embed header is fully visible
+            const cardBg = lightEmbed
+              ? (isCenter ? '#ffffff' : 'rgba(255,255,255,0.80)')
+              : (isCenter ? 'rgba(18,26,42,0.88)' : '#0C1220');
 
             return (
               <div
                 key={i}
-                className={isCenter ? 'reel-wrap is-active' : 'reel-wrap'}
+                className={[isCenter ? 'reel-wrap is-active' : 'reel-wrap', lightEmbed ? 'reel-wrap--light' : ''].join(' ').trim()}
                 onClick={() => { if (off !== 0) go(off > 0 ? 1 : -1); }}
                 style={{
                   position:   'absolute',

@@ -724,4 +724,8 @@ small, .meta { font-size: 13.5px }
   pointer-events: none;
   z-index: 2;
 }
+/* light-embed variant: no dark overlays */
+.reel-wrap--light::after {
+  display: none;
+}
 
