@@ -40,9 +40,13 @@ const CBR  = 'rgba(255,255,255,0.08)';
 const INK  = '#18202F';
 const INK2 = '#56617A';
 
-const WA_PHONE   = '962771052222';
-const WA_ENROLL  = waLink(WA_PHONE, 'مرحباً، أودّ حجز مقعدي في ماستركلاس التعليق والأداء الصوتي');
-const WA_CONSULT = waLink(WA_PHONE, 'مرحباً، أودّ حجز استشارة تعليمية مجانية عن ماستركلاس التعليق والأداء الصوتي');
+const WA_PHONE_ONLINE  = '962771052222'; // ياقوت — مباشر تفاعلي
+const WA_PHONE_ONSITE  = '962790234483'; // آية — حضوري
+
+const WA_ENROLL  = waLink(WA_PHONE_ONLINE, 'مرحباً، أودّ حجز مقعدي في ماستركلاس التعليق والأداء الصوتي');
+const WA_CONSULT = waLink(WA_PHONE_ONLINE, 'مرحباً، أودّ حجز استشارة تعليمية مجانية عن ماستركلاس التعليق والأداء الصوتي');
+const WA_ENROLL_ONSITE  = waLink(WA_PHONE_ONSITE, 'مرحباً، أودّ حجز مقعدي في ماستركلاس التعليق والأداء الصوتي — الحضوري');
+const WA_ENROLL_ONLINE  = waLink(WA_PHONE_ONLINE, 'مرحباً، أودّ حجز مقعدي في ماستركلاس التعليق والأداء الصوتي — المباشر التفاعلي');
 
 /* ── wave helpers ────────────────────────────────── */
 function waveThumb(seed: number, n = 38, w = 120, h = 26): string {
@@ -912,11 +916,21 @@ export default function MasarSotiPage() {
                   <div style={{ textAlign: 'center' }}>
                     <span style={{ fontFamily: FP, fontSize: 48, fontWeight: 700, color: GLD, lineHeight: 1, display: 'block' }}>500</span>
                     <span style={{ fontFamily: F, fontSize: 13, color: MUT, display: 'block', marginTop: 4 }}>JOD · حضوري عمّان</span>
+                    <a href={WA_ENROLL_ONSITE} target="_blank" rel="noopener noreferrer"
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: 5, marginTop: 8, fontFamily: F, fontSize: 12, fontWeight: 700, color: '#7FE3A6', background: 'rgba(37,211,102,.10)', border: '1px solid rgba(37,211,102,.28)', borderRadius: 999, padding: '5px 11px', textDecoration: 'none' }}>
+                      <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12" aria-hidden="true"><path d="M12.04 2C6.6 2 2.2 6.4 2.2 11.84c0 1.94.55 3.75 1.5 5.28L2 22l5-1.63a9.84 9.84 0 0 0 5.04 1.38c5.44 0 9.84-4.4 9.84-9.84S17.48 2 12.04 2zm0 17.94c-1.6 0-3.1-.44-4.38-1.2l-.31-.19-3.25 1.06 1.07-3.17-.2-.32a7.94 7.94 0 0 1-1.23-4.28c0-4.4 3.6-7.98 8.3-7.98 4.4 0 8 3.58 8 7.98s-3.6 8.1-8 8.1z"/></svg>
+                      تواصل مع آية
+                    </a>
                   </div>
                   <div style={{ width: 1, height: 52, background: CBR, flexShrink: 0 }} />
                   <div style={{ textAlign: 'center' }}>
                     <span style={{ fontFamily: FP, fontSize: 48, fontWeight: 700, color: GLD, lineHeight: 1, display: 'block' }}>700</span>
                     <span style={{ fontFamily: F, fontSize: 13, color: MUT, display: 'block', marginTop: 4 }}>USD · مباشر تفاعلي (Online LIVE)</span>
+                    <a href={WA_ENROLL_ONLINE} target="_blank" rel="noopener noreferrer"
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: 5, marginTop: 8, fontFamily: F, fontSize: 12, fontWeight: 700, color: '#7FE3A6', background: 'rgba(37,211,102,.10)', border: '1px solid rgba(37,211,102,.28)', borderRadius: 999, padding: '5px 11px', textDecoration: 'none' }}>
+                      <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12" aria-hidden="true"><path d="M12.04 2C6.6 2 2.2 6.4 2.2 11.84c0 1.94.55 3.75 1.5 5.28L2 22l5-1.63a9.84 9.84 0 0 0 5.04 1.38c5.44 0 9.84-4.4 9.84-9.84S17.48 2 12.04 2zm0 17.94c-1.6 0-3.1-.44-4.38-1.2l-.31-.19-3.25 1.06 1.07-3.17-.2-.32a7.94 7.94 0 0 1-1.23-4.28c0-4.4 3.6-7.98 8.3-7.98 4.4 0 8 3.58 8 7.98s-3.6 8.1-8 8.1z"/></svg>
+                      تواصل مع ياقوت
+                    </a>
                   </div>
                 </div>
 
@@ -952,57 +966,85 @@ export default function MasarSotiPage() {
       </section>
 
       {/* ═══════════════════════════════════════
-          10. ADVISOR
+          10. ADVISORS
       ═══════════════════════════════════════ */}
       <section id="consult" className="sec sec--advisor" style={{ padding: '96px 0' }}>
         <div style={WRP}>
-          <div style={{ background: 'rgba(42,54,72,.80)', border: `1px solid ${GL}`, borderRadius: 24, overflow: 'hidden', boxShadow: '0 30px 80px rgba(0,0,0,.45)' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: 0 }}>
-              {/* side */}
-              <div style={{ padding: 'clamp(28px,3.5vw,48px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, borderLeft: `1px solid ${CBR}`, minWidth: 180, background: 'rgba(0,0,0,.12)' }}>
-                <div className="adv-ava">
-                  <img src={advisorImg} alt="ياقوت — المستشارة التعليمية" />
+          <div style={{ textAlign: 'center', marginBottom: 40 }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GS, border: `1px solid ${GL}`, color: GLD, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>
+              <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD }} />
+              استشارة مجانية · دون التزام
+            </span>
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,3.8vw,40px)', lineHeight: 1.35, margin: '16px 0 0', color: OFF }}>
+              قبل أن تسجّل، <span style={{ color: GLD }}>تحدّث مع مستشارتك</span>
+            </h2>
+            <p style={{ fontFamily: F, fontSize: 15.5, color: MUT, marginTop: 12, maxWidth: 540, marginInline: 'auto', lineHeight: 1.85 }}>
+              جلسة قصيرة على واتساب تُحدَّد فيها نقطة بدايتك — لكلّ مسار مستشارة مخصّصة.
+            </p>
+          </div>
+
+          <div className="soti-acc-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18 }}>
+
+            {/* آية — حضوري */}
+            <div style={{ background: 'rgba(42,54,72,.80)', border: `1px solid ${GL}`, borderRadius: 20, overflow: 'hidden', boxShadow: '0 20px 60px rgba(0,0,0,.40)' }}>
+              <div style={{ background: `rgba(255,193,7,.08)`, borderBottom: `1px solid rgba(255,193,7,.18)`, padding: '10px 20px', display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: GLD, flexShrink: 0 }} />
+                <span style={{ fontFamily: F, fontWeight: 700, fontSize: 12, color: GLD }}>حضوري · عمّان</span>
+              </div>
+              <div style={{ padding: 'clamp(22px,2.8vw,32px)', display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                  <div style={{ width: 64, height: 64, borderRadius: '50%', flexShrink: 0, background: 'linear-gradient(135deg, #3A2800, #5A3F00)', border: `2px solid rgba(255,193,7,.40)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: F, fontWeight: 800, fontSize: 22, color: GLD }}>آ</div>
+                  <div>
+                    <div style={{ fontFamily: F, fontWeight: 800, fontSize: 18, color: OFF }}>آية</div>
+                    <div style={{ fontFamily: F, fontSize: 12.5, color: MUT, marginTop: 3, lineHeight: 1.5 }}>المستشارة التعليمية<br />ماستركلاس الحضوري</div>
+                  </div>
                 </div>
-                <div style={{ fontFamily: F, fontWeight: 800, fontSize: 18, color: OFF, textAlign: 'center' }}>ياقوت</div>
-                <div style={{ fontFamily: F, fontSize: 12.5, color: MUT, textAlign: 'center', lineHeight: 1.5 }}>المستشارة التعليمية<br />كاسيت أكاديمي</div>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: 'rgba(14,20,31,.78)', backdropFilter: 'blur(8px)', border: '1px solid rgba(37,211,102,.42)', color: '#7FE3A6', fontSize: 11.5, fontWeight: 700, fontFamily: F, padding: '7px 12px', borderRadius: 999, whiteSpace: 'nowrap' }}>
-                  <span className="soti-live-dot" style={{ width: 7, height: 7, borderRadius: '50%', background: '#25D366', display: 'block', flexShrink: 0 }} />
+                <div style={{ display: 'inline-flex', alignSelf: 'flex-start', alignItems: 'center', gap: 6, background: 'rgba(14,20,31,.78)', border: '1px solid rgba(37,211,102,.36)', color: '#7FE3A6', fontSize: 11.5, fontWeight: 700, fontFamily: F, padding: '5px 11px', borderRadius: 999 }}>
+                  <span className="soti-live-dot" style={{ width: 6, height: 6, borderRadius: '50%', background: '#25D366', display: 'block', flexShrink: 0 }} />
                   متاحة الآن
                 </div>
-              </div>
-
-              {/* body */}
-              <div style={{ padding: 'clamp(28px,3.5vw,48px)' }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GLD, color: '#1A1206', fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '7px 16px', borderRadius: 999 }}>
-                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#1A1206' }} />
-                  استشارة مجانية · دون التزام
-                </span>
-                <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(22px,3.2vw,34px)', lineHeight: 1.35, marginTop: 16, color: OFF }}>
-                  قبل أن تسجّل، <span style={{ color: GLD }}>تحدّث مع ياقوت</span>
-                </h2>
-                <p style={{ fontFamily: F, fontSize: 15.5, color: MUT, marginTop: 14, maxWidth: 520, lineHeight: 1.85 }}>
-                  جلسة قصيرة على واتساب تُحدَّد فيها نقطة بدايتك: يُقيَّم مستواك الصوتي، ويُرشَّح لك المسار والمدرّب الأنسب لهدفك المهني.
-                </p>
-                <ul style={{ listStyle: 'none', marginTop: 22, display: 'grid', gap: 12, padding: 0 }}>
-                  {['تقييم أوّلي لمستواك الصوتي واللغوي', 'ترشيح نقطة البداية والمدرّب الأنسب لهدفك', 'إجابات دقيقة عن الأسعار والتقسيط ومواعيد الفوج'].map(li => (
-                    <li key={li} style={{ display: 'flex', gap: 11, fontFamily: F, fontSize: 14.5, color: LT, lineHeight: 1.7 }}>
-                      <span style={{ flexShrink: 0, width: 20, height: 20, borderRadius: '50%', background: GS, border: `1px solid ${GL}`, color: GLD, fontSize: 11.5, fontWeight: 700, display: 'grid', placeContent: 'center', marginTop: 3 }}>✓</span>
-                      {li}
-                    </li>
-                  ))}
-                </ul>
-                <div style={{ marginTop: 26 }}>
-                  <a href={WA_CONSULT} target="_blank" rel="noopener noreferrer"
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: '#1F9D57', color: '#fff', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 26px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 10px 30px rgba(31,157,87,.30)' }}>
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true">
-                      <path d="M12.04 2C6.6 2 2.2 6.4 2.2 11.84c0 1.94.55 3.75 1.5 5.28L2 22l5-1.63a9.84 9.84 0 0 0 5.04 1.38c5.44 0 9.84-4.4 9.84-9.84S17.48 2 12.04 2zm0 17.94c-1.6 0-3.1-.44-4.38-1.2l-.31-.19-3.25 1.06 1.07-3.17-.2-.32a7.94 7.94 0 0 1-1.23-4.28c0-4.4 3.6-7.98 8.3-7.98 4.4 0 8 3.58 8 7.98s-3.6 8.1-8 8.1z"/>
-                    </svg>
-                    احجز استشارتك المجانية على واتساب
-                  </a>
-                </div>
+                <a href={waLink(WA_PHONE_ONSITE, 'مرحباً آية، أودّ حجز استشارة مجانية عن ماستركلاس التعليق الصوتي الحضوري')}
+                  target="_blank" rel="noopener noreferrer"
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9, background: '#1F9D57', color: '#fff', fontFamily: F, fontWeight: 800, fontSize: 14, padding: '12px 20px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 8px 22px rgba(31,157,87,.28)', marginTop: 4 }}>
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true"><path d="M12.04 2C6.6 2 2.2 6.4 2.2 11.84c0 1.94.55 3.75 1.5 5.28L2 22l5-1.63a9.84 9.84 0 0 0 5.04 1.38c5.44 0 9.84-4.4 9.84-9.84S17.48 2 12.04 2zm0 17.94c-1.6 0-3.1-.44-4.38-1.2l-.31-.19-3.25 1.06 1.07-3.17-.2-.32a7.94 7.94 0 0 1-1.23-4.28c0-4.4 3.6-7.98 8.3-7.98 4.4 0 8 3.58 8 7.98s-3.6 8.1-8 8.1z"/></svg>
+                  واتساب آية (+962 79 023 4483)
+                </a>
               </div>
             </div>
+
+            {/* ياقوت — مباشر */}
+            <div style={{ background: 'rgba(42,54,72,.80)', border: `1px solid rgba(103,232,249,.35)`, borderRadius: 20, overflow: 'hidden', boxShadow: '0 20px 60px rgba(0,0,0,.40)' }}>
+              <div style={{ background: `rgba(103,232,249,.07)`, borderBottom: `1px solid rgba(103,232,249,.18)`, padding: '10px 20px', display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#67e8f9', flexShrink: 0 }} />
+                <span style={{ fontFamily: F, fontWeight: 700, fontSize: 12, color: '#67e8f9' }}>مباشر تفاعلي (Online LIVE)</span>
+              </div>
+              <div style={{ padding: 'clamp(22px,2.8vw,32px)', display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                  <div className="adv-ava" style={{ flexShrink: 0 }}>
+                    <img src={advisorImg} alt="ياقوت — المستشارة التعليمية" />
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: F, fontWeight: 800, fontSize: 18, color: OFF }}>ياقوت</div>
+                    <div style={{ fontFamily: F, fontSize: 12.5, color: MUT, marginTop: 3, lineHeight: 1.5 }}>المستشارة التعليمية<br />ماستركلاس المباشر التفاعلي</div>
+                  </div>
+                </div>
+                <div style={{ display: 'inline-flex', alignSelf: 'flex-start', alignItems: 'center', gap: 6, background: 'rgba(14,20,31,.78)', border: '1px solid rgba(37,211,102,.36)', color: '#7FE3A6', fontSize: 11.5, fontWeight: 700, fontFamily: F, padding: '5px 11px', borderRadius: 999 }}>
+                  <span className="soti-live-dot" style={{ width: 6, height: 6, borderRadius: '50%', background: '#25D366', display: 'block', flexShrink: 0 }} />
+                  متاحة الآن
+                </div>
+                <a href={WA_CONSULT} target="_blank" rel="noopener noreferrer"
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9, background: '#1F9D57', color: '#fff', fontFamily: F, fontWeight: 800, fontSize: 14, padding: '12px 20px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 8px 22px rgba(31,157,87,.28)', marginTop: 4 }}>
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true"><path d="M12.04 2C6.6 2 2.2 6.4 2.2 11.84c0 1.94.55 3.75 1.5 5.28L2 22l5-1.63a9.84 9.84 0 0 0 5.04 1.38c5.44 0 9.84-4.4 9.84-9.84S17.48 2 12.04 2zm0 17.94c-1.6 0-3.1-.44-4.38-1.2l-.31-.19-3.25 1.06 1.07-3.17-.2-.32a7.94 7.94 0 0 1-1.23-4.28c0-4.4 3.6-7.98 8.3-7.98 4.4 0 8 3.58 8 7.98s-3.6 8.1-8 8.1z"/></svg>
+                  واتساب ياقوت (+962 77 105 2222)
+                </a>
+              </div>
+            </div>
+
           </div>
+
+          <p style={{ textAlign: 'center', fontFamily: F, fontSize: 13.5, color: MUT, marginTop: 22, lineHeight: 1.8 }}>
+            لست متأكّداً من المسار؟ <a href={WA_CONSULT} target="_blank" rel="noopener noreferrer" style={{ color: GLD, textDecoration: 'underline', textUnderlineOffset: 3 }}>تحدّث مع ياقوت</a> وستساعدك في اختيار ما يناسبك.
+          </p>
         </div>
       </section>
 
