@@ -3,8 +3,9 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import pinoHttp from "pino-http";
-import router from "./routes";
-import { logger } from "./lib/logger";
+import { handleStripeWebhook } from "./routes/checkout.js";
+import router from "./routes/index.js";
+import { logger } from "./lib/logger.js";
 
 const app: Express = express();
 
@@ -26,15 +27,37 @@ app.use(
   }),
 );
 
-// ── CORS — allow browser credentials ─────────────────────
+// ── CORS ──────────────────────────────────────────────────
 app.use(
   cors({
-    origin: true,       // reflect any origin (Replit domain varies)
-    credentials: true,  // allow cookies
+    origin: true,
+    credentials: true,
   }),
 );
 
-// ── Body / cookie parsers ─────────────────────────────────
+// ── ⛔ Stripe webhook MUST come BEFORE express.json() ─────
+// Needs raw Buffer body for signature verification
+app.post(
+  "/api/stripe/webhook",
+  express.raw({ type: "application/json" }),
+  async (req, res) => {
+    const sig = req.headers["stripe-signature"];
+    if (!sig) {
+      res.status(400).json({ error: "Missing stripe-signature header" });
+      return;
+    }
+    const signature = Array.isArray(sig) ? sig[0] : sig;
+    try {
+      await handleStripeWebhook(req.body as Buffer, signature);
+      res.json({ received: true });
+    } catch (err: any) {
+      logger.error({ err }, "Stripe webhook error");
+      res.status(400).json({ error: err.message });
+    }
+  },
+);
+
+// ── Body / cookie parsers (AFTER webhook route) ───────────
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -52,9 +75,9 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: true,        // always secure (Replit uses HTTPS)
-      sameSite: "none",    // cross-path cookie on same domain via Replit proxy
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      secure: true,
+      sameSite: "none",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     },
   }),
 );

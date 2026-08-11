@@ -19,6 +19,9 @@ import TermsPage                 from '@/pages/TermsPage';
 import RefundPolicyPage          from '@/pages/RefundPolicyPage';
 import ApplyVoiceTalentPage      from '@/pages/ApplyVoiceTalentPage';
 import ApplyTrainerPage          from '@/pages/ApplyTrainerPage';
+import CheckoutPage              from '@/pages/CheckoutPage';
+import CheckoutSuccessPage       from '@/pages/CheckoutSuccessPage';
+import AdminOrdersPage           from '@/pages/AdminOrdersPage';
 import NotFoundPage              from '@/pages/not-found';
 
 function Router() {
@@ -45,6 +48,11 @@ function Router() {
         <Route path="/masar-elami"    component={() => <Redirect to="/masterclass-elam" />} />
         <Route path="/masar-soti"     component={() => <Redirect to="/masterclass-voice" />} />
         <Route path="/masar-khataba"  component={() => <Redirect to="/masterclass-khataba" />} />
+
+        {/* Checkout & admin */}
+        <Route path="/checkout/success"         component={CheckoutSuccessPage} />
+        <Route path="/checkout"                 component={CheckoutPage} />
+        <Route path="/admin/orders"             component={AdminOrdersPage} />
 
         {/* Utility */}
         <Route path="/voice-test"               component={VoiceTestPage} />
