@@ -357,7 +357,7 @@ export default function CheckoutPage() {
               <p style={{ margin: '0 0 4px', fontSize: 14, fontWeight: 700, color: INK }}>تفضّل الدفع بالدينار الأردني؟</p>
               <p style={{ margin: '0 0 12px', fontSize: 13, color: INK2 }}>تحويل بنكي أو إي فواتيركم — تُرتّبه معك مستشارتك خلال دقائق.</p>
               <a
-                href="https://wa.me/962790000000?text=أرغب في التسجيل وأفضّل الدفع بالدينار الأردني"
+                href="https://wa.me/962771052222?text=أرغب في التسجيل وأفضّل الدفع بالدينار الأردني"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(22,163,74,.1)', border: '1px solid rgba(22,163,74,.3)', borderRadius: 10, padding: '9px 16px', color: GREEN, fontWeight: 700, fontSize: 13.5, textDecoration: 'none' }}
