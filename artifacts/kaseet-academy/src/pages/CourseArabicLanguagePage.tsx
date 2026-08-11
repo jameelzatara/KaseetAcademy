@@ -8,7 +8,7 @@ import {
   CreditCard, Lock, PlayCircle, BookOpen, Sliders,
   Mic, Sparkles, Briefcase, Zap,
   GraduationCap, Printer, ChevronDown, MessageCircle, ArrowLeft,
-  Share2, ShieldCheck, Star,
+  Share2, ShieldCheck, Star, FileDown,
 } from 'lucide-react';
 import ShareModal from '../components/ShareModal';
 import { usePageMeta } from '../hooks/usePageMeta';
@@ -188,12 +188,12 @@ function SecTitle({ children }: { children: React.ReactNode }) {
 
 /* ── AboutSection ── */
 const GOALS = [
-  { icon: <BookOpen size={22} strokeWidth={1.8} color={GOLD_INK} />, title: 'النحو الوظيفي التطبيقي',      text: 'نحو عملي غير نظري — إعراب الجمل في السياق الحقيقي وتطبيق القواعد مباشرةً في الكتابة والتحرير.' },
-  { icon: <Sliders size={22} strokeWidth={1.8} color={GOLD_INK} />,  title: 'علم الصرف والاشتقاق',         text: 'أوزان الأفعال والمصادر والمشتقات — مفتاح توسيع المعجم الذهني واستخدام الألفاظ بدقة ومرونة.' },
-  { icon: <Star size={22} strokeWidth={1.8} color={GOLD_INK} />,     title: 'الإملاء السليم والترقيم',     text: 'قواعد الإملاء الحاسمة: الهمزات، التاء المربوطة والمفتوحة، علامات الترقيم في الإعلام الجديد.' },
-  { icon: <Zap size={22} strokeWidth={1.8} color={GOLD_INK} />,      title: 'الأساليب اللغوية والتوظيف',   text: 'أنماط التعبير العربي المختلفة وكيف تختار الأسلوب المناسب لكل سياق مهني أو إبداعي.' },
-  { icon: <Mic size={22} strokeWidth={1.8} color={GOLD_INK} />,      title: 'فنون التحرير ورشاقة النص',    text: 'تقنيات تحسين الأسلوب وبناء الفقرات وتدفق الأفكار — الانتقال من الكتابة الصحيحة إلى المؤثرة.' },
-  { icon: <Briefcase size={22} strokeWidth={1.8} color={GOLD_INK} />, title: 'البلاغة والتأثير اللغوي',   text: 'مقدمة في علمَي البيان والبديع — كيف يُحيي التشبيه والاستعارة النصوص ويرفع مستوى الكتابة.' },
+  { icon: <BookOpen size={22} strokeWidth={1.8} color={GOLD_INK} />, title: 'النحو والصرف في الكتابة والتحدث',  text: 'توظيف قواعد النحو والصرف بسلاسة في الكتابة والتحدث بثقة كاملة — من القاعدة إلى التطبيق الفوري.' },
+  { icon: <Sliders size={22} strokeWidth={1.8} color={GOLD_INK} />,  title: 'التحرير والتدقيق المعاصر',         text: 'امتلاك أدوات تحرير النصوص ومراجعتها وتدقيقها بمعايير معاصرة مع القدرة على رصد الأخطاء وتصحيحها.' },
+  { icon: <Star size={22} strokeWidth={1.8} color={GOLD_INK} />,     title: 'تجنّب الأخطاء الإعلامية الشائعة', text: 'تجنب الأخطاء الإملائية والأسلوبية الشائعة في الإعلام والمنصات الرقمية والتحدث بلغة سليمة ومهنية.' },
+  { icon: <Mic size={22} strokeWidth={1.8} color={GOLD_INK} />,      title: 'نصوص عربية رصينة ومتماسكة',       text: 'إنتاج نصوص عربية سليمة ومتماسكة بأسلوب رصين يجمع الفصاحة والإيجاز — يناسب الإعلام والمحتوى الرقمي.' },
+  { icon: <Briefcase size={22} strokeWidth={1.8} color={GOLD_INK} />, title: 'تحليل النصوص وتشخيص الخلل اللغوي', text: 'تطوير القدرة على تحليل النصوص الأدبية والإعلامية واكتشاف مواطن القوة والخلل اللغوي فيها بدقة.' },
+  { icon: <Zap size={22} strokeWidth={1.8} color={GOLD_INK} />,      title: 'البلاغة والأسلوب والرشاقة اللغوية', text: 'الأسلوب العربي وفنون رشاقة النص، والبلاغة الوظيفية في التحرير اللغوي المعاصر لرفع مستوى الكتابة.' },
 ];
 function AboutSection() {
   const waYaqt = waLink('962771052222', 'السلام عليكم، أرغب في الاستفسار عن دورة تمكين اللغة العربية وفنون التحرير اللغوي (مباشر تفاعلي Online LIVE)');
@@ -312,11 +312,18 @@ function CurriculumSection() {
       <div style={{ ...WRAP, direction: 'rtl' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, marginBottom: 32 }}>
           <SecTitle>الخطة الدراسية</SecTitle>
-          <button onClick={() => window.print()} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'transparent', border: `1px solid ${CREAM_LINE}`, borderRadius: 10, padding: '8px 16px', cursor: 'pointer', fontFamily: F, fontWeight: 700, fontSize: 13, color: INK2, transition: 'background .15s' }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(24,32,47,.05)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-            <Printer size={15} strokeWidth={1.8} color={INK2} /> طباعة المنهج
-          </button>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <a href={`${import.meta.env.BASE_URL}brochures/arabic-language.pdf`} download="كتيّب-دورة-اللغة-العربية.pdf" style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'transparent', border: `1px solid ${CREAM_LINE}`, borderRadius: 10, padding: '8px 16px', cursor: 'pointer', fontFamily: F, fontWeight: 700, fontSize: 13, color: INK2, textDecoration: 'none', transition: 'background .15s' }}
+              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = 'rgba(24,32,47,.05)')}
+              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = 'transparent')}>
+              <FileDown size={15} strokeWidth={1.8} color={INK2} /> تحميل الكتيّب
+            </a>
+            <button onClick={() => window.print()} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'transparent', border: `1px solid ${CREAM_LINE}`, borderRadius: 10, padding: '8px 16px', cursor: 'pointer', fontFamily: F, fontWeight: 700, fontSize: 13, color: INK2, transition: 'background .15s' }}
+              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(24,32,47,.05)')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
+              <Printer size={15} strokeWidth={1.8} color={INK2} /> طباعة المنهج
+            </button>
+          </div>
         </div>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 20, background: `rgba(30,122,133,.10)`, border: `1px solid rgba(30,122,133,.22)`, borderRadius: 10, padding: '8px 16px' }}>
           <Wifi size={14} strokeWidth={1.8} color={TEAL} />

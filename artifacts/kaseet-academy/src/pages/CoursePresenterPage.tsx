@@ -8,7 +8,7 @@ import {
   CreditCard, Lock, PlayCircle, Tv, Volume2, Video,
   Mic, Sparkles, Briefcase, BookOpen,
   GraduationCap, Printer, ChevronDown, MessageCircle, ArrowLeft,
-  Share2, ShieldCheck, Zap,
+  Share2, ShieldCheck, Zap, FileDown,
 } from 'lucide-react';
 import ShareModal from '../components/ShareModal';
 import { usePageMeta } from '../hooks/usePageMeta';
@@ -313,11 +313,18 @@ function CurriculumSection() {
       <div style={{ ...WRAP, direction: 'rtl' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, marginBottom: 32 }}>
           <SecTitle>الخطة الدراسية</SecTitle>
-          <button onClick={() => window.print()} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'transparent', border: `1px solid ${CREAM_LINE}`, borderRadius: 10, padding: '8px 16px', cursor: 'pointer', fontFamily: F, fontWeight: 700, fontSize: 13, color: INK2, transition: 'background .15s' }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(24,32,47,.05)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-            <Printer size={15} strokeWidth={1.8} color={INK2} /> طباعة المنهج
-          </button>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <a href={`${import.meta.env.BASE_URL}brochures/presenter.pdf`} download="كتيّب-دورة-المذيع-المحترف.pdf" style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'transparent', border: `1px solid ${CREAM_LINE}`, borderRadius: 10, padding: '8px 16px', cursor: 'pointer', fontFamily: F, fontWeight: 700, fontSize: 13, color: INK2, textDecoration: 'none', transition: 'background .15s' }}
+              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = 'rgba(24,32,47,.05)')}
+              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = 'transparent')}>
+              <FileDown size={15} strokeWidth={1.8} color={INK2} /> تحميل الكتيّب
+            </a>
+            <button onClick={() => window.print()} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'transparent', border: `1px solid ${CREAM_LINE}`, borderRadius: 10, padding: '8px 16px', cursor: 'pointer', fontFamily: F, fontWeight: 700, fontSize: 13, color: INK2, transition: 'background .15s' }}
+              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(24,32,47,.05)')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
+              <Printer size={15} strokeWidth={1.8} color={INK2} /> طباعة المنهج
+            </button>
+          </div>
         </div>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 20, background: 'rgba(255,193,7,.12)', border: `1px solid ${GOLD_LINE}`, borderRadius: 10, padding: '8px 16px' }}>
           <MapPin size={14} strokeWidth={1.8} color={GOLD_INK} />

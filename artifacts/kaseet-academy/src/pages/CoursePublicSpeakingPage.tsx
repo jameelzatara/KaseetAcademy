@@ -8,7 +8,7 @@ import {
   CreditCard, Video, Lock, PlayCircle, Mic, Zap,
   Sliders, Briefcase, Star,
   GraduationCap, Printer, ChevronDown, MessageCircle, ArrowLeft,
-  Share2, ShieldCheck,
+  Share2, ShieldCheck, FileDown,
 } from 'lucide-react';
 import ShareModal from '../components/ShareModal';
 import { usePageMeta } from '../hooks/usePageMeta';
@@ -220,12 +220,12 @@ function SecTitle({ children }: { children: React.ReactNode }) {
 
 /* ── AboutSection ── */
 const GOALS = [
-  { icon: <Mic size={22} strokeWidth={1.8} color={GOLD_INK} />,      title: 'كسر رهبة المنصة',         text: 'استراتيجيات عملية للتغلب على الخوف الجماهيري وبناء الثقة الداخلية — تمارين التعرّض التدريجي والسيطرة على التوتر.' },
-  { icon: <Sliders size={22} strokeWidth={1.8} color={GOLD_INK} />,  title: 'إيقاع الخطاب والوقفات',   text: 'فن توظيف الصمت الاستراتيجي والوقفة المؤثرة — متى ترفع نبرتك وتشعل الحماس، ومتى تخفضها وتستمل القلوب.' },
-  { icon: <Zap size={22} strokeWidth={1.8} color={GOLD_INK} />,      title: 'الارتجال والمواقف المفاجئة', text: 'تقنيات الحديث دون استعداد مسبق — مهارة قيّمة في المقابلات وجلسات النقاش وإدارة المواقف غير المتوقعة.' },
-  { icon: <Star size={22} strokeWidth={1.8} color={GOLD_INK} />,     title: 'هيكل الخطاب المؤثر',       text: 'منهجية بناء الخطاب من المقدمة الخاطفة إلى الخاتمة الماكثة في الذاكرة — نماذج TED وخطابات الإقناع العالمية.' },
-  { icon: <Briefcase size={22} strokeWidth={1.8} color={GOLD_INK} />, title: 'خطابة الإقناع القيادي',   text: 'مهارات إلقاء مخصصة لبيئات العمل: بناء نبرة قيادية وإقناع الإدارات والمستثمرين بأفكارك بثقة وحضور.' },
-  { icon: <Award size={22} strokeWidth={1.8} color={GOLD_INK} />,    title: 'إدارة الأزمات والأسئلة',   text: 'الثبات الانفعالي فوق المنصة، والرد بذكاء ودبلوماسية على الأسئلة الصعبة أو المحرجة أثناء الإلقاء.' },
+  { icon: <Mic size={22} strokeWidth={1.8} color={GOLD_INK} />,      title: 'كسر الرهبة وامتلاك أي منصة',    text: 'الصعود إلى أي منصة أو كاميرا — أونلاين وفي الواقع — دون تردد أو ارتباك، وكسر رهبة الكاميرا والجمهور نهائياً.' },
+  { icon: <Zap size={22} strokeWidth={1.8} color={GOLD_INK} />,      title: 'الارتجال بثقة ودون تردد',        text: 'إتقان الارتجال السريع وترتيب الأفكار عند التعرض لسؤال مفاجئ — حتى تصبح المفاجأة أداةً لا مصدر قلق.' },
+  { icon: <Sliders size={22} strokeWidth={1.8} color={GOLD_INK} />,  title: 'صياغة خطاب متكامل ومؤثر',       text: 'بناء الخطاب من الافتتاحية الخاطفة إلى الخاتمة المؤثرة، بهيكل ذكي يعكس حضوراً قيادياً مؤثراً أمام أي جمهور.' },
+  { icon: <Star size={22} strokeWidth={1.8} color={GOLD_INK} />,     title: 'لغة الجسد والصوت القيادي',       text: 'ضبط نبرة صوتك ولغة جسدك وتعبيرات الوجه والتواصل البصري لتعكس حضوراً قيادياً مؤثراً وفصحى خالية من الحشو.' },
+  { icon: <Briefcase size={22} strokeWidth={1.8} color={GOLD_INK} />, title: 'إدارة الأسئلة الصعبة والأزمات', text: 'التعامل بذكاء ودبلوماسية مع الأسئلة الصعبة والمحرجة، والثبات الانفعالي فوق المنصة في أشد اللحظات ضغطاً.' },
+  { icon: <Award size={22} strokeWidth={1.8} color={GOLD_INK} />,    title: 'توثيق التطور بتقرير وشهادة',      text: 'توثيق تطورك بتقرير تقييم فردي مباشر من المدرب وشهادة معتمدة من وجيز وكاسيت تُثبّت مكانتك الخطابية.' },
 ];
 function AboutSection({ mode }: { mode: 'onsite' | 'online' }) {
   const waAya  = waLink('962790234483', 'السلام عليكم، أرغب في الاستفسار عن دورة فن الخطابة والإلقاء الجماهيري المؤثر (حضوري)');
@@ -356,11 +356,18 @@ function CurriculumSection({ mode }: { mode: 'onsite' | 'online' }) {
       <div style={{ ...WRAP, direction: 'rtl' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, marginBottom: 32 }}>
           <SecTitle>الخطة الدراسية</SecTitle>
-          <button onClick={() => window.print()} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'transparent', border: `1px solid ${CREAM_LINE}`, borderRadius: 10, padding: '8px 16px', cursor: 'pointer', fontFamily: F, fontWeight: 700, fontSize: 13, color: INK2, transition: 'background .15s' }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(24,32,47,.05)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-            <Printer size={15} strokeWidth={1.8} color={INK2} /> طباعة المنهج
-          </button>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <a href={`${import.meta.env.BASE_URL}brochures/public-speaking.pdf`} download="كتيّب-دورة-الخطابة-والإلقاء.pdf" style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'transparent', border: `1px solid ${CREAM_LINE}`, borderRadius: 10, padding: '8px 16px', cursor: 'pointer', fontFamily: F, fontWeight: 700, fontSize: 13, color: INK2, textDecoration: 'none', transition: 'background .15s' }}
+              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = 'rgba(24,32,47,.05)')}
+              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = 'transparent')}>
+              <FileDown size={15} strokeWidth={1.8} color={INK2} /> تحميل الكتيّب
+            </a>
+            <button onClick={() => window.print()} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'transparent', border: `1px solid ${CREAM_LINE}`, borderRadius: 10, padding: '8px 16px', cursor: 'pointer', fontFamily: F, fontWeight: 700, fontSize: 13, color: INK2, transition: 'background .15s' }}
+              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(24,32,47,.05)')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
+              <Printer size={15} strokeWidth={1.8} color={INK2} /> طباعة المنهج
+            </button>
+          </div>
         </div>
         {/* Mode tabs */}
         <div style={{ display: 'flex', gap: 8, marginBottom: 28, background: 'rgba(24,32,47,.07)', borderRadius: 14, padding: 4 }}>

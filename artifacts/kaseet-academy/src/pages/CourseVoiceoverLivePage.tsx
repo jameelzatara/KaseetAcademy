@@ -8,7 +8,7 @@ import {
   CreditCard, Video, Lock, PlayCircle, AudioLines, Volume2,
   SlidersHorizontal, Mic, Sparkles, Briefcase, AudioWaveform,
   GraduationCap, Printer, ChevronDown, MessageCircle, ArrowLeft,
-  Share2, ShieldCheck,
+  Share2, ShieldCheck, FileDown,
 } from 'lucide-react';
 import ShareModal from '../components/ShareModal';
 import { usePageMeta } from '../hooks/usePageMeta';
@@ -54,11 +54,11 @@ const COHORTS: Cohort[] = [
   { id: 1, mode: 'online', status: 'open', trainer: 'عمر درابكة + رنا العزام',
     start: '2026-09-12', end: '2026-10-17', start_ar: '12 سبتمبر', end_ar: '17 أكتوبر',
     days: 'السبت', time_24: '19:00', time_ar: '7:00م – 9:00م',
-    platform: 'Google Meet', enrolled: 4, capacity: 10, remaining: 6, fill: 40 },
+    platform: 'Zoom', enrolled: 4, capacity: 10, remaining: 6, fill: 40 },
   { id: 2, mode: 'online', status: 'open', trainer: 'عمر درابكة + رنا العزام',
     start: '2026-10-03', end: '2026-11-07', start_ar: '3 أكتوبر', end_ar: '7 نوفمبر',
     days: 'الثلاثاء / الخميس', time_24: '19:00', time_ar: '7:00م – 9:00م',
-    platform: 'Google Meet', enrolled: 2, capacity: 10, remaining: 8, fill: 20 },
+    platform: 'Zoom', enrolled: 2, capacity: 10, remaining: 8, fill: 20 },
 ];
 const openCohorts  = COHORTS.filter(c => c.status === 'open');
 const runCohorts   = COHORTS.filter(c => c.status === 'running');
@@ -151,7 +151,7 @@ function CohortsSection() {
       <div style={{ ...WRAP, position: 'relative', zIndex: 3 }}>
         <div style={{ textAlign: 'center', marginBottom: 40, direction: 'rtl' }}>
           <h2 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(24px,3vw,34px)', color: OFF, margin: '0 0 8px' }}>المواعيد المتاحة للتسجيل</h2>
-          <p style={{ fontFamily: F, fontSize: 14, color: MUTED, margin: 0 }}>جميع المواعيد بتوقيت عمّان (GMT+3) · Google Meet</p>
+          <p style={{ fontFamily: F, fontSize: 14, color: MUTED, margin: 0 }}>Zoom · تُحدَّد المواعيد بالتنسيق مع المتدربين بعد اكتمال العدد · 10 مقاعد فقط</p>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 28 }}>
           {openCohorts.map(c => <CohortRow key={c.id} c={c} onRegister={handleRegister} />)}
@@ -276,15 +276,15 @@ function OutcomesSection() {
         <div style={{ background: CREAM_CARD, border: `2px solid ${GOLD}`, borderRadius: 22, padding: 'clamp(24px,3vw,36px)', boxShadow: '0 0 0 6px rgba(255,193,7,.10), 0 22px 60px rgba(24,32,47,.12)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24, direction: 'rtl' }}>
             <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(255,193,7,.16)', display: 'grid', placeContent: 'center', flexShrink: 0 }}><GraduationCap size={22} strokeWidth={1.8} color={GOLD_INK} /></div>
-            <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(17px,2vw,21px)', color: INK, margin: 0 }}>مشروع التخرّج · الإنتاج الفعلي في الاستوديو</h3>
+            <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(17px,2vw,21px)', color: INK, margin: 0 }}>مشروع التخرّج · إنتاج Voice Demo CV من استوديوك المنزلي</h3>
           </div>
           <p style={{ fontFamily: F, fontSize: 14, color: INK2, lineHeight: 1.8, margin: '0 0 24px', direction: 'rtl' }}>
-            بعد إتمام المحاضرات، تبدأ مرحلة الإنتاج: <strong style={{ color: INK }}>تحجز ثلاث جلسات في الاستوديو، كلّ جلسة ساعة، بإشراف مهندس الصوت — تماماً كما في النسخة الحضورية.</strong>
+            بعد إتمام المحاضرات، تنتقل إلى مرحلة الإنتاج: <strong style={{ color: INK }}>تُسجّل Voice Demo CV كاملاً من استوديوك المنزلي الذي أعددته خلال الدورة، مع مراجعة وتغذية راجعة مباشرة من المدرب.</strong>
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 12, marginBottom: 20, direction: 'rtl' }}>
             {[
-              { num: '1+2', title: 'الجلستان الأولى والثانية — التمرين على نصوصك', body: 'تتمرّن على الميكروفون في بيئة تسجيل حقيقية داخل الاستوديو، ويُصحَّح أداؤك جملةً بجملة.' },
-              { num: '3',   title: 'الجلسة الثالثة — تسجيل مشروعك النهائي', body: 'جلسة تسجيل احترافية تنتج فيها Voice Demo CV شاملاً جميع ألوان التعليق التي تدرّبت عليها.' },
+              { num: '1', title: 'مرحلة التحضير والتسجيل', body: 'تُطبّق كل ما تعلّمته من أداء صوتي وتقنيات تسجيل وتسجّل نصوصك في بيئتك المنزلية المُجهّزة.' },
+              { num: '2', title: 'مرحلة المراجعة والتسليم', body: 'يُراجع المدرب تسجيلك ويُقدّم تغذية راجعة مفصّلة، وتحصل على Voice Demo CV جاهز لسوق العمل.' },
             ].map(({ num, title, body }) => (
               <div key={num} style={{ background: CREAM, borderRadius: 14, padding: '18px', border: `1px solid ${CREAM_LINE}` }}>
                 <div style={{ width: 32, height: 32, borderRadius: 9, background: 'rgba(255,193,7,.16)', display: 'grid', placeContent: 'center', marginBottom: 10, fontFamily: FP, fontWeight: 700, fontSize: 13, color: GOLD_INK }}>{num}</div>
@@ -297,7 +297,7 @@ function OutcomesSection() {
             <GraduationCap size={18} strokeWidth={1.8} color={GOLD_INK} style={{ flexShrink: 0, marginTop: 2 }} />
             <div>
               <div style={{ fontFamily: F, fontWeight: 800, fontSize: 13.5, color: GOLD_INK, marginBottom: 3 }}>المخرج النهائي</div>
-              <p style={{ fontFamily: F, fontSize: 13, color: INK2, margin: 0, lineHeight: 1.7 }}>ديمو صوتي احترافي (Voice Demo CV) منتَج بيد مهندس صوت متخصّص بعد الهندسة والمكساج والماسترنج — جاهز للإرسال لشركات الإنتاج.</p>
+              <p style={{ fontFamily: F, fontSize: 13, color: INK2, margin: 0, lineHeight: 1.7 }}>Voice Demo CV يمثّل هويتك الصوتية الاحترافية + فرصة الانضمام لقاعدة بيانات كاسيت للمواهب الصوتية + شهادة معتمدة من وجيز وكاسيت.</p>
             </div>
           </div>
         </div>
@@ -322,11 +322,18 @@ function CurriculumSection() {
       <div style={{ ...WRAP, direction: 'rtl' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, marginBottom: 32 }}>
           <SecTitle>الخطة الدراسية</SecTitle>
-          <button onClick={() => window.print()} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'transparent', border: `1px solid ${CREAM_LINE}`, borderRadius: 10, padding: '8px 16px', cursor: 'pointer', fontFamily: F, fontWeight: 700, fontSize: 13, color: INK2, transition: 'background .15s' }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(24,32,47,.05)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-            <Printer size={15} strokeWidth={1.8} color={INK2} /> طباعة المنهج
-          </button>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <a href={`${import.meta.env.BASE_URL}brochures/voiceover-live.pdf`} download="كتيّب-دورة-التعليق-الصوتي.pdf" style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'transparent', border: `1px solid ${CREAM_LINE}`, borderRadius: 10, padding: '8px 16px', cursor: 'pointer', fontFamily: F, fontWeight: 700, fontSize: 13, color: INK2, textDecoration: 'none', transition: 'background .15s' }}
+              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = 'rgba(24,32,47,.05)')}
+              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = 'transparent')}>
+              <FileDown size={15} strokeWidth={1.8} color={INK2} /> تحميل الكتيّب
+            </a>
+            <button onClick={() => window.print()} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'transparent', border: `1px solid ${CREAM_LINE}`, borderRadius: 10, padding: '8px 16px', cursor: 'pointer', fontFamily: F, fontWeight: 700, fontSize: 13, color: INK2, transition: 'background .15s' }}
+              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(24,32,47,.05)')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
+              <Printer size={15} strokeWidth={1.8} color={INK2} /> طباعة المنهج
+            </button>
+          </div>
         </div>
         {/* Single mode badge */}
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 20, background: `rgba(30,122,133,.10)`, border: `1px solid rgba(30,122,133,.22)`, borderRadius: 10, padding: '8px 16px' }}>
@@ -452,7 +459,7 @@ function HeroSection({ onShare }: { onShare: () => void }) {
                   <div style={{ width: 36, height: 36, borderRadius: 10, display: 'grid', placeContent: 'center', background: GOLD, color: INK, flexShrink: 0 }}><Wifi size={18} strokeWidth={1.8} /></div>
                   <div>
                     <div style={{ fontFamily: F, fontWeight: 800, fontSize: 15, color: INK }}>مباشر تفاعلي (Online LIVE)</div>
-                    <div style={{ fontFamily: F, fontSize: 12, color: INK2, opacity: .65 }}>Google Meet</div>
+                    <div style={{ fontFamily: F, fontSize: 12, color: INK2, opacity: .65 }}>Zoom</div>
                   </div>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, direction: 'ltr' }}>
