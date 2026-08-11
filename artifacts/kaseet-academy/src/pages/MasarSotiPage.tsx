@@ -165,11 +165,11 @@ const TRAINERS = [
   { name:'يسار عبده', role:'مدرّبة إعلامية، وخبيرة تعليق صوتي، ومختصّة في تطوير الأداء الصوتي',
     bio:'مدرّبة معتمدة لدى الأمم المتحدة والمؤسسات الوطنية، بخبرة تزيد على عشرين عاماً في الإعلام والتعليق الصوتي والتدريب المهني. تحمل بكالوريوس اللغة الإنجليزية وعلم الأصوات (Phonetics)، وماجستير حقوق الإنسان. تشمل خبرتها الدبلجة والأفلام الوثائقية والكتب الصوتية والتعليق الإعلاني.',
     chips:['علم الأصوات','الدبلجة','الكتب الصوتية','التعليق الإعلاني','تطوير الأداء'],
-    img: trainerYasar },
+    img: trainerYasar, imgPosition: '50% 32%' },
   { name:'عمر الدرابكة', role:'معلّق صوتي محترف، ومدرّب أداء وإلقاء خطابي',
     bio:'سجّل بصوته مئات الأفلام الوثائقية والإعلانات التجارية لكبرى الشركات والمؤسسات الإعلامية في الخليج والشرق الأوسط. حاصل على دبلوم الإعلام من الأكاديمية العالمية للفنون والإبداع في فلوريدا، بخبرة تزيد على اثنتَي عشرة سنة في التدريب الصوتي.',
     chips:['الوثائقي','الإعلانات','الإلقاء الخطابي','التدريب الصوتي','التمكين اللغوي'],
-    img: trainerOmar },
+    img: trainerOmar, imgPosition: '50% 16%' },
 ];
 
 const OUTCOMES = [
@@ -759,7 +759,7 @@ export default function MasarSotiPage() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
                   {tr.img ? (
                     <div className="tr-ava">
-                      <img src={tr.img} alt={tr.name} />
+                      <img src={tr.img} alt={tr.name} style={tr.imgPosition ? { objectPosition: tr.imgPosition } : undefined} />
                     </div>
                   ) : (
                     <div style={{ width: 88, height: 88, borderRadius: '50%', flexShrink: 0, border: '2px solid rgba(255,193,7,.32)', background: 'linear-gradient(135deg, #1A2E4A, #2D4A70)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: F, fontWeight: 800, fontSize: 22, color: GLD }}>
