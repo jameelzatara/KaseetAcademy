@@ -41,16 +41,17 @@ export async function getStripeCredentials(): Promise<StripeCredentials> {
   const data = await resp.json();
   const settings = data.items?.[0]?.settings;
 
-  if (!settings?.secret_key) {
+  // Replit Stripe connector stores keys as `secret` and `publishable`
+  const secretKey = settings?.secret_key ?? settings?.secret;
+  if (!secretKey) {
     throw new Error(
       "Stripe integration not connected or missing secret key. Connect Stripe via Integrations.",
     );
   }
 
-  return {
-    secretKey: settings.secret_key,
-    webhookSecret: settings.webhook_secret,
-  };
+  const webhookSecret = settings?.webhook_secret ?? settings?.webhook_signing_secret;
+
+  return { secretKey, webhookSecret };
 }
 
 /**

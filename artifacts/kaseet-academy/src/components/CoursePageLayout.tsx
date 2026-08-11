@@ -239,7 +239,13 @@ function CohortsSection({ courseSlug, modes, defaultModeKey, onModeChange }: {
   const handleTab = (key: string) => { setTab(key); onModeChange?.(key); };
 
   const handleRegister = (cohortId: number) => {
-    window.open(waLink(activeMode.waPhone, `${activeMode.waMessage} — الدفعة #${cohortId}`), '_blank');
+    // Navigate to the checkout page with course, cohort, and mode pre-selected
+    const params = new URLSearchParams({
+      course: courseSlug,
+      cohort: String(cohortId),
+      mode: activeMode.cohortFilter, // 'onsite' | 'live'
+    });
+    window.location.href = `/checkout?${params.toString()}`;
   };
 
   const handleInterest = () => {
