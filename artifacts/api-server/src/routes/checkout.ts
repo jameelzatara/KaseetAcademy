@@ -21,6 +21,7 @@ import {
 } from "../lib/orderUtils.js";
 import type { CustomerInfo, InstallmentRecord } from "@workspace/db";
 import { logger } from "../lib/logger.js";
+import { notifyOrderCompleted } from "../lib/whatsapp.js";
 
 // Extend express-session with checkout-specific fields
 declare module "express-session" {
@@ -381,6 +382,16 @@ async function onSessionCompleted(s: import("stripe").Stripe.Checkout.Session) {
     }).onConflictDoNothing();
   } else if (result === "created") {
     logger.info({ orderId, cohortId, status }, "Order created");
+    // Fire-and-forget: notify team via WhatsApp — must not block payment processing
+    notifyOrderCompleted({
+      orderId,
+      courseName: COURSE_NAMES[meta.courseSlug ?? ""] ?? meta.courseSlug ?? "",
+      firstName:  meta.firstName ?? "",
+      lastName:   meta.lastName ?? "",
+      phone:      meta.phone ?? "",
+      plan,
+      mode,
+    }).catch((err) => logger.warn({ err }, "WhatsApp notification failed silently"));
   }
 }
 
