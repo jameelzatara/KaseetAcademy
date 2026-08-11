@@ -148,7 +148,7 @@ router.post("/checkout/session", async (req, res) => {
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
-      locale: "ar",
+      locale: "auto", // 'ar' is not supported; 'auto' lets Stripe detect from browser
       client_reference_id: orderId,
       customer_email: customer.email || undefined,
       line_items: [
@@ -183,8 +183,8 @@ router.post("/checkout/session", async (req, res) => {
       payment_intent_data: {
         description: `كاسيت أكاديمي — طلب ${orderId}`,
       },
-      success_url: `${BASE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${BASE_URL}/courses/${courseSlug}`,
+      success_url: `${BASE_URL}/kaseet-academy/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${BASE_URL}/kaseet-academy/courses/${courseSlug}`,
       expires_at: Math.floor(Date.now() / 1000) + 30 * 60,
     });
 
