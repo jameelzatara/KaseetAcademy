@@ -59,6 +59,12 @@ const F = "'Tajawal', 'Cairo', Arial, sans-serif";
 
 const API = '/api';
 
+// ─── Advisor config ───────────────────────────────────────
+const ADVISORS: Record<Mode, { name: string; phone: string }> = {
+  onsite: { name: 'آية', phone: '962790234483' },
+  live:   { name: 'ياقوت', phone: '962771052222' },
+};
+
 // ─── Helpers ──────────────────────────────────────────────
 function useQuery() {
   // Wouter's useLocation returns only the path; query string lives in window.location.search
@@ -357,12 +363,12 @@ export default function CheckoutPage() {
               <p style={{ margin: '0 0 4px', fontSize: 14, fontWeight: 700, color: INK }}>تفضّل الدفع بالدينار الأردني؟</p>
               <p style={{ margin: '0 0 12px', fontSize: 13, color: INK2 }}>تحويل بنكي أو إي فواتيركم — تُرتّبه معك مستشارتك خلال دقائق.</p>
               <a
-                href="https://wa.me/962771052222?text=أرغب في التسجيل وأفضّل الدفع بالدينار الأردني"
+                href={`https://wa.me/${ADVISORS[modeParam].phone}?text=${encodeURIComponent('أرغب في التسجيل وأفضّل الدفع بالدينار الأردني')}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(22,163,74,.1)', border: '1px solid rgba(22,163,74,.3)', borderRadius: 10, padding: '9px 16px', color: GREEN, fontWeight: 700, fontSize: 13.5, textDecoration: 'none' }}
               >
-                <MessageCircle size={16} /> تحدّث مع آية لترتيب الدفع
+                <MessageCircle size={16} /> تحدّث مع {ADVISORS[modeParam].name} لترتيب الدفع
               </a>
             </div>
 

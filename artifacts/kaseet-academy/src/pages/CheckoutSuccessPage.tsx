@@ -28,6 +28,13 @@ const F = "'Tajawal', 'Cairo', Arial, sans-serif";
 
 const API = '/api';
 
+// ─── Advisor config ───────────────────────────────────────
+const ADVISORS: Record<string, { name: string; phone: string }> = {
+  onsite: { name: 'آية', phone: '962790234483' },
+  live:   { name: 'ياقوت', phone: '962771052222' },
+};
+const DEFAULT_ADVISOR = ADVISORS.live; // fallback for pending/error states
+
 const COURSE_NAMES: Record<string, string> = {
   voiceover:           'أساسيات التعليق والأداء الصوتي',
   'voiceover-basics':  'أساسيات التعليق والأداء الصوتي',
@@ -83,6 +90,8 @@ export default function CheckoutSuccessPage() {
   const modeLabel = order?.mode === 'onsite' ? 'حضوري' : 'مباشر تفاعلي';
   const isLive = order?.mode === 'live';
 
+  const advisor = order ? (ADVISORS[order.mode] ?? DEFAULT_ADVISOR) : DEFAULT_ADVISOR;
+
   const waMsg = order
     ? encodeURIComponent(
         `مرحباً 👋 تمّ تسجيلي في ${courseName} — ${modeLabel} (الدفعة #${order.cohortId}، الطلب ${order.id})`,
@@ -112,7 +121,7 @@ export default function CheckoutSuccessPage() {
               رقم الطلب: <strong>—</strong>
             </p>
             <a
-              href={`https://wa.me/962771052222?text=${encodeURIComponent('مرحباً، أتحقّق من حالة دفعي في كاسيت أكاديمي')}`}
+              href={`https://wa.me/${DEFAULT_ADVISOR.phone}?text=${encodeURIComponent('مرحباً، أتحقّق من حالة دفعي في كاسيت أكاديمي')}`}
               target="_blank" rel="noopener noreferrer"
               style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(22,163,74,.1)', border: '1px solid rgba(22,163,74,.3)', borderRadius: 12, padding: '10px 18px', color: GREEN, fontWeight: 700, textDecoration: 'none', fontSize: 14 }}
             >
@@ -127,7 +136,7 @@ export default function CheckoutSuccessPage() {
             <h2 style={{ fontWeight: 800, fontSize: 22, color: INK, margin: '0 0 12px' }}>حدث خطأ</h2>
             <p style={{ color: INK2, fontSize: 14, margin: '0 0 24px' }}>لم نتمكّن من التحقّق من حالة دفعك. تواصل معنا وسنحلّ الأمر فوراً.</p>
             <a
-              href="https://wa.me/962771052222"
+              href={`https://wa.me/${DEFAULT_ADVISOR.phone}`}
               target="_blank" rel="noopener noreferrer"
               style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: DARK, borderRadius: 12, padding: '10px 20px', color: '#fff', fontWeight: 700, textDecoration: 'none', fontSize: 14 }}
             >
@@ -171,11 +180,11 @@ export default function CheckoutSuccessPage() {
             {/* CTAs */}
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
               <a
-                href={`https://wa.me/962771052222?text=${waMsg}`}
+                href={`https://wa.me/${advisor.phone}?text=${waMsg}`}
                 target="_blank" rel="noopener noreferrer"
                 style={{ flex: 1, minWidth: 160, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, background: DARK, borderRadius: 12, padding: '12px 0', color: '#fff', fontWeight: 700, textDecoration: 'none', fontSize: 14 }}
               >
-                <MessageCircle size={17} /> تحدّث مع مستشارتك
+                <MessageCircle size={17} /> تحدّث مع {advisor.name}
               </a>
               <a
                 href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(courseName)}&details=${encodeURIComponent(`كاسيت أكاديمي — الطلب ${order.id}`)}`}
