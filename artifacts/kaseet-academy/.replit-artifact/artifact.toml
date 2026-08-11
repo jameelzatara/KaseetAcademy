@@ -1,5 +1,5 @@
 kind = "web"
-previewPath = "/kaseet-academy"
+previewPath = "/"
 title = "Kaseet Academy"
 version = "1.0.0"
 id = "artifacts/kaseet-academy"
@@ -7,7 +7,7 @@ router = "path"
 
 [[services]]
 name = "web"
-paths = [ "/kaseet-academy" ]
+paths = [ "/" ]
 localPort = 20331
 
 [services.development]
@@ -24,4 +24,4 @@ to = "/index.html"
 
 [services.env]
 PORT = "20331"
-BASE_PATH = "/kaseet-academy/"
+BASE_PATH = "/"

@@ -1,19 +1,24 @@
 ---
-name: kaseet-academy artifact previewPath fix
-description: The kaseet-academy artifact had previewPath="/" causing Wouter routing to break completely — fix applied.
+name: Artifact previewPath fix
+description: History of the kaseet-academy artifact path — was /kaseet-academy/, now correctly at /
 ---
 
-## Problem
-The artifact.toml for `artifacts/kaseet-academy` had `previewPath = "/"` and `BASE_PATH = "/"`.
-Replit's proxy served the app at `/kaseet-academy/...`, so `window.location.pathname` started with `/kaseet-academy/`.
-But `import.meta.env.BASE_URL = "/"` → Wouter `base = ""` → routes like `/courses/voiceover-basics` couldn't match the full path `/kaseet-academy/courses/voiceover-basics` → ALL routes showed the app's 404 page.
+## Current state (corrected)
+- `previewPath = "/"` — artifact now served at root
+- `paths = ["/"]` — proxy routes all traffic here
+- `BASE_PATH = "/"` — Vite base and Wouter base are both root
 
-## Fix
-Updated `artifact.toml` via `verifyAndReplaceArtifactToml` to:
-- `previewPath = "/kaseet-academy"`
-- `paths = [ "/kaseet-academy" ]`
-- `BASE_PATH = "/kaseet-academy/"`
+**Why:** The site is kaseet.com's sole product; having it at /kaseet-academy/ made the root a 404 and wasted the canonical URL.
 
-**Why:** Vite sets `import.meta.env.BASE_URL` from `basePath = process.env.BASE_PATH`. The router uses `base = BASE_URL.replace(/\/$/, '')`. Setting BASE_PATH to the real served prefix makes Wouter strip it before matching routes.
+## Redirect in place
+App.tsx has client-side Wouter redirects for the old prefix:
+```tsx
+<Route path="/kaseet-academy" component={() => <Redirect to="/" />} />
+<Route path="/kaseet-academy/:rest*" component={() => <Redirect to="/" />} />
+```
+These are client-side only (no HTTP 301). A true server-side 301 is not possible with Replit static serving; the rewrite rules only support URL rewriting, not HTTP status codes.
 
-**How to apply:** If routing breaks again (all pages show 404 except the app's own not-found page), check `artifact.toml` — previewPath and BASE_PATH must match the actual URL prefix Replit proxies the app at.
+## How to apply
+`import.meta.env.BASE_URL` is now `/` in both dev and production. No asset path prefix changes needed.
+
+**Why:** Original previewPath was /kaseet-academy/ because that matched the monorepo slug by convention. Corrected to / because this is a single-product site.

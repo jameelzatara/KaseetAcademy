@@ -55,6 +55,10 @@ function Router() {
         <Route path="/apply/voice-talent"       component={ApplyVoiceTalentPage} />
         <Route path="/apply/trainer"            component={ApplyTrainerPage} />
 
+        {/* 301-equivalent client redirect from old /kaseet-academy/ prefix */}
+        <Route path="/kaseet-academy" component={() => <Redirect to="/" />} />
+        <Route path="/kaseet-academy/:rest*" component={() => <Redirect to="/" />} />
+
         {/* 404 */}
         <Route component={NotFoundPage} />
       </Switch>
