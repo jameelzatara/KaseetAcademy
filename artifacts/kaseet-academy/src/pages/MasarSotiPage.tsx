@@ -502,7 +502,7 @@ export default function MasarSotiPage() {
         heading={<>أصوات تخرّجت <Gold>من الماستركلاس</Gold></>}
         description="استمع إلى أصوات متدرّبينا وشاهد ما خرج من التدريب إلى التسجيل الفعلي."
         urls={SOTI_REEL_URLS}
-        noGlow
+        lightEmbed
       />
 
       {/* ═══════════════════════════════════════
