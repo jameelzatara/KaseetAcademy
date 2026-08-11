@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'wouter';
-import { Info, ChevronRight, ChevronLeft, Lock, CreditCard, MessageCircle, Check } from 'lucide-react';
+import { Info, ChevronRight, ChevronLeft, Lock, CreditCard, MessageCircle, Check, ChevronDown } from 'lucide-react';
 import cohortsData from '@/data/cohorts.json';
 
 // ─── Types ────────────────────────────────────────────────
@@ -46,6 +46,58 @@ function splitInstallments(total: number): [number, number, number] {
   return [DEPOSIT_JOD, each, rest - each];
 }
 
+// ─── Phone: country dial-code list ───────────────────────
+// Arab countries first, then international
+const DIAL_COUNTRIES = [
+  { code: '962', flag: '🇯🇴', label: 'الأردن',          min: 9,  max: 9  },
+  { code: '966', flag: '🇸🇦', label: 'السعودية',        min: 9,  max: 9  },
+  { code: '971', flag: '🇦🇪', label: 'الإمارات',        min: 9,  max: 9  },
+  { code: '965', flag: '🇰🇼', label: 'الكويت',          min: 8,  max: 8  },
+  { code: '974', flag: '🇶🇦', label: 'قطر',             min: 8,  max: 8  },
+  { code: '973', flag: '🇧🇭', label: 'البحرين',         min: 8,  max: 8  },
+  { code: '968', flag: '🇴🇲', label: 'عُمان',           min: 8,  max: 8  },
+  { code: '20',  flag: '🇪🇬', label: 'مصر',             min: 10, max: 10 },
+  { code: '963', flag: '🇸🇾', label: 'سوريا',           min: 9,  max: 9  },
+  { code: '961', flag: '🇱🇧', label: 'لبنان',           min: 7,  max: 8  },
+  { code: '970', flag: '🇵🇸', label: 'فلسطين',          min: 9,  max: 9  },
+  { code: '964', flag: '🇮🇶', label: 'العراق',          min: 10, max: 10 },
+  { code: '967', flag: '🇾🇪', label: 'اليمن',           min: 9,  max: 9  },
+  { code: '218', flag: '🇱🇾', label: 'ليبيا',           min: 9,  max: 10 },
+  { code: '212', flag: '🇲🇦', label: 'المغرب',          min: 9,  max: 9  },
+  { code: '213', flag: '🇩🇿', label: 'الجزائر',         min: 9,  max: 9  },
+  { code: '216', flag: '🇹🇳', label: 'تونس',            min: 8,  max: 8  },
+  { code: '249', flag: '🇸🇩', label: 'السودان',         min: 9,  max: 9  },
+  { code: '252', flag: '🇸🇴', label: 'الصومال',         min: 8,  max: 9  },
+  null, // separator
+  { code: '1',   flag: '🇺🇸', label: 'الولايات المتحدة', min: 10, max: 10 },
+  { code: '44',  flag: '🇬🇧', label: 'المملكة المتحدة', min: 10, max: 10 },
+  { code: '49',  flag: '🇩🇪', label: 'ألمانيا',         min: 9,  max: 11 },
+  { code: '33',  flag: '🇫🇷', label: 'فرنسا',           min: 9,  max: 9  },
+  { code: '90',  flag: '🇹🇷', label: 'تركيا',           min: 10, max: 10 },
+  { code: '98',  flag: '🇮🇷', label: 'إيران',           min: 10, max: 10 },
+  { code: '92',  flag: '🇵🇰', label: 'باكستان',         min: 10, max: 10 },
+  { code: '91',  flag: '🇮🇳', label: 'الهند',           min: 10, max: 10 },
+  { code: '61',  flag: '🇦🇺', label: 'أستراليا',        min: 9,  max: 9  },
+  { code: '1',   flag: '🇨🇦', label: 'كندا',            min: 10, max: 10 },
+] as const;
+
+type DialCountry = Exclude<typeof DIAL_COUNTRIES[number], null>;
+
+/** Drop leading zero from local number, prepend country code → E.164 without + */
+function buildPhone(dialCode: string, local: string): string {
+  const digits = local.replace(/\D/g, '').replace(/^0+/, '');
+  return `${dialCode}${digits}`;
+}
+
+function validatePhone(dialCode: string, local: string): string | null {
+  const digits = local.replace(/\D/g, '').replace(/^0+/, '');
+  const entry = DIAL_COUNTRIES.find(c => c && c.code === dialCode) as DialCountry | undefined;
+  if (!entry) return 'اختر رمز الدولة';
+  if (digits.length < entry.min) return `رقم الهاتف قصير، المطلوب ${entry.min} أرقام على الأقل`;
+  if (digits.length > entry.max) return `رقم الهاتف طويل، الحدّ الأقصى ${entry.max} أرقام`;
+  return null;
+}
+
 // ─── Design tokens ────────────────────────────────────────
 const DARK = '#0D0B14';
 const CREAM = '#F5F4F0';
@@ -84,8 +136,10 @@ export default function CheckoutPage() {
   const [customer, setCustomer] = useState<Customer>({
     firstName: '', lastName: '', email: '', phone: '', country: 'الأردن', city: '',
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [loading,   setLoading]   = useState(false);
+  const [error,     setError]     = useState('');
+  const [dialCode,  setDialCode]  = useState('962'); // Jordan default
+  const [localPhone, setLocalPhone] = useState('');
 
   const cohort = (cohortsData.cohorts as Cohort[]).find(
     (c) => c.id === cohortIdParam && c.mode === modeParam,
@@ -111,9 +165,24 @@ export default function CheckoutPage() {
   const nowUSD = isLive ? totalUSD : jodToUSD(nowJOD);
   const showFxNotice = !isLive; // JOD courses need FX disclosure
 
+  // ── Step 2 → 3 advance ────────────────────────────────────
+  function advanceToStep3() {
+    if (!customer.firstName) { setError('الاسم الأول مطلوب'); return; }
+    const phoneErr = validatePhone(dialCode, localPhone);
+    if (phoneErr) { setError(phoneErr); return; }
+    // Build E.164-style phone and store in customer
+    const fullPhone = buildPhone(dialCode, localPhone);
+    setCustomer(c => ({ ...c, phone: fullPhone }));
+    setError('');
+    setStep(3);
+  }
+
   // ── Submit ────────────────────────────────────────────────
   const handlePay = useCallback(async () => {
-    if (!customer.firstName || !customer.phone) {
+    // Ensure phone is built (in case customer was set before dialCode synced)
+    const fullPhone = buildPhone(dialCode, localPhone);
+    const custToSend = { ...customer, phone: fullPhone || customer.phone };
+    if (!custToSend.firstName || !custToSend.phone) {
       setError('الاسم الأول والهاتف مطلوبان');
       return;
     }
@@ -136,7 +205,7 @@ export default function CheckoutPage() {
           cohortTimeAr: cohort.time_ar,
           cohortTrainer: cohort.trainer,
           cohortPlatform: cohort.platform,
-          customer,
+          customer: custToSend,
         }),
       });
       const data = await resp.json();
@@ -155,7 +224,7 @@ export default function CheckoutPage() {
       setError('تعذّر الاتصال بالخادم، تحقّق من الإنترنت وأعد المحاولة');
       setLoading(false);
     }
-  }, [customer, cohort, courseSlug, modeParam, plan]);
+  }, [customer, cohort, courseSlug, modeParam, plan, dialCode, localPhone]);
 
   // ── Progress bar ──────────────────────────────────────────
   const steps = ['اختيار الخطّة', 'بياناتك', 'الدفع الآمن'];
@@ -282,8 +351,12 @@ export default function CheckoutPage() {
                 </div>
                 <Field label="البريد الإلكتروني" value={customer.email} type="email"
                   onChange={v => setCustomer(c => ({ ...c, email: v }))} placeholder="name@example.com" />
-                <Field label="رقم الهاتف (واتساب) *" value={customer.phone} type="tel"
-                  onChange={v => setCustomer(c => ({ ...c, phone: v }))} placeholder="+962 7x xxx xxxx" />
+                <PhoneField
+                  dialCode={dialCode}
+                  localPhone={localPhone}
+                  onDialChange={setDialCode}
+                  onLocalChange={setLocalPhone}
+                />
                 <Field label="الدولة *" value={customer.country}
                   onChange={v => setCustomer(c => ({ ...c, country: v }))} placeholder="الأردن" />
                 <Field label="المدينة" value={customer.city}
@@ -298,9 +371,9 @@ export default function CheckoutPage() {
             )}
 
             <button
-              onClick={() => setStep(3)}
-              disabled={!customer.firstName || !customer.phone}
-              style={{ width: '100%', padding: '14px 0', background: !customer.firstName || !customer.phone ? 'rgba(24,32,47,.25)' : DARK, color: '#fff', border: 'none', borderRadius: 14, fontFamily: F, fontWeight: 800, fontSize: 16, cursor: !customer.firstName || !customer.phone ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
+              onClick={advanceToStep3}
+              disabled={!customer.firstName || !localPhone}
+              style={{ width: '100%', padding: '14px 0', background: !customer.firstName || !localPhone ? 'rgba(24,32,47,.25)' : DARK, color: '#fff', border: 'none', borderRadius: 14, fontFamily: F, fontWeight: 800, fontSize: 16, cursor: !customer.firstName || !localPhone ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
             >
               التالي <ChevronLeft size={18} />
             </button>
@@ -449,6 +522,96 @@ function Row({ label, value, bold }: { label: string; value: string; bold?: bool
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: bold ? 15 : 14, fontWeight: bold ? 800 : 500, color: bold ? INK : INK2, marginBottom: 8 }}>
       <span>{label}</span><span>{value}</span>
+    </div>
+  );
+}
+
+// ── PhoneField ────────────────────────────────────────────
+// Country picker (flag + dial code) + numeric local input
+// Drops leading zero automatically; font-size 16px prevents iOS zoom
+function PhoneField({
+  dialCode, localPhone, onDialChange, onLocalChange,
+}: {
+  dialCode: string;
+  localPhone: string;
+  onDialChange: (code: string) => void;
+  onLocalChange: (local: string) => void;
+}) {
+  const INK  = '#18202F';
+  const INK2 = '#4B5563';
+  const CREAM_LINE = 'rgba(24,32,47,.1)';
+  const F    = "'Tajawal', 'Cairo', Arial, sans-serif";
+
+  const selected = DIAL_COUNTRIES.find(c => c && c.code === dialCode) as DialCountry | undefined;
+
+  function handleLocalChange(val: string) {
+    // Allow digits and common separators; we strip non-digits when building E.164
+    const cleaned = val.replace(/[^\d\s\-()]/g, '');
+    onLocalChange(cleaned);
+  }
+
+  return (
+    <div>
+      <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: INK2, marginBottom: 6 }}>
+        رقم الهاتف (واتساب) *
+      </label>
+      <div style={{ display: 'flex', gap: 8 }}>
+        {/* Country picker */}
+        <div style={{ position: 'relative', flexShrink: 0 }}>
+          <select
+            value={dialCode}
+            onChange={e => onDialChange(e.target.value)}
+            style={{
+              appearance: 'none',
+              WebkitAppearance: 'none',
+              padding: '10px 32px 10px 10px',
+              border: `1.5px solid ${CREAM_LINE}`,
+              borderRadius: 10,
+              fontFamily: F,
+              fontSize: 14,
+              color: INK,
+              background: '#fff',
+              cursor: 'pointer',
+              minWidth: 110,
+              direction: 'ltr',
+            }}
+          >
+            {DIAL_COUNTRIES.map((c, i) =>
+              c === null
+                ? <option key={`sep-${i}`} disabled>──────────</option>
+                : <option key={`${c.code}-${i}`} value={c.code}>{c.flag} +{c.code}</option>
+            )}
+          </select>
+          <ChevronDown
+            size={14}
+            style={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', color: INK2, pointerEvents: 'none' }}
+          />
+        </div>
+
+        {/* Number input */}
+        <input
+          type="tel"
+          inputMode="numeric"
+          value={localPhone}
+          onChange={e => handleLocalChange(e.target.value)}
+          placeholder={selected?.min === 9 ? '7xxxxxxxx' : selected?.min === 8 ? '8xxxxxxx' : 'xxxxxxxxxx'}
+          style={{
+            flex: 1,
+            padding: '10px 14px',
+            border: `1.5px solid ${CREAM_LINE}`,
+            borderRadius: 10,
+            fontFamily: F,
+            fontSize: 16, // 16px prevents iOS auto-zoom on focus
+            color: INK,
+            background: '#fff',
+            direction: 'ltr',
+            outline: 'none',
+          }}
+        />
+      </div>
+      <div style={{ fontSize: 12, color: INK2, marginTop: 5, opacity: .75 }}>
+        أدخل الرقم بدون الصفر الأوّل — مثال: {selected?.code === '962' ? '791234567' : '501234567'}
+      </div>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import pinoHttp from "pino-http";
-import { handleStripeWebhook } from "./routes/checkout.js";
+import { verifyStripeWebhook, processWebhookEvent } from "./routes/checkout.js";
 import router from "./routes/index.js";
 import { logger } from "./lib/logger.js";
 
@@ -48,10 +48,15 @@ app.post(
     }
     const signature = Array.isArray(sig) ? sig[0] : sig;
     try {
-      await handleStripeWebhook(req.body as Buffer, signature);
+      // Verify signature (throws → 400); then respond 200 BEFORE processing
+      const event = await verifyStripeWebhook(req.body as Buffer, signature);
       res.json({ received: true });
+      // Fire-and-forget business logic (seat decrement, order creation, etc.)
+      processWebhookEvent(event).catch((err) =>
+        logger.error({ err }, "Async webhook processing failed"),
+      );
     } catch (err: any) {
-      logger.error({ err }, "Stripe webhook error");
+      logger.error({ err }, "Stripe webhook signature error");
       res.status(400).json({ error: err.message });
     }
   },

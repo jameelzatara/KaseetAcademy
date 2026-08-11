@@ -7,5 +7,6 @@
 - [MasarSotiPage trainers](masar-soti-trainers.md) — يسار عبده photo: `المدربة_يسار_عبده_1785855126478.jpeg`; رنا العزام removed permanently from this page
 - [Course page layout](course-page-layout.md) — all 6 pages use shared CoursePageLayout; cohorts.json uses mode:'live' (not 'online'); thin wrappers only
 - [Stripe Payment System](stripe-payment-system.md) — full checkout system; needs Stripe API keys entered in Replit Integrations to activate
+- [Backend 08+09 status](backend-08-09-status.md) — webhook/seat/KPI/phone done; Google Sheet sync still blocked on service account
 - [Round 2 update status](round2-update-status.md) — Round 2 docs at /tmp/kaseet_docs2/; what's done and what remains
 - [Icon system](icon-system.md) — all icons are lucide-react SVG components; no other icon library used anywhere
