@@ -22,6 +22,13 @@ import {
 import type { CustomerInfo, InstallmentRecord } from "@workspace/db";
 import { logger } from "../lib/logger.js";
 
+// Extend express-session with checkout-specific fields
+declare module "express-session" {
+  interface SessionData {
+    stripeSessionIds?: string[]; // Stripe session IDs initiated by this browser session
+  }
+}
+
 const router = Router();
 
 const BASE_URL = process.env.BASE_URL ?? `https://${process.env.REPLIT_DOMAINS?.split(",")[0]}`;
@@ -152,6 +159,11 @@ router.post("/checkout/session", async (req, res) => {
     });
 
     await setHoldSession(holdId, session.id);
+
+    // Record this Stripe session as belonging to the current browser session
+    if (!req.session.stripeSessionIds) req.session.stripeSessionIds = [];
+    req.session.stripeSessionIds.push(session.id);
+
     res.json({ url: session.url, sessionId: session.id });
   } catch (err: any) {
     logger.error({ err }, "checkout/session error");
@@ -166,6 +178,14 @@ router.get("/checkout/status", async (req, res) => {
     res.status(400).json({ error: "session_id مطلوب" });
     return;
   }
+
+  // Ownership check: the session_id must have been created by this browser session
+  const allowedIds = req.session.stripeSessionIds ?? [];
+  if (!allowedIds.includes(session_id)) {
+    res.status(403).json({ error: "غير مصرّح" });
+    return;
+  }
+
   try {
     // 1. Fast path: order already created (by webhook or a previous status check)
     const [existingOrder] = await db
