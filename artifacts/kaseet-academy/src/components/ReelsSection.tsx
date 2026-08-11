@@ -7,6 +7,7 @@ interface ReelsSectionProps {
   heading?: ReactNode;
   description?: string;
   urls?: string[];
+  noGlow?: boolean;
 }
 
 const REEL_URLS = [
@@ -34,7 +35,7 @@ function getOffset(i: number, current: number, total: number): number {
   return off;
 }
 
-function cardStyle(offset: number): CSSProperties {
+function cardStyle(offset: number, noGlow = false): CSSProperties {
   const tx  = offset * (CARD_W + GAP);
   const abs = Math.abs(offset);
 
@@ -42,8 +43,8 @@ function cardStyle(offset: number): CSSProperties {
     transform:     `translateX(${tx}px) scale(1.0)`,
     opacity:       1,
     zIndex:        5,
-    border:        '1.5px solid rgba(255,193,7,0.85)',
-    boxShadow: [
+    border:        noGlow ? '1px solid rgba(255,255,255,0.10)' : '1.5px solid rgba(255,193,7,0.85)',
+    boxShadow:     noGlow ? 'none' : [
       '0 0 0 1px rgba(255,193,7,0.20)',
       '0 0 28px 4px rgba(255,193,7,0.24)',
       '0 0 64px 8px rgba(255,193,7,0.10)',
@@ -104,6 +105,7 @@ export default function ReelsSection({
   heading = <><Gold>أصوات</Gold> صنعناها معاً</>,
   description = 'مقاطع حيّة من ورشنا وأعمال متدرّبينا ومدربينا على إنستغرام — اسمع الفرق قبل أن تسجّل.',
   urls,
+  noGlow = false,
 }: ReelsSectionProps = {}) {
   const activeUrls = urls && urls.length > 0 ? urls : REEL_URLS;
   const n = activeUrls.length;
@@ -193,7 +195,7 @@ export default function ReelsSection({
         <div style={{ position: 'relative', overflow: 'visible', height: CARD_H + 20 }}>
           {activeUrls.map((url, i) => {
             const off      = getOffset(i, cur, n);
-            const cstyle   = cardStyle(off);
+            const cstyle   = cardStyle(off, noGlow);
             const isCenter = off === 0;
             // only the active centre card is semi-transparent/glass; others are solid
             const cardBg   = isCenter ? 'rgba(18,26,42,0.88)' : '#0C1220';

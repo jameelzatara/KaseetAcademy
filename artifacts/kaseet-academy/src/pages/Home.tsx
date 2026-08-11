@@ -33,7 +33,7 @@ export default function Home() {
       {/* ── Page content — z-index above global layers ── */}
       <main className="w-full" dir="rtl" style={{ position: 'relative', zIndex: 1 }}>
         <HeroSection />
-        <div id="reels"><ReelsSection /></div>
+        <div id="reels"><ReelsSection noGlow /></div>
         <div id="courses"><CoursesSection /></div>
         <div id="tracks"><TracksSection /></div>
         <ConsultationSection />
