@@ -42,10 +42,8 @@ router.post("/checkout/session", async (req, res) => {
       courseSlug,
       mode,
       plan = "deposit",
-      // cohortCapacity / cohortEnrolled from client kept for display only —
-      // actual availability is checked against cohort_seats table in DB
-      cohortCapacity: clientCapacity,
-      cohortEnrolled: clientEnrolled,
+      // ⛔ cohortCapacity / cohortEnrolled are intentionally NOT accepted from
+      // the browser — all capacity decisions come from cohort_seats in DB only.
       cohortStartAr,
       cohortDays,
       cohortTimeAr,
@@ -57,8 +55,6 @@ router.post("/checkout/session", async (req, res) => {
       courseSlug: string;
       mode: "onsite" | "live";
       plan?: "full" | "deposit";
-      cohortCapacity?: number;
-      cohortEnrolled?: number;
       cohortStartAr: string;
       cohortDays: string;
       cohortTimeAr: string;
@@ -78,8 +74,8 @@ router.post("/checkout/session", async (req, res) => {
       return;
     }
 
-    // ── Seat check from DB ───────────────────────────────────
-    const seats = await getCohortSeats(cohortId, clientCapacity ?? 10, clientEnrolled ?? 0);
+    // ── Seat check from DB (no browser values trusted) ───────
+    const seats = await getCohortSeats(cohortId);
     if (!seats.isOpen || seats.enrolled >= seats.capacity) {
       res.status(409).json({ error: "CAP_REACHED", message: "نفدت مقاعد هذه الدفعة" });
       return;
