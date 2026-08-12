@@ -295,7 +295,8 @@ export async function processWebhookEvent(
   }
 }
 
-async function onSessionCompleted(s: import("stripe").Stripe.Checkout.Session) {
+// Exported so the polling path (/checkout/status) and tests can call it directly.
+export async function onSessionCompleted(s: import("stripe").Stripe.Checkout.Session) {
   // Idempotency guard (also inside createOrderWithSeat transaction)
   if (await orderExistsForSession(s.id)) return;
 

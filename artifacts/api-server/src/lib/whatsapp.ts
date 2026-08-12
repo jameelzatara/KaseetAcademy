@@ -36,41 +36,53 @@ function getRecipients(): Recipient[] {
     .filter((r) => r.phone && r.apikey);
 }
 
+export interface WhatsAppRecipientResult {
+  phone: string;
+  ok: boolean;
+  error?: string;
+}
+
 /**
  * Send a WhatsApp message to all configured recipients.
- * Failures are logged but never thrown — notifications must not block payment processing.
+ * Returns per-recipient results — failures are logged but never thrown so
+ * payment processing is never blocked.
+ * Returns an empty array when WHATSAPP_RECIPIENTS is not configured.
  */
-export async function sendWhatsAppNotification(text: string): Promise<void> {
+export async function sendWhatsAppNotification(text: string): Promise<WhatsAppRecipientResult[]> {
   const recipients = getRecipients();
   if (recipients.length === 0) {
     logger.debug("WhatsApp notifications skipped — WHATSAPP_RECIPIENTS not configured");
-    return;
+    return [];
   }
 
-  await Promise.allSettled(
+  const settled = await Promise.allSettled(
     recipients.map(async ({ phone, apikey }) => {
-      try {
-        const url = new URL(CALLMEBOT_URL);
-        url.searchParams.set("phone", phone);
-        url.searchParams.set("apikey", apikey);
-        url.searchParams.set("text", text);
+      const url = new URL(CALLMEBOT_URL);
+      url.searchParams.set("phone", phone);
+      url.searchParams.set("apikey", apikey);
+      url.searchParams.set("text", text);
 
-        const res = await fetch(url.toString());
-        if (!res.ok) {
-          const body = await res.text().catch(() => "");
-          logger.warn({ phone, status: res.status, body }, "WhatsApp notification failed");
-        } else {
-          logger.info({ phone }, "WhatsApp notification sent");
-        }
-      } catch (err) {
-        logger.warn({ err, phone }, "WhatsApp notification error");
+      const res = await fetch(url.toString());
+      if (!res.ok) {
+        const body = await res.text().catch(() => "");
+        logger.warn({ phone, status: res.status, body }, "WhatsApp notification failed");
+        throw new Error(`HTTP ${res.status}: ${body}`);
       }
+      logger.info({ phone }, "WhatsApp notification sent");
     }),
   );
+
+  return settled.map((result, i) => ({
+    phone: recipients[i].phone,
+    ok:    result.status === "fulfilled",
+    error: result.status === "rejected" ? String((result as PromiseRejectedResult).reason) : undefined,
+  }));
 }
 
 /**
  * Build and send the standard order-completed WhatsApp message.
+ * Returns per-recipient results for observability (e.g. admin dry-run).
+ * Failures are captured in the result array — never thrown.
  */
 export async function notifyOrderCompleted(params: {
   orderId: string;
@@ -80,7 +92,7 @@ export async function notifyOrderCompleted(params: {
   phone: string;
   plan: "full" | "deposit";
   mode: "onsite" | "live";
-}): Promise<void> {
+}): Promise<WhatsAppRecipientResult[]> {
   const { orderId, courseName, firstName, lastName, phone, plan, mode } = params;
 
   const planLabel = plan === "full" ? "دفع كامل" : "عربون";
@@ -95,5 +107,5 @@ export async function notifyOrderCompleted(params: {
     `💳 نوع الدفع: ${planLabel}`,
   ].join("\n");
 
-  await sendWhatsAppNotification(text);
+  return sendWhatsAppNotification(text);
 }

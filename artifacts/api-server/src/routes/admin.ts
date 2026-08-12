@@ -2,6 +2,8 @@ import { Router } from "express";
 import bcrypt from "bcryptjs";
 import { db, pool, ordersTable, installmentsTable, cohortSeatsTable } from "@workspace/db";
 import { eq, desc, sql, and, gt, lt, gte } from "drizzle-orm";
+import { notifyOrderCompleted } from "../lib/whatsapp.js";
+import { sendOrderConfirmation } from "../lib/email.js";
 
 const router = Router();
 
@@ -351,6 +353,73 @@ router.post("/cohorts/:id/seats", requireAdmin, async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: "خطأ في الخادم" });
   }
+});
+
+// ── POST /admin/notify-dryrun ──────────────────────────────
+// Fires a real WhatsApp + email notification with synthetic order data.
+// Use to smoke-test both channels without creating a real payment.
+// Body (all optional, sensible defaults are provided):
+//   { email?: string, phone?: string, courseSlug?: string, plan?: "full"|"deposit" }
+router.post("/notify-dryrun", requireAdmin, async (req, res) => {
+  const {
+    email     = null,
+    phone     = "0000000000",
+    courseSlug = "voiceover",
+    plan      = "full",
+  } = req.body as {
+    email?:      string | null;
+    phone?:      string;
+    courseSlug?: string;
+    plan?:       "full" | "deposit";
+  };
+
+  const orderId    = `KA-DRYRUN-${Date.now()}`;
+  const courseName = ({ voiceover: "أساسيات التعليق", masar_soti: "مسار صوتي", casting: "الكاستينغ", podcast: "البودكاست" } as Record<string, string>)[courseSlug] ?? courseSlug;
+
+  const results: Record<string, unknown> = {};
+
+  // ① WhatsApp — surface per-recipient outcomes so misconfigurations are visible
+  try {
+    const waResults = await notifyOrderCompleted({ orderId, courseName, firstName: "اختبار", lastName: "إدمن", phone, plan, mode: "onsite" });
+    if (waResults.length === 0) {
+      results.whatsapp = { ok: false, configured: false, message: "WHATSAPP_RECIPIENTS not set — no recipients configured" };
+    } else {
+      results.whatsapp = {
+        ok: waResults.every((r) => r.ok),
+        configured: true,
+        recipients: waResults,
+      };
+    }
+  } catch (err) {
+    results.whatsapp = { ok: false, error: String(err) };
+  }
+
+  // ② Email
+  try {
+    const emailResult = await sendOrderConfirmation({
+      orderId,
+      firstName:    "اختبار",
+      lastName:     "إدمن",
+      courseName,
+      cohortDate:   "اختبار",
+      cohortDays:   "اختبار",
+      cohortTime:   "اختبار",
+      trainerName:  "اختبار",
+      mode:         "onsite",
+      platform:     "استوديو كاسيت",
+      totalJOD:     218,
+      paidJOD:      plan === "full" ? 218 : 50,
+      remainingJOD: plan === "full" ? 0 : 168,
+      plan,
+      chargedUSD:   307,
+      customerEmail: email || null,
+    });
+    results.email = emailResult;
+  } catch (err) {
+    results.email = { ok: false, error: String(err) };
+  }
+
+  res.json({ orderId, results });
 });
 
 export default router;

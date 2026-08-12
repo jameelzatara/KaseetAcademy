@@ -31,7 +31,7 @@ describe("sendWhatsAppNotification", () => {
     const mockFetch = makeFetch();
     global.fetch = mockFetch as unknown as typeof global.fetch;
 
-    await expect(sendWhatsAppNotification("hello")).resolves.toBeUndefined();
+    await expect(sendWhatsAppNotification("hello")).resolves.toEqual([]);
     expect(mockFetch).not.toHaveBeenCalled();
   });
 
@@ -64,14 +64,20 @@ describe("sendWhatsAppNotification", () => {
     process.env.WHATSAPP_RECIPIENTS = "962791234567:abc123";
     global.fetch = makeFetch(false) as unknown as typeof global.fetch;
 
-    await expect(sendWhatsAppNotification("msg")).resolves.toBeUndefined();
+    const results = await sendWhatsAppNotification("msg");
+    expect(results).toHaveLength(1);
+    expect(results[0].ok).toBe(false);
+    expect(results[0].error).toBeDefined();
   });
 
   it("does not throw when fetch rejects (network error)", async () => {
     process.env.WHATSAPP_RECIPIENTS = "962791234567:abc123";
     global.fetch = vi.fn().mockRejectedValue(new Error("network")) as unknown as typeof global.fetch;
 
-    await expect(sendWhatsAppNotification("msg")).resolves.toBeUndefined();
+    const results = await sendWhatsAppNotification("msg");
+    expect(results).toHaveLength(1);
+    expect(results[0].ok).toBe(false);
+    expect(results[0].error).toContain("network");
   });
 });
 
@@ -194,7 +200,8 @@ describe("notifyOrderCompleted", () => {
     const mockFetch = makeFetch();
     global.fetch = mockFetch as unknown as typeof global.fetch;
 
-    await expect(notifyOrderCompleted(baseParams)).resolves.toBeUndefined();
+    const results = await notifyOrderCompleted(baseParams);
+    expect(results).toEqual([]);
     expect(mockFetch).not.toHaveBeenCalled();
   });
 });
