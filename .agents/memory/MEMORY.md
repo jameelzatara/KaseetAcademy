@@ -8,6 +8,5 @@
 - [Course page layout](course-page-layout.md) — all 6 pages use shared CoursePageLayout; cohorts.json uses mode:'live' (not 'online'); thin wrappers only
 - [Stripe Payment System](stripe-payment-system.md) — full checkout system; needs Stripe API keys entered in Replit Integrations to activate
 - [Backend 08+09 status](backend-08-09-status.md) — webhook/seat/KPI/phone done; Google Sheet sync 16 cols done; email.ts Resend wrapper done
-- [Round 2 update status](round2-update-status.md) — Round 2 docs at /tmp/kaseet_docs2/; what's done and what remains
 - [Icon system](icon-system.md) — all icons are lucide-react SVG components; no other icon library used anywhere
-- [Launch 13 items](launch-13-items.md) — status of all 13 launch items; prerender (⑥) deferred; rest complete
+- [Launch 13 items](launch-13-items.md) — all 13 items complete; prerender.mjs ✅ done; blog content ✅ from real PDFs; nav links ✅ in QuickMenu+SiteFooter

@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useLocation } from 'wouter';
+import { useLocation, Link } from 'wouter';
 import logo from '@assets/logo_1785422080938.png';
 
 interface Props {
@@ -19,6 +19,13 @@ const SECTIONS = [
   { id: 'tracks',       label: 'المسارات',        icon: '🎙️' },
   { id: 'reels',        label: 'قصص متدرّبينا',   icon: '▶️' },
   { id: 'testimonials', label: 'آراء الطلاب',     icon: '⭐' },
+] as const;
+
+/* ── Page links ──────────────────────────────────────── */
+const PAGE_LINKS = [
+  { href: '/blog',     label: 'أدلة مجانية', icon: '📖' },
+  { href: '/trainers', label: 'المدرّبون',    icon: '🏅' },
+  { href: '/events',   label: 'الأحداث',      icon: '📅' },
 ] as const;
 
 /* ── Section nav helper ──────────────────────────────── */
@@ -144,6 +151,30 @@ export default function QuickMenu({ open, onClose }: Props) {
                   <span style={{ fontSize: 18, lineHeight: 1, flexShrink: 0 }}>{icon}</span>
                   <span>{label}</span>
                 </button>
+              ))}
+            </div>
+
+            {/* ── Page links: blog / trainers / events ── */}
+            <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
+              {PAGE_LINKS.map(({ href, label, icon }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={onClose}
+                  style={{
+                    flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    gap: 5, padding: '10px 6px',
+                    background: '#f3f4f6', border: '1px solid #e5e7eb',
+                    borderRadius: 12, textDecoration: 'none',
+                    fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 12.5,
+                    color: '#374151', transition: 'background .15s',
+                  }}
+                  onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.background = '#e9eaec')}
+                  onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.background = '#f3f4f6')}
+                >
+                  <span style={{ fontSize: 14 }}>{icon}</span>
+                  <span>{label}</span>
+                </Link>
               ))}
             </div>
 

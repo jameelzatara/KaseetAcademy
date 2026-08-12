@@ -1,28 +1,43 @@
 ---
 name: Launch 13 items
-description: Status of the 13 pre-launch items from the Aug 2026 spec; what's done and what's deferred
+description: Status of all 13 pre-launch items for Kaseet Academy
 ---
 
-All 13 items were executed. Summary:
+All 13 items complete as of Aug 2026.
 
-✅ ① cohorts 201/202/203: time_ar/enrolled filled in; public-speaking capacity=15
-✅ ② contact.ts created; SiteFooter opens/closes 10:00/20:00; dayOfWeek includes Saturday
-✅ ③ email.ts Resend wrapper; sendOrderConfirmation wired after webhook; email_log auto-created
-✅ ④ sheetsSync 16 cols (A-P); phone with apostrophe; warning row 1; data from row 3
-✅ ⑤ Student auth fully deleted: AuthModal/AuthContext/routes/auth.ts gone; QuickMenu now has WhatsApp CTA
-⚠️ ⑥ Prerender: only comment added to vite.config.ts — full SSR prerender deferred (needs entry-server.tsx + SSR-compatible components)
-✅ ⑦ Alt texts: decorative images intentionally use alt="" aria-hidden="true" (correct)
-✅ ⑧ Security headers: CSP, HSTS, X-Frame-Options, Referrer-Policy, Permissions-Policy: microphone=(self)
-✅ ⑨ Analytics: Analytics.tsx component injects Umami conditionally via VITE_UMAMI_WEBSITE_ID env var
-✅ ⑩ Blog: 5 articles + lead magnet form (name/WhatsApp/email) → PDF email via Resend; blog.ts API route
-✅ ⑪ Events: EventsPage with empty state and EVENTS[] array ready for future entries
-✅ ⑫ Trainers: trainers.ts data, TrainersPage grid, TrainerDetailPage with Person JSON-LD
-✅ ⑬ Course JSON-LD: useEffect in CoursePageLayout injects Course schema for all 6 course pages; no aggregateRating
+| # | Item | Status |
+|---|---|---|
+| ① | Fix cohorts 201/202/203 + public-speaking capacity=15 | ✅ |
+| ② | contact.ts, fix hours (10:00/20:00), SiteFooter add Saturday | ✅ |
+| ③ | Unified sendEmail Resend wrapper, wired to webhook | ✅ |
+| ④ | sheetsSync 16 cols (A–P) + phone apostrophe + warning row | ✅ |
+| ⑤ | Delete student auth system entirely | ✅ |
+| ⑥ | prerender.mjs — post-build static HTML for OG tags | ✅ artifacts/kaseet-academy/prerender.mjs; wired into build script |
+| ⑦ | Fix alt texts | ✅ |
+| ⑧ | Security headers (CSP, HSTS, Permissions-Policy) | ✅ |
+| ⑨ | Umami analytics via Analytics.tsx (conditional on VITE_UMAMI_WEBSITE_ID) | ✅ |
+| ⑩ | Blog — 5 PDF guides as lead magnets | ✅ Content rewritten from actual PDFs |
+| ⑪ | /events page | ✅ |
+| ⑫ | /trainers + /trainers/:slug | ✅ |
+| ⑬ | Course JSON-LD schema | ✅ |
 
-**Key missing user inputs:**
-- VITE_UMAMI_WEBSITE_ID → add in Replit Secrets when Umami site created
-- RESEND_DOMAIN_VERIFIED=true → flip after DNS records verified
-- Cohort details (trainer/date/time) not yet stored in Stripe metadata → email shows generic text; consultant follows up
+**Blog PDF sources (correct mapping):**
+- khamat-sawt → دليل_سوق_التعليق_الصوتي_1786559999332.pdf
+- makharij-huruf → Kaseet_Makharij_Guide_1786559999332.pdf
+- studio-manzili → كاسيت_دليل_الاستوديو_المنزلي_1786559999332.pdf (was wrong before, now fixed)
+- khomul-nutq → دليل_كاسيت_علاج_خمول_النطق_1786559999333.pdf (image-based; content extracted via visual render)
+- taswiq-sawti → KASEET_Marketing_Guide_1786559999332.pdf
 
-**Why:**
-Prerender deferred because components use browser APIs (window, import.meta.env, etc.) at module level — SSR would require significant refactoring and carries high breakage risk for a production app.
+**Navigation links:**
+- /blog, /trainers, /events added to QuickMenu (PAGE_LINKS array, uses wouter Link)
+- /blog, /trainers, /events added to SiteFooter NAV_LINKS
+
+**Prerender script:**
+- artifacts/kaseet-academy/prerender.mjs
+- Runs after vite build via: "build": "vite build && node prerender.mjs"
+- Generates static index.html with OG+Twitter meta tags for: 5 blog posts, blog index, 6 course pages, 4 trainer pages, trainers index, events, static pages
+
+**User actions still required:**
+- Set VITE_UMAMI_WEBSITE_ID in Replit Secrets (after creating site on cloud.umami.is)
+- Stripe API keys in Replit Integrations (for live checkout)
+- RESEND_DOMAIN_VERIFIED=true after DNS verification

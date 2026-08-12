@@ -63,6 +63,9 @@ const NAV_LINKS: NavLink[] = [
   { label: 'ماستركلاس الإعلام',                     href: '/masterclass-elam',  internal: true },
   { label: 'ماستركلاس التعليق والأداء الصوتي',      href: '/masterclass-voice', internal: true },
   { label: 'ماستركلاس الخطابة والتواصل القيادي',    href: '/masterclass-khataba', internal: true },
+  { label: 'المدرّبون',                              href: '/trainers',          internal: true },
+  { label: 'الأحداث',                               href: '/events',            internal: true },
+  { label: 'المدوّنة والأدلة',                      href: '/blog',              internal: true },
   { label: 'الاستشارة المجانية',                    href: '/#consultant',       internal: false },
   { label: 'سمّعنا صوتك',  href: `${import.meta.env.BASE_URL ?? '/'}voice-test.html`, internal: false, gold: true },
 ];
