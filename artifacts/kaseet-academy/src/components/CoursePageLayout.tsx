@@ -833,6 +833,54 @@ export default function CoursePageLayout(props: CoursePageLayoutProps) {
 
   useEffect(() => { window.scrollTo({ top: 0, left: 0, behavior: 'instant' }); }, []);
 
+  // ⑬ Course JSON-LD schema — بلا aggregateRating
+  useEffect(() => {
+    const existing = document.getElementById('course-jsonld');
+    if (existing) existing.remove();
+
+    const allCohorts = (cohortsAll.cohorts as Cohort[]).filter(
+      (c) => c.course === courseSlug && c.status === 'open',
+    );
+
+    const instances = allCohorts.map((c) => ({
+      '@type': 'CourseInstance',
+      courseMode:    c.mode === 'onsite' ? 'Blended' : 'Online',
+      startDate:     c.start,
+      endDate:       c.end,
+      instructor: [{
+        '@type': 'Person',
+        name:    c.trainer,
+      }],
+      ...(c.mode === 'onsite'
+        ? { location: { '@type': 'Place', name: 'استوديو كاسيت', address: { '@type': 'PostalAddress', addressLocality: 'عمّان', addressCountry: 'JO' } } }
+        : { courseWorkload: 'PT2H/week' }),
+    }));
+
+    const schema: any = {
+      '@context':   'https://schema.org',
+      '@type':      'Course',
+      name:         props.title,
+      description:  props.description,
+      url:          `https://kaseet.com/courses/${courseSlug}`,
+      provider: {
+        '@type': 'EducationalOrganization',
+        name:    'كاسيت أكاديمي',
+        url:     'https://kaseet.com',
+      },
+      inLanguage:   'ar',
+      isAccessibleForFree: false,
+      ...(instances.length > 0 ? { hasCourseInstance: instances } : {}),
+    };
+
+    const script  = document.createElement('script');
+    script.id     = 'course-jsonld';
+    script.type   = 'application/ld+json';
+    script.text   = JSON.stringify(schema);
+    document.head.appendChild(script);
+
+    return () => { document.getElementById('course-jsonld')?.remove(); };
+  }, [courseSlug, props.title, props.description]);
+
   const allCohorts = cohortsAll.cohorts as Cohort[];
   const openCounts = useMemo(() => {
     const counts: Record<string, number> = {};

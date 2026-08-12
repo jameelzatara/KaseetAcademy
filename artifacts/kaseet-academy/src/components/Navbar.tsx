@@ -3,25 +3,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import logo from '@assets/logo_1785422080938.png';
 import { useCurrency } from '../context/CurrencyContext';
 import { CURRENCY_LIST, CURRENCY_SYMBOLS, CURRENCY_NAMES } from '../data/currency';
-import AuthModal from './AuthModal';
 import QuickMenu from './QuickMenu';
-import { useAuth } from '../context/AuthContext';
 
 export default function Navbar() {
   const [solid,        setSolid]        = useState(false);
   const [showCurrency, setShowCurrency] = useState(false);
   const [showMenu,     setShowMenu]     = useState(false);
-  const [showAuth,     setShowAuth]     = useState(false);
-  const [authMode,     setAuthMode]     = useState<'login' | 'register'>('login');
   const { currency, setCurrency } = useCurrency();
-  const { user } = useAuth();
   const dropRef  = useRef<HTMLDivElement>(null);
-
-  const openAuth = (mode: 'login' | 'register') => {
-    setAuthMode(mode);
-    setShowMenu(false);
-    setShowAuth(true);
-  };
 
   // ── Solid nav: always solid on non-hero pages or light-hero pages; follows scroll on dark hero ──
   useEffect(() => {
@@ -195,21 +184,9 @@ export default function Navbar() {
               onMouseEnter={e => (e.currentTarget.style.background = 'rgba(44,55,75,.95)')}
               onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.04)')}
             >
-              {/* Show initials when logged in, bars when not */}
-              {user ? (
-                <span style={{
-                  fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 15,
-                  color: '#FFC107', lineHeight: 1,
-                }}>
-                  {user.firstName.charAt(0)}
-                </span>
-              ) : (
-                <>
-                  <span style={{ width: 20, height: 2, background: '#FFC107', borderRadius: 2, display: 'block' }} />
-                  <span style={{ width: 20, height: 2, background: '#FFC107', borderRadius: 2, display: 'block' }} />
-                  <span style={{ width: 20, height: 2, background: '#FFC107', borderRadius: 2, display: 'block' }} />
-                </>
-              )}
+              <span style={{ width: 20, height: 2, background: '#FFC107', borderRadius: 2, display: 'block' }} />
+              <span style={{ width: 20, height: 2, background: '#FFC107', borderRadius: 2, display: 'block' }} />
+              <span style={{ width: 20, height: 2, background: '#FFC107', borderRadius: 2, display: 'block' }} />
             </button>
 
           </div>
@@ -226,14 +203,6 @@ export default function Navbar() {
       <QuickMenu
         open={showMenu}
         onClose={() => setShowMenu(false)}
-        onOpenAuth={openAuth}
-      />
-
-      {/* Auth Modal */}
-      <AuthModal
-        open={showAuth}
-        defaultMode={authMode}
-        onClose={() => setShowAuth(false)}
       />
     </>
   );

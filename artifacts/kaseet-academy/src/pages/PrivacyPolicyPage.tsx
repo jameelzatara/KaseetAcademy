@@ -29,7 +29,7 @@ const CONTACT = {
   email:   'info@kaseet.com',
   phone:   '+962 79 023 4483',
   wa:      '+962 77 105 2222',
-  hours:   'الأحد – الخميس · 9:00 ص – 7:00 م (الجمعة والسبت مغلق)',
+  hours:   'من 10:00 صباحاً حتى 8:00 مساءً',
 };
 
 export default function PrivacyPolicyPage() {

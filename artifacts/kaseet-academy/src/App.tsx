@@ -1,7 +1,8 @@
 import { Route, Switch, Router as WouterRouter, Redirect } from 'wouter';
 import { CurrencyProvider } from '@/context/CurrencyContext';
-import { AuthProvider } from '@/context/AuthContext';
+// AuthProvider removed — student auth deleted (⑤)
 import ScrollToTop from '@/components/ScrollToTop';
+import Analytics   from '@/components/Analytics';
 import Navbar from '@/components/Navbar';
 import Home from '@/pages/Home';
 import CourseVoiceoverPage      from '@/pages/CourseVoiceoverPage';
@@ -22,6 +23,11 @@ import ApplyTrainerPage          from '@/pages/ApplyTrainerPage';
 import CheckoutPage              from '@/pages/CheckoutPage';
 import CheckoutSuccessPage       from '@/pages/CheckoutSuccessPage';
 import AdminOrdersPage           from '@/pages/AdminOrdersPage';
+import EventsPage                from '@/pages/EventsPage';
+import TrainersPage              from '@/pages/TrainersPage';
+import TrainerDetailPage         from '@/pages/TrainerDetailPage';
+import BlogIndexPage             from '@/pages/BlogIndexPage';
+import BlogPostPage              from '@/pages/BlogPostPage';
 import NotFoundPage              from '@/pages/not-found';
 
 function Router() {
@@ -54,6 +60,13 @@ function Router() {
         <Route path="/checkout"                 component={CheckoutPage} />
         <Route path="/admin/orders"             component={AdminOrdersPage} />
 
+        {/* Community & Resources */}
+        <Route path="/events"                   component={EventsPage} />
+        <Route path="/trainers/:slug"           component={TrainerDetailPage} />
+        <Route path="/trainers"                 component={TrainersPage} />
+        <Route path="/blog/:slug"               component={BlogPostPage} />
+        <Route path="/blog"                     component={BlogIndexPage} />
+
         {/* Utility */}
         <Route path="/voice-test"               component={VoiceTestPage} />
         <Route path="/privacy-policy"           component={PrivacyPolicyPage} />
@@ -76,14 +89,13 @@ function Router() {
 
 function App() {
   return (
-    <AuthProvider>
-      <CurrencyProvider>
-        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
-          <Navbar />
-          <Router />
-        </WouterRouter>
-      </CurrencyProvider>
-    </AuthProvider>
+    <CurrencyProvider>
+      <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
+        <Analytics />
+        <Navbar />
+        <Router />
+      </WouterRouter>
+    </CurrencyProvider>
   );
 }
 

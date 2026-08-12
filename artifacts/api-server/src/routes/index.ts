@@ -1,14 +1,16 @@
 import { Router, type IRouter } from "express";
 import healthRouter from "./health";
-import authRouter from "./auth";
+// authRouter removed — student auth deleted (⑤)
 import checkoutRouter from "./checkout";
 import adminRouter from "./admin";
+import blogRouter from "./blog";
 
 const router: IRouter = Router();
 
 router.use(healthRouter);
-router.use(authRouter);
+// router.use(authRouter); — removed (⑤)
 router.use(checkoutRouter);
+router.use(blogRouter);
 router.use("/admin", adminRouter);
 
 export default router;

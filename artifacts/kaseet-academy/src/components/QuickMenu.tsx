@@ -1,12 +1,10 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'wouter';
 import logo from '@assets/logo_1785422080938.png';
-import { useAuth } from '../context/AuthContext';
 
 interface Props {
   open: boolean;
   onClose: () => void;
-  onOpenAuth: (mode: 'login' | 'register') => void;
 }
 
 const ACCENT  = '#7B2D60';          // عنابي كاسيت
@@ -45,14 +43,8 @@ function useNavToSection() {
 }
 
 // ── Main ────────────────────────────────────────────────
-export default function QuickMenu({ open, onClose, onOpenAuth }: Props) {
-  const { user, logout } = useAuth();
+export default function QuickMenu({ open, onClose }: Props) {
   const navTo = useNavToSection();
-
-  const handleLogout = async () => {
-    await logout();
-    onClose();
-  };
 
   return (
     <AnimatePresence>
@@ -71,7 +63,7 @@ export default function QuickMenu({ open, onClose, onOpenAuth }: Props) {
             }}
           />
 
-          {/* Panel — centered via flexbox (framer y-anim doesn't break centering) */}
+          {/* Panel — centered via flexbox */}
           <div style={{
             position: 'fixed', inset: 0, zIndex: 901,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -164,7 +156,7 @@ export default function QuickMenu({ open, onClose, onOpenAuth }: Props) {
                 width: '100%', padding: '11px',
                 background: `${GOLD}18`,
                 border: `1.5px solid ${GOLD}55`,
-                borderRadius: 14, marginBottom: 18,
+                borderRadius: 14, marginBottom: 14,
                 fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 14,
                 color: '#92610a', textDecoration: 'none',
                 transition: 'background .15s',
@@ -178,84 +170,32 @@ export default function QuickMenu({ open, onClose, onOpenAuth }: Props) {
             </a>
 
             {/* ── Divider ── */}
-            <div style={{ height: 1, background: '#e5e7eb', marginBottom: 16 }} />
+            <div style={{ height: 1, background: '#e5e7eb', marginBottom: 14 }} />
 
-            {user ? (
-              /* ── Logged in ── */
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {/* User info card */}
-                <div style={{
-                  display: 'flex', alignItems: 'center', gap: 12,
-                  background: NAVY, borderRadius: 14, padding: '14px',
-                }}>
-                  <span style={{
-                    width: 40, height: 40, borderRadius: '50%', flexShrink: 0,
-                    background: ACCENT, color: '#fff',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 17,
-                  }}>
-                    {user.firstName.charAt(0)}
-                  </span>
-                  <div style={{ flex: 1 }}>
-                    <p style={{ margin: 0, fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 14, color: 'rgba(252,251,251,0.95)' }}>
-                      {user.firstName} {user.lastName}
-                    </p>
-                    <p style={{ margin: 0, fontFamily: 'Tajawal, sans-serif', fontSize: 11.5, color: 'rgba(252,251,251,0.50)', direction: 'ltr', textAlign: 'right' }}>
-                      {user.email}
-                    </p>
-                  </div>
-                </div>
-                {/* Logout */}
-                <button
-                  onClick={handleLogout}
-                  style={{
-                    width: '100%', padding: '13px',
-                    background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.09)',
-                    borderRadius: 14, cursor: 'pointer',
-                    fontFamily: 'Tajawal, sans-serif', fontWeight: 700, fontSize: 14, color: '#374151',
-                    transition: 'background .15s',
-                  }}
-                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.10)')}
-                  onMouseLeave={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.05)')}
-                >
-                  تسجيل الخروج
-                </button>
-              </div>
-            ) : (
-              /* ── Guest: Login + Register ── */
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <button
-                  onClick={() => { onClose(); setTimeout(() => onOpenAuth('login'), 60); }}
-                  style={{
-                    width: '100%', padding: '14px',
-                    background: ACCENT, border: 'none',
-                    borderRadius: 14, cursor: 'pointer',
-                    fontFamily: 'Tajawal, sans-serif', fontWeight: 800, fontSize: 15.5, color: '#fff',
-                    boxShadow: `0 4px 18px ${ACCENT}44`,
-                    transition: 'background .15s, transform .12s',
-                  }}
-                  onMouseEnter={e => Object.assign(e.currentTarget.style, { background: '#6a2553', transform: 'translateY(-1px)' })}
-                  onMouseLeave={e => Object.assign(e.currentTarget.style, { background: ACCENT, transform: 'none' })}
-                >
-                  تسجيل الدخول
-                </button>
-                <button
-                  onClick={() => { onClose(); setTimeout(() => onOpenAuth('register'), 60); }}
-                  style={{
-                    width: '100%', padding: '14px',
-                    background: 'transparent',
-                    border: `2px solid ${ACCENT}`,
-                    borderRadius: 14, cursor: 'pointer',
-                    fontFamily: 'Tajawal, sans-serif', fontWeight: 800, fontSize: 15.5, color: ACCENT,
-                    transition: 'background .15s, transform .12s',
-                  }}
-                  onMouseEnter={e => Object.assign(e.currentTarget.style, { background: `${ACCENT}0e`, transform: 'translateY(-1px)' })}
-                  onMouseLeave={e => Object.assign(e.currentTarget.style, { background: 'transparent', transform: 'none' })}
-                >
-                  إنشاء حساب
-                </button>
-              </div>
-            )}
+            {/* ── WhatsApp contact ── */}
+            <a
+              href="https://wa.me/962790234483"
+              target="_blank" rel="noopener noreferrer"
+              onClick={onClose}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                width: '100%', padding: '13px',
+                background: '#25D366',
+                border: 'none',
+                borderRadius: 14, cursor: 'pointer',
+                fontFamily: 'Tajawal, sans-serif', fontWeight: 800, fontSize: 15.5, color: '#fff',
+                textDecoration: 'none',
+                boxShadow: '0 4px 18px rgba(37,211,102,0.30)',
+                transition: 'background .15s, transform .12s',
+                boxSizing: 'border-box',
+              }}
+              onMouseEnter={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, { background: '#1ebe5e', transform: 'translateY(-1px)' })}
+              onMouseLeave={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, { background: '#25D366', transform: 'none' })}
+            >
+              <span style={{ fontSize: 18 }}>💬</span>
+              تحدّث معنا على واتساب
+            </a>
+
           </motion.div>
           </div>{/* /centering wrapper */}
         </>

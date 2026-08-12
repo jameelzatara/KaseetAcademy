@@ -195,15 +195,15 @@
       "start_ar": "31 أغسطس",
       "end_ar": "16 سبتمبر",
       "days": "الاثنين والأربعاء",
-      "time_24": null,
-      "time_ar": null,
+      "time_24": "18:00-20:00",
+      "time_ar": "6:00 مساءً – 8:00 مساءً",
       "hours": 12,
       "sessions": 6,
       "platform": "Google Meet",
-      "enrolled": null,
+      "enrolled": 4,
       "capacity": 10,
-      "remaining": null,
-      "fill": null
+      "remaining": 6,
+      "fill": 40
     },
     {
       "id": 201,
@@ -216,15 +216,15 @@
       "start_ar": "6 سبتمبر",
       "end_ar": "22 سبتمبر",
       "days": "الأحد والثلاثاء والخميس",
-      "time_24": null,
-      "time_ar": null,
+      "time_24": "18:00-20:00",
+      "time_ar": "6:00 مساءً – 8:00 مساءً",
       "hours": 16,
       "sessions": 8,
       "platform": "استوديو كاسيت",
-      "enrolled": null,
-      "capacity": 10,
-      "remaining": null,
-      "fill": null
+      "enrolled": 6,
+      "capacity": 15,
+      "remaining": 9,
+      "fill": 40
     },
     {
       "id": 202,
@@ -237,15 +237,15 @@
       "start_ar": "8 سبتمبر",
       "end_ar": "24 سبتمبر",
       "days": "الأحد والثلاثاء والخميس",
-      "time_24": null,
-      "time_ar": null,
+      "time_24": "18:00-20:00",
+      "time_ar": "6:00 مساءً – 8:00 مساءً",
       "hours": 16,
       "sessions": 8,
       "platform": "استوديو كاسيت",
-      "enrolled": null,
+      "enrolled": 3,
       "capacity": 10,
-      "remaining": null,
-      "fill": null
+      "remaining": 7,
+      "fill": 30
     },
     {
       "id": 127,

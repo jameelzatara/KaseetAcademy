@@ -87,6 +87,30 @@ app.use(
   }),
 );
 
+// ── ⑧ ترويسات الأمان ─────────────────────────────────────
+app.use((_req, res, next) => {
+  // Content-Security-Policy
+  res.setHeader(
+    "Content-Security-Policy",
+    [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' https://js.stripe.com https://www.instagram.com https://cloud.umami.is",
+      "frame-src https://js.stripe.com https://hooks.stripe.com https://www.instagram.com",
+      "img-src 'self' data: https:",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "font-src 'self' https://fonts.gstatic.com",
+      "connect-src 'self' https://api.stripe.com https://cloud.umami.is",
+    ].join("; "),
+  );
+  res.setHeader("X-Frame-Options",          "SAMEORIGIN");
+  res.setHeader("X-Content-Type-Options",   "nosniff");
+  res.setHeader("Referrer-Policy",          "strict-origin-when-cross-origin");
+  res.setHeader("Strict-Transport-Security","max-age=31536000; includeSubDomains");
+  // ⛔ microphone=(self) إلزامي — صفحة «سمّعنا صوتك» تحتاجه
+  res.setHeader("Permissions-Policy",       "microphone=(self), camera=(), geolocation=()");
+  next();
+});
+
 // ── Routes ────────────────────────────────────────────────
 app.use("/api", router);
 

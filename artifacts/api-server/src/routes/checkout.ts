@@ -22,6 +22,7 @@ import {
 import type { CustomerInfo, InstallmentRecord } from "@workspace/db";
 import { logger } from "../lib/logger.js";
 import { notifyOrderCompleted } from "../lib/whatsapp.js";
+import { sendOrderConfirmation } from "../lib/email.js";
 
 // Extend express-session with checkout-specific fields
 declare module "express-session" {
@@ -412,6 +413,26 @@ async function onSessionCompleted(s: import("stripe").Stripe.Checkout.Session) {
       plan,
       mode,
     }).catch((err) => logger.warn({ err }, "WhatsApp notification failed silently"));
+
+    // ③ Email confirmation — fire-and-forget; failure must not block payment
+    sendOrderConfirmation({
+      orderId,
+      firstName:    meta.firstName ?? "",
+      lastName:     meta.lastName ?? "",
+      courseName:   COURSE_NAMES[meta.courseSlug ?? ""] ?? meta.courseSlug ?? "",
+      cohortDate:   "",           // not in Stripe metadata — consultant follows up
+      cohortDays:   "",
+      cohortTime:   "",
+      trainerName:  "",
+      mode:         mode as "onsite" | "live",
+      platform:     mode === "onsite" ? "استوديو كاسيت" : "Google Meet",
+      totalJOD,
+      paidJOD,
+      remainingJOD,
+      plan:         plan as "full" | "deposit",
+      chargedUSD:   chargedUsd,
+      customerEmail: meta.email || null,
+    }).catch((err) => logger.warn({ err }, "Email confirmation failed silently"));
   }
 }
 

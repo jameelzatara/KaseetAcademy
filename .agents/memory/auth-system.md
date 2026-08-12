@@ -1,24 +1,26 @@
 ---
 name: Auth System
-description: Real email/password authentication wired end-to-end — DB, API routes, frontend context, and QuickMenu panel.
+description: Current authentication architecture after student auth deletion
 ---
 
-# Auth System
+## Current state (Aug 2026)
 
-## How it works
-- **Backend**: `express-session` + `bcryptjs` on the API server (port 8080 internally, routed via `/api/*` by Replit proxy)
-- **Session cookie**: `name: kaseet.sid`, `secure: true`, `sameSite: 'none'`, 7-day expiry. `trust proxy: 1` set on Express.
-- **DB**: `usersTable` in `lib/db/src/schema/index.ts` — Postgres via Drizzle. Already migrated.
-- **Routes**: `artifacts/api-server/src/routes/auth.ts` — POST /auth/register, /auth/login, /auth/logout, GET /auth/me (all under `/api/`)
+**Student auth: DELETED**
+- `AuthModal.tsx` — deleted
+- `AuthContext.tsx` — deleted
+- `routes/auth.ts` — deleted (API)
+- `AuthProvider` removed from App.tsx
+- `useAuth` removed from Navbar.tsx and QuickMenu.tsx
+- `router.use(authRouter)` removed from routes/index.ts
 
-## Frontend
-- `AuthContext` at `artifacts/kaseet-academy/src/context/AuthContext.tsx` — `useAuth()` hook exposes `user`, `login`, `register`, `logout`
-- `AuthProvider` wraps the whole app in `App.tsx` (outside `CurrencyProvider`)
-- `QuickMenu` component is the new hamburger overlay panel — logo + search + menu rows. Clicking "دخول | تسجيل" closes QuickMenu then opens `AuthModal`
-- `AuthModal` calls real API endpoints, shows loading/error states, closes on success
+**Admin auth: INTACT** (keep always)
+- `routes/admin.ts` — Express routes with bcrypt + session
+- `AdminOrdersPage.tsx` — protected admin panel
+- Session config in app.ts: `kaseet.sid`, sameSite:none (required for Replit path-routing)
+- ADMIN_PASSWORD env var in Replit Secrets
 
-## Why sameSite: none
-Replit path-based routing means the frontend (at `/kaseet-academy/`) and API (at `/api/`) share the same domain but different paths. `sameSite: none` + `secure: true` ensures the cookie is sent for cross-path requests through the Replit proxy.
+**Why student auth was deleted:**
+It was never used by real students; consultants handle enrollment manually. Removing it simplifies the codebase and removes an attack surface.
 
-## Test credentials (dev)
-demo@kaseet.com / Demo1234 — created during development, id=1 in DB.
+**How to apply:**
+Never recreate student auth without explicit user request. If auth is ever needed again, prefer Clerk (see clerk-auth skill) rather than custom session auth.
