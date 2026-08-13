@@ -134,32 +134,21 @@ router.post("/blog/lead-magnet", async (req, res) => {
 
   const text = `مرحباً ${name}،\n\nدليل ${blogTitle} مرفق مع هذه الرسالة.\n\nاستكشف دوراتنا: https://kaseet.com/courses/voiceover\n`;
 
-  const { Resend } = await import("resend");
-  const key = process.env.RESEND_API_KEY;
-  let sent = false;
-  if (key) {
-    const resend = new Resend(key);
-    const verified = process.env.RESEND_DOMAIN_VERIFIED === "true";
-    const from = verified
-      ? "أكاديمية كاسيت <info@kaseet.com>"
-      : "أكاديمية كاسيت <onboarding@resend.dev>";
-    try {
-      const payload: any = { from, to: email, subject, html, text, replyTo: "info@kaseet.com" };
-      if (attachment) {
-        payload.attachments = [{ filename: attachment.filename, content: attachment.content }];
-      }
-      const { error } = await resend.emails.send(payload);
-      if (!error) {
-        sent = true;
-        if (leadId) {
-          await pool.query("UPDATE blog_leads SET sent=true WHERE id=$1", [leadId]);
-        }
-      } else {
-        logger.warn({ error }, "Lead magnet email failed");
-      }
-    } catch (err) {
-      logger.warn({ err }, "Lead magnet send threw");
-    }
+  const result = await sendEmail({
+    to: email,
+    subject,
+    html,
+    text,
+    tag: "lead_magnet",
+    attachments: attachment ? [{ filename: attachment.filename, content: attachment.content }] : undefined,
+  });
+
+  const sent = result.ok;
+  if (sent && leadId) {
+    await pool.query("UPDATE blog_leads SET sent=true WHERE id=$1", [leadId]).catch(() => {});
+  }
+  if (!sent && !result.skipped) {
+    logger.warn({ err: result.error }, "Lead magnet email failed");
   }
 
   res.json({ ok: true, sent });

@@ -1,10 +1,14 @@
 /**
- * ③ Resend — طبقة البريد الموحّدة
+ * طبقة البريد الموحّدة — Gmail SMTP عبر Nodemailer
  * ⛔ كلّ إرسال يمرّ من هنا — لا استدعاء مباشر في أيّ مسار
  * ⛔ فشل البريد لا يُسقط طلباً مدفوعاً
- * ⛔ replyTo ثابت على info@kaseet.com حتى مع المرسل المؤقّت
+ * ⛔ replyTo ثابت على info@kaseet.com
+ *
+ * متغيّرات البيئة المطلوبة:
+ *   GMAIL_USER         — عنوان Gmail المُرسِل (مثل: info@kaseet.com أو kaseetacademy@gmail.com)
+ *   GMAIL_APP_PASSWORD — كلمة مرور التطبيق المكوّنة من 16 حرفاً (Google App Password)
  */
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 import { logger } from "./logger.js";
 import { pool } from "@workspace/db";
 
@@ -22,25 +26,33 @@ pool.query(`
   )
 `).catch(() => { /* non-fatal */ });
 
-let _resend: Resend | null = null;
-function getResend(): Resend {
-  if (!_resend) {
-    const key = process.env.RESEND_API_KEY;
-    if (!key) throw new Error("RESEND_API_KEY not set");
-    _resend = new Resend(key);
+// ── Transporter (مُعاد استخدامه — لا ينشئ اتصالاً عند كل إرسال) ──
+let _transporter: nodemailer.Transporter | null = null;
+
+function getTransporter(): nodemailer.Transporter {
+  if (_transporter) return _transporter;
+
+  const user = process.env.GMAIL_USER;
+  const pass = process.env.GMAIL_APP_PASSWORD;
+
+  if (!user || !pass) {
+    throw new Error("GMAIL_USER أو GMAIL_APP_PASSWORD غير مضبوط في متغيّرات البيئة");
   }
-  return _resend;
+
+  _transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: { user, pass },
+  });
+
+  return _transporter;
 }
 
-// مرسل ديناميكي: يتبدّل بمتغيّر بيئة واحد بعد توثيق DNS
 function fromAddress(): string {
-  const verified = process.env.RESEND_DOMAIN_VERIFIED === "true";
-  return verified
-    ? "أكاديمية كاسيت <info@kaseet.com>"
-    : "أكاديمية كاسيت <onboarding@resend.dev>";
+  const user = process.env.GMAIL_USER ?? "";
+  return `أكاديمية كاسيت <${user}>`;
 }
 
-// تسجيل داخلي في قاعدة البيانات (لا يُسقط الإرسال عند فشله)
+// ── تسجيل داخلي (لا يُسقط الإرسال عند فشله) ──
 async function logEmail(row: {
   to: string;
   subject: string;
@@ -52,8 +64,7 @@ async function logEmail(row: {
   try {
     await pool.query(
       `INSERT INTO email_log (to_address, subject, tag, provider_id, status, error, sent_at)
-       VALUES ($1, $2, $3, $4, $5, $6, NOW())
-       ON CONFLICT DO NOTHING`,
+       VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
       [row.to, row.subject, row.tag ?? null, row.providerId ?? null, row.status, row.error ?? null],
     );
   } catch {
@@ -65,11 +76,14 @@ export interface SendEmailInput {
   to: string | undefined | null;
   subject: string;
   html: string;
-  text: string;          // ⛔ إلزامي مع html — غيابه يرفع احتمال Spam
-  tag?: string;          // نوع الرسالة: order_confirm | payment_received | …
+  text: string;   // ⛔ إلزامي مع html — غيابه يرفع احتمال Spam
+  tag?: string;   // نوع الرسالة: order_confirm | payment_received | …
+  attachments?: Array<{ filename: string; content: string | Buffer; encoding?: string }>;
 }
 
-export async function sendEmail(input: SendEmailInput): Promise<{ ok: boolean; id?: string; skipped?: string; error?: string }> {
+export async function sendEmail(
+  input: SendEmailInput,
+): Promise<{ ok: boolean; id?: string; skipped?: string; error?: string }> {
   const { to, subject, html, text, tag } = input;
 
   // ① لا بريد = لا إرسال، بلا خطأ
@@ -80,31 +94,34 @@ export async function sendEmail(input: SendEmailInput): Promise<{ ok: boolean; i
   }
 
   try {
-    const resend = getResend();
-    const { data, error } = await resend.emails.send({
-      from:    fromAddress(),
+    const transporter = getTransporter();
+    const info = await transporter.sendMail({
+      from:        fromAddress(),
       to,
       subject,
       html,
       text,
-      replyTo: "info@kaseet.com",   // ثابت حتى مع المرسل المؤقّت
-      tags: tag ? [{ name: "type", value: tag }] : undefined,
+      replyTo:     "info@kaseet.com",
+      attachments: input.attachments?.map(a => ({
+        filename: a.filename,
+        content:  a.content,
+        encoding: a.encoding ?? (typeof a.content === "string" ? "base64" : undefined),
+      })),
     });
 
-    if (error) throw error;
-
-    logger.info({ to, subject, tag, id: data?.id }, "Email sent");
-    await logEmail({ to, subject, tag, providerId: data?.id, status: "sent" });
-    return { ok: true, id: data?.id };
+    const msgId = info.messageId ?? "";
+    logger.info({ to, subject, tag, msgId }, "Email sent via Gmail SMTP");
+    await logEmail({ to, subject, tag, providerId: msgId, status: "sent" });
+    return { ok: true, id: msgId };
   } catch (err) {
-    const msg = String(err);
+    const msg = err instanceof Error ? err.message : String(err);
     logger.error({ to, subject, tag, err }, "Email send failed");
     await logEmail({ to, subject, tag, status: "failed", error: msg });
-    return { ok: false, error: msg };   // ⛔ لا يُسقط الطلب
+    return { ok: false, error: msg };  // ⛔ لا يُسقط الطلب
   }
 }
 
-// ── قوالب الرسائل الأربع ─────────────────────────────────
+// ── قوالب الرسائل ────────────────────────────────────────────
 
 export interface OrderEmailData {
   orderId: string;
@@ -149,8 +166,6 @@ export async function sendOrderConfirmation(data: OrderEmailData) {
   .header{background:#0D0B14;padding:32px;text-align:center}
   .header h1{color:#FFC107;margin:0;font-size:22px}
   .body{padding:32px}
-  .row{display:flex;justify-content:space-between;border-bottom:1px solid #eee;padding:10px 0;font-size:14px}
-  .label{color:#888}
   .badge{background:#FFC107;color:#0D0B14;border-radius:20px;padding:4px 14px;font-size:12px;font-weight:bold;display:inline-block;margin-bottom:20px}
   .remaining{background:#fff3cd;border:1px solid #FFC107;border-radius:8px;padding:14px;margin:20px 0;font-size:14px}
   .footer{background:#0D0B14;color:#aaa;text-align:center;padding:20px;font-size:12px}
