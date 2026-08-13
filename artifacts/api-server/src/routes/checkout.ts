@@ -116,7 +116,7 @@ router.post("/checkout/session", async (req, res) => {
 
     // ── Create hold ──────────────────────────────────────────
     const holdId  = await createHold(cohortId);
-    const orderId = generateOrderId();
+    const orderId = await generateOrderId();
     const stripe  = await getUncachableStripeClient();
 
     const session = await stripe.checkout.sessions.create({
@@ -196,30 +196,36 @@ router.get("/checkout/status", async (req, res) => {
     }
 
     // 2. Order not in DB yet — ask Stripe directly so we don't wait for webhook
+    // ⚠️ فصل خطأ Stripe API عن خطأ إنشاء الطلب حتى لا يُعاد "pending" حين الطلب موجود فعلًا
+    let stripeSession: import("stripe").Stripe.Checkout.Session | null = null;
     try {
       const stripe = await getUncachableStripeClient();
-      const session = await stripe.checkout.sessions.retrieve(session_id);
-
-      if (session.payment_status === "paid") {
-        // Payment confirmed by Stripe: create the order now (idempotent)
-        await onSessionCompleted(session);
-
-        // Fetch the newly created order (check both session ID columns)
-        const [newOrder] = await db
-          .select()
-          .from(ordersTable)
-          .where(or(eq(ordersTable.sessionId, session_id), eq(ordersTable.stripeSessionId, session_id)))
-          .limit(1);
-
-        if (newOrder) {
-          res.json({ status: newOrder.status, order: newOrder });
-          return;
-        }
-      }
-      // Payment not confirmed yet (still processing or unpaid)
+      stripeSession = await stripe.checkout.sessions.retrieve(session_id);
     } catch (stripeErr) {
-      // Non-fatal: fall through to pending so client can retry
+      // خطأ في جلب جلسة Stripe — تراجع آمن
       logger.warn({ stripeErr, session_id }, "Stripe session fetch failed in status check");
+    }
+
+    if (stripeSession && stripeSession.payment_status === "paid") {
+      // Payment confirmed by Stripe: create the order (idempotent)
+      try {
+        await onSessionCompleted(stripeSession);
+      } catch (sessionErr) {
+        // قد تكون 23505 (طلب مكرر من دفعة سابقة) — ليست خطأً فادحًا
+        logger.warn({ sessionErr, session_id }, "onSessionCompleted error in status polling (may be duplicate)");
+      }
+
+      // ابحث عن الطلب بعد المحاولة — سواء أنشأناه الآن أو كان موجودًا
+      const [newOrder] = await db
+        .select()
+        .from(ordersTable)
+        .where(or(eq(ordersTable.sessionId, session_id), eq(ordersTable.stripeSessionId, session_id)))
+        .limit(1);
+
+      if (newOrder) {
+        res.json({ status: newOrder.status, order: newOrder });
+        return;
+      }
     }
 
     res.json({ status: "pending" });
@@ -338,7 +344,7 @@ export async function onSessionCompleted(s: import("stripe").Stripe.Checkout.Ses
     ];
   }
 
-  const orderId  = meta.orderId ?? generateOrderId();
+  const orderId  = meta.orderId ?? await generateOrderId();
   const cohortId = parseInt(meta.cohortId ?? "0", 10);
 
   const result = await createOrderWithSeat({

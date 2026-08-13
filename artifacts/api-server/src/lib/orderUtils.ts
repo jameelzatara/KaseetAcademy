@@ -4,13 +4,37 @@ import { eq, and, isNull, gt, inArray, sql } from "drizzle-orm";
 import type { InstallmentRecord } from "@workspace/db";
 
 // ── ID Generation ──────────────────────────────────────────
+// يستخدم DB sequence ليضمن تفرّد الأرقام حتى بعد إعادة تشغيل الخادم
 
-const orderCounter = { value: 100 };
+let _seqReady = false;
 
-export function generateOrderId(): string {
-  orderCounter.value += 1;
+async function ensureOrderSeq(): Promise<void> {
+  if (_seqReady) return;
   const year = new Date().getFullYear();
-  const seq  = String(orderCounter.value).padStart(4, "0");
+  // احسب القيمة البداية من أكبر طلب موجود
+  const res = await pool.query<{ n: string }>(
+    `SELECT COALESCE(MAX(CAST(SPLIT_PART(id,'-',4) AS INT)), 100) + 1 AS n
+     FROM orders WHERE id LIKE $1`,
+    [`KS-ORD-${year}-%`],
+  );
+  const start = parseInt(res.rows[0]?.n ?? "101", 10);
+  await pool.query(
+    `CREATE SEQUENCE IF NOT EXISTS kaseet_order_seq START WITH $1 OWNED BY NONE`,
+    [start],
+  );
+  // إذا كانت السيكوينس موجودة ولكن قيمتها أقل من start، نرفعها
+  await pool.query(
+    `SELECT setval('kaseet_order_seq', GREATEST(nextval('kaseet_order_seq')-1, $1-1)+0)`,
+    [start],
+  );
+  _seqReady = true;
+}
+
+export async function generateOrderId(): Promise<string> {
+  await ensureOrderSeq();
+  const year = new Date().getFullYear();
+  const res  = await pool.query<{ n: string }>("SELECT NEXTVAL('kaseet_order_seq') AS n");
+  const seq  = String(parseInt(res.rows[0].n, 10)).padStart(4, "0");
   return `KS-ORD-${year}-${seq}`;
 }
 
@@ -170,10 +194,10 @@ export async function createOrderWithSeat(params: {
   try {
     await client.query("BEGIN");
 
-    // Idempotency check inside transaction
+    // Idempotency check inside transaction — by session_id OR orderId
     const dup = await client.query(
-      "SELECT id FROM orders WHERE session_id = $1 LIMIT 1",
-      [params.sessionId],
+      "SELECT id FROM orders WHERE session_id = $1 OR id = $2 LIMIT 1",
+      [params.sessionId, params.orderId],
     );
     if (dup.rowCount && dup.rowCount > 0) {
       await client.query("ROLLBACK");
