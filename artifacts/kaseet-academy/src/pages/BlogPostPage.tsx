@@ -145,10 +145,22 @@ export default function BlogPostPage() {
         {/* Body */}
         <div style={{ maxWidth: 800, margin: '0 auto', padding: 'clamp(32px,5vw,60px) clamp(16px,4vw,48px)' }}>
 
+          {/* Cover image */}
+          {post.cover && (
+            <figure style={{ margin: '0 0 40px', borderRadius: 20, overflow: 'hidden' }}>
+              <img
+                src={`${BASE}blog-images/${post.cover}`}
+                alt={post.title}
+                loading="eager"
+                style={{ width: '100%', maxHeight: 420, objectFit: 'cover', display: 'block' }}
+              />
+            </figure>
+          )}
+
           {/* Article content */}
           <article
             className="blog-body"
-            dangerouslySetInnerHTML={{ __html: post.body }}
+            dangerouslySetInnerHTML={{ __html: post.body.replace(/__BASE__/g, BASE) }}
             style={{
               fontFamily: F, fontSize: 'clamp(15px,1.6vw,17px)', color: INK2,
               lineHeight: 2, marginBottom: 48,

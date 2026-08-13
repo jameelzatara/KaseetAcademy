@@ -8,6 +8,7 @@ import SiteFooter from '../components/SiteFooter';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { BLOG_POSTS } from '../data/blog';
 
+const BASE   = import.meta.env.BASE_URL;
 const GOLD   = '#FFC107';
 const CREAM  = '#F5F4F0';
 const INK    = '#18202F';
@@ -75,14 +76,23 @@ export default function BlogIndexPage() {
                   transform: 'none', boxShadow: '0 2px 20px rgba(0,0,0,0.07)',
                 })}
               >
-                {/* Cover emoji */}
-                <div style={{
-                  height: 120, background: '#0D0B14',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 56,
-                }}>
-                  {post.coverEmoji}
-                </div>
+                {/* Cover image or emoji */}
+                {post.cover ? (
+                  <img
+                    src={`${BASE}blog-images/${post.cover}`}
+                    alt={post.title}
+                    loading="lazy"
+                    style={{ width: '100%', height: 180, objectFit: 'cover', display: 'block' }}
+                  />
+                ) : (
+                  <div style={{
+                    height: 180, background: '#0D0B14',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 56,
+                  }}>
+                    {post.coverEmoji}
+                  </div>
+                )}
 
                 {/* Content */}
                 <div style={{ padding: '20px 22px 24px' }}>
