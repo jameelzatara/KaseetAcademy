@@ -302,6 +302,61 @@ router.post("/orders/:id/payment", requireAdmin, async (req, res) => {
   }
 });
 
+// ── POST /admin/orders/:id/resend-email ───────────────────
+// يُعيد إرسال بريد التأكيد لطلب موجود يدوياً من لوحة التحكم
+router.post("/orders/:id/resend-email", requireAdmin, async (req, res) => {
+  try {
+    const [order] = await db
+      .select()
+      .from(ordersTable)
+      .where(eq(ordersTable.id, req.params.id))
+      .limit(1);
+
+    if (!order) { res.status(404).json({ error: "الطلب غير موجود" }); return; }
+
+    const COURSE_NAMES: Record<string, string> = {
+      "voiceover":           "أساسيات التعليق والأداء الصوتي",
+      "voiceover-basics":    "أساسيات التعليق والأداء الصوتي",
+      "public-speaking":     "فن الخطابة والتأثير",
+      "presenter":           "المذيع المحترف",
+      "arabic-language":     "اللغة العربية للمذيعين",
+      "masar-soti":          "المسار الصوتي المتكامل",
+      "masterclass-elam":    "ماستركلاس الإعلام",
+      "masterclass-voice":   "ماستركلاس التعليق والأداء الصوتي",
+      "masterclass-khataba": "ماستركلاس الخطابة والتواصل القيادي",
+    };
+
+    const result = await sendOrderConfirmation({
+      orderId:      order.id,
+      firstName:    order.firstName ?? "",
+      lastName:     order.lastName  ?? "",
+      courseName:   COURSE_NAMES[order.courseSlug ?? ""] ?? order.courseSlug ?? "",
+      cohortDate:   "",
+      cohortDays:   "",
+      cohortTime:   "",
+      trainerName:  "",
+      mode:         (order.mode as "onsite" | "live") ?? "onsite",
+      platform:     order.mode === "live" ? "Google Meet" : "استوديو كاسيت",
+      totalJOD:     order.totalJOD ?? 0,
+      paidJOD:      order.paidJOD  ?? 0,
+      remainingJOD: order.remainingJOD ?? 0,
+      plan:         (order.plan as "full" | "deposit") ?? "deposit",
+      chargedUSD:   parseFloat(order.chargedUsd ?? "0"),
+      customerEmail: order.email ?? null,
+    });
+
+    if (result.ok) {
+      res.json({ ok: true, messageId: result.id });
+    } else if (result.skipped) {
+      res.status(400).json({ error: "لا يوجد بريد إلكتروني لهذا الطلب" });
+    } else {
+      res.status(500).json({ error: result.error ?? "فشل الإرسال" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: "خطأ في الخادم" });
+  }
+});
+
 // ── POST /admin/orders/:id/status ─────────────────────────
 // Cancel/update order status — no DELETE ever
 router.post("/orders/:id/status", requireAdmin, async (req, res) => {

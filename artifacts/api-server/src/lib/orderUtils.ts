@@ -18,14 +18,13 @@ async function ensureOrderSeq(): Promise<void> {
     [`KS-ORD-${year}-%`],
   );
   const start = parseInt(res.rows[0]?.n ?? "101", 10);
+  // PostgreSQL لا يقبل $1 في DDL — نستخدم string interpolation (start دائماً integer)
   await pool.query(
-    `CREATE SEQUENCE IF NOT EXISTS kaseet_order_seq START WITH $1 OWNED BY NONE`,
-    [start],
+    `CREATE SEQUENCE IF NOT EXISTS kaseet_order_seq START WITH ${start} OWNED BY NONE`,
   );
-  // إذا كانت السيكوينس موجودة ولكن قيمتها أقل من start، نرفعها
+  // إذا كانت السيكوينس موجودة بقيمة أقل، نرفعها
   await pool.query(
-    `SELECT setval('kaseet_order_seq', GREATEST(nextval('kaseet_order_seq')-1, $1-1)+0)`,
-    [start],
+    `SELECT setval('kaseet_order_seq', GREATEST(last_value, ${start} - 1)) FROM kaseet_order_seq`,
   );
   _seqReady = true;
 }

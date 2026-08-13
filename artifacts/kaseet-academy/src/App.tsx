@@ -58,6 +58,7 @@ function Router() {
         {/* Checkout & admin */}
         <Route path="/checkout/success"         component={CheckoutSuccessPage} />
         <Route path="/checkout"                 component={CheckoutPage} />
+        <Route path="/admin"                    component={() => <Redirect to="/admin/orders" />} />
         <Route path="/admin/orders"             component={AdminOrdersPage} />
 
         {/* Community & Resources */}

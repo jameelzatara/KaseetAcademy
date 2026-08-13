@@ -114,6 +114,9 @@ export default function AdminOrdersPage() {
   const [kpi,          setKpi]          = useState<KpiData | null>(null);
   const [kpiLoading,   setKpiLoading]   = useState(false);
   const [waOpen,       setWaOpen]       = useState<string | null>(null);
+  const [search,       setSearch]       = useState('');
+  const [resending,    setResending]    = useState<string | null>(null);
+  const [resendMsg,    setResendMsg]    = useState<{ id: string; ok: boolean; text: string } | null>(null);
 
   async function login() {
     const resp = await fetch(`${API}/admin/login`, {
@@ -240,9 +243,16 @@ export default function AdminOrdersPage() {
         </div>
 
         {/* ── Orders section ──────────────────────────────── */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 12 }}>
           <h2 style={{ margin: 0, fontWeight: 800, fontSize: 20, color: INK }}>الطلبات</h2>
-          <div style={{ display: 'flex', gap: 10 }}>
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+            {/* بحث */}
+            <input
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="بحث بالاسم أو الهاتف أو البريد…"
+              style={{ padding: '8px 14px', border: `1.5px solid ${CREAM_LINE}`, borderRadius: 10, fontFamily: F, fontSize: 13, color: INK, background: '#fff', minWidth: 220 }}
+            />
             <select
               value={statusFilter}
               onChange={e => setStatusFilter(e.target.value)}
@@ -269,7 +279,14 @@ export default function AdminOrdersPage() {
           <p style={{ color: INK2, textAlign: 'center' }}>لا توجد طلبات</p>
         )}
 
-        {orders.map(order => {
+        {orders.filter(o => {
+          if (!search.trim()) return true;
+          const q = search.trim().toLowerCase();
+          const name  = `${o.firstName ?? o.customer?.firstName ?? ''} ${o.lastName ?? o.customer?.lastName ?? ''}`.toLowerCase();
+          const phone = (o.phone ?? o.customer?.phone ?? '').toLowerCase();
+          const email = (o.email ?? o.customer?.email ?? '').toLowerCase();
+          return name.includes(q) || phone.includes(q) || email.includes(q) || o.id.toLowerCase().includes(q);
+        }).map(order => {
           const st       = STATUS_LABELS[order.status] ?? { label: order.status, color: INK2 };
           const isOpen   = expanded === order.id;
           const pending  = order.installments?.filter(i => !i.paidAt && i.amountJOD > 0) ?? [];
@@ -339,29 +356,55 @@ export default function AdminOrdersPage() {
                     </div>
                   )}
 
-                  {/* WhatsApp templates */}
-                  <div style={{ marginTop: 10 }}>
+                  {/* Actions row */}
+                  <div style={{ marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                    {/* WhatsApp templates */}
                     <button
                       onClick={() => setWaOpen(waOpen === order.id ? null : order.id)}
                       style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 14px', background: 'rgba(22,163,74,.1)', border: '1px solid rgba(22,163,74,.3)', borderRadius: 10, color: GREEN, fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: F }}
                     >
                       💬 رسائل واتساب
                     </button>
-                    {waOpen === order.id && (
-                      <div style={{ marginTop: 8, display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                        {templates.map(t => (
-                          <a
-                            key={t.label}
-                            href={t.href}
-                            target="_blank" rel="noopener noreferrer"
-                            style={{ padding: '6px 13px', background: 'rgba(22,163,74,.08)', border: '1px solid rgba(22,163,74,.25)', borderRadius: 8, color: GREEN, fontWeight: 600, fontSize: 12.5, textDecoration: 'none', whiteSpace: 'nowrap' }}
-                          >
-                            {t.label}
-                          </a>
-                        ))}
-                      </div>
+
+                    {/* Resend confirmation email */}
+                    {email && (
+                      <button
+                        disabled={resending === order.id}
+                        onClick={async () => {
+                          setResending(order.id);
+                          setResendMsg(null);
+                          const r = await fetch(`${API}/admin/orders/${order.id}/resend-email`, {
+                            method: 'POST', credentials: 'include',
+                          });
+                          const d = await r.json();
+                          setResending(null);
+                          setResendMsg({ id: order.id, ok: r.ok, text: r.ok ? '✅ البريد أُرسل' : `❌ ${d.error}` });
+                          setTimeout(() => setResendMsg(null), 4000);
+                        }}
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 14px', background: 'rgba(37,99,235,.08)', border: '1px solid rgba(37,99,235,.25)', borderRadius: 10, color: '#2563eb', fontWeight: 700, fontSize: 13, cursor: resending === order.id ? 'wait' : 'pointer', fontFamily: F, opacity: resending === order.id ? .6 : 1 }}
+                      >
+                        📧 {resending === order.id ? 'جارٍ الإرسال…' : 'إعادة إرسال البريد'}
+                      </button>
+                    )}
+                    {resendMsg?.id === order.id && (
+                      <span style={{ alignSelf: 'center', fontSize: 13, fontWeight: 700, color: resendMsg.ok ? GREEN : '#dc2626' }}>{resendMsg.text}</span>
                     )}
                   </div>
+
+                  {waOpen === order.id && (
+                    <div style={{ marginTop: 8, display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                      {templates.map(t => (
+                        <a
+                          key={t.label}
+                          href={t.href}
+                          target="_blank" rel="noopener noreferrer"
+                          style={{ padding: '6px 13px', background: 'rgba(22,163,74,.08)', border: '1px solid rgba(22,163,74,.25)', borderRadius: 8, color: GREEN, fontWeight: 600, fontSize: 12.5, textDecoration: 'none', whiteSpace: 'nowrap' }}
+                        >
+                          {t.label}
+                        </a>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
