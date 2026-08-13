@@ -1,16 +1,17 @@
 /**
- * طبقة البريد الموحّدة — Brevo SMTP عبر Nodemailer
+ * طبقة البريد الموحّدة — Brevo Transactional Email API
  * ⛔ كلّ إرسال يمرّ من هنا — لا استدعاء مباشر في أيّ مسار
  * ⛔ فشل البريد لا يُسقط طلباً مدفوعاً
  * ⛔ replyTo ثابت على info@kaseet.com
  *
  * متغيّرات البيئة المطلوبة:
- *   BREVO_API_KEY — مفتاح SMTP API من Brevo (يبدأ بـ xkeysib-)
- *   SENDER_EMAIL  — عنوان المُرسِل المسجَّل في Brevo (مثل: info@kaseet.com)
+ *   BREVO_API_KEY — مفتاح API v3 من Brevo (يبدأ بـ xkeysib-)
+ *   SENDER_EMAIL  — عنوان المُرسِل (notify@kaseet.com أو info@kaseet.com)
  */
-import nodemailer from "nodemailer";
 import { logger } from "./logger.js";
 import { pool } from "@workspace/db";
+
+const BREVO_API_URL = "https://api.brevo.com/v3/smtp/email";
 
 // أنشئ جدول email_log تلقائيًا عند أول تشغيل
 pool.query(`
@@ -26,35 +27,8 @@ pool.query(`
   )
 `).catch(() => { /* non-fatal */ });
 
-// ── Transporter (مُعاد استخدامه — لا ينشئ اتصالاً عند كل إرسال) ──
-let _transporter: nodemailer.Transporter | null = null;
-
-function getTransporter(): nodemailer.Transporter {
-  if (_transporter) return _transporter;
-
-  const apiKey = process.env.BREVO_API_KEY;
-  const sender = process.env.SENDER_EMAIL;
-
-  if (!apiKey || !sender) {
-    throw new Error("BREVO_API_KEY أو SENDER_EMAIL غير مضبوط في متغيّرات البيئة");
-  }
-
-  _transporter = nodemailer.createTransport({
-    host:   "smtp-relay.brevo.com",
-    port:   587,
-    secure: false,
-    auth: {
-      user: sender,   // بريد الحساب المسجَّل في Brevo
-      pass: apiKey,   // SMTP API key
-    },
-  });
-
-  return _transporter;
-}
-
-function fromAddress(): string {
-  const sender = process.env.SENDER_EMAIL ?? "info@kaseet.com";
-  return `أكاديمية كاسيت <${sender}>`;
+function senderEmail(): string {
+  return process.env.SENDER_EMAIL ?? "notify@kaseet.com";
 }
 
 // ── تسجيل داخلي (لا يُسقط الإرسال عند فشله) ──
@@ -98,24 +72,51 @@ export async function sendEmail(
     return { ok: false, skipped: "no_email" };
   }
 
+  const apiKey = process.env.BREVO_API_KEY;
+  if (!apiKey) {
+    const msg = "BREVO_API_KEY غير مضبوط";
+    logger.error({ to, subject }, msg);
+    await logEmail({ to, subject, tag, status: "failed", error: msg });
+    return { ok: false, error: msg };
+  }
+
   try {
-    const transporter = getTransporter();
-    const info = await transporter.sendMail({
-      from:        fromAddress(),
-      to,
+    // بناء جسم الطلب لـ Brevo API
+    const body: Record<string, unknown> = {
+      sender:      { name: "أكاديمية كاسيت", email: senderEmail() },
+      to:          [{ email: to }],
+      replyTo:     { email: "info@kaseet.com" },
       subject,
-      html,
-      text,
-      replyTo:     "info@kaseet.com",
-      attachments: input.attachments?.map(a => ({
-        filename: a.filename,
-        content:  a.content,
-        encoding: a.encoding ?? (typeof a.content === "string" ? "base64" : undefined),
-      })),
+      htmlContent: html,
+      textContent: text,
+    };
+
+    // مرفقات PDF إن وجدت
+    if (input.attachments?.length) {
+      body.attachment = input.attachments.map(a => ({
+        name:    a.filename,
+        content: typeof a.content === "string" ? a.content : a.content.toString("base64"),
+      }));
+    }
+
+    const res = await fetch(BREVO_API_URL, {
+      method:  "POST",
+      headers: {
+        "api-key":      apiKey,
+        "content-type": "application/json",
+        "accept":       "application/json",
+      },
+      body: JSON.stringify(body),
     });
 
-    const msgId = info.messageId ?? "";
-    logger.info({ to, subject, tag, msgId }, "Email sent via Gmail SMTP");
+    if (!res.ok) {
+      const errText = await res.text().catch(() => res.statusText);
+      throw new Error(`Brevo ${res.status}: ${errText}`);
+    }
+
+    const data = await res.json() as { messageId?: string };
+    const msgId = data.messageId ?? "";
+    logger.info({ to, subject, tag, msgId }, "Email sent via Brevo API");
     await logEmail({ to, subject, tag, providerId: msgId, status: "sent" });
     return { ok: true, id: msgId };
   } catch (err) {
