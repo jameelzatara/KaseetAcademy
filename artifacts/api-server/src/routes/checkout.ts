@@ -437,6 +437,31 @@ export async function onSessionCompleted(s: import("stripe").Stripe.Checkout.Ses
   }
 }
 
+// ── GET /api/cohorts/seats — public, read-only ────────────────
+// يُستخدم من الواجهة لعرض السعات الحقيقية من قاعدة البيانات
+router.get("/cohorts/seats", async (_req, res) => {
+  try {
+    const rows = await pool.query<{
+      cohort_id: number; capacity: number; enrolled: number; is_open: boolean;
+    }>("SELECT cohort_id, capacity, enrolled, is_open FROM cohort_seats");
+
+    const seats = rows.rows.map((r) => ({
+      cohortId:  r.cohort_id,
+      capacity:  r.capacity,
+      enrolled:  r.enrolled,
+      remaining: Math.max(0, r.capacity - r.enrolled),
+      fill:      Math.round((r.enrolled / Math.max(r.capacity, 1)) * 100),
+      isOpen:    r.is_open,
+    }));
+
+    res.setHeader("Cache-Control", "no-store");
+    res.json({ seats });
+  } catch {
+    // Graceful fallback — frontend falls back to static cohorts.json values
+    res.json({ seats: [] });
+  }
+});
+
 // ── Legacy export used by app.ts — kept for backward compat ──
 export async function handleStripeWebhook(rawBody: Buffer, signature: string): Promise<void> {
   const event = await verifyStripeWebhook(rawBody, signature);

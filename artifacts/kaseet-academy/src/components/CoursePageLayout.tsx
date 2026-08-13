@@ -207,17 +207,39 @@ function CohortRow({ c, onRegister, accentStyle }: {
 /* ══════════════════════════════════════════════════════════════
    § CohortsSection
    ══════════════════════════════════════════════════════════════ */
+/** نوع استجابة /api/cohorts/seats */
+type LiveSeat = { cohortId: number; capacity: number; enrolled: number; remaining: number; fill: number; isOpen: boolean };
+
 function CohortsSection({ courseSlug, modes, defaultModeKey, onModeChange }: {
   courseSlug: string; modes: ModeConfig[]; defaultModeKey: string;
   onModeChange?: (key: string) => void;
 }) {
-  const [tab, setTab]       = useState(defaultModeKey);
+  const [tab, setTab]         = useState(defaultModeKey);
   const [showRun, setShowRun] = useState(false);
+  const [liveSeats, setLiveSeats] = useState<LiveSeat[]>([]);
   useEffect(() => { setTab(defaultModeKey); }, [defaultModeKey]);
+
+  // جلب السعات الحقيقية من قاعدة البيانات
+  useEffect(() => {
+    fetch('/api/cohorts/seats')
+      .then(r => r.ok ? r.json() : { seats: [] })
+      .then((d: { seats: LiveSeat[] }) => setLiveSeats(d.seats ?? []))
+      .catch(() => { /* fallback to static */ });
+  }, []);
 
   const activeMode = modes.find(m => m.key === tab) ?? modes[0];
 
-  const allCohorts = cohortsAll.cohorts as Cohort[];
+  // دمج البيانات الحية فوق cohorts.json
+  const allCohorts = useMemo<Cohort[]>(() => {
+    const base = cohortsAll.cohorts as Cohort[];
+    if (!liveSeats.length) return base;
+    const map = new Map(liveSeats.map(s => [s.cohortId, s]));
+    return base.map(c => {
+      const live = map.get(c.id);
+      if (!live) return c;
+      return { ...c, enrolled: live.enrolled, capacity: live.capacity, remaining: live.remaining, fill: live.fill };
+    });
+  }, [liveSeats]);
 
   const openCohorts = useMemo(() =>
     allCohorts.filter(c => c.course === courseSlug && c.mode === activeMode.cohortFilter && c.time_ar && c.status === 'open'),
