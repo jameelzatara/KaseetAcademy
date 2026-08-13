@@ -1,12 +1,12 @@
 /**
- * طبقة البريد الموحّدة — Gmail SMTP عبر Nodemailer
+ * طبقة البريد الموحّدة — Brevo SMTP عبر Nodemailer
  * ⛔ كلّ إرسال يمرّ من هنا — لا استدعاء مباشر في أيّ مسار
  * ⛔ فشل البريد لا يُسقط طلباً مدفوعاً
  * ⛔ replyTo ثابت على info@kaseet.com
  *
  * متغيّرات البيئة المطلوبة:
- *   GMAIL_USER         — عنوان Gmail المُرسِل (مثل: info@kaseet.com أو kaseetacademy@gmail.com)
- *   GMAIL_APP_PASSWORD — كلمة مرور التطبيق المكوّنة من 16 حرفاً (Google App Password)
+ *   BREVO_API_KEY — مفتاح SMTP API من Brevo (يبدأ بـ xkeysib-)
+ *   SENDER_EMAIL  — عنوان المُرسِل المسجَّل في Brevo (مثل: info@kaseet.com)
  */
 import nodemailer from "nodemailer";
 import { logger } from "./logger.js";
@@ -32,24 +32,29 @@ let _transporter: nodemailer.Transporter | null = null;
 function getTransporter(): nodemailer.Transporter {
   if (_transporter) return _transporter;
 
-  const user = process.env.GMAIL_USER;
-  const pass = process.env.GMAIL_APP_PASSWORD;
+  const apiKey = process.env.BREVO_API_KEY;
+  const sender = process.env.SENDER_EMAIL;
 
-  if (!user || !pass) {
-    throw new Error("GMAIL_USER أو GMAIL_APP_PASSWORD غير مضبوط في متغيّرات البيئة");
+  if (!apiKey || !sender) {
+    throw new Error("BREVO_API_KEY أو SENDER_EMAIL غير مضبوط في متغيّرات البيئة");
   }
 
   _transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: { user, pass },
+    host:   "smtp-relay.brevo.com",
+    port:   587,
+    secure: false,
+    auth: {
+      user: sender,   // بريد الحساب المسجَّل في Brevo
+      pass: apiKey,   // SMTP API key
+    },
   });
 
   return _transporter;
 }
 
 function fromAddress(): string {
-  const user = process.env.GMAIL_USER ?? "";
-  return `أكاديمية كاسيت <${user}>`;
+  const sender = process.env.SENDER_EMAIL ?? "info@kaseet.com";
+  return `أكاديمية كاسيت <${sender}>`;
 }
 
 // ── تسجيل داخلي (لا يُسقط الإرسال عند فشله) ──
