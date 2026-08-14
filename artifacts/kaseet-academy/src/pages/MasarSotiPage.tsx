@@ -4,7 +4,8 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { usePageMeta } from '../hooks/usePageMeta';
-import { ChevronDown, ArrowLeft, MapPin, Wifi } from 'lucide-react';
+import { ChevronDown, ArrowLeft, MapPin, Wifi, ShieldCheck } from 'lucide-react';
+import { FaWhatsapp } from 'react-icons/fa6';
 import { GOLD, OFF, F, FP, INNER, waLink } from './shared/coursePageHelpers';
 import ReelsSection from '../components/ReelsSection';
 import { Gold } from '../components/SectionHeader';
@@ -915,23 +916,13 @@ export default function MasarSotiPage() {
 
                 <div style={{ display: 'flex', justifyContent: 'center', gap: 28, margin: '20px 0 0', flexWrap: 'wrap', alignItems: 'flex-end' }}>
                   <div style={{ textAlign: 'center' }}>
-                    <span style={{ fontFamily: FP, fontSize: 48, fontWeight: 700, color: GLD, lineHeight: 1, display: 'block' }}>500</span>
+                    <span style={{ fontFamily: FP, fontSize: 48, fontWeight: 700, color: GLD, lineHeight: 1, display: 'block' }}>550</span>
                     <span style={{ fontFamily: F, fontSize: 13, color: MUT, display: 'block', marginTop: 4 }}>JOD · حضوري عمّان</span>
-                    <a href={WA_ENROLL_ONSITE} target="_blank" rel="noopener noreferrer"
-                      style={{ display: 'inline-flex', alignItems: 'center', gap: 5, marginTop: 8, fontFamily: F, fontSize: 12, fontWeight: 700, color: '#7FE3A6', background: 'rgba(37,211,102,.10)', border: '1px solid rgba(37,211,102,.28)', borderRadius: 999, padding: '5px 11px', textDecoration: 'none' }}>
-                      <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12" aria-hidden="true"><path d="M12.04 2C6.6 2 2.2 6.4 2.2 11.84c0 1.94.55 3.75 1.5 5.28L2 22l5-1.63a9.84 9.84 0 0 0 5.04 1.38c5.44 0 9.84-4.4 9.84-9.84S17.48 2 12.04 2zm0 17.94c-1.6 0-3.1-.44-4.38-1.2l-.31-.19-3.25 1.06 1.07-3.17-.2-.32a7.94 7.94 0 0 1-1.23-4.28c0-4.4 3.6-7.98 8.3-7.98 4.4 0 8 3.58 8 7.98s-3.6 8.1-8 8.1z"/></svg>
-                      تواصل مع آية
-                    </a>
                   </div>
                   <div style={{ width: 1, height: 52, background: CBR, flexShrink: 0 }} />
                   <div style={{ textAlign: 'center' }}>
-                    <span style={{ fontFamily: FP, fontSize: 48, fontWeight: 700, color: GLD, lineHeight: 1, display: 'block' }}>700</span>
+                    <span style={{ fontFamily: FP, fontSize: 48, fontWeight: 700, color: GLD, lineHeight: 1, display: 'block' }}>750</span>
                     <span style={{ fontFamily: F, fontSize: 13, color: MUT, display: 'block', marginTop: 4 }}>USD · مباشر تفاعلي (Online LIVE)</span>
-                    <a href={WA_ENROLL_ONLINE} target="_blank" rel="noopener noreferrer"
-                      style={{ display: 'inline-flex', alignItems: 'center', gap: 5, marginTop: 8, fontFamily: F, fontSize: 12, fontWeight: 700, color: '#7FE3A6', background: 'rgba(37,211,102,.10)', border: '1px solid rgba(37,211,102,.28)', borderRadius: 999, padding: '5px 11px', textDecoration: 'none' }}>
-                      <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12" aria-hidden="true"><path d="M12.04 2C6.6 2 2.2 6.4 2.2 11.84c0 1.94.55 3.75 1.5 5.28L2 22l5-1.63a9.84 9.84 0 0 0 5.04 1.38c5.44 0 9.84-4.4 9.84-9.84S17.48 2 12.04 2zm0 17.94c-1.6 0-3.1-.44-4.38-1.2l-.31-.19-3.25 1.06 1.07-3.17-.2-.32a7.94 7.94 0 0 1-1.23-4.28c0-4.4 3.6-7.98 8.3-7.98 4.4 0 8 3.58 8 7.98s-3.6 8.1-8 8.1z"/></svg>
-                      تواصل مع ياقوت
-                    </a>
                   </div>
                 </div>
 
@@ -962,6 +953,26 @@ export default function MasarSotiPage() {
                 التسجيل في الماستركلاس <ArrowLeft size={15} />
               </a>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════
+          GUARANTEE — ضمان الجلسة الأولى
+      ═══════════════════════════════════════ */}
+      <section style={{ padding: '72px 0' }}>
+        <div style={WRP}>
+          <div style={{ maxWidth: 680, margin: '0 auto', background: 'rgba(255,193,7,.06)', border: '1px solid rgba(255,193,7,.32)', borderRadius: 22, padding: 'clamp(28px,3.5vw,44px)', textAlign: 'center' }}>
+            <ShieldCheck size={44} strokeWidth={1.5} color="#FFC107" aria-hidden="true" />
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(22px,3vw,30px)', color: OFF, margin: '18px 0 14px', lineHeight: 1.4 }}>
+              ضمان الجلسة الأولى
+            </h2>
+            <p style={{ fontFamily: F, fontSize: 15.5, color: MUT, lineHeight: 1.9, maxWidth: 520, marginInline: 'auto' }}>
+              جرّب الجلسة الأولى كاملة. وإن شعرت أنّ الماستركلاس لا يلبّي توقّعاتك، اطلب استرداداً كاملاً خلال 24 ساعة من انتهائها — دون أسئلة.
+            </p>
+            <p style={{ fontFamily: F, fontSize: 13.5, color: GLD, marginTop: 16, fontStyle: 'italic', margin: '16px 0 0' }}>
+              نحن نعرف ما نقدّمه. والجلسة الأولى تكفي لتعرفه أنت.
+            </p>
           </div>
         </div>
       </section>
@@ -1009,7 +1020,7 @@ export default function MasarSotiPage() {
                 <a href={waLink(WA_PHONE_ONSITE, 'مرحباً آية، أودّ حجز استشارة مجانية عن ماستركلاس التعليق الصوتي الحضوري')}
                   target="_blank" rel="noopener noreferrer"
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9, background: '#1F9D57', color: '#fff', fontFamily: F, fontWeight: 800, fontSize: 14, padding: '12px 20px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 8px 22px rgba(31,157,87,.28)', marginTop: 4 }}>
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true"><path d="M12.04 2C6.6 2 2.2 6.4 2.2 11.84c0 1.94.55 3.75 1.5 5.28L2 22l5-1.63a9.84 9.84 0 0 0 5.04 1.38c5.44 0 9.84-4.4 9.84-9.84S17.48 2 12.04 2zm0 17.94c-1.6 0-3.1-.44-4.38-1.2l-.31-.19-3.25 1.06 1.07-3.17-.2-.32a7.94 7.94 0 0 1-1.23-4.28c0-4.4 3.6-7.98 8.3-7.98 4.4 0 8 3.58 8 7.98s-3.6 8.1-8 8.1z"/></svg>
+                  <FaWhatsapp size={16} aria-hidden="true" />
                   واتساب آية (+962 79 023 4483)
                 </a>
               </div>
@@ -1037,7 +1048,7 @@ export default function MasarSotiPage() {
                 </div>
                 <a href={WA_CONSULT} target="_blank" rel="noopener noreferrer"
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9, background: '#1F9D57', color: '#fff', fontFamily: F, fontWeight: 800, fontSize: 14, padding: '12px 20px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 8px 22px rgba(31,157,87,.28)', marginTop: 4 }}>
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true"><path d="M12.04 2C6.6 2 2.2 6.4 2.2 11.84c0 1.94.55 3.75 1.5 5.28L2 22l5-1.63a9.84 9.84 0 0 0 5.04 1.38c5.44 0 9.84-4.4 9.84-9.84S17.48 2 12.04 2zm0 17.94c-1.6 0-3.1-.44-4.38-1.2l-.31-.19-3.25 1.06 1.07-3.17-.2-.32a7.94 7.94 0 0 1-1.23-4.28c0-4.4 3.6-7.98 8.3-7.98 4.4 0 8 3.58 8 7.98s-3.6 8.1-8 8.1z"/></svg>
+                  <FaWhatsapp size={16} aria-hidden="true" />
                   واتساب ياقوت (+962 77 105 2222)
                 </a>
               </div>
@@ -1070,12 +1081,6 @@ export default function MasarSotiPage() {
             {FAQS.map((faq, i) => <FaqItem key={i} q={faq.q} a={faq.a} />)}
           </div>
 
-          <div style={{ textAlign: 'center', marginTop: 32 }}>
-            <a href={WA_CONSULT} target="_blank" rel="noopener noreferrer"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: CARD, color: OFF, border: `1px solid ${CBR}`, fontFamily: F, fontWeight: 700, fontSize: 15, padding: '13px 28px', borderRadius: 999, textDecoration: 'none' }}>
-              لم تجد سؤالك؟ اسأل ياقوت مباشرة <ArrowLeft size={14} />
-            </a>
-          </div>
         </div>
       </section>
 

@@ -4,7 +4,8 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { usePageMeta } from '../hooks/usePageMeta';
-import { ChevronDown, ArrowLeft, MapPin, Wifi, Layers, Clock, FolderCheck, CheckCircle2, MessageCircle } from 'lucide-react';
+import { ChevronDown, ArrowLeft, MapPin, Wifi, Layers, Clock, FolderCheck, CheckCircle2, MessageCircle, ShieldCheck } from 'lucide-react';
+import { FaWhatsapp } from 'react-icons/fa6';
 import { NAVY, GOLD, OFF, F, FP, INNER, DH, DM, waLink } from './shared/coursePageHelpers';
 import wajeezLogo     from '@assets/wajeez-logo_1785688262989.png';
 import coverMasar     from '@assets/cover_المسار_الاعلامي_1785777356196.png';
@@ -803,15 +804,15 @@ export default function MasarElamiPage() {
                   10 محطات · التأسيس + التخصصات + القيادة الإعلامية
                 </p>
                 <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: 8, margin: '20px 0 0' }}>
-                  <span style={{ fontFamily: FP, fontSize: 54, fontWeight: 900, color: GLD, lineHeight: 1 }}>$1,000</span>
-                  <span style={{ fontFamily: F, fontSize: 13, color: MUT, marginBottom: 7 }}>للمسار الكامل</span>
+                  <span style={{ fontFamily: FP, fontSize: 54, fontWeight: 900, color: GLD, lineHeight: 1 }}>400</span>
+                  <span style={{ fontFamily: F, fontSize: 15, color: MUT, marginBottom: 10 }}>د.أ · للمسار الكامل</span>
                 </div>
 
                 {/* installment chip */}
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 14, background: GS, border: `1px solid ${GL}`, borderRadius: 12, padding: '9px 15px' }}>
                   <span className="ka-pulse-dot" style={{ width: 7, height: 7, borderRadius: '50%', background: GLD, flexShrink: 0 }} />
                   <span style={{ fontFamily: F, fontSize: 13, color: LT }}>
-                    التقسيط متاح · الدفعة الأولى <b style={{ color: GLD, fontFamily: FP }}>$250</b> لتثبيت مقعدك
+                    التقسيط متاح · <b style={{ color: GLD, fontFamily: FP }}>50 د.أ</b> تُثبَّت مقعدك
                   </span>
                 </div>
 
@@ -850,6 +851,24 @@ export default function MasarElamiPage() {
               <a href="/" style={{ color: GLD, textDecoration: 'underline', textUnderlineOffset: 3, fontWeight: 700 }}>
                 استعرض الدورات المنفردة ←
               </a>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════ GUARANTEE ════════════════ */}
+      <section style={{ padding: '72px 0', borderTop: `1px solid rgba(255,193,7,.15)` }}>
+        <div className="sec-wrap" style={{ ...INNER }}>
+          <div style={{ maxWidth: 680, margin: '0 auto', background: 'rgba(255,193,7,.06)', border: '1px solid rgba(255,193,7,.32)', borderRadius: 22, padding: 'clamp(28px,3.5vw,44px)', textAlign: 'center' }}>
+            <ShieldCheck size={44} strokeWidth={1.5} color="#FFC107" aria-hidden="true" />
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(22px,3vw,30px)', color: OFF, margin: '18px 0 14px', lineHeight: 1.4 }}>
+              ضمان الجلسة الأولى
+            </h2>
+            <p style={{ fontFamily: F, fontSize: 15.5, color: MUT, lineHeight: 1.9, maxWidth: 520, marginInline: 'auto' }}>
+              جرّب الجلسة الأولى كاملة. وإن شعرت أنّ الماستركلاس لا يلبّي توقّعاتك، اطلب استرداداً كاملاً خلال 24 ساعة من انتهائها — دون أسئلة.
+            </p>
+            <p style={{ fontFamily: F, fontSize: 13.5, color: GLD, fontStyle: 'italic', margin: '16px 0 0' }}>
+              نحن نعرف ما نقدّمه. والجلسة الأولى تكفي لتعرفه أنت.
             </p>
           </div>
         </div>

@@ -4,7 +4,8 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { usePageMeta } from '../hooks/usePageMeta';
-import { ChevronDown, ArrowLeft, MapPin, Wifi } from 'lucide-react';
+import { ChevronDown, ArrowLeft, MapPin, Wifi, ShieldCheck } from 'lucide-react';
+import { FaWhatsapp } from 'react-icons/fa6';
 import { GOLD, OFF, F, FP, INNER, waLink } from './shared/coursePageHelpers';
 import wajeezLogo    from '@assets/wajeez-logo_1785688262989.png';
 import heroShot      from '@assets/cover-public-speaking-tedx_1785865159100.jpeg';
@@ -352,7 +353,7 @@ export default function MasarKhatabaPage() {
           {/* top chip */}
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GS, border: `1px solid ${GL}`, borderRadius: 999, padding: '6px 14px', marginBottom: 28 }}>
             <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD }} />
-            <span style={{ fontFamily: F, fontSize: 12.5, fontWeight: 700, color: GLD }}>ماستركلاس · 42 ساعة تدريبية</span>
+            <span style={{ fontFamily: F, fontSize: 12.5, fontWeight: 700, color: GLD }}>ماستركلاس · 44 ساعة تدريبية</span>
           </div>
 
           <h1 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(34px,5vw,60px)', lineHeight: 1.22, margin: '0 0 20px', color: OFF, letterSpacing: -0.8, maxWidth: 720 }}>
@@ -370,7 +371,7 @@ export default function MasarKhatabaPage() {
           {/* fact chips */}
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 32 }}>
             {[
-              { icon: '⏱', text: '42 ساعة · 21 جلسة' },
+              { icon: '⏱', text: '44 ساعة · 22 جلسة' },
               { icon: '📁', text: '13 مخرجاً موثَّقاً' },
               { icon: '🎙', text: 'فيديو خطاب احترافي' },
               { icon: '🌐', text: 'حضوري أو مباشر تفاعلي (Online LIVE)' },
@@ -638,6 +639,48 @@ export default function MasarKhatabaPage() {
       </section>
 
       {/* ═══════════════════════════════════════
+          5. OUTCOMES — ما الذي ستُحقّقه
+      ═══════════════════════════════════════ */}
+      <section className="sec sec--outcomes" style={{ padding: '96px 0', background: '#0B1628' }}>
+        <div style={WRP}>
+          <div style={SH}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GS, border: `1px solid ${GL}`, color: GLD, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>
+              <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD }} />
+              مخرجات الماستركلاس
+            </span>
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', lineHeight: 1.35, margin: '18px 0 0', color: OFF }}>
+              ما الذي ستُحقّقه <span style={{ color: GLD }}>بعد الماستركلاس؟</span>
+            </h2>
+            <p style={{ fontFamily: F, fontSize: 16, color: MUT, maxWidth: 560, marginTop: 14, marginInline: 'auto' }}>
+              مخرجات ملموسة تُقدّمها لأصحاب العمل والجهات المنظِّمة — لا مجرّد شعور عام بالتحسّن.
+            </p>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 20, marginTop: 52 }}>
+            {[
+              { n:'01', t:'خطاب مبنيّ لا مرتجَل', d:'تُنشئ مخطَّطاً قبل أن تكتب، وتكتب للأذن لا للعين، فتُلقي في زمن أقلّ وبأثر أعلى.' },
+              { n:'02', t:'حضور منصّي مضبوط', d:'صوت ثابت، وإيماءة مقصودة، وتواصل بصري موزَّع — وإجراء ثابت لضبط رهبة المنصّة.' },
+              { n:'03', t:'قدرة إقناعية موثَّقة', d:'حجّة مكتملة الأركان، وتفنيد للحجّة المضادّة، وحكاية شخصية تحمل رسالتك.' },
+              { n:'04', t:'فيديو خطاب احترافي وشهادة معتمدة', d:'مخرج منتَج بجودة النشر، مرفَق بتقرير تحليل أداء، وشهادة معتمدة من تطبيق وجيز.' },
+            ].map(({ n, t, d }) => (
+              <div key={n} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 18, padding: 'clamp(20px,2.5vw,28px)' }}>
+                <div style={{ fontFamily: FP, fontSize: 11, fontWeight: 700, color: GLD, letterSpacing: 1.2, marginBottom: 12 }}>{n}</div>
+                <h4 style={{ fontFamily: F, fontWeight: 800, fontSize: 18, color: OFF, marginBottom: 10, lineHeight: 1.4 }}>{t}</h4>
+                <p style={{ fontFamily: F, fontSize: 13.5, color: MUT, lineHeight: 1.8, margin: 0 }}>{d}</p>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ textAlign: 'center', marginTop: 48 }}>
+            <a href={WA_ENROLL} target="_blank" rel="noopener noreferrer"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: INK, fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 32px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 8px 24px rgba(255,193,7,.24)' }}>
+              ابدأ مسيرتك على المنصّة <ArrowLeft size={14} />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════
           6. TRAINERS
       ═══════════════════════════════════════ */}
       <section id="trainers" className="sec sec--trainers" style={{ padding: '96px 0' }}>
@@ -838,26 +881,18 @@ export default function MasarKhatabaPage() {
                 <div style={{ textAlign: 'center', paddingBottom: 24, borderBottom: `1px solid ${CBR}`, paddingTop: 10 }}>
                   <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 21, color: OFF }}>الماستركلاس الكامل</h3>
                   <p style={{ fontFamily: F, fontSize: 13, color: MUT, marginTop: 6, lineHeight: 1.65 }}>
-                    42 ساعة · 12 محطة · 13 مخرجاً · مشروع تخرّج مصوَّر · شهادة معتمدة من وجيز
+                    44 ساعة · 12 محطة · 13 مخرجاً · مشروع تخرّج مصوَّر · شهادة معتمدة من وجيز
                   </p>
-                  <div style={{ display: 'flex', justifyContent: 'center', gap: 28, margin: '20px 0 0', flexWrap: 'wrap', alignItems: 'flex-end' }}>
-                    <div style={{ textAlign: 'center' }}>
-                      <span style={{ fontFamily: FP, fontSize: 48, fontWeight: 700, color: GLD, lineHeight: 1, display: 'block' }}>780</span>
-                      <span style={{ fontFamily: F, fontSize: 13, color: MUT, display: 'block', marginTop: 4 }}>JOD · حضوري عمّان</span>
-                    </div>
-                    <div style={{ width: 1, height: 52, background: CBR, flexShrink: 0 }} />
-                    <div style={{ textAlign: 'center' }}>
-                      <span style={{ fontFamily: FP, fontSize: 30, fontWeight: 700, color: GLD, lineHeight: 1, display: 'block' }}>690</span>
-                      <span style={{ fontFamily: F, fontSize: 13, color: MUT, display: 'block', marginTop: 4 }}>JOD · مباشر تفاعلي</span>
-                    </div>
+                  <div style={{ textAlign: 'center', margin: '20px 0 0' }}>
+                    <span style={{ fontFamily: F, fontSize: 15, color: MUT, display: 'block' }}>السعر يُعلَن قريباً — تواصل مع المستشارة للتفاصيل</span>
                   </div>
                   <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 16, background: GS, border: `1px solid ${GL}`, borderRadius: 12, padding: '9px 15px' }}>
                     <span style={{ width: 7, height: 7, borderRadius: '50%', background: GLD, flexShrink: 0 }} />
-                    <span style={{ fontFamily: F, fontSize: 13, color: LT }}>التقسيط متاح · تُثبَّت مقعدك بـ 250 ديناراً</span>
+                    <span style={{ fontFamily: F, fontSize: 13, color: LT }}>التقسيط متاح · تُثبَّت مقعدك بالدفعة الأولى</span>
                   </div>
                 </div>
                 <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 13, padding: '24px 0', margin: 0 }}>
-                  {['42 ساعة تدريبية على 21 جلسة','ثماني محطات لا تُتاح خارج الماستركلاس','13 مخرجاً موثَّقاً بتغذية راجعة مصوَّرة','ثلاث جلسات إنتاج + مونتاج احترافي','تقرير تحليل أداء فردي','فوج من خمسة عشر متدرّباً لا أكثر'].map(feat => (
+                  {['44 ساعة تدريبية على 22 جلسة','ثماني محطات لا تُتاح خارج الماستركلاس','13 مخرجاً موثَّقاً بتغذية راجعة مصوَّرة','ثلاث جلسات إنتاج + مونتاج احترافي','تقرير تحليل أداء فردي','فوج من خمسة عشر متدرّباً لا أكثر'].map(feat => (
                     <li key={feat} style={{ display: 'flex', alignItems: 'flex-start', gap: 11, fontFamily: F, fontSize: 14, color: LT, lineHeight: 1.65 }}>
                       <span style={{ color: GLD, fontWeight: 800, flexShrink: 0 }}>✓</span> {feat}
                     </li>
@@ -937,6 +972,26 @@ export default function MasarKhatabaPage() {
       </section>
 
       {/* ═══════════════════════════════════════
+          GUARANTEE — ضمان الجلسة الأولى
+      ═══════════════════════════════════════ */}
+      <section style={{ padding: '72px 0' }}>
+        <div style={WRP}>
+          <div style={{ maxWidth: 680, margin: '0 auto', background: 'rgba(255,193,7,.06)', border: '1px solid rgba(255,193,7,.32)', borderRadius: 22, padding: 'clamp(28px,3.5vw,44px)', textAlign: 'center' }}>
+            <ShieldCheck size={44} strokeWidth={1.5} color="#FFC107" aria-hidden="true" />
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(22px,3vw,30px)', color: OFF, margin: '18px 0 14px', lineHeight: 1.4 }}>
+              ضمان الجلسة الأولى
+            </h2>
+            <p style={{ fontFamily: F, fontSize: 15.5, color: MUT, lineHeight: 1.9, maxWidth: 520, marginInline: 'auto' }}>
+              جرّب الجلسة الأولى كاملة. وإن شعرت أنّ الماستركلاس لا يلبّي توقّعاتك، اطلب استرداداً كاملاً خلال 24 ساعة من انتهائها — دون أسئلة.
+            </p>
+            <p style={{ fontFamily: F, fontSize: 13.5, color: GLD, fontStyle: 'italic', margin: '16px 0 0' }}>
+              نحن نعرف ما نقدّمه. والجلسة الأولى تكفي لتعرفه أنت.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════
           12. ADVISOR
       ═══════════════════════════════════════ */}
       <section id="consult" className="sec sec--advisor" style={{ padding: '96px 0' }}>
@@ -978,9 +1033,7 @@ export default function MasarKhatabaPage() {
                 <div style={{ marginTop: 26 }}>
                   <a href={WA_CONSULT} target="_blank" rel="noopener noreferrer"
                     style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: '#1F9D57', color: '#fff', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 26px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 10px 30px rgba(31,157,87,.30)' }}>
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true">
-                      <path d="M12.04 2C6.6 2 2.2 6.4 2.2 11.84c0 1.94.55 3.75 1.5 5.28L2 22l5-1.63a9.84 9.84 0 0 0 5.04 1.38c5.44 0 9.84-4.4 9.84-9.84S17.48 2 12.04 2zm0 17.94c-1.6 0-3.1-.44-4.38-1.2l-.31-.19-3.25 1.06 1.07-3.17-.2-.32a7.94 7.94 0 0 1-1.23-4.28c0-4.4 3.6-7.98 8.3-7.98 4.4 0 8 3.58 8 7.98s-3.6 8.1-8 8.1z"/>
-                    </svg>
+                    <FaWhatsapp size={18} aria-hidden="true" />
                     احجز استشارتك المجانية على واتساب
                   </a>
                 </div>
@@ -1006,12 +1059,6 @@ export default function MasarKhatabaPage() {
           </div>
           <div style={{ maxWidth: 840, margin: '48px auto 0' }}>
             {FAQS.map((faq, i) => <FaqItem key={i} q={faq.q} a={faq.a} defaultOpen={i === 0} />)}
-          </div>
-          <div style={{ textAlign: 'center', marginTop: 32 }}>
-            <a href={WA_CONSULT} target="_blank" rel="noopener noreferrer"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: CARD, color: OFF, border: `1px solid ${CBR}`, fontFamily: F, fontWeight: 700, fontSize: 15, padding: '13px 28px', borderRadius: 999, textDecoration: 'none' }}>
-              لم تجد سؤالك؟ اسأل ياقوت مباشرة <ArrowLeft size={14} />
-            </a>
           </div>
         </div>
       </section>
@@ -1061,47 +1108,6 @@ export default function MasarKhatabaPage() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════
-          FINAL. OUTCOMES — navy bg
-      ═══════════════════════════════════════ */}
-      <section className="sec sec--outcomes" style={{ padding: '96px 0', background: '#0B1628' }}>
-        <div style={WRP}>
-          <div style={SH}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GS, border: `1px solid ${GL}`, color: GLD, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>
-              <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD }} />
-              مخرجات الماستركلاس
-            </span>
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', lineHeight: 1.35, margin: '18px 0 0', color: OFF }}>
-              ما الذي ستُحقّقه <span style={{ color: GLD }}>بعد الماستركلاس؟</span>
-            </h2>
-            <p style={{ fontFamily: F, fontSize: 16, color: MUT, maxWidth: 560, marginTop: 14, marginInline: 'auto' }}>
-              مخرجات ملموسة تُقدّمها لأصحاب العمل والجهات المنظِّمة — لا مجرّد شعور عام بالتحسّن.
-            </p>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 20, marginTop: 52 }}>
-            {[
-              { n:'01', t:'خطاب مبنيّ لا مرتجَل', d:'تُنشئ مخطَّطاً قبل أن تكتب، وتكتب للأذن لا للعين، فتُلقي في زمن أقلّ وبأثر أعلى.' },
-              { n:'02', t:'حضور منصّي مضبوط', d:'صوت ثابت، وإيماءة مقصودة، وتواصل بصري موزَّع — وإجراء ثابت لضبط رهبة المنصّة.' },
-              { n:'03', t:'قدرة إقناعية موثَّقة', d:'حجّة مكتملة الأركان، وتفنيد للحجّة المضادّة، وحكاية شخصية تحمل رسالتك.' },
-              { n:'04', t:'فيديو خطاب احترافي وشهادة معتمدة', d:'مخرج منتَج بجودة النشر، مرفَق بتقرير تحليل أداء، وشهادة معتمدة من تطبيق وجيز.' },
-            ].map(({ n, t, d }) => (
-              <div key={n} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 18, padding: 'clamp(20px,2.5vw,28px)' }}>
-                <div style={{ fontFamily: FP, fontSize: 11, fontWeight: 700, color: GLD, letterSpacing: 1.2, marginBottom: 12 }}>{n}</div>
-                <h4 style={{ fontFamily: F, fontWeight: 800, fontSize: 18, color: OFF, marginBottom: 10, lineHeight: 1.4 }}>{t}</h4>
-                <p style={{ fontFamily: F, fontSize: 13.5, color: MUT, lineHeight: 1.8, margin: 0 }}>{d}</p>
-              </div>
-            ))}
-          </div>
-
-          <div style={{ textAlign: 'center', marginTop: 48 }}>
-            <a href={WA_ENROLL} target="_blank" rel="noopener noreferrer"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: INK, fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 32px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 8px 24px rgba(255,193,7,.24)' }}>
-              ابدأ مسيرتك على المنصّة <ArrowLeft size={14} />
-            </a>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }
