@@ -4,9 +4,12 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { usePageMeta } from '../hooks/usePageMeta';
-import { ChevronDown, ArrowLeft, MapPin, Wifi, Layers, Clock, FolderCheck, CheckCircle2, MessageCircle, ShieldCheck } from 'lucide-react';
-import { FaWhatsapp } from 'react-icons/fa6';
+import { ChevronDown, ArrowLeft, MapPin, Wifi, Layers, Clock, FolderCheck, CheckCircle2 } from 'lucide-react';
 import { NAVY, GOLD, OFF, F, FP, INNER, DH, DM, waLink } from './shared/coursePageHelpers';
+import MasterclassGuarantee from '../components/masterclass/MasterclassGuarantee';
+import MasterclassFaqAccordion from '../components/masterclass/MasterclassFaqAccordion';
+import MasterclassAdvisorCard from '../components/masterclass/MasterclassAdvisorCard';
+import PaymentModal from '../components/PaymentModal';
 import wajeezLogo     from '@assets/wajeez-logo_1785688262989.png';
 import coverMasar     from '@assets/cover_المسار_الاعلامي_1785777356196.png';
 import instructorRana from '@assets/trainer-rana-azzam_1785692178863.JPG';
@@ -37,7 +40,7 @@ const STATIONS = [
     sub:'المرحلة التأسيسية — الحضور والإلقاء والتقديم',
     chips:['الإلقاء الاحترافي','لغة الجسد','الحضور أمام الكاميرا','قراءة النشرة','تقديم البرامج','إدارة الحوارات','المقابلات','البث المباشر'],
     project:'تقرير مرئي كامل يُقدَّم أمام الكاميرا ويُقيَّم من لجنة مدربين.',
-    hours:'16 ساعة', note:'متاحة كدورة مستقلة: الدورة المكثفة — المذيع المحترف',
+    hours:'6 ساعات', note:'متاحة كدورة مستقلة: الدورة المكثفة — المذيع المحترف',
   },
   {
     n:'02', phase:1, standalone:false,
@@ -45,7 +48,7 @@ const STATIONS = [
     sub:'المرحلة التأسيسية — ضبط الصوت والنبرة',
     chips:['أساسيات الأداء الصوتي','التنفس الصحيح','مخارج الحروف','ضبط النبرات'],
     project:'تسجيل صوتي مقيَّم: إعلان، تمهيد برنامج، أو خبر.',
-    hours:'6 ساعات', note:null,
+    hours:'3 ساعات', note:null,
   },
   {
     n:'03', phase:2, standalone:false,
@@ -53,7 +56,7 @@ const STATIONS = [
     sub:'مرحلة التخصص — الكتابة والتحرير',
     chips:['الخبر','التقرير','التحقيق','المقال','التحرير الرقمي','العناوين','التحقق من الأخبار'],
     project:'تقرير صحفي مكتوب مع تحقيق من مصادر متعددة.',
-    hours:'12 ساعة', note:null,
+    hours:'4 ساعات', note:null,
   },
   {
     n:'04', phase:2, standalone:false,
@@ -61,7 +64,7 @@ const STATIONS = [
     sub:'مرحلة التخصص — التغطية والميدان',
     chips:['الوقفة الميدانية','التقارير','التغطيات','البث المباشر','صناعة القصة','السلامة المهنية'],
     project:'تقرير ميداني مصوَّر يُجهَّز كاملاً: تصوير وتعليق وإخراج.',
-    hours:'12 ساعة', note:null,
+    hours:'4 ساعات', note:null,
   },
   {
     n:'05', phase:2, standalone:false,
@@ -69,7 +72,7 @@ const STATIONS = [
     sub:'مرحلة التخصص — المحتوى الرقمي',
     chips:['كتابة السكريبت','الريلز','صناعة الهوية','تصوير المحتوى','السرد القصصي','استراتيجيات النشر'],
     project:'سلسلة محتوى من ثلاث قطع لعلامة تجارية أو موضوع إعلامي.',
-    hours:'10 ساعات', note:null,
+    hours:'4 ساعات', note:null,
   },
   {
     n:'06', phase:2, standalone:false,
@@ -77,7 +80,7 @@ const STATIONS = [
     sub:'مرحلة التخصص — الصوت والمحادثة',
     chips:['إعداد الحلقة','كتابة الأسئلة','إدارة الحوار','التسجيل','المونتاج الأساسي','نشر البودكاست'],
     project:'حلقة بودكاست منتَجة ومنشورة على إحدى المنصات.',
-    hours:'10 ساعات', note:null,
+    hours:'4 ساعات', note:null,
   },
   {
     n:'07', phase:2, standalone:false,
@@ -85,7 +88,7 @@ const STATIONS = [
     sub:'مرحلة التخصص — التصريحات وإدارة الأزمات',
     chips:['التعامل مع الإعلام','المؤتمرات الصحفية','التصريحات','إدارة الأزمات الإعلامية','بناء الرسائل'],
     project:'محاكاة مؤتمر صحفي مع إدارة موقف أزمة.',
-    hours:'10 ساعات', note:null,
+    hours:'4 ساعات', note:null,
   },
   {
     n:'08', phase:2, standalone:false,
@@ -93,7 +96,7 @@ const STATIONS = [
     sub:'مرحلة التخصص — الإخراج والإنتاج',
     chips:['التخطيط للإنتاج','كتابة السيناريو','التصوير','الإخراج','أساسيات المونتاج','إدارة فريق الإنتاج'],
     project:'فيلم قصير أو مقطع إعلامي منتَج بالكامل.',
-    hours:'12 ساعة', note:null,
+    hours:'4 ساعات', note:null,
   },
   {
     n:'09', phase:2, standalone:false,
@@ -101,7 +104,7 @@ const STATIONS = [
     sub:'مرحلة التخصص — أدوات المستقبل',
     chips:['كتابة الأخبار بالذكاء الاصطناعي','صناعة السكريبت','تحويل النص إلى صوت','توليد الصور','أدوات المونتاج','الترجمة والدبلجة','التحقق من المعلومات'],
     project:'مشروع إعلامي كامل منتَج بأدوات الذكاء الاصطناعي.',
-    hours:'8 ساعات', note:null,
+    hours:'3 ساعات', note:null,
   },
   {
     n:'10', phase:3, standalone:false, optional:true,
@@ -109,7 +112,7 @@ const STATIONS = [
     sub:'مرحلة القيادة — الإدارة والاستراتيجية',
     chips:['إدارة المؤسسات الإعلامية','التخطيط الإعلامي','إدارة فرق العمل','بناء الهوية الإعلامية','إدارة المشاريع الإعلامية'],
     project:'خطة إعلامية متكاملة لمؤسسة أو مشروع.',
-    hours:'10 ساعات', note:null,
+    hours:'4 ساعات', note:null,
   },
 ] as const;
 
@@ -211,27 +214,6 @@ function Station({ s, open, onToggle }: { s: StationType; open: boolean; onToggl
   );
 }
 
-/* ── FAQ item ─────────────────────────────────────────── */
-function FaqItem({ q, a }: { q: string; a: string }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <div style={{
-      background: CARD, border: `1px solid ${open ? GL : CARD_BORDER}`,
-      borderRadius: 14, overflow: 'hidden', marginBottom: 10, transition: 'border-color .2s',
-    }}>
-      <button
-        onClick={() => setOpen(o => !o)}
-        aria-expanded={open}
-        style={{ width: '100%', background: 'none', border: 'none', cursor: 'pointer', padding: '18px 22px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
-        <span style={{ fontFamily: F, fontSize: 15.5, fontWeight: 700, color: OFF, textAlign: 'right' }}>{q}</span>
-        <span aria-hidden="true" style={{ color: GLD, fontSize: 22, lineHeight: 1, transform: open ? 'rotate(45deg)' : 'none', transition: 'transform .25s', flexShrink: 0 }}>+</span>
-      </button>
-      {open && (
-        <div style={{ padding: '0 22px 20px', fontFamily: F, fontSize: 14.5, color: MUT, lineHeight: 1.85 }}>{a}</div>
-      )}
-    </div>
-  );
-}
 
 /* ── Study accordion ─────────────────────────────────── */
 function StudyAccordion({
@@ -316,6 +298,11 @@ function SectionLabel({ text, light = false }: { text: string; light?: boolean }
 /* ── Page ────────────────────────────────────────────── */
 export default function MasarElamiPage() {
   const [, navigate]            = useLocation();
+  const [modalOpen, setModalOpen] = useState(false);
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search);
+    if (p.get('payment_intent') && p.get('redirect_status') === 'succeeded') setModalOpen(true);
+  }, []);
   const [openIdx, setOpenIdx]   = useState<number | null>(null);
   const [expandAll, setExpandAll] = useState(false);
 
@@ -448,7 +435,7 @@ export default function MasarElamiPage() {
 
               {/* CTAs */}
               <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 12, marginTop: 22 }}>
-                <a href={WA_TRACK} target="_blank" rel="noopener noreferrer"
+                <a href="#enroll" onClick={(e) => { e.preventDefault(); setModalOpen(true); }}
                   style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 14.5, padding: '13px 26px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 6px 20px rgba(255,193,7,0.22)' }}>
                   تحدّث مع ياقوت عبر واتساب 💬 <ArrowLeft size={14} />
                 </a>
@@ -547,7 +534,7 @@ export default function MasarElamiPage() {
                   <p style={{ fontFamily: F, fontSize: 13, color: MUT, marginTop: 3 }}>شهادة المسار الكاملة + محفظة أعمال + توصية مهنية</p>
                 </div>
               </div>
-              <a href={WA_TRACK} target="_blank" rel="noopener noreferrer"
+              <a href="#enroll" onClick={(e) => { e.preventDefault(); setModalOpen(true); }}
                 style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 700, fontSize: 13.5, padding: '11px 22px', borderRadius: 12, textDecoration: 'none' }}>
                 التسجيل في المسار <ArrowLeft size={13} />
               </a>
@@ -720,7 +707,7 @@ export default function MasarElamiPage() {
                     <span key={t} style={{ fontFamily: F, fontSize: 12, color: GLD, background: GS, border: `1px solid ${GL}`, borderRadius: 999, padding: '4px 12px' }}>{t}</span>
                   ))}
                 </div>
-                <a href={WA_TRACK} target="_blank" rel="noopener noreferrer"
+                <a href="#enroll" onClick={(e) => { e.preventDefault(); setModalOpen(true); }}
                   style={{ marginTop: 'auto', display: 'inline-flex', alignItems: 'center', gap: 8, alignSelf: 'flex-start', background: GLD, color: NAVY, fontFamily: F, fontWeight: 800, fontSize: 13.5, padding: '11px 22px', borderRadius: 11, textDecoration: 'none' }}>
                   تواصل للاستفسار <ArrowLeft size={13} />
                 </a>
@@ -753,7 +740,7 @@ export default function MasarElamiPage() {
                     <span key={t} style={{ fontFamily: F, fontSize: 12, color: '#67e8f9', background: 'rgba(103,232,249,0.07)', border: '1px solid rgba(103,232,249,0.20)', borderRadius: 999, padding: '4px 12px' }}>{t}</span>
                   ))}
                 </div>
-                <a href={WA_TRACK} target="_blank" rel="noopener noreferrer"
+                <a href="#enroll" onClick={(e) => { e.preventDefault(); setModalOpen(true); }}
                   style={{ marginTop: 'auto', display: 'inline-flex', alignItems: 'center', gap: 8, alignSelf: 'flex-start', background: 'rgba(103,232,249,0.10)', border: '1px solid rgba(103,232,249,0.30)', color: '#67e8f9', fontFamily: F, fontWeight: 800, fontSize: 13.5, padding: '11px 22px', borderRadius: 11, textDecoration: 'none' }}>
                   تواصل للاستفسار <ArrowLeft size={13} />
                 </a>
@@ -803,9 +790,16 @@ export default function MasarElamiPage() {
                 <p style={{ fontFamily: F, fontSize: 13, color: MUT, marginTop: 6, lineHeight: 1.65 }}>
                   10 محطات · التأسيس + التخصصات + القيادة الإعلامية
                 </p>
-                <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: 8, margin: '20px 0 0' }}>
-                  <span style={{ fontFamily: FP, fontSize: 54, fontWeight: 900, color: GLD, lineHeight: 1 }}>400</span>
-                  <span style={{ fontFamily: F, fontSize: 15, color: MUT, marginBottom: 10 }}>د.أ · للمسار الكامل</span>
+                <div style={{ display: 'flex', justifyContent: 'center', gap: 28, margin: '20px 0 0', flexWrap: 'wrap', alignItems: 'flex-end' }}>
+                  <div style={{ textAlign: 'center' }}>
+                    <span style={{ fontFamily: FP, fontSize: 48, fontWeight: 700, color: GLD, lineHeight: 1, display: 'block' }}>700</span>
+                    <span style={{ fontFamily: F, fontSize: 13, color: MUT, display: 'block', marginTop: 4 }}>JOD · حضوري عمّان</span>
+                  </div>
+                  <div style={{ width: 1, height: 52, background: CARD_BORDER, flexShrink: 0 }} />
+                  <div style={{ textAlign: 'center' }}>
+                    <span style={{ fontFamily: FP, fontSize: 48, fontWeight: 700, color: GLD, lineHeight: 1, display: 'block' }}>1000</span>
+                    <span style={{ fontFamily: F, fontSize: 13, color: MUT, display: 'block', marginTop: 4 }}>USD · مباشر تفاعلي (Online LIVE)</span>
+                  </div>
                 </div>
 
                 {/* installment chip */}
@@ -837,7 +831,7 @@ export default function MasarElamiPage() {
               </ul>
 
               {/* CTA */}
-              <a href={WA_TRACK} target="_blank" rel="noopener noreferrer"
+              <a href="#enroll" onClick={(e) => { e.preventDefault(); setModalOpen(true); }}
                 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, width: '100%', boxSizing: 'border-box', background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 24px', borderRadius: 14, textDecoration: 'none', boxShadow: '0 6px 22px rgba(255,193,7,0.20)' }}>
                 التسجيل في المسار <ArrowLeft size={15} />
               </a>
@@ -859,18 +853,7 @@ export default function MasarElamiPage() {
       {/* ════════════════ GUARANTEE ════════════════ */}
       <section style={{ padding: '72px 0', borderTop: `1px solid rgba(255,193,7,.15)` }}>
         <div className="sec-wrap" style={{ ...INNER }}>
-          <div style={{ maxWidth: 680, margin: '0 auto', background: 'rgba(255,193,7,.06)', border: '1px solid rgba(255,193,7,.32)', borderRadius: 22, padding: 'clamp(28px,3.5vw,44px)', textAlign: 'center' }}>
-            <ShieldCheck size={44} strokeWidth={1.5} color="#FFC107" aria-hidden="true" />
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(22px,3vw,30px)', color: OFF, margin: '18px 0 14px', lineHeight: 1.4 }}>
-              ضمان الجلسة الأولى
-            </h2>
-            <p style={{ fontFamily: F, fontSize: 15.5, color: MUT, lineHeight: 1.9, maxWidth: 520, marginInline: 'auto' }}>
-              جرّب الجلسة الأولى كاملة. وإن شعرت أنّ الماستركلاس لا يلبّي توقّعاتك، اطلب استرداداً كاملاً خلال 24 ساعة من انتهائها — دون أسئلة.
-            </p>
-            <p style={{ fontFamily: F, fontSize: 13.5, color: GLD, fontStyle: 'italic', margin: '16px 0 0' }}>
-              نحن نعرف ما نقدّمه. والجلسة الأولى تكفي لتعرفه أنت.
-            </p>
-          </div>
+          <MasterclassGuarantee />
         </div>
       </section>
 
@@ -883,57 +866,16 @@ export default function MasarElamiPage() {
             <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,4vw,40px)', marginTop: 16, lineHeight: 1.35, color: OFF }}>
               غير متأكد؟ <span style={{ color: GLD }}>تحدّث مع مستشارتنا</span>
             </h2>
-            <p style={{ fontFamily: F, fontSize: 15, color: MUT, marginTop: 10, maxWidth: 520, marginInline: 'auto', lineHeight: 1.8 }}>
-              جلسة استشارية مجانية على واتساب — تساعدك تحدد إذا المسار هو الخيار الصح لك، وكيف تبدأ.
-            </p>
           </div>
-
-          {/* advisor card */}
-          <div style={{ maxWidth: 720, marginInline: 'auto' }}>
-            <div className="masar-advisor">
-              {/* photo */}
-              <div className="masar-advisor-photo">
-                <img src={advisorYaqout} alt="ياقوت — مستشارة تعليمية"
-                  loading="lazy" decoding="async" />
-                <span className="masar-advisor-live">
-                  <i />{' '}متواجدة الآن للرد على استفساراتك
-                </span>
-              </div>
-
-              {/* content */}
-              <div className="masar-advisor-body" style={{ display: 'flex', flexDirection: 'column' }}>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: GS, border: `1px solid ${GL}`, borderRadius: 999, padding: '4px 13px', marginBottom: 12, alignSelf: 'flex-start' }}>
-                  <span style={{ width: 4, height: 4, borderRadius: '50%', background: GLD }} />
-                  <span style={{ fontFamily: F, fontSize: 12, fontWeight: 700, color: GLD }}>مستشارة تعليمية</span>
-                </div>
-
-                <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 22, color: OFF, margin: '0 0 6px' }}>ياقوت</h3>
-                <p style={{ fontFamily: F, fontSize: 13.5, color: MUT, lineHeight: 1.8, marginBottom: 20 }}>
-                  ستساعدك في تقييم مستواك الحالي، ومعرفة ما إذا كان المسار الكامل هو الخيار الأنسب لك — أو إذا كانت دورة منفردة هي نقطة البداية الأفضل.
-                </p>
-
-                {/* what you get */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 9, marginBottom: 24 }}>
-                  {[
-                    'تقييم مستواك ومناسبة المسار لك',
-                    'إجابات على كل أسئلتك قبل التسجيل',
-                    'خيارات الدفع والتقسيط المتاحة',
-                  ].map(item => (
-                    <div key={item} style={{ display: 'flex', alignItems: 'center', gap: 9, fontFamily: F, fontSize: 13.5, color: LT }}>
-                      <span style={{ color: GLD, fontWeight: 800, flexShrink: 0 }}>✓</span> {item}
-                    </div>
-                  ))}
-                </div>
-
-                <a href={WA_CONSULT} target="_blank" rel="noopener noreferrer"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 10, alignSelf: 'flex-start', background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 14, padding: '12px 24px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 6px 20px rgba(255,193,7,0.20)' }}>
-                  <MessageCircle size={16} />
-                  احجز استشارة مجانية — واتساب
-                </a>
-
-                <p style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 10 }}>مجانية تماماً · على واتساب · بدون أي التزام</p>
-              </div>
-            </div>
+          <div style={{ maxWidth: 560, marginInline: 'auto' }}>
+            <MasterclassAdvisorCard
+              name="ياقوت"
+              role="المستشارة التعليمية — كاسيت أكاديمي"
+              bio="ستساعدك في تقييم مستواك الحالي، ومعرفة ما إذا كان المسار الكامل هو الخيار الأنسب لك — أو إذا كانت دورة منفردة هي نقطة البداية الأفضل."
+              phone={WA_PHONE}
+              waLabel="احجز استشارة مجانية — واتساب"
+              imageSrc={advisorYaqout}
+            />
           </div>
         </div>
       </section>
@@ -948,7 +890,7 @@ export default function MasarElamiPage() {
             </h2>
           </div>
           <div style={{ maxWidth: 820, marginInline: 'auto' }}>
-            {FAQS.map((faq, i) => <FaqItem key={i} {...faq} />)}
+            <MasterclassFaqAccordion faqs={FAQS} />
           </div>
         </div>
       </section>
@@ -977,7 +919,7 @@ export default function MasarElamiPage() {
             </div>
           </div>
 
-          <a href="#enroll" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15.5, padding: '15px 32px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 8px 26px rgba(255,193,7,0.24)' }}>
+          <a href="#enroll" onClick={(e) => { e.preventDefault(); setModalOpen(true); }} style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15.5, padding: '15px 32px', borderRadius: 12, textDecoration: 'none', cursor: 'pointer', boxShadow: '0 8px 26px rgba(255,193,7,0.24)' }}>
             احجز مقعدك في هذا الفوج <ArrowLeft size={15} />
           </a>
           <p style={{ fontFamily: F, fontSize: 14, color: MUT, marginTop: 18 }}>
@@ -985,6 +927,21 @@ export default function MasarElamiPage() {
           </p>
         </div>
       </section>
+
+      <PaymentModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        courseSlug="masar-elami"
+        courseTitle="ماستركلاس الإعلام المتكامل"
+        cohortIdOnsite={305}
+        cohortIdLive={306}
+        cohortStartAr="15 أيلول"
+        cohortDays="الأحد والثلاثاء"
+        cohortTimeAr="6:00 – 8:00 مساءً"
+        cohortTrainer="رنا العزام"
+        priceJOD={700}
+        priceUSD={1000}
+      />
 
     </div>
   );

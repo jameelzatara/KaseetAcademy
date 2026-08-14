@@ -255,6 +255,12 @@ importers:
 
   artifacts/kaseet-academy:
     dependencies:
+      '@stripe/react-stripe-js':
+        specifier: ^6.8.1
+        version: 6.8.1(@stripe/stripe-js@9.13.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@stripe/stripe-js':
+        specifier: ^9.13.0
+        version: 9.13.0
       gray-matter:
         specifier: ^4.0.3
         version: 4.0.3
@@ -1578,6 +1584,17 @@ packages:
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
+
+  '@stripe/react-stripe-js@6.8.1':
+    resolution: {integrity: sha512-Wzy7KCF8lM819x8rVFSKUr2ofITdX1c/49ceJprJzGhPzHb3fhrcAoEmNQwV5UYRci7YY1joyG8oz3So3JAMRg==}
+    peerDependencies:
+      '@stripe/stripe-js': '>=9.5.0 <10.0.0'
+      react: '>=16.8.0 <20.0.0'
+      react-dom: '>=16.8.0 <20.0.0'
+
+  '@stripe/stripe-js@9.13.0':
+    resolution: {integrity: sha512-/0c72BUgzzVkVTlsw5uBn8x3waTdVJ/PZGfQ6jY1eu6K7olUPf4d9lgDPA9/0sIdsR8j7o3QIG8fOCO6ItcL7A==}
+    engines: {node: '>=12.16'}
 
   '@tabby_ai/hijri-converter@1.0.5':
     resolution: {integrity: sha512-r5bClKrcIusDoo049dSL8CawnHR6mRdDwhlQuIgZRNty68q0x8k3Lf1BtPAMxRf/GgnHBnIO4ujd3+GQdLWzxQ==}
@@ -4445,6 +4462,15 @@ snapshots:
   '@sindresorhus/merge-streams@4.0.0': {}
 
   '@standard-schema/spec@1.1.0': {}
+
+  '@stripe/react-stripe-js@6.8.1(@stripe/stripe-js@9.13.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@stripe/stripe-js': 9.13.0
+      prop-types: 15.8.1
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+
+  '@stripe/stripe-js@9.13.0': {}
 
   '@tabby_ai/hijri-converter@1.0.5': {}
 

@@ -15,11 +15,15 @@ export interface CoursePricing {
 }
 
 export const COURSE_PRICING: Record<string, CoursePricing> = {
-  voiceover:        { onsite: { totalJOD: 218 }, live: { totalUSD: 150 } },
+  voiceover:          { onsite: { totalJOD: 218 }, live: { totalUSD: 150 } },
   "voiceover-basics": { onsite: { totalJOD: 218 }, live: { totalUSD: 150 } },
-  presenter:        { onsite: { totalJOD: 250 } },
+  presenter:          { onsite: { totalJOD: 250 } },
   "public-speaking":  { onsite: { totalJOD: 180 }, live: { totalUSD: 150 } },
   "arabic-language":  { live: { totalUSD: 150 } },
+  // ── Masterclasses ─────────────────────────────────────────
+  "masar-soti":       { onsite: { totalJOD: 550 }, live: { totalUSD: 750 } },
+  "masar-khataba":    { onsite: { totalJOD: 500 }, live: { totalUSD: 700 } },
+  "masar-elami":      { onsite: { totalJOD: 700 }, live: { totalUSD: 1000 } },
 };
 
 export const COURSE_NAMES: Record<string, string> = {
@@ -28,6 +32,10 @@ export const COURSE_NAMES: Record<string, string> = {
   presenter:           "الدورة المكثّفة: المذيع المحترف",
   "public-speaking":   "فن الخطابة والإلقاء الجماهيري المؤثّر",
   "arabic-language":   "تمكين اللغة العربية وفنون التحرير اللغوي",
+  // ── Masterclasses ─────────────────────────────────────────
+  "masar-soti":        "ماستركلاس التعليق والأداء الصوتي",
+  "masar-khataba":     "ماستركلاس فن الخطابة والتواصل القيادي",
+  "masar-elami":       "ماستركلاس الإعلام المتكامل",
 };
 
 export function getPricing(

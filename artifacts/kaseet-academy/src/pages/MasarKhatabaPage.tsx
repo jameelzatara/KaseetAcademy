@@ -4,9 +4,12 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { usePageMeta } from '../hooks/usePageMeta';
-import { ChevronDown, ArrowLeft, MapPin, Wifi, ShieldCheck } from 'lucide-react';
-import { FaWhatsapp } from 'react-icons/fa6';
+import { ChevronDown, ArrowLeft, MapPin, Wifi } from 'lucide-react';
 import { GOLD, OFF, F, FP, INNER, waLink } from './shared/coursePageHelpers';
+import MasterclassGuarantee from '../components/masterclass/MasterclassGuarantee';
+import MasterclassFaqAccordion from '../components/masterclass/MasterclassFaqAccordion';
+import MasterclassAdvisorCard from '../components/masterclass/MasterclassAdvisorCard';
+import PaymentModal from '../components/PaymentModal';
 import wajeezLogo    from '@assets/wajeez-logo_1785688262989.png';
 import heroShot      from '@assets/cover-public-speaking-tedx_1785865159100.jpeg';
 import trainerSohaib from '@assets/instructor-sohaib_1785863334821.jpeg';
@@ -107,7 +110,7 @@ const STATIONS = [
 const PHASE_BANDS = [
   { from:0, to:4,  label:'المرحلة الأولى',  sub:'التأسيس · 14 ساعة · 7 جلسات',               color: GOLD },
   { from:4, to:8,  label:'المرحلة الثانية', sub:'بناء الخطاب والإقناع · 16 ساعة · 8 جلسات',  color: '#67e8f9' },
-  { from:8, to:12, label:'المرحلة الثالثة', sub:'المنصّة والقيادة · 12 ساعة · 6 جلسات',       color: '#a78bfa' },
+  { from:8, to:12, label:'المرحلة الثالثة', sub:'المنصّة والقيادة · 14 ساعة · 7 جلسات',       color: '#a78bfa' },
 ];
 
 const ALBUM = [
@@ -148,9 +151,9 @@ const FAQS = [
   { q:'أخاف من الحديث أمام الناس خوفاً شديداً — هل هذا الماستركلاس لي؟',
     a:'نعم، وهو مبنيّ على ذلك. المحطة الثانية مخصّصة بالكامل لرهبة المنصّة، وتُعالِجها بوصفها استجابة فسيولوجية معروفة الأسباب لا عيباً في الشخصية: بإعادة التأطير المعرفي، وتمارين التهيئة، والتعرّض المتدرّج من المجموعة الصغيرة إلى المنصّة. ويبدأ أوّل أداء لك بخطاب من دقيقتين لا بخطاب جماهيري.' },
   { q:'هل الدفع آمن؟ وهل التقسيط متاح؟',
-    a:'الدفع إلكتروني بالكامل عبر بوّابة دفع آمنة، ولا تحتفظ كاسيت ببيانات بطاقتك. والتقسيط متاح: تُثبَّت مقعدك بدفعة أولى قدرها 250 ديناراً، وتُوزَّع باقي الدفعات على مراحل الماستركلاس.' },
+    a:'الدفع إلكتروني بالكامل عبر بوّابة دفع آمنة، ولا تحتفظ كاسيت ببيانات بطاقتك. والتقسيط متاح: تُثبَّت مقعدك بدفعة أولى، وتُوزَّع باقي الدفعات على مراحل الماستركلاس.' },
   { q:'متى يبدأ الفوج القادم؟ وما الجدول الأسبوعي؟',
-    a:'يبدأ الفوج القادم في 30 أغسطس، الجدول الأسبوعي: الاثنين والأربعاء والسبت.' },
+    a:'يبدأ الفوج القادم في 14 أيلول (سبتمبر)، الجدول الأسبوعي: الاثنين والأربعاء والسبت.' },
   { q:'هل يُصوَّر أدائي؟ لا أرغب في ذلك.',
     a:'يُصوَّر، والتصوير جزء بنيوي من المنهج لا خيار فيه؛ فلا يُصحَّح أداء لم يُرَ. أمّا التسجيلات فتبقى خاصّة بك وبمدرّبك، ولا تُنشر إلا بإذنك الصريح. ومن لا يستطيع الالتزام بذلك، فالماستركلاس غير مناسب له.' },
   { q:'هل أحتاج خبرة سابقة في الخطابة؟',
@@ -216,7 +219,7 @@ function StudyRow({ variant }: { variant: 'inperson' | 'online' }) {
           </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 7, flexShrink: 0 }}>
-          {['12 محطة','42 ساعة', isIP ? 'حضوري' : 'مباشر تفاعلي (Online LIVE)'].map(b => (
+          {['12 محطة','44 ساعة', isIP ? 'حضوري' : 'مباشر تفاعلي (Online LIVE)'].map(b => (
             <span key={b} style={{ fontFamily: F, fontSize: 10.5, color: MUT, background: CARD, border: `1px solid ${CBR}`, borderRadius: 6, padding: '2.5px 7px', whiteSpace: 'nowrap' }}>{b}</span>
           ))}
           <ChevronDown size={15} color={open ? ac : MUT} strokeWidth={2.5} style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform .25s', flexShrink: 0 }} />
@@ -239,30 +242,17 @@ function StudyRow({ variant }: { variant: 'inperson' | 'online' }) {
   );
 }
 
-/* ── FaqItem ─────────────────────────────────────────── */
-function FaqItem({ q, a, defaultOpen = false }: { q: string; a: string; defaultOpen?: boolean }) {
-  const [open, setOpen] = useState(defaultOpen);
-  return (
-    <div style={{ borderRadius: 14, overflow: 'hidden', border: `1px solid ${open ? GL : CBR}`, marginBottom: 10, transition: 'border-color .2s' }}>
-      <button onClick={() => setOpen(v => !v)} aria-expanded={open}
-        style={{ width: '100%', background: open ? GS : CARD, border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 20px', cursor: 'pointer', textAlign: 'right', gap: 12 }}>
-        <span style={{ fontFamily: F, fontWeight: 700, fontSize: 15, color: 'rgba(252,251,251,0.96)', flex: 1, lineHeight: 1.5 }}>{q}</span>
-        <ChevronDown size={16} color={open ? GLD : MUT} strokeWidth={2.5} style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform .25s', flexShrink: 0 }} />
-      </button>
-      {open && (
-        <div style={{ padding: '16px 20px 20px', borderTop: `1px solid ${GL}`, background: 'rgba(255,193,7,0.03)' }}>
-          <p style={{ fontFamily: F, fontSize: 14, color: MUT, lineHeight: 1.85, margin: 0 }}>{a}</p>
-        </div>
-      )}
-    </div>
-  );
-}
 
 /* ── page ─────────────────────────────────────────────── */
 export default function MasarKhatabaPage() {
   const [, navigate] = useLocation();
   const [openIdx, setOpenIdx]   = useState<number | null>(null);
   const [expandAll, setExpandAll] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search);
+    if (p.get('payment_intent') && p.get('redirect_status') === 'succeeded') setModalOpen(true);
+  }, []);
 
   usePageMeta({
     title: 'ماستركلاس فن الخطابة والتواصل القيادي',
@@ -399,7 +389,7 @@ export default function MasarKhatabaPage() {
 
           {/* CTAs */}
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-            <a href={WA_ENROLL} target="_blank" rel="noopener noreferrer"
+            <a href="#enroll" onClick={(e) => { e.preventDefault(); setModalOpen(true); }}
               style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: INK, fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 28px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 8px 24px rgba(255,193,7,.28)' }}>
               سجّل في الماستركلاس <ArrowLeft size={14} />
             </a>
@@ -428,7 +418,7 @@ export default function MasarKhatabaPage() {
               الطريق من رهبة المنصّة <span style={{ color: GLD }}>إلى الإقناع</span>
             </h2>
             <p style={{ fontFamily: F, fontSize: 16, color: MUT, maxWidth: 640, marginTop: 14, marginInline: 'auto', lineHeight: 1.8 }}>
-              اثنتان وأربعون ساعة على إحدى وعشرين جلسة، تُختَم بمرحلة إنتاج فعلي مصوَّرة أمام جمهور. كلّ محطة إلزامية وبترتيب مقصود؛ اضغط على أيّ محطة لتصفّح محاورها ومشروعها.
+              أربع وأربعون ساعة على اثنتَين وعشرين جلسة، تُختَم بمرحلة إنتاج فعلي مصوَّرة أمام جمهور. كلّ محطة إلزامية وبترتيب مقصود؛ اضغط على أيّ محطة لتصفّح محاورها ومشروعها.
             </p>
           </div>
 
@@ -534,7 +524,7 @@ export default function MasarKhatabaPage() {
           </div>
 
           <div style={{ textAlign: 'center', marginTop: 34 }}>
-            <a href={WA_ENROLL} target="_blank" rel="noopener noreferrer"
+            <a href="#enroll" onClick={(e) => { e.preventDefault(); setModalOpen(true); }}
               style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: INK, fontFamily: F, fontWeight: 800, fontSize: 15, padding: '13px 28px', borderRadius: 999, textDecoration: 'none' }}>
               احجز مقعدك في الفوج القادم <ArrowLeft size={14} />
             </a>
@@ -672,7 +662,7 @@ export default function MasarKhatabaPage() {
           </div>
 
           <div style={{ textAlign: 'center', marginTop: 48 }}>
-            <a href={WA_ENROLL} target="_blank" rel="noopener noreferrer"
+            <a href="#enroll" onClick={(e) => { e.preventDefault(); setModalOpen(true); }}
               style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: INK, fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 32px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 8px 24px rgba(255,193,7,.24)' }}>
               ابدأ مسيرتك على المنصّة <ArrowLeft size={14} />
             </a>
@@ -883,12 +873,20 @@ export default function MasarKhatabaPage() {
                   <p style={{ fontFamily: F, fontSize: 13, color: MUT, marginTop: 6, lineHeight: 1.65 }}>
                     44 ساعة · 12 محطة · 13 مخرجاً · مشروع تخرّج مصوَّر · شهادة معتمدة من وجيز
                   </p>
-                  <div style={{ textAlign: 'center', margin: '20px 0 0' }}>
-                    <span style={{ fontFamily: F, fontSize: 15, color: MUT, display: 'block' }}>السعر يُعلَن قريباً — تواصل مع المستشارة للتفاصيل</span>
+                  <div style={{ display: 'flex', justifyContent: 'center', gap: 28, margin: '20px 0 0', flexWrap: 'wrap', alignItems: 'flex-end' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <span style={{ fontFamily: FP, fontSize: 48, fontWeight: 700, color: GLD, lineHeight: 1, display: 'block' }}>500</span>
+                      <span style={{ fontFamily: F, fontSize: 13, color: MUT, display: 'block', marginTop: 4 }}>JOD · حضوري عمّان</span>
+                    </div>
+                    <div style={{ width: 1, height: 52, background: CBR, flexShrink: 0 }} />
+                    <div style={{ textAlign: 'center' }}>
+                      <span style={{ fontFamily: FP, fontSize: 48, fontWeight: 700, color: GLD, lineHeight: 1, display: 'block' }}>700</span>
+                      <span style={{ fontFamily: F, fontSize: 13, color: MUT, display: 'block', marginTop: 4 }}>USD · مباشر تفاعلي (Online LIVE)</span>
+                    </div>
                   </div>
                   <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 16, background: GS, border: `1px solid ${GL}`, borderRadius: 12, padding: '9px 15px' }}>
                     <span style={{ width: 7, height: 7, borderRadius: '50%', background: GLD, flexShrink: 0 }} />
-                    <span style={{ fontFamily: F, fontSize: 13, color: LT }}>التقسيط متاح · تُثبَّت مقعدك بالدفعة الأولى</span>
+                    <span style={{ fontFamily: F, fontSize: 13, color: LT }}>التقسيط متاح · تُثبَّت مقعدك بدفعة أولى</span>
                   </div>
                 </div>
                 <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 13, padding: '24px 0', margin: 0 }}>
@@ -898,7 +896,7 @@ export default function MasarKhatabaPage() {
                     </li>
                   ))}
                 </ul>
-                <a href={WA_ENROLL} target="_blank" rel="noopener noreferrer"
+                <a href="#enroll" onClick={(e) => { e.preventDefault(); setModalOpen(true); }}
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, width: '100%', boxSizing: 'border-box', background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 24px', borderRadius: 14, textDecoration: 'none', boxShadow: '0 6px 22px rgba(255,193,7,0.20)' }}>
                   احجز مقعدك في الفوج القادم <ArrowLeft size={15} />
                 </a>
@@ -976,18 +974,7 @@ export default function MasarKhatabaPage() {
       ═══════════════════════════════════════ */}
       <section style={{ padding: '72px 0' }}>
         <div style={WRP}>
-          <div style={{ maxWidth: 680, margin: '0 auto', background: 'rgba(255,193,7,.06)', border: '1px solid rgba(255,193,7,.32)', borderRadius: 22, padding: 'clamp(28px,3.5vw,44px)', textAlign: 'center' }}>
-            <ShieldCheck size={44} strokeWidth={1.5} color="#FFC107" aria-hidden="true" />
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(22px,3vw,30px)', color: OFF, margin: '18px 0 14px', lineHeight: 1.4 }}>
-              ضمان الجلسة الأولى
-            </h2>
-            <p style={{ fontFamily: F, fontSize: 15.5, color: MUT, lineHeight: 1.9, maxWidth: 520, marginInline: 'auto' }}>
-              جرّب الجلسة الأولى كاملة. وإن شعرت أنّ الماستركلاس لا يلبّي توقّعاتك، اطلب استرداداً كاملاً خلال 24 ساعة من انتهائها — دون أسئلة.
-            </p>
-            <p style={{ fontFamily: F, fontSize: 13.5, color: GLD, fontStyle: 'italic', margin: '16px 0 0' }}>
-              نحن نعرف ما نقدّمه. والجلسة الأولى تكفي لتعرفه أنت.
-            </p>
-          </div>
+          <MasterclassGuarantee />
         </div>
       </section>
 
@@ -996,49 +983,15 @@ export default function MasarKhatabaPage() {
       ═══════════════════════════════════════ */}
       <section id="consult" className="sec sec--advisor" style={{ padding: '96px 0' }}>
         <div style={WRP}>
-          <div style={{ background: 'rgba(42,54,72,.80)', border: `1px solid ${GL}`, borderRadius: 24, overflow: 'hidden', boxShadow: '0 30px 80px rgba(0,0,0,.45)' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: 0 }}>
-              {/* side */}
-              <div style={{ padding: 'clamp(28px,3.5vw,48px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, borderLeft: `1px solid ${CBR}`, minWidth: 180, background: 'rgba(0,0,0,.12)' }}>
-                <div className="kh-adv-ava">
-                  <img src={advisorImg} alt="ياقوت — المستشارة التعليمية" />
-                </div>
-                <div style={{ fontFamily: F, fontWeight: 800, fontSize: 18, color: OFF, textAlign: 'center' }}>ياقوت</div>
-                <div style={{ fontFamily: F, fontSize: 12.5, color: MUT, textAlign: 'center', lineHeight: 1.5 }}>المستشارة التعليمية<br />كاسيت أكاديمي</div>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: 'rgba(14,20,31,.78)', backdropFilter: 'blur(8px)', border: '1px solid rgba(37,211,102,.42)', color: '#7FE3A6', fontSize: 11.5, fontWeight: 700, fontFamily: F, padding: '7px 12px', borderRadius: 999, whiteSpace: 'nowrap' }}>
-                  <span className="kh-live-dot" style={{ width: 7, height: 7, borderRadius: '50%', background: '#25D366', display: 'block', flexShrink: 0 }} />
-                  متاحة الآن
-                </div>
-              </div>
-              {/* body */}
-              <div style={{ padding: 'clamp(28px,3.5vw,48px)' }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GLD, color: '#1A1206', fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '7px 16px', borderRadius: 999 }}>
-                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#1A1206' }} />
-                  استشارة مجانية · دون التزام
-                </span>
-                <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(22px,3.2vw,34px)', lineHeight: 1.35, marginTop: 16, color: OFF }}>
-                  قبل أن تسجّل، <span style={{ color: GLD }}>تحدّث مع ياقوت</span>
-                </h2>
-                <p style={{ fontFamily: F, fontSize: 15.5, color: MUT, marginTop: 14, maxWidth: 520, lineHeight: 1.85 }}>
-                  جلسة قصيرة على واتساب تُحدَّد فيها نقطة بدايتك: يُقيَّم مستواك الحالي، ويُرشَّح لك المسار الأنسب لهدفك المهني.
-                </p>
-                <ul style={{ listStyle: 'none', marginTop: 22, display: 'grid', gap: 12, padding: 0 }}>
-                  {['تقييم أوّلي لمستواك في الإلقاء والحضور','ترشيح نقطة البداية الأنسب لهدفك','إجابات دقيقة عن الأسعار والتقسيط ومواعيد الفوج'].map(li => (
-                    <li key={li} style={{ display: 'flex', gap: 11, fontFamily: F, fontSize: 14.5, color: LT, lineHeight: 1.7 }}>
-                      <span style={{ flexShrink: 0, width: 20, height: 20, borderRadius: '50%', background: GS, border: `1px solid ${GL}`, color: GLD, fontSize: 11.5, fontWeight: 700, display: 'grid', placeContent: 'center', marginTop: 3 }}>✓</span>
-                      {li}
-                    </li>
-                  ))}
-                </ul>
-                <div style={{ marginTop: 26 }}>
-                  <a href={WA_CONSULT} target="_blank" rel="noopener noreferrer"
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: '#1F9D57', color: '#fff', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 26px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 10px 30px rgba(31,157,87,.30)' }}>
-                    <FaWhatsapp size={18} aria-hidden="true" />
-                    احجز استشارتك المجانية على واتساب
-                  </a>
-                </div>
-              </div>
-            </div>
+          <div style={{ maxWidth: 560, margin: '0 auto' }}>
+            <MasterclassAdvisorCard
+              name="ياقوت"
+              role="المستشارة التعليمية — كاسيت أكاديمي"
+              bio="جلسة قصيرة على واتساب تُحدَّد فيها نقطة بدايتك: يُقيَّم مستواك الحالي، ويُرشَّح لك المسار الأنسب لهدفك المهني."
+              phone={WA_PHONE}
+              waLabel="احجز استشارتك المجانية على واتساب (+962 77 105 2222)"
+              imageSrc={advisorImg}
+            />
           </div>
         </div>
       </section>
@@ -1057,8 +1010,8 @@ export default function MasarKhatabaPage() {
               قبل أن <span style={{ color: GLD }}>تسأل</span>
             </h2>
           </div>
-          <div style={{ maxWidth: 840, margin: '48px auto 0' }}>
-            {FAQS.map((faq, i) => <FaqItem key={i} q={faq.q} a={faq.a} defaultOpen={i === 0} />)}
+          <div style={{ marginTop: 48 }}>
+            <MasterclassFaqAccordion faqs={FAQS} />
           </div>
         </div>
       </section>
@@ -1080,7 +1033,7 @@ export default function MasarKhatabaPage() {
             الفوج القادم
           </span>
           <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(30px,4.4vw,46px)', lineHeight: 1.3, margin: '16px 0 0', letterSpacing: -0.6, color: OFF }}>
-            يبدأ في <span style={{ color: GLD }}>30 / 8</span>
+            يبدأ في <span style={{ color: GLD }}>14 / 9</span>
           </h2>
 
           <div className="kh-cohort-facts" style={{ maxWidth: 880 }}>
@@ -1090,7 +1043,7 @@ export default function MasarKhatabaPage() {
             </div>
             <div>
               <span className="kh-cf-l">المدّة</span>
-              <b style={{ fontFamily: F, fontWeight: 800, fontSize: 15, color: OFF }}>42 ساعة · 21 جلسة + الإنتاج</b>
+              <b style={{ fontFamily: F, fontWeight: 800, fontSize: 15, color: OFF }}>44 ساعة · 22 جلسة + الإنتاج</b>
             </div>
             <div>
               <span className="kh-cf-l">المقاعد</span>
@@ -1098,7 +1051,7 @@ export default function MasarKhatabaPage() {
             </div>
           </div>
 
-          <a href={WA_ENROLL} target="_blank" rel="noopener noreferrer"
+          <a href="#enroll" onClick={(e) => { e.preventDefault(); setModalOpen(true); }}
             style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15.5, padding: '15px 32px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 10px 30px rgba(255,193,7,.28)' }}>
             احجز مقعدك في هذا الفوج <ArrowLeft size={14} />
           </a>
@@ -1107,6 +1060,21 @@ export default function MasarKhatabaPage() {
           </p>
         </div>
       </section>
+
+      <PaymentModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        courseSlug="masar-khataba"
+        courseTitle="ماستركلاس فن الخطابة والتواصل القيادي"
+        cohortIdOnsite={303}
+        cohortIdLive={304}
+        cohortStartAr="14 أيلول"
+        cohortDays="الاثنين والأربعاء والسبت"
+        cohortTimeAr="6:00 – 8:00 مساءً"
+        cohortTrainer="عمر الدرابكة"
+        priceJOD={500}
+        priceUSD={700}
+      />
 
     </div>
   );

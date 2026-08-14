@@ -1,69 +1,51 @@
 ---
 name: Stripe Payment System
-description: Full Stripe checkout system built for Kaseet Academy — architecture, key decisions, and activation steps.
+description: Full Stripe Elements embedded checkout for masterclass pages — architecture, endpoints, and env var requirements
 ---
 
-## What was built
-- `artifacts/api-server/src/lib/stripeClient.ts` — Replit connection API credentials fetcher
-- `artifacts/api-server/src/lib/currency.ts` — FX config (1 JOD = 1.41 USD, hardcoded quarterly), DEPOSIT_JOD=50, toMinorUSD, jodToChargeUSD, splitInstallments
-- `artifacts/api-server/src/lib/pricing.ts` — COURSE_PRICING map (server-side, not trusted from frontend)
-- `artifacts/api-server/src/lib/orderUtils.ts` — hold lifecycle (createHold, confirmHold, releaseHold, sweepExpiredHolds), order ID generation (KS-ORD-YYYY-XXXX)
-- `artifacts/api-server/src/routes/checkout.ts` — POST /api/checkout/session, GET /api/checkout/status, handleStripeWebhook
-- `artifacts/api-server/src/routes/admin.ts` — POST /api/admin/login, GET /api/admin/orders, POST /api/admin/orders/:id/payment
-- `kaseet-academy/src/pages/CheckoutPage.tsx` — 3-step flow (plan → customer → pay)
-- `kaseet-academy/src/pages/CheckoutSuccessPage.tsx` — polling /api/checkout/status, 2s interval for up to 60s
-- `kaseet-academy/src/pages/AdminOrdersPage.tsx` — password-gated orders dashboard
-- DB tables: `orders` + `holds` (Drizzle ORM, pushed to prod via drizzle-kit push)
+## Architecture
 
-## Key architecture decisions
+Kaseet uses TWO Stripe flows in parallel:
+- **Legacy**: `POST /checkout/session` → Stripe Checkout Session (redirect-based) — old courses
+- **New (PaymentIntent)**: `POST /checkout/payment-intent` → Stripe Elements in-page modal — masterclass pages
 
-### Stripe Checkout (hosted, not Elements)
-- All payments go through Stripe Checkout hosted page with `locale: 'ar'`
-- Uses `price_data` (dynamic, per-cohort) NOT pre-created Stripe prices — each cohort is unique
-- The Stripe skill says "never use price_data" but this is required for dynamic cohort pricing
+## Masterclass Payment Flow (Task #117)
 
-### Currency rule
-- **All Stripe charges in USD** (`CHARGE_CURRENCY = 'usd'`)
-- JOD is display-only; server always converts with `jodToChargeUSD(n) = Math.ceil(n * 1.41)`
-- `toMinorUSD(n) = Math.round(n * 100)` → cents
-- Never pass `jod` as currency to Stripe
+### Frontend
+- `src/lib/stripeClient.ts` — fetches publishable key from `GET /api/checkout/config`, caches the Stripe promise
+- `src/components/PaymentModal.tsx` — 3-step modal: form → Stripe Elements (PaymentElement) → success/polling
+  - Step 1 (form): mode (onsite/live), plan (deposit/full), customer info
+  - Step 2 (payment): `<Elements>` with night theme, gold accent, Tajawal font, Arabic locale
+  - Step 3 (success/polling): polls `/api/checkout/pi-status` until order confirmed
+  - Handles 3DS redirect return: detects `?payment_intent=xxx&redirect_status=succeeded` in URL
+- All 3 masterclass pages import `PaymentModal` and open it via `setModalOpen(true)`
 
-### Installment plan (onsite only)
-- Deposit = 50 JOD → $71 USD charged now via Stripe
-- Installments 2 & 3 = manual (cash/bank transfer, tracked in admin panel)
-- Live/online courses: full payment only, no installment option shown
+### API Endpoints (checkout.ts)
+- `GET /checkout/config` → `{ publishableKey }` from `STRIPE_PUBLISHABLE_KEY` env var
+- `POST /checkout/payment-intent` → creates PI with full metadata (customer, cohort, mode, plan, amounts); returns `{ clientSecret, paymentIntentId, orderId }`
+- `GET /checkout/pi-status?pi_id=xxx` → checks DB first, then Stripe; calls `onPaymentIntentSucceeded()` if succeeded
+- `payment_intent.succeeded` webhook event → `onPaymentIntentSucceeded(pi)` (same handler)
 
-### Seat hold flow
-- On checkout session creation: 30-minute hold created in `holds` table
-- On `checkout.session.completed` webhook: hold confirmed, order created, seat decremented
-- On `checkout.session.expired`: hold released
-- Available seats = cohortCapacity - cohortEnrolled - activeHolds - confirmedOrders
+### onPaymentIntentSucceeded
+Mirrors `onSessionCompleted` but reads PI metadata. Uses `pi.id` as `sessionId` for idempotency.
+Calls `createOrderWithSeat`, then `notifyOrderCompleted` + `sendOrderConfirmation` (fire-and-forget).
 
-### Webhook route
-- MUST be registered BEFORE express.json() in app.ts (currently correct)
-- Uses raw Buffer body → `stripe.webhooks.constructEvent(rawBody, sig, webhookSecret)`
-- Events handled: completed, expired, charge.refunded, charge.dispute.created
+### Cohort IDs (masterclass)
+- 301: masar-soti onsite, 302: masar-soti live
+- 303: masar-khataba onsite, 304: masar-khataba live
+- 305: masar-elami onsite, 306: masar-elami live
 
-### Admin panel
-- Route: `/admin/orders`
-- Password: env var `ADMIN_PASSWORD` (default: 'kaseet-admin-2026' in dev, MUST set in production)
-- Records manual cash/bank-transfer payments, updates remainingJOD and status
+### Pricing (pricing.ts)
+- masar-soti: 550 JOD / $750 USD
+- masar-khataba: 500 JOD / $700 USD
+- masar-elami: 700 JOD / $1000 USD
+- Deposit for onsite: 50 JOD (DEPOSIT_JOD constant in currency.ts)
 
-## Activation requirement (IMPORTANT)
-Stripe credentials are fetched via Replit Connector API (`REPLIT_CONNECTORS_HOSTNAME`).
-The Stripe integration was connected but API keys must be entered via the Replit Integrations UI.
-Until keys are entered, the checkout endpoint returns a 500 error.
-The server starts normally regardless (non-fatal init error).
+## Required Env Var
 
-## FX notice (mandatory for JOD courses)
-Shown above the pay button whenever courseMode === 'onsite' (JOD-priced).
-Text: "سعر البرنامج: X ديناراً · يُحصَّل ما يعادل $Y بالدولار"
-Also appears in success page and should appear in confirmation emails.
+**`STRIPE_PUBLISHABLE_KEY`** must be set in Replit Secrets. It is the `pk_test_...` or `pk_live_...` key from the Stripe dashboard. This key is NOT secret (it's publishable) but must be added manually since it's not injected by the Stripe integration automatically.
 
-## URL patterns
-- Checkout: `/checkout?course=voiceover&cohort=137&mode=onsite`
-- Success: `/checkout/success?session_id=cs_xxx`
-- Admin: `/admin/orders`
-- API: `/api/checkout/session`, `/api/checkout/status`, `/api/stripe/webhook`
+**Why:** The Stripe integration auto-injects `STRIPE_SECRET_KEY` for server-side use, but the publishable key for the browser SDK is separate. The `GET /checkout/config` endpoint returns 503 until this env var is set.
 
-**Why:** useLocation() in Wouter doesn't include query string — must use window.location.search instead.
+## Stripe Appearance (PaymentElement)
+Night theme, primary color #FFC107 (gold), background #1A2535, Tajawal font, locale `ar`, border radius 12px.

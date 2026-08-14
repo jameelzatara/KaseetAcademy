@@ -278,7 +278,9 @@ export async function processWebhookEvent(
   event: import("stripe").Stripe.Event,
 ): Promise<void> {
   try {
-    if (event.type === "checkout.session.completed") {
+    if (event.type === "payment_intent.succeeded") {
+      await onPaymentIntentSucceeded(event.data.object as import("stripe").Stripe.PaymentIntent);
+    } else if (event.type === "checkout.session.completed") {
       await onSessionCompleted(event.data.object as import("stripe").Stripe.Checkout.Session);
     } else if (event.type === "checkout.session.expired") {
       const s = event.data.object as import("stripe").Stripe.Checkout.Session;
@@ -467,6 +469,291 @@ router.get("/cohorts/seats", async (_req, res) => {
     res.json({ seats: [] });
   }
 });
+
+// ── GET /checkout/config — publishable key for frontend ───
+router.get("/checkout/config", (_req, res) => {
+  const pk = process.env.STRIPE_PUBLISHABLE_KEY ?? process.env.STRIPE_PUBLIC_KEY ?? "";
+  if (!pk) {
+    logger.warn("STRIPE_PUBLISHABLE_KEY not set");
+    res.status(503).json({ error: "Stripe not configured" });
+    return;
+  }
+  res.json({ publishableKey: pk });
+});
+
+// ── POST /checkout/payment-intent — Stripe Elements flow ──
+router.post("/checkout/payment-intent", async (req, res) => {
+  try {
+    const {
+      cohortId,
+      courseSlug,
+      mode,
+      plan = "deposit",
+      cohortStartAr,
+      cohortDays,
+      cohortTimeAr,
+      cohortTrainer,
+      cohortPlatform,
+      customer,
+    } = req.body as {
+      cohortId: number;
+      courseSlug: string;
+      mode: "onsite" | "live";
+      plan?: "full" | "deposit";
+      cohortStartAr: string;
+      cohortDays: string;
+      cohortTimeAr: string;
+      cohortTrainer: string;
+      cohortPlatform: string;
+      customer: CustomerInfo;
+    };
+
+    if (!cohortId || !courseSlug || !mode || !customer?.firstName || !customer?.phone) {
+      res.status(400).json({ error: "بيانات غير مكتملة" });
+      return;
+    }
+
+    const pricing = getPricing(courseSlug, mode);
+    if (!pricing) {
+      res.status(400).json({ error: "دورة أو وضع غير صالح" });
+      return;
+    }
+
+    const seats = await getCohortSeats(cohortId);
+    if (!seats.isOpen || seats.enrolled >= seats.capacity) {
+      res.status(409).json({ error: "CAP_REACHED", message: "نفدت مقاعد هذه الدفعة" });
+      return;
+    }
+
+    const courseName = COURSE_NAMES[courseSlug] ?? courseSlug;
+    const modeLabel  = mode === "onsite" ? "حضوري" : "مباشر تفاعلي (Online LIVE)";
+
+    let totalJOD = 0, totalUSD = 0, chargeUSD = 0;
+    let effectivePlan: "full" | "deposit" = plan;
+
+    if (mode === "live") {
+      effectivePlan = "full";
+      totalUSD  = (pricing as { totalUSD: number }).totalUSD;
+      chargeUSD = totalUSD;
+    } else {
+      totalJOD = (pricing as { totalJOD: number }).totalJOD;
+      if (effectivePlan === "full") {
+        chargeUSD = jodToChargeUSD(totalJOD);
+      } else {
+        chargeUSD = jodToChargeUSD(DEPOSIT_JOD);
+      }
+    }
+
+    const holdId  = await createHold(cohortId);
+    const orderId = await generateOrderId();
+    const stripe  = await getUncachableStripeClient();
+
+    const pi = await stripe.paymentIntents.create({
+      amount:   toMinorUSD(chargeUSD),
+      currency: CHARGE_CURRENCY,
+      description: `${courseName} — ${modeLabel} · طلب ${orderId}`,
+      metadata: {
+        holdId, orderId,
+        cohortId:      String(cohortId),
+        courseSlug,    mode,
+        plan:          effectivePlan,
+        totalJOD:      String(totalJOD),
+        totalUSD:      String(totalUSD),
+        chargeUSD:     String(chargeUSD),
+        firstName:     customer.firstName,
+        lastName:      customer.lastName ?? "",
+        email:         customer.email ?? "",
+        phone:         customer.phone,
+        country:       customer.country,
+        city:          customer.city ?? "",
+        cohortStartAr: cohortStartAr ?? "",
+        cohortDays:    cohortDays ?? "",
+        cohortTimeAr:  cohortTimeAr ?? "",
+        cohortTrainer: cohortTrainer ?? "",
+        cohortPlatform: cohortPlatform ?? "",
+      },
+    });
+
+    if (!pi.client_secret) {
+      res.status(500).json({ error: "خطأ في إنشاء جلسة الدفع" });
+      return;
+    }
+
+    res.json({ clientSecret: pi.client_secret, paymentIntentId: pi.id, orderId });
+  } catch (err: any) {
+    logger.error({ err }, "checkout/payment-intent error");
+    res.status(500).json({ error: "خطأ في إنشاء جلسة الدفع" });
+  }
+});
+
+// ── GET /checkout/pi-status — poll order by PaymentIntent ID ─
+router.get("/checkout/pi-status", async (req, res) => {
+  const { pi_id } = req.query as { pi_id: string };
+  if (!pi_id) { res.status(400).json({ error: "pi_id مطلوب" }); return; }
+
+  try {
+    const [existing] = await db
+      .select()
+      .from(ordersTable)
+      .where(eq(ordersTable.paymentIntent, pi_id))
+      .limit(1);
+
+    if (existing) {
+      res.json({ status: existing.status, order: existing });
+      return;
+    }
+
+    let stripePI: import("stripe").Stripe.PaymentIntent | null = null;
+    try {
+      const stripe = await getUncachableStripeClient();
+      stripePI = await stripe.paymentIntents.retrieve(pi_id);
+    } catch (stripeErr) {
+      logger.warn({ stripeErr, pi_id }, "Stripe PI fetch failed in pi-status");
+    }
+
+    if (stripePI && stripePI.status === "succeeded") {
+      try {
+        await onPaymentIntentSucceeded(stripePI);
+      } catch (e) {
+        logger.warn({ e, pi_id }, "onPaymentIntentSucceeded error in pi-status polling");
+      }
+      const [newOrder] = await db
+        .select()
+        .from(ordersTable)
+        .where(eq(ordersTable.paymentIntent, pi_id))
+        .limit(1);
+      if (newOrder) {
+        res.json({ status: newOrder.status, order: newOrder });
+        return;
+      }
+    }
+
+    res.json({ status: "pending" });
+  } catch (err) {
+    logger.error({ err }, "checkout/pi-status error");
+    res.status(500).json({ error: "خطأ في الخادم" });
+  }
+});
+
+// ── onPaymentIntentSucceeded — shared handler for webhook + polling ─
+async function onPaymentIntentSucceeded(pi: import("stripe").Stripe.PaymentIntent): Promise<void> {
+  // Idempotency guard
+  const [existing] = await db
+    .select()
+    .from(ordersTable)
+    .where(eq(ordersTable.paymentIntent, pi.id))
+    .limit(1);
+  if (existing) return;
+
+  const meta      = pi.metadata ?? {};
+  const mode      = (meta.mode ?? "live") as "onsite" | "live";
+  const plan      = (meta.plan ?? "full") as "full" | "deposit";
+  const totalJOD  = parseInt(meta.totalJOD ?? "0", 10);
+  const totalUSD  = parseInt(meta.totalUSD ?? "0", 10);
+  const chargedUsd = parseFloat(meta.chargeUSD ?? String((pi.amount ?? 0) / 100));
+
+  let paidJOD = 0, remainingJOD = 0, status: string;
+  if (mode === "live") {
+    status = "paid_full";
+  } else if (plan === "full") {
+    status = "paid_full";
+    paidJOD = totalJOD;
+  } else {
+    status = "deposit_paid";
+    paidJOD = DEPOSIT_JOD;
+    remainingJOD = totalJOD - DEPOSIT_JOD;
+  }
+
+  const [dep, inst2, inst3] =
+    mode === "live" ? [0, 0, 0] :
+    plan === "full" ? [totalJOD, 0, 0] :
+    splitInstallments(totalJOD);
+
+  const now = new Date().toISOString();
+  let installments: InstallmentRecord[];
+  if (mode === "live") {
+    installments = [{ seq: 1, amountJOD: 0, method: "stripe", paidAt: now }];
+  } else if (plan === "full") {
+    installments = [{ seq: 1, amountJOD: dep, method: "stripe", paidAt: now }];
+  } else {
+    installments = [
+      { seq: 1, amountJOD: dep,   method: "stripe", paidAt: now },
+      { seq: 2, amountJOD: inst2, method: "cash",   paidAt: null },
+      { seq: 3, amountJOD: inst3, method: "cash",   paidAt: null },
+    ];
+  }
+
+  const orderId  = meta.orderId ?? await generateOrderId();
+  const cohortId = parseInt(meta.cohortId ?? "0", 10);
+
+  const result = await createOrderWithSeat({
+    orderId,
+    sessionId:       pi.id,
+    paymentIntent:   pi.id,
+    chargedUsd,
+    courseSlug:      meta.courseSlug ?? "",
+    cohortId,
+    mode, plan,
+    totalJOD, totalUSD, paidJOD, remainingJOD,
+    amountPaidMinor: pi.amount ?? 0,
+    status,
+    installments,
+    customer: {
+      firstName: meta.firstName ?? "",
+      lastName:  meta.lastName ?? "",
+      email:     meta.email || undefined,
+      phone:     meta.phone ?? "",
+      country:   meta.country ?? "",
+      city:      meta.city || undefined,
+    },
+    holdId: meta.holdId || undefined,
+  });
+
+  if (result === "overbooked") {
+    logger.error({ orderId, cohortId }, "⚠️ OVERBOOKED via PaymentIntent");
+    await db.insert(ordersTable).values({
+      id: orderId, sessionId: pi.id, stripeSessionId: pi.id,
+      paymentIntent: pi.id, stripePaymentId: pi.id,
+      courseSlug: meta.courseSlug ?? "", cohortId, mode, plan,
+      customer: {
+        firstName: meta.firstName ?? "", lastName: meta.lastName ?? "",
+        email: meta.email, phone: meta.phone ?? "", country: meta.country ?? "", city: meta.city,
+      },
+      firstName: meta.firstName ?? "", lastName: meta.lastName ?? "",
+      phone: meta.phone ?? "", email: meta.email || null,
+      country: meta.country ?? "", city: meta.city || null,
+      totalJOD, totalUSD, paidJOD, remainingJOD,
+      amountPaidMinor: pi.amount ?? 0, chargedUsd: String(chargedUsd),
+      status: "overbooked", installments,
+    }).onConflictDoNothing();
+  } else if (result === "created") {
+    logger.info({ orderId, cohortId, status }, "Order created via PaymentIntent");
+    notifyOrderCompleted({
+      orderId,
+      courseName: COURSE_NAMES[meta.courseSlug ?? ""] ?? meta.courseSlug ?? "",
+      firstName:  meta.firstName ?? "",
+      lastName:   meta.lastName ?? "",
+      phone:      meta.phone ?? "",
+      plan, mode,
+    }).catch((err) => logger.warn({ err }, "WhatsApp notification failed silently"));
+    sendOrderConfirmation({
+      orderId,
+      firstName:     meta.firstName ?? "",
+      lastName:      meta.lastName ?? "",
+      courseName:    COURSE_NAMES[meta.courseSlug ?? ""] ?? meta.courseSlug ?? "",
+      cohortDate:    meta.cohortStartAr ?? "",
+      cohortDays:    meta.cohortDays ?? "",
+      cohortTime:    meta.cohortTimeAr ?? "",
+      trainerName:   meta.cohortTrainer ?? "",
+      mode:          mode as "onsite" | "live",
+      platform:      meta.cohortPlatform || (mode === "onsite" ? "استوديو كاسيت" : "Google Meet"),
+      totalJOD, paidJOD, remainingJOD,
+      plan:          plan as "full" | "deposit",
+      chargedUSD:    chargedUsd,
+      customerEmail: meta.email || null,
+    }).catch((err) => logger.warn({ err }, "Email confirmation failed silently"));
+  }
+}
 
 // ── Legacy export used by app.ts — kept for backward compat ──
 export async function handleStripeWebhook(rawBody: Buffer, signature: string): Promise<void> {

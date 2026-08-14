@@ -75,6 +75,8 @@
     "zod": "catalog:"
   },
   "dependencies": {
+    "@stripe/react-stripe-js": "^6.8.1",
+    "@stripe/stripe-js": "^9.13.0",
     "gray-matter": "^4.0.3",
     "marked": "^18.0.9"
   }

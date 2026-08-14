@@ -4,9 +4,12 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { usePageMeta } from '../hooks/usePageMeta';
-import { ChevronDown, ArrowLeft, MapPin, Wifi, ShieldCheck } from 'lucide-react';
-import { FaWhatsapp } from 'react-icons/fa6';
+import { ChevronDown, ArrowLeft, MapPin, Wifi } from 'lucide-react';
 import { GOLD, OFF, F, FP, INNER, waLink } from './shared/coursePageHelpers';
+import MasterclassGuarantee from '../components/masterclass/MasterclassGuarantee';
+import MasterclassFaqAccordion from '../components/masterclass/MasterclassFaqAccordion';
+import MasterclassAdvisorCard from '../components/masterclass/MasterclassAdvisorCard';
+import PaymentModal from '../components/PaymentModal';
 import ReelsSection from '../components/ReelsSection';
 import { Gold } from '../components/SectionHeader';
 import wajeezLogo   from '@assets/wajeez-logo_1785688262989.png';
@@ -283,21 +286,6 @@ function StationItem({ s, open, onToggle }: { s: StationType; open: boolean; onT
   );
 }
 
-function FaqItem({ q, a }: { q: string; a: string }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <div style={{ background: CARD, border: `1px solid ${open ? GL : CBR}`, borderRadius: 14, overflow: 'hidden', marginBottom: 10, transition: 'border-color .2s' }}>
-      <button onClick={() => setOpen(o => !o)} aria-expanded={open}
-        style={{ width: '100%', background: 'none', border: 'none', cursor: 'pointer', padding: '18px 22px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
-        <span style={{ fontFamily: F, fontSize: 15, fontWeight: 700, color: OFF, textAlign: 'right' }}>{q}</span>
-        <span aria-hidden="true" style={{ color: GLD, fontSize: 22, lineHeight: 1, transform: open ? 'rotate(45deg)' : 'none', transition: 'transform .25s', flexShrink: 0 }}>+</span>
-      </button>
-      {open && (
-        <div style={{ padding: '0 22px 18px', fontFamily: F, fontSize: 14, color: MUT, lineHeight: 1.85 }}>{a}</div>
-      )}
-    </div>
-  );
-}
 
 function StudyRow({ variant }: { variant: 'inperson' | 'online' }) {
   const [open, setOpen] = useState(false);
@@ -365,6 +353,11 @@ export default function MasarSotiPage() {
   const [, navigate]  = useLocation();
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const [expandAll, setExpandAll] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search);
+    if (p.get('payment_intent') && p.get('redirect_status') === 'succeeded') setModalOpen(true);
+  }, []);
 
   usePageMeta({
     title: 'ماستركلاس التعليق والأداء الصوتي',
@@ -458,7 +451,7 @@ export default function MasarSotiPage() {
               </div>
 
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 24 }}>
-                <a href={WA_ENROLL} target="_blank" rel="noopener noreferrer"
+                <a href="#enroll" onClick={(e) => { e.preventDefault(); setModalOpen(true); }}
                   style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '13px 26px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 6px 20px rgba(255,193,7,.22)' }}>
                   التسجيل في الماستركلاس <ArrowLeft size={14} />
                 </a>
@@ -596,7 +589,7 @@ export default function MasarSotiPage() {
           </div>
 
           <div style={{ textAlign: 'center', marginTop: 34 }}>
-            <a href={WA_ENROLL} target="_blank" rel="noopener noreferrer"
+            <a href="#enroll" onClick={(e) => { e.preventDefault(); setModalOpen(true); }}
               style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15.5, padding: '14px 30px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 10px 30px rgba(255,193,7,.24)' }}>
               التسجيل في الماستركلاس <ArrowLeft size={14} />
             </a>
@@ -948,7 +941,7 @@ export default function MasarSotiPage() {
                 ))}
               </ul>
 
-              <a href={WA_ENROLL} target="_blank" rel="noopener noreferrer"
+              <a href="#enroll" onClick={(e) => { e.preventDefault(); setModalOpen(true); }}
                 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, width: '100%', boxSizing: 'border-box', background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 24px', borderRadius: 14, textDecoration: 'none', boxShadow: '0 6px 22px rgba(255,193,7,0.20)' }}>
                 التسجيل في الماستركلاس <ArrowLeft size={15} />
               </a>
@@ -962,18 +955,7 @@ export default function MasarSotiPage() {
       ═══════════════════════════════════════ */}
       <section style={{ padding: '72px 0' }}>
         <div style={WRP}>
-          <div style={{ maxWidth: 680, margin: '0 auto', background: 'rgba(255,193,7,.06)', border: '1px solid rgba(255,193,7,.32)', borderRadius: 22, padding: 'clamp(28px,3.5vw,44px)', textAlign: 'center' }}>
-            <ShieldCheck size={44} strokeWidth={1.5} color="#FFC107" aria-hidden="true" />
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(22px,3vw,30px)', color: OFF, margin: '18px 0 14px', lineHeight: 1.4 }}>
-              ضمان الجلسة الأولى
-            </h2>
-            <p style={{ fontFamily: F, fontSize: 15.5, color: MUT, lineHeight: 1.9, maxWidth: 520, marginInline: 'auto' }}>
-              جرّب الجلسة الأولى كاملة. وإن شعرت أنّ الماستركلاس لا يلبّي توقّعاتك، اطلب استرداداً كاملاً خلال 24 ساعة من انتهائها — دون أسئلة.
-            </p>
-            <p style={{ fontFamily: F, fontSize: 13.5, color: GLD, marginTop: 16, fontStyle: 'italic', margin: '16px 0 0' }}>
-              نحن نعرف ما نقدّمه. والجلسة الأولى تكفي لتعرفه أنت.
-            </p>
-          </div>
+          <MasterclassGuarantee />
         </div>
       </section>
 
@@ -996,64 +978,22 @@ export default function MasarSotiPage() {
           </div>
 
           <div className="soti-acc-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18 }}>
-
-            {/* آية — حضوري */}
-            <div style={{ background: 'rgba(42,54,72,.80)', border: `1px solid ${GL}`, borderRadius: 20, overflow: 'hidden', boxShadow: '0 20px 60px rgba(0,0,0,.40)' }}>
-              <div style={{ background: `rgba(255,193,7,.08)`, borderBottom: `1px solid rgba(255,193,7,.18)`, padding: '10px 20px', display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: GLD, flexShrink: 0 }} />
-                <span style={{ fontFamily: F, fontWeight: 700, fontSize: 12, color: GLD }}>حضوري · عمّان</span>
-              </div>
-              <div style={{ padding: 'clamp(22px,2.8vw,32px)', display: 'flex', flexDirection: 'column', gap: 16 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                  <div className="adv-ava" style={{ flexShrink: 0 }}>
-                    <img src={advisorAyaImg} alt="آية — المستشارة التعليمية" style={{ objectPosition: '50% 15%' }} />
-                  </div>
-                  <div>
-                    <div style={{ fontFamily: F, fontWeight: 800, fontSize: 18, color: OFF }}>آية</div>
-                    <div style={{ fontFamily: F, fontSize: 12.5, color: MUT, marginTop: 3, lineHeight: 1.5 }}>المستشارة التعليمية<br />ماستركلاس الحضوري</div>
-                  </div>
-                </div>
-                <div style={{ display: 'inline-flex', alignSelf: 'flex-start', alignItems: 'center', gap: 6, background: 'rgba(14,20,31,.78)', border: '1px solid rgba(37,211,102,.36)', color: '#7FE3A6', fontSize: 11.5, fontWeight: 700, fontFamily: F, padding: '5px 11px', borderRadius: 999 }}>
-                  <span className="soti-live-dot" style={{ width: 6, height: 6, borderRadius: '50%', background: '#25D366', display: 'block', flexShrink: 0 }} />
-                  متاحة الآن
-                </div>
-                <a href={waLink(WA_PHONE_ONSITE, 'مرحباً آية، أودّ حجز استشارة مجانية عن ماستركلاس التعليق الصوتي الحضوري')}
-                  target="_blank" rel="noopener noreferrer"
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9, background: '#1F9D57', color: '#fff', fontFamily: F, fontWeight: 800, fontSize: 14, padding: '12px 20px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 8px 22px rgba(31,157,87,.28)', marginTop: 4 }}>
-                  <FaWhatsapp size={16} aria-hidden="true" />
-                  واتساب آية (+962 79 023 4483)
-                </a>
-              </div>
-            </div>
-
-            {/* ياقوت — مباشر */}
-            <div style={{ background: 'rgba(42,54,72,.80)', border: `1px solid rgba(103,232,249,.35)`, borderRadius: 20, overflow: 'hidden', boxShadow: '0 20px 60px rgba(0,0,0,.40)' }}>
-              <div style={{ background: `rgba(103,232,249,.07)`, borderBottom: `1px solid rgba(103,232,249,.18)`, padding: '10px 20px', display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#67e8f9', flexShrink: 0 }} />
-                <span style={{ fontFamily: F, fontWeight: 700, fontSize: 12, color: '#67e8f9' }}>مباشر تفاعلي (Online LIVE)</span>
-              </div>
-              <div style={{ padding: 'clamp(22px,2.8vw,32px)', display: 'flex', flexDirection: 'column', gap: 16 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                  <div className="adv-ava" style={{ flexShrink: 0 }}>
-                    <img src={advisorImg} alt="ياقوت — المستشارة التعليمية" />
-                  </div>
-                  <div>
-                    <div style={{ fontFamily: F, fontWeight: 800, fontSize: 18, color: OFF }}>ياقوت</div>
-                    <div style={{ fontFamily: F, fontSize: 12.5, color: MUT, marginTop: 3, lineHeight: 1.5 }}>المستشارة التعليمية<br />ماستركلاس المباشر التفاعلي</div>
-                  </div>
-                </div>
-                <div style={{ display: 'inline-flex', alignSelf: 'flex-start', alignItems: 'center', gap: 6, background: 'rgba(14,20,31,.78)', border: '1px solid rgba(37,211,102,.36)', color: '#7FE3A6', fontSize: 11.5, fontWeight: 700, fontFamily: F, padding: '5px 11px', borderRadius: 999 }}>
-                  <span className="soti-live-dot" style={{ width: 6, height: 6, borderRadius: '50%', background: '#25D366', display: 'block', flexShrink: 0 }} />
-                  متاحة الآن
-                </div>
-                <a href={WA_CONSULT} target="_blank" rel="noopener noreferrer"
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9, background: '#1F9D57', color: '#fff', fontFamily: F, fontWeight: 800, fontSize: 14, padding: '12px 20px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 8px 22px rgba(31,157,87,.28)', marginTop: 4 }}>
-                  <FaWhatsapp size={16} aria-hidden="true" />
-                  واتساب ياقوت (+962 77 105 2222)
-                </a>
-              </div>
-            </div>
-
+            <MasterclassAdvisorCard
+              name="آية"
+              role="المستشارة التعليمية — ماستركلاس الحضوري"
+              bio=""
+              phone={WA_PHONE_ONSITE}
+              waLabel="واتساب آية (+962 79 023 4483)"
+              imageSrc={advisorAyaImg}
+            />
+            <MasterclassAdvisorCard
+              name="ياقوت"
+              role="المستشارة التعليمية — ماستركلاس المباشر التفاعلي"
+              bio=""
+              phone={WA_PHONE_ONLINE}
+              waLabel="واتساب ياقوت (+962 77 105 2222)"
+              imageSrc={advisorImg}
+            />
           </div>
 
           <p style={{ textAlign: 'center', fontFamily: F, fontSize: 13.5, color: MUT, marginTop: 22, lineHeight: 1.8 }}>
@@ -1077,8 +1017,8 @@ export default function MasarSotiPage() {
             </h2>
           </div>
 
-          <div style={{ maxWidth: 840, margin: '48px auto 0' }}>
-            {FAQS.map((faq, i) => <FaqItem key={i} q={faq.q} a={faq.a} />)}
+          <div style={{ marginTop: 48 }}>
+            <MasterclassFaqAccordion faqs={FAQS} />
           </div>
 
         </div>
@@ -1118,7 +1058,7 @@ export default function MasarSotiPage() {
             </div>
           </div>
 
-          <a href={WA_ENROLL} target="_blank" rel="noopener noreferrer"
+          <a href="#enroll" onClick={(e) => { e.preventDefault(); setModalOpen(true); }}
             style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15.5, padding: '15px 32px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 10px 30px rgba(255,193,7,.28)' }}>
             التسجيل في الماستركلاس <ArrowLeft size={14} />
           </a>
@@ -1127,6 +1067,21 @@ export default function MasarSotiPage() {
           </p>
         </div>
       </section>
+
+      <PaymentModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        courseSlug="masar-soti"
+        courseTitle="ماستركلاس التعليق والأداء الصوتي"
+        cohortIdOnsite={301}
+        cohortIdLive={302}
+        cohortStartAr="9 آب"
+        cohortDays="الأحد والثلاثاء"
+        cohortTimeAr="6:00 – 8:00 مساءً"
+        cohortTrainer="يسار عبده"
+        priceJOD={550}
+        priceUSD={750}
+      />
 
     </div>
   );
