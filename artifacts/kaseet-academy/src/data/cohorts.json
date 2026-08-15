@@ -3,6 +3,18 @@
   "capacity_default": 10,
   "note": "ملفّ موحّد لكلّ الدورات. كلّ صفحة تُصفّي بـ course و mode. ⛔ لا تُعرض دفعة time_ar فيها null.",
   "courses": {
+    "masar-soti": {
+      "onsite": { "hours": 44, "sessions": 22 },
+      "live":   { "hours": 44, "sessions": 22 }
+    },
+    "masar-elami": {
+      "onsite": { "hours": 40, "sessions": 20 },
+      "live":   { "hours": 40, "sessions": 20 }
+    },
+    "masar-khataba": {
+      "onsite": { "hours": 44, "sessions": 22 },
+      "live":   { "hours": 44, "sessions": 22 }
+    },
     "voiceover": {
       "onsite": {
         "hours": 16,
