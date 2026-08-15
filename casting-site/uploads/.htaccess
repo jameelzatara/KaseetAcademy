@@ -1,0 +1,13 @@
+# منع تنفيذ أي سكريبت في مجلد الملفات الصوتية
+Options -ExecCGI
+RemoveHandler .php .php3 .php4 .php5 .phtml .pl .py .rb .cgi
+RemoveType application/x-httpd-php application/x-httpd-php5
+
+# السماح فقط بـ MP3 و WAV
+<FilesMatch "(?i)\.(mp3|wav)$">
+  Allow from all
+</FilesMatch>
+
+<FilesMatch "(?i)^(?!.*\.(mp3|wav)$)">
+  Deny from all
+</FilesMatch>

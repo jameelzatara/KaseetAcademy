@@ -1,0 +1,9 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "JfFpYr7GCvSiUppNMr_hX"
+uri = "file://casting-site.zip"
+type = "unspecified"
+title = "casting-site.zip — ملفات DreamHost"
+description = "index.php · admin.php · config.php · setup.sql · .htaccess · uploads/"
