@@ -1,0 +1,27 @@
+{
+  "name": "@workspace/casting",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "node build.mjs",
+    "start": "node --enable-source-maps dist/index.mjs"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "multer": "^1.4.5-lts.1",
+    "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/express-session": "^1.17.10",
+    "@types/multer": "^1.4.11",
+    "@types/node": "catalog:",
+    "@types/pg": "^8.11.6",
+    "esbuild": "0.27.3",
+    "tsx": "catalog:",
+    "typescript": "^5.6.3"
+  }
+}
