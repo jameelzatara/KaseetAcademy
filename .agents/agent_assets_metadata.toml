@@ -7,3 +7,10 @@ uri = "file://casting-site.zip"
 type = "unspecified"
 title = "casting-site.zip — ملفات DreamHost"
 description = "index.php · admin.php · config.php · setup.sql · .htaccess · uploads/"
+
+[[outputs]]
+id = "d0zs9fpmRwN2IUjL_Z3Pn"
+uri = "file://kaseet-casting.zip"
+type = "unspecified"
+title = "kaseet-casting.zip"
+description = "كود صفحة تجارب الأداء الصوتي — Express + PostgreSQL + Brevo. جاهز للرفع في Repl جديد مستقل."
