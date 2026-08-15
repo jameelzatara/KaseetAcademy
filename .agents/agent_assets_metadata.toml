@@ -13,4 +13,11 @@ id = "d0zs9fpmRwN2IUjL_Z3Pn"
 uri = "file://kaseet-casting.zip"
 type = "unspecified"
 title = "kaseet-casting.zip"
-description = "كود صفحة تجارب الأداء الصوتي — Express + PostgreSQL + Brevo. جاهز للرفع في Repl جديد مستقل."
+description = "كود صفحة تجارب الأداء — Express + PostgreSQL + Brevo"
+
+[[outputs]]
+id = "m3BzpxE_nzOBt1_Sl5pyi"
+uri = "file://kaseet-casting-download.html"
+type = "text"
+title = "kaseet-casting.zip — تحميل"
+description = "افتح الصفحة ثم اضغط زر التحميل"
