@@ -232,35 +232,40 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
         .mc-kh-gallery-item::after { content:''; position:absolute; inset:0; background:linear-gradient(to top, rgba(10,14,24,.55) 0%, transparent 55%); pointer-events:none; }
         @media (max-width:768px) {
           .mc-hero-grid { grid-template-columns:1fr !important; }
-          .mc-hero-visual { max-width:260px !important; order:-1; margin:0 auto 20px; }
+          .mc-hero-visual { max-width:270px !important; order:1; margin:28px auto 0 !important; }
           .mc-modes-grid { grid-template-columns:1fr !important; }
           .mc-acc-grid { grid-template-columns:1fr !important; }
           .mc-trainer-card { grid-template-columns:1fr !important; }
           .mc-trainer-photo { min-height:220px !important; }
           .mc-advisor-grid { grid-template-columns:1fr !important; }
           .mc-kh-gallery { columns:2; }
+          .mc-hud { display:none !important; }
+          .mc-hero-cta-row { flex-direction:column !important; }
+          .mc-hero-cta-row a { width:100% !important; justify-content:center !important; }
         }
         @media (max-width:480px) { .mc-kh-gallery { columns:1; } }
         :focus-visible { outline:2px solid #FFC107 !important; outline-offset:3px !important; border-radius:4px !important; }
         @media (prefers-reduced-motion:reduce) { .mc-spin-ring,.mc-spin-slow { animation:none !important; } .mc-live-dot { animation:none !important; } }
       `}</style>
 
-      {/* ── back nav ──────────────────────────────────────── */}
-      <div style={{ ...WRP, paddingTop: 94, paddingBottom: 0 }}>
-        <button onClick={() => navigate('/')} aria-label="العودة إلى الدورات"
-          style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: F, fontSize: 13, color: MUT, padding: 0 }}>
-          <ArrowLeft size={13} /> العودة إلى الدورات
-        </button>
-      </div>
+      {/* ── back nav (non-cover pages only) ───────────────── */}
+      {!isCoverHero && (
+        <div style={{ ...WRP, paddingTop: 94, paddingBottom: 0 }}>
+          <button onClick={() => navigate('/')} aria-label="العودة إلى الدورات"
+            style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: F, fontSize: 13, color: MUT, padding: 0 }}>
+            <ArrowLeft size={13} /> العودة إلى الدورات
+          </button>
+        </div>
+      )}
 
       {/* ═══════════════════════════════════
           01. HERO
       ═══════════════════════════════════ */}
       <section className="sec sec--hero" style={{
         position: 'relative',
-        padding: isCoverHero ? 'clamp(72px,9vw,120px) 0 clamp(80px,10vw,130px)' : '52px 0 88px',
+        padding: isCoverHero ? '108px 0 clamp(80px,10vw,130px)' : '52px 0 88px',
         overflow: 'hidden',
-        minHeight: isCoverHero ? 560 : undefined,
+        minHeight: isCoverHero ? 620 : undefined,
       }}>
         {/* cover bg */}
         {isCoverHero && data.hero.heroBgSrc && (
@@ -275,7 +280,46 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
           </>
         )}
 
+        {/* ── viewfinder HUD (elam only) ─────────────────── */}
+        {isCoverHero && data.hero.useSpinningRing && (
+          <div className="mc-hud" style={{ position: 'absolute', top: 78, left: 0, right: 0, zIndex: 5, padding: '0 clamp(16px,4vw,48px)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', opacity: 0.5, pointerEvents: 'none', direction: 'ltr' }}>
+            {/* left: REC + resolution */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: FP, fontSize: 11, color: LT, letterSpacing: 1 }}>
+              <span className="mc-live-dot" style={{ width: 7, height: 7, borderRadius: '50%', background: '#FF3333', flexShrink: 0 }} />
+              <span>REC</span>
+              <span style={{ color: 'rgba(200,211,226,0.4)', marginInline: 2 }}>|</span>
+              <span>1920×1080</span>
+            </div>
+            {/* center: timecode */}
+            <div style={{ fontFamily: FP, fontSize: 13, color: LT, letterSpacing: 2 }}>00:00:08:15</div>
+            {/* right: fps + focal + battery */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: FP, fontSize: 11, color: LT, letterSpacing: 1 }}>
+              <span>50FPS</span>
+              <span style={{ color: 'rgba(200,211,226,0.4)', marginInline: 2 }}>|</span>
+              <span>35mm</span>
+              <span style={{ color: 'rgba(200,211,226,0.4)', marginInline: 2 }}>|</span>
+              <svg width="20" height="11" viewBox="0 0 22 12" fill="none"><rect x=".5" y=".5" width="18" height="11" rx="2.5" stroke="currentColor" strokeOpacity=".7"/><rect x="2" y="2" width="12" height="8" rx="1.5" fill="currentColor" fillOpacity=".6"/><path d="M19.5 4.5v3" stroke="currentColor" strokeOpacity=".7" strokeWidth="1.5" strokeLinecap="round"/></svg>
+              <span>78%</span>
+            </div>
+          </div>
+        )}
+
         <div style={{ position: 'relative', zIndex: 3, ...WRP }}>
+          {/* breadcrumbs (cover-hero pages) */}
+          {isCoverHero && (
+            <div style={{ marginBottom: 20, direction: 'rtl', display: 'flex', alignItems: 'center', gap: 0 }}>
+              <button onClick={() => navigate('/')}
+                style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontFamily: F, fontSize: 12.5, color: 'rgba(180,190,210,0.7)', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                <ArrowLeft size={10} style={{ opacity: 0.6 }} />
+                الرئيسية
+              </button>
+              <span style={{ color: 'rgba(180,190,210,0.3)', marginInline: 7, fontSize: 12 }}>/</span>
+              <span style={{ fontFamily: F, fontSize: 12.5, color: 'rgba(180,190,210,0.55)' }}>الماستركلاسات</span>
+              <span style={{ color: 'rgba(180,190,210,0.3)', marginInline: 7, fontSize: 12 }}>/</span>
+              <span style={{ fontFamily: F, fontSize: 12.5, color: 'rgba(180,190,210,0.38)' }}>{data.meta.title}</span>
+            </div>
+          )}
+
           <div className="mc-hero-grid" style={{ display: 'grid', gridTemplateColumns: (data.hero.heroCardSrc || data.hero.useSpinningRing) ? '1.12fr .88fr' : '1fr', gap: 52, alignItems: 'center' }}>
 
             {/* text column */}
@@ -365,16 +409,22 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
               </div>
 
               {/* CTAs */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 24 }}>
+              <div className="mc-hero-cta-row" style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 24 }}>
                 <a href={data.hero.ctaEnrollIsWa ? waOnline : '#enroll'}
                   onClick={data.hero.ctaEnrollIsWa ? undefined : openModal}
                   target={data.hero.ctaEnrollIsWa ? '_blank' : undefined}
                   rel={data.hero.ctaEnrollIsWa ? 'noopener noreferrer' : undefined}
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '13px 26px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 6px 20px rgba(255,193,7,.22)' }}>
-                  {data.hero.ctaEnroll} <ArrowLeft size={14} />
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '13px 26px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 6px 20px rgba(255,193,7,.22)', justifyContent: 'center' }}>
+                  {data.hero.ctaEnrollIsWa && (
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                  )}
+                  {data.hero.ctaEnroll}
+                  {!data.hero.ctaEnrollIsWa && <ArrowLeft size={14} />}
                 </a>
                 <a href={data.hero.ctaExploreHref}
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: isCoverHero ? 'rgba(255,255,255,.08)' : 'rgba(255,255,255,.05)', backdropFilter: isCoverHero ? 'blur(8px)' : 'none', WebkitBackdropFilter: isCoverHero ? 'blur(8px)' : 'none', border: '1px solid rgba(255,255,255,.18)', color: OFF, fontFamily: F, fontWeight: 700, fontSize: 15, padding: '13px 26px', borderRadius: 12, textDecoration: 'none' }}>
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: isCoverHero ? 'rgba(255,255,255,.08)' : 'rgba(255,255,255,.05)', backdropFilter: isCoverHero ? 'blur(8px)' : 'none', WebkitBackdropFilter: isCoverHero ? 'blur(8px)' : 'none', border: '1px solid rgba(255,255,255,.18)', color: OFF, fontFamily: F, fontWeight: 700, fontSize: 15, padding: '13px 26px', borderRadius: 12, textDecoration: 'none', justifyContent: 'center' }}>
                   {data.hero.ctaExplore} <ArrowLeft size={14} />
                 </a>
               </div>
@@ -409,7 +459,9 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
             {/* spinning SVG ring — elam */}
             {data.hero.useSpinningRing && (
               <div className="mc-hero-visual" style={{ position: 'relative', aspectRatio: '1', maxWidth: 400, width: '100%', marginInline: 'auto' }}>
-                <svg viewBox="0 0 400 400" style={{ width: '100%', height: '100%', display: 'block' }}>
+                {/* dark radial shadow behind ring so gold arc doesn't clash with presenter */}
+                <div style={{ position: 'absolute', inset: '-8%', borderRadius: '50%', background: 'radial-gradient(circle, rgba(2,6,23,0.78) 0%, rgba(2,6,23,0.50) 52%, transparent 72%)', zIndex: 0, pointerEvents: 'none' }} />
+                <svg viewBox="0 0 400 400" style={{ width: '100%', height: '100%', display: 'block', position: 'relative', zIndex: 1 }}>
                   <circle cx="200" cy="200" r="186" fill="none" stroke="rgba(255,255,255,0.05)" />
                   <circle cx="200" cy="200" r="150" fill="none" stroke="rgba(255,255,255,0.04)" />
                   <g className="mc-spin-ring">
@@ -425,11 +477,11 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
                     <circle cx="200" cy="200" r="186" fill="none" stroke="rgba(255,193,7,0.06)" strokeWidth="1" strokeDasharray="12 20" />
                   </g>
                 </svg>
-                <div style={{ position: 'absolute', inset: 0, display: 'grid', placeContent: 'center', textAlign: 'center' }}>
-                  <div style={{ fontFamily: FP, fontSize: 68, fontWeight: 700, color: OFF, lineHeight: 1 }}>{data.curriculum.stations.length}</div>
-                  <div style={{ fontFamily: F, fontSize: 15, color: MUT, marginTop: 4 }}>محطات</div>
-                  <div style={{ width: 36, height: 1, background: 'rgba(255,193,7,0.35)', margin: '10px auto' }} />
-                  <div style={{ fontFamily: F, fontSize: 11.5, color: 'rgba(255,193,7,0.65)' }}>تأسيس ← تخصصات ← قيادة</div>
+                <div style={{ position: 'absolute', inset: 0, display: 'grid', placeContent: 'center', textAlign: 'center', zIndex: 2 }}>
+                  <div style={{ fontFamily: FP, fontSize: 72, fontWeight: 800, color: OFF, lineHeight: 1 }}>{data.curriculum.stations.length}</div>
+                  <div style={{ fontFamily: F, fontSize: 15, color: MUT, marginTop: 6 }}>محطات</div>
+                  <div style={{ width: 36, height: 1, background: 'rgba(255,193,7,0.35)', margin: '12px auto' }} />
+                  <div style={{ fontFamily: F, fontSize: 12.5, color: LT, letterSpacing: 0.5 }}>تأسيس · تخصيص · قيادة</div>
                 </div>
               </div>
             )}
