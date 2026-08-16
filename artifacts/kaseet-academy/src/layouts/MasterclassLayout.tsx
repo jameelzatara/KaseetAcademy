@@ -4,7 +4,7 @@
  */
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { ChevronDown, ArrowLeft, MapPin, Wifi } from 'lucide-react';
+import { ChevronDown, ArrowLeft, MapPin, Wifi, Layers, Clock, FolderCheck } from 'lucide-react';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { GOLD, OFF, F, FP, INNER, waLink } from '../pages/shared/coursePageHelpers';
 import MasterclassGuarantee from '../components/masterclass/MasterclassGuarantee';
@@ -282,7 +282,7 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
 
         {/* ── viewfinder HUD (elam only) ─────────────────── */}
         {isCoverHero && data.hero.useSpinningRing && (
-          <div className="mc-hud" style={{ position: 'absolute', top: 78, left: 0, right: 0, zIndex: 5, padding: '0 clamp(16px,4vw,48px)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', opacity: 0.5, pointerEvents: 'none', direction: 'ltr' }}>
+          <div className="mc-hud" style={{ position: 'absolute', top: 72, left: 0, right: 0, zIndex: 5, padding: '0 clamp(16px,4vw,48px)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', opacity: 0.4, pointerEvents: 'none', direction: 'ltr' }}>
             {/* left: REC + resolution */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: FP, fontSize: 11, color: LT, letterSpacing: 1 }}>
               <span className="mc-live-dot" style={{ width: 7, height: 7, borderRadius: '50%', background: '#FF3333', flexShrink: 0 }} />
@@ -305,9 +305,9 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
         )}
 
         <div style={{ position: 'relative', zIndex: 3, ...WRP }}>
-          {/* breadcrumbs (cover-hero pages) */}
+          {/* breadcrumbs (cover-hero pages) — 24px below HUD, pinned right */}
           {isCoverHero && (
-            <div style={{ marginBottom: 20, direction: 'rtl', display: 'flex', alignItems: 'center', gap: 0 }}>
+            <div style={{ marginBottom: 20, marginTop: 24, direction: 'rtl', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 0 }}>
               <button onClick={() => navigate('/')}
                 style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontFamily: F, fontSize: 12.5, color: 'rgba(180,190,210,0.7)', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
                 <ArrowLeft size={10} style={{ opacity: 0.6 }} />
@@ -326,13 +326,14 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
             <div>
               {/* audience tags — elam */}
               {data.hero.audienceTags && (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginBottom: 14 }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginBottom: 18 }}>
                   {data.hero.audienceTags.map(tag => (
                     <span key={tag} style={{ fontFamily: F, fontSize: 11.5, color: LT, background: 'rgba(255,255,255,.07)', border: `1px solid ${CBR}`, padding: '4px 12px', borderRadius: 999 }}>{tag}</span>
                   ))}
                 </div>
               )}
-              <GoldChip text={data.hero.chip} outline />
+              {/* chip badge — hide when audienceTags are present (elam) */}
+              {!data.hero.audienceTags && <GoldChip text={data.hero.chip} outline />}
 
               <h1 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(34px,5vw,60px)', lineHeight: 1.22, letterSpacing: -1.2, margin: '18px 0 0', color: OFF, maxWidth: 720 }}>
                 {data.hero.h1Line1}<br />
@@ -379,17 +380,17 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
                 </div>
               )}
 
-              {/* spinning ring stats for elam */}
+              {/* spinning ring stats for elam — 2×2 grid with dedicated icons */}
               {data.hero.useSpinningRing && (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0,1fr))', gap: 10, marginTop: 24, maxWidth: 500 }}>
-                  {[
-                    { num: '10', label: 'محطات تدريبية متسلسلة' },
-                    { num: '40', label: 'ساعة تدريبية موزَّعة' },
-                    { num: '8',  label: 'مشاريع تطبيقية تُسلَّم' },
-                    { num: null, label: 'حضوري أو مباشر تفاعلي (Online LIVE)' },
-                  ].map(({ num, label }, i) => (
-                    <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: 'rgba(2,6,23,0.60)', border: '1px solid rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', padding: '10px 13px', borderRadius: 11, fontFamily: F, fontSize: 13, color: LT }}>
-                      <MapPin size={14} color={GLD} strokeWidth={2} style={{ flexShrink: 0 }} />
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0,1fr))', gap: 10, marginTop: 32, maxWidth: 500 }}>
+                  {([
+                    { Icon: Layers,      num: '10', label: 'محطات تدريبية متسلسلة' },
+                    { Icon: Clock,       num: '40', label: 'ساعة تدريبية موزَّعة'  },
+                    { Icon: FolderCheck, num: '8',  label: 'مشاريع تطبيقية تُسلَّم' },
+                    { Icon: MapPin,      num: null, label: 'حضوري أو مباشر تفاعلي (Online LIVE)' },
+                  ] as const).map(({ Icon, num, label }, i) => (
+                    <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: 'rgba(2,6,23,0.60)', border: '1px solid rgba(255,255,255,0.10)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', padding: '11px 14px', borderRadius: 11, fontFamily: F, fontSize: 13, color: LT }}>
+                      <Icon size={15} color={GLD} strokeWidth={1.8} style={{ flexShrink: 0 }} />
                       {num && <b style={{ fontFamily: FP, color: OFF, fontWeight: 700 }}>{num}</b>}
                       {label}
                     </span>
