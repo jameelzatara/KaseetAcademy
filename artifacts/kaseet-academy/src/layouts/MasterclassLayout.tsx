@@ -280,6 +280,14 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
 
             {/* text column */}
             <div>
+              {/* audience tags — elam */}
+              {data.hero.audienceTags && (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginBottom: 14 }}>
+                  {data.hero.audienceTags.map(tag => (
+                    <span key={tag} style={{ fontFamily: F, fontSize: 11.5, color: LT, background: 'rgba(255,255,255,.07)', border: `1px solid ${CBR}`, padding: '4px 12px', borderRadius: 999 }}>{tag}</span>
+                  ))}
+                </div>
+              )}
               <GoldChip text={data.hero.chip} outline />
 
               <h1 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(34px,5vw,60px)', lineHeight: 1.22, letterSpacing: -1.2, margin: '18px 0 0', color: OFF, maxWidth: 720 }}>
@@ -316,14 +324,10 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
                 </div>
               )}
 
-              {/* fact chips for cover hero */}
-              {isCoverHero && !data.hero.statsEnabled && !data.hero.useSpinningRing && (
+              {/* fact chips for cover hero — data-driven */}
+              {isCoverHero && !data.hero.statsEnabled && !data.hero.useSpinningRing && data.hero.factChips && (
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 24 }}>
-                  {[
-                    { text: '44 ساعة · 22 جلسة' },
-                    { text: '13 مخرجاً موثَّقاً' },
-                    { text: 'حضوري أو مباشر تفاعلي (Online LIVE)' },
-                  ].map(({ text }) => (
+                  {data.hero.factChips.map(text => (
                     <span key={text} style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: 'rgba(2,6,23,.55)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', border: `1px solid ${CBR}`, fontFamily: F, fontSize: 13, color: LT, padding: '8px 14px', borderRadius: 10 }}>
                       {text}
                     </span>
@@ -356,13 +360,16 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
                 </div>
                 <span style={{ fontFamily: F, fontSize: 13, color: MUT, lineHeight: 1.5 }}>
                   <strong style={{ color: OFF, display: 'block' }}>شهادة معتمدة من تطبيق وجيز</strong>
-                  أكبر مكتبة صوتية وبودكاست في الشرق الأوسط
+                  {data.hero.wajeezSubtitle}
                 </span>
               </div>
 
               {/* CTAs */}
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 24 }}>
-                <a href="#enroll" onClick={openModal}
+                <a href={data.hero.ctaEnrollIsWa ? waOnline : '#enroll'}
+                  onClick={data.hero.ctaEnrollIsWa ? undefined : openModal}
+                  target={data.hero.ctaEnrollIsWa ? '_blank' : undefined}
+                  rel={data.hero.ctaEnrollIsWa ? 'noopener noreferrer' : undefined}
                   style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '13px 26px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 6px 20px rgba(255,193,7,.22)' }}>
                   {data.hero.ctaEnroll} <ArrowLeft size={14} />
                 </a>
@@ -429,6 +436,90 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
           </div>
         </div>
       </section>
+
+      {/* ═══════════════════════════════════
+          01-B. AUDIENCE (elam + khataba)
+      ═══════════════════════════════════ */}
+      {data.audience && (
+        <section className="sec sec--audience" style={{ padding: '80px 0', background: '#0B1628' }}>
+          <div style={WRP}>
+            <div style={{ textAlign: 'center', marginBottom: 44, direction: 'rtl' }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GLD, color: '#1A1206', fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '7px 16px', borderRadius: 999 }}>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#1A1206' }} />
+                {data.audience.badge}
+              </span>
+              <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(22px,3.4vw,36px)', lineHeight: 1.5, margin: '16px 0 0', color: OFF, maxWidth: 700, marginInline: 'auto' }}>
+                {data.audience.heading}
+              </h2>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 14, maxWidth: 960, marginInline: 'auto' }}>
+              {data.audience.items.map((item, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 14, background: 'rgba(255,255,255,0.04)', border: `1px solid rgba(255,255,255,0.08)`, borderRadius: 14, padding: '16px 18px' }}>
+                  <span style={{ flexShrink: 0, width: 28, height: 28, borderRadius: '50%', background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 12, display: 'grid', placeContent: 'center' }}>
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <span style={{ fontFamily: F, fontSize: 14.5, color: LT, lineHeight: 1.75 }}>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ═══════════════════════════════════
+          01-C. METHOD (elam — right after audience)
+      ═══════════════════════════════════ */}
+      {data.method && data.slug === 'masar-elami' && (
+        <section className="sec sec--method" style={{ padding: '80px 0' }}>
+          <div style={WRP}>
+            <SectionHead badge={data.method.badge} heading={data.method.heading} headingGold={data.method.headingGold} sub={data.method.lead} />
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16, marginTop: 48 }}>
+              {data.method.items.map((item, i) => (
+                <div key={i} style={{ background: CARD, border: `1px solid ${CBR}`, borderRadius: 18, padding: '26px 22px' }}>
+                  <div style={{ width: 40, height: 40, borderRadius: 12, background: GS, border: `1px solid ${GL}`, display: 'grid', placeContent: 'center', marginBottom: 14 }}>
+                    <span style={{ fontFamily: FP, fontSize: 13, fontWeight: 700, color: GLD }}>{String(i + 1).padStart(2, '0')}</span>
+                  </div>
+                  <h4 style={{ fontFamily: F, fontWeight: 800, fontSize: 17, color: OFF, marginBottom: 8, lineHeight: 1.4 }}>{item.title}</h4>
+                  <p style={{ fontFamily: F, fontSize: 13.5, color: MUT, lineHeight: 1.8, margin: 0 }}>{item.body}</p>
+                </div>
+              ))}
+            </div>
+            <div style={{ marginTop: 18, background: `linear-gradient(135deg, ${GS}, rgba(255,193,7,0.04) 60%)`, border: `1px solid ${GL}`, borderRadius: 18, padding: '24px 26px', display: 'flex', alignItems: 'flex-start', gap: 16 }}>
+              <span style={{ flexShrink: 0, fontFamily: FP, fontSize: 22, color: GLD }}>★</span>
+              <div>
+                <div style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: GLD, marginBottom: 6 }}>{data.method.finalOutput.title}</div>
+                <p style={{ fontFamily: F, fontSize: 14, color: LT, lineHeight: 1.8, margin: 0 }}>{data.method.finalOutput.body}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ═══════════════════════════════════
+          01-D. OUTCOMES/ACQUISITIONS (khataba — before curriculum)
+      ═══════════════════════════════════ */}
+      {data.outcomes.acquisitions && (
+        <section className="sec sec--acq" style={{ padding: '80px 0', background: '#0B1628' }}>
+          <div style={WRP}>
+            <SectionHead badge={data.outcomes.badge} heading={data.outcomes.heading} headingGold={data.outcomes.headingGold} sub={data.outcomes.desc} />
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 18, marginTop: 48 }}>
+              {data.outcomes.items.map((oc, i) => (
+                <div key={i} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 18, padding: '26px 22px' }}>
+                  <div style={{ width: 10, height: 3, background: GLD, borderRadius: 2, marginBottom: 16 }} />
+                  <h4 style={{ fontFamily: F, fontWeight: 800, fontSize: 17, lineHeight: 1.4, color: OFF, marginBottom: 10 }}>{oc.title}</h4>
+                  <p style={{ fontFamily: F, fontSize: 14, color: MUT, lineHeight: 1.8, margin: 0 }}>{oc.desc}</p>
+                </div>
+              ))}
+            </div>
+            <div style={{ textAlign: 'center', marginTop: 32 }}>
+              <a href="#enroll" onClick={openModal}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 32px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 8px 24px rgba(255,193,7,.24)' }}>
+                احجز مقعدك الآن <ArrowLeft size={14} />
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ═══════════════════════════════════
           02. CURRICULUM (station tree)
@@ -565,6 +656,35 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
       )}
 
       {/* ═══════════════════════════════════
+          03-B. METHOD (khataba — after portfolio)
+      ═══════════════════════════════════ */}
+      {data.method && data.slug === 'masar-khataba' && (
+        <section className="sec sec--method" style={{ padding: '80px 0' }}>
+          <div style={WRP}>
+            <SectionHead badge={data.method.badge} heading={data.method.heading} headingGold={data.method.headingGold} sub={data.method.lead} />
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16, marginTop: 48 }}>
+              {data.method.items.map((item, i) => (
+                <div key={i} style={{ background: CARD, border: `1px solid ${CBR}`, borderRadius: 18, padding: '26px 22px' }}>
+                  <div style={{ width: 40, height: 40, borderRadius: 12, background: GS, border: `1px solid ${GL}`, display: 'grid', placeContent: 'center', marginBottom: 14 }}>
+                    <span style={{ fontFamily: FP, fontSize: 13, fontWeight: 700, color: GLD }}>{String(i + 1).padStart(2, '0')}</span>
+                  </div>
+                  <h4 style={{ fontFamily: F, fontWeight: 800, fontSize: 17, color: OFF, marginBottom: 8, lineHeight: 1.4 }}>{item.title}</h4>
+                  <p style={{ fontFamily: F, fontSize: 13.5, color: MUT, lineHeight: 1.8, margin: 0 }}>{item.body}</p>
+                </div>
+              ))}
+            </div>
+            <div style={{ marginTop: 18, background: `linear-gradient(135deg, ${GS}, rgba(255,193,7,0.04) 60%)`, border: `1px solid ${GL}`, borderRadius: 18, padding: '24px 26px', display: 'flex', alignItems: 'flex-start', gap: 16 }}>
+              <span style={{ flexShrink: 0, fontFamily: FP, fontSize: 22, color: GLD }}>★</span>
+              <div>
+                <div style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: GLD, marginBottom: 6 }}>{data.method.finalOutput.title}</div>
+                <p style={{ fontFamily: F, fontSize: 14, color: LT, lineHeight: 1.8, margin: 0 }}>{data.method.finalOutput.body}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ═══════════════════════════════════
           04. WAJEEZ (optional)
       ═══════════════════════════════════ */}
       {data.wajeez && (
@@ -600,31 +720,33 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
       )}
 
       {/* ═══════════════════════════════════
-          05. OUTCOMES
+          05. OUTCOMES (numbered — voice + elam; skip khataba which rendered earlier)
       ═══════════════════════════════════ */}
-      <section className="sec sec--out" style={{ padding: '96px 0', background: data.slug === 'masar-khataba' ? '#0B1628' : 'transparent' }}>
-        <div style={WRP}>
-          <SectionHead badge={data.outcomes.badge} heading={data.outcomes.heading} headingGold={data.outcomes.headingGold} sub={data.outcomes.desc} />
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 18, marginTop: 52 }}>
-            {data.outcomes.items.map(oc => (
-              <div key={oc.n} style={{ background: data.slug === 'masar-khataba' ? 'rgba(255,255,255,0.05)' : CARD, border: `1px solid ${data.slug === 'masar-khataba' ? 'rgba(255,255,255,0.10)' : CBR}`, borderRadius: 18, padding: '30px 26px' }}>
-                <span style={{ display: 'block', fontFamily: FP, fontSize: 44, fontWeight: 700, lineHeight: 1, color: GLD, opacity: .28 }}>{oc.n}</span>
-                <div style={{ marginTop: 18, paddingTop: 18, borderTop: `1px solid ${CBR}`, position: 'relative' }}>
-                  <div style={{ position: 'absolute', top: 0, right: 0, width: 32, height: 3, background: GLD, borderRadius: 2 }} />
-                  <h4 style={{ fontFamily: F, fontWeight: 800, fontSize: 18, lineHeight: 1.5, color: OFF, marginBottom: 10 }}>{oc.title}</h4>
-                  <p style={{ fontFamily: F, fontSize: 14, color: MUT, lineHeight: 1.8 }}>{oc.desc}</p>
+      {!data.outcomes.acquisitions && (
+        <section className="sec sec--out" style={{ padding: '96px 0' }}>
+          <div style={WRP}>
+            <SectionHead badge={data.outcomes.badge} heading={data.outcomes.heading} headingGold={data.outcomes.headingGold} sub={data.outcomes.desc} />
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 18, marginTop: 52 }}>
+              {data.outcomes.items.map(oc => (
+                <div key={oc.n} style={{ background: CARD, border: `1px solid ${CBR}`, borderRadius: 18, padding: '30px 26px' }}>
+                  <span style={{ display: 'block', fontFamily: FP, fontSize: 44, fontWeight: 700, lineHeight: 1, color: GLD, opacity: .28 }}>{oc.n}</span>
+                  <div style={{ marginTop: 18, paddingTop: 18, borderTop: `1px solid ${CBR}`, position: 'relative' }}>
+                    <div style={{ position: 'absolute', top: 0, right: 0, width: 32, height: 3, background: GLD, borderRadius: 2 }} />
+                    <h4 style={{ fontFamily: F, fontWeight: 800, fontSize: 18, lineHeight: 1.5, color: OFF, marginBottom: 10 }}>{oc.title}</h4>
+                    <p style={{ fontFamily: F, fontSize: 14, color: MUT, lineHeight: 1.8 }}>{oc.desc}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+            <div style={{ textAlign: 'center', marginTop: 34 }}>
+              <a href="#enroll" onClick={openModal}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 32px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 8px 24px rgba(255,193,7,.24)' }}>
+                احجز مقعدك الآن <ArrowLeft size={14} />
+              </a>
+            </div>
           </div>
-          <div style={{ textAlign: 'center', marginTop: 34 }}>
-            <a href="#enroll" onClick={openModal}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 32px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 8px 24px rgba(255,193,7,.24)' }}>
-              احجز مقعدك الآن <ArrowLeft size={14} />
-            </a>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ═══════════════════════════════════
           06. TRAINERS

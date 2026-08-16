@@ -9,6 +9,7 @@ import heroBgSrc      from '@assets/cover-public-speaking-tedx_1785865159100.jpe
 import trainerSohaibSrc from '@assets/instructor-sohaib_1785863334821.jpeg';
 import trainerOmarSrc   from '@assets/trainer-omar_1785692015818.jpg';
 import advisorImgSrc    from '@assets/ياقوت_الخشاشنة_المستشارة_1785852509109.jpeg';
+import advisorAyaImgSrc from '@assets/0_اية_القماز_1786476075148.jpeg';
 
 import corpPhoto1 from '@assets/WhatsApp_Image_2026-08-04_at_7.40.10_PM_1785863327459.jpeg';
 import corpPhoto2 from '@assets/WhatsApp_Image_2026-08-04_at_7.40.09_PM_(1)_1785863327459.jpeg';
@@ -44,6 +45,7 @@ const data = getKhatabaData({
   trainerSohaibSrc,
   trainerOmarSrc,
   advisorImgSrc,
+  advisorAyaImgSrc,
   corpPhotos: [corpPhoto1, corpPhoto2, corpPhoto3, corpPhoto5],
   galleryItems,
 });

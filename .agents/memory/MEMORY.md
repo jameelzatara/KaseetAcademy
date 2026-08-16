@@ -6,7 +6,7 @@
 - [ReelsSection props](reels-section-props.md) — ReelsSection accepts badge/heading/description props with defaults matching the homepage; wire new values from caller
 - [MasarSotiPage trainers](masar-soti-trainers.md) — يسار عبده photo: `المدربة_يسار_عبده_1785855126478.jpeg`; رنا العزام removed permanently from this page
 - [Course page layout](course-page-layout.md) — all 6 pages use shared CoursePageLayout; cohorts.json uses mode:'live' (not 'online'); thin wrappers only
-- [Masterclass template](masterclass-template.md) — 3 masterclass pages unified under MasterclassLayout; data in masterclasses.ts; cohort IDs 301-306 in cohorts.json
+- [Masterclass template](masterclass-template.md) — 3 masterclass pages unified under MasterclassLayout; Audience+Method+Outcomes sections conditional; elam CTA→WhatsApp
 - [Stripe Payment System](stripe-payment-system.md) — full checkout system; needs Stripe API keys entered in Replit Integrations to activate
 - [Email service](email-service.md) — Brevo REST API (not Resend/Gmail); BREVO_API_KEY + SENDER_EMAIL=notify@kaseet.com; generateOrderId now async DB sequence
 - [Icon system](icon-system.md) — all icons are lucide-react SVG components; no other icon library used anywhere
