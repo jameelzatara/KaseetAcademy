@@ -4,7 +4,7 @@
  */
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { ChevronDown, ArrowLeft, MapPin, Wifi, Layers, Clock, FolderCheck } from 'lucide-react';
+import { ChevronDown, ArrowLeft, MapPin, Wifi, Layers, Clock, FolderCheck, ShieldCheck } from 'lucide-react';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { GOLD, OFF, F, FP, INNER, waLink } from '../pages/shared/coursePageHelpers';
 import type { MasterclassData, StationItem } from '../data/masterclasses';
@@ -347,7 +347,7 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
         {isCoverHero && data.hero.heroBgSrc && (
           <>
             <img src={data.hero.heroBgSrc} alt="" aria-hidden="true" fetchPriority="high" decoding="async"
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: '28% 22%', zIndex: 0 }} />
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: '18% 18%', zIndex: 0 }} />
             {/* vertical vignette */}
             <div style={{ position: 'absolute', inset: 0, zIndex: 1, background: 'linear-gradient(to bottom, rgba(2,6,23,0.80) 0%, rgba(2,6,23,0.32) 38%, rgba(2,6,23,0.92) 100%)' }} />
             {/* side vignette — darkens text/right side, leaves subject on left clear */}
@@ -542,7 +542,7 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
             {data.hero.useSpinningRing && (
               <div className="mc-hero-visual" style={{ position: 'relative', aspectRatio: '1', maxWidth: 400, width: '100%', marginInline: 'auto' }}>
                 {/* dark radial shadow behind ring so gold arc doesn't clash with presenter */}
-                <div style={{ position: 'absolute', inset: '-8%', borderRadius: '50%', background: 'radial-gradient(circle, rgba(2,6,23,0.90) 0%, rgba(2,6,23,0.72) 44%, rgba(2,6,23,0.30) 65%, transparent 76%)', zIndex: 0, pointerEvents: 'none' }} />
+                <div style={{ position: 'absolute', inset: '-8%', borderRadius: '50%', background: 'radial-gradient(circle, rgba(2,6,23,0.50) 0%, rgba(2,6,23,0.30) 44%, rgba(2,6,23,0.10) 65%, transparent 76%)', zIndex: 0, pointerEvents: 'none' }} />
                 <svg viewBox="0 0 400 400" style={{ width: '100%', height: '100%', display: 'block', position: 'relative', zIndex: 1 }}>
                   <circle cx="200" cy="200" r="186" fill="none" stroke="rgba(255,255,255,0.05)" />
                   <circle cx="200" cy="200" r="150" fill="none" stroke="rgba(255,255,255,0.04)" />
@@ -560,6 +560,9 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
                   </g>
                 </svg>
                 <div style={{ position: 'absolute', inset: 0, display: 'grid', placeContent: 'center', textAlign: 'center', zIndex: 2 }}>
+                  <div style={{ fontFamily: FP, fontSize: 72, fontWeight: 800, color: OFF, lineHeight: 1 }}>{data.curriculum.stations.length}</div>
+                  <div style={{ fontFamily: F, fontSize: 15, color: MUT, marginTop: 6 }}>محطات</div>
+                  <div style={{ width: 36, height: 1, background: 'rgba(255,193,7,0.35)', margin: '12px auto' }} />
                   <div style={{ fontFamily: F, fontSize: 12.5, color: LT, letterSpacing: 0.5 }}>تأسيس · تخصيص · قيادة</div>
                 </div>
               </div>
@@ -615,6 +618,16 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
                 </div>
               ))}
             </div>
+            {/* portfolio lead note — merged from portfolio section */}
+            {data.portfolio && (
+              <div style={{ marginTop: 28, background: GS, border: `1px solid ${GL}`, borderRadius: 16, padding: '22px 24px', display: 'flex', alignItems: 'flex-start', gap: 16 }}>
+                <span style={{ flexShrink: 0, fontFamily: FP, fontSize: 22, color: GLD, marginTop: 2 }}>★</span>
+                <div>
+                  <div style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: GLD, marginBottom: 6 }}>{data.portfolio.heading}</div>
+                  <p style={{ fontFamily: F, fontSize: 14, color: LT, lineHeight: 1.8, margin: 0 }}>{data.portfolio.lead}</p>
+                </div>
+              </div>
+            )}
             <div style={{ textAlign: 'center', marginTop: 32 }}>
               <a href="#pricing"
                 style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 32px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 8px 24px rgba(255,193,7,.24)' }}>
@@ -715,10 +728,7 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════
-          03. PORTFOLIO (optional — elam, after curriculum)
-      ═══════════════════════════════════ */}
-      {data.portfolio && renderPortfolio(data.portfolio, { INK, INK2, WRP })}
+      {/* portfolio section merged into outcomes above */}
 
       {/* ═══════════════════════════════════
           03-B. METHOD (khataba — after curriculum)
@@ -843,47 +853,27 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
               { v: 'inperson' as const, m: data.modes.inperson, ac: GLD, acRgb: '255,193,7', icon: <MapPin size={18} color="#1A1206" strokeWidth={2.2} /> },
               { v: 'online'   as const, m: data.modes.online,   ac: '#67e8f9', acRgb: '103,232,249', icon: <Wifi size={18} color="#1A1206" strokeWidth={2.2} /> },
             ].map(({ v, m, ac, acRgb, icon }) => (
-              <div key={v} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                {/* main mode card */}
-                <div style={{ background: CARD, border: `1px solid rgba(${acRgb},.22)`, borderRadius: 20, padding: 'clamp(22px,2.5vw,28px)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
-                    <div style={{ width: 36, height: 36, borderRadius: '50%', background: ac, display: 'grid', placeContent: 'center', flexShrink: 0 }}>{icon}</div>
-                    <div>
-                      <div style={{ fontFamily: F, fontWeight: 800, fontSize: 15.5, color: OFF }}>{m.label}</div>
-                      <div style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 2 }}>{m.sub}</div>
-                    </div>
+              <div key={v} style={{ background: CARD, border: `1px solid rgba(${acRgb},.22)`, borderRadius: 20, padding: 'clamp(22px,2.5vw,28px)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: '50%', background: ac, display: 'grid', placeContent: 'center', flexShrink: 0 }}>{icon}</div>
+                  <div>
+                    <div style={{ fontFamily: F, fontWeight: 800, fontSize: 15.5, color: OFF }}>{m.label}</div>
+                    <div style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 2 }}>{m.sub}</div>
                   </div>
-                  {/* schedule line */}
-                  {m.schedule && (
-                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: `rgba(${acRgb},.08)`, border: `1px solid rgba(${acRgb},.22)`, borderRadius: 8, padding: '6px 12px', marginBottom: 14, fontFamily: F, fontSize: 12.5, color: ac }}>
-                      🗓 {m.schedule}
-                    </div>
-                  )}
-                  <ul style={{ listStyle: 'none', display: 'grid', gap: 9, margin: 0, padding: 0 }}>
-                    {m.items.map(item => (
-                      <li key={item} style={{ display: 'flex', gap: 10, fontFamily: F, fontSize: 13.5, color: LT, lineHeight: 1.7 }}>
-                        <span style={{ color: ac, fontSize: 14, marginTop: 3, flexShrink: 0 }}>✓</span>{item}
-                      </li>
-                    ))}
-                  </ul>
                 </div>
-                {/* advisor staff card */}
-                {m.advisor && (
-                  <div style={{ background: CARD, border: `1px solid rgba(${acRgb},.18)`, borderRadius: 16, padding: '16px 18px', display: 'flex', alignItems: 'center', gap: 14 }}>
-                    <div style={{ width: 52, height: 52, borderRadius: '50%', flexShrink: 0, border: `2px solid rgba(${acRgb},.35)`, overflow: 'hidden' }}>
-                      <img src={m.advisor.imgSrc} alt={m.advisor.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
-                    </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontFamily: F, fontWeight: 800, fontSize: 14.5, color: OFF }}>{m.advisor.name}</div>
-                      <div style={{ fontFamily: F, fontSize: 11.5, color: MUT, marginTop: 2, lineHeight: 1.5 }}>{m.advisor.role}</div>
-                    </div>
-                    <a href={`https://wa.me/${m.advisor.phone}`} target="_blank" rel="noopener noreferrer"
-                      style={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: 6, background: `rgba(${acRgb},.12)`, border: `1px solid rgba(${acRgb},.28)`, color: ac, fontFamily: F, fontWeight: 700, fontSize: 12, padding: '7px 14px', borderRadius: 999, textDecoration: 'none' }}>
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                      {m.advisor.waLabel}
-                    </a>
+                {/* schedule line */}
+                {m.schedule && (
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: `rgba(${acRgb},.08)`, border: `1px solid rgba(${acRgb},.22)`, borderRadius: 8, padding: '6px 12px', marginBottom: 14, fontFamily: F, fontSize: 12.5, color: ac }}>
+                    🗓 {m.schedule}
                   </div>
                 )}
+                <ul style={{ listStyle: 'none', display: 'grid', gap: 9, margin: 0, padding: 0 }}>
+                  {m.items.map(item => (
+                    <li key={item} style={{ display: 'flex', gap: 10, fontFamily: F, fontSize: 13.5, color: LT, lineHeight: 1.7 }}>
+                      <span style={{ color: ac, fontSize: 14, marginTop: 3, flexShrink: 0 }}>✓</span>{item}
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
@@ -893,26 +883,43 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
             <StudyAccordion variant="online"   label={data.modes.online.label}   sub={data.modes.online.sub}   items={data.modes.online.details} />
           </div>
 
-          {/* cohort facts row (when merged) */}
-          <div style={{ marginTop: 36, background: CARD, border: `1px solid ${GL}`, borderRadius: 18, padding: '28px 32px' }}>
-            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 0, justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-                <span style={{ background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 12, padding: '4px 12px', borderRadius: 999 }}>{data.cohort.badge}</span>
-                <span style={{ fontFamily: F, fontWeight: 800, fontSize: 18, color: OFF }}>{data.cohort.startLabel} <span style={{ color: GLD }}>{data.cohort.startGold}</span></span>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════
+          08-B. EDUCATIONAL ADVISORS
+          (one card with both, below modes)
+      ═══════════════════════════════════ */}
+      <section id="consult" className="sec sec--advisor" style={{ padding: '0 0 80px' }}>
+        <div style={WRP}>
+          <div style={{ marginBottom: 28, textAlign: 'center' }}>
+            <GoldChip text={data.advisors.badge} outline />
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(22px,3.2vw,34px)', lineHeight: 1.4, margin: '14px 0 6px', color: OFF }}>
+              {data.advisors.heading} <span style={{ color: GLD }}>{data.advisors.headingGold}</span>
+            </h2>
+            {data.advisors.sub && <p style={{ fontFamily: F, fontSize: 14.5, color: MUT, maxWidth: 520, marginInline: 'auto', lineHeight: 1.8 }}>{data.advisors.sub}</p>}
+          </div>
+
+          {/* ONE unified card with both advisors */}
+          <div style={{ maxWidth: 860, marginInline: 'auto', background: CARD, border: `1px solid ${GL}`, borderRadius: 22, padding: 'clamp(22px,3vw,36px)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px,1fr))', gap: 24 }}>
+            {data.advisors.items.map((adv, i) => (
+              <div key={adv.name} style={{ display: 'flex', alignItems: 'center', gap: 16, paddingRight: i > 0 ? 0 : undefined, borderRight: i === 0 && data.advisors.items.length > 1 ? `1px solid ${CBR}` : undefined, paddingLeft: i > 0 ? 'clamp(16px,2vw,24px)' : undefined }}>
+                <div style={{ width: 68, height: 68, borderRadius: '50%', flexShrink: 0, border: `2px solid ${GL}`, overflow: 'hidden' }}>
+                  <img src={adv.imageSrc} alt={adv.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: OFF }}>{adv.name}</div>
+                  <div style={{ fontFamily: F, fontSize: 12.5, color: MUT, marginTop: 3, lineHeight: 1.5 }}>{adv.role}</div>
+                  {adv.phone && (
+                    <a href={`https://wa.me/${adv.phone}`} target="_blank" rel="noopener noreferrer"
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: 7, marginTop: 10, background: GS, border: `1px solid ${GL}`, color: GLD, fontFamily: F, fontWeight: 700, fontSize: 12.5, padding: '7px 14px', borderRadius: 999, textDecoration: 'none' }}>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                      {adv.waLabel}
+                    </a>
+                  )}
+                </div>
               </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 0 }}>
-                {data.cohort.facts.map(fact => (
-                  <div key={fact.label} style={{ padding: '4px 20px', borderLeft: `1px solid ${CBR}`, textAlign: 'center' }}>
-                    <span style={{ display: 'block', fontSize: 11, color: MUT, fontFamily: F }}>{fact.label}</span>
-                    <b style={{ fontFamily: F, fontSize: 13, color: LT }}>{fact.value}</b>
-                  </div>
-                ))}
-              </div>
-              <a href="#pricing"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 14, padding: '11px 22px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 6px 18px rgba(255,193,7,.22)' }}>
-                احجز مقعدك الآن <ArrowLeft size={13} />
-              </a>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -968,7 +975,7 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
               {/* guarantee — inside card */}
               <div style={{ margin: '4px 0 16px', padding: '14px 16px', background: 'rgba(255,193,7,.06)', border: '1px solid rgba(255,193,7,.18)', borderRadius: 12 }}>
                 <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-                  <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.4 }}>🛡️</span>
+                  <ShieldCheck size={18} color={GLD} strokeWidth={2} style={{ flexShrink: 0, marginTop: 2 }} />
                   <p style={{ fontFamily: F, fontSize: 13, color: LT, lineHeight: 1.8, margin: 0 }}>
                     <strong style={{ color: OFF, display: 'block', marginBottom: 2 }}>ضمان الجلسة الأولى</strong>
                     جرّب الجلسة الأولى كاملة. وإن شعرت أنّ الماستركلاس لا يلبّي توقّعاتك، اطلب استرداداً كاملاً خلال 24 ساعة من انتهائها — دون أسئلة. نحن نعرف ما نقدّمه. والجلسة الأولى تكفي لتعرفه أنت.
@@ -1020,33 +1027,6 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
       </section>
 
       {/* ═══════════════════════════════════
-          11. ADVISORS
-      ═══════════════════════════════════ */}
-      <section id="consult" className="sec sec--advisor" style={{ padding: '96px 0' }}>
-        <div style={WRP}>
-          <div style={{ textAlign: 'center', marginBottom: 40 }}>
-            <GoldChip text={data.advisors.badge} outline />
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,3.8vw,40px)', lineHeight: 1.35, margin: '16px 0 0', color: OFF }}>
-              {data.advisors.heading} <span style={{ color: GLD }}>{data.advisors.headingGold}</span>
-            </h2>
-            <p style={{ fontFamily: F, fontSize: 15.5, color: MUT, marginTop: 12, maxWidth: 540, marginInline: 'auto', lineHeight: 1.85 }}>{data.advisors.sub}</p>
-          </div>
-
-          <div className="mc-acc-grid" style={{ display: 'grid', gridTemplateColumns: data.advisors.items.length > 1 ? '1fr 1fr' : '1fr', gap: 18, maxWidth: data.advisors.items.length === 1 ? 560 : '100%', marginInline: 'auto' }}>
-            {data.advisors.items.map(adv => (
-              <MasterclassAdvisorCard key={adv.name} {...adv} />
-            ))}
-          </div>
-
-          {data.advisors.footNote && (
-            <p style={{ textAlign: 'center', fontFamily: F, fontSize: 13.5, color: MUT, marginTop: 22, lineHeight: 1.8 }}>
-              {data.advisors.footNote} <a href={waConsult} target="_blank" rel="noopener noreferrer" style={{ color: GLD, textDecoration: 'underline', textUnderlineOffset: 3 }}>تحدّث مع ياقوت</a>
-            </p>
-          )}
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════
           12. FAQ
       ═══════════════════════════════════ */}
       <section className="sec sec--faq" style={{ padding: '96px 0' }}>
@@ -1062,46 +1042,12 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
           <div style={{ maxWidth: 840, margin: '0 auto' }}>
             <MasterclassFaqAccordion faqs={data.faqs} />
           </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════
-          13. COHORT (closing CTA)
-      ═══════════════════════════════════ */}
-      <section id="cohort" className="sec sec--cohort" style={{ padding: '96px 0', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none', overflow: 'hidden' }}>
-          <svg viewBox="0 0 1440 480" preserveAspectRatio="none" style={{ width: '100%', height: '100%' }} aria-hidden="true">
-            <path d="M-120,470 Q400,150 760,270 T1560,120" fill="none" stroke="rgba(255,193,7,.28)" strokeWidth="2.5"/>
-            <path d="M-120,500 Q380,220 740,330 T1560,190" fill="none" stroke="rgba(255,255,255,.09)" strokeWidth="1.5"/>
-          </svg>
-        </div>
-        <div style={{ ...WRP, position: 'relative', zIndex: 3, textAlign: 'center' }}>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GLD, color: '#1A1206', fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '7px 16px', borderRadius: 999 }}>
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#1A1206' }} /> {data.cohort.badge}
-          </span>
-          <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(30px,4.4vw,46px)', lineHeight: 1.3, margin: '16px 0 0', letterSpacing: -.6, color: OFF }}>
-            {data.cohort.startLabel} <span style={{ color: GLD }}>{data.cohort.startGold}</span>
-          </h2>
-
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 0, margin: '28px auto 36px', maxWidth: 800 }}>
-            {data.cohort.facts.map(fact => (
-              <div key={fact.label} style={{ flex: '1 0 220px', padding: '20px 28px', borderLeft: '1px solid rgba(255,255,255,0.08)', textAlign: 'center' }}>
-                <span style={{ display: 'block', fontSize: 11.5, color: MUT, marginBottom: 6, fontFamily: F }}>{fact.label}</span>
-                <b style={{ fontFamily: F, fontSize: 14, color: OFF, whiteSpace: 'pre-line' }}>{fact.value}</b>
-              </div>
-            ))}
-          </div>
-
-          <a href="#pricing"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15.5, padding: '15px 32px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 10px 30px rgba(255,193,7,.28)' }}>
-            {data.cohort.ctaLabel} <ArrowLeft size={14} />
-          </a>
-          <p style={{ fontFamily: F, fontSize: 14, color: MUT, marginTop: 18 }}>
-            {data.cohort.consultNote.split('—')[0]}—{' '}
-            <a href={data.cohort.consultHref} style={{ color: GLD, textDecoration: 'underline', textUnderlineOffset: 3 }}>
-              {data.cohort.consultNote.split('—')[1] || 'تحدّث معنا أوّلاً'}
+          <div style={{ textAlign: 'center', marginTop: 40 }}>
+            <a href="#pricing"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 32px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 8px 24px rgba(255,193,7,.24)' }}>
+              احجز مقعدك الآن <ArrowLeft size={14} />
             </a>
-          </p>
+          </div>
         </div>
       </section>
 
