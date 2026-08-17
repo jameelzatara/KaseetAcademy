@@ -3,7 +3,7 @@
  */
 import { useState, useEffect } from 'react';
 import { usePageMeta } from '../hooks/usePageMeta';
-import { ChevronDown, ArrowLeft, MapPin, Wifi, Home, Layers, Clock, Mic, Target, Radio, ShieldCheck } from 'lucide-react';
+import { ChevronDown, ArrowLeft, MapPin, Wifi, Home, Layers, Clock, Mic, Target, Radio, ShieldCheck, CalendarDays, Users } from 'lucide-react';
 import { GOLD, OFF, F, FP, INNER, waLink } from './shared/coursePageHelpers';
 import ReelsSection from '../components/ReelsSection';
 import { Gold } from '../components/SectionHeader';
@@ -787,92 +787,113 @@ export default function MasarSotiPage() {
           </div>
 
           <div className="soti-modes-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18, marginTop: 52 }}>
-            {[
-              {
-                variant: 'inperson' as const,
-                label: 'حضوري — استوديو كاسيت',
-                sub: 'حضور فعلي في عمّان',
-                icon: <MapPin size={18} color="#1A1206" strokeWidth={2.2} />,
-                ac: GLD, acRgb: '255,193,7',
-                items: [
-                  'تدريب مباشر داخل استوديو كاسيت',
-                  'تطبيق وتسجيل وتصحيح فوري',
-                  'تعامل مباشر مع الميكروفون وبيئة التسجيل',
-                  'تفاعل مباشر مع المدرّب والمتدرّبين',
-                ],
-              },
-              {
-                variant: 'online' as const,
-                label: 'مباشر تفاعلي (Online LIVE)',
-                sub: 'من أي مكان في العالم العربي',
-                icon: <Wifi size={18} color="#1A1206" strokeWidth={2.2} />,
-                ac: '#67e8f9', acRgb: '103,232,249',
-                items: [
-                  'جلسات مباشرة مع المدرّب في الوقت الفعلي',
-                  'تطبيق وتقييم فردي أثناء التدريب',
-                  'تسجيلات الجلسات متاحة للمراجعة',
-                  'مشروع التخرّج بإشراف مباشر مع مهندس الصوت',
-                ],
-              },
-            ].map(m => (
-              <div key={m.label} style={{ background: CARD, border: `1px solid rgba(${m.acRgb},.22)`, borderRadius: 20, padding: 'clamp(22px,2.5vw,28px)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-                  <div style={{ width: 36, height: 36, borderRadius: '50%', background: m.ac, display: 'grid', placeContent: 'center', flexShrink: 0 }}>
-                    {m.icon}
+
+            {/* بطاقة حضوري */}
+            <div style={{ background: CARD, border: `1px solid rgba(255,193,7,.22)`, borderRadius: 20, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+              {/* رأس البطاقة */}
+              <div style={{ padding: 'clamp(22px,2.5vw,28px)', flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
+                  <div style={{ width: 38, height: 38, borderRadius: '50%', background: GLD, display: 'grid', placeContent: 'center', flexShrink: 0, boxShadow: '0 6px 16px rgba(255,193,7,.28)' }}>
+                    <MapPin size={18} color="#1A1206" strokeWidth={2.2} />
                   </div>
                   <div>
-                    <div style={{ fontFamily: F, fontWeight: 800, fontSize: 15.5, color: OFF }}>{m.label}</div>
-                    <div style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 2 }}>{m.sub}</div>
+                    <div style={{ fontFamily: F, fontWeight: 800, fontSize: 15.5, color: OFF }}>حضوري — استوديو كاسيت</div>
+                    <div style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 2 }}>حضور فعلي في عمّان</div>
                   </div>
                 </div>
                 <ul style={{ listStyle: 'none', display: 'grid', gap: 9, margin: 0, padding: 0 }}>
-                  {m.items.map(item => (
+                  {[
+                    'تدريب مباشر داخل استوديو كاسيت',
+                    'تطبيق وتسجيل وتصحيح فوري',
+                    'تعامل مباشر مع الميكروفون وبيئة التسجيل',
+                    'تفاعل مباشر مع المدرّب والمتدرّبين',
+                  ].map(item => (
                     <li key={item} style={{ display: 'flex', gap: 10, fontFamily: F, fontSize: 13.5, color: LT, lineHeight: 1.7 }}>
-                      <span style={{ color: m.ac, fontSize: 14, marginTop: 3, flexShrink: 0 }}>✓</span>
+                      <span style={{ color: GLD, fontSize: 14, marginTop: 3, flexShrink: 0 }}>✓</span>
                       {item}
                     </li>
                   ))}
                 </ul>
               </div>
-            ))}
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 18 }}>
-            <StudyRow variant="inperson" />
-            <StudyRow variant="online" />
-          </div>
-
-          {/* inline cohort */}
-          <div style={{ position: 'relative', marginTop: 52, borderRadius: 24, overflow: 'hidden' }}>
-            <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }} aria-hidden="true">
-              <svg viewBox="0 0 1440 320" preserveAspectRatio="none" style={{ width: '100%', height: '100%' }}>
-                <path d="M-120,310 Q400,100 760,190 T1560,80" fill="none" stroke="rgba(255,193,7,.22)" strokeWidth="2"/>
-                <path d="M-120,340 Q380,150 740,230 T1560,130" fill="none" stroke="rgba(255,255,255,.07)" strokeWidth="1.2"/>
-              </svg>
-            </div>
-            <div style={{ position: 'relative', zIndex: 2, background: 'linear-gradient(135deg, rgba(255,193,7,.10), rgba(13,11,20,.92) 60%)', border: `1px solid rgba(255,193,7,.32)`, borderRadius: 24, padding: 'clamp(32px,4vw,52px)', textAlign: 'center', boxShadow: '0 24px 64px rgba(0,0,0,.36)' }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GLD, color: '#1A1206', fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '7px 16px', borderRadius: 999 }}>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#1A1206' }} />
-                الفوج القادم
-              </span>
-              <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4vw,42px)', lineHeight: 1.3, margin: '16px 0 0', letterSpacing: -.6, color: OFF }}>
-                يبدأ <span style={{ color: GLD }}>الأحد، 9 آب</span>
-              </h2>
-              <div className="cohort-facts" style={{ maxWidth: 800, marginTop: 0 }}>
-                <div>
-                  <span className="cf-l">الجدول الأسبوعي</span>
-                  <b>الأحد والثلاثاء · 6–8 مساءً</b>
+              {/* شريط الفوج */}
+              <div style={{ borderTop: `1px solid rgba(255,193,7,.18)`, background: 'rgba(255,193,7,.05)', padding: '16px clamp(18px,2.5vw,24px)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
+                  <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD, flexShrink: 0 }} />
+                  <span style={{ fontFamily: F, fontSize: 11.5, fontWeight: 700, color: GLD, letterSpacing: .5 }}>الفوج القادم</span>
                 </div>
-                <div>
-                  <span className="cf-l">المدّة</span>
-                  <b>44 ساعة تدريبية · 22 جلسة<br />+ 3 ساعات لإنتاج مشروع التخرّج</b>
-                </div>
-                <div>
-                  <span className="cf-l">المقاعد</span>
-                  <b style={{ color: '#f87171' }}>4 مقاعد متبقية</b>
+                <div style={{ display: 'grid', gap: 9 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <CalendarDays size={14} color={GLD} strokeWidth={2} style={{ flexShrink: 0 }} />
+                    <span style={{ fontFamily: F, fontSize: 13, color: LT }}>
+                      <span style={{ color: MUT, marginInlineEnd: 4 }}>يبدأ</span>
+                      <strong style={{ color: OFF }}>الثلاثاء، 15 أيلول</strong>
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <Clock size={14} color={GLD} strokeWidth={2} style={{ flexShrink: 0 }} />
+                    <span style={{ fontFamily: F, fontSize: 13, color: LT }}>3 أيام أسبوعياً · الأحد، الثلاثاء، الخميس</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <Users size={14} color={GLD} strokeWidth={2} style={{ flexShrink: 0 }} />
+                    <span style={{ fontFamily: F, fontSize: 13, color: '#f87171', fontWeight: 700 }}>المقاعد محدودة</span>
+                  </div>
                 </div>
               </div>
             </div>
+
+            {/* بطاقة مباشر تفاعلي */}
+            <div style={{ background: CARD, border: `1px solid rgba(103,232,249,.22)`, borderRadius: 20, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+              {/* رأس البطاقة */}
+              <div style={{ padding: 'clamp(22px,2.5vw,28px)', flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
+                  <div style={{ width: 38, height: 38, borderRadius: '50%', background: '#67e8f9', display: 'grid', placeContent: 'center', flexShrink: 0, boxShadow: '0 6px 16px rgba(103,232,249,.22)' }}>
+                    <Wifi size={18} color="#1A1206" strokeWidth={2.2} />
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: F, fontWeight: 800, fontSize: 15.5, color: OFF }}>مباشر تفاعلي (Online LIVE)</div>
+                    <div style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 2 }}>من أي مكان في العالم العربي</div>
+                  </div>
+                </div>
+                <ul style={{ listStyle: 'none', display: 'grid', gap: 9, margin: 0, padding: 0 }}>
+                  {[
+                    'جلسات مباشرة مع المدرّب في الوقت الفعلي',
+                    'تطبيق وتقييم فردي أثناء التدريب',
+                    'تسجيلات الجلسات متاحة للمراجعة',
+                    'مشروع التخرّج بإشراف مباشر مع مهندس الصوت',
+                  ].map(item => (
+                    <li key={item} style={{ display: 'flex', gap: 10, fontFamily: F, fontSize: 13.5, color: LT, lineHeight: 1.7 }}>
+                      <span style={{ color: '#67e8f9', fontSize: 14, marginTop: 3, flexShrink: 0 }}>✓</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              {/* شريط الفوج */}
+              <div style={{ borderTop: `1px solid rgba(103,232,249,.18)`, background: 'rgba(103,232,249,.05)', padding: '16px clamp(18px,2.5vw,24px)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
+                  <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#67e8f9', flexShrink: 0 }} />
+                  <span style={{ fontFamily: F, fontSize: 11.5, fontWeight: 700, color: '#67e8f9', letterSpacing: .5 }}>الفوج القادم</span>
+                </div>
+                <div style={{ display: 'grid', gap: 9 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <CalendarDays size={14} color="#67e8f9" strokeWidth={2} style={{ flexShrink: 0 }} />
+                    <span style={{ fontFamily: F, fontSize: 13, color: LT }}>
+                      <span style={{ color: MUT, marginInlineEnd: 4 }}>يبدأ</span>
+                      <strong style={{ color: OFF }}>الأربعاء، 16 أيلول</strong>
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <Clock size={14} color="#67e8f9" strokeWidth={2} style={{ flexShrink: 0 }} />
+                    <span style={{ fontFamily: F, fontSize: 13, color: LT }}>يومان أسبوعياً · الأربعاء والسبت</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <Users size={14} color="#67e8f9" strokeWidth={2} style={{ flexShrink: 0 }} />
+                    <span style={{ fontFamily: F, fontSize: 13, color: '#f87171', fontWeight: 700 }}>المقاعد محدودة</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
