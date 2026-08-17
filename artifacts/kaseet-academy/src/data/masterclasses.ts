@@ -33,6 +33,8 @@ export interface PortfolioItem {
   n: string;
   title: string;
   kind: string;
+  /** output type label (فيديو/وثيقة/صوت/إنتاج كامل) — replaces wave when set */
+  outputType?: string;
   hot: boolean;
 }
 
@@ -158,8 +160,9 @@ export interface MasterclassData {
     };
   };
 
-  /** portfolio — absent for elam */
   portfolio?: {
+    /** 'paper' = creamy #F4EFE4 background with dot pattern; default = #F5F4F0 */
+    theme?: 'paper';
     badge: string;
     heading: string;
     headingGold: string;
@@ -167,7 +170,7 @@ export interface MasterclassData {
     tableHeader: string;
     tableCount: string;
     items: PortfolioItem[];
-    gradRow: { title: string; kind: string };
+    gradRow: { title: string; kind: string; outputType?: string };
     footerNote: string;
   };
 
@@ -679,7 +682,31 @@ export function getElamData(assets: {
       },
     },
 
-    // elam لا يملك قسم portfolio
+    portfolio: {
+      theme: 'paper',
+      badge: 'محفظة الأعمال',
+      heading: 'تتخرّج بشريط أعمال',
+      headingGold: 'لا بشهادة',
+      desc: 'الجهة الإعلامية لا تسأل عن شهادتك، بل تطلب أن ترى تسجيلاً لك على الشاشة. هذه محفظتك عند إتمام المسار.',
+      tableHeader: 'محفظتك الإعلامية · 12 مخرجاً + مشروع التخرّج',
+      tableCount: '13 مخرجاً',
+      items: [
+        { n:'01', title:'ظهور أوّل أمام الكاميرا · قبل وبعد',                kind:'تأسيس',   outputType:'فيديو',       hot:false },
+        { n:'02', title:'قراءة نصّ إخباري مشكّل كامل',                       kind:'لغة',     outputType:'فيديو',       hot:false },
+        { n:'03', title:'ملفّ إضاءة وإطار وصوت بمواصفات البثّ',               kind:'تقنية',   outputType:'وثيقة',       hot:false },
+        { n:'04', title:'نشرة أخبار موجزة · دقيقتان',                        kind:'أخبار',   outputType:'فيديو',       hot:false },
+        { n:'05', title:'تقرير ميداني مصوَّر · ثلاث دقائق',                   kind:'تقرير',   outputType:'فيديو',       hot:false },
+        { n:'06', title:'مقابلة كاملة مع ضيف · 15–20 دقيقة',                 kind:'مقابلة',  outputType:'فيديو',       hot:true  },
+        { n:'07', title:'إدارة حوار بين طرفين مختلفَين',                      kind:'حوار',    outputType:'فيديو',       hot:false },
+        { n:'08', title:'تقديم برنامج استوديو · ربط وفواصل',                  kind:'استوديو', outputType:'فيديو',       hot:false },
+        { n:'09', title:'بثّ مباشر وإدارة الطارئ',                            kind:'مباشر',   outputType:'فيديو',       hot:false },
+        { n:'10', title:'حلقة بودكاست بتقديمك',                               kind:'بودكاست', outputType:'صوت',         hot:false },
+        { n:'11', title:'ملفّ تعريفي احترافي (Show Reel)',                    kind:'هوية',    outputType:'فيديو',       hot:true  },
+        { n:'12', title:'قائمة أسعار ونموذج عقد',                            kind:'سوق',     outputType:'وثيقة',       hot:false },
+      ],
+      gradRow: { title: 'مشروع التخرّج · حلقة منتَجة بيد مخرج ومهندس صوت', kind: 'التخرّج', outputType: 'إنتاج كامل' },
+      footerNote: 'الأعمال المميّزة بالذهبي هي الأكثر أثراً في السوق: المقابلة تُثبت قدرتك على إدارة ضيف، وشريط الأعمال هو ما تُقيَّم به قبل أن تُقابَل.',
+    },
 
     // elam لا يملك قسم wajeez منفصلاً
 

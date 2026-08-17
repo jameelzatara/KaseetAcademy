@@ -7,12 +7,12 @@ import { useLocation } from 'wouter';
 import { ChevronDown, ArrowLeft, MapPin, Wifi, Layers, Clock, FolderCheck } from 'lucide-react';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { GOLD, OFF, F, FP, INNER, waLink } from '../pages/shared/coursePageHelpers';
+import type { MasterclassData, StationItem } from '../data/masterclasses';
 import MasterclassGuarantee from '../components/masterclass/MasterclassGuarantee';
 import MasterclassFaqAccordion from '../components/masterclass/MasterclassFaqAccordion';
 import MasterclassAdvisorCard from '../components/masterclass/MasterclassAdvisorCard';
 import PaymentModal from '../components/PaymentModal';
 import wajeezLogo from '@assets/wajeez-logo_1785688262989.png';
-import type { MasterclassData, StationItem } from '../data/masterclasses';
 
 /* ── design tokens ─────────────────────────────────────────── */
 const GLD  = GOLD;
@@ -70,6 +70,82 @@ function waveThumb(seed: number, n = 38, w = 120, h = 26): string {
     return `<line x1="${x.toFixed(1)}" y1="${(h/2-a).toFixed(1)}" x2="${x.toFixed(1)}" y2="${(h/2+a).toFixed(1)}"/>`;
   });
   return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><g stroke="currentColor" stroke-width="1.8" stroke-linecap="round">${lines.join('')}</g></svg>`;
+}
+
+/* ── Portfolio section renderer (defined outside component to avoid React remount) ── */
+function renderPortfolio(
+  p: NonNullable<MasterclassData['portfolio']>,
+  styles: { INK: string; INK2: string; WRP: React.CSSProperties }
+) {
+  const { INK, INK2, WRP } = styles;
+  const isPaper = p.theme === 'paper';
+  const PK    = '#8A6200';
+  const tINK  = isPaper ? '#201A12' : INK;
+  const tINK2 = isPaper ? '#8B8073' : INK2;
+  const tBDR  = isPaper ? 'rgba(122,88,26,.10)' : 'rgba(24,32,47,.10)';
+
+  const typePill = (text: string, hot: boolean) => (
+    <span style={{ fontFamily: F, fontSize: 11.5, color: hot ? PK : tINK2, border: `1px solid ${hot ? 'rgba(138,98,0,.28)' : tBDR}`, background: hot ? 'rgba(138,98,0,.07)' : (isPaper ? 'rgba(122,88,26,.05)' : 'rgba(24,32,47,.03)'), padding: '3px 11px', borderRadius: 999, textAlign: 'center' as const, whiteSpace: 'nowrap' as const, display: 'inline-block' }}>
+      {text}
+    </span>
+  );
+
+  return (
+    <section key="portfolio" className="sec sec--album" style={{ padding: '96px 0', position: 'relative', background: isPaper ? '#F4EFE4' : '#F5F4F0' }}>
+      {isPaper && <>
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none', backgroundImage: 'radial-gradient(rgba(122,88,26,.14) 1.3px,transparent 1.3px),radial-gradient(rgba(122,88,26,.14) 1.3px,transparent 1.3px)', backgroundSize: '24px 24px', backgroundPosition: '0 0,12px 12px', WebkitMaskImage: 'radial-gradient(ellipse 110% 80% at 50% 10%,#000 35%,transparent 100%)', maskImage: 'radial-gradient(ellipse 110% 80% at 50% 10%,#000 35%,transparent 100%)' }} />
+        <div aria-hidden="true" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 80, zIndex: 1, pointerEvents: 'none', background: 'linear-gradient(to bottom,#0D0B14,transparent)' }} />
+        <div aria-hidden="true" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 80, zIndex: 1, pointerEvents: 'none', background: 'linear-gradient(to bottom,transparent,#EFE8DA)' }} />
+      </>}
+      <div style={{ ...WRP, position: 'relative', zIndex: 2 }}>
+        {/* heading — for paper theme invert SectionHead colours manually */}
+        <div style={{ textAlign: 'center', marginBottom: 48 }}>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: isPaper ? 'rgba(138,98,0,.10)' : 'rgba(255,193,7,.12)', border: `1px solid ${isPaper ? 'rgba(138,98,0,.28)' : 'rgba(255,193,7,.35)'}`, color: PK, fontFamily: F, fontSize: 12, fontWeight: 700, padding: '5px 16px', borderRadius: 999 }}>
+            <span style={{ width: 5, height: 5, borderRadius: '50%', background: PK, flexShrink: 0 }} />{p.badge}
+          </span>
+          <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4vw,44px)', lineHeight: 1.28, margin: '14px 0 0', letterSpacing: -.5, color: tINK }}>
+            {p.heading} <span style={{ color: PK }}>{p.headingGold}</span>
+          </h2>
+          <p style={{ fontFamily: F, fontSize: 16, color: tINK2, marginTop: 12, lineHeight: 1.8, maxWidth: 560, margin: '12px auto 0' }}>{p.desc}</p>
+        </div>
+
+        <div style={{ maxWidth: 760, margin: '0 auto', background: isPaper ? 'rgba(255,255,255,.70)' : '#fff', borderRadius: 22, boxShadow: isPaper ? '0 16px 48px rgba(122,88,26,.13)' : '0 22px 60px rgba(24,32,47,.12)', overflow: 'hidden', border: `1px solid ${tBDR}` }}>
+          {/* table head */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 28px', borderBottom: `1px solid ${tBDR}` }}>
+            <div style={{ fontFamily: F, fontWeight: 700, fontSize: 14, color: tINK }}>{p.tableHeader}</div>
+            <span style={{ background: PK, color: '#fff', fontFamily: FP, fontSize: 12, fontWeight: 800, padding: '4px 14px', borderRadius: 999 }}>{p.tableCount}</span>
+          </div>
+          {/* rows */}
+          {p.items.map((item, i) => (
+            <div key={item.n} style={{ display: 'grid', gridTemplateColumns: '44px 1fr 96px 110px', gap: 12, alignItems: 'center', padding: '13px 28px', borderBottom: `1px solid ${isPaper ? 'rgba(122,88,26,.08)' : 'rgba(24,32,47,.08)'}`, background: item.hot ? (isPaper ? 'rgba(138,98,0,.06)' : 'rgba(255,193,7,.07)') : 'transparent' }}>
+              <span style={{ fontFamily: FP, fontWeight: 700, fontSize: 12.5, color: item.hot ? PK : tINK2 }}>{item.n}</span>
+              <span style={{ fontFamily: F, fontSize: 14, fontWeight: item.hot ? 700 : 400, color: item.hot ? PK : tINK, lineHeight: 1.5 }}>
+                {item.title}
+                {item.hot && <span style={{ marginInlineStart: 8, background: PK, color: '#fff', fontSize: 10, fontWeight: 800, padding: '1px 7px', borderRadius: 999 }}>★ ذهبي</span>}
+              </span>
+              <span style={{ fontFamily: F, fontSize: 11.5, color: tINK2, border: `1px solid ${tBDR}`, background: isPaper ? 'rgba(122,88,26,.05)' : 'rgba(24,32,47,.03)', padding: '3px 10px', borderRadius: 999, textAlign: 'center', whiteSpace: 'nowrap' }}>{item.kind}</span>
+              {item.outputType
+                ? typePill(item.outputType, !!item.hot)
+                : <span style={{ color: item.hot ? 'rgba(138,98,0,.78)' : 'rgba(138,98,0,.34)', height: 26, display: 'block' }} dangerouslySetInnerHTML={{ __html: waveThumb(50 + i) }} />}
+            </div>
+          ))}
+          {/* grad row */}
+          <div style={{ display: 'grid', gridTemplateColumns: '44px 1fr 96px 110px', gap: 12, alignItems: 'center', padding: '14px 28px', background: isPaper ? 'linear-gradient(90deg,rgba(138,98,0,.14),rgba(138,98,0,.04))' : 'linear-gradient(90deg,rgba(255,193,7,.18),rgba(255,193,7,.06))', borderTop: '1px solid rgba(138,98,0,.28)' }}>
+            <span style={{ fontFamily: FP, fontSize: 14, fontWeight: 700, color: PK }}>★</span>
+            <span style={{ fontFamily: F, fontSize: 14, fontWeight: 800, color: PK }}>{p.gradRow.title}</span>
+            <span style={{ fontFamily: F, fontSize: 11.5, color: PK, border: '1px solid rgba(138,98,0,.28)', background: 'rgba(138,98,0,.07)', padding: '3px 10px', borderRadius: 999, textAlign: 'center', whiteSpace: 'nowrap' }}>{p.gradRow.kind}</span>
+            {p.gradRow.outputType
+              ? typePill(p.gradRow.outputType, true)
+              : <span style={{ color: 'rgba(138,98,0,.9)', height: 26, display: 'block' }} dangerouslySetInnerHTML={{ __html: waveThumb(999) }} />}
+          </div>
+          {/* footer */}
+          <div style={{ padding: '18px 28px', borderTop: `1px solid ${tBDR}`, fontFamily: F, fontSize: 13.5, color: isPaper ? '#5A5145' : '#6B7280', lineHeight: 1.85 }}>
+            <strong style={{ color: tINK }}>الأعمال المميّزة بالذهبي</strong> — {p.footerNote}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
 
 /* ── Station accordion item ────────────────────────────────── */
@@ -580,6 +656,11 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
       )}
 
       {/* ═══════════════════════════════════
+          03. PORTFOLIO (optional — elam, before curriculum)
+      ═══════════════════════════════════ */}
+      {data.portfolio && renderPortfolio(data.portfolio, { INK, INK2, WRP })}
+
+      {/* ═══════════════════════════════════
           02. CURRICULUM (station tree)
       ═══════════════════════════════════ */}
       <section id="tree" className="sec sec--tree" style={{ padding: '96px 0' }}>
@@ -674,47 +755,7 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
       </section>
 
       {/* ═══════════════════════════════════
-          03. PORTFOLIO (optional)
-      ═══════════════════════════════════ */}
-      {data.portfolio && (
-        <section className="sec sec--album" style={{ padding: '96px 0', background: '#F5F4F0' }}>
-          <div style={WRP}>
-            <SectionHead dark badge={data.portfolio.badge} heading={data.portfolio.heading} headingGold={data.portfolio.headingGold} sub={data.portfolio.desc} />
-
-            <div style={{ maxWidth: 760, margin: '0 auto', background: '#fff', borderRadius: 22, boxShadow: '0 22px 60px rgba(24,32,47,.12)', overflow: 'hidden', border: '1px solid rgba(24,32,47,.10)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 28px', borderBottom: '1px solid rgba(24,32,47,.10)' }}>
-                <div style={{ fontFamily: F, fontWeight: 700, fontSize: 14, color: '#374151' }}>{data.portfolio.tableHeader}</div>
-                <span style={{ background: '#8A6200', color: '#fff', fontFamily: FP, fontSize: 12, fontWeight: 800, padding: '4px 14px', borderRadius: 999 }}>{data.portfolio.tableCount}</span>
-              </div>
-              {data.portfolio.items.map((item, i) => (
-                <div key={item.n} style={{ display: 'grid', gridTemplateColumns: '44px 1fr 108px 130px', gap: 14, alignItems: 'center', padding: '13px 28px', borderBottom: '1px solid rgba(24,32,47,.08)', background: item.hot ? 'rgba(255,193,7,.07)' : 'transparent' }}>
-                  <span style={{ fontFamily: FP, fontWeight: 700, fontSize: 12.5, color: item.hot ? '#8A6200' : INK2 }}>{item.n}</span>
-                  <span style={{ fontFamily: F, fontSize: 14, fontWeight: item.hot ? 700 : 400, color: item.hot ? '#8A6200' : INK, lineHeight: 1.5 }}>
-                    {item.title}
-                    {item.hot && <span style={{ marginInlineStart: 8, background: '#8A6200', color: '#fff', fontSize: 10, fontWeight: 800, padding: '1px 7px', borderRadius: 999 }}>★ ذهبي</span>}
-                  </span>
-                  <span style={{ fontFamily: F, fontSize: 11.5, color: INK2, border: '1px solid rgba(24,32,47,.10)', background: 'rgba(24,32,47,.035)', padding: '3px 11px', borderRadius: 999, textAlign: 'center', whiteSpace: 'nowrap' }}>{item.kind}</span>
-                  <span style={{ color: item.hot ? 'rgba(138,98,0,.78)' : 'rgba(138,98,0,.34)', height: 26, display: 'block' }}
-                    dangerouslySetInnerHTML={{ __html: waveThumb(50 + i) }} />
-                </div>
-              ))}
-              <div style={{ display: 'grid', gridTemplateColumns: '44px 1fr 108px 130px', gap: 14, alignItems: 'center', padding: '14px 28px', background: 'linear-gradient(90deg, rgba(255,193,7,.18), rgba(255,193,7,.06))', borderTop: '1px solid rgba(138,98,0,.28)' }}>
-                <span style={{ fontFamily: FP, fontSize: 14, fontWeight: 700, color: '#8A6200' }}>★</span>
-                <span style={{ fontFamily: F, fontSize: 14, fontWeight: 800, color: '#8A6200' }}>{data.portfolio.gradRow.title}</span>
-                <span style={{ fontFamily: F, fontSize: 11.5, color: '#8A6200', border: '1px solid rgba(138,98,0,.32)', background: 'rgba(138,98,0,.08)', padding: '3px 11px', borderRadius: 999, textAlign: 'center' }}>{data.portfolio.gradRow.kind}</span>
-                <span style={{ color: 'rgba(138,98,0,.9)', height: 26, display: 'block' }}
-                  dangerouslySetInnerHTML={{ __html: waveThumb(999) }} />
-              </div>
-              <div style={{ padding: '20px 28px', borderTop: '1px solid rgba(24,32,47,.10)', fontFamily: F, fontSize: 13.5, color: '#6B7280', lineHeight: 1.85 }}>
-                <strong style={{ color: INK }}>الأعمال المميّزة بالذهبي</strong> — {data.portfolio.footerNote}
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* ═══════════════════════════════════
-          03-B. METHOD (khataba — after portfolio)
+          03-B. METHOD (khataba — after curriculum)
       ═══════════════════════════════════ */}
       {data.method && data.slug === 'masar-khataba' && (
         <section className="sec sec--method" style={{ padding: '80px 0' }}>
