@@ -792,6 +792,90 @@ export default function MasarSotiPage() {
         </div>
       </section>
 
+      {/* ⑤·٥ استشارة مجانية — WhatsApp chat mockup */}
+      <section className="sec sec--consult" style={{ padding: '0 0 88px' }}>
+        <div style={WRP}>
+          <div style={{ textAlign: 'center', marginBottom: 40 }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: GS, border: `1px solid ${GL}`, color: GLD, fontFamily: F, fontSize: 12, fontWeight: 700, padding: '5px 15px', borderRadius: 999 }}>
+              <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD, flexShrink: 0 }} />
+              استشارة مجانية · دون التزام
+            </span>
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(24px,3.4vw,36px)', lineHeight: 1.4, color: OFF, margin: '16px 0 10px' }}>
+              قبل أن تسجّل، تحدّث مع <span style={{ color: GLD }}>مستشارتك</span>
+            </h2>
+            <p style={{ fontFamily: F, fontSize: 15.5, color: MUT, lineHeight: 1.75, maxWidth: 520, marginInline: 'auto' }}>
+              جلسة قصيرة على واتساب تُحدَّد فيها نقطة بدايتك — لكلّ مسار مستشارة مخصّصة.
+            </p>
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 10, marginBottom: 28 }}>
+            {[
+              { mode: 'onsite' as const, label: 'الحضوري', img: advisorAyaImg,  name: 'آية القماز' },
+              { mode: 'live'   as const, label: 'المباشر', img: advisorImg,     name: 'ياقوت الخشاشنة' },
+            ].map(({ mode, label, img, name }) => (
+              <button key={mode} onClick={() => setCheckoutMode(mode)} style={{
+                display: 'flex', alignItems: 'center', gap: 9,
+                background: checkoutMode === mode ? GS : 'transparent',
+                border: `1px solid ${checkoutMode === mode ? GL : CBR}`,
+                borderRadius: 999, padding: '7px 16px 7px 10px', cursor: 'pointer',
+              }}>
+                <div style={{ width: 30, height: 30, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, border: checkoutMode === mode ? `2px solid ${GLD}` : '2px solid transparent' }}>
+                  <img src={img} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+                <span style={{ fontFamily: F, fontWeight: 700, fontSize: 13, color: checkoutMode === mode ? GLD : MUT }}>{label}</span>
+              </button>
+            ))}
+          </div>
+
+          {(() => {
+            const isOnsite = checkoutMode === 'onsite';
+            const advisor = isOnsite
+              ? { name: 'آية القماز', role: 'مستشارة المسار الحضوري', img: advisorAyaImg,
+                  msg: 'أهلاً 👋 أنا آية، مستشارة ماستركلاس التعليق الحضوري. أخبريني عن مستواكِ الصوتي الحالي — وأساعدك تختاري نقطة البداية الصح.',
+                  link: waLink(WA_PHONE_ONSITE, 'مرحباً، أودّ حجز استشارة مجانية عن ماستركلاس التعليق الحضوري') }
+              : { name: 'ياقوت الخشاشنة', role: 'مستشارة المسار المباشر', img: advisorImg,
+                  msg: 'أهلاً 👋 أنا ياقوت، مستشارة ماستركلاس التعليق المباشر. أخبريني عن مستواكِ الصوتي الحالي — وأساعدك تختاري نقطة البداية الصح.',
+                  link: WA_CONSULT };
+            return (
+              <div style={{ maxWidth: 480, marginInline: 'auto', borderRadius: 20, overflow: 'hidden', boxShadow: '0 24px 64px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <div style={{ background: '#1F2C34', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{ width: 42, height: 42, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, border: '2px solid #25D366' }}>
+                    <img src={advisor.img} alt={advisor.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontFamily: F, fontWeight: 700, fontSize: 14.5, color: '#E9EEF1', lineHeight: 1.3 }}>{advisor.name}</div>
+                    <div style={{ fontFamily: F, fontSize: 12, color: '#8696A0', marginTop: 1 }}>{advisor.role}</div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#25D366', boxShadow: '0 0 6px #25D366' }} />
+                    <span style={{ fontFamily: F, fontSize: 11, color: '#25D366', fontWeight: 600 }}>متاحة</span>
+                  </div>
+                </div>
+                <div style={{ background: '#0B141A', padding: '20px 16px 16px', minHeight: 140, position: 'relative' }}>
+                  <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px)', backgroundSize: '20px 20px', pointerEvents: 'none' }} />
+                  <div style={{ position: 'relative', maxWidth: '82%', background: '#1F2C34', borderRadius: '0 14px 14px 14px', padding: '10px 14px 8px', marginRight: 'auto' }}>
+                    <div style={{ position: 'absolute', top: 0, right: '100%', width: 0, height: 0, borderStyle: 'solid', borderWidth: '0 8px 8px 0', borderColor: `transparent #1F2C34 transparent transparent` }} />
+                    <p style={{ fontFamily: F, fontSize: 14.5, color: '#E9EEF1', lineHeight: 1.7, margin: 0 }} dir="rtl">{advisor.msg}</p>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 4, marginTop: 5 }}>
+                      <span style={{ fontFamily: F, fontSize: 10.5, color: '#8696A0' }}>الآن</span>
+                      <svg width="14" height="9" viewBox="0 0 16 10" fill="none"><path d="M1 5l3.5 3.5L10 1M6 5l3.5 3.5L15 1" stroke="#53BDEB" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </div>
+                  </div>
+                </div>
+                <a href={advisor.link} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#1F2C34', padding: '10px 12px', textDecoration: 'none', borderTop: '1px solid rgba(255,255,255,0.06)', cursor: 'pointer' }}>
+                  <div style={{ flex: 1, background: '#2A3942', borderRadius: 22, padding: '9px 16px' }}>
+                    <span style={{ fontFamily: F, fontSize: 14, color: '#8696A0' }}>ابدأ المحادثة…</span>
+                  </div>
+                  <div style={{ width: 44, height: 44, borderRadius: '50%', background: '#25D366', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 14px rgba(37,211,102,.4)' }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                  </div>
+                </a>
+              </div>
+            );
+          })()}
+        </div>
+      </section>
+
       {/* ⑥ أسلوب الدراسة + الفوج */}
       <section className="sec sec--modes" style={{ padding: '96px 0' }}>
         <div style={WRP}>
@@ -1073,113 +1157,10 @@ export default function MasarSotiPage() {
         </div>
       </section>
 
-      {/* ⑧ المستشارة + الأسئلة */}
+      {/* ⑧ الأسئلة */}
       <section id="consult" className="sec sec--advisor" style={{ padding: '96px 0' }}>
         <div style={WRP}>
-          <div style={{ textAlign: 'center', marginBottom: 40 }}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GS, border: `1px solid ${GL}`, color: GLD, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>
-              <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD }} />
-              استشارة مجانية · دون التزام
-            </span>
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,3.8vw,40px)', lineHeight: 1.35, margin: '16px 0 0', color: OFF }}>
-              قبل أن تسجّل، <span style={{ color: GLD }}>تحدّث مع مستشارتك</span>
-            </h2>
-            <p style={{ fontFamily: F, fontSize: 15.5, color: MUT, marginTop: 12, maxWidth: 540, marginInline: 'auto', lineHeight: 1.85 }}>
-              جلسة قصيرة على واتساب تُحدَّد فيها نقطة بدايتك — لكلّ مسار مستشارة مخصّصة.
-            </p>
-          </div>
-
-          {/* بطاقة المستشارتين — موحّدة */}
-          <div style={{
-            position: 'relative', borderRadius: 24, overflow: 'hidden',
-            border: `1px solid rgba(255,193,7,.28)`,
-            background: 'linear-gradient(160deg, rgba(255,193,7,.07) 0%, rgba(13,11,20,.96) 42%)',
-            boxShadow: '0 32px 80px rgba(0,0,0,.45)',
-          }}>
-            {/* شريط العنوان */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, padding: '14px 28px', borderBottom: `1px solid rgba(255,193,7,.15)`, background: 'rgba(255,193,7,.05)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <Sparkles size={14} color={GLD} strokeWidth={2} />
-                <span style={{ fontFamily: F, fontSize: 12.5, fontWeight: 700, color: GLD }}>استشارة مجانية · دون التزام</span>
-              </div>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(37,211,102,.10)', border: '1px solid rgba(37,211,102,.30)', color: '#7FE3A6', fontSize: 11.5, fontWeight: 700, fontFamily: F, padding: '4px 12px', borderRadius: 999 }}>
-                <span className="soti-live-dot" style={{ width: 5, height: 5, borderRadius: '50%', background: '#25D366', display: 'block', flexShrink: 0 }} />
-                متاحتان الآن
-              </div>
-            </div>
-
-            {/* المستشارتان جنباً إلى جنب */}
-            <div className="soti-acc-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-
-              {/* آية القماز */}
-              <div style={{ padding: 'clamp(24px,3vw,38px)', display: 'flex', flexDirection: 'column', gap: 20 }}>
-                {/* badge */}
-                <div style={{ display: 'inline-flex', alignSelf: 'flex-start', alignItems: 'center', gap: 7, background: 'rgba(255,193,7,.08)', border: `1px solid rgba(255,193,7,.22)`, borderRadius: 999, padding: '5px 12px' }}>
-                  <MapPin size={12} color={GLD} strokeWidth={2.5} />
-                  <span style={{ fontFamily: F, fontSize: 11.5, fontWeight: 700, color: GLD }}>حضوري · عمّان</span>
-                </div>
-                {/* صورة + اسم */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                  <div className="adv-ava" style={{ flexShrink: 0 }}>
-                    <img src={advisorAyaImg} alt="آية القماز" style={{ objectPosition: '50% 15%' }} />
-                  </div>
-                  <div>
-                    <div style={{ fontFamily: F, fontWeight: 800, fontSize: 19, color: OFF, letterSpacing: -.3 }}>آية القماز</div>
-                    <div style={{ fontFamily: F, fontSize: 12.5, color: MUT, marginTop: 5, lineHeight: 1.6 }}>
-                      المستشارة التعليمية<br />
-                      <span style={{ color: GLD }}>ماستركلاس الحضوري</span>
-                    </div>
-                  </div>
-                </div>
-                {/* زر واتساب */}
-                <a href={waLink(WA_PHONE_ONSITE, 'مرحباً آية، أودّ حجز استشارة مجانية عن ماستركلاس التعليق الصوتي الحضوري')}
-                  target="_blank" rel="noopener noreferrer"
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9, background: '#1F9D57', color: '#fff', fontFamily: F, fontWeight: 800, fontSize: 14, padding: '13px 20px', borderRadius: 14, textDecoration: 'none', boxShadow: '0 8px 22px rgba(31,157,87,.28)', marginTop: 'auto' }}>
-                  <MessageCircle size={16} strokeWidth={2.2} />
-                  تحدّثي مع آية
-                </a>
-              </div>
-
-              {/* فاصل عمودي */}
-              <div style={{ position: 'absolute', top: '14%', bottom: '8%', right: '50%', width: 1, background: `linear-gradient(to bottom, transparent, rgba(255,193,7,.22) 30%, rgba(255,193,7,.22) 70%, transparent)`, pointerEvents: 'none' }} />
-
-              {/* ياقوت الخشاشنة */}
-              <div style={{ padding: 'clamp(24px,3vw,38px)', display: 'flex', flexDirection: 'column', gap: 20, borderRight: `1px solid transparent` }}>
-                {/* badge */}
-                <div style={{ display: 'inline-flex', alignSelf: 'flex-start', alignItems: 'center', gap: 7, background: 'rgba(103,232,249,.07)', border: '1px solid rgba(103,232,249,.22)', borderRadius: 999, padding: '5px 12px' }}>
-                  <Wifi size={12} color="#67e8f9" strokeWidth={2.5} />
-                  <span style={{ fontFamily: F, fontSize: 11.5, fontWeight: 700, color: '#67e8f9' }}>مباشر تفاعلي · Online LIVE</span>
-                </div>
-                {/* صورة + اسم */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                  <div className="adv-ava" style={{ flexShrink: 0 }}>
-                    <img src={advisorImg} alt="ياقوت الخشاشنة" />
-                  </div>
-                  <div>
-                    <div style={{ fontFamily: F, fontWeight: 800, fontSize: 19, color: OFF, letterSpacing: -.3 }}>ياقوت الخشاشنة</div>
-                    <div style={{ fontFamily: F, fontSize: 12.5, color: MUT, marginTop: 5, lineHeight: 1.6 }}>
-                      المستشارة التعليمية<br />
-                      <span style={{ color: '#67e8f9' }}>ماستركلاس المباشر التفاعلي</span>
-                    </div>
-                  </div>
-                </div>
-                {/* زر واتساب */}
-                <a href={WA_CONSULT} target="_blank" rel="noopener noreferrer"
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9, background: '#1F9D57', color: '#fff', fontFamily: F, fontWeight: 800, fontSize: 14, padding: '13px 20px', borderRadius: 14, textDecoration: 'none', boxShadow: '0 8px 22px rgba(31,157,87,.28)', marginTop: 'auto' }}>
-                  <MessageCircle size={16} strokeWidth={2.2} />
-                  تحدّثي مع ياقوت
-                </a>
-              </div>
-            </div>
-
-            {/* تذييل البطاقة */}
-            <div style={{ padding: '14px 28px', borderTop: `1px solid rgba(255,193,7,.12)`, background: 'rgba(0,0,0,.18)', textAlign: 'center', fontFamily: F, fontSize: 13, color: MUT, lineHeight: 1.8 }}>
-              لست متأكّداً من المسار؟ <a href={WA_CONSULT} target="_blank" rel="noopener noreferrer" style={{ color: GLD, textDecoration: 'underline', textUnderlineOffset: 3, fontWeight: 700 }}>تحدّث مع ياقوت</a> — ستساعدك في اختيار ما يناسبك.
-            </div>
-          </div>
-
-          {/* FAQ merged */}
-          <div style={{ marginTop: 72 }}>
+          <div style={{ marginTop: 0 }}>
             <div style={SH}>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GLD, color: '#1A1206', fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '7px 16px', borderRadius: 999 }}>
                 <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#1A1206' }} />
