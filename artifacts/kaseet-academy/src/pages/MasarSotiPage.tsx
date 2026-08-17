@@ -741,6 +741,130 @@ export default function MasarSotiPage() {
         </div>
       </section>
 
+      {/* ⑥ أسلوب الدراسة + الفوج */}
+      <section className="sec sec--modes" style={{ padding: '96px 0' }}>
+        <div style={WRP}>
+          <div style={SH}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GS, border: `1px solid ${GL}`, color: GLD, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>
+              <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD }} />
+              أسلوب الدراسة
+            </span>
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', lineHeight: 1.35, margin: '18px 0 0', color: OFF }}>
+              اختر <span style={{ color: GLD }}>أسلوب تعلّمك</span>
+            </h2>
+            <p style={{ fontFamily: F, fontSize: 16, color: MUT, maxWidth: 620, marginTop: 14, marginInline: 'auto' }}>
+              نفس المنهج، ونفس المدرّبين، ونفس مستوى التدريب — اختر الطريقة التي تناسبك.
+            </p>
+          </div>
+
+          <div className="soti-modes-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18, marginTop: 52 }}>
+
+            {/* بطاقة حضوري */}
+            <div style={{ background: CARD, border: `1px solid rgba(255,193,7,.22)`, borderRadius: 20, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+              <div style={{ padding: 'clamp(22px,2.5vw,28px)', flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
+                  <div style={{ width: 38, height: 38, borderRadius: '50%', background: GLD, display: 'grid', placeContent: 'center', flexShrink: 0, boxShadow: '0 6px 16px rgba(255,193,7,.28)' }}>
+                    <MapPin size={18} color="#1A1206" strokeWidth={2.2} />
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: F, fontWeight: 800, fontSize: 15.5, color: OFF }}>حضوري — استوديو كاسيت</div>
+                    <div style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 2 }}>حضور فعلي في عمّان</div>
+                  </div>
+                </div>
+                <ul style={{ listStyle: 'none', display: 'grid', gap: 9, margin: 0, padding: 0 }}>
+                  {[
+                    'تدريب مباشر داخل استوديو كاسيت',
+                    'تطبيق وتسجيل وتصحيح فوري',
+                    'تعامل مباشر مع الميكروفون وبيئة التسجيل',
+                    'تفاعل مباشر مع المدرّب والمتدرّبين',
+                  ].map(item => (
+                    <li key={item} style={{ display: 'flex', gap: 10, fontFamily: F, fontSize: 13.5, color: LT, lineHeight: 1.7 }}>
+                      <span style={{ color: GLD, fontSize: 14, marginTop: 3, flexShrink: 0 }}>✓</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div style={{ borderTop: `1px solid rgba(255,193,7,.18)`, background: 'rgba(255,193,7,.05)', padding: '16px clamp(18px,2.5vw,24px)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
+                  <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD, flexShrink: 0 }} />
+                  <span style={{ fontFamily: F, fontSize: 11.5, fontWeight: 700, color: GLD, letterSpacing: .5 }}>الفوج القادم</span>
+                </div>
+                <div style={{ display: 'grid', gap: 9 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <CalendarDays size={14} color={GLD} strokeWidth={2} style={{ flexShrink: 0 }} />
+                    <span style={{ fontFamily: F, fontSize: 13, color: LT }}>
+                      <span style={{ color: MUT, marginInlineEnd: 4 }}>يبدأ</span>
+                      <strong style={{ color: OFF }}>الثلاثاء، 15 أيلول</strong>
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <Clock size={14} color={GLD} strokeWidth={2} style={{ flexShrink: 0 }} />
+                    <span style={{ fontFamily: F, fontSize: 13, color: LT }}>3 أيام أسبوعياً · الأحد، الثلاثاء، الخميس</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <Users size={14} color={GLD} strokeWidth={2} style={{ flexShrink: 0 }} />
+                    <span style={{ fontFamily: F, fontSize: 13, color: '#f87171', fontWeight: 700 }}>المقاعد محدودة</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* بطاقة مباشر تفاعلي */}
+            <div style={{ background: CARD, border: `1px solid rgba(103,232,249,.22)`, borderRadius: 20, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+              <div style={{ padding: 'clamp(22px,2.5vw,28px)', flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
+                  <div style={{ width: 38, height: 38, borderRadius: '50%', background: '#67e8f9', display: 'grid', placeContent: 'center', flexShrink: 0, boxShadow: '0 6px 16px rgba(103,232,249,.22)' }}>
+                    <Wifi size={18} color="#1A1206" strokeWidth={2.2} />
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: F, fontWeight: 800, fontSize: 15.5, color: OFF }}>مباشر تفاعلي (Online LIVE)</div>
+                    <div style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 2 }}>من أي مكان في العالم العربي</div>
+                  </div>
+                </div>
+                <ul style={{ listStyle: 'none', display: 'grid', gap: 9, margin: 0, padding: 0 }}>
+                  {[
+                    'جلسات مباشرة مع المدرّب في الوقت الفعلي',
+                    'تطبيق وتقييم فردي أثناء التدريب',
+                    'تسجيلات الجلسات متاحة للمراجعة',
+                    'مشروع التخرّج بإشراف مباشر مع مهندس الصوت',
+                  ].map(item => (
+                    <li key={item} style={{ display: 'flex', gap: 10, fontFamily: F, fontSize: 13.5, color: LT, lineHeight: 1.7 }}>
+                      <span style={{ color: '#67e8f9', fontSize: 14, marginTop: 3, flexShrink: 0 }}>✓</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div style={{ borderTop: `1px solid rgba(103,232,249,.18)`, background: 'rgba(103,232,249,.05)', padding: '16px clamp(18px,2.5vw,24px)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
+                  <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#67e8f9', flexShrink: 0 }} />
+                  <span style={{ fontFamily: F, fontSize: 11.5, fontWeight: 700, color: '#67e8f9', letterSpacing: .5 }}>الفوج القادم</span>
+                </div>
+                <div style={{ display: 'grid', gap: 9 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <CalendarDays size={14} color="#67e8f9" strokeWidth={2} style={{ flexShrink: 0 }} />
+                    <span style={{ fontFamily: F, fontSize: 13, color: LT }}>
+                      <span style={{ color: MUT, marginInlineEnd: 4 }}>يبدأ</span>
+                      <strong style={{ color: OFF }}>الأربعاء، 16 أيلول</strong>
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <Clock size={14} color="#67e8f9" strokeWidth={2} style={{ flexShrink: 0 }} />
+                    <span style={{ fontFamily: F, fontSize: 13, color: LT }}>يومان أسبوعياً · الأربعاء والسبت</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <Users size={14} color="#67e8f9" strokeWidth={2} style={{ flexShrink: 0 }} />
+                    <span style={{ fontFamily: F, fontSize: 13, color: '#f87171', fontWeight: 700 }}>المقاعد محدودة</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
       {/* ⑤ مَن يُدرّبك */}
       <section className="sec sec--trainers" style={{ padding: '96px 0' }}>
         <div style={WRP}>
@@ -873,134 +997,6 @@ export default function MasarSotiPage() {
               </div>
             );
           })()}
-        </div>
-      </section>
-
-      {/* ⑥ أسلوب الدراسة + الفوج */}
-      <section className="sec sec--modes" style={{ padding: '96px 0' }}>
-        <div style={WRP}>
-          <div style={SH}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GS, border: `1px solid ${GL}`, color: GLD, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>
-              <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD }} />
-              أسلوب الدراسة
-            </span>
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', lineHeight: 1.35, margin: '18px 0 0', color: OFF }}>
-              اختر <span style={{ color: GLD }}>أسلوب تعلّمك</span>
-            </h2>
-            <p style={{ fontFamily: F, fontSize: 16, color: MUT, maxWidth: 620, marginTop: 14, marginInline: 'auto' }}>
-              نفس المنهج، ونفس المدرّبين، ونفس مستوى التدريب — اختر الطريقة التي تناسبك.
-            </p>
-          </div>
-
-          <div className="soti-modes-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18, marginTop: 52 }}>
-
-            {/* بطاقة حضوري */}
-            <div style={{ background: CARD, border: `1px solid rgba(255,193,7,.22)`, borderRadius: 20, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-              {/* رأس البطاقة */}
-              <div style={{ padding: 'clamp(22px,2.5vw,28px)', flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
-                  <div style={{ width: 38, height: 38, borderRadius: '50%', background: GLD, display: 'grid', placeContent: 'center', flexShrink: 0, boxShadow: '0 6px 16px rgba(255,193,7,.28)' }}>
-                    <MapPin size={18} color="#1A1206" strokeWidth={2.2} />
-                  </div>
-                  <div>
-                    <div style={{ fontFamily: F, fontWeight: 800, fontSize: 15.5, color: OFF }}>حضوري — استوديو كاسيت</div>
-                    <div style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 2 }}>حضور فعلي في عمّان</div>
-                  </div>
-                </div>
-                <ul style={{ listStyle: 'none', display: 'grid', gap: 9, margin: 0, padding: 0 }}>
-                  {[
-                    'تدريب مباشر داخل استوديو كاسيت',
-                    'تطبيق وتسجيل وتصحيح فوري',
-                    'تعامل مباشر مع الميكروفون وبيئة التسجيل',
-                    'تفاعل مباشر مع المدرّب والمتدرّبين',
-                  ].map(item => (
-                    <li key={item} style={{ display: 'flex', gap: 10, fontFamily: F, fontSize: 13.5, color: LT, lineHeight: 1.7 }}>
-                      <span style={{ color: GLD, fontSize: 14, marginTop: 3, flexShrink: 0 }}>✓</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              {/* شريط الفوج */}
-              <div style={{ borderTop: `1px solid rgba(255,193,7,.18)`, background: 'rgba(255,193,7,.05)', padding: '16px clamp(18px,2.5vw,24px)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
-                  <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD, flexShrink: 0 }} />
-                  <span style={{ fontFamily: F, fontSize: 11.5, fontWeight: 700, color: GLD, letterSpacing: .5 }}>الفوج القادم</span>
-                </div>
-                <div style={{ display: 'grid', gap: 9 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <CalendarDays size={14} color={GLD} strokeWidth={2} style={{ flexShrink: 0 }} />
-                    <span style={{ fontFamily: F, fontSize: 13, color: LT }}>
-                      <span style={{ color: MUT, marginInlineEnd: 4 }}>يبدأ</span>
-                      <strong style={{ color: OFF }}>الثلاثاء، 15 أيلول</strong>
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <Clock size={14} color={GLD} strokeWidth={2} style={{ flexShrink: 0 }} />
-                    <span style={{ fontFamily: F, fontSize: 13, color: LT }}>3 أيام أسبوعياً · الأحد، الثلاثاء، الخميس</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <Users size={14} color={GLD} strokeWidth={2} style={{ flexShrink: 0 }} />
-                    <span style={{ fontFamily: F, fontSize: 13, color: '#f87171', fontWeight: 700 }}>المقاعد محدودة</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* بطاقة مباشر تفاعلي */}
-            <div style={{ background: CARD, border: `1px solid rgba(103,232,249,.22)`, borderRadius: 20, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-              {/* رأس البطاقة */}
-              <div style={{ padding: 'clamp(22px,2.5vw,28px)', flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
-                  <div style={{ width: 38, height: 38, borderRadius: '50%', background: '#67e8f9', display: 'grid', placeContent: 'center', flexShrink: 0, boxShadow: '0 6px 16px rgba(103,232,249,.22)' }}>
-                    <Wifi size={18} color="#1A1206" strokeWidth={2.2} />
-                  </div>
-                  <div>
-                    <div style={{ fontFamily: F, fontWeight: 800, fontSize: 15.5, color: OFF }}>مباشر تفاعلي (Online LIVE)</div>
-                    <div style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 2 }}>من أي مكان في العالم العربي</div>
-                  </div>
-                </div>
-                <ul style={{ listStyle: 'none', display: 'grid', gap: 9, margin: 0, padding: 0 }}>
-                  {[
-                    'جلسات مباشرة مع المدرّب في الوقت الفعلي',
-                    'تطبيق وتقييم فردي أثناء التدريب',
-                    'تسجيلات الجلسات متاحة للمراجعة',
-                    'مشروع التخرّج بإشراف مباشر مع مهندس الصوت',
-                  ].map(item => (
-                    <li key={item} style={{ display: 'flex', gap: 10, fontFamily: F, fontSize: 13.5, color: LT, lineHeight: 1.7 }}>
-                      <span style={{ color: '#67e8f9', fontSize: 14, marginTop: 3, flexShrink: 0 }}>✓</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              {/* شريط الفوج */}
-              <div style={{ borderTop: `1px solid rgba(103,232,249,.18)`, background: 'rgba(103,232,249,.05)', padding: '16px clamp(18px,2.5vw,24px)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
-                  <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#67e8f9', flexShrink: 0 }} />
-                  <span style={{ fontFamily: F, fontSize: 11.5, fontWeight: 700, color: '#67e8f9', letterSpacing: .5 }}>الفوج القادم</span>
-                </div>
-                <div style={{ display: 'grid', gap: 9 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <CalendarDays size={14} color="#67e8f9" strokeWidth={2} style={{ flexShrink: 0 }} />
-                    <span style={{ fontFamily: F, fontSize: 13, color: LT }}>
-                      <span style={{ color: MUT, marginInlineEnd: 4 }}>يبدأ</span>
-                      <strong style={{ color: OFF }}>الأربعاء، 16 أيلول</strong>
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <Clock size={14} color="#67e8f9" strokeWidth={2} style={{ flexShrink: 0 }} />
-                    <span style={{ fontFamily: F, fontSize: 13, color: LT }}>يومان أسبوعياً · الأربعاء والسبت</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <Users size={14} color="#67e8f9" strokeWidth={2} style={{ flexShrink: 0 }} />
-                    <span style={{ fontFamily: F, fontSize: 13, color: '#f87171', fontWeight: 700 }}>المقاعد محدودة</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
         </div>
       </section>
 
