@@ -131,6 +131,7 @@ interface FormState {
   phoneNumber: string;
   email: string;
   country: string;
+  city: string;
   mode: 'onsite' | 'live';
   plan: 'full' | 'deposit';
 }
@@ -253,7 +254,7 @@ function Field({
   );
 }
 
-/* ── Phone field: dial-code select + number input ──── */
+/* ── Phone field: dial-code select (left) + number input (right) ── */
 function PhoneField({
   dialCode, phoneNumber, onDialChange, onNumberChange,
 }: {
@@ -262,13 +263,14 @@ function PhoneField({
 }) {
   const [focused, setFocused] = useState(false);
   return (
+    /* direction:ltr so dial-code sits on the LEFT, number input on the RIGHT */
     <div style={{
-      display: 'flex', alignItems: 'stretch',
+      display: 'flex', alignItems: 'stretch', direction: 'ltr',
       background: CARD2, border: `1.5px solid ${focused ? GLD : CBR}`,
       borderRadius: 12, overflow: 'hidden', transition: 'border-color .2s',
     }}>
-      {/* dial-code selector ── plain styled <select>, no overlay */}
-      <div style={{ borderLeft: `1px solid ${CBR}`, flexShrink: 0 }}>
+      {/* dial-code selector ── LEFT side */}
+      <div style={{ borderRight: `1px solid ${CBR}`, flexShrink: 0 }}>
         <select
           value={dialCode}
           onChange={e => onDialChange(e.target.value)}
@@ -278,20 +280,19 @@ function PhoneField({
             height: '100%', background: 'transparent', border: 'none', outline: 'none',
             fontFamily: FP, fontSize: 13, fontWeight: 700, color: LT,
             padding: '0 10px', cursor: 'pointer', direction: 'ltr',
-            minWidth: 72,
+            minWidth: 80,
           } as CSSProperties}
         >
           {COUNTRIES.map(c => (
             <option key={c.code} value={c.dial} style={{ background: '#1A2535', color: OFF, direction: 'ltr' }}>
-              {c.dial}{'  '}{c.name}
+              {c.dial}   {c.name}
             </option>
           ))}
         </select>
       </div>
 
-      {/* number input */}
+      {/* number input ── RIGHT side, placeholder RTL */}
       <div style={{ display: 'flex', alignItems: 'center', flex: 1, gap: 8, padding: '12px 14px' }}>
-        <Phone size={14} color={focused ? GLD : MUT} style={{ flexShrink: 0, transition: 'color .2s' }} />
         <input
           type="tel"
           placeholder="رقم الجوال *"
@@ -302,6 +303,7 @@ function PhoneField({
           onBlur={() => setFocused(false)}
           style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', fontFamily: FP, fontSize: 14, color: OFF, minWidth: 0 } as CSSProperties}
         />
+        <Phone size={14} color={focused ? GLD : MUT} style={{ flexShrink: 0, transition: 'color .2s' }} />
       </div>
     </div>
   );
@@ -311,10 +313,11 @@ function PhoneField({
 function CountrySelect({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   const [focused, setFocused] = useState(false);
   return (
+    /* direction:ltr on wrapper keeps MapPin on LEFT, select text flows RTL */
     <div style={{
-      display: 'flex', alignItems: 'center', gap: 10,
+      display: 'flex', alignItems: 'center', gap: 10, direction: 'ltr',
       background: CARD2, border: `1.5px solid ${focused ? GLD : CBR}`,
-      borderRadius: 12, padding: '12px 14px', transition: 'border-color .2s',
+      borderRadius: 12, padding: '0 14px', transition: 'border-color .2s',
     }}>
       <MapPin size={15} color={focused ? GLD : MUT} style={{ flexShrink: 0, transition: 'color .2s' }} />
       <select
@@ -322,7 +325,12 @@ function CountrySelect({ value, onChange }: { value: string; onChange: (v: strin
         onChange={e => onChange(e.target.value)}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
-        style={{ ...selectBase, direction: 'rtl' }}
+        style={{
+          flex: 1, appearance: 'none' as const, background: 'transparent',
+          border: 'none', outline: 'none', fontFamily: F, fontSize: 14,
+          color: OFF, cursor: 'pointer', direction: 'rtl',
+          padding: '12px 0', textAlign: 'right',
+        } as CSSProperties}
       >
         {COUNTRIES.map(c => (
           <option key={c.code} value={c.name} style={{ background: '#1A2535', color: OFF }}>
@@ -330,7 +338,6 @@ function CountrySelect({ value, onChange }: { value: string; onChange: (v: strin
           </option>
         ))}
       </select>
-      <span style={{ color: MUT, fontSize: 11, flexShrink: 0 }}>▾</span>
     </div>
   );
 }
@@ -448,7 +455,7 @@ export default function PaymentModal({
   const [step, setStep]         = useState<Step>('form');
   const [form, setForm]         = useState<FormState>({
     firstName: '', lastName: '', dialCode: '+962', phoneNumber: '',
-    email: '', country: 'الأردن', mode: initialMode, plan: 'deposit',
+    email: '', country: 'الأردن', city: '', mode: initialMode, plan: 'deposit',
   });
   const [loading, setLoading]   = useState(false);
   const [formErr, setFormErr]   = useState<string | null>(null);
@@ -526,6 +533,7 @@ export default function PaymentModal({
           customer: {
             firstName: form.firstName.trim(), lastName: form.lastName.trim() || undefined,
             phone: fullPhone, email: form.email.trim(), country: form.country || 'الأردن',
+            city: form.city.trim() || undefined,
           },
         }),
       });
@@ -697,7 +705,10 @@ export default function PaymentModal({
                       onNumberChange={v => setForm(f => ({ ...f, phoneNumber: v }))}
                     />
                     <Field icon={<Mail size={15} />} placeholder="البريد الإلكتروني" value={form.email} onChange={v => setForm(f => ({ ...f, email: v }))} type="email" inputDir="ltr" required />
-                    <CountrySelect value={form.country} onChange={v => setForm(f => ({ ...f, country: v }))} />
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                      <CountrySelect value={form.country} onChange={v => setForm(f => ({ ...f, country: v }))} />
+                      <Field icon={<MapPin size={15} />} placeholder="المدينة" value={form.city} onChange={v => setForm(f => ({ ...f, city: v }))} />
+                    </div>
                   </div>
                 </div>
 
