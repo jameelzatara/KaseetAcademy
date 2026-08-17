@@ -4,7 +4,7 @@
  */
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { ChevronDown, ArrowLeft, MapPin, Wifi, Layers, Clock, FolderCheck, ShieldCheck, Video, AudioLines, FileText, Clapperboard } from 'lucide-react';
+import { ChevronDown, ArrowLeft, MapPin, Wifi, Layers, Clock, FolderCheck, ShieldCheck, Video, AudioLines, FileText, Clapperboard, Lock, CheckCircle2 } from 'lucide-react';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { GOLD, OFF, F, FP, INNER, waLink } from '../pages/shared/coursePageHelpers';
 import type { MasterclassData, StationItem } from '../data/masterclasses';
@@ -275,9 +275,10 @@ function StudyAccordion({ variant, label, sub, items }: {
 ══════════════════════════════════════════════════════════ */
 export default function MasterclassLayout({ data }: { data: MasterclassData }) {
   const [, navigate]   = useLocation();
-  const [modalOpen, setModalOpen] = useState(false);
-  const [openIdx, setOpenIdx]     = useState<number | null>(null);
-  const [expandAll, setExpandAll] = useState(false);
+  const [modalOpen, setModalOpen]       = useState(false);
+  const [checkoutMode, setCheckoutMode] = useState<'onsite' | 'live'>('onsite');
+  const [openIdx, setOpenIdx]           = useState<number | null>(null);
+  const [expandAll, setExpandAll]       = useState(false);
 
   useEffect(() => {
     const p = new URLSearchParams(window.location.search);
@@ -290,6 +291,9 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
   function toggle(i: number) { setOpenIdx(openIdx === i ? null : i); setExpandAll(false); }
   function isOpen(i: number) { return expandAll || openIdx === i; }
   function handleExpandAll()  { setExpandAll(v => !v); setOpenIdx(null); }
+
+  const scrollToCheckout = () =>
+    document.getElementById('checkout')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   const openModal = (e: React.MouseEvent) => { e.preventDefault(); setModalOpen(true); };
   const waOnline  = waLink(data.wa.phoneOnline, `مرحباً، أودّ الاستفسار عن ${data.meta.title}`);
@@ -500,8 +504,8 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
 
               {/* CTAs */}
               <div className="mc-hero-cta-row" style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 16 }}>
-                <a href={data.hero.ctaEnrollIsWa ? waOnline : '#enroll'}
-                  onClick={data.hero.ctaEnrollIsWa ? undefined : openModal}
+                <a href={data.hero.ctaEnrollIsWa ? waOnline : '#checkout'}
+                  onClick={data.hero.ctaEnrollIsWa ? undefined : (e => { e.preventDefault(); scrollToCheckout(); })}
                   target={data.hero.ctaEnrollIsWa ? '_blank' : undefined}
                   rel={data.hero.ctaEnrollIsWa ? 'noopener noreferrer' : undefined}
                   style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '13px 26px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 6px 20px rgba(255,193,7,.22)', justifyContent: 'center' }}>
@@ -637,7 +641,7 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
               </div>
             )}
             <div style={{ textAlign: 'center', marginTop: 32 }}>
-              <a href="#pricing"
+              <a href="#checkout" onClick={e => { e.preventDefault(); scrollToCheckout(); }}
                 style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 32px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 8px 24px rgba(255,193,7,.24)' }}>
                 احجز مقعدك الآن <ArrowLeft size={14} />
               </a>
@@ -803,7 +807,7 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
           )}
 
           <div style={{ textAlign: 'center', marginTop: 34 }}>
-            <a href="#pricing"
+            <a href="#checkout" onClick={e => { e.preventDefault(); scrollToCheckout(); }}
               style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15.5, padding: '14px 30px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 10px 30px rgba(255,193,7,.24)' }}>
               احجز مقعدك الآن <ArrowLeft size={14} />
             </a>
@@ -897,7 +901,7 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
               ))}
             </div>
             <div style={{ textAlign: 'center', marginTop: 34 }}>
-              <a href="#enroll" onClick={openModal}
+              <a href="#checkout" onClick={e => { e.preventDefault(); scrollToCheckout(); }}
                 style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 32px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 8px 24px rgba(255,193,7,.24)' }}>
                 احجز مقعدك الآن <ArrowLeft size={14} />
               </a>
@@ -1008,73 +1012,153 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
       </section>
 
       {/* ═══════════════════════════════════
-          09. PRICING
+          09. CHECKOUT — interactive
       ═══════════════════════════════════ */}
-      <section id="pricing" className="sec sec--access" style={{ padding: '96px 0' }}>
+      <section id="checkout" className="sec sec--access" style={{ padding: '96px 0', scrollMarginTop: 80 }}>
         <div style={WRP}>
-          <SectionHead badge={data.pricing.badge} heading={data.pricing.heading} headingGold={data.pricing.headingGold} />
+          {/* heading */}
+          <div style={{ textAlign: 'center', marginBottom: 52, direction: 'rtl' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GS, border: `1px solid ${GL}`, color: GLD, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>
+              <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD }} />
+              {data.pricing.badge}
+            </span>
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', lineHeight: 1.35, margin: '18px 0 0', color: OFF }}>
+              {data.pricing.heading} <span style={{ color: GLD }}>{data.pricing.headingGold}</span>
+            </h2>
+            <p style={{ fontFamily: F, fontSize: 15, fontWeight: 700, color: LT, marginTop: 10, marginBottom: 0 }}>
+              اختر أسلوب دراستك وابدأ فوراً
+            </p>
+          </div>
 
-          <div style={{ maxWidth: 620, margin: '48px auto 0', position: 'relative' }}>
-            <div style={{ position: 'absolute', inset: -2, background: 'linear-gradient(135deg, rgba(255,193,7,0.18), rgba(103,232,249,0.08))', borderRadius: 28, filter: 'blur(18px)', opacity: 0.6, pointerEvents: 'none' }} />
-            <div style={{ position: 'relative', background: '#131B27', border: '1px solid rgba(255,193,7,.55)', borderRadius: 24, padding: 'clamp(26px,4vw,40px)', boxShadow: '0 0 0 1px rgba(255,193,7,.20), inset 0 1px 0 rgba(255,193,7,.10), 0 34px 70px rgba(24,32,47,.28)' }}>
-              {data.pricing.topBadge && (
-                <div style={{ position: 'absolute', top: -13, left: '50%', transform: 'translateX(-50%)', background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 12, padding: '5px 18px', borderRadius: 999, whiteSpace: 'nowrap', boxShadow: '0 4px 16px rgba(255,193,7,0.28)' }}>
-                  {data.pricing.topBadge}
-                </div>
-              )}
-              <div style={{ textAlign: 'center', paddingBottom: 24, borderBottom: `1px solid ${CBR}`, paddingTop: data.pricing.topBadge ? 10 : 0 }}>
-                <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 21, color: OFF }}>{data.pricing.cardTitle}</h3>
-                <p style={{ fontFamily: F, fontSize: 13, color: MUT, marginTop: 6, lineHeight: 1.65 }}>{data.pricing.cardDesc}</p>
-                <div style={{ display: 'flex', justifyContent: 'center', gap: 28, margin: '20px 0 0', flexWrap: 'wrap', alignItems: 'flex-end' }}>
-                  <div style={{ textAlign: 'center' }}>
-                    <span style={{ fontFamily: FP, fontSize: 48, fontWeight: 700, color: GLD, lineHeight: 1, display: 'block' }}>{data.pricing.priceJOD}</span>
-                    <span style={{ fontFamily: F, fontSize: 13, color: MUT, display: 'block', marginTop: 4 }}>JOD · حضوري عمّان</span>
+          <div style={{ maxWidth: 600, margin: '0 auto', position: 'relative' }}>
+            {/* glow */}
+            <div style={{ position: 'absolute', inset: -3, background: 'linear-gradient(135deg, rgba(255,193,7,.22), rgba(103,232,249,.10))', borderRadius: 30, filter: 'blur(20px)', opacity: 0.7, pointerEvents: 'none' }} />
+
+            <div style={{ position: 'relative', background: '#131B27', border: `1px solid ${GL}`, borderRadius: 26, overflow: 'hidden', boxShadow: '0 0 0 1px rgba(255,193,7,.12), 0 34px 70px rgba(13,11,20,.45)' }}>
+
+              {/* ── mode tabs ── */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderBottom: `1px solid ${CBR}` }}>
+                {/* حضوري */}
+                <button
+                  onClick={() => setCheckoutMode('onsite')}
+                  style={{
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+                    padding: '18px 16px', border: 'none', cursor: 'pointer',
+                    background: checkoutMode === 'onsite' ? 'rgba(255,193,7,.08)' : 'transparent',
+                    borderBottom: checkoutMode === 'onsite' ? `2px solid ${GLD}` : '2px solid transparent',
+                    transition: 'background .2s, border-color .2s',
+                  }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <MapPin size={14} color={checkoutMode === 'onsite' ? GLD : MUT} strokeWidth={2.2} />
+                    <span style={{ fontFamily: F, fontSize: 14.5, fontWeight: 800, color: checkoutMode === 'onsite' ? GLD : MUT }}>حضوري</span>
                   </div>
-                  <div style={{ width: 1, height: 52, background: CBR, flexShrink: 0 }} />
-                  <div style={{ textAlign: 'center' }}>
-                    <span style={{ fontFamily: FP, fontSize: 48, fontWeight: 700, color: GLD, lineHeight: 1, display: 'block' }}>{data.pricing.priceUSD}</span>
-                    <span style={{ fontFamily: F, fontSize: 13, color: MUT, display: 'block', marginTop: 4 }}>USD · مباشر تفاعلي (Online LIVE)</span>
+                  <span style={{ fontFamily: F, fontSize: 11.5, color: MUT }}>استوديو كاسيت · عمّان · {data.payment.cohortStartAr}</span>
+                  <span style={{ fontFamily: FP, fontSize: 22, fontWeight: 700, color: checkoutMode === 'onsite' ? GLD : LT, lineHeight: 1 }}>{data.payment.priceJOD} <span style={{ fontSize: 13 }}>JOD</span></span>
+                </button>
+                {/* مباشر تفاعلي */}
+                <button
+                  onClick={() => setCheckoutMode('live')}
+                  style={{
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+                    padding: '18px 16px', border: 'none', cursor: 'pointer',
+                    background: checkoutMode === 'live' ? 'rgba(103,232,249,.07)' : 'transparent',
+                    borderBottom: checkoutMode === 'live' ? '2px solid #67e8f9' : '2px solid transparent',
+                    transition: 'background .2s, border-color .2s',
+                    borderRight: `1px solid ${CBR}`,
+                  }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <Wifi size={14} color={checkoutMode === 'live' ? '#67e8f9' : MUT} strokeWidth={2.2} />
+                    <span style={{ fontFamily: F, fontSize: 14.5, fontWeight: 800, color: checkoutMode === 'live' ? '#67e8f9' : MUT }}>مباشر تفاعلي</span>
+                  </div>
+                  <span style={{ fontFamily: F, fontSize: 11.5, color: MUT }}>عن بُعد (Online LIVE) · {data.payment.cohortStartAr}</span>
+                  <span style={{ fontFamily: FP, fontSize: 22, fontWeight: 700, color: checkoutMode === 'live' ? '#67e8f9' : LT, lineHeight: 1 }}>${data.payment.priceUSD}</span>
+                </button>
+              </div>
+
+              <div style={{ padding: 'clamp(24px,3.5vw,36px)' }}>
+
+                {/* feature list */}
+                <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 12, padding: 0, margin: '0 0 24px' }}>
+                  {data.pricing.features.map(feat => (
+                    <li key={feat} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontFamily: F, fontSize: 14, color: LT, lineHeight: 1.6 }}>
+                      <CheckCircle2 size={16} color={GLD} strokeWidth={2.2} style={{ flexShrink: 0, marginTop: 2 }} />
+                      {feat}
+                    </li>
+                  ))}
+                </ul>
+
+                {/* guarantee box */}
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 13, background: 'rgba(255,193,7,.07)', border: `1px solid rgba(255,193,7,.26)`, borderRadius: 16, padding: '16px 18px', marginBottom: 18 }}>
+                  <ShieldCheck size={22} color={GLD} strokeWidth={2} style={{ flexShrink: 0, marginTop: 2 }} />
+                  <div>
+                    <div style={{ fontFamily: F, fontWeight: 800, fontSize: 14, color: OFF, marginBottom: 5 }}>ضمان الجلسة الأولى — Risk Reversal</div>
+                    <p style={{ fontFamily: F, fontSize: 13, color: LT, lineHeight: 1.8, margin: 0 }}>
+                      جرّب الجلسة الأولى كاملة. إن شعرت أنّ الماستركلاس لا يلبّي توقّعاتك، اطلب استرداداً كاملاً خلال 24 ساعة — <strong style={{ color: OFF }}>دون أسئلة ولا شروط</strong>.
+                    </p>
                   </div>
                 </div>
-                {data.pricing.showPerHourLine && (
-                  <p style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 8 }}>
-                    ما يعادل <span style={{ fontFamily: FP, color: LT, fontWeight: 700 }}>${data.pricing.equivalentUSD}</span> USD — أقلّ من <span style={{ fontFamily: FP, color: LT, fontWeight: 700 }}>17$</span> للساعة التدريبية
-                  </p>
+
+                {/* installment notice — onsite only (live is always full payment) */}
+                {checkoutMode === 'onsite' && (
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, background: GS, border: `1px solid ${GL}`, borderRadius: 12, padding: '11px 15px', marginBottom: 22 }}>
+                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: GLD, flexShrink: 0, marginTop: 6 }} />
+                    <span style={{ fontFamily: F, fontSize: 13, color: LT, lineHeight: 1.7 }}>
+                      <strong style={{ color: OFF }}>التقسيط متاح:</strong> يمكنك الدفع كاملاً أو تثبيت مقعدك بدفع الدفعة الأولى فقط
+                      {' '}<strong style={{ color: GLD }}>({data.pricing.installments[0]} JOD)</strong>.
+                    </span>
+                  </div>
                 )}
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 16, background: GS, border: `1px solid ${GL}`, borderRadius: 12, padding: '9px 15px' }}>
-                  <span className="mc-live-dot" style={{ width: 7, height: 7, borderRadius: '50%', background: GLD, flexShrink: 0 }} />
-                  <span style={{ fontFamily: F, fontSize: 13, color: LT }}>
-                    التقسيط متاح · <b style={{ color: GLD, fontFamily: FP }}>{data.pricing.installments[0]} د.أ</b> تُثبَّت مقعدك
-                  </span>
+                {checkoutMode === 'live' && (
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, background: GS, border: `1px solid rgba(103,232,249,.22)`, borderRadius: 12, padding: '11px 15px', marginBottom: 22 }}>
+                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#67e8f9', flexShrink: 0, marginTop: 6 }} />
+                    <span style={{ fontFamily: F, fontSize: 13, color: LT, lineHeight: 1.7 }}>
+                      الدفع الكامل مطلوب للتسجيل في الخيار المباشر —{' '}
+                      <strong style={{ color: '#67e8f9' }}>${data.payment.priceUSD}</strong>.
+                    </span>
+                  </div>
+                )}
+
+                {/* Stripe CTA */}
+                <button
+                  onClick={() => setModalOpen(true)}
+                  style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+                    width: '100%', boxSizing: 'border-box',
+                    background: GLD, color: '#0f172a',
+                    fontFamily: F, fontWeight: 800, fontSize: 15.5,
+                    padding: '16px 24px', borderRadius: 16, border: 'none', cursor: 'pointer',
+                    boxShadow: '0 8px 28px rgba(255,193,7,.30)',
+                    transition: 'transform .15s, box-shadow .15s',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 14px 38px rgba(255,193,7,.38)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(255,193,7,.30)'; }}>
+                  <Lock size={15} />
+                  {checkoutMode === 'onsite'
+                    ? `احجز مقعدك — ادفع ${data.pricing.installments[0]} ديناراً الآن`
+                    : `سجّل الآن — ادفع $${data.payment.priceUSD} كاملاً`}
+                  <ArrowLeft size={15} />
+                </button>
+
+                {/* security footer */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, marginTop: 16, flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontFamily: F, fontSize: 12, color: MUT }}>
+                    <Lock size={12} color={MUT} strokeWidth={2} />
+                    معاملة آمنة ومشفّرة 100% عبر Stripe
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <svg width="32" height="11" viewBox="0 0 48 16" aria-label="Visa"><rect width="48" height="16" rx="3" fill="#1A1F71"/><text x="50%" y="12" textAnchor="middle" fontFamily="Arial" fontWeight="bold" fontSize="11" fill="#fff">VISA</text></svg>
+                    <svg width="20" height="13" viewBox="0 0 34 22" aria-label="Mastercard"><circle cx="12" cy="11" r="11" fill="#EB001B"/><circle cx="22" cy="11" r="11" fill="#F79E1B"/><path d="M17 4.3a11 11 0 0 1 0 13.4A11 11 0 0 1 17 4.3z" fill="#FF5F00"/></svg>
+                    <svg width="32" height="13" viewBox="0 0 50 20" aria-label="Apple Pay"><rect width="50" height="20" rx="4" fill="#000"/><text x="50%" y="14.5" textAnchor="middle" fontFamily="'-apple-system',sans-serif" fontWeight="600" fontSize="10" fill="#fff">Apple Pay</text></svg>
+                  </div>
                 </div>
+
               </div>
-              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 13, padding: '24px 0', margin: 0 }}>
-                {data.pricing.features.map(feat => (
-                  <li key={feat} style={{ display: 'flex', alignItems: 'flex-start', gap: 11, fontFamily: F, fontSize: 14, color: LT, lineHeight: 1.65 }}>
-                    <span style={{ color: GLD, fontWeight: 800, flexShrink: 0 }}>✓</span> {feat}
-                  </li>
-                ))}
-              </ul>
-              {/* guarantee — inside card */}
-              <div style={{ margin: '4px 0 16px', padding: '14px 16px', background: 'rgba(255,193,7,.06)', border: '1px solid rgba(255,193,7,.18)', borderRadius: 12 }}>
-                <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-                  <ShieldCheck size={18} color={GLD} strokeWidth={2} style={{ flexShrink: 0, marginTop: 2 }} />
-                  <p style={{ fontFamily: F, fontSize: 13, color: LT, lineHeight: 1.8, margin: 0 }}>
-                    <strong style={{ color: OFF, display: 'block', marginBottom: 2 }}>ضمان الجلسة الأولى</strong>
-                    جرّب الجلسة الأولى كاملة. وإن شعرت أنّ الماستركلاس لا يلبّي توقّعاتك، اطلب استرداداً كاملاً خلال 24 ساعة من انتهائها — دون أسئلة. نحن نعرف ما نقدّمه. والجلسة الأولى تكفي لتعرفه أنت.
-                  </p>
-                </div>
-              </div>
-              <a href="#enroll" onClick={openModal}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, width: '100%', boxSizing: 'border-box', background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 24px', borderRadius: 14, textDecoration: 'none', boxShadow: '0 6px 22px rgba(255,193,7,0.20)' }}>
-                {data.pricing.ctaLabel} <ArrowLeft size={15} />
-              </a>
             </div>
           </div>
 
           {/* corporate card — khataba */}
           {data.pricing.corporate && (
-            <div style={{ maxWidth: 860, margin: '24px auto 0', background: CARD, border: `1px solid ${CBR}`, borderRadius: 22, padding: 'clamp(24px,3.5vw,40px)', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 28 }}>
+            <div style={{ maxWidth: 860, margin: '32px auto 0', background: CARD, border: `1px solid ${CBR}`, borderRadius: 22, padding: 'clamp(24px,3.5vw,40px)', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 28 }}>
               <div style={{ display: 'flex', gap: 5, flexShrink: 0 }}>
                 {data.pricing.corporate.photos.slice(0, 3).map((src, i) => (
                   <div key={i} style={{ width: 64, height: 64, borderRadius: 10, overflow: 'hidden', flexShrink: 0 }}>
@@ -1126,7 +1210,7 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
             <MasterclassFaqAccordion faqs={data.faqs} />
           </div>
           <div style={{ textAlign: 'center', marginTop: 40 }}>
-            <a href="#pricing"
+            <a href="#checkout" onClick={e => { e.preventDefault(); scrollToCheckout(); }}
               style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 32px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 8px 24px rgba(255,193,7,.24)' }}>
               احجز مقعدك الآن <ArrowLeft size={14} />
             </a>
@@ -1211,8 +1295,8 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
 
       {/* ── sticky CTA (mobile) ───────────────────────── */}
       <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 50, padding: '10px 16px', background: 'rgba(10,14,24,0.95)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'none' }} className="mc-sticky-cta">
-        <a href={data.hero.ctaEnrollIsWa ? waOnline : '#enroll'}
-          onClick={data.hero.ctaEnrollIsWa ? undefined : openModal}
+        <a href={data.hero.ctaEnrollIsWa ? waOnline : '#checkout'}
+          onClick={data.hero.ctaEnrollIsWa ? undefined : (e => { e.preventDefault(); scrollToCheckout(); })}
           target={data.hero.ctaEnrollIsWa ? '_blank' : undefined}
           rel={data.hero.ctaEnrollIsWa ? 'noopener noreferrer' : undefined}
           style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9, background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 14.5, padding: '13px 20px', borderRadius: 12, textDecoration: 'none' }}>
@@ -1237,6 +1321,7 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
         cohortTrainer={data.payment.cohortTrainer}
         priceJOD={data.payment.priceJOD}
         priceUSD={data.payment.priceUSD}
+        initialMode={checkoutMode}
       />
     </div>
   );

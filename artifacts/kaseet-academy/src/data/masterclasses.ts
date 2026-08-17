@@ -1110,9 +1110,9 @@ export function getKhatabaData(assets: {
       headingGold: 'إلى المنصّة',
       cardTitle: 'الماستركلاس الكامل',
       cardDesc: '42 ساعة · 12 محطة · 14 مخرجاً · مشروع تخرّج مصوَّر · شهادة معتمدة من تطبيق وجيز',
-      priceJOD: 550,
-      priceUSD: 750,
-      equivalentUSD: 750,
+      priceJOD: 500,
+      priceUSD: 700,
+      equivalentUSD: 700,
       installments: [50, 225, 225],
       showPerHourLine: false,
       features: [
@@ -1180,8 +1180,8 @@ export function getKhatabaData(assets: {
       cohortDays: 'الاثنين والأربعاء والسبت',
       cohortTimeAr: '6:00 – 8:00 مساءً',
       cohortTrainer: 'د. صهيب الخوالدة',
-      priceJOD: 550,
-      priceUSD: 750,
+      priceJOD: 500,
+      priceUSD: 700,
     },
 
     wa: {

@@ -19,9 +19,10 @@ import { useState, useEffect } from 'react';
 import { usePageMeta }         from '../hooks/usePageMeta';
 import {
   ChevronDown, ArrowLeft, MapPin, Wifi, Layers, Clock,
-  FolderCheck, CheckCircle2, ShieldCheck, Home,
+  FolderCheck, CheckCircle2, ShieldCheck, Home, Lock,
 } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa6';
+import PaymentModal from '../components/PaymentModal';
 import { GOLD, OFF, F, FP, INNER, DH, DM, waLink } from './shared/coursePageHelpers';
 
 import wajeezLogo     from '@assets/wajeez-logo_1785688262989.png';
@@ -272,8 +273,13 @@ function FaqItem({ q, a }: { q: string; a: string }) {
    Page
 ═══════════════════════════════════════════════════════════════ */
 export default function MasarElamiPage() {
-  const [openIdx,   setOpenIdx]   = useState<number | null>(null);
-  const [expandAll, setExpandAll] = useState(false);
+  const [openIdx,       setOpenIdx]       = useState<number | null>(null);
+  const [expandAll,     setExpandAll]     = useState(false);
+  const [modalOpen,     setModalOpen]     = useState(false);
+  const [checkoutMode,  setCheckoutMode]  = useState<'onsite' | 'live'>('onsite');
+
+  const scrollToCheckout = () =>
+    document.getElementById('checkout')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   usePageMeta({
     title: 'ماستركلاس الإعلام — المسار الإعلامي',
@@ -451,12 +457,13 @@ export default function MasarElamiPage() {
                 </div>
               </div>
 
-              {/* CTAs — primary (WA) first (rightmost in RTL) */}
+              {/* CTAs */}
               <div style={{ display:'flex', flexWrap:'wrap', alignItems:'center', gap:12, marginTop:22 }}>
-                <a href={WA_TRACK} target="_blank" rel="noopener noreferrer"
-                  style={{ display:'inline-flex', alignItems:'center', gap:9, background:GLD, color:'#0f172a', fontFamily:F, fontWeight:800, fontSize:14.5, padding:'13px 26px', borderRadius:12, textDecoration:'none', boxShadow:'0 6px 20px rgba(255,193,7,.22)' }}>
-                  <FaWhatsapp size={17} /> تحدّث مع ياقوت عبر واتساب
-                </a>
+                <button
+                  onClick={scrollToCheckout}
+                  style={{ display:'inline-flex', alignItems:'center', gap:9, background:GLD, color:'#0f172a', fontFamily:F, fontWeight:800, fontSize:14.5, padding:'13px 26px', borderRadius:12, border:'none', cursor:'pointer', boxShadow:'0 6px 20px rgba(255,193,7,.22)' }}>
+                  <Lock size={15} /> احجز مقعدك الآن
+                </button>
                 <a href="#tree"
                   style={{ display:'inline-flex', alignItems:'center', gap:9, background:'rgba(255,255,255,.05)', border:'1px solid rgba(255,255,255,.13)', backdropFilter:'blur(12px)', WebkitBackdropFilter:'blur(12px)', color:OFF, fontFamily:F, fontWeight:700, fontSize:14.5, padding:'13px 26px', borderRadius:12, textDecoration:'none' }}>
                   استكشف شجرة المسار <ArrowLeft size={14} />
@@ -757,83 +764,154 @@ export default function MasarElamiPage() {
       </section>
 
       {/* ════════════════════════════════════════════════════════════
-          §07 PRICING — 700 JOD / 1000 USD
+          §07 CHECKOUT — interactive (Stripe)
       ════════════════════════════════════════════════════════════ */}
-      <section id="enroll" className="sec sec--pricing" style={{ position:'relative', borderTop:`1px solid ${CARD_BORDER}`, padding:'80px 0' }}>
-        <div className="geo" aria-hidden="true">
-          <svg viewBox="0 0 1440 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-            <g fill="none" stroke="rgba(138,98,0,.16)" strokeWidth="1.5">
-              <polygon points="720,150 1010,320 1010,560 720,730 430,560 430,320"/>
-              <polygon points="720,240 930,362 930,608 720,730 510,608 510,362" strokeOpacity=".55"/>
-            </g>
-          </svg>
-        </div>
+      <section id="checkout" className="sec sec--access" style={{ position:'relative', borderTop:`1px solid ${CARD_BORDER}`, padding:'80px 0', scrollMarginTop:80 }}>
         <div style={{ ...INNER }}>
-          <div style={{ textAlign:'center', maxWidth:580, margin:'0 auto 44px' }}>
-            <SectionLabel text="الالتحاق بالمسار" />
-            <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(26px,4vw,42px)', color:OFF, marginTop:16, lineHeight:1.3 }}>
-              اختر <span style={{ color:GLD }}>خيار الالتحاق</span>
+          {/* heading */}
+          <div style={{ textAlign:'center', maxWidth:580, margin:'0 auto 52px' }}>
+            <span style={{ display:'inline-flex', alignItems:'center', gap:8, background:GS, border:`1px solid ${GL}`, color:GLD, fontFamily:F, fontSize:12.5, fontWeight:700, padding:'6px 15px', borderRadius:999 }}>
+              <span style={{ width:5, height:5, borderRadius:'50%', background:GLD }} />
+              استثمر في مستقبلك المهني
+            </span>
+            <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(28px,4.4vw,44px)', lineHeight:1.35, margin:'18px 0 0', color:OFF }}>
+              الماستركلاس الكامل — <span style={{ color:GLD }}>اختر أسلوبك</span>
             </h2>
-            <p style={{ fontFamily:F, fontSize:15, color:MUT, marginTop:10, lineHeight:1.8 }}>
-              التحق بالمسار الكامل وتحوّل إلى إعلامي محترف — أو ابدأ بدورة منفردة واكتشف الأسلوب المناسب لك.
+            <p style={{ fontFamily:F, fontSize:15, fontWeight:700, color:LT, marginTop:10, marginBottom:0 }}>
+              10 محطات من التأسيس إلى القيادة الإعلامية
             </p>
           </div>
 
-          <div style={{ maxWidth:620, margin:'0 auto', position:'relative' }}>
-            <div style={{ position:'absolute', inset:-2, background:`linear-gradient(135deg,rgba(255,193,7,.18),rgba(103,232,249,.08))`, borderRadius:28, filter:'blur(18px)', opacity:.6, pointerEvents:'none' }} />
-            <div style={{ position:'relative', background:'#131B27', border:`1px solid rgba(255,193,7,.55)`, borderRadius:24, padding:'clamp(26px,4vw,40px)', boxShadow:'0 0 0 1px rgba(255,193,7,.20),inset 0 1px 0 rgba(255,193,7,.10),0 34px 70px rgba(24,32,47,.28)' }}>
+          <div style={{ maxWidth:600, margin:'0 auto', position:'relative' }}>
+            {/* glow */}
+            <div style={{ position:'absolute', inset:-3, background:'linear-gradient(135deg,rgba(255,193,7,.22),rgba(103,232,249,.10))', borderRadius:30, filter:'blur(20px)', opacity:0.7, pointerEvents:'none' }} />
 
-              <div style={{ position:'absolute', top:-13, left:'50%', transform:'translateX(-50%)', background:GLD, color:'#0f172a', fontFamily:F, fontWeight:800, fontSize:12, padding:'5px 18px', borderRadius:999, whiteSpace:'nowrap', boxShadow:'0 4px 16px rgba(255,193,7,.28)' }}>
-                الأشمل والأوفر
+            <div style={{ position:'relative', background:'#131B27', border:`1px solid ${GL}`, borderRadius:26, overflow:'hidden', boxShadow:'0 0 0 1px rgba(255,193,7,.12),0 34px 70px rgba(13,11,20,.45)' }}>
+
+              {/* ── mode tabs ── */}
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', borderBottom:`1px solid ${CARD_BORDER}` }}>
+                {/* حضوري */}
+                <button
+                  onClick={() => setCheckoutMode('onsite')}
+                  style={{
+                    display:'flex', flexDirection:'column', alignItems:'center', gap:4,
+                    padding:'18px 16px', border:'none', cursor:'pointer',
+                    background: checkoutMode === 'onsite' ? 'rgba(255,193,7,.08)' : 'transparent',
+                    borderBottom: checkoutMode === 'onsite' ? `2px solid ${GLD}` : '2px solid transparent',
+                    transition:'background .2s, border-color .2s',
+                  }}>
+                  <div style={{ display:'flex', alignItems:'center', gap:6 }}>
+                    <MapPin size={14} color={checkoutMode === 'onsite' ? GLD : '#8A97AE'} strokeWidth={2.2} />
+                    <span style={{ fontFamily:F, fontSize:14.5, fontWeight:800, color:checkoutMode === 'onsite' ? GLD : '#8A97AE' }}>حضوري</span>
+                  </div>
+                  <span style={{ fontFamily:F, fontSize:11.5, color:'#8A97AE' }}>استوديو كاسيت · عمّان · 15 أيلول</span>
+                  <span style={{ fontFamily:FP, fontSize:22, fontWeight:700, color:checkoutMode === 'onsite' ? GLD : LT, lineHeight:1 }}>700 <span style={{ fontSize:13 }}>JOD</span></span>
+                </button>
+                {/* مباشر تفاعلي */}
+                <button
+                  onClick={() => setCheckoutMode('live')}
+                  style={{
+                    display:'flex', flexDirection:'column', alignItems:'center', gap:4,
+                    padding:'18px 16px', border:'none', cursor:'pointer',
+                    background: checkoutMode === 'live' ? 'rgba(103,232,249,.07)' : 'transparent',
+                    borderBottom: checkoutMode === 'live' ? '2px solid #67e8f9' : '2px solid transparent',
+                    transition:'background .2s, border-color .2s',
+                    borderRight:`1px solid ${CARD_BORDER}`,
+                  }}>
+                  <div style={{ display:'flex', alignItems:'center', gap:6 }}>
+                    <Wifi size={14} color={checkoutMode === 'live' ? '#67e8f9' : '#8A97AE'} strokeWidth={2.2} />
+                    <span style={{ fontFamily:F, fontSize:14.5, fontWeight:800, color:checkoutMode === 'live' ? '#67e8f9' : '#8A97AE' }}>مباشر تفاعلي</span>
+                  </div>
+                  <span style={{ fontFamily:F, fontSize:11.5, color:'#8A97AE' }}>عن بُعد (Online LIVE) · 15 أيلول</span>
+                  <span style={{ fontFamily:FP, fontSize:22, fontWeight:700, color:checkoutMode === 'live' ? '#67e8f9' : LT, lineHeight:1 }}>$1000</span>
+                </button>
               </div>
 
-              <div style={{ textAlign:'center', paddingBottom:24, borderBottom:`1px solid ${CARD_BORDER}` }}>
-                <h3 style={{ fontFamily:F, fontWeight:800, fontSize:21, color:OFF }}>ماستركلاس الإعلام</h3>
-                <p style={{ fontFamily:F, fontSize:13, color:MUT, marginTop:6, lineHeight:1.65 }}>
-                  10 محطات · التأسيس + التخصصات + القيادة الإعلامية
-                </p>
-                {/* dual price */}
-                <div style={{ display:'flex', alignItems:'flex-end', justifyContent:'center', gap:16, margin:'20px 0 0', flexWrap:'wrap' }}>
-                  <div style={{ textAlign:'center' }}>
-                    <div style={{ fontFamily:FP, fontSize:52, fontWeight:900, color:GLD, lineHeight:1 }}>700</div>
-                    <div style={{ fontFamily:F, fontSize:13, color:MUT }}>دينار أردني</div>
-                  </div>
-                  <div style={{ fontFamily:F, fontSize:13, color:'rgba(255,255,255,.20)', alignSelf:'center', marginBottom:18 }}>أو</div>
-                  <div style={{ textAlign:'center' }}>
-                    <div style={{ fontFamily:FP, fontSize:52, fontWeight:900, color:'rgba(255,193,7,.55)', lineHeight:1 }}>1000</div>
-                    <div style={{ fontFamily:F, fontSize:13, color:MUT }}>دولار أمريكي</div>
+              <div style={{ padding:'clamp(24px,3.5vw,36px)' }}>
+
+                {/* features */}
+                <ul style={{ listStyle:'none', display:'flex', flexDirection:'column', gap:12, padding:0, margin:'0 0 24px' }}>
+                  {[
+                    '10 محطات متسلسلة — 3 مراحل كاملة (تأسيس، تخصصات، قيادة)',
+                    '40 ساعة تدريبية موزَّعة بإشراف مباشر',
+                    '8 مشاريع تطبيقية مصوَّرة داخل المسار',
+                    'محطة القيادة الإعلامية وتأهيل البروفايل',
+                    'شهادة معتمدة من تطبيق وجيز',
+                    'إمكانية خصم قيمة أي دورة درستها سابقاً',
+                  ].map(feat => (
+                    <li key={feat} style={{ display:'flex', alignItems:'flex-start', gap:10, fontFamily:F, fontSize:14, color:LT, lineHeight:1.6 }}>
+                      <CheckCircle2 size={16} color={GLD} strokeWidth={2.2} style={{ flexShrink:0, marginTop:2 }} />
+                      {feat}
+                    </li>
+                  ))}
+                </ul>
+
+                {/* guarantee */}
+                <div style={{ display:'flex', alignItems:'flex-start', gap:13, background:'rgba(255,193,7,.07)', border:`1px solid rgba(255,193,7,.26)`, borderRadius:16, padding:'16px 18px', marginBottom:18 }}>
+                  <ShieldCheck size={22} color={GLD} strokeWidth={2} style={{ flexShrink:0, marginTop:2 }} />
+                  <div>
+                    <div style={{ fontFamily:F, fontWeight:800, fontSize:14, color:OFF, marginBottom:5 }}>ضمان الجلسة الأولى</div>
+                    <p style={{ fontFamily:F, fontSize:13, color:LT, lineHeight:1.8, margin:0 }}>
+                      جرّب الجلسة الأولى كاملة. إن لم تلبِّ توقّعاتك، اطلب استرداداً كاملاً خلال 24 ساعة — <strong style={{ color:OFF }}>دون أسئلة ولا شروط</strong>.
+                    </p>
                   </div>
                 </div>
 
-                <div style={{ display:'inline-flex', alignItems:'center', gap:8, marginTop:14, background:GS, border:`1px solid ${GL}`, borderRadius:12, padding:'9px 15px' }}>
-                  <span className="ka-pulse-dot" style={{ width:7, height:7, borderRadius:'50%', background:GLD, flexShrink:0 }} />
-                  <span style={{ fontFamily:F, fontSize:13, color:LT }}>
-                    التقسيط متاح · <b style={{ color:GLD, fontFamily:FP }}>50 د.أ</b> تُثبَّت مقعدك
-                  </span>
+                {/* installment — onsite only (live is always full payment) */}
+                {checkoutMode === 'onsite' && (
+                  <div style={{ display:'flex', alignItems:'flex-start', gap:10, background:GS, border:`1px solid ${GL}`, borderRadius:12, padding:'11px 15px', marginBottom:22 }}>
+                    <span style={{ width:6, height:6, borderRadius:'50%', background:GLD, flexShrink:0, marginTop:6 }} />
+                    <span style={{ fontFamily:F, fontSize:13, color:LT, lineHeight:1.7 }}>
+                      <strong style={{ color:OFF }}>التقسيط متاح:</strong> يمكنك تثبيت مقعدك بدفع الدفعة الأولى فقط
+                      {' '}<strong style={{ color:GLD }}>(50 JOD)</strong>.
+                    </span>
+                  </div>
+                )}
+                {checkoutMode === 'live' && (
+                  <div style={{ display:'flex', alignItems:'flex-start', gap:10, background:GS, border:`1px solid rgba(103,232,249,.22)`, borderRadius:12, padding:'11px 15px', marginBottom:22 }}>
+                    <span style={{ width:6, height:6, borderRadius:'50%', background:'#67e8f9', flexShrink:0, marginTop:6 }} />
+                    <span style={{ fontFamily:F, fontSize:13, color:LT, lineHeight:1.7 }}>
+                      الدفع الكامل مطلوب للتسجيل في الخيار المباشر —{' '}
+                      <strong style={{ color:'#67e8f9' }}>$1000</strong>.
+                    </span>
+                  </div>
+                )}
+
+                {/* CTA */}
+                <button
+                  onClick={() => setModalOpen(true)}
+                  style={{
+                    display:'flex', alignItems:'center', justifyContent:'center', gap:10,
+                    width:'100%', boxSizing:'border-box',
+                    background:GLD, color:'#0f172a',
+                    fontFamily:F, fontWeight:800, fontSize:15.5,
+                    padding:'16px 24px', borderRadius:16, border:'none', cursor:'pointer',
+                    boxShadow:'0 8px 28px rgba(255,193,7,.30)',
+                    transition:'transform .15s, box-shadow .15s',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.transform='translateY(-2px)'; e.currentTarget.style.boxShadow='0 14px 38px rgba(255,193,7,.38)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.boxShadow='0 8px 28px rgba(255,193,7,.30)'; }}>
+                  <Lock size={15} />
+                  {checkoutMode === 'onsite'
+                    ? 'احجز مقعدك — ادفع 50 ديناراً الآن'
+                    : 'سجّل الآن — ادفع $1000 كاملاً'}
+                  <ArrowLeft size={15} />
+                </button>
+
+                {/* security footer */}
+                <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:16, marginTop:16, flexWrap:'wrap' }}>
+                  <div style={{ display:'flex', alignItems:'center', gap:6, fontFamily:F, fontSize:12, color:'#8A97AE' }}>
+                    <Lock size={12} color="#8A97AE" strokeWidth={2} />
+                    معاملة آمنة ومشفّرة 100% عبر Stripe
+                  </div>
+                  <div style={{ display:'flex', alignItems:'center', gap:6 }}>
+                    <svg width="32" height="11" viewBox="0 0 48 16" aria-label="Visa"><rect width="48" height="16" rx="3" fill="#1A1F71"/><text x="50%" y="12" textAnchor="middle" fontFamily="Arial" fontWeight="bold" fontSize="11" fill="#fff">VISA</text></svg>
+                    <svg width="20" height="13" viewBox="0 0 34 22" aria-label="Mastercard"><circle cx="12" cy="11" r="11" fill="#EB001B"/><circle cx="22" cy="11" r="11" fill="#F79E1B"/><path d="M17 4.3a11 11 0 0 1 0 13.4A11 11 0 0 1 17 4.3z" fill="#FF5F00"/></svg>
+                    <svg width="32" height="13" viewBox="0 0 50 20" aria-label="Apple Pay"><rect width="50" height="20" rx="4" fill="#000"/><text x="50%" y="14.5" textAnchor="middle" fontFamily="'-apple-system',sans-serif" fontWeight="600" fontSize="10" fill="#fff">Apple Pay</text></svg>
+                  </div>
                 </div>
-                <p style={{ fontFamily:F, fontSize:12.5, color:MUT, marginTop:10 }}>40 ساعة موزَّعة · حضوري أو Online LIVE</p>
+
               </div>
-
-              <ul style={{ listStyle:'none', display:'flex', flexDirection:'column', gap:13, padding:'24px 0', margin:0 }}>
-                {[
-                  '10 محطات متسلسلة — 3 مراحل كاملة',
-                  'تغطية جميع التخصصات الإعلامية',
-                  '8 محطات حصريّة داخل المسار',
-                  '8 مشاريع تطبيقية مصوَّرة بإشراف مباشر',
-                  'محطة القيادة الإعلامية وتأهيل البروفايل',
-                  'شهادة معتمدة من تطبيق وجيز',
-                  'إمكانية خصم قيمة أي دورة درستها سابقاً',
-                ].map(feat => (
-                  <li key={feat} style={{ display:'flex', alignItems:'flex-start', gap:11, fontFamily:F, fontSize:14, color:LT, lineHeight:1.65 }}>
-                    <span style={{ color:GLD, fontWeight:800, flexShrink:0 }}>✓</span> {feat}
-                  </li>
-                ))}
-              </ul>
-
-              <a href={WA_TRACK} target="_blank" rel="noopener noreferrer"
-                style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:10, width:'100%', boxSizing:'border-box', background:GLD, color:'#0f172a', fontFamily:F, fontWeight:800, fontSize:15, padding:'14px 24px', borderRadius:14, textDecoration:'none', boxShadow:'0 6px 22px rgba(255,193,7,.20)' }}>
-                <FaWhatsapp size={17} /> التسجيل في المسار
-              </a>
             </div>
           </div>
 
@@ -864,9 +942,9 @@ export default function MasarElamiPage() {
             <div><span className="cf-l">المقاعد</span><b>10 مقاعد فقط</b></div>
           </div>
 
-          <a href="#enroll" style={{ display:'inline-flex', alignItems:'center', gap:10, background:GLD, color:'#0f172a', fontFamily:F, fontWeight:800, fontSize:15.5, padding:'15px 32px', borderRadius:12, textDecoration:'none', boxShadow:'0 8px 26px rgba(255,193,7,.24)' }}>
+          <button onClick={scrollToCheckout} style={{ display:'inline-flex', alignItems:'center', gap:10, background:GLD, color:'#0f172a', fontFamily:F, fontWeight:800, fontSize:15.5, padding:'15px 32px', borderRadius:12, border:'none', cursor:'pointer', boxShadow:'0 8px 26px rgba(255,193,7,.24)' }}>
             احجز مقعدك في هذا الفوج <ArrowLeft size={15} />
-          </a>
+          </button>
           <p style={{ fontFamily:F, fontSize:14, color:MUT, marginTop:18 }}>
             أو <a href="#consult" style={{ color:GLD, textDecoration:'underline', textUnderlineOffset:3 }}>احكِ مع المستشارة أولاً</a> — استشارة مجانية بدون التزام.
           </p>
@@ -1038,6 +1116,21 @@ export default function MasarElamiPage() {
         </div>
       </section>
 
+      <PaymentModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        courseSlug="masar-elami"
+        courseTitle="ماستركلاس الإعلام المتكامل"
+        cohortIdOnsite={305}
+        cohortIdLive={306}
+        cohortStartAr="15 أيلول"
+        cohortDays="الأحد والثلاثاء"
+        cohortTimeAr="6:00 – 8:00 مساءً"
+        cohortTrainer="رنا العزام"
+        priceJOD={700}
+        priceUSD={1000}
+        initialMode={checkoutMode}
+      />
     </div>
   );
 }
