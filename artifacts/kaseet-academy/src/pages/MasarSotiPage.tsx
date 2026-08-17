@@ -792,78 +792,105 @@ export default function MasarSotiPage() {
         </div>
       </section>
 
-      {/* ⑤·٥ استشارة مجانية */}
-      <section className="sec sec--consult" style={{ padding: '0 0 80px' }}>
-        <div style={{ ...WRP }}>
-          <div style={{
-            background: 'linear-gradient(135deg, rgba(255,193,7,0.07) 0%, rgba(255,193,7,0.03) 100%)',
-            border: `1px solid ${GL}`,
-            borderRadius: 24,
-            padding: 'clamp(28px,3.5vw,44px) clamp(24px,3vw,40px)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 'clamp(24px,3vw,48px)',
-            flexWrap: 'wrap',
-          }}>
-            {/* ── text side ── */}
-            <div style={{ flex: '1 1 280px', minWidth: 0 }}>
-              <span style={{
-                display: 'inline-flex', alignItems: 'center', gap: 7,
-                background: GS, border: `1px solid ${GL}`,
-                color: GLD, fontFamily: F, fontSize: 12, fontWeight: 700,
-                padding: '5px 14px', borderRadius: 999, marginBottom: 18,
-              }}>
-                <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD, flexShrink: 0 }} />
-                استشارة مجانية · دون التزام
-              </span>
-              <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(20px,2.8vw,28px)', lineHeight: 1.45, color: OFF, margin: '0 0 12px' }}>
-                قبل أن تسجّل، تحدّث مع مستشارتك
-              </h2>
-              <p style={{ fontFamily: F, fontSize: 15, color: MUT, lineHeight: 1.75, margin: '0 0 26px', maxWidth: 460 }}>
-                جلسة قصيرة على واتساب تُحدَّد فيها نقطة بدايتك — لكلّ مسار مستشارة مخصّصة.
-              </p>
-              <a
-                href={WA_CONSULT}
-                target="_blank" rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 9,
-                  background: '#25D366', color: '#fff',
-                  fontFamily: F, fontWeight: 800, fontSize: 14.5,
-                  padding: '12px 24px', borderRadius: 12,
-                  textDecoration: 'none',
-                  boxShadow: '0 4px 16px rgba(37,211,102,.28)',
-                }}>
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                </svg>
-                ابدأ محادثتك المجانية
-              </a>
-            </div>
-
-            {/* ── advisors side ── */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexShrink: 0 }}>
-              {/* ياقوت — مباشر */}
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-                <div style={{ width: 72, height: 72, borderRadius: '50%', border: `2.5px solid ${GLD}`, overflow: 'hidden', flexShrink: 0 }}>
-                  <img src={advisorImg} alt="ياقوت الخشاشنة" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                </div>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontFamily: F, fontWeight: 700, fontSize: 12.5, color: OFF }}>ياقوت</div>
-                  <div style={{ fontFamily: F, fontSize: 11, color: MUT, marginTop: 1 }}>مسار المباشر</div>
-                </div>
-              </div>
-              {/* آية — حضوري */}
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-                <div style={{ width: 72, height: 72, borderRadius: '50%', border: `2.5px solid ${GL}`, overflow: 'hidden', flexShrink: 0 }}>
-                  <img src={advisorAyaImg} alt="آية القماز" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                </div>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontFamily: F, fontWeight: 700, fontSize: 12.5, color: OFF }}>آية</div>
-                  <div style={{ fontFamily: F, fontSize: 11, color: MUT, marginTop: 1 }}>مسار الحضوري</div>
-                </div>
-              </div>
-            </div>
+      {/* ⑤·٥ استشارة مجانية — WhatsApp chat mockup */}
+      <section className="sec sec--consult" style={{ padding: '0 0 88px' }}>
+        <div style={WRP}>
+          {/* section label */}
+          <div style={{ textAlign: 'center', marginBottom: 40 }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: GS, border: `1px solid ${GL}`, color: GLD, fontFamily: F, fontSize: 12, fontWeight: 700, padding: '5px 15px', borderRadius: 999 }}>
+              <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD, flexShrink: 0 }} />
+              استشارة مجانية · دون التزام
+            </span>
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(24px,3.4vw,36px)', lineHeight: 1.4, color: OFF, margin: '16px 0 10px' }}>
+              قبل أن تسجّل، تحدّث مع <span style={{ color: GLD }}>مستشارتك</span>
+            </h2>
+            <p style={{ fontFamily: F, fontSize: 15.5, color: MUT, lineHeight: 1.75, maxWidth: 520, marginInline: 'auto' }}>
+              جلسة قصيرة على واتساب تُحدَّد فيها نقطة بدايتك — لكلّ مسار مستشارة مخصّصة.
+            </p>
           </div>
+
+          {/* ── advisor toggle ── */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 10, marginBottom: 28 }}>
+            {[
+              { mode: 'onsite' as const, label: 'الحضوري', img: advisorAyaImg,  name: 'آية القماز',       phone: WA_PHONE_ONSITE },
+              { mode: 'live'   as const, label: 'المباشر', img: advisorImg,     name: 'ياقوت الخشاشنة', phone: WA_PHONE_ONLINE },
+            ].map(({ mode, label, img, name }) => (
+              <button key={mode} onClick={() => setCheckoutMode(mode)} style={{
+                display: 'flex', alignItems: 'center', gap: 9,
+                background: checkoutMode === mode ? GS : 'transparent',
+                border: `1px solid ${checkoutMode === mode ? GL : CBR}`,
+                borderRadius: 999, padding: '7px 16px 7px 10px', cursor: 'pointer',
+              }}>
+                <div style={{ width: 30, height: 30, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, border: checkoutMode === mode ? `2px solid ${GLD}` : '2px solid transparent' }}>
+                  <img src={img} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+                <span style={{ fontFamily: F, fontWeight: 700, fontSize: 13, color: checkoutMode === mode ? GLD : MUT }}>{label}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* ── WhatsApp chat window ── */}
+          {(() => {
+            const isOnsite = checkoutMode === 'onsite';
+            const advisor = isOnsite
+              ? { name: 'آية القماز', role: 'مستشارة المسار الحضوري', img: advisorAyaImg, phone: WA_PHONE_ONSITE,
+                  msg: 'أهلاً 👋 أنا آية، مستشارة ماستركلاس التعليق الحضوري. أخبريني عن مستواكِ الصوتي الحالي — وأساعدك تختاري نقطة البداية الصح.',
+                  link: waLink(WA_PHONE_ONSITE, 'مرحباً، أودّ حجز استشارة مجانية عن ماستركلاس التعليق الحضوري') }
+              : { name: 'ياقوت الخشاشنة', role: 'مستشارة المسار المباشر', img: advisorImg, phone: WA_PHONE_ONLINE,
+                  msg: 'أهلاً 👋 أنا ياقوت، مستشارة ماستركلاس التعليق المباشر. أخبريني عن مستواكِ الصوتي الحالي — وأساعدك تختاري نقطة البداية الصح.',
+                  link: WA_CONSULT };
+            return (
+              <div style={{ maxWidth: 480, marginInline: 'auto', borderRadius: 20, overflow: 'hidden', boxShadow: '0 24px 64px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.08)' }}>
+
+                {/* ── WA top bar ── */}
+                <div style={{ background: '#1F2C34', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{ width: 42, height: 42, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, border: '2px solid #25D366' }}>
+                    <img src={advisor.img} alt={advisor.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontFamily: F, fontWeight: 700, fontSize: 14.5, color: '#E9EEF1', lineHeight: 1.3 }}>{advisor.name}</div>
+                    <div style={{ fontFamily: F, fontSize: 12, color: '#8696A0', marginTop: 1 }}>{advisor.role}</div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#25D366', boxShadow: '0 0 6px #25D366' }} />
+                    <span style={{ fontFamily: F, fontSize: 11, color: '#25D366', fontWeight: 600 }}>متاحة</span>
+                  </div>
+                </div>
+
+                {/* ── chat body ── */}
+                <div style={{ background: '#0B141A', padding: '20px 16px 16px', minHeight: 140, position: 'relative' }}>
+                  {/* subtle wa pattern overlay */}
+                  <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px)', backgroundSize: '20px 20px', pointerEvents: 'none' }} />
+                  {/* incoming bubble */}
+                  <div style={{ position: 'relative', maxWidth: '82%', background: '#1F2C34', borderRadius: '0 14px 14px 14px', padding: '10px 14px 8px', marginRight: 'auto' }}>
+                    {/* triangle */}
+                    <div style={{ position: 'absolute', top: 0, right: '100%', width: 0, height: 0, borderStyle: 'solid', borderWidth: '0 8px 8px 0', borderColor: `transparent #1F2C34 transparent transparent` }} />
+                    <p style={{ fontFamily: F, fontSize: 14.5, color: '#E9EEF1', lineHeight: 1.7, margin: 0 }} dir="rtl">
+                      {advisor.msg}
+                    </p>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 4, marginTop: 5 }}>
+                      <span style={{ fontFamily: F, fontSize: 10.5, color: '#8696A0' }}>الآن</span>
+                      <svg width="14" height="9" viewBox="0 0 16 10" fill="none">
+                        <path d="M1 5l3.5 3.5L10 1M6 5l3.5 3.5L15 1" stroke="#53BDEB" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
+                {/* ── input bar ── */}
+                <a href={advisor.link} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#1F2C34', padding: '10px 12px', textDecoration: 'none', borderTop: '1px solid rgba(255,255,255,0.06)', cursor: 'pointer' }}>
+                  <div style={{ flex: 1, background: '#2A3942', borderRadius: 22, padding: '9px 16px', display: 'flex', alignItems: 'center' }}>
+                    <span style={{ fontFamily: F, fontSize: 14, color: '#8696A0' }}>ابدأ المحادثة…</span>
+                  </div>
+                  <div style={{ width: 44, height: 44, borderRadius: '50%', background: '#25D366', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 14px rgba(37,211,102,.4)' }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                      <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                  </div>
+                </a>
+              </div>
+            );
+          })()}
         </div>
       </section>
 
