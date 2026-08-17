@@ -477,4 +477,21 @@ router.post("/notify-dryrun", requireAdmin, async (req, res) => {
   res.json({ orderId, results });
 });
 
+// ── GET /admin/email-log ───────────────────────────────────
+// Returns the last 100 email log rows (newest first)
+router.get("/email-log", requireAdmin, async (req, res) => {
+  try {
+    const { rows } = await pool.query(`
+      SELECT id, to_address, subject, tag, provider_id, status, error, sent_at
+      FROM email_log
+      ORDER BY sent_at DESC
+      LIMIT 100
+    `);
+    res.json({ logs: rows });
+  } catch (err) {
+    console.error("admin/email-log error", err);
+    res.status(500).json({ error: "خطأ في الخادم" });
+  }
+});
+
 export default router;

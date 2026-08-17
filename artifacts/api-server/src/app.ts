@@ -28,9 +28,28 @@ app.use(
 );
 
 // ── CORS ──────────────────────────────────────────────────
+// ⛔ Never reflect arbitrary origins when credentials are allowed.
+// Only Replit's own proxy domains (.replit.dev / .pike.replit.dev)
+// and the production domain are permitted.  Unknown origins receive
+// no Access-Control-Allow-Origin header → browser blocks the request.
+const ALLOWED_ORIGIN_RE =
+  /^https:\/\/(?:[\w-]+\.pike\.replit\.dev|[\w-]+\.replit\.dev|kaseet\.com)$/;
+
+function isTrustedOrigin(origin: string | undefined): boolean {
+  if (!origin) return false;
+  if (origin === "http://localhost:5173" || origin === "http://localhost:3000") return true;
+  return ALLOWED_ORIGIN_RE.test(origin);
+}
+
 app.use(
   cors({
-    origin: true,
+    origin(requestOrigin, callback) {
+      if (isTrustedOrigin(requestOrigin)) {
+        callback(null, requestOrigin);      // echo back the exact trusted origin
+      } else {
+        callback(null, false);              // deny — no ACAO header
+      }
+    },
     credentials: true,
   }),
 );

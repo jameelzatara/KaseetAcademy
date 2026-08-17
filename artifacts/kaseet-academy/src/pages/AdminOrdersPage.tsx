@@ -1,8 +1,19 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Lock, RefreshCw, ChevronDown, ChevronUp, TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { Lock, RefreshCw, ChevronDown, ChevronUp, TrendingUp, TrendingDown, Minus, Mail } from 'lucide-react';
 import cohortsData from '@/data/cohorts.json';
 
 // ── Types ─────────────────────────────────────────────────
+interface EmailLog {
+  id: number;
+  to_address: string;
+  subject: string;
+  tag: string | null;
+  provider_id: string | null;
+  status: 'sent' | 'failed' | 'skipped';
+  error: string | null;
+  sent_at: string;
+}
+
 interface Installment {
   seq: 1 | 2 | 3;
   amountJOD: number;
@@ -117,6 +128,9 @@ export default function AdminOrdersPage() {
   const [search,       setSearch]       = useState('');
   const [resending,    setResending]    = useState<string | null>(null);
   const [resendMsg,    setResendMsg]    = useState<{ id: string; ok: boolean; text: string } | null>(null);
+  const [activeTab,    setActiveTab]    = useState<'orders' | 'email-log'>('orders');
+  const [emailLogs,    setEmailLogs]    = useState<EmailLog[]>([]);
+  const [emailLoading, setEmailLoading] = useState(false);
 
   async function login() {
     const resp = await fetch(`${API}/admin/login`, {
@@ -145,7 +159,16 @@ export default function AdminOrdersPage() {
     } finally { setKpiLoading(false); }
   }, []);
 
+  const fetchEmailLogs = useCallback(async () => {
+    setEmailLoading(true);
+    try {
+      const resp = await fetch(`${API}/admin/email-log`, { credentials: 'include' });
+      if (resp.ok) { const d = await resp.json(); setEmailLogs(d.logs ?? []); }
+    } finally { setEmailLoading(false); }
+  }, []);
+
   useEffect(() => { if (authed) { fetchOrders(); fetchKpi(); } }, [statusFilter, authed]);
+  useEffect(() => { if (authed && activeTab === 'email-log') { fetchEmailLogs(); } }, [authed, activeTab]);
 
   async function recordPayment() {
     if (!payingOrder) return;
@@ -241,6 +264,96 @@ export default function AdminOrdersPage() {
             loading={kpiLoading}
           />
         </div>
+
+        {/* ── Tab switcher ────────────────────────────────── */}
+        <div style={{ display: 'flex', gap: 8, marginBottom: 24, borderBottom: `2px solid ${CREAM_LINE}` }}>
+          {([
+            { key: 'orders',    label: 'الطلبات' },
+            { key: 'email-log', label: 'سجل البريد', icon: <Mail size={14} style={{ marginLeft: 4 }} /> },
+          ] as { key: 'orders' | 'email-log'; label: string; icon?: React.ReactNode }[]).map(tab => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              style={{
+                display: 'inline-flex', alignItems: 'center', padding: '8px 18px',
+                fontFamily: F, fontWeight: activeTab === tab.key ? 800 : 600,
+                fontSize: 14, color: activeTab === tab.key ? DARK : INK2,
+                background: 'transparent', border: 'none', borderBottom: activeTab === tab.key ? `3px solid ${DARK}` : '3px solid transparent',
+                cursor: 'pointer', marginBottom: -2, transition: 'all .15s',
+              }}
+            >
+              {tab.icon}{tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* ── Email log tab ────────────────────────────────── */}
+        {activeTab === 'email-log' && (
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+              <h2 style={{ margin: 0, fontWeight: 800, fontSize: 20, color: INK }}>سجل البريد الإلكتروني</h2>
+              <button
+                onClick={fetchEmailLogs}
+                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', border: `1.5px solid ${CREAM_LINE}`, borderRadius: 10, fontFamily: F, fontWeight: 700, fontSize: 13, color: INK, background: '#fff', cursor: 'pointer' }}
+              >
+                <RefreshCw size={14} /> تحديث
+              </button>
+            </div>
+            {emailLoading && <p style={{ color: INK2, textAlign: 'center' }}>جارٍ التحميل…</p>}
+            {!emailLoading && emailLogs.length === 0 && (
+              <p style={{ color: INK2, textAlign: 'center' }}>لا توجد سجلات</p>
+            )}
+            {!emailLoading && emailLogs.length > 0 && (
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: F, fontSize: 13 }}>
+                  <thead>
+                    <tr style={{ background: CREAM_CARD, textAlign: 'right' }}>
+                      {['التاريخ', 'البريد', 'الموضوع', 'النوع', 'الحالة', 'الخطأ'].map(h => (
+                        <th key={h} style={{ padding: '10px 12px', fontWeight: 700, color: INK2, borderBottom: `1.5px solid ${CREAM_LINE}`, whiteSpace: 'nowrap' }}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {emailLogs.map(log => {
+                      const badge = log.status === 'sent'
+                        ? { label: 'أُرسل',   bg: 'rgba(22,163,74,.12)',  color: '#16a34a' }
+                        : log.status === 'failed'
+                        ? { label: 'فشل',     bg: 'rgba(220,38,38,.12)', color: '#dc2626' }
+                        : { label: 'تخطّى',   bg: 'rgba(107,114,128,.12)', color: '#6B7280' };
+                      return (
+                        <tr key={log.id} style={{ borderBottom: `1px solid ${CREAM_LINE}` }}>
+                          <td style={{ padding: '9px 12px', color: INK2, whiteSpace: 'nowrap' }}>
+                            {new Date(log.sent_at).toLocaleString('ar-JO', { dateStyle: 'short', timeStyle: 'short' })}
+                          </td>
+                          <td style={{ padding: '9px 12px', color: INK, direction: 'ltr', textAlign: 'left', maxWidth: 180, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {log.to_address}
+                          </td>
+                          <td style={{ padding: '9px 12px', color: INK, maxWidth: 220, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {log.subject}
+                          </td>
+                          <td style={{ padding: '9px 12px', color: INK2, whiteSpace: 'nowrap' }}>
+                            {log.tag ?? '—'}
+                          </td>
+                          <td style={{ padding: '9px 12px', whiteSpace: 'nowrap' }}>
+                            <span style={{ background: badge.bg, color: badge.color, borderRadius: 20, padding: '3px 11px', fontWeight: 700, fontSize: 12 }}>
+                              {badge.label}
+                            </span>
+                          </td>
+                          <td style={{ padding: '9px 12px', color: '#dc2626', fontSize: 12, maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={log.error ?? ''}>
+                            {log.error ?? '—'}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── Orders tab ──────────────────────────────────── */}
+        {activeTab === 'orders' && <>
 
         {/* ── Orders section ──────────────────────────────── */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 12 }}>
@@ -410,6 +523,9 @@ export default function AdminOrdersPage() {
             </div>
           );
         })}
+
+        </>}
+
       </div>
 
       {/* ── Record payment modal ──────────────────────────── */}
