@@ -225,7 +225,7 @@ function OrderSummary({
   );
 }
 
-/* ── Simple text field ─────────────────────────────── */
+/* ── Simple text field — icon absolute on the RIGHT ── */
 function Field({
   icon, placeholder, value, onChange, type = 'text', inputDir = 'rtl', required,
 }: {
@@ -235,11 +235,18 @@ function Field({
   const [focused, setFocused] = useState(false);
   return (
     <div style={{
-      display: 'flex', alignItems: 'center', gap: 10,
+      position: 'relative',
       background: CARD2, border: `1.5px solid ${focused ? GLD : CBR}`,
-      borderRadius: 12, padding: '12px 14px', transition: 'border-color .2s',
+      borderRadius: 12, transition: 'border-color .2s',
     }}>
-      <span style={{ color: focused ? GLD : MUT, flexShrink: 0, display: 'flex', transition: 'color .2s' }}>{icon}</span>
+      {/* icon pinned to the right */}
+      <span style={{
+        position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)',
+        color: focused ? GLD : MUT, display: 'flex', pointerEvents: 'none',
+        transition: 'color .2s',
+      }}>
+        {icon}
+      </span>
       <input
         type={type}
         placeholder={placeholder + (required ? ' *' : '')}
@@ -248,7 +255,12 @@ function Field({
         dir={inputDir}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
-        style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', fontFamily: F, fontSize: 14, color: OFF, minWidth: 0 } as CSSProperties}
+        style={{
+          width: '100%', background: 'transparent', border: 'none', outline: 'none',
+          fontFamily: F, fontSize: 14, color: OFF,
+          padding: '12px 42px 12px 14px',   /* right padding leaves room for icon */
+          textAlign: 'right', boxSizing: 'border-box',
+        } as CSSProperties}
       />
     </div>
   );
@@ -263,13 +275,13 @@ function PhoneField({
 }) {
   const [focused, setFocused] = useState(false);
   return (
-    /* direction:ltr so dial-code sits on the LEFT, number input on the RIGHT */
+    /* LTR container: code on LEFT, number+icon on RIGHT */
     <div style={{
       display: 'flex', alignItems: 'stretch', direction: 'ltr',
       background: CARD2, border: `1.5px solid ${focused ? GLD : CBR}`,
       borderRadius: 12, overflow: 'hidden', transition: 'border-color .2s',
     }}>
-      {/* dial-code selector ── LEFT side */}
+      {/* dial-code selector — LEFT */}
       <div style={{ borderRight: `1px solid ${CBR}`, flexShrink: 0 }}>
         <select
           value={dialCode}
@@ -279,8 +291,7 @@ function PhoneField({
           style={{
             height: '100%', background: 'transparent', border: 'none', outline: 'none',
             fontFamily: FP, fontSize: 13, fontWeight: 700, color: LT,
-            padding: '0 10px', cursor: 'pointer', direction: 'ltr',
-            minWidth: 80,
+            padding: '0 10px', cursor: 'pointer', direction: 'ltr', minWidth: 80,
           } as CSSProperties}
         >
           {COUNTRIES.map(c => (
@@ -291,8 +302,8 @@ function PhoneField({
         </select>
       </div>
 
-      {/* number input ── RIGHT side, placeholder RTL */}
-      <div style={{ display: 'flex', alignItems: 'center', flex: 1, gap: 8, padding: '12px 14px' }}>
+      {/* number input — icon pinned to the RIGHT of this sub-section */}
+      <div style={{ position: 'relative', flex: 1 }}>
         <input
           type="tel"
           placeholder="رقم الجوال *"
@@ -301,35 +312,48 @@ function PhoneField({
           dir="ltr"
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
-          style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', fontFamily: FP, fontSize: 14, color: OFF, minWidth: 0 } as CSSProperties}
+          style={{
+            width: '100%', background: 'transparent', border: 'none', outline: 'none',
+            fontFamily: FP, fontSize: 14, color: OFF,
+            padding: '12px 40px 12px 12px',
+            boxSizing: 'border-box',
+          } as CSSProperties}
         />
-        <Phone size={14} color={focused ? GLD : MUT} style={{ flexShrink: 0, transition: 'color .2s' }} />
+        <Phone
+          size={14}
+          color={focused ? GLD : MUT}
+          style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', transition: 'color .2s' }}
+        />
       </div>
     </div>
   );
 }
 
-/* ── Country select ────────────────────────────────── */
+/* ── Country select — icon absolute RIGHT ──────────── */
 function CountrySelect({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   const [focused, setFocused] = useState(false);
   return (
-    /* direction:ltr on wrapper keeps MapPin on LEFT, select text flows RTL */
     <div style={{
-      display: 'flex', alignItems: 'center', gap: 10, direction: 'ltr',
+      position: 'relative',
       background: CARD2, border: `1.5px solid ${focused ? GLD : CBR}`,
-      borderRadius: 12, padding: '0 14px', transition: 'border-color .2s',
+      borderRadius: 12, transition: 'border-color .2s',
     }}>
-      <MapPin size={15} color={focused ? GLD : MUT} style={{ flexShrink: 0, transition: 'color .2s' }} />
+      <MapPin
+        size={15}
+        color={focused ? GLD : MUT}
+        style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', transition: 'color .2s' }}
+      />
       <select
         value={value}
         onChange={e => onChange(e.target.value)}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         style={{
-          flex: 1, appearance: 'none' as const, background: 'transparent',
+          width: '100%', appearance: 'none' as const, background: 'transparent',
           border: 'none', outline: 'none', fontFamily: F, fontSize: 14,
           color: OFF, cursor: 'pointer', direction: 'rtl',
-          padding: '12px 0', textAlign: 'right',
+          padding: '12px 42px 12px 14px',  /* right padding for icon */
+          textAlign: 'right', boxSizing: 'border-box',
         } as CSSProperties}
       >
         {COUNTRIES.map(c => (
@@ -575,7 +599,7 @@ export default function PaymentModal({
           position: 'fixed', inset: 0, zIndex: 1000,
           background: 'rgba(0,0,0,0.80)', backdropFilter: 'blur(6px)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          padding: 16,
+          padding: 20,
         }}
       >
         {/* card */}
@@ -584,13 +608,13 @@ export default function PaymentModal({
           onClick={e => e.stopPropagation()}
           style={{
             background: BG, border: `1px solid ${CBR}`, borderRadius: 20,
-            width: '100%', maxWidth: 520, maxHeight: '92dvh',
+            width: '100%', maxWidth: 520, maxHeight: '85vh',
             display: 'flex', flexDirection: 'column',
             boxShadow: '0 40px 100px rgba(0,0,0,0.75)',
             overflow: 'hidden',
           }}
         >
-          {/* sticky header */}
+          {/* fixed header */}
           <div style={{
             flexShrink: 0, background: BG, borderBottom: `1px solid ${CBR}`,
             padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -609,8 +633,8 @@ export default function PaymentModal({
             </button>
           </div>
 
-          {/* scrollable body */}
-          <div style={{ flex: 1, overflowY: 'auto', padding: '22px 20px 28px' }}>
+          {/* scrollable body — thin scrollbar */}
+          <div className="ka-modal-body" style={{ flex: 1, overflowY: 'auto', padding: '22px 20px 28px' }}>
 
             {(step === 'form' || step === 'payment' || step === 'success') && <Stepper step={step} />}
 
@@ -835,20 +859,22 @@ export default function PaymentModal({
 
       <style>{`
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* placeholder colour for all inputs */
         input::placeholder { color: #8A97AE !important; }
         select option { background: #1A2535 !important; color: #f8fafc !important; }
 
-        /* mobile: full-screen modal */
+        /* thin, styled scrollbar for the modal body */
+        .ka-modal-body::-webkit-scrollbar { width: 4px; }
+        .ka-modal-body::-webkit-scrollbar-track { background: transparent; }
+        .ka-modal-body::-webkit-scrollbar-thumb { background: rgba(255,193,7,0.25); border-radius: 4px; }
+        .ka-modal-body::-webkit-scrollbar-thumb:hover { background: rgba(255,193,7,0.45); }
+        .ka-modal-body { scrollbar-width: thin; scrollbar-color: rgba(255,193,7,0.25) transparent; }
+
+        /* mobile: keep centered, slightly taller */
         @media (max-width: 600px) {
-          .ka-modal-overlay {
-            align-items: flex-end !important;
-            padding: 0 !important;
-          }
-          .ka-modal-card {
-            border-radius: 20px 20px 0 0 !important;
-            max-height: 96dvh !important;
-            border-bottom: none !important;
-          }
+          .ka-modal-overlay { padding: 12px !important; }
+          .ka-modal-card { max-height: 92dvh !important; }
         }
       `}</style>
     </>
