@@ -700,8 +700,8 @@ export function getElamData(assets: {
       heading: 'تتخرّج بشريط أعمال',
       headingGold: 'لا بشهادة',
       desc: 'الجهة الإعلامية لا تسأل عن شهادتك، بل تطلب أن ترى تسجيلاً لك على الشاشة. هذه محفظتك عند إتمام المسار.',
-      tableHeader: 'محفظتك الإعلامية · 12 مخرجاً + مشروع التخرّج',
-      tableCount: '13 مخرجاً',
+      tableHeader: 'محفظتك الإعلامية · 11 مخرجاً + مشروع التخرّج',
+      tableCount: '12 مخرجاً',
       items: [
         { n:'01', title:'ظهور أوّل أمام الكاميرا · قبل وبعد',                kind:'تأسيس',   outputType:'فيديو',       hot:false },
         { n:'02', title:'قراءة نصّ إخباري مشكّل كامل',                       kind:'لغة',     outputType:'فيديو',       hot:false },
@@ -714,7 +714,6 @@ export function getElamData(assets: {
         { n:'09', title:'بثّ مباشر وإدارة الطارئ',                            kind:'مباشر',   outputType:'فيديو',       hot:false },
         { n:'10', title:'حلقة بودكاست بتقديمك',                               kind:'بودكاست', outputType:'صوت',         hot:false },
         { n:'11', title:'ملفّ تعريفي احترافي (Show Reel)',                    kind:'هوية',    outputType:'فيديو',       hot:true  },
-        { n:'12', title:'قائمة أسعار ونموذج عقد',                            kind:'سوق',     outputType:'وثيقة',       hot:false },
       ],
       gradRow: { title: 'مشروع التخرّج · حلقة منتَجة بيد مخرج ومهندس صوت', kind: 'التخرّج', outputType: 'إنتاج كامل' },
       footerNote: 'الأعمال المميّزة بالذهبي هي الأكثر أثراً في السوق: المقابلة تُثبت قدرتك على إدارة ضيف، وشريط الأعمال هو ما تُقيَّم به قبل أن تُقابَل.',

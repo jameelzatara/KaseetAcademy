@@ -4,7 +4,7 @@
  */
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { ChevronDown, ArrowLeft, MapPin, Wifi, Layers, Clock, FolderCheck, ShieldCheck } from 'lucide-react';
+import { ChevronDown, ArrowLeft, MapPin, Wifi, Layers, Clock, FolderCheck, ShieldCheck, Video, AudioLines, FileText, Clapperboard } from 'lucide-react';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { GOLD, OFF, F, FP, INNER, waLink } from '../pages/shared/coursePageHelpers';
 import type { MasterclassData, StationItem } from '../data/masterclasses';
@@ -29,17 +29,25 @@ const TEAL = 'rgba(30,122,133,';
 const WRP = INNER;
 
 /* ── tiny helpers ──────────────────────────────────────────── */
+/* ── section chip (non-gold) ───────────────────────────────── */
+const CHIP_BG  = 'rgba(255,255,255,0.06)';
+const CHIP_BR  = 'rgba(255,255,255,0.10)';
+const CHIP_TXT = '#C8D3E2';
+const CHIP_DOT = '#30B8C4';
+
+/* ── dark-theme chip ───────────────────────────────────────── */
+const CHIP_BG_D  = 'rgba(138,98,0,.09)';
+const CHIP_BR_D  = 'rgba(138,98,0,.28)';
+const CHIP_TXT_D = '#8A6200';
+
 function SectionHead({ badge, dark, heading, headingGold, sub }: {
   badge: string; dark?: boolean; heading: string; headingGold: string; sub?: string;
 }) {
   const textColor = dark ? INK : OFF;
-  const badgeBg   = dark ? 'rgba(138,98,0,.09)' : GLD;
-  const badgeTxt  = dark ? '#8A6200' : '#1A1206';
-  const badgeBdr  = dark ? 'rgba(138,98,0,.28)' : 'none';
   return (
     <div style={{ textAlign: 'center', marginBottom: 52, direction: 'rtl' }}>
-      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: badgeBg, border: `1px solid ${badgeBdr}`, color: badgeTxt, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '7px 16px', borderRadius: 999 }}>
-        <span style={{ width: 6, height: 6, borderRadius: '50%', background: badgeTxt }} />
+      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: dark ? CHIP_BG_D : CHIP_BG, border: `1px solid ${dark ? CHIP_BR_D : CHIP_BR}`, color: dark ? CHIP_TXT_D : CHIP_TXT, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '7px 16px', borderRadius: 999 }}>
+        <span style={{ width: 6, height: 6, borderRadius: '50%', background: dark ? CHIP_TXT_D : CHIP_DOT }} />
         {badge}
       </span>
       <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', lineHeight: 1.35, margin: '18px 0 0', color: textColor }}>
@@ -359,9 +367,9 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
           </>
         )}
 
-        {/* ── viewfinder HUD (desktop ≥769px only) ─────────────────── */}
-        {isCoverHero && data.hero.useSpinningRing && typeof window !== 'undefined' && window.innerWidth >= 769 && (
-          <div className="mc-hud" style={{ position: 'absolute', top: 72, left: 0, right: 0, zIndex: 5, padding: '0 clamp(16px,4vw,48px)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', opacity: 0.4, pointerEvents: 'none', direction: 'ltr' }}>
+        {/* ── viewfinder HUD (hidden on mobile via CSS) ──────────── */}
+        {isCoverHero && data.hero.useSpinningRing && (
+          <div className="mc-hud" style={{ position: 'absolute', top: 72, left: 0, right: 0, zIndex: 5, padding: '0 clamp(16px,4vw,48px)', display: 'none', alignItems: 'center', justifyContent: 'space-between', opacity: 0.4, pointerEvents: 'none', direction: 'ltr' }}>
             {/* left: REC + resolution */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: FP, fontSize: 11, color: LT, letterSpacing: 1 }}>
               <span className="mc-live-dot" style={{ width: 7, height: 7, borderRadius: '50%', background: '#FF3333', flexShrink: 0 }} />
@@ -578,8 +586,8 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
         <section className="sec sec--audience" style={{ padding: '80px 0', background: '#0B1628', backgroundImage: 'linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px)', backgroundSize: '48px 48px' }}>
           <div style={WRP}>
             <div style={{ textAlign: 'center', marginBottom: 44, direction: 'rtl' }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GLD, color: '#1A1206', fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '7px 16px', borderRadius: 999 }}>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#1A1206' }} />
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: CHIP_BG, border: `1px solid ${CHIP_BR}`, color: CHIP_TXT, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '7px 16px', borderRadius: 999 }}>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: CHIP_DOT }} />
                 {data.audience.badge}
               </span>
               <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(22px,3.4vw,36px)', lineHeight: 1.5, margin: '16px 0 0', color: OFF, maxWidth: 700, marginInline: 'auto' }}>
@@ -589,7 +597,7 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 14, maxWidth: 960, marginInline: 'auto' }}>
               {data.audience.items.map((item, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 14, background: 'rgba(255,255,255,0.04)', border: `1px solid rgba(255,255,255,0.08)`, borderRadius: 14, padding: '16px 18px' }}>
-                  <span style={{ flexShrink: 0, width: 28, height: 28, borderRadius: '50%', background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 12, display: 'grid', placeContent: 'center' }}>
+                  <span style={{ flexShrink: 0, width: 26, height: 26, borderRadius: '50%', background: 'transparent', border: '1px solid rgba(255,255,255,0.10)', color: MUT, fontFamily: FP, fontWeight: 700, fontSize: 12, display: 'grid', placeContent: 'center' }}>
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <span style={{ fontFamily: F, fontSize: 14.5, color: LT, lineHeight: 1.75 }}>{item}</span>
@@ -624,7 +632,7 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
                 <span style={{ flexShrink: 0, fontFamily: FP, fontSize: 22, color: GLD, marginTop: 2 }}>★</span>
                 <div>
                   <div style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: GLD, marginBottom: 6 }}>{data.portfolio.heading}</div>
-                  <p style={{ fontFamily: F, fontSize: 14, color: LT, lineHeight: 1.8, margin: 0 }}>{data.portfolio.lead}</p>
+                  <p style={{ fontFamily: F, fontSize: 14, color: LT, lineHeight: 1.8, margin: 0 }}>{data.portfolio.desc}</p>
                 </div>
               </div>
             )}
@@ -637,6 +645,81 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
           </div>
         </section>
       )}
+
+      {/* ═══════════════════════════════════
+          01-E. PORTFOLIO TABLE (elam only)
+      ═══════════════════════════════════ */}
+      {data.portfolio && data.portfolio.items && data.portfolio.items.some(it => it.outputType) && (() => {
+        const p = data.portfolio!;
+        function portIcon(t?: string) {
+          if (t === 'صوت')         return <AudioLines size={15} color={MUT} />;
+          if (t === 'وثيقة')       return <FileText   size={15} color={MUT} />;
+          if (t === 'إنتاج كامل')  return <Clapperboard size={15} color={MUT} />;
+          return                          <Video      size={15} color={MUT} />;
+        }
+        const hotStyle: React.CSSProperties = {
+          background: 'rgba(255,193,7,.055)',
+          borderInlineStart: `2px solid ${GLD}`,
+          borderRadius: 0,
+        };
+        return (
+          <section className="sec sec--portfolio" style={{ padding: '80px 0' }}>
+            <div style={WRP}>
+              <div style={{ textAlign: 'center', marginBottom: 40, direction: 'rtl' }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: CHIP_BG, border: `1px solid ${CHIP_BR}`, color: CHIP_TXT, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '7px 16px', borderRadius: 999 }}>
+                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: CHIP_DOT }} />
+                  {p.badge}
+                </span>
+                <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,4vw,42px)', lineHeight: 1.35, margin: '16px 0 8px', color: OFF }}>
+                  {p.heading} <span style={{ color: GLD }}>{p.headingGold}</span>
+                </h2>
+                <p style={{ fontFamily: F, fontSize: 15, color: MUT, maxWidth: 620, marginInline: 'auto', lineHeight: 1.85 }}>{p.desc}</p>
+              </div>
+
+              {/* table */}
+              <div style={{ maxWidth: 880, marginInline: 'auto', border: `1px solid ${CBR}`, borderRadius: 14, overflow: 'hidden' }}>
+                {/* header row */}
+                <div style={{ display: 'grid', gridTemplateColumns: '40px 1fr 88px 72px', gap: 12, alignItems: 'center', padding: '12px 24px', background: 'rgba(255,255,255,0.04)', borderBottom: `1px solid ${CBR}` }}>
+                  <span style={{ fontFamily: FP, fontSize: 11, color: MUT, textAlign: 'center' }}>#</span>
+                  <span style={{ fontFamily: F, fontSize: 12.5, fontWeight: 700, color: LT }}>
+                    {p.tableHeader}
+                    <span style={{ marginInlineStart: 10, fontFamily: F, fontSize: 11, fontWeight: 700, color: GLD, background: GS, border: `1px solid ${GL}`, padding: '2px 10px', borderRadius: 999 }}>{p.tableCount}</span>
+                  </span>
+                  <span style={{ fontFamily: F, fontSize: 11, color: MUT, textAlign: 'center' }}>الوسم</span>
+                  <span style={{ fontFamily: F, fontSize: 11, color: MUT, textAlign: 'center' }}>النوع</span>
+                </div>
+                {/* items */}
+                {p.items.map(it => (
+                  <div key={it.n} style={{ display: 'grid', gridTemplateColumns: '40px 1fr 88px 72px', gap: 12, alignItems: 'center', padding: '13px 24px', borderBottom: `1px solid ${CBR}`, ...(it.hot ? hotStyle : {}) }}>
+                    <span style={{ fontFamily: FP, fontSize: 13, fontWeight: 700, color: it.hot ? GLD : MUT, textAlign: 'center' }}>{it.n}</span>
+                    <span style={{ fontFamily: F, fontSize: 14, color: it.hot ? OFF : LT, lineHeight: 1.5 }}>{it.title}</span>
+                    <span style={{ fontFamily: F, fontSize: 11.5, color: MUT, background: CARD, border: `1px solid ${CBR}`, borderRadius: 6, padding: '3px 8px', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{it.kind}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
+                      {portIcon(it.outputType)}
+                      <span style={{ fontFamily: F, fontSize: 11.5, color: MUT }}>{it.outputType === 'إنتاج كامل' ? 'إنتاج' : it.outputType}</span>
+                    </div>
+                  </div>
+                ))}
+                {/* grad row */}
+                <div style={{ display: 'grid', gridTemplateColumns: '40px 1fr 88px 72px', gap: 12, alignItems: 'center', padding: '14px 24px', background: 'rgba(255,193,7,.055)', borderInlineStart: `2px solid ${GLD}`, borderTop: `1px solid ${CBR}` }}>
+                  <span style={{ fontFamily: FP, fontSize: 16, color: GLD, textAlign: 'center' }}>★</span>
+                  <span style={{ fontFamily: F, fontSize: 14, color: OFF, fontWeight: 700, lineHeight: 1.5 }}>{p.gradRow.title}</span>
+                  <span style={{ fontFamily: F, fontSize: 11.5, color: GLD, background: GS, border: `1px solid ${GL}`, borderRadius: 6, padding: '3px 8px', textAlign: 'center', whiteSpace: 'nowrap' }}>{p.gradRow.kind}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
+                    <Clapperboard size={15} color={GLD} />
+                    <span style={{ fontFamily: F, fontSize: 11.5, color: GLD }}>إنتاج</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* footer note */}
+              {p.footerNote && (
+                <p style={{ fontFamily: F, fontSize: 13, color: MUT, maxWidth: 700, marginInline: 'auto', marginTop: 18, lineHeight: 1.85, textAlign: 'center', direction: 'rtl' }}>{p.footerNote}</p>
+              )}
+            </div>
+          </section>
+        );
+      })()}
 
       {/* ═══════════════════════════════════
           02. CURRICULUM (station tree)
