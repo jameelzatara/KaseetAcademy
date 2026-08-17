@@ -89,6 +89,16 @@ export interface StudyModeInfo {
   sub: string;
   items: string[];
   details: ModeDetail[];
+  /** schedule line shown beneath the mode card label */
+  schedule?: string;
+  /** staff card shown beneath the mode card */
+  advisor?: {
+    name: string;
+    role: string;
+    phone: string;
+    imgSrc: string;
+    waLabel: string;
+  };
 }
 
 export interface GalleryItem {
@@ -585,6 +595,8 @@ export function getElamData(assets: {
   trainerRamiSrc: string;
   trainerRanaSrc: string;
   advisorYaqoutSrc: string;
+  advisorImgSrc: string;
+  advisorAyaImgSrc: string;
 }): MasterclassData {
   return {
     slug: 'masar-elami',
@@ -756,6 +768,7 @@ export function getElamData(assets: {
       inperson: {
         label: 'حضوري — استوديو كاسيت',
         sub: 'حضور فعلي في عمّان',
+        schedule: 'الأحد والثلاثاء · 6:00–8:00 مساءً · يبدأ 14 أيلول',
         items: ['تفاعل مباشر مع المدرب والزملاء','تطبيق عملي داخل الاستوديوهات المجهَّزة','بيئة تعلم منظَّمة بلا إلهاء','تشبيك مع المتدربين وفرص العمل'],
         details: [
           { title:'تطبيق عملي أمام الكاميرا',   desc:'كل محطة تنتهي بمشروع مصوَّر أو مسجَّل يُسلَّم ويُقيَّم من لجنة المدربين.' },
@@ -763,10 +776,18 @@ export function getElamData(assets: {
           { title:'مجموعات صغيرة — تصحيح فردي',  desc:'لا يتجاوز عدد المجموعة 12 متدرباً لضمان اهتمام المدرب بكل متدرب.' },
           { title:'تشبيك مهني مع الزملاء',        desc:'بيئة تعلم جماعية تفتح أبواب الفرص المهنية والتعاون بين المتدربين.' },
         ],
+        advisor: {
+          name: 'آية القماز',
+          role: 'المستشارة التعليمية — الحضوري عمّان',
+          phone: '962790234483',
+          imgSrc: assets.advisorAyaImgSrc,
+          waLabel: 'تحدّثي مع آية',
+        },
       },
       online: {
         label: 'مباشر تفاعلي (Online LIVE)',
         sub: 'من أي مكان في العالم العربي',
+        schedule: 'الأحد والثلاثاء · 6:00–8:00 مساءً · يبدأ 14 أيلول',
         items: ['جلسات مباشرة مع المدرب في الوقت الفعلي','تسجيلات الجلسات متاحة للمراجعة','تسليم واجبات وتقييم فردي','متاح من أي مكان في العالم العربي'],
         details: [
           { title:'جلسات حية مع المدرب',         desc:'كل محطة تُقدَّم مباشرةً في الوقت الفعلي — لا محاضرات مسجَّلة مسبقاً.' },
@@ -774,6 +795,13 @@ export function getElamData(assets: {
           { title:'تسليم مشاريع وتقييم فردي',     desc:'نفس آلية التسليم والتقييم المطبَّقة في الحضوري — لا تنازل عن المعايير.' },
           { title:'متاح من أي مكان',              desc:'الأردن، السعودية، الإمارات، مصر، أو أي مكان آخر — بشرط اتصال جيد.' },
         ],
+        advisor: {
+          name: 'ياقوت الخشاشنة',
+          role: 'المستشارة التعليمية — المباشر التفاعلي',
+          phone: '962771052222',
+          imgSrc: assets.advisorImgSrc,
+          waLabel: 'تحدّثي مع ياقوت',
+        },
       },
     },
 

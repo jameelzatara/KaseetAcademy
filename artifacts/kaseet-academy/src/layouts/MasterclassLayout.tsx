@@ -347,11 +347,11 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
         {isCoverHero && data.hero.heroBgSrc && (
           <>
             <img src={data.hero.heroBgSrc} alt="" aria-hidden="true" fetchPriority="high" decoding="async"
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 22%', zIndex: 0 }} />
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: '28% 22%', zIndex: 0 }} />
             {/* vertical vignette */}
-            <div style={{ position: 'absolute', inset: 0, zIndex: 1, background: 'linear-gradient(to bottom, rgba(2,6,23,0.82) 0%, rgba(2,6,23,0.44) 38%, rgba(2,6,23,0.92) 100%)' }} />
-            {/* side vignette — covers background text bleeding from ring side */}
-            <div style={{ position: 'absolute', inset: 0, zIndex: 2, background: 'linear-gradient(to right, rgba(2,6,23,0.88) 0%, rgba(2,6,23,0.55) 35%, transparent 58%)' }} />
+            <div style={{ position: 'absolute', inset: 0, zIndex: 1, background: 'linear-gradient(to bottom, rgba(2,6,23,0.80) 0%, rgba(2,6,23,0.32) 38%, rgba(2,6,23,0.92) 100%)' }} />
+            {/* side vignette — darkens text/right side, leaves subject on left clear */}
+            <div style={{ position: 'absolute', inset: 0, zIndex: 2, background: 'linear-gradient(to left, rgba(2,6,23,0.90) 0%, rgba(2,6,23,0.60) 38%, transparent 62%)' }} />
             {/* arc decorations */}
             {[320, 500, 680].map((r, i) => (
               <div key={i} className="mc-arc" style={{ width: r, height: r, bottom: -r*0.4, left: '50%', transform: 'translateX(-50%)', opacity: 0.28 - i*0.08, zIndex: 2 }} />
@@ -560,9 +560,6 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
                   </g>
                 </svg>
                 <div style={{ position: 'absolute', inset: 0, display: 'grid', placeContent: 'center', textAlign: 'center', zIndex: 2 }}>
-                  <div style={{ fontFamily: FP, fontSize: 72, fontWeight: 800, color: OFF, lineHeight: 1 }}>{data.curriculum.stations.length}</div>
-                  <div style={{ fontFamily: F, fontSize: 15, color: MUT, marginTop: 6 }}>محطات</div>
-                  <div style={{ width: 36, height: 1, background: 'rgba(255,193,7,0.35)', margin: '12px auto' }} />
                   <div style={{ fontFamily: F, fontSize: 12.5, color: LT, letterSpacing: 0.5 }}>تأسيس · تخصيص · قيادة</div>
                 </div>
               </div>
@@ -575,7 +572,7 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
           01-B. AUDIENCE (elam + khataba)
       ═══════════════════════════════════ */}
       {data.audience && (
-        <section className="sec sec--audience" style={{ padding: '80px 0', background: '#0B1628' }}>
+        <section className="sec sec--audience" style={{ padding: '80px 0', background: '#0B1628', backgroundImage: 'linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px)', backgroundSize: '48px 48px' }}>
           <div style={WRP}>
             <div style={{ textAlign: 'center', marginBottom: 44, direction: 'rtl' }}>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GLD, color: '#1A1206', fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '7px 16px', borderRadius: 999 }}>
@@ -600,34 +597,7 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
         </section>
       )}
 
-      {/* ═══════════════════════════════════
-          01-C. METHOD (elam — right after audience)
-      ═══════════════════════════════════ */}
-      {data.method && data.slug === 'masar-elami' && (
-        <section className="sec sec--method" style={{ padding: '80px 0' }}>
-          <div style={WRP}>
-            <SectionHead badge={data.method.badge} heading={data.method.heading} headingGold={data.method.headingGold} sub={data.method.lead} />
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16, marginTop: 48 }}>
-              {data.method.items.map((item, i) => (
-                <div key={i} style={{ background: CARD, border: `1px solid ${CBR}`, borderRadius: 18, padding: '26px 22px' }}>
-                  <div style={{ width: 40, height: 40, borderRadius: 12, background: GS, border: `1px solid ${GL}`, display: 'grid', placeContent: 'center', marginBottom: 14 }}>
-                    <span style={{ fontFamily: FP, fontSize: 13, fontWeight: 700, color: GLD }}>{String(i + 1).padStart(2, '0')}</span>
-                  </div>
-                  <h4 style={{ fontFamily: F, fontWeight: 800, fontSize: 17, color: OFF, marginBottom: 8, lineHeight: 1.4 }}>{item.title}</h4>
-                  <p style={{ fontFamily: F, fontSize: 13.5, color: MUT, lineHeight: 1.8, margin: 0 }}>{item.body}</p>
-                </div>
-              ))}
-            </div>
-            <div style={{ marginTop: 18, background: `linear-gradient(135deg, ${GS}, rgba(255,193,7,0.04) 60%)`, border: `1px solid ${GL}`, borderRadius: 18, padding: '24px 26px', display: 'flex', alignItems: 'flex-start', gap: 16 }}>
-              <span style={{ flexShrink: 0, fontFamily: FP, fontSize: 22, color: GLD }}>★</span>
-              <div>
-                <div style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: GLD, marginBottom: 6 }}>{data.method.finalOutput.title}</div>
-                <p style={{ fontFamily: F, fontSize: 14, color: LT, lineHeight: 1.8, margin: 0 }}>{data.method.finalOutput.body}</p>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
+      {/* 01-C elam method removed per design update */}
 
       {/* ═══════════════════════════════════
           01-D. OUTCOMES/ACQUISITIONS (khataba — before curriculum)
@@ -646,7 +616,7 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
               ))}
             </div>
             <div style={{ textAlign: 'center', marginTop: 32 }}>
-              <a href="#enroll" onClick={openModal}
+              <a href="#pricing"
                 style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 32px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 8px 24px rgba(255,193,7,.24)' }}>
                 احجز مقعدك الآن <ArrowLeft size={14} />
               </a>
@@ -733,17 +703,13 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
                   <p style={{ fontFamily: F, fontSize: 13, color: MUT, marginTop: 3 }}>{data.curriculum.gradProject.desc}</p>
                 </div>
               </div>
-              <a href="#enroll" onClick={openModal}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 700, fontSize: 13.5, padding: '11px 22px', borderRadius: 12, textDecoration: 'none' }}>
-                التسجيل في المسار <ArrowLeft size={13} />
-              </a>
             </div>
           )}
 
           <div style={{ textAlign: 'center', marginTop: 34 }}>
-            <a href="#enroll" onClick={openModal}
+            <a href="#pricing"
               style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15.5, padding: '14px 30px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 10px 30px rgba(255,193,7,.24)' }}>
-              احجز مقعدك في الفوج القادم <ArrowLeft size={14} />
+              احجز مقعدك الآن <ArrowLeft size={14} />
             </a>
           </div>
         </div>
@@ -848,81 +814,6 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
       )}
 
       {/* ═══════════════════════════════════
-          06. TRAINERS
-      ═══════════════════════════════════ */}
-      <section id="trainers" className="sec sec--trainers" style={{ padding: '96px 0' }}>
-        <div style={WRP}>
-          <SectionHead badge={data.trainers.badge} heading={data.trainers.heading} headingGold={data.trainers.headingGold} sub={data.trainers.sub} />
-
-          {data.slug === 'masar-elami' ? (
-            /* elam: large landscape trainer cards */
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 18, maxWidth: 900, marginInline: 'auto' }}>
-              {data.trainers.items.map((tr, idx) => {
-                const accent = idx === 0 ? GLD : '#67e8f9';
-                const accentBg = idx === 0 ? `linear-gradient(135deg, rgba(255,193,7,0.04), rgba(255,255,255,0.025) 60%)` : `linear-gradient(135deg, rgba(103,232,249,0.04), rgba(255,255,255,0.020) 60%)`;
-                const accentBdr = idx === 0 ? GL : 'rgba(103,232,249,0.20)';
-                return (
-                  <div key={tr.name} className="mc-trainer-card" style={{ background: accentBg, border: `1px solid ${accentBdr}`, borderRadius: 22, overflow: 'hidden', display: 'grid', gridTemplateColumns: 'minmax(0,290px) 1fr' }}>
-                    <div className="mc-trainer-photo" style={{ position: 'relative', minHeight: 300, background: '#050810', overflow: 'hidden' }}>
-                      <img src={tr.imgSrc} alt={tr.name} loading="lazy" decoding="async"
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: tr.imgPosition || 'center top', display: 'block', position: 'absolute', inset: 0 }} />
-                      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, rgba(8,13,23,0.85) 0%, transparent 55%)' }} />
-                    </div>
-                    <div style={{ padding: '32px 32px 28px', display: 'flex', flexDirection: 'column' }}>
-                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: idx === 0 ? GS : 'rgba(103,232,249,0.07)', border: `1px solid ${accentBdr}`, borderRadius: 999, padding: '4px 13px', marginBottom: 12, alignSelf: 'flex-start' }}>
-                        <span style={{ width: 4, height: 4, borderRadius: '50%', background: accent }} />
-                        <span style={{ fontFamily: F, fontSize: 12, fontWeight: 700, color: accent }}>{tr.role}</span>
-                      </div>
-                      <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(20px,2.2vw,28px)', color: OFF, margin: '0 0 8px' }}>{tr.name}</h3>
-                      <p style={{ fontFamily: F, fontSize: 14, color: MUT, lineHeight: 1.85, marginBottom: 20 }}>{tr.bio}</p>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
-                        {tr.chips.map(c => (
-                          <span key={c} style={{ fontFamily: F, fontSize: 12, color: accent, background: idx === 0 ? GS : 'rgba(103,232,249,0.07)', border: `1px solid ${accentBdr}`, borderRadius: 999, padding: '4px 12px' }}>{c}</span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            /* voice & khataba: standard grid cards */
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24, marginTop: 52 }}>
-              {data.trainers.items.map(tr => (
-                <article key={tr.name} style={{ background: CARD, border: `1px solid ${CBR}`, borderRadius: 20, padding: 'clamp(22px,2.5vw,30px)', display: 'flex', flexDirection: 'column', gap: 16 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                    <div style={{ width: 88, height: 88, borderRadius: '50%', flexShrink: 0, border: '2px solid rgba(255,193,7,.32)', overflow: 'hidden' }}>
-                      <img src={tr.imgSrc} alt={tr.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: tr.imgPosition || 'center top' }} />
-                    </div>
-                    <div>
-                      <div style={{ fontFamily: F, fontWeight: 800, fontSize: 18, color: OFF }}>{tr.name}</div>
-                      <div style={{ fontFamily: F, fontSize: 12.5, color: GLD, marginTop: 4, lineHeight: 1.5 }}>{tr.role}</div>
-                    </div>
-                  </div>
-                  <p style={{ fontFamily: F, fontSize: 13.5, color: MUT, lineHeight: 1.85, flex: 1 }}>{tr.bio}</p>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
-                    {tr.chips.map(c => (
-                      <span key={c} style={{ fontFamily: F, fontSize: 12, color: LT, background: 'rgba(255,255,255,.04)', border: `1px solid ${CBR}`, padding: '4px 11px', borderRadius: 999 }}>{c}</span>
-                    ))}
-                  </div>
-                  {tr.tag && (
-                    <div style={{ fontFamily: F, fontSize: 12, color: MUT, paddingTop: 10, borderTop: `1px solid ${CBR}` }}>{tr.tag}</div>
-                  )}
-                </article>
-              ))}
-            </div>
-          )}
-
-          <div style={{ textAlign: 'center', marginTop: 34 }}>
-            <a href={waConsult} target="_blank" rel="noopener noreferrer"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: CARD, color: OFF, border: `1px solid ${CBR}`, fontFamily: F, fontWeight: 700, fontSize: 15, padding: '13px 28px', borderRadius: 999, textDecoration: 'none' }}>
-              اسأل عن جدول المدرّبين <ArrowLeft size={14} />
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════
           07. GALLERY (optional — khataba)
       ═══════════════════════════════════ */}
       {data.gallery && (
@@ -941,7 +832,7 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
       )}
 
       {/* ═══════════════════════════════════
-          08. STUDY MODES
+          08. STUDY MODES + COHORT (merged)
       ═══════════════════════════════════ */}
       <section className="sec sec--modes" style={{ padding: '96px 0' }}>
         <div style={WRP}>
@@ -952,21 +843,47 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
               { v: 'inperson' as const, m: data.modes.inperson, ac: GLD, acRgb: '255,193,7', icon: <MapPin size={18} color="#1A1206" strokeWidth={2.2} /> },
               { v: 'online'   as const, m: data.modes.online,   ac: '#67e8f9', acRgb: '103,232,249', icon: <Wifi size={18} color="#1A1206" strokeWidth={2.2} /> },
             ].map(({ v, m, ac, acRgb, icon }) => (
-              <div key={v} style={{ background: CARD, border: `1px solid rgba(${acRgb},.22)`, borderRadius: 20, padding: 'clamp(22px,2.5vw,28px)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-                  <div style={{ width: 36, height: 36, borderRadius: '50%', background: ac, display: 'grid', placeContent: 'center', flexShrink: 0 }}>{icon}</div>
-                  <div>
-                    <div style={{ fontFamily: F, fontWeight: 800, fontSize: 15.5, color: OFF }}>{m.label}</div>
-                    <div style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 2 }}>{m.sub}</div>
+              <div key={v} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                {/* main mode card */}
+                <div style={{ background: CARD, border: `1px solid rgba(${acRgb},.22)`, borderRadius: 20, padding: 'clamp(22px,2.5vw,28px)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
+                    <div style={{ width: 36, height: 36, borderRadius: '50%', background: ac, display: 'grid', placeContent: 'center', flexShrink: 0 }}>{icon}</div>
+                    <div>
+                      <div style={{ fontFamily: F, fontWeight: 800, fontSize: 15.5, color: OFF }}>{m.label}</div>
+                      <div style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 2 }}>{m.sub}</div>
+                    </div>
                   </div>
+                  {/* schedule line */}
+                  {m.schedule && (
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: `rgba(${acRgb},.08)`, border: `1px solid rgba(${acRgb},.22)`, borderRadius: 8, padding: '6px 12px', marginBottom: 14, fontFamily: F, fontSize: 12.5, color: ac }}>
+                      🗓 {m.schedule}
+                    </div>
+                  )}
+                  <ul style={{ listStyle: 'none', display: 'grid', gap: 9, margin: 0, padding: 0 }}>
+                    {m.items.map(item => (
+                      <li key={item} style={{ display: 'flex', gap: 10, fontFamily: F, fontSize: 13.5, color: LT, lineHeight: 1.7 }}>
+                        <span style={{ color: ac, fontSize: 14, marginTop: 3, flexShrink: 0 }}>✓</span>{item}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <ul style={{ listStyle: 'none', display: 'grid', gap: 9, margin: 0, padding: 0 }}>
-                  {m.items.map(item => (
-                    <li key={item} style={{ display: 'flex', gap: 10, fontFamily: F, fontSize: 13.5, color: LT, lineHeight: 1.7 }}>
-                      <span style={{ color: ac, fontSize: 14, marginTop: 3, flexShrink: 0 }}>✓</span>{item}
-                    </li>
-                  ))}
-                </ul>
+                {/* advisor staff card */}
+                {m.advisor && (
+                  <div style={{ background: CARD, border: `1px solid rgba(${acRgb},.18)`, borderRadius: 16, padding: '16px 18px', display: 'flex', alignItems: 'center', gap: 14 }}>
+                    <div style={{ width: 52, height: 52, borderRadius: '50%', flexShrink: 0, border: `2px solid rgba(${acRgb},.35)`, overflow: 'hidden' }}>
+                      <img src={m.advisor.imgSrc} alt={m.advisor.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontFamily: F, fontWeight: 800, fontSize: 14.5, color: OFF }}>{m.advisor.name}</div>
+                      <div style={{ fontFamily: F, fontSize: 11.5, color: MUT, marginTop: 2, lineHeight: 1.5 }}>{m.advisor.role}</div>
+                    </div>
+                    <a href={`https://wa.me/${m.advisor.phone}`} target="_blank" rel="noopener noreferrer"
+                      style={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: 6, background: `rgba(${acRgb},.12)`, border: `1px solid rgba(${acRgb},.28)`, color: ac, fontFamily: F, fontWeight: 700, fontSize: 12, padding: '7px 14px', borderRadius: 999, textDecoration: 'none' }}>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                      {m.advisor.waLabel}
+                    </a>
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -974,6 +891,28 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
           <div style={{ marginTop: 18 }}>
             <StudyAccordion variant="inperson" label={data.modes.inperson.label} sub={data.modes.inperson.sub} items={data.modes.inperson.details} />
             <StudyAccordion variant="online"   label={data.modes.online.label}   sub={data.modes.online.sub}   items={data.modes.online.details} />
+          </div>
+
+          {/* cohort facts row (when merged) */}
+          <div style={{ marginTop: 36, background: CARD, border: `1px solid ${GL}`, borderRadius: 18, padding: '28px 32px' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 0, justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+                <span style={{ background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 12, padding: '4px 12px', borderRadius: 999 }}>{data.cohort.badge}</span>
+                <span style={{ fontFamily: F, fontWeight: 800, fontSize: 18, color: OFF }}>{data.cohort.startLabel} <span style={{ color: GLD }}>{data.cohort.startGold}</span></span>
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 0 }}>
+                {data.cohort.facts.map(fact => (
+                  <div key={fact.label} style={{ padding: '4px 20px', borderLeft: `1px solid ${CBR}`, textAlign: 'center' }}>
+                    <span style={{ display: 'block', fontSize: 11, color: MUT, fontFamily: F }}>{fact.label}</span>
+                    <b style={{ fontFamily: F, fontSize: 13, color: LT }}>{fact.value}</b>
+                  </div>
+                ))}
+              </div>
+              <a href="#pricing"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 14, padding: '11px 22px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 6px 18px rgba(255,193,7,.22)' }}>
+                احجز مقعدك الآن <ArrowLeft size={13} />
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -1026,6 +965,16 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
                   </li>
                 ))}
               </ul>
+              {/* guarantee — inside card */}
+              <div style={{ margin: '4px 0 16px', padding: '14px 16px', background: 'rgba(255,193,7,.06)', border: '1px solid rgba(255,193,7,.18)', borderRadius: 12 }}>
+                <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                  <span style={{ fontSize: 16, flexShrink: 0, lineHeight: 1.4 }}>🛡️</span>
+                  <p style={{ fontFamily: F, fontSize: 13, color: LT, lineHeight: 1.8, margin: 0 }}>
+                    <strong style={{ color: OFF, display: 'block', marginBottom: 2 }}>ضمان الجلسة الأولى</strong>
+                    جرّب الجلسة الأولى كاملة. وإن شعرت أنّ الماستركلاس لا يلبّي توقّعاتك، اطلب استرداداً كاملاً خلال 24 ساعة من انتهائها — دون أسئلة. نحن نعرف ما نقدّمه. والجلسة الأولى تكفي لتعرفه أنت.
+                  </p>
+                </div>
+              </div>
               <a href="#enroll" onClick={openModal}
                 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, width: '100%', boxSizing: 'border-box', background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 24px', borderRadius: 14, textDecoration: 'none', boxShadow: '0 6px 22px rgba(255,193,7,0.20)' }}>
                 {data.pricing.ctaLabel} <ArrowLeft size={15} />
@@ -1067,15 +1016,6 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
               </p>
             </div>
           )}
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════
-          10. GUARANTEE
-      ═══════════════════════════════════ */}
-      <section style={{ padding: '72px 0' }}>
-        <div style={WRP}>
-          <MasterclassGuarantee />
         </div>
       </section>
 
@@ -1152,7 +1092,7 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
             ))}
           </div>
 
-          <a href="#enroll" onClick={openModal}
+          <a href="#pricing"
             style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15.5, padding: '15px 32px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 10px 30px rgba(255,193,7,.28)' }}>
             {data.cohort.ctaLabel} <ArrowLeft size={14} />
           </a>
@@ -1162,6 +1102,81 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
               {data.cohort.consultNote.split('—')[1] || 'تحدّث معنا أوّلاً'}
             </a>
           </p>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════
+          06. TRAINERS (moved to bottom)
+      ═══════════════════════════════════ */}
+      <section id="trainers" className="sec sec--trainers" style={{ padding: '96px 0' }}>
+        <div style={WRP}>
+          <SectionHead badge={data.trainers.badge} heading={data.trainers.heading} headingGold={data.trainers.headingGold} sub={data.trainers.sub} />
+
+          {data.slug === 'masar-elami' ? (
+            /* elam: large landscape trainer cards */
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 18, maxWidth: 900, marginInline: 'auto' }}>
+              {data.trainers.items.map((tr, idx) => {
+                const accent = idx === 0 ? GLD : '#67e8f9';
+                const accentBg = idx === 0 ? `linear-gradient(135deg, rgba(255,193,7,0.04), rgba(255,255,255,0.025) 60%)` : `linear-gradient(135deg, rgba(103,232,249,0.04), rgba(255,255,255,0.020) 60%)`;
+                const accentBdr = idx === 0 ? GL : 'rgba(103,232,249,0.20)';
+                return (
+                  <div key={tr.name} className="mc-trainer-card" style={{ background: accentBg, border: `1px solid ${accentBdr}`, borderRadius: 22, overflow: 'hidden', display: 'grid', gridTemplateColumns: 'minmax(0,290px) 1fr' }}>
+                    <div className="mc-trainer-photo" style={{ position: 'relative', minHeight: 300, background: '#050810', overflow: 'hidden' }}>
+                      <img src={tr.imgSrc} alt={tr.name} loading="lazy" decoding="async"
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: tr.imgPosition || 'center top', display: 'block', position: 'absolute', inset: 0 }} />
+                      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, rgba(8,13,23,0.85) 0%, transparent 55%)' }} />
+                    </div>
+                    <div style={{ padding: '32px 32px 28px', display: 'flex', flexDirection: 'column' }}>
+                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: idx === 0 ? GS : 'rgba(103,232,249,0.07)', border: `1px solid ${accentBdr}`, borderRadius: 999, padding: '4px 13px', marginBottom: 12, alignSelf: 'flex-start' }}>
+                        <span style={{ width: 4, height: 4, borderRadius: '50%', background: accent }} />
+                        <span style={{ fontFamily: F, fontSize: 12, fontWeight: 700, color: accent }}>{tr.role}</span>
+                      </div>
+                      <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(20px,2.2vw,28px)', color: OFF, margin: '0 0 8px' }}>{tr.name}</h3>
+                      <p style={{ fontFamily: F, fontSize: 14, color: MUT, lineHeight: 1.85, marginBottom: 20 }}>{tr.bio}</p>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
+                        {tr.chips.map(c => (
+                          <span key={c} style={{ fontFamily: F, fontSize: 12, color: accent, background: idx === 0 ? GS : 'rgba(103,232,249,0.07)', border: `1px solid ${accentBdr}`, borderRadius: 999, padding: '4px 12px' }}>{c}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            /* voice & khataba: standard grid cards */
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24, marginTop: 52 }}>
+              {data.trainers.items.map(tr => (
+                <article key={tr.name} style={{ background: CARD, border: `1px solid ${CBR}`, borderRadius: 20, padding: 'clamp(22px,2.5vw,30px)', display: 'flex', flexDirection: 'column', gap: 16 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                    <div style={{ width: 88, height: 88, borderRadius: '50%', flexShrink: 0, border: '2px solid rgba(255,193,7,.32)', overflow: 'hidden' }}>
+                      <img src={tr.imgSrc} alt={tr.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: tr.imgPosition || 'center top' }} />
+                    </div>
+                    <div>
+                      <div style={{ fontFamily: F, fontWeight: 800, fontSize: 18, color: OFF }}>{tr.name}</div>
+                      <div style={{ fontFamily: F, fontSize: 12.5, color: GLD, marginTop: 4, lineHeight: 1.5 }}>{tr.role}</div>
+                    </div>
+                  </div>
+                  <p style={{ fontFamily: F, fontSize: 13.5, color: MUT, lineHeight: 1.85, flex: 1 }}>{tr.bio}</p>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
+                    {tr.chips.map(c => (
+                      <span key={c} style={{ fontFamily: F, fontSize: 12, color: LT, background: 'rgba(255,255,255,.04)', border: `1px solid ${CBR}`, padding: '4px 11px', borderRadius: 999 }}>{c}</span>
+                    ))}
+                  </div>
+                  {tr.tag && (
+                    <div style={{ fontFamily: F, fontSize: 12, color: MUT, paddingTop: 10, borderTop: `1px solid ${CBR}` }}>{tr.tag}</div>
+                  )}
+                </article>
+              ))}
+            </div>
+          )}
+
+          <div style={{ textAlign: 'center', marginTop: 34 }}>
+            <a href={waConsult} target="_blank" rel="noopener noreferrer"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: CARD, color: OFF, border: `1px solid ${CBR}`, fontFamily: F, fontWeight: 700, fontSize: 15, padding: '13px 28px', borderRadius: 999, textDecoration: 'none' }}>
+              اسأل عن جدول المدرّبين <ArrowLeft size={14} />
+            </a>
+          </div>
         </div>
       </section>
 
