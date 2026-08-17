@@ -570,76 +570,61 @@ export default function MasarElamiPage() {
       </section>
 
       {/* ════════════════════════════════════════════════════════════
-          §03 OUTCOMES — ألوان فاتحة (cream)
+          §03 محفظة الأعمال — CREAM (matching Soti)
       ════════════════════════════════════════════════════════════ */}
-      <section className="sec sec--outcomes" style={{ padding:'80px 0', position:'relative', overflow:'hidden' }}>
-        <div className="geo" aria-hidden="true">
-          <svg viewBox="0 0 1440 520" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M-100,470 Q420,250 760,360 T1560,190" fill="none" stroke="rgba(255,193,7,.55)" strokeWidth="2.5"/>
-          </svg>
-        </div>
-        <div style={{ ...INNER }}>
-          <div style={{ textAlign:'center' }}>
-            <SectionLabel text="مخرجات المسار" light />
-            <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(26px,4vw,42px)', marginTop:16, lineHeight:1.35, color:DH }}>
-              ما الذي ستُحقّقه <span style={{ color:'#92600a' }}>بعد المسار؟</span>
+      <section className="sec sec--cream" style={{ padding:'96px 0', position:'relative', overflow:'hidden' }}>
+        <div className="geo geo--halftone" style={{ position:'absolute', inset:0, zIndex:1, pointerEvents:'none' }} />
+        <div style={{ ...INNER, position:'relative', zIndex:3 }}>
+          <div style={{ textAlign:'center', marginBottom:48 }}>
+            <span style={{ display:'inline-flex', alignItems:'center', gap:8, background:'rgba(138,98,0,.09)', border:'1px solid rgba(138,98,0,.28)', color:'#8A6200', fontFamily:F, fontSize:12.5, fontWeight:700, padding:'6px 15px', borderRadius:999 }}>محفظة الأعمال</span>
+            <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(28px,4.4vw,44px)', lineHeight:1.35, letterSpacing:-.5, margin:'18px 0 0', color:DH }}>
+              تتخرّج <span style={{ color:'#8A6200' }}>بمحفظة</span> لا بشهادة
             </h2>
-            <p style={{ fontFamily:F, fontSize:15.5, color:DM, maxWidth:580, marginInline:'auto', marginTop:12 }}>
-              مخرجات ملموسة تُقدّمها لأصحاب العمل والعملاء — لا مجرد شعور عام بالتحسّن.
-            </p>
-          </div>
-          <div className="masar-outcome-panel">
-            {OUTCOMES.map(o => (
-              <div key={o.n} className="masar-oc">
-                <span className="masar-oc-n">{o.n}</span>
-                <h3 className="masar-oc-title">{o.title}</h3>
-                <p className="masar-oc-desc">{o.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════════════════════════
-          §04 PORTFOLIO — 8 مشاريع تطبيقية
-      ════════════════════════════════════════════════════════════ */}
-      <section style={{ borderTop:`1px solid ${CARD_BORDER}`, padding:'80px 0' }}>
-        <div style={{ ...INNER }}>
-          <div style={{ textAlign:'center', marginBottom:44 }}>
-            <SectionLabel text="محفظة الأعمال" />
-            <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(26px,4vw,42px)', marginTop:16, lineHeight:1.35, color:OFF }}>
-              8 مشاريع حقيقية <span style={{ color:GLD }}>تُسلَّم وتُقيَّم</span>
-            </h2>
-            <p style={{ fontFamily:F, fontSize:15, color:MUT, maxWidth:520, marginInline:'auto', marginTop:12, lineHeight:1.8 }}>
-              كل محطة تنتهي بمخرج موثَّق يُضاف إلى محفظة أعمالك المهنية — لا محاضرات فقط.
+            <p style={{ fontFamily:F, fontSize:16, color:DM, maxWidth:680, marginTop:14, marginInline:'auto', lineHeight:1.8 }}>
+              8 مشاريع تطبيقية حقيقية — كلّ محطة تنتهي بمخرج موثَّق يُضاف إلى محفظة أعمالك المهنية.
             </p>
           </div>
 
+          {/* portfolio grid */}
           <div className="elam-pf-grid" style={{ maxWidth:900, marginInline:'auto' }}>
             {PORTFOLIO.map(p => (
-              <div key={p.n} style={{ background:CARD, border:`1px solid ${CARD_BORDER}`, borderRadius:14, padding:'20px 18px' }}>
-                <div style={{ fontFamily:FP, fontSize:11, color:GLD, fontWeight:700, marginBottom:8, letterSpacing:'.04em' }}>مشروع {p.n}</div>
-                <h4 style={{ fontFamily:F, fontWeight:800, fontSize:15, color:OFF, margin:'0 0 6px' }}>{p.title}</h4>
-                <p style={{ fontFamily:F, fontSize:12.5, color:MUT, margin:0, lineHeight:1.65 }}>{p.desc}</p>
+              <div key={p.n} style={{ background:'#fff', border:'1px solid rgba(24,32,47,.10)', borderRadius:14, padding:'20px 18px', boxShadow:'0 2px 10px rgba(24,32,47,.06)' }}>
+                <div style={{ fontFamily:FP, fontSize:11, color:'#8A6200', fontWeight:700, marginBottom:8, letterSpacing:'.04em' }}>مشروع {p.n}</div>
+                <h4 style={{ fontFamily:F, fontWeight:800, fontSize:15, color:DH, margin:'0 0 6px' }}>{p.title}</h4>
+                <p style={{ fontFamily:F, fontSize:12.5, color:DM, margin:0, lineHeight:1.65 }}>{p.desc}</p>
               </div>
             ))}
           </div>
 
-          {/* Wajeez final output bar */}
-          <div style={{ maxWidth:900, marginInline:'auto', marginTop:20, border:'1px solid rgba(30,122,133,.40)', borderRadius:16, background:'linear-gradient(160deg,rgba(30,122,133,.14),rgba(11,17,32,.8) 60%)', padding:'26px 24px', display:'flex', flexWrap:'wrap', gap:18, alignItems:'center', justifyContent:'space-between' }}>
+          {/* wajeez strip */}
+          <div style={{ maxWidth:900, marginInline:'auto', marginTop:20, border:'1px solid rgba(30,122,133,.40)', borderRadius:16, background:'linear-gradient(160deg,rgba(30,122,133,.10),rgba(24,32,47,.04) 56%)', padding:'26px 24px', display:'flex', flexWrap:'wrap', gap:18, alignItems:'center', justifyContent:'space-between' }}>
             <div style={{ display:'flex', gap:16, alignItems:'center', flexWrap:'wrap' }}>
               <div style={{ width:54, height:54, borderRadius:12, background:'#fff', display:'grid', placeContent:'center', padding:7, flexShrink:0 }}>
                 <img src={wajeezLogo} alt="وجيز" style={{ width:'100%', height:'100%', objectFit:'contain' }} />
               </div>
               <div>
-                <h4 style={{ fontFamily:F, fontWeight:800, fontSize:17, color:OFF, margin:'0 0 3px' }}>شهادة كاسيت أكاديمي · معتمدة من تطبيق وجيز</h4>
-                <p style={{ fontFamily:F, fontSize:13, color:MUT, margin:0 }}>شهادة المسار الكاملة + محفظة 8 مشاريع + توصية مهنية من المدربين</p>
+                <h4 style={{ fontFamily:F, fontWeight:800, fontSize:17, color:DH, margin:'0 0 3px' }}>شهادة كاسيت أكاديمي · معتمدة من تطبيق وجيز</h4>
+                <p style={{ fontFamily:F, fontSize:13, color:DM, margin:0 }}>شهادة الماستركلاس الكاملة + محفظة 8 مشاريع + توصية مهنية من المدربين</p>
               </div>
             </div>
             <a href={WA_TRACK} target="_blank" rel="noopener noreferrer"
-              style={{ display:'inline-flex', alignItems:'center', gap:8, background:GLD, color:'#1A1206', fontFamily:F, fontWeight:700, fontSize:13.5, padding:'11px 22px', borderRadius:12, textDecoration:'none' }}>
-              التسجيل في المسار <ArrowLeft size={13} />
+              style={{ display:'inline-flex', alignItems:'center', gap:8, background:'#8A6200', color:'#fff', fontFamily:F, fontWeight:700, fontSize:13.5, padding:'11px 22px', borderRadius:12, textDecoration:'none' }}>
+              التسجيل في الماستركلاس <ArrowLeft size={13} />
             </a>
+          </div>
+
+          {/* outcome cards */}
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(240px,1fr))', gap:18, marginTop:40 }}>
+            {OUTCOMES.map(o => (
+              <div key={o.n} style={{ background:'rgba(24,32,47,.05)', border:'1px solid rgba(24,32,47,.10)', borderRadius:18, padding:'30px 26px' }}>
+                <span style={{ display:'block', fontFamily:FP, fontSize:44, fontWeight:700, lineHeight:1, color:'#8A6200', opacity:.28 }}>{o.n}</span>
+                <div style={{ marginTop:18, paddingTop:18, borderTop:'1px solid rgba(24,32,47,.10)', position:'relative' }}>
+                  <div style={{ position:'absolute', top:0, right:0, width:32, height:3, background:'#8A6200', borderRadius:2 }} />
+                  <h4 style={{ fontFamily:F, fontWeight:800, fontSize:18, lineHeight:1.5, color:DH, marginBottom:10 }}>{o.title}</h4>
+                  <p style={{ fontFamily:F, fontSize:14, color:DM, lineHeight:1.8 }}>{o.desc}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -784,7 +769,91 @@ export default function MasarElamiPage() {
       </section>
 
       {/* ════════════════════════════════════════════════════════════
-          §07 CHECKOUT — interactive (Stripe)
+          §07 CONSULTATION — WhatsApp chat mockup (after trainers)
+      ════════════════════════════════════════════════════════════ */}
+      <section id="consult" className="sec sec--consult" style={{ padding:'0 0 88px' }}>
+        <div style={{ ...INNER }}>
+          <div style={{ textAlign:'center', marginBottom:40 }}>
+            <span style={{ display:'inline-flex', alignItems:'center', gap:7, background:GS, border:`1px solid ${GL}`, color:GLD, fontFamily:F, fontSize:12, fontWeight:700, padding:'5px 15px', borderRadius:999 }}>
+              <span style={{ width:5, height:5, borderRadius:'50%', background:GLD, flexShrink:0 }} />
+              استشارة مجانية · دون التزام
+            </span>
+            <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(24px,3.4vw,36px)', lineHeight:1.4, color:OFF, margin:'16px 0 10px' }}>
+              قبل أن تسجّل، تحدّث مع <span style={{ color:GLD }}>مستشارتك</span>
+            </h2>
+            <p style={{ fontFamily:F, fontSize:15.5, color:MUT, lineHeight:1.75, maxWidth:520, marginInline:'auto' }}>
+              جلسة قصيرة على واتساب تُحدَّد فيها نقطة بدايتك — لكلّ مسار مستشارة مخصّصة.
+            </p>
+          </div>
+          <div style={{ display:'flex', justifyContent:'center', gap:10, marginBottom:28 }}>
+            {[
+              { mode: 'onsite' as const, label:'الحضوري',  img:advisorAya,    name:'آية القماز' },
+              { mode: 'live'   as const, label:'المباشر',  img:advisorYaqout, name:'ياقوت الخشاشنة' },
+            ].map(({ mode, label, img, name }) => (
+              <button key={mode} onClick={() => setCheckoutMode(mode)} style={{
+                display:'flex', alignItems:'center', gap:9,
+                background: checkoutMode === mode ? GS : 'transparent',
+                border:`1px solid ${checkoutMode === mode ? GL : CARD_BORDER}`,
+                borderRadius:999, padding:'7px 16px 7px 10px', cursor:'pointer',
+              }}>
+                <div style={{ width:30, height:30, borderRadius:'50%', overflow:'hidden', flexShrink:0, border: checkoutMode === mode ? `2px solid ${GLD}` : '2px solid transparent' }}>
+                  <img src={img} alt={name} style={{ width:'100%', height:'100%', objectFit:'cover' }} />
+                </div>
+                <span style={{ fontFamily:F, fontWeight:700, fontSize:13, color: checkoutMode === mode ? GLD : MUT }}>{label}</span>
+              </button>
+            ))}
+          </div>
+          {(() => {
+            const isOnsite = checkoutMode === 'onsite';
+            const adv = isOnsite
+              ? { name:'آية القماز', role:'مستشارة ماستركلاس الإعلام الحضوري', img:advisorAya,
+                  msg:'أهلاً 👋 أنا آية، مستشارة ماستركلاس الإعلام الحضوري. أخبريني عن طموحاتك الإعلامية — وأساعدك تختاري نقطة البداية الصح.',
+                  link:WA_AYA_LINK }
+              : { name:'ياقوت الخشاشنة', role:'مستشارة ماستركلاس الإعلام المباشر', img:advisorYaqout,
+                  msg:'أهلاً 👋 أنا ياقوت، مستشارة ماستركلاس الإعلام المباشر. أخبريني عن طموحاتك الإعلامية — وأساعدك تختاري نقطة البداية الصح.',
+                  link:WA_CONSULT };
+            return (
+              <div style={{ maxWidth:480, marginInline:'auto', borderRadius:20, overflow:'hidden', boxShadow:'0 24px 64px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,0.07)', border:`1px solid ${CARD_BORDER}` }}>
+                <div style={{ background:'#1F2C34', padding:'12px 16px', display:'flex', alignItems:'center', gap:12 }}>
+                  <div style={{ width:42, height:42, borderRadius:'50%', overflow:'hidden', flexShrink:0, border:'2px solid #25D366' }}>
+                    <img src={adv.img} alt={adv.name} style={{ width:'100%', height:'100%', objectFit:'cover' }} />
+                  </div>
+                  <div style={{ flex:1, minWidth:0 }}>
+                    <div style={{ fontFamily:F, fontWeight:700, fontSize:14.5, color:'#E9EEF1', lineHeight:1.3 }}>{adv.name}</div>
+                    <div style={{ fontFamily:F, fontSize:12, color:'#8696A0', marginTop:1 }}>{adv.role}</div>
+                  </div>
+                  <div style={{ display:'flex', alignItems:'center', gap:4 }}>
+                    <span style={{ width:7, height:7, borderRadius:'50%', background:'#25D366', boxShadow:'0 0 6px #25D366' }} />
+                    <span style={{ fontFamily:F, fontSize:11, color:'#25D366', fontWeight:600 }}>متاحة</span>
+                  </div>
+                </div>
+                <div style={{ background:'#0B141A', padding:'20px 16px 16px', minHeight:140, position:'relative' }}>
+                  <div style={{ position:'absolute', inset:0, backgroundImage:'radial-gradient(circle,rgba(255,255,255,.025) 1px,transparent 1px)', backgroundSize:'20px 20px', pointerEvents:'none' }} />
+                  <div style={{ position:'relative', maxWidth:'82%', background:'#1F2C34', borderRadius:'0 14px 14px 14px', padding:'10px 14px 8px', marginRight:'auto' }}>
+                    <div style={{ position:'absolute', top:0, right:'100%', width:0, height:0, borderStyle:'solid', borderWidth:'0 8px 8px 0', borderColor:`transparent #1F2C34 transparent transparent` }} />
+                    <p style={{ fontFamily:F, fontSize:14.5, color:'#E9EEF1', lineHeight:1.7, margin:0 }} dir="rtl">{adv.msg}</p>
+                    <div style={{ display:'flex', alignItems:'center', justifyContent:'flex-end', gap:4, marginTop:5 }}>
+                      <span style={{ fontFamily:F, fontSize:10.5, color:'#8696A0' }}>الآن</span>
+                      <svg width="14" height="9" viewBox="0 0 16 10" fill="none"><path d="M1 5l3.5 3.5L10 1M6 5l3.5 3.5L15 1" stroke="#53BDEB" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </div>
+                  </div>
+                </div>
+                <a href={adv.link} target="_blank" rel="noopener noreferrer" style={{ display:'flex', alignItems:'center', gap:10, background:'#1F2C34', padding:'10px 12px', textDecoration:'none', borderTop:'1px solid rgba(255,255,255,0.06)', cursor:'pointer' }}>
+                  <div style={{ flex:1, background:'#2A3942', borderRadius:22, padding:'9px 16px' }}>
+                    <span style={{ fontFamily:F, fontSize:14, color:'#8696A0' }}>ابدأ المحادثة…</span>
+                  </div>
+                  <div style={{ width:44, height:44, borderRadius:'50%', background:'#25D366', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, boxShadow:'0 4px 14px rgba(37,211,102,.4)' }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                  </div>
+                </a>
+              </div>
+            );
+          })()}
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════════════════════════
+          §08 CHECKOUT — interactive (Stripe)
       ════════════════════════════════════════════════════════════ */}
       <section id="checkout" className="sec sec--access" style={{ position:'relative', borderTop:`1px solid ${CARD_BORDER}`, padding:'80px 0', scrollMarginTop:80 }}>
         <div style={{ ...INNER }}>
@@ -1038,98 +1107,6 @@ export default function MasarElamiPage() {
             </p>
           </div>
 
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════════════════════════
-          §10 CONSULTATION — WhatsApp chat mockup
-      ════════════════════════════════════════════════════════════ */}
-      <section id="consult" className="sec sec--advisor" style={{ borderTop:`1px solid ${CARD_BORDER}`, padding:'80px 0 88px' }}>
-        <div style={{ ...INNER }}>
-          {/* header */}
-          <div style={{ textAlign:'center', marginBottom:40 }}>
-            <span style={{ display:'inline-flex', alignItems:'center', gap:7, background:GS, border:`1px solid ${GL}`, color:GLD, fontFamily:F, fontSize:12, fontWeight:700, padding:'5px 15px', borderRadius:999 }}>
-              <span style={{ width:5, height:5, borderRadius:'50%', background:GLD, flexShrink:0 }} />
-              استشارة مجانية · دون التزام
-            </span>
-            <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(24px,3.4vw,36px)', lineHeight:1.4, color:OFF, margin:'16px 0 10px' }}>
-              قبل أن تسجّل، تحدّث مع <span style={{ color:GLD }}>مستشارتك</span>
-            </h2>
-            <p style={{ fontFamily:F, fontSize:15.5, color:MUT, lineHeight:1.75, maxWidth:520, marginInline:'auto' }}>
-              جلسة قصيرة على واتساب تُحدَّد فيها نقطة بدايتك — لكلّ مسار مستشارة مخصّصة.
-            </p>
-          </div>
-
-          {/* advisor toggle */}
-          <div style={{ display:'flex', justifyContent:'center', gap:10, marginBottom:28 }}>
-            {[
-              { mode: 'onsite' as const, label:'الحضوري',  img:advisorAya,    name:'آية القماز' },
-              { mode: 'live'   as const, label:'المباشر',  img:advisorYaqout, name:'ياقوت الخشاشنة' },
-            ].map(({ mode, label, img, name }) => (
-              <button key={mode} onClick={() => setCheckoutMode(mode)} style={{
-                display:'flex', alignItems:'center', gap:9,
-                background: checkoutMode === mode ? GS : 'transparent',
-                border:`1px solid ${checkoutMode === mode ? GL : CARD_BORDER}`,
-                borderRadius:999, padding:'7px 16px 7px 10px', cursor:'pointer',
-              }}>
-                <div style={{ width:30, height:30, borderRadius:'50%', overflow:'hidden', flexShrink:0, border: checkoutMode === mode ? `2px solid ${GLD}` : '2px solid transparent' }}>
-                  <img src={img} alt={name} style={{ width:'100%', height:'100%', objectFit:'cover' }} />
-                </div>
-                <span style={{ fontFamily:F, fontWeight:700, fontSize:13, color: checkoutMode === mode ? GLD : MUT }}>{label}</span>
-              </button>
-            ))}
-          </div>
-
-          {/* WhatsApp chat window */}
-          {(() => {
-            const isOnsite = checkoutMode === 'onsite';
-            const adv = isOnsite
-              ? { name:'آية القماز', role:'مستشارة المسار الحضوري', img:advisorAya,
-                  msg:'أهلاً 👋 أنا آية، مستشارة ماستركلاس الإعلام الحضوري. أخبريني عن طموحاتك الإعلامية — وأساعدك تختاري نقطة البداية الصح.',
-                  link:WA_AYA_LINK }
-              : { name:'ياقوت الخشاشنة', role:'مستشارة المسار المباشر', img:advisorYaqout,
-                  msg:'أهلاً 👋 أنا ياقوت، مستشارة ماستركلاس الإعلام المباشر. أخبريني عن طموحاتك الإعلامية — وأساعدك تختاري نقطة البداية الصح.',
-                  link:WA_CONSULT };
-            return (
-              <div style={{ maxWidth:480, marginInline:'auto', borderRadius:20, overflow:'hidden', boxShadow:'0 24px 64px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,0.07)', border:`1px solid ${CARD_BORDER}` }}>
-                {/* WA top bar */}
-                <div style={{ background:'#1F2C34', padding:'12px 16px', display:'flex', alignItems:'center', gap:12 }}>
-                  <div style={{ width:42, height:42, borderRadius:'50%', overflow:'hidden', flexShrink:0, border:'2px solid #25D366' }}>
-                    <img src={adv.img} alt={adv.name} style={{ width:'100%', height:'100%', objectFit:'cover' }} />
-                  </div>
-                  <div style={{ flex:1, minWidth:0 }}>
-                    <div style={{ fontFamily:F, fontWeight:700, fontSize:14.5, color:'#E9EEF1', lineHeight:1.3 }}>{adv.name}</div>
-                    <div style={{ fontFamily:F, fontSize:12, color:'#8696A0', marginTop:1 }}>{adv.role}</div>
-                  </div>
-                  <div style={{ display:'flex', alignItems:'center', gap:4 }}>
-                    <span style={{ width:7, height:7, borderRadius:'50%', background:'#25D366', boxShadow:'0 0 6px #25D366' }} />
-                    <span style={{ fontFamily:F, fontSize:11, color:'#25D366', fontWeight:600 }}>متاحة</span>
-                  </div>
-                </div>
-                {/* chat body */}
-                <div style={{ background:'#0B141A', padding:'20px 16px 16px', minHeight:140, position:'relative' }}>
-                  <div style={{ position:'absolute', inset:0, backgroundImage:'radial-gradient(circle,rgba(255,255,255,.025) 1px,transparent 1px)', backgroundSize:'20px 20px', pointerEvents:'none' }} />
-                  <div style={{ position:'relative', maxWidth:'82%', background:'#1F2C34', borderRadius:'0 14px 14px 14px', padding:'10px 14px 8px', marginRight:'auto' }}>
-                    <div style={{ position:'absolute', top:0, right:'100%', width:0, height:0, borderStyle:'solid', borderWidth:'0 8px 8px 0', borderColor:`transparent #1F2C34 transparent transparent` }} />
-                    <p style={{ fontFamily:F, fontSize:14.5, color:'#E9EEF1', lineHeight:1.7, margin:0 }} dir="rtl">{adv.msg}</p>
-                    <div style={{ display:'flex', alignItems:'center', justifyContent:'flex-end', gap:4, marginTop:5 }}>
-                      <span style={{ fontFamily:F, fontSize:10.5, color:'#8696A0' }}>الآن</span>
-                      <svg width="14" height="9" viewBox="0 0 16 10" fill="none"><path d="M1 5l3.5 3.5L10 1M6 5l3.5 3.5L15 1" stroke="#53BDEB" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                    </div>
-                  </div>
-                </div>
-                {/* input bar → opens WA */}
-                <a href={adv.link} target="_blank" rel="noopener noreferrer" style={{ display:'flex', alignItems:'center', gap:10, background:'#1F2C34', padding:'10px 12px', textDecoration:'none', borderTop:'1px solid rgba(255,255,255,0.06)', cursor:'pointer' }}>
-                  <div style={{ flex:1, background:'#2A3942', borderRadius:22, padding:'9px 16px' }}>
-                    <span style={{ fontFamily:F, fontSize:14, color:'#8696A0' }}>ابدأ المحادثة…</span>
-                  </div>
-                  <div style={{ width:44, height:44, borderRadius:'50%', background:'#25D366', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, boxShadow:'0 4px 14px rgba(37,211,102,.4)' }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-                  </div>
-                </a>
-              </div>
-            );
-          })()}
         </div>
       </section>
 

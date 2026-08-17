@@ -1013,6 +1013,79 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
       </section>
 
       {/* ═══════════════════════════════════
+          06. TRAINERS
+      ═══════════════════════════════════ */}
+      <section id="trainers" className="sec sec--trainers" style={{ padding: '96px 0' }}>
+        <div style={WRP}>
+          <SectionHead badge={data.trainers.badge} heading={data.trainers.heading} headingGold={data.trainers.headingGold} sub={data.trainers.sub} />
+
+          {data.slug === 'masar-elami' ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 18, maxWidth: 900, marginInline: 'auto' }}>
+              {data.trainers.items.map((tr, idx) => {
+                const accent = idx === 0 ? GLD : '#67e8f9';
+                const accentBg = idx === 0 ? `linear-gradient(135deg, rgba(255,193,7,0.04), rgba(255,255,255,0.025) 60%)` : `linear-gradient(135deg, rgba(103,232,249,0.04), rgba(255,255,255,0.020) 60%)`;
+                const accentBdr = idx === 0 ? GL : 'rgba(103,232,249,0.20)';
+                return (
+                  <div key={tr.name} className="mc-trainer-card" style={{ background: accentBg, border: `1px solid ${accentBdr}`, borderRadius: 22, overflow: 'hidden', display: 'grid', gridTemplateColumns: 'minmax(0,290px) 1fr' }}>
+                    <div className="mc-trainer-photo" style={{ position: 'relative', minHeight: 300, background: '#050810', overflow: 'hidden' }}>
+                      <img src={tr.imgSrc} alt={tr.name} loading="lazy" decoding="async"
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: tr.imgPosition || 'center top', display: 'block', position: 'absolute', inset: 0 }} />
+                      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, rgba(8,13,23,0.85) 0%, transparent 55%)' }} />
+                    </div>
+                    <div style={{ padding: '32px 32px 28px', display: 'flex', flexDirection: 'column' }}>
+                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: idx === 0 ? GS : 'rgba(103,232,249,0.07)', border: `1px solid ${accentBdr}`, borderRadius: 999, padding: '4px 13px', marginBottom: 12, alignSelf: 'flex-start' }}>
+                        <span style={{ width: 4, height: 4, borderRadius: '50%', background: accent }} />
+                        <span style={{ fontFamily: F, fontSize: 12, fontWeight: 700, color: accent }}>{tr.role}</span>
+                      </div>
+                      <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(20px,2.2vw,28px)', color: OFF, margin: '0 0 8px' }}>{tr.name}</h3>
+                      <p style={{ fontFamily: F, fontSize: 14, color: MUT, lineHeight: 1.85, marginBottom: 20 }}>{tr.bio}</p>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
+                        {tr.chips.map(c => (
+                          <span key={c} style={{ fontFamily: F, fontSize: 12, color: accent, background: idx === 0 ? GS : 'rgba(103,232,249,0.07)', border: `1px solid ${accentBdr}`, borderRadius: 999, padding: '4px 12px' }}>{c}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24, marginTop: 52 }}>
+              {data.trainers.items.map(tr => (
+                <article key={tr.name} style={{ background: CARD, border: `1px solid ${CBR}`, borderRadius: 20, padding: 'clamp(22px,2.5vw,30px)', display: 'flex', flexDirection: 'column', gap: 16 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                    <div style={{ width: 88, height: 88, borderRadius: '50%', flexShrink: 0, border: '2px solid rgba(255,193,7,.32)', overflow: 'hidden' }}>
+                      <img src={tr.imgSrc} alt={tr.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: tr.imgPosition || 'center top' }} />
+                    </div>
+                    <div>
+                      <div style={{ fontFamily: F, fontWeight: 800, fontSize: 18, color: OFF }}>{tr.name}</div>
+                      <div style={{ fontFamily: F, fontSize: 12.5, color: GLD, marginTop: 4, lineHeight: 1.5 }}>{tr.role}</div>
+                    </div>
+                  </div>
+                  <p style={{ fontFamily: F, fontSize: 13.5, color: MUT, lineHeight: 1.85, flex: 1 }}>{tr.bio}</p>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
+                    {tr.chips.map(c => (
+                      <span key={c} style={{ fontFamily: F, fontSize: 12, color: LT, background: 'rgba(255,255,255,.04)', border: `1px solid ${CBR}`, padding: '4px 11px', borderRadius: 999 }}>{c}</span>
+                    ))}
+                  </div>
+                  {tr.tag && (
+                    <div style={{ fontFamily: F, fontSize: 12, color: MUT, paddingTop: 10, borderTop: `1px solid ${CBR}` }}>{tr.tag}</div>
+                  )}
+                </article>
+              ))}
+            </div>
+          )}
+
+          <div style={{ textAlign: 'center', marginTop: 34 }}>
+            <a href={waConsult} target="_blank" rel="noopener noreferrer"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: CARD, color: OFF, border: `1px solid ${CBR}`, fontFamily: F, fontWeight: 700, fontSize: 15, padding: '13px 28px', borderRadius: 999, textDecoration: 'none' }}>
+              اسأل عن جدول المدرّبين <ArrowLeft size={14} />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════
           08-B. CONSULTATION — WhatsApp chat mockup
       ═══════════════════════════════════ */}
       <section id="consult" className="sec sec--advisor" style={{ padding: '0 0 88px' }}>
@@ -1306,81 +1379,6 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
             <a href="#checkout" onClick={e => { e.preventDefault(); scrollToCheckout(); }}
               style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 32px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 8px 24px rgba(255,193,7,.24)' }}>
               احجز مقعدك الآن <ArrowLeft size={14} />
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════
-          06. TRAINERS (moved to bottom)
-      ═══════════════════════════════════ */}
-      <section id="trainers" className="sec sec--trainers" style={{ padding: '96px 0' }}>
-        <div style={WRP}>
-          <SectionHead badge={data.trainers.badge} heading={data.trainers.heading} headingGold={data.trainers.headingGold} sub={data.trainers.sub} />
-
-          {data.slug === 'masar-elami' ? (
-            /* elam: large landscape trainer cards */
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 18, maxWidth: 900, marginInline: 'auto' }}>
-              {data.trainers.items.map((tr, idx) => {
-                const accent = idx === 0 ? GLD : '#67e8f9';
-                const accentBg = idx === 0 ? `linear-gradient(135deg, rgba(255,193,7,0.04), rgba(255,255,255,0.025) 60%)` : `linear-gradient(135deg, rgba(103,232,249,0.04), rgba(255,255,255,0.020) 60%)`;
-                const accentBdr = idx === 0 ? GL : 'rgba(103,232,249,0.20)';
-                return (
-                  <div key={tr.name} className="mc-trainer-card" style={{ background: accentBg, border: `1px solid ${accentBdr}`, borderRadius: 22, overflow: 'hidden', display: 'grid', gridTemplateColumns: 'minmax(0,290px) 1fr' }}>
-                    <div className="mc-trainer-photo" style={{ position: 'relative', minHeight: 300, background: '#050810', overflow: 'hidden' }}>
-                      <img src={tr.imgSrc} alt={tr.name} loading="lazy" decoding="async"
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: tr.imgPosition || 'center top', display: 'block', position: 'absolute', inset: 0 }} />
-                      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, rgba(8,13,23,0.85) 0%, transparent 55%)' }} />
-                    </div>
-                    <div style={{ padding: '32px 32px 28px', display: 'flex', flexDirection: 'column' }}>
-                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: idx === 0 ? GS : 'rgba(103,232,249,0.07)', border: `1px solid ${accentBdr}`, borderRadius: 999, padding: '4px 13px', marginBottom: 12, alignSelf: 'flex-start' }}>
-                        <span style={{ width: 4, height: 4, borderRadius: '50%', background: accent }} />
-                        <span style={{ fontFamily: F, fontSize: 12, fontWeight: 700, color: accent }}>{tr.role}</span>
-                      </div>
-                      <h3 style={{ fontFamily: F, fontWeight: 900, fontSize: 'clamp(20px,2.2vw,28px)', color: OFF, margin: '0 0 8px' }}>{tr.name}</h3>
-                      <p style={{ fontFamily: F, fontSize: 14, color: MUT, lineHeight: 1.85, marginBottom: 20 }}>{tr.bio}</p>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
-                        {tr.chips.map(c => (
-                          <span key={c} style={{ fontFamily: F, fontSize: 12, color: accent, background: idx === 0 ? GS : 'rgba(103,232,249,0.07)', border: `1px solid ${accentBdr}`, borderRadius: 999, padding: '4px 12px' }}>{c}</span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            /* voice & khataba: standard grid cards */
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24, marginTop: 52 }}>
-              {data.trainers.items.map(tr => (
-                <article key={tr.name} style={{ background: CARD, border: `1px solid ${CBR}`, borderRadius: 20, padding: 'clamp(22px,2.5vw,30px)', display: 'flex', flexDirection: 'column', gap: 16 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                    <div style={{ width: 88, height: 88, borderRadius: '50%', flexShrink: 0, border: '2px solid rgba(255,193,7,.32)', overflow: 'hidden' }}>
-                      <img src={tr.imgSrc} alt={tr.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: tr.imgPosition || 'center top' }} />
-                    </div>
-                    <div>
-                      <div style={{ fontFamily: F, fontWeight: 800, fontSize: 18, color: OFF }}>{tr.name}</div>
-                      <div style={{ fontFamily: F, fontSize: 12.5, color: GLD, marginTop: 4, lineHeight: 1.5 }}>{tr.role}</div>
-                    </div>
-                  </div>
-                  <p style={{ fontFamily: F, fontSize: 13.5, color: MUT, lineHeight: 1.85, flex: 1 }}>{tr.bio}</p>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
-                    {tr.chips.map(c => (
-                      <span key={c} style={{ fontFamily: F, fontSize: 12, color: LT, background: 'rgba(255,255,255,.04)', border: `1px solid ${CBR}`, padding: '4px 11px', borderRadius: 999 }}>{c}</span>
-                    ))}
-                  </div>
-                  {tr.tag && (
-                    <div style={{ fontFamily: F, fontSize: 12, color: MUT, paddingTop: 10, borderTop: `1px solid ${CBR}` }}>{tr.tag}</div>
-                  )}
-                </article>
-              ))}
-            </div>
-          )}
-
-          <div style={{ textAlign: 'center', marginTop: 34 }}>
-            <a href={waConsult} target="_blank" rel="noopener noreferrer"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: CARD, color: OFF, border: `1px solid ${CBR}`, fontFamily: F, fontWeight: 700, fontSize: 15, padding: '13px 28px', borderRadius: 999, textDecoration: 'none' }}>
-              اسأل عن جدول المدرّبين <ArrowLeft size={14} />
             </a>
           </div>
         </div>
