@@ -656,11 +656,6 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
       )}
 
       {/* ═══════════════════════════════════
-          03. PORTFOLIO (optional — elam, before curriculum)
-      ═══════════════════════════════════ */}
-      {data.portfolio && renderPortfolio(data.portfolio, { INK, INK2, WRP })}
-
-      {/* ═══════════════════════════════════
           02. CURRICULUM (station tree)
       ═══════════════════════════════════ */}
       <section id="tree" className="sec sec--tree" style={{ padding: '96px 0' }}>
@@ -753,6 +748,11 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
           </div>
         </div>
       </section>
+
+      {/* ═══════════════════════════════════
+          03. PORTFOLIO (optional — elam, after curriculum)
+      ═══════════════════════════════════ */}
+      {data.portfolio && renderPortfolio(data.portfolio, { INK, INK2, WRP })}
 
       {/* ═══════════════════════════════════
           03-B. METHOD (khataba — after curriculum)
