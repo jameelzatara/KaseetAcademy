@@ -1,14 +1,13 @@
 /**
  * PaymentModal — embedded Stripe Elements checkout for Kaseet masterclass pages.
- * Redesigned: custom mode/plan cards, order summary, progress stepper, icon fields.
+ * Fully RTL, phone = dial-code selector + number input, email required, back button.
  */
 import { useState, useEffect, useCallback, type CSSProperties } from 'react';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { getStripePromise } from '../lib/stripeClient';
 import {
   Lock, ShieldCheck, CheckCircle2, X, AlertCircle,
-  MapPin, Wifi, User, Phone, Mail, Globe, Building2,
-  CalendarDays, ArrowLeft,
+  MapPin, Wifi, User, Phone, Mail, CalendarDays, ArrowRight,
 } from 'lucide-react';
 
 /* ── design tokens ─────────────────────────────────── */
@@ -32,6 +31,84 @@ const GRN   = '#4ade80';
 const DEPOSIT_JOD = 50;
 const DEPOSIT_USD = 70;
 
+/* ── country data ───────────────────────────────────── */
+interface Country { code: string; dial: string; name: string; flag: string; }
+const COUNTRIES: Country[] = [
+  { code:'JO', dial:'+962', name:'الأردن',             flag:'🇯🇴' },
+  { code:'PS', dial:'+970', name:'فلسطين',             flag:'🇵🇸' },
+  { code:'SA', dial:'+966', name:'السعودية',           flag:'🇸🇦' },
+  { code:'AE', dial:'+971', name:'الإمارات',           flag:'🇦🇪' },
+  { code:'KW', dial:'+965', name:'الكويت',             flag:'🇰🇼' },
+  { code:'QA', dial:'+974', name:'قطر',                flag:'🇶🇦' },
+  { code:'BH', dial:'+973', name:'البحرين',            flag:'🇧🇭' },
+  { code:'OM', dial:'+968', name:'عُمان',              flag:'🇴🇲' },
+  { code:'EG', dial:'+20',  name:'مصر',               flag:'🇪🇬' },
+  { code:'SY', dial:'+963', name:'سوريا',              flag:'🇸🇾' },
+  { code:'LB', dial:'+961', name:'لبنان',              flag:'🇱🇧' },
+  { code:'IQ', dial:'+964', name:'العراق',             flag:'🇮🇶' },
+  { code:'YE', dial:'+967', name:'اليمن',              flag:'🇾🇪' },
+  { code:'LY', dial:'+218', name:'ليبيا',              flag:'🇱🇾' },
+  { code:'TN', dial:'+216', name:'تونس',              flag:'🇹🇳' },
+  { code:'DZ', dial:'+213', name:'الجزائر',            flag:'🇩🇿' },
+  { code:'MA', dial:'+212', name:'المغرب',             flag:'🇲🇦' },
+  { code:'SD', dial:'+249', name:'السودان',            flag:'🇸🇩' },
+  { code:'SO', dial:'+252', name:'الصومال',            flag:'🇸🇴' },
+  { code:'MR', dial:'+222', name:'موريتانيا',          flag:'🇲🇷' },
+  { code:'DJ', dial:'+253', name:'جيبوتي',             flag:'🇩🇯' },
+  { code:'KM', dial:'+269', name:'جزر القمر',          flag:'🇰🇲' },
+  { code:'TR', dial:'+90',  name:'تركيا',              flag:'🇹🇷' },
+  { code:'DE', dial:'+49',  name:'ألمانيا',            flag:'🇩🇪' },
+  { code:'GB', dial:'+44',  name:'المملكة المتحدة',    flag:'🇬🇧' },
+  { code:'US', dial:'+1',   name:'الولايات المتحدة',   flag:'🇺🇸' },
+  { code:'CA', dial:'+1',   name:'كندا',               flag:'🇨🇦' },
+  { code:'AU', dial:'+61',  name:'أستراليا',           flag:'🇦🇺' },
+  { code:'FR', dial:'+33',  name:'فرنسا',              flag:'🇫🇷' },
+  { code:'SE', dial:'+46',  name:'السويد',             flag:'🇸🇪' },
+  { code:'NL', dial:'+31',  name:'هولندا',             flag:'🇳🇱' },
+  { code:'BE', dial:'+32',  name:'بلجيكا',             flag:'🇧🇪' },
+  { code:'IT', dial:'+39',  name:'إيطاليا',            flag:'🇮🇹' },
+  { code:'ES', dial:'+34',  name:'إسبانيا',            flag:'🇪🇸' },
+  { code:'PT', dial:'+351', name:'البرتغال',           flag:'🇵🇹' },
+  { code:'GR', dial:'+30',  name:'اليونان',            flag:'🇬🇷' },
+  { code:'PL', dial:'+48',  name:'بولندا',             flag:'🇵🇱' },
+  { code:'AT', dial:'+43',  name:'النمسا',             flag:'🇦🇹' },
+  { code:'CH', dial:'+41',  name:'سويسرا',             flag:'🇨🇭' },
+  { code:'DK', dial:'+45',  name:'الدنمارك',           flag:'🇩🇰' },
+  { code:'NO', dial:'+47',  name:'النرويج',            flag:'🇳🇴' },
+  { code:'FI', dial:'+358', name:'فنلندا',             flag:'🇫🇮' },
+  { code:'RU', dial:'+7',   name:'روسيا',              flag:'🇷🇺' },
+  { code:'UA', dial:'+380', name:'أوكرانيا',           flag:'🇺🇦' },
+  { code:'PK', dial:'+92',  name:'باكستان',            flag:'🇵🇰' },
+  { code:'IN', dial:'+91',  name:'الهند',              flag:'🇮🇳' },
+  { code:'BD', dial:'+880', name:'بنغلاديش',           flag:'🇧🇩' },
+  { code:'MY', dial:'+60',  name:'ماليزيا',            flag:'🇲🇾' },
+  { code:'ID', dial:'+62',  name:'إندونيسيا',          flag:'🇮🇩' },
+  { code:'PH', dial:'+63',  name:'الفلبين',            flag:'🇵🇭' },
+  { code:'SG', dial:'+65',  name:'سنغافورة',           flag:'🇸🇬' },
+  { code:'TH', dial:'+66',  name:'تايلاند',            flag:'🇹🇭' },
+  { code:'VN', dial:'+84',  name:'فيتنام',             flag:'🇻🇳' },
+  { code:'CN', dial:'+86',  name:'الصين',              flag:'🇨🇳' },
+  { code:'JP', dial:'+81',  name:'اليابان',            flag:'🇯🇵' },
+  { code:'KR', dial:'+82',  name:'كوريا الجنوبية',     flag:'🇰🇷' },
+  { code:'NG', dial:'+234', name:'نيجيريا',            flag:'🇳🇬' },
+  { code:'GH', dial:'+233', name:'غانا',               flag:'🇬🇭' },
+  { code:'KE', dial:'+254', name:'كينيا',              flag:'🇰🇪' },
+  { code:'ZA', dial:'+27',  name:'جنوب أفريقيا',       flag:'🇿🇦' },
+  { code:'ET', dial:'+251', name:'إثيوبيا',            flag:'🇪🇹' },
+  { code:'TZ', dial:'+255', name:'تنزانيا',            flag:'🇹🇿' },
+  { code:'BR', dial:'+55',  name:'البرازيل',           flag:'🇧🇷' },
+  { code:'MX', dial:'+52',  name:'المكسيك',            flag:'🇲🇽' },
+  { code:'AR', dial:'+54',  name:'الأرجنتين',          flag:'🇦🇷' },
+  { code:'CO', dial:'+57',  name:'كولومبيا',           flag:'🇨🇴' },
+  { code:'CL', dial:'+56',  name:'تشيلي',              flag:'🇨🇱' },
+  { code:'NZ', dial:'+64',  name:'نيوزيلندا',          flag:'🇳🇿' },
+  { code:'IR', dial:'+98',  name:'إيران',              flag:'🇮🇷' },
+  { code:'AF', dial:'+93',  name:'أفغانستان',          flag:'🇦🇫' },
+  { code:'NP', dial:'+977', name:'نيبال',              flag:'🇳🇵' },
+  { code:'LK', dial:'+94',  name:'سريلانكا',           flag:'🇱🇰' },
+  { code:'MM', dial:'+95',  name:'ميانمار',            flag:'🇲🇲' },
+];
+
 export interface PaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -53,10 +130,10 @@ type Step = 'form' | 'payment' | 'polling' | 'pending' | 'success' | 'error';
 interface FormState {
   firstName: string;
   lastName: string;
-  phone: string;
+  dialCode: string;
+  phoneNumber: string;
   email: string;
   country: string;
-  city: string;
   mode: 'onsite' | 'live';
   plan: 'full' | 'deposit';
 }
@@ -64,18 +141,20 @@ interface FormState {
 /* ── Progress stepper ──────────────────────────────── */
 function Stepper({ step }: { step: Step }) {
   const current = step === 'form' ? 1 : step === 'payment' ? 2 : 3;
+  // In RTL the first step (بياناتك) is shown first in DOM which renders on the RIGHT
   const steps = ['بياناتك', 'الدفع', 'تم الحجز'];
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0, marginBottom: 24 }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0, marginBottom: 24, direction: 'rtl' }}>
       {steps.map((label, i) => {
-        const idx   = i + 1;
-        const done  = idx < current;
+        const idx    = i + 1;
+        const done   = idx < current;
         const active = idx === current;
         return (
           <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
               <div style={{
-                width: 28, height: 28, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                width: 30, height: 30, borderRadius: '50%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
                 background: done ? GRN : active ? GLD : 'rgba(255,255,255,.08)',
                 border: `2px solid ${done ? GRN : active ? GLD : CBR}`,
                 transition: 'all .3s',
@@ -88,7 +167,7 @@ function Stepper({ step }: { step: Step }) {
               <span style={{ fontFamily: F, fontSize: 11, color: active ? GLD : done ? GRN : MUT, fontWeight: active ? 700 : 400 }}>{label}</span>
             </div>
             {i < steps.length - 1 && (
-              <div style={{ width: 48, height: 2, background: i + 1 < current ? GRN : CBR, margin: '0 4px', marginBottom: 18, transition: 'background .3s' }} />
+              <div style={{ width: 44, height: 2, background: i + 1 < current ? GRN : CBR, margin: '0 6px', marginBottom: 18, transition: 'background .3s' }} />
             )}
           </div>
         );
@@ -99,13 +178,11 @@ function Stepper({ step }: { step: Step }) {
 
 /* ── Order summary card ────────────────────────────── */
 function OrderSummary({
-  courseTitle, mode, cohortStartAr, cohortDays,
-  priceJOD, priceUSD, plan,
+  courseTitle, mode, cohortStartAr, cohortDays, priceJOD, priceUSD, plan,
 }: {
   courseTitle: string; mode: 'onsite' | 'live';
   cohortStartAr: string; cohortDays: string;
-  priceJOD: number; priceUSD: number;
-  plan: 'full' | 'deposit';
+  priceJOD: number; priceUSD: number; plan: 'full' | 'deposit';
 }) {
   const isOnsite  = mode === 'onsite';
   const accentCol = isOnsite ? GLD : CYN;
@@ -115,50 +192,50 @@ function OrderSummary({
 
   return (
     <div style={{
-      background: isOnsite ? GS : CS,
-      border: `1px solid ${isOnsite ? GL : CL}`,
-      borderRadius: 14, padding: '14px 16px', marginBottom: 22,
-      display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12,
+      background: isOnsite ? GS : CS, border: `1px solid ${isOnsite ? GL : CL}`,
+      borderRadius: 14, padding: '14px 16px', marginBottom: 18,
     }}>
-      <div>
-        <div style={{ fontFamily: F, fontWeight: 800, fontSize: 14.5, color: OFF }}>{courseTitle}</div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 5 }}>
-          {isOnsite
-            ? <MapPin size={12} color={accentCol} strokeWidth={2.5} />
-            : <Wifi size={12} color={accentCol} strokeWidth={2.5} />
-          }
-          <span style={{ fontFamily: F, fontSize: 12.5, color: accentCol, fontWeight: 700 }}>
-            {isOnsite ? 'حضوري · استوديو كاسيت' : 'مباشر تفاعلي · Online LIVE'}
-          </span>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontFamily: F, fontWeight: 800, fontSize: 14, color: OFF, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{courseTitle}</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 4 }}>
+            {isOnsite
+              ? <MapPin size={11} color={accentCol} strokeWidth={2.5} />
+              : <Wifi size={11} color={accentCol} strokeWidth={2.5} />
+            }
+            <span style={{ fontFamily: F, fontSize: 12, color: accentCol, fontWeight: 700 }}>
+              {isOnsite ? 'حضوري · استوديو كاسيت' : 'مباشر تفاعلي · Online LIVE'}
+            </span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 3 }}>
+            <CalendarDays size={11} color={MUT} strokeWidth={2} />
+            <span style={{ fontFamily: F, fontSize: 11.5, color: MUT }}>يبدأ {cohortStartAr} · {cohortDays}</span>
+          </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
-          <CalendarDays size={12} color={MUT} strokeWidth={2} />
-          <span style={{ fontFamily: F, fontSize: 12, color: MUT }}>يبدأ {cohortStartAr} · {cohortDays}</span>
+        <div style={{ flexShrink: 0, textAlign: 'left' }}>
+          <div style={{ fontFamily: FP, fontSize: 22, fontWeight: 800, color: accentCol, lineHeight: 1 }}>{charge}</div>
+          {isOnsite && plan === 'deposit' && (
+            <div style={{ fontFamily: F, fontSize: 11, color: MUT, marginTop: 3 }}>والباقي {priceJOD - DEPOSIT_JOD} JOD لاحقاً</div>
+          )}
         </div>
-      </div>
-      <div style={{ textAlign: 'left' }}>
-        <div style={{ fontFamily: FP, fontSize: 22, fontWeight: 800, color: accentCol, lineHeight: 1 }}>{charge}</div>
-        {isOnsite && plan === 'deposit' && (
-          <div style={{ fontFamily: F, fontSize: 11, color: MUT, marginTop: 3 }}>والباقي {priceJOD - DEPOSIT_JOD} JOD لاحقاً</div>
-        )}
       </div>
     </div>
   );
 }
 
-/* ── custom input field ────────────────────────────── */
+/* ── Custom text field ─────────────────────────────── */
 function Field({
-  icon, placeholder, value, onChange, type = 'text', dir = 'rtl', required,
+  icon, placeholder, value, onChange, type = 'text', inputDir = 'rtl', required,
 }: {
   icon: React.ReactNode; placeholder: string; value: string;
-  onChange: (v: string) => void; type?: string; dir?: string; required?: boolean;
+  onChange: (v: string) => void; type?: string; inputDir?: string; required?: boolean;
 }) {
   const [focused, setFocused] = useState(false);
   return (
     <div style={{
       display: 'flex', alignItems: 'center', gap: 10,
-      background: CARD2, border: `1px solid ${focused ? GL : CBR}`,
-      borderRadius: 12, padding: '11px 14px', transition: 'border-color .2s',
+      background: CARD2, border: `1.5px solid ${focused ? GLD : CBR}`,
+      borderRadius: 12, padding: '12px 14px', transition: 'border-color .2s',
     }}>
       <span style={{ color: focused ? GLD : MUT, flexShrink: 0, display: 'flex', transition: 'color .2s' }}>{icon}</span>
       <input
@@ -166,26 +243,125 @@ function Field({
         placeholder={placeholder + (required ? ' *' : '')}
         value={value}
         onChange={e => onChange(e.target.value)}
-        dir={dir}
+        dir={inputDir}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         style={{
           flex: 1, background: 'transparent', border: 'none', outline: 'none',
-          fontFamily: F, fontSize: 14, color: OFF,
-          '::placeholder': { color: MUT },
+          fontFamily: F, fontSize: 14, color: OFF, minWidth: 0,
         } as CSSProperties}
       />
     </div>
   );
 }
 
+/* ── Phone field: dial-code selector + number input ── */
+function PhoneField({
+  dialCode, phoneNumber, onDialChange, onNumberChange,
+}: {
+  dialCode: string; phoneNumber: string;
+  onDialChange: (v: string) => void; onNumberChange: (v: string) => void;
+}) {
+  const [focused, setFocused] = useState(false);
+  const selected = COUNTRIES.find(c => c.dial === dialCode) ?? COUNTRIES[0];
+
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'center',
+      background: CARD2, border: `1.5px solid ${focused ? GLD : CBR}`,
+      borderRadius: 12, overflow: 'hidden', transition: 'border-color .2s',
+    }}>
+      {/* dial-code selector */}
+      <div style={{ position: 'relative', flexShrink: 0, borderLeft: `1px solid ${CBR}` }}>
+        <select
+          value={dialCode}
+          onChange={e => onDialChange(e.target.value)}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          style={{
+            appearance: 'none', background: 'transparent', border: 'none', outline: 'none',
+            fontFamily: F, fontSize: 13, color: OFF, padding: '12px 8px 12px 28px',
+            cursor: 'pointer', direction: 'rtl', paddingRight: 8,
+          } as CSSProperties}
+        >
+          {COUNTRIES.map(c => (
+            <option key={c.code} value={c.dial} style={{ background: '#1A2535', color: OFF }}>
+              {c.flag} {c.name} ({c.dial})
+            </option>
+          ))}
+        </select>
+        {/* display: flag + dial code, with chevron */}
+        <div style={{
+          position: 'absolute', inset: 0, display: 'flex', alignItems: 'center',
+          padding: '0 6px 0 4px', gap: 4, pointerEvents: 'none',
+        }}>
+          <span style={{ fontSize: 16 }}>{selected.flag}</span>
+          <span style={{ fontFamily: FP, fontSize: 12.5, color: LT, fontWeight: 600 }}>{selected.dial}</span>
+          <span style={{ color: MUT, fontSize: 10, marginRight: 2 }}>▾</span>
+        </div>
+      </div>
+
+      {/* phone number input */}
+      <div style={{ display: 'flex', alignItems: 'center', flex: 1, gap: 8, padding: '0 12px' }}>
+        <Phone size={14} color={focused ? GLD : MUT} style={{ flexShrink: 0, transition: 'color .2s' }} />
+        <input
+          type="tel"
+          placeholder="رقم الجوال *"
+          value={phoneNumber}
+          onChange={e => onNumberChange(e.target.value)}
+          dir="ltr"
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          style={{
+            flex: 1, background: 'transparent', border: 'none', outline: 'none',
+            fontFamily: F, fontSize: 14, color: OFF, minWidth: 0,
+          } as CSSProperties}
+        />
+      </div>
+    </div>
+  );
+}
+
+/* ── Country select dropdown ───────────────────────── */
+function CountrySelect({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const [focused, setFocused] = useState(false);
+  return (
+    <div style={{
+      position: 'relative',
+      display: 'flex', alignItems: 'center', gap: 10,
+      background: CARD2, border: `1.5px solid ${focused ? GLD : CBR}`,
+      borderRadius: 12, padding: '12px 14px', transition: 'border-color .2s',
+    }}>
+      <span style={{ color: focused ? GLD : MUT, flexShrink: 0, display: 'flex', fontSize: 15, transition: 'color .2s' }}>🌍</span>
+      <select
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        style={{
+          flex: 1, appearance: 'none', background: 'transparent', border: 'none', outline: 'none',
+          fontFamily: F, fontSize: 14, color: value ? OFF : MUT,
+          cursor: 'pointer', direction: 'rtl', minWidth: 0,
+        } as CSSProperties}
+      >
+        {COUNTRIES.map(c => (
+          <option key={c.code} value={c.name} style={{ background: '#1A2535', color: OFF }}>
+            {c.flag} {c.name}
+          </option>
+        ))}
+      </select>
+      <span style={{ color: MUT, fontSize: 11, flexShrink: 0 }}>▾</span>
+    </div>
+  );
+}
+
 /* ── Stripe payment form ────────────────────────────── */
 function StripePaymentForm({
-  priceJOD, priceUSD, plan, mode, onSuccess, onError,
+  priceJOD, priceUSD, plan, mode, onSuccess, onError, onBack,
 }: {
   priceJOD: number; priceUSD: number;
   plan: 'full' | 'deposit'; mode: 'onsite' | 'live';
-  onSuccess: () => void; onError: (msg: string) => void;
+  onSuccess: () => void; onError: (msg: string) => void; onBack: () => void;
 }) {
   const stripe   = useStripe();
   const elements = useElements();
@@ -249,6 +425,22 @@ function StripePaymentForm({
         {paying ? 'جاري المعالجة...' : `ادفع ${chargeAmount} وثبّت مقعدك`}
       </button>
 
+      {/* back button */}
+      <button
+        onClick={onBack}
+        disabled={paying}
+        style={{
+          display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+          width: '100%', background: 'transparent', color: MUT,
+          fontFamily: F, fontWeight: 600, fontSize: 13.5, padding: '10px 16px',
+          borderRadius: 10, border: `1px solid ${CBR}`, cursor: paying ? 'not-allowed' : 'pointer',
+          transition: 'all .2s',
+        }}
+      >
+        <ArrowRight size={14} />
+        العودة وتعديل البيانات
+      </button>
+
       {/* assurance */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
         {['ضمان الجلسة الأولى — استرداد كامل خلال 24 ساعة', 'يصلك تأكيد التسجيل فور الدفع على بريدك', 'مقعدك محجوز لك وحدك'].map(line => (
@@ -272,8 +464,8 @@ export default function PaymentModal({
 }: PaymentModalProps) {
   const [step, setStep]             = useState<Step>('form');
   const [form, setForm]             = useState<FormState>({
-    firstName: '', lastName: '', phone: '', email: '',
-    country: 'الأردن', city: '', mode: initialMode, plan: 'deposit',
+    firstName: '', lastName: '', dialCode: '+962', phoneNumber: '',
+    email: '', country: 'الأردن', mode: initialMode, plan: 'deposit',
   });
   const [loading, setLoading]       = useState(false);
   const [formErr, setFormErr]       = useState<string | null>(null);
@@ -294,7 +486,7 @@ export default function PaymentModal({
       } else {
         setStep('form'); setClientSecret(null); setPiId(null);
         setOrderId(null); setFormErr(null); setLoading(false);
-        setForm(f => ({ ...f, mode: initialMode }));
+        setForm(f => ({ ...f, mode: initialMode, plan: initialMode === 'live' ? 'full' : 'deposit' }));
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -335,8 +527,18 @@ export default function PaymentModal({
   }, []);
 
   const handleFormSubmit = async () => {
-    if (!form.firstName.trim() || !form.phone.trim()) {
-      setFormErr('الاسم الأول ورقم الجوال إلزاميان'); return;
+    const fullPhone = (form.dialCode + form.phoneNumber.trim()).replace(/\s+/g, '');
+    if (!form.firstName.trim()) {
+      setFormErr('الاسم الأول إلزامي'); return;
+    }
+    if (!form.phoneNumber.trim()) {
+      setFormErr('رقم الجوال إلزامي'); return;
+    }
+    if (!form.email.trim()) {
+      setFormErr('البريد الإلكتروني إلزامي'); return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+      setFormErr('البريد الإلكتروني غير صحيح'); return;
     }
     setFormErr(null); setLoading(true);
     try {
@@ -351,10 +553,9 @@ export default function PaymentModal({
           customer: {
             firstName: form.firstName.trim(),
             lastName:  form.lastName.trim() || undefined,
-            phone:     form.phone.trim(),
-            email:     form.email.trim() || undefined,
+            phone:     fullPhone,
+            email:     form.email.trim(),
             country:   form.country || 'الأردن',
-            city:      form.city.trim() || undefined,
           },
         }),
       });
@@ -383,6 +584,11 @@ export default function PaymentModal({
     if (piId) pollOrder(piId);
   }, [piId, pollOrder]);
 
+  const handleBack = useCallback(() => {
+    setStep('form');
+    setClientSecret(null);
+  }, []);
+
   const stripeAppearance = {
     theme: 'night' as const,
     variables: {
@@ -398,23 +604,39 @@ export default function PaymentModal({
 
   return (
     <>
-      {/* backdrop */}
-      <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.76)', zIndex: 1000, backdropFilter: 'blur(6px)' }} />
-
-      {/* panel */}
-      <div dir="rtl" style={{ position: 'fixed', inset: 0, zIndex: 1001, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px', pointerEvents: 'none' }}>
+      {/* single overlay — closes on backdrop click, centers the card */}
+      <div
+        onClick={onClose}
+        dir="rtl"
+        style={{
+          position: 'fixed', inset: 0, zIndex: 1000,
+          background: 'rgba(0,0,0,0.78)', backdropFilter: 'blur(6px)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: 16,
+        }}
+      >
+        {/* modal card — stops click propagation so clicking inside doesn't close modal */}
         <div
           onClick={e => e.stopPropagation()}
           style={{
             background: BG, border: `1px solid ${CBR}`, borderRadius: 24,
             width: '100%', maxWidth: 520, maxHeight: '92dvh', overflowY: 'auto',
-            boxShadow: '0 40px 100px rgba(0,0,0,0.7)', pointerEvents: 'auto',
+            boxShadow: '0 40px 100px rgba(0,0,0,0.75)',
+            display: 'flex', flexDirection: 'column',
           }}
         >
-          {/* ── modal header ── */}
-          <div style={{ position: 'sticky', top: 0, zIndex: 10, background: BG, borderBottom: `1px solid ${CBR}`, padding: '18px 22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', align: 'center', gap: 10 }}>
-              <div style={{ width: 34, height: 34, borderRadius: 10, background: GS, border: `1px solid ${GL}`, display: 'grid', placeContent: 'center', marginLeft: 10 }}>
+          {/* ── sticky header ── */}
+          <div style={{
+            position: 'sticky', top: 0, zIndex: 10, background: BG,
+            borderBottom: `1px solid ${CBR}`, padding: '16px 20px',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            flexShrink: 0,
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{
+                width: 34, height: 34, borderRadius: 10, background: GS,
+                border: `1px solid ${GL}`, display: 'grid', placeContent: 'center', flexShrink: 0,
+              }}>
                 <Lock size={15} color={GLD} />
               </div>
               <div>
@@ -422,23 +644,31 @@ export default function PaymentModal({
                 <div style={{ fontFamily: F, fontSize: 11.5, color: MUT, marginTop: 1 }}>دفع آمن عبر Stripe</div>
               </div>
             </div>
-            <button onClick={onClose} style={{ background: 'rgba(255,255,255,.06)', border: `1px solid ${CBR}`, cursor: 'pointer', color: MUT, padding: 7, borderRadius: 9, display: 'flex', transition: 'background .2s' }} aria-label="إغلاق">
+            <button
+              onClick={onClose}
+              style={{
+                background: 'rgba(255,255,255,.06)', border: `1px solid ${CBR}`,
+                cursor: 'pointer', color: MUT, padding: 7, borderRadius: 9,
+                display: 'flex', transition: 'background .2s', flexShrink: 0,
+              }}
+              aria-label="إغلاق"
+            >
               <X size={18} />
             </button>
           </div>
 
-          <div style={{ padding: '22px 22px 28px' }}>
+          {/* ── scrollable body ── */}
+          <div style={{ padding: '22px 20px 28px', flex: 1 }}>
 
-            {/* stepper — form/payment/success steps */}
             {(step === 'form' || step === 'payment' || step === 'success') && (
               <Stepper step={step} />
             )}
 
             {/* ── STEP 1: FORM ──────────────────────── */}
             {step === 'form' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
 
-                {/* ① أسلوب التعلّم — Mode Cards */}
+                {/* ① أسلوب التعلّم */}
                 <div>
                   <SectionLabel>① أسلوب التعلّم</SectionLabel>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -446,75 +676,78 @@ export default function PaymentModal({
                     <button
                       onClick={() => setForm(f => ({ ...f, mode: 'onsite' }))}
                       style={{
-                        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                        width: '100%', display: 'flex', alignItems: 'center',
+                        justifyContent: 'space-between', gap: 12,
                         background: form.mode === 'onsite' ? GS : CARD,
                         border: `2px solid ${form.mode === 'onsite' ? GLD : CBR}`,
                         borderRadius: 14, padding: '14px 16px', cursor: 'pointer',
                         transition: 'all .2s', textAlign: 'right',
                       }}
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 11 }}>
-                        {/* custom radio dot */}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
                         <div style={{
-                          width: 20, height: 20, borderRadius: '50%', border: `2px solid ${form.mode === 'onsite' ? GLD : MUT}`,
+                          width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
+                          border: `2px solid ${form.mode === 'onsite' ? GLD : MUT}`,
                           background: form.mode === 'onsite' ? GLD : 'transparent',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
                           transition: 'all .2s',
                         }}>
                           {form.mode === 'onsite' && <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#0F1A2E' }} />}
                         </div>
-                        <div>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-                            <MapPin size={13} color={form.mode === 'onsite' ? GLD : MUT} strokeWidth={2.2} />
+                        <div style={{ textAlign: 'right', minWidth: 0 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                            <MapPin size={12} color={form.mode === 'onsite' ? GLD : MUT} strokeWidth={2.2} />
                             <span style={{ fontFamily: F, fontSize: 14.5, fontWeight: 800, color: form.mode === 'onsite' ? OFF : LT }}>حضوري</span>
                           </div>
-                          <div style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 2 }}>استوديو كاسيت · عمّان · 15 أيلول</div>
+                          <div style={{ fontFamily: F, fontSize: 11.5, color: MUT, marginTop: 2 }}>استوديو كاسيت · عمّان · {cohortStartAr}</div>
                         </div>
                       </div>
-                      <div style={{ textAlign: 'left' }}>
-                        <div style={{ fontFamily: FP, fontSize: 20, fontWeight: 700, color: form.mode === 'onsite' ? GLD : LT }}>{priceJOD}</div>
+                      <div style={{ flexShrink: 0, textAlign: 'left' }}>
+                        <div style={{ fontFamily: FP, fontSize: 20, fontWeight: 700, color: form.mode === 'onsite' ? GLD : LT, lineHeight: 1 }}>{priceJOD}</div>
                         <div style={{ fontFamily: F, fontSize: 11, color: MUT }}>JOD</div>
                       </div>
                     </button>
 
                     {/* مباشر تفاعلي */}
                     <button
-                      onClick={() => setForm(f => ({ ...f, mode: 'live' }))}
+                      onClick={() => setForm(f => ({ ...f, mode: 'live', plan: 'full' }))}
                       style={{
-                        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                        width: '100%', display: 'flex', alignItems: 'center',
+                        justifyContent: 'space-between', gap: 12,
                         background: form.mode === 'live' ? CS : CARD,
                         border: `2px solid ${form.mode === 'live' ? CYN : CBR}`,
                         borderRadius: 14, padding: '14px 16px', cursor: 'pointer',
                         transition: 'all .2s', textAlign: 'right',
                       }}
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 11 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
                         <div style={{
-                          width: 20, height: 20, borderRadius: '50%', border: `2px solid ${form.mode === 'live' ? CYN : MUT}`,
+                          width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
+                          border: `2px solid ${form.mode === 'live' ? CYN : MUT}`,
                           background: form.mode === 'live' ? CYN : 'transparent',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
                           transition: 'all .2s',
                         }}>
                           {form.mode === 'live' && <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#0F1A2E' }} />}
                         </div>
-                        <div>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-                            <Wifi size={13} color={form.mode === 'live' ? CYN : MUT} strokeWidth={2.2} />
+                        <div style={{ textAlign: 'right', minWidth: 0 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                            <Wifi size={12} color={form.mode === 'live' ? CYN : MUT} strokeWidth={2.2} />
                             <span style={{ fontFamily: F, fontSize: 14.5, fontWeight: 800, color: form.mode === 'live' ? OFF : LT }}>مباشر تفاعلي</span>
-                            <span style={{ fontFamily: F, fontSize: 10.5, color: CYN, background: CS, border: `1px solid ${CL}`, padding: '1px 7px', borderRadius: 999 }}>Online LIVE</span>
+                            <span style={{ fontFamily: F, fontSize: 10, color: CYN, background: CS, border: `1px solid ${CL}`, padding: '1px 6px', borderRadius: 999 }}>Online LIVE</span>
                           </div>
-                          <div style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 2 }}>عن بُعد من أي مكان · 16 أيلول</div>
+                          <div style={{ fontFamily: F, fontSize: 11.5, color: MUT, marginTop: 2 }}>عن بُعد من أي مكان · {cohortStartAr}</div>
                         </div>
                       </div>
-                      <div style={{ textAlign: 'left' }}>
-                        <div style={{ fontFamily: FP, fontSize: 20, fontWeight: 700, color: form.mode === 'live' ? CYN : LT }}>${priceUSD}</div>
+                      <div style={{ flexShrink: 0, textAlign: 'left' }}>
+                        <div style={{ fontFamily: FP, fontSize: 20, fontWeight: 700, color: form.mode === 'live' ? CYN : LT, lineHeight: 1 }}>${priceUSD}</div>
                         <div style={{ fontFamily: F, fontSize: 11, color: MUT }}>USD</div>
                       </div>
                     </button>
                   </div>
                 </div>
 
-                {/* ② خطة الدفع — Plan Cards (onsite only) */}
+                {/* ② خطة الدفع (حضوري فقط) */}
                 {isOnsite && (
                   <div>
                     <SectionLabel>② خطّة الدفع</SectionLabel>
@@ -523,30 +756,31 @@ export default function PaymentModal({
                       <button
                         onClick={() => setForm(f => ({ ...f, plan: 'deposit' }))}
                         style={{
-                          background: form.plan === 'deposit' ? GS : CARD,
+                          width: '100%', background: form.plan === 'deposit' ? GS : CARD,
                           border: `2px solid ${form.plan === 'deposit' ? GLD : CBR}`,
                           borderRadius: 14, padding: '14px 16px', cursor: 'pointer',
-                          transition: 'all .2s', textAlign: 'right', width: '100%',
+                          transition: 'all .2s', textAlign: 'right',
                         }}
                       >
                         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
                           <div style={{
-                            width: 20, height: 20, borderRadius: '50%', border: `2px solid ${form.plan === 'deposit' ? GLD : MUT}`,
+                            width: 20, height: 20, borderRadius: '50%', flexShrink: 0, marginTop: 2,
+                            border: `2px solid ${form.plan === 'deposit' ? GLD : MUT}`,
                             background: form.plan === 'deposit' ? GLD : 'transparent',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2,
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
                             transition: 'all .2s',
                           }}>
                             {form.plan === 'deposit' && <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#0F1A2E' }} />}
                           </div>
-                          <div style={{ flex: 1 }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 5 }}>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
                               <span style={{ fontFamily: F, fontSize: 14.5, fontWeight: 800, color: form.plan === 'deposit' ? OFF : LT }}>تقسيط مريح</span>
-                              <span style={{ fontFamily: F, fontSize: 10.5, fontWeight: 700, background: GLD, color: '#0F1A2E', padding: '2px 9px', borderRadius: 999 }}>موصى به</span>
+                              <span style={{ fontFamily: F, fontSize: 10.5, fontWeight: 700, background: GLD, color: '#0F1A2E', padding: '2px 8px', borderRadius: 999 }}>موصى به</span>
                             </div>
                             <div style={{ fontFamily: F, fontSize: 13, color: LT, lineHeight: 1.7 }}>
                               ادفع <strong style={{ color: GLD }}>{DEPOSIT_JOD} ديناراً</strong> الآن · والباقي {priceJOD - DEPOSIT_JOD} على دفعتين أثناء الدورة
                             </div>
-                            <div style={{ display: 'flex', gap: 12, marginTop: 6 }}>
+                            <div style={{ display: 'flex', gap: 12, marginTop: 6, flexWrap: 'wrap' }}>
                               {['بلا فوائد', 'بلا رسوم إضافية'].map(t => (
                                 <div key={t} style={{ display: 'flex', alignItems: 'center', gap: 4, fontFamily: F, fontSize: 11.5, color: MUT }}>
                                   <CheckCircle2 size={11} color={GRN} /> {t}
@@ -561,22 +795,23 @@ export default function PaymentModal({
                       <button
                         onClick={() => setForm(f => ({ ...f, plan: 'full' }))}
                         style={{
-                          display: 'flex', alignItems: 'center', gap: 10,
+                          width: '100%', display: 'flex', alignItems: 'center', gap: 10,
                           background: form.plan === 'full' ? GS : CARD,
                           border: `2px solid ${form.plan === 'full' ? GLD : CBR}`,
                           borderRadius: 14, padding: '14px 16px', cursor: 'pointer',
-                          transition: 'all .2s', textAlign: 'right', width: '100%',
+                          transition: 'all .2s', textAlign: 'right',
                         }}
                       >
                         <div style={{
-                          width: 20, height: 20, borderRadius: '50%', border: `2px solid ${form.plan === 'full' ? GLD : MUT}`,
+                          width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
+                          border: `2px solid ${form.plan === 'full' ? GLD : MUT}`,
                           background: form.plan === 'full' ? GLD : 'transparent',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
                           transition: 'all .2s',
                         }}>
                           {form.plan === 'full' && <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#0F1A2E' }} />}
                         </div>
-                        <div>
+                        <div style={{ minWidth: 0 }}>
                           <div style={{ fontFamily: F, fontSize: 14.5, fontWeight: 800, color: form.plan === 'full' ? OFF : LT }}>دفعة واحدة</div>
                           <div style={{ fontFamily: F, fontSize: 12.5, color: MUT, marginTop: 2 }}>{priceJOD} دينار كاملة</div>
                         </div>
@@ -585,31 +820,54 @@ export default function PaymentModal({
                   </div>
                 )}
 
-                {/* ③ بياناتك */}
+                {/* بياناتك */}
                 <div>
                   <SectionLabel>{isOnsite ? '③' : '②'} بياناتك</SectionLabel>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                    <div style={{ display: 'flex', gap: 10 }}>
+                    {/* الاسم */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                       <Field icon={<User size={15} />} placeholder="الاسم الأول" value={form.firstName} onChange={v => setForm(f => ({ ...f, firstName: v }))} required />
                       <Field icon={<User size={15} />} placeholder="اسم العائلة" value={form.lastName} onChange={v => setForm(f => ({ ...f, lastName: v }))} />
                     </div>
-                    <Field icon={<Phone size={15} />} placeholder="رقم الجوال (مع رمز الدولة)" value={form.phone} onChange={v => setForm(f => ({ ...f, phone: v }))} dir="ltr" required />
-                    <Field icon={<Mail size={15} />} placeholder="البريد الإلكتروني (اختياري)" value={form.email} onChange={v => setForm(f => ({ ...f, email: v }))} type="email" dir="ltr" />
-                    <div style={{ display: 'flex', gap: 10 }}>
-                      <Field icon={<Globe size={15} />} placeholder="الدولة" value={form.country} onChange={v => setForm(f => ({ ...f, country: v }))} />
-                      <Field icon={<Building2 size={15} />} placeholder="المدينة" value={form.city} onChange={v => setForm(f => ({ ...f, city: v }))} />
-                    </div>
+
+                    {/* الهاتف */}
+                    <PhoneField
+                      dialCode={form.dialCode}
+                      phoneNumber={form.phoneNumber}
+                      onDialChange={v => {
+                        const c = COUNTRIES.find(x => x.dial === v);
+                        setForm(f => ({ ...f, dialCode: v, country: c?.name ?? f.country }));
+                      }}
+                      onNumberChange={v => setForm(f => ({ ...f, phoneNumber: v }))}
+                    />
+
+                    {/* البريد */}
+                    <Field
+                      icon={<Mail size={15} />}
+                      placeholder="البريد الإلكتروني"
+                      value={form.email}
+                      onChange={v => setForm(f => ({ ...f, email: v }))}
+                      type="email"
+                      inputDir="ltr"
+                      required
+                    />
+
+                    {/* الدولة */}
+                    <CountrySelect
+                      value={form.country}
+                      onChange={v => setForm(f => ({ ...f, country: v }))}
+                    />
                   </div>
                 </div>
 
-                {/* order summary */}
+                {/* ملخص الطلب */}
                 <OrderSummary
                   courseTitle={courseTitle} mode={form.mode}
                   cohortStartAr={cohortStartAr} cohortDays={cohortDays}
                   priceJOD={priceJOD} priceUSD={priceUSD} plan={form.plan}
                 />
 
-                {/* error */}
+                {/* خطأ */}
                 {formErr && (
                   <div style={{ display: 'flex', gap: 10, background: 'rgba(248,113,113,.08)', border: '1px solid rgba(248,113,113,.28)', borderRadius: 12, padding: '12px 14px' }}>
                     <AlertCircle size={18} color={ERR} style={{ flexShrink: 0, marginTop: 1 }} />
@@ -617,7 +875,7 @@ export default function PaymentModal({
                   </div>
                 )}
 
-                {/* CTA */}
+                {/* زر المتابعة */}
                 <div>
                   <button
                     onClick={handleFormSubmit}
@@ -633,17 +891,15 @@ export default function PaymentModal({
                   >
                     <Lock size={15} />
                     {loading ? 'جاري التحضير...' : 'متابعة للدفع'}
-                    {!loading && <ArrowLeft size={15} />}
                   </button>
-                  {/* security badges */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14, marginTop: 12, flexWrap: 'wrap' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontFamily: F, fontSize: 11.5, color: MUT }}>
-                      <Lock size={11} color={MUT} /> مشفّر 100% عبر Stripe
-                    </div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginTop: 12, flexWrap: 'wrap' }}>
+                    <span style={{ fontFamily: F, fontSize: 11, color: MUT, display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <Lock size={10} color={MUT} /> مشفّر 100% عبر Stripe
+                    </span>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <svg width="30" height="10" viewBox="0 0 48 16" aria-label="Visa"><rect width="48" height="16" rx="3" fill="#1A1F71"/><text x="50%" y="12" textAnchor="middle" fontFamily="Arial" fontWeight="bold" fontSize="11" fill="#fff">VISA</text></svg>
-                      <svg width="20" height="13" viewBox="0 0 34 22" aria-label="Mastercard"><circle cx="12" cy="11" r="11" fill="#EB001B"/><circle cx="22" cy="11" r="11" fill="#F79E1B"/><path d="M17 4.3a11 11 0 0 1 0 13.4A11 11 0 0 1 17 4.3z" fill="#FF5F00"/></svg>
-                      <svg width="30" height="12" viewBox="0 0 50 20" aria-label="Apple Pay"><rect width="50" height="20" rx="4" fill="#000"/><text x="50%" y="14.5" textAnchor="middle" fontFamily="'-apple-system',sans-serif" fontWeight="600" fontSize="10" fill="#fff">Apple Pay</text></svg>
+                      <svg width="30" height="10" viewBox="0 0 48 16"><rect width="48" height="16" rx="3" fill="#1A1F71"/><text x="50%" y="12" textAnchor="middle" fontFamily="Arial" fontWeight="bold" fontSize="11" fill="#fff">VISA</text></svg>
+                      <svg width="20" height="13" viewBox="0 0 34 22"><circle cx="12" cy="11" r="11" fill="#EB001B"/><circle cx="22" cy="11" r="11" fill="#F79E1B"/><path d="M17 4.3a11 11 0 0 1 0 13.4A11 11 0 0 1 17 4.3z" fill="#FF5F00"/></svg>
+                      <svg width="34" height="12" viewBox="0 0 50 20"><rect width="50" height="20" rx="4" fill="#000"/><text x="50%" y="14.5" textAnchor="middle" fontFamily="'-apple-system',sans-serif" fontWeight="600" fontSize="10" fill="#fff">Apple Pay</text></svg>
                     </div>
                   </div>
                 </div>
@@ -659,6 +915,7 @@ export default function PaymentModal({
                   plan={form.plan} mode={form.mode}
                   onSuccess={handlePaySuccess}
                   onError={() => setStep('error')}
+                  onBack={handleBack}
                 />
               </Elements>
             )}
@@ -689,7 +946,7 @@ export default function PaymentModal({
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
                     {[
                       { icon: <CalendarDays size={14} color={GLD} />, text: `يبدأ ${cohortStartAr} · ${cohortDays} · ${cohortTimeAr}` },
-                      { icon: <User size={14} color={GLD} />,         text: `المدرّب: ${cohortTrainer}` },
+                      { icon: <User size={14} color={GLD} />, text: `المدرّب: ${cohortTrainer}` },
                       ...(paidAmount > 0 ? [{
                         icon: <CheckCircle2 size={14} color={GRN} />,
                         text: `المدفوع: ${paidAmount} ${paidCurrency}${remaining > 0 ? ` · المتبقّي: ${remaining} JOD` : ''}`,
@@ -726,7 +983,6 @@ export default function PaymentModal({
                   <div style={{ fontFamily: F, fontSize: 13, color: MUT }}>لم يصلك إيصال خلال 5 دقائق؟ تواصل معنا:</div>
                   <a href="https://wa.me/962771052222" target="_blank" rel="noopener noreferrer"
                     style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 8, fontFamily: F, fontSize: 13.5, fontWeight: 700, color: '#25D366', textDecoration: 'none' }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                     واتساب كاسيت (+962 77 105 2222)
                   </a>
                 </div>
@@ -755,6 +1011,7 @@ export default function PaymentModal({
       <style>{`
         @keyframes spin { to { transform: rotate(360deg); } }
         input::placeholder { color: #8A97AE; }
+        select option { background: #1A2535; color: #f8fafc; }
       `}</style>
     </>
   );
