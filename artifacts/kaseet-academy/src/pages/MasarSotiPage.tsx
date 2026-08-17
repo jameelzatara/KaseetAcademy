@@ -3,10 +3,11 @@
  */
 import { useState, useEffect } from 'react';
 import { usePageMeta } from '../hooks/usePageMeta';
-import { ChevronDown, ArrowLeft, MapPin, Wifi, Home, Layers, Clock, Mic, Target, Radio, ShieldCheck, CalendarDays, Users, MessageCircle, Sparkles } from 'lucide-react';
+import { ChevronDown, ArrowLeft, MapPin, Wifi, Home, Layers, Clock, Mic, Target, Radio, ShieldCheck, CalendarDays, Users, MessageCircle, Sparkles, CheckCircle2, Lock } from 'lucide-react';
 import { GOLD, OFF, F, FP, INNER, waLink } from './shared/coursePageHelpers';
 import ReelsSection from '../components/ReelsSection';
 import { Gold } from '../components/SectionHeader';
+import PaymentModal from '../components/PaymentModal';
 import wajeezLogo   from '@assets/wajeez-logo_1785688262989.png';
 import heroShot     from '@assets/voiceover-track1_1785854995070.jpeg';
 import trainerYasar from '@assets/المدربة_يسار_عبده_1785855126478.jpeg';
@@ -359,8 +360,14 @@ function StudyRow({ variant }: { variant: 'inperson' | 'online' }) {
 }
 
 /* ── page ─────────────────────────────────────────── */
+const scrollToCheckout = () => {
+  document.getElementById('checkout')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
 export default function MasarSotiPage() {
-  const [openIdx, setOpenIdx] = useState<number | null>(null);
+  const [openIdx, setOpenIdx]           = useState<number | null>(null);
+  const [modalOpen, setModalOpen]       = useState(false);
+  const [checkoutMode, setCheckoutMode] = useState<'onsite' | 'live'>('onsite');
   const [expandAll, setExpandAll] = useState(false);
 
   usePageMeta({
@@ -481,10 +488,10 @@ export default function MasarSotiPage() {
 
               {/* CTAs */}
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 22 }}>
-                <a href={WA_ENROLL} target="_blank" rel="noopener noreferrer"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '13px 26px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 6px 20px rgba(255,193,7,.22)' }}>
-                  التسجيل في الماستركلاس <ArrowLeft size={14} />
-                </a>
+                <button onClick={scrollToCheckout}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '13px 26px', borderRadius: 12, border: 'none', cursor: 'pointer', boxShadow: '0 6px 20px rgba(255,193,7,.22)' }}>
+                  احجز مقعدك في الماستركلاس <ArrowLeft size={14} />
+                </button>
                 <a href="#tree"
                   style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: 'rgba(255,255,255,.05)', border: `1px solid ${CBR}`, color: OFF, fontFamily: F, fontWeight: 700, fontSize: 15, padding: '13px 26px', borderRadius: 12, textDecoration: 'none' }}>
                   استكشف المنهج <ArrowLeft size={14} />
@@ -711,10 +718,10 @@ export default function MasarSotiPage() {
           </div>
 
           <div style={{ textAlign: 'center', marginTop: 34 }}>
-            <a href={WA_ENROLL} target="_blank" rel="noopener noreferrer"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15.5, padding: '14px 30px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 10px 30px rgba(255,193,7,.24)' }}>
-              التسجيل في الماستركلاس <ArrowLeft size={14} />
-            </a>
+            <button onClick={scrollToCheckout}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15.5, padding: '14px 30px', borderRadius: 999, border: 'none', cursor: 'pointer', boxShadow: '0 10px 30px rgba(255,193,7,.24)' }}>
+              احجز مقعدك في الماستركلاس <ArrowLeft size={14} />
+            </button>
           </div>
         </div>
       </section>
@@ -898,99 +905,154 @@ export default function MasarSotiPage() {
         </div>
       </section>
 
-      {/* ⑦ السعر + الضمان */}
-      <section className="sec sec--access" style={{ padding: '96px 0' }}>
+      {/* ⑦ التسجيل والدفع — بطاقة checkout تفاعلية */}
+      <section id="checkout" className="sec sec--access" style={{ padding: '96px 0', scrollMarginTop: 80 }}>
         <div style={WRP}>
+          {/* رأس القسم */}
           <div style={SH}>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GS, border: `1px solid ${GL}`, color: GLD, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>
               <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD }} />
-              الأسعار والتسجيل
+              خطوتك نحو السوق
             </span>
             <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', lineHeight: 1.35, margin: '18px 0 0', color: OFF }}>
-              سعر <span style={{ color: GLD }}>الماستركلاس</span>
+              استثمر في <span style={{ color: GLD }}>مستقبلك المهني</span>
             </h2>
+            <p style={{ fontFamily: F, fontSize: 16, fontWeight: 700, color: LT, marginTop: 10 }}>
+              الماستركلاس الكامل — اختر أسلوب دراستك وابدأ فوراً
+            </p>
+            <p style={{ fontFamily: F, fontSize: 14.5, color: MUT, maxWidth: 580, marginInline: 'auto', marginTop: 10, lineHeight: 1.85 }}>
+              برنامج متكامل يأخذك من التأسيس وحتى الإنتاج الفعلي. اختر بين الحضور المباشر في الاستوديو أو الأونلاين التفاعلي.
+            </p>
           </div>
 
-          <div style={{ maxWidth: 580, margin: '48px auto 0', position: 'relative' }}>
-            <div style={{ position: 'absolute', inset: -2, background: 'linear-gradient(135deg, rgba(255,193,7,0.18), rgba(103,232,249,0.08))', borderRadius: 28, filter: 'blur(18px)', opacity: 0.6, pointerEvents: 'none' }} />
-            <div style={{ position: 'relative', background: '#131B27', border: '1px solid rgba(255,193,7,.55)', borderRadius: 24, padding: 'clamp(26px,4vw,40px)', boxShadow: '0 0 0 1px rgba(255,193,7,.20), inset 0 1px 0 rgba(255,193,7,.10), 0 34px 70px rgba(24,32,47,.28)' }}>
+          <div style={{ maxWidth: 600, margin: '52px auto 0', position: 'relative' }}>
+            {/* وهج خلفي */}
+            <div style={{ position: 'absolute', inset: -3, background: `linear-gradient(135deg, rgba(255,193,7,.22), rgba(103,232,249,.10))`, borderRadius: 30, filter: 'blur(20px)', opacity: 0.7, pointerEvents: 'none' }} />
 
-              <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 20, color: OFF, textAlign: 'center', marginBottom: 6 }}>الماستركلاس الكامل</h3>
-              <p style={{ fontFamily: F, fontSize: 12.5, color: MUT, textAlign: 'center', marginBottom: 24, lineHeight: 1.6 }}>44 ساعة · 22 جلسة · 12 محطة · 13 مخرجاً + مشروع تخرّج</p>
+            <div style={{ position: 'relative', background: '#131B27', border: `1px solid ${GL}`, borderRadius: 26, overflow: 'hidden', boxShadow: '0 0 0 1px rgba(255,193,7,.12), 0 34px 70px rgba(13,11,20,.45)' }}>
 
-              {/* price rows */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 14, paddingBottom: 22, borderBottom: `1px solid ${CBR}` }}>
-                {/* row 1 */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, background: 'rgba(255,193,7,.07)', border: `1px solid rgba(255,193,7,.20)`, borderRadius: 14, padding: '14px 18px' }}>
-                  <div>
-                    <div style={{ fontFamily: F, fontSize: 12.5, color: MUT, marginBottom: 3 }}>حضوري · عمّان</div>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
-                      <span style={{ fontFamily: FP, fontSize: 42, fontWeight: 700, color: GLD, lineHeight: 1 }}>550</span>
-                      <span style={{ fontFamily: F, fontSize: 13.5, color: LT, fontWeight: 700 }}>د.أ</span>
-                    </div>
+              {/* ── تبويبات المسار ── */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderBottom: `1px solid ${CBR}` }}>
+                {/* حضوري */}
+                <button
+                  onClick={() => setCheckoutMode('onsite')}
+                  style={{
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+                    padding: '18px 16px', border: 'none', cursor: 'pointer',
+                    background: checkoutMode === 'onsite' ? 'rgba(255,193,7,.08)' : 'transparent',
+                    borderBottom: checkoutMode === 'onsite' ? `2px solid ${GLD}` : '2px solid transparent',
+                    transition: 'background .2s, border-color .2s',
+                  }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <MapPin size={14} color={checkoutMode === 'onsite' ? GLD : MUT} strokeWidth={2.2} />
+                    <span style={{ fontFamily: F, fontSize: 14.5, fontWeight: 800, color: checkoutMode === 'onsite' ? GLD : MUT }}>حضوري</span>
                   </div>
-                  <a href={WA_ENROLL_ONSITE} target="_blank" rel="noopener noreferrer"
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: F, fontSize: 12.5, fontWeight: 700, color: '#7FE3A6', background: 'rgba(37,211,102,.10)', border: '1px solid rgba(37,211,102,.28)', borderRadius: 999, padding: '7px 14px', textDecoration: 'none', flexShrink: 0 }}>
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13" aria-hidden="true"><path d="M12.04 2C6.6 2 2.2 6.4 2.2 11.84c0 1.94.55 3.75 1.5 5.28L2 22l5-1.63a9.84 9.84 0 0 0 5.04 1.38c5.44 0 9.84-4.4 9.84-9.84S17.48 2 12.04 2zm0 17.94c-1.6 0-3.1-.44-4.38-1.2l-.31-.19-3.25 1.06 1.07-3.17-.2-.32a7.94 7.94 0 0 1-1.23-4.28c0-4.4 3.6-7.98 8.3-7.98 4.4 0 8 3.58 8 7.98s-3.6 8.1-8 8.1z"/></svg>
-                    تحدّث مع آية
-                  </a>
-                </div>
-                {/* row 2 */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, background: 'rgba(103,232,249,.05)', border: '1px solid rgba(103,232,249,.20)', borderRadius: 14, padding: '14px 18px' }}>
-                  <div>
-                    <div style={{ fontFamily: F, fontSize: 12.5, color: MUT, marginBottom: 3 }}>مباشر تفاعلي (Online LIVE)</div>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
-                      <span style={{ fontFamily: FP, fontSize: 42, fontWeight: 700, color: '#67e8f9', lineHeight: 1 }}>750</span>
-                      <span style={{ fontFamily: F, fontSize: 13.5, color: LT, fontWeight: 700 }}>$</span>
-                    </div>
+                  <span style={{ fontFamily: F, fontSize: 11.5, color: MUT }}>استوديو كاسيت | عمّان · 15 أيلول</span>
+                  <span style={{ fontFamily: FP, fontSize: 22, fontWeight: 700, color: checkoutMode === 'onsite' ? GLD : LT, lineHeight: 1 }}>550 <span style={{ fontSize: 13 }}>JOD</span></span>
+                </button>
+                {/* مباشر تفاعلي */}
+                <button
+                  onClick={() => setCheckoutMode('live')}
+                  style={{
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+                    padding: '18px 16px', border: 'none', cursor: 'pointer',
+                    background: checkoutMode === 'live' ? 'rgba(103,232,249,.07)' : 'transparent',
+                    borderBottom: checkoutMode === 'live' ? '2px solid #67e8f9' : '2px solid transparent',
+                    transition: 'background .2s, border-color .2s',
+                    borderRight: `1px solid ${CBR}`,
+                  }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <Wifi size={14} color={checkoutMode === 'live' ? '#67e8f9' : MUT} strokeWidth={2.2} />
+                    <span style={{ fontFamily: F, fontSize: 14.5, fontWeight: 800, color: checkoutMode === 'live' ? '#67e8f9' : MUT }}>مباشر تفاعلي</span>
                   </div>
-                  <a href={WA_ENROLL_ONLINE} target="_blank" rel="noopener noreferrer"
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: F, fontSize: 12.5, fontWeight: 700, color: '#7FE3A6', background: 'rgba(37,211,102,.10)', border: '1px solid rgba(37,211,102,.28)', borderRadius: 999, padding: '7px 14px', textDecoration: 'none', flexShrink: 0 }}>
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13" aria-hidden="true"><path d="M12.04 2C6.6 2 2.2 6.4 2.2 11.84c0 1.94.55 3.75 1.5 5.28L2 22l5-1.63a9.84 9.84 0 0 0 5.04 1.38c5.44 0 9.84-4.4 9.84-9.84S17.48 2 12.04 2zm0 17.94c-1.6 0-3.1-.44-4.38-1.2l-.31-.19-3.25 1.06 1.07-3.17-.2-.32a7.94 7.94 0 0 1-1.23-4.28c0-4.4 3.6-7.98 8.3-7.98 4.4 0 8 3.58 8 7.98s-3.6 8.1-8 8.1z"/></svg>
-                    تحدّث مع ياقوت
-                  </a>
-                </div>
+                  <span style={{ fontFamily: F, fontSize: 11.5, color: MUT }}>عن بُعد (Online LIVE) · 16 أيلول</span>
+                  <span style={{ fontFamily: FP, fontSize: 22, fontWeight: 700, color: checkoutMode === 'live' ? '#67e8f9' : LT, lineHeight: 1 }}>$750</span>
+                </button>
               </div>
 
-              {/* value line */}
-              <p style={{ fontFamily: F, fontSize: 13, color: LT, textAlign: 'center', margin: '16px 0 0', lineHeight: 1.7 }}>
-                44 ساعة بـ550 ديناراً — أي <strong style={{ color: GLD }}>12.5 دينار للساعة</strong>
-              </p>
+              <div style={{ padding: 'clamp(24px,3.5vw,36px)' }}>
 
-              {/* features */}
-              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 11, padding: '20px 0', margin: 0 }}>
-                {[
-                  '44 ساعة تدريبية على 22 جلسة',
-                  '12 محطة تدريبية متسلسلة',
-                  '13 مخرجاً ضمن محفظة المتدرّب',
-                  'مشروع تخرّج من 3 ساعات في الاستوديو',
-                  'مسار التأهيل للنشر على وجيز',
-                  'اعتماد من تطبيق وجيز',
-                ].map(feat => (
-                  <li key={feat} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontFamily: F, fontSize: 13.5, color: LT, lineHeight: 1.65 }}>
-                    <span style={{ color: GLD, fontWeight: 800, flexShrink: 0 }}>✓</span> {feat}
-                  </li>
-                ))}
-              </ul>
-
-              {/* guarantee */}
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, background: 'rgba(255,193,7,.08)', border: `1px solid rgba(255,193,7,.22)`, borderRadius: 14, padding: '14px 16px', marginBottom: 16 }}>
-                <ShieldCheck size={20} color={GLD} strokeWidth={2} style={{ flexShrink: 0, marginTop: 2 }} />
-                <p style={{ fontFamily: F, fontSize: 13, color: LT, lineHeight: 1.75, margin: 0 }}>
-                  <strong style={{ color: OFF }}>جرّب الجلسة الأولى</strong> — استرداد كامل خلال 24 ساعة إن لم تكن راضياً، دون شرط ولا سؤال.
+                {/* سطر القيمة الديناميكي */}
+                <p style={{ fontFamily: F, fontSize: 13.5, color: LT, textAlign: 'center', margin: '0 0 22px', lineHeight: 1.7, minHeight: 42 }}>
+                  {checkoutMode === 'onsite'
+                    ? <>44 ساعة تدريبية بـ<strong style={{ color: GLD }}>550 ديناراً</strong> — أي <strong style={{ color: GLD }}>12.5 دينار فقط للساعة</strong></>
+                    : <>44 ساعة تدريبية تفاعلية — <strong style={{ color: '#67e8f9' }}>حضور مباشر من أي مكان بالعالم</strong></>
+                  }
                 </p>
-              </div>
 
-              {/* installment note */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 18, background: GS, border: `1px solid ${GL}`, borderRadius: 10, padding: '9px 14px' }}>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: GLD, flexShrink: 0 }} />
-                <span style={{ fontFamily: F, fontSize: 12.5, color: LT }}>التقسيط متاح · يُثبَّت مقعدك بالدفعة الأولى</span>
-              </div>
+                {/* قائمة المحتويات */}
+                <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 12, padding: 0, margin: '0 0 24px' }}>
+                  {[
+                    '44 ساعة تدريبية مكثفة موزعة على 22 جلسة',
+                    '12 محطة متسلسلة من التأسيس إلى سوق العمل',
+                    '13 عملاً صوتياً جاهزاً داخل ألبوم تخرّجك',
+                    'مشروع تخرّج بإنتاج فعلي (3 ساعات داخل الاستوديو)',
+                    'تأهيل عملي لتسعير خدماتك وإدارة العروض',
+                    'شهادة اعتماد وفرصة النشر عبر تطبيق وجيز',
+                  ].map(feat => (
+                    <li key={feat} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontFamily: F, fontSize: 14, color: LT, lineHeight: 1.6 }}>
+                      <CheckCircle2 size={16} color={GLD} strokeWidth={2.2} style={{ flexShrink: 0, marginTop: 2 }} />
+                      {feat}
+                    </li>
+                  ))}
+                </ul>
 
-              <a href={WA_ENROLL} target="_blank" rel="noopener noreferrer"
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, width: '100%', boxSizing: 'border-box', background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '15px 24px', borderRadius: 14, textDecoration: 'none', boxShadow: '0 6px 22px rgba(255,193,7,0.24)' }}>
-                احجز مقعدك — ادفع 50 ديناراً الآن <ArrowLeft size={15} />
-              </a>
+                {/* صندوق ضمان الجلسة الأولى */}
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 13, background: 'rgba(255,193,7,.07)', border: `1px solid rgba(255,193,7,.26)`, borderRadius: 16, padding: '16px 18px', marginBottom: 18 }}>
+                  <ShieldCheck size={22} color={GLD} strokeWidth={2} style={{ flexShrink: 0, marginTop: 2 }} />
+                  <div>
+                    <div style={{ fontFamily: F, fontWeight: 800, fontSize: 14, color: OFF, marginBottom: 5 }}>ضمان الجلسة الأولى — Risk Reversal</div>
+                    <p style={{ fontFamily: F, fontSize: 13, color: LT, lineHeight: 1.8, margin: 0 }}>
+                      جرّب الجلسة الأولى كاملة. إن شعرت أنّ الماستركلاس لا يلبّي توقّعاتك، اطلب استرداداً كاملاً لرسومك خلال 24 ساعة من انتهائها — <strong style={{ color: OFF }}>دون أسئلة ولا شروط</strong>.
+                    </p>
+                  </div>
+                </div>
+
+                {/* تنبيه التقسيط */}
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, background: GS, border: `1px solid ${GL}`, borderRadius: 12, padding: '11px 15px', marginBottom: 22 }}>
+                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: GLD, flexShrink: 0, marginTop: 6 }} />
+                  <span style={{ fontFamily: F, fontSize: 13, color: LT, lineHeight: 1.7 }}>
+                    <strong style={{ color: OFF }}>التقسيط متاح:</strong> يمكنك الدفع كاملاً الآن أو تثبيت مقعدك بدفع الدفعة الأولى فقط
+                    {' '}<strong style={{ color: GLD }}>{checkoutMode === 'onsite' ? '(50 JOD)' : '($70)'}</strong>.
+                  </span>
+                </div>
+
+                {/* زر Stripe */}
+                <button
+                  onClick={() => { setModalOpen(true); }}
+                  style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+                    width: '100%', boxSizing: 'border-box',
+                    background: GLD, color: '#0f172a',
+                    fontFamily: F, fontWeight: 800, fontSize: 15.5,
+                    padding: '16px 24px', borderRadius: 16, border: 'none', cursor: 'pointer',
+                    boxShadow: '0 8px 28px rgba(255,193,7,.30)',
+                    transition: 'transform .15s, box-shadow .15s',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 14px 38px rgba(255,193,7,.38)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(255,193,7,.30)'; }}>
+                  <Lock size={15} />
+                  احجز مقعدك في الماستركلاس — ادفع {checkoutMode === 'onsite' ? '50 ديناراً' : '$70'} الآن
+                  <ArrowLeft size={15} />
+                </button>
+
+                {/* تذييل الأمان */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, marginTop: 16, flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontFamily: F, fontSize: 12, color: MUT }}>
+                    <Lock size={12} color={MUT} strokeWidth={2} />
+                    معاملة آمنة ومشفّرة 100% عبر Stripe
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    {/* Visa */}
+                    <svg width="32" height="11" viewBox="0 0 48 16" aria-label="Visa"><rect width="48" height="16" rx="3" fill="#1A1F71"/><text x="50%" y="12" textAnchor="middle" fontFamily="Arial" fontWeight="bold" fontSize="11" fill="#fff">VISA</text></svg>
+                    {/* MC */}
+                    <svg width="20" height="13" viewBox="0 0 34 22" aria-label="Mastercard"><circle cx="12" cy="11" r="11" fill="#EB001B"/><circle cx="22" cy="11" r="11" fill="#F79E1B"/><path d="M17 4.3a11 11 0 0 1 0 13.4A11 11 0 0 1 17 4.3z" fill="#FF5F00"/></svg>
+                    {/* Apple Pay */}
+                    <svg width="32" height="13" viewBox="0 0 50 20" aria-label="Apple Pay"><rect width="50" height="20" rx="4" fill="#000"/><text x="50%" y="14.5" textAnchor="middle" fontFamily="'-apple-system',sans-serif" fontWeight="600" fontSize="10" fill="#fff">Apple Pay</text></svg>
+                  </div>
+                </div>
+
+              </div>
             </div>
           </div>
         </div>
@@ -1119,6 +1181,22 @@ export default function MasarSotiPage() {
         </div>
       </section>
 
+      {/* ── PaymentModal — Stripe Elements ── */}
+      <PaymentModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        courseSlug="masar-soti"
+        courseTitle="ماستركلاس التعليق والأداء الصوتي"
+        cohortIdOnsite={301}
+        cohortIdLive={302}
+        cohortStartAr={checkoutMode === 'onsite' ? 'الثلاثاء، 15 أيلول 2025' : 'الأربعاء، 16 أيلول 2025'}
+        cohortDays={checkoutMode === 'onsite' ? 'الأحد، الثلاثاء، الخميس' : 'الأربعاء والسبت'}
+        cohortTimeAr={checkoutMode === 'onsite' ? '5:00 مساءً' : '7:00 مساءً'}
+        cohortTrainer="يسار عبده، عمر شروم"
+        priceJOD={550}
+        priceUSD={750}
+        initialMode={checkoutMode}
+      />
     </div>
   );
 }

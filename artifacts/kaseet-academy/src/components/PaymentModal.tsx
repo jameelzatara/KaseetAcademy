@@ -35,6 +35,7 @@ export interface PaymentModalProps {
   cohortTrainer: string;
   priceJOD: number;
   priceUSD: number;
+  initialMode?: 'onsite' | 'live';
 }
 
 type Step = 'form' | 'payment' | 'polling' | 'pending' | 'success' | 'error';
@@ -159,11 +160,12 @@ export default function PaymentModal({
   cohortIdOnsite, cohortIdLive,
   cohortStartAr, cohortDays, cohortTimeAr, cohortTrainer,
   priceJOD, priceUSD,
+  initialMode = 'onsite',
 }: PaymentModalProps) {
   const [step, setStep]             = useState<Step>('form');
   const [form, setForm]             = useState<FormState>({
     firstName: '', lastName: '', phone: '', email: '',
-    country: 'الأردن', city: '', mode: 'onsite', plan: 'deposit',
+    country: 'الأردن', city: '', mode: initialMode, plan: 'deposit',
   });
   const [loading, setLoading]       = useState(false);
   const [formErr, setFormErr]       = useState<string | null>(null);
