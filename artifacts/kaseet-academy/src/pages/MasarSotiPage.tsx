@@ -3,7 +3,7 @@
  */
 import { useState, useEffect } from 'react';
 import { usePageMeta } from '../hooks/usePageMeta';
-import { ChevronDown, ArrowLeft, MapPin, Wifi, Home, Layers, Clock, Mic } from 'lucide-react';
+import { ChevronDown, ArrowLeft, MapPin, Wifi, Home, Layers, Clock, Mic, Target, Radio } from 'lucide-react';
 import { GOLD, OFF, F, FP, INNER, waLink } from './shared/coursePageHelpers';
 import ReelsSection from '../components/ReelsSection';
 import { Gold } from '../components/SectionHeader';
@@ -420,10 +420,10 @@ export default function MasarSotiPage() {
               {/* two audience / skill pills */}
               <div style={{ display:'flex', flexWrap:'wrap', gap:8, marginBottom:20 }}>
                 <span style={{ display:'inline-flex', alignItems:'center', gap:7, background:GS, border:`1px solid ${GL}`, color:GLD, fontFamily:F, fontSize:12.5, fontWeight:700, padding:'6px 15px', borderRadius:999 }}>
-                  🎯 للمبتدئين والصاعدين
+                  <Target size={12} strokeWidth={2.2} /> للمبتدئين والصاعدين
                 </span>
                 <span style={{ display:'inline-flex', alignItems:'center', gap:7, background:'rgba(103,232,249,.08)', border:'1px solid rgba(103,232,249,.22)', color:'#67e8f9', fontFamily:F, fontSize:12.5, fontWeight:700, padding:'6px 15px', borderRadius:999 }}>
-                  🎙️ إعلانات وبودكاست
+                  <Radio size={12} strokeWidth={2.2} /> إعلانات وبودكاست
                 </span>
               </div>
 
@@ -465,8 +465,11 @@ export default function MasarSotiPage() {
 
               </div>
 
-              {/* wajeez badge — same pattern as Elami */}
-              <div style={{ display:'flex', alignItems:'center', gap:14, marginTop:18, background:'rgba(2,6,23,.75)', border:'1px solid rgba(255,193,7,.18)', backdropFilter:'blur(12px)', WebkitBackdropFilter:'blur(12px)', borderRadius:14, padding:'12px 16px', maxWidth:500 }}>
+              {/* wajeez badge — clickable link */}
+              <a href="https://wajeez.com" target="_blank" rel="noopener noreferrer"
+                style={{ display:'flex', alignItems:'center', gap:14, marginTop:18, background:'rgba(2,6,23,.75)', border:'1px solid rgba(255,193,7,.18)', backdropFilter:'blur(12px)', WebkitBackdropFilter:'blur(12px)', borderRadius:14, padding:'12px 16px', maxWidth:500, textDecoration:'none', cursor:'pointer', transition:'border-color .2s' }}
+                onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(255,193,7,.42)')}
+                onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,193,7,.18)')}>
                 <div style={{ flexShrink:0, width:38, height:38, borderRadius:8, background:'#fff', display:'grid', placeContent:'center', padding:4 }}>
                   <img src={wajeezLogo} alt="وجيز" style={{ width:'100%', height:'100%', objectFit:'contain' }} />
                 </div>
@@ -474,7 +477,7 @@ export default function MasarSotiPage() {
                   <div style={{ fontFamily:F, fontSize:13, fontWeight:700, color:OFF }}>شريك الاعتماد الرسمي — تطبيق وجيز</div>
                   <div style={{ fontFamily:F, fontSize:11.5, color:MUT }}>أكبر مكتبة صوتية وبودكاست في الشرق الأوسط</div>
                 </div>
-              </div>
+              </a>
 
               {/* CTAs */}
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 22 }}>
@@ -489,30 +492,30 @@ export default function MasarSotiPage() {
               </div>
             </div>
 
-            {/* ── spinning ring — 13 في المنتصف + "عمل صوتي" ── */}
-            <div className="soti-hero-shot" style={{ position:'relative', maxWidth:400, marginInline:'auto', width:'100%', aspectRatio:'1' }}>
-              <svg viewBox="0 0 400 400" style={{ width:'100%', height:'100%', display:'block' }}>
-                <circle cx="200" cy="200" r="186" fill="none" stroke="rgba(255,255,255,.05)" />
-                <circle cx="200" cy="200" r="150" fill="none" stroke="rgba(255,255,255,.04)" />
-                <g className="ka-spin-ring">
-                  <circle cx="200" cy="200" r="168" fill="none" stroke="rgba(255,193,7,.90)" strokeWidth="3" strokeLinecap="round" strokeDasharray="260 1056" transform="rotate(-90 200 200)" />
-                  <circle cx="200" cy="200" r="168" fill="none" stroke="rgba(255,193,7,.40)" strokeWidth="3" strokeLinecap="round" strokeDasharray="340 1056" strokeDashoffset="-280" transform="rotate(-90 200 200)" />
-                  <circle cx="200" cy="200" r="168" fill="none" stroke="rgba(255,255,255,.18)" strokeWidth="3" strokeLinecap="round" strokeDasharray="110 1056" strokeDashoffset="-660" transform="rotate(-90 200 200)" />
-                  <circle cx="200" cy="200" r="168" fill="none" stroke="rgba(30,122,133,.90)" strokeWidth="3" strokeLinecap="round" strokeDasharray="90 1056" strokeDashoffset="-800" transform="rotate(-90 200 200)" />
-                  <circle cx="200" cy="32"  r="6" fill="#FFC107" />
-                  <circle cx="352" cy="268" r="6" fill="#FFC107" />
-                  <circle cx="66"  cy="286" r="6" fill="#1E7A85" />
-                </g>
-                <g className="ka-spin-slow">
-                  <circle cx="200" cy="200" r="186" fill="none" stroke="rgba(255,193,7,.06)" strokeWidth="1" strokeDasharray="12 20" />
-                </g>
-              </svg>
-              {/* center content */}
-              <div style={{ position:'absolute', inset:0, display:'grid', placeContent:'center', textAlign:'center' }}>
-                <div style={{ fontFamily:FP, fontSize:72, fontWeight:700, color:OFF, lineHeight:1 }}>13</div>
-                <div style={{ fontFamily:F, fontSize:15, color:MUT, marginTop:4 }}>عمل صوتي</div>
-                <div style={{ width:36, height:1, background:'rgba(255,193,7,.35)', margin:'10px auto' }} />
-                <div style={{ fontFamily:F, fontSize:11.5, color:'rgba(255,193,7,.65)' }}>تتخرج بألبوم لا بشهادة</div>
+            {/* ── hero shot ── */}
+            <div className="soti-hero-shot" style={{ position:'relative', maxWidth:380, marginInline:'auto', width:'100%' }}>
+              <div style={{ position:'absolute', inset:'-14% -10% -8%', borderRadius:40, background:'radial-gradient(ellipse at 50% 40%, rgba(255,193,7,.22), transparent 68%)', filter:'blur(8px)', zIndex:-1 }} />
+              <div style={{ position:'relative', borderRadius:26, overflow:'hidden', border:`1px solid ${GL}`, aspectRatio:'3/4', boxShadow:'0 34px 90px rgba(0,0,0,.5)' }}>
+                <img src={heroShot} alt="ماستركلاس التعليق والأداء الصوتي" fetchPriority="high"
+                  style={{ width:'100%', height:'100%', objectFit:'cover', objectPosition:'52% 20%', display:'block' }} />
+                <div style={{ position:'absolute', inset:0, background:'linear-gradient(to top, rgba(26,37,51,.95) 0%, rgba(26,37,51,.32) 30%, transparent 58%)' }} />
+                {/* pill */}
+                <span style={{ position:'absolute', top:18, right:18, zIndex:3, display:'inline-flex', alignItems:'center', gap:7, background:'rgba(26,37,51,.74)', backdropFilter:'blur(6px)', border:`1px solid ${GL}`, color:GLD, fontSize:11.5, fontWeight:700, fontFamily:F, padding:'7px 13px', borderRadius:999 }}>
+                  <span style={{ width:6, height:6, borderRadius:'50%', background:GLD }} />
+                  تسجيل داخل استوديو كاسيت
+                </span>
+                {/* foot */}
+                <div style={{ position:'absolute', inset:'auto 0 0 0', zIndex:3, padding:'22px 22px 24px', display:'flex', alignItems:'flex-end', justifyContent:'space-between', gap:16 }}>
+                  <div>
+                    <span style={{ fontFamily:FP, fontSize:38, fontWeight:700, color:GLD, lineHeight:.95 }}>13</span>
+                    <span style={{ fontFamily:F, fontSize:12.5, color:LT, marginTop:4, display:'block' }}>مخرجاً صوتياً · ألبوم التخرج</span>
+                  </div>
+                  <div style={{ display:'flex', alignItems:'flex-end', gap:3, height:34 }}>
+                    {Array.from({ length:9 }, (_, i) => (
+                      <span key={i} className="soti-vu-bar" style={{ animationDelay:`${i * 0.11}s` }} />
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
 
