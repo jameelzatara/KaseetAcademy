@@ -72,10 +72,11 @@ if (!process.env.SESSION_SECRET) {
   throw new Error("SESSION_SECRET env var is required");
 }
 
-app.use(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(app as any).use(
   session({
     name: "kaseet.sid",
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET as string,
     resave: false,
     saveUninitialized: false,
     cookie: {

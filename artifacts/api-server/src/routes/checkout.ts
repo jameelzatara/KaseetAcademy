@@ -9,7 +9,7 @@ import {
   toMinorUSD,
   splitInstallments,
 } from "../lib/currency.js";
-import { getPricing, COURSE_NAMES } from "../lib/pricing.js";
+import { getPricing, COURSE_NAMES, validateCohort } from "../lib/pricing.js";
 import {
   createHold,
   setHoldSession,
@@ -75,8 +75,19 @@ router.post("/checkout/session", async (req, res) => {
       return;
     }
 
+    // ── Server-side cohort validation ─────────────────────────
+    let validCohortId: number;
+    try {
+      validCohortId = validateCohort(courseSlug, mode, cohortId);
+    } catch (err: any) {
+      const code = err?.message ?? "COHORT_MISMATCH";
+      logger.warn({ courseSlug, mode, cohortId, code }, "Cohort validation failed (session)");
+      res.status(400).json({ error: "cohort/course/mode مجموعة غير مسموح بها", code });
+      return;
+    }
+
     // ── Seat check from DB (no browser values trusted) ───────
-    const seats = await getCohortSeats(cohortId);
+    const seats = await getCohortSeats(validCohortId);
     if (!seats.isOpen || seats.enrolled >= seats.capacity) {
       res.status(409).json({ error: "CAP_REACHED", message: "نفدت مقاعد هذه الدفعة" });
       return;
@@ -115,7 +126,7 @@ router.post("/checkout/session", async (req, res) => {
     }
 
     // ── Create hold ──────────────────────────────────────────
-    const holdId  = await createHold(cohortId);
+    const holdId  = await createHold(validCohortId);
     const orderId = await generateOrderId();
     const stripe  = await getUncachableStripeClient();
 
@@ -131,13 +142,13 @@ router.post("/checkout/session", async (req, res) => {
           unit_amount: toMinorUSD(chargeUSD),
           product_data: {
             name: `${courseName} — ${modeLabel}`,
-            description: `الدفعة #${cohortId} · تبدأ ${cohortStartAr} · ${cohortDays} · ${cohortTimeAr} · ${cohortTrainer}`,
+            description: `الدفعة #${validCohortId} · تبدأ ${cohortStartAr} · ${cohortDays} · ${cohortTimeAr} · ${cohortTrainer}`,
           },
         },
       }],
       metadata: {
         holdId, orderId,
-        cohortId:   String(cohortId),
+        cohortId:   String(validCohortId),
         courseSlug, mode,
         plan:       effectivePlan,
         totalJOD:   String(totalJOD),
@@ -519,7 +530,19 @@ router.post("/checkout/payment-intent", async (req, res) => {
       return;
     }
 
-    const seats = await getCohortSeats(cohortId);
+    // ── Server-side cohort validation — reject mismatched / unknown cohorts ─
+    let validCohortId: number;
+    try {
+      validCohortId = validateCohort(courseSlug, mode, cohortId);
+    } catch (err: any) {
+      const code = err?.message ?? "COHORT_MISMATCH";
+      logger.warn({ courseSlug, mode, cohortId, code }, "Cohort validation failed");
+      res.status(400).json({ error: "cohort/course/mode مجموعة غير مسموح بها", code });
+      return;
+    }
+
+    // Use the server-validated cohortId for all downstream operations
+    const seats = await getCohortSeats(validCohortId);
     if (!seats.isOpen || seats.enrolled >= seats.capacity) {
       res.status(409).json({ error: "CAP_REACHED", message: "نفدت مقاعد هذه الدفعة" });
       return;
@@ -544,7 +567,7 @@ router.post("/checkout/payment-intent", async (req, res) => {
       }
     }
 
-    const holdId  = await createHold(cohortId);
+    const holdId  = await createHold(validCohortId);
     const orderId = await generateOrderId();
     const stripe  = await getUncachableStripeClient();
 
@@ -554,7 +577,7 @@ router.post("/checkout/payment-intent", async (req, res) => {
       description: `${courseName} — ${modeLabel} · طلب ${orderId}`,
       metadata: {
         holdId, orderId,
-        cohortId:      String(cohortId),
+        cohortId:      String(validCohortId),
         courseSlug,    mode,
         plan:          effectivePlan,
         totalJOD:      String(totalJOD),
@@ -636,7 +659,7 @@ router.get("/checkout/pi-status", async (req, res) => {
 });
 
 // ── onPaymentIntentSucceeded — shared handler for webhook + polling ─
-async function onPaymentIntentSucceeded(pi: import("stripe").Stripe.PaymentIntent): Promise<void> {
+export async function onPaymentIntentSucceeded(pi: import("stripe").Stripe.PaymentIntent): Promise<void> {
   // Idempotency guard
   const [existing] = await db
     .select()

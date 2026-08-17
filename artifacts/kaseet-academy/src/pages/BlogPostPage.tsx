@@ -131,7 +131,7 @@ export default function BlogPostPage() {
     setMeta('meta[name="twitter:image"]',       'content', ogImg);
 
     // JSON-LD Article (بلا aggregateRating)
-    let ld = document.getElementById('ld-article');
+    let ld = document.getElementById('ld-article') as HTMLScriptElement | null;
     if (!ld) { ld = document.createElement('script'); ld.id = 'ld-article'; ld.type = 'application/ld+json'; document.head.appendChild(ld); }
     ld.textContent = JSON.stringify({
       '@context': 'https://schema.org',

@@ -617,7 +617,7 @@ export function getElamData(assets: {
       modeChip: 'حضوري في عمّان أو مباشر تفاعلي (Online LIVE)',
       wajeezSubtitle: 'الشهادة معتمدة من تطبيق وجيز — أكبر منصّة صوتية وبودكاست في الشرق الأوسط',
       ctaEnroll: 'تحدّث مع ياقوت عبر واتساب',
-      ctaEnrollIsWa: true,
+      ctaEnrollIsWa: false,
       ctaExplore: 'استكشف شجرة المسار',
       ctaExploreHref: '#tree',
       audienceTags: ['التقديم التلفزيوني والبرامجي','إدارة الحوارات والإخبار','المستوى المتوسط والاحترافي','المذيعون وصنّاع المحتوى'],

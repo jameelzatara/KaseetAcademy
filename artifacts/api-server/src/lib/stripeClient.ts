@@ -38,7 +38,7 @@ export async function getStripeCredentials(): Promise<StripeCredentials> {
     );
   }
 
-  const data = await resp.json();
+  const data = await resp.json() as { items?: Array<{ settings?: Record<string, string> }> };
   const settings = data.items?.[0]?.settings;
 
   // Replit Stripe connector stores keys as `secret` and `publishable`
@@ -59,7 +59,7 @@ export async function getStripeCredentials(): Promise<StripeCredentials> {
  */
 export async function getUncachableStripeClient(): Promise<Stripe> {
   const { secretKey } = await getStripeCredentials();
-  return new Stripe(secretKey, { apiVersion: "2025-06-30.basil" });
+  return new Stripe(secretKey, { apiVersion: "2026-07-29.dahlia" });
 }
 
 /**
