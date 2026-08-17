@@ -599,33 +599,57 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
       </section>
 
       {/* ═══════════════════════════════════
-          01-B. AUDIENCE (elam + khataba)
+          01-B. FOR WHOM — لمن صُمِّم البرنامج؟
       ═══════════════════════════════════ */}
-      {data.audience && (
-        <section className="sec sec--audience" style={{ padding: '80px 0', background: '#0B1628', backgroundImage: 'linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px)', backgroundSize: '48px 48px' }}>
-          <div style={WRP}>
-            <div style={{ textAlign: 'center', marginBottom: 44, direction: 'rtl' }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: CHIP_BG, border: `1px solid ${CHIP_BR}`, color: CHIP_TXT, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '7px 16px', borderRadius: 999 }}>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: CHIP_DOT }} />
-                {data.audience.badge}
-              </span>
-              <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(22px,3.4vw,36px)', lineHeight: 1.5, margin: '16px 0 0', color: OFF, maxWidth: 700, marginInline: 'auto' }}>
-                {data.audience.heading}
-              </h2>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 14, maxWidth: 960, marginInline: 'auto' }}>
-              {data.audience.items.map((item, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 14, background: 'rgba(255,255,255,0.04)', border: `1px solid rgba(255,255,255,0.08)`, borderRadius: 14, padding: '16px 18px' }}>
-                  <span style={{ flexShrink: 0, width: 26, height: 26, borderRadius: '50%', background: 'transparent', border: '1px solid rgba(255,255,255,0.10)', color: MUT, fontFamily: FP, fontWeight: 700, fontSize: 12, display: 'grid', placeContent: 'center' }}>
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  <span style={{ fontFamily: F, fontSize: 14.5, color: LT, lineHeight: 1.75 }}>{item}</span>
-                </div>
-              ))}
-            </div>
+      <section className="sec sec--forwho" style={{ padding: '88px 0', borderTop: `1px solid ${CBR}` }}>
+        <div style={WRP}>
+          <div style={{ textAlign: 'center', marginBottom: 52 }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: GS, border: `1px solid ${GL}`, color: GLD, fontFamily: F, fontSize: 12, fontWeight: 700, padding: '5px 15px', borderRadius: 999 }}>
+              <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD, flexShrink: 0 }} />
+              لمن صُمِّم البرنامج؟
+            </span>
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(26px,3.6vw,40px)', color: OFF, marginTop: 18, marginBottom: 12, lineHeight: 1.35 }}>
+              ما الذي ستُتقنه <span style={{ color: GLD }}>بعد الماستركلاس؟</span>
+            </h2>
+            <p style={{ fontFamily: F, fontSize: 15.5, color: MUT, maxWidth: 560, marginInline: 'auto', lineHeight: 1.8 }}>
+              ثلاثة محاور تُغطّي مهارة الخطابة كاملةً — من الحضور القيادي حتى إدارة أصعب الجماهير.
+            </p>
           </div>
-        </section>
-      )}
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20, maxWidth: 980, marginInline: 'auto' }}>
+            {[
+              {
+                focus: 'الثقة والحضور أمام الجمهور',
+                title: 'الحضور والاتزان القيادي',
+                desc: 'تتحدّث أمام الجمهور بثقة ووضوح، وتبني حضوراً قيادياً يسبق كلماتك وتعزّز به تقديم خبرتك دون مبالغة أو تقليل من الذات.',
+              },
+              {
+                focus: 'الهيكل والقصة والتكيّف',
+                title: 'بناء الرسالة والارتجال الذكي',
+                desc: 'تصمّم رسالة مترابطة تخدم هدفاً محدداً، ترتجل بوعي وتتكيّف مع المواقف المفاجئة، وتصنع بدايات ونهايات راسخة باستخدام القصص والدعابة بذكاء.',
+              },
+              {
+                focus: 'التواصل الحقيقي تحت الضغط',
+                title: 'إدارة الجمهور والضغوط',
+                desc: 'تفهم جمهورك وتكيّف لغتك وأمثلتك دون أن تفقد هويتك، مع القدرة على إدارة مقاومة الجمهور والحفاظ على هدوئك الكامل تحت الضغط.',
+              },
+            ].map((card, i) => (
+              <div key={i} style={{ background: CARD, border: `1px solid ${CBR}`, borderRadius: 20, padding: '30px 26px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+                <div style={{ width: 36, height: 3, background: GLD, borderRadius: 2 }} />
+                <span style={{ fontFamily: F, fontSize: 11.5, fontWeight: 700, color: MUT, display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <span style={{ color: GLD }}>التركيز:</span> {card.focus}
+                </span>
+                <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(17px,2.2vw,21px)', color: OFF, margin: 0, lineHeight: 1.45 }}>
+                  {card.title}
+                </h3>
+                <p style={{ fontFamily: F, fontSize: 14, color: MUT, lineHeight: 1.85, margin: 0 }}>
+                  {card.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* 01-C elam method removed per design update */}
 
@@ -989,40 +1013,94 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
       </section>
 
       {/* ═══════════════════════════════════
-          08-B. EDUCATIONAL ADVISORS
-          (one card with both, below modes)
+          08-B. CONSULTATION — WhatsApp chat mockup
       ═══════════════════════════════════ */}
-      <section id="consult" className="sec sec--advisor" style={{ padding: '0 0 80px' }}>
+      <section id="consult" className="sec sec--advisor" style={{ padding: '0 0 88px' }}>
         <div style={WRP}>
-          <div style={{ marginBottom: 28, textAlign: 'center' }}>
-            <GoldChip text={data.advisors.badge} outline />
-            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(22px,3.2vw,34px)', lineHeight: 1.4, margin: '14px 0 6px', color: OFF }}>
-              {data.advisors.heading} <span style={{ color: GLD }}>{data.advisors.headingGold}</span>
+          {/* header */}
+          <div style={{ textAlign: 'center', marginBottom: 40 }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: GS, border: `1px solid ${GL}`, color: GLD, fontFamily: F, fontSize: 12, fontWeight: 700, padding: '5px 15px', borderRadius: 999 }}>
+              <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD, flexShrink: 0 }} />
+              استشارة مجانية · دون التزام
+            </span>
+            <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(24px,3.4vw,36px)', lineHeight: 1.4, color: OFF, margin: '16px 0 10px' }}>
+              قبل أن تسجّل، تحدّث مع <span style={{ color: GLD }}>مستشارتك</span>
             </h2>
-            {data.advisors.sub && <p style={{ fontFamily: F, fontSize: 14.5, color: MUT, maxWidth: 520, marginInline: 'auto', lineHeight: 1.8 }}>{data.advisors.sub}</p>}
+            <p style={{ fontFamily: F, fontSize: 15.5, color: MUT, lineHeight: 1.75, maxWidth: 520, marginInline: 'auto' }}>
+              جلسة قصيرة على واتساب تُحدَّد فيها نقطة بدايتك — لكلّ مسار مستشارة مخصّصة.
+            </p>
           </div>
 
-          {/* ONE unified card with both advisors */}
-          <div style={{ maxWidth: 860, marginInline: 'auto', background: CARD, border: `1px solid ${GL}`, borderRadius: 22, padding: 'clamp(22px,3vw,36px)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px,1fr))', gap: 24 }}>
-            {data.advisors.items.map((adv, i) => (
-              <div key={adv.name} style={{ display: 'flex', alignItems: 'center', gap: 16, paddingRight: i > 0 ? 0 : undefined, borderRight: i === 0 && data.advisors.items.length > 1 ? `1px solid ${CBR}` : undefined, paddingLeft: i > 0 ? 'clamp(16px,2vw,24px)' : undefined }}>
-                <div style={{ width: 68, height: 68, borderRadius: '50%', flexShrink: 0, border: `2px solid ${GL}`, overflow: 'hidden' }}>
-                  <img src={adv.imageSrc} alt={adv.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
+          {/* advisor toggle */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 10, marginBottom: 28 }}>
+            {[
+              { mode: 'onsite' as const, label: 'الحضوري',  adv: data.advisors.items[0] },
+              { mode: 'live'   as const, label: 'المباشر',  adv: data.advisors.items[1] ?? data.advisors.items[0] },
+            ].map(({ mode, label, adv }) => (
+              <button key={mode} onClick={() => setCheckoutMode(mode)} style={{
+                display: 'flex', alignItems: 'center', gap: 9,
+                background: checkoutMode === mode ? GS : 'transparent',
+                border: `1px solid ${checkoutMode === mode ? GL : CBR}`,
+                borderRadius: 999, padding: '7px 16px 7px 10px', cursor: 'pointer',
+              }}>
+                <div style={{ width: 30, height: 30, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, border: checkoutMode === mode ? `2px solid ${GLD}` : '2px solid transparent' }}>
+                  <img src={adv.imageSrc} alt={adv.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: OFF }}>{adv.name}</div>
-                  <div style={{ fontFamily: F, fontSize: 12.5, color: MUT, marginTop: 3, lineHeight: 1.5 }}>{adv.role}</div>
-                  {adv.phone && (
-                    <a href={`https://wa.me/${adv.phone}`} target="_blank" rel="noopener noreferrer"
-                      style={{ display: 'inline-flex', alignItems: 'center', gap: 7, marginTop: 10, background: GS, border: `1px solid ${GL}`, color: GLD, fontFamily: F, fontWeight: 700, fontSize: 12.5, padding: '7px 14px', borderRadius: 999, textDecoration: 'none' }}>
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                      {adv.waLabel}
-                    </a>
-                  )}
-                </div>
-              </div>
+                <span style={{ fontFamily: F, fontWeight: 700, fontSize: 13, color: checkoutMode === mode ? GLD : MUT }}>{label}</span>
+              </button>
             ))}
           </div>
+
+          {/* WhatsApp chat window */}
+          {(() => {
+            const isOnsite = checkoutMode === 'onsite';
+            const adv = isOnsite ? data.advisors.items[0] : (data.advisors.items[1] ?? data.advisors.items[0]);
+            const link = isOnsite
+              ? waLink(adv.phone ?? data.wa.phoneOnline, `مرحباً ${adv.name}، أودّ حجز استشارة مجانية عن ماستركلاس الخطابة الحضوري`)
+              : waConsult;
+            const msg = isOnsite
+              ? `أهلاً 👋 أنا ${adv.name}، مستشارة ماستركلاس الخطابة الحضوري. أخبريني عن تجربتك في التحدث أمام الجمهور — وأساعدك تختاري نقطة البداية الصح.`
+              : `أهلاً 👋 أنا ${adv.name}، مستشارة ماستركلاس الخطابة المباشر. أخبريني عن تجربتك في التحدث أمام الجمهور — وأساعدك تختاري نقطة البداية الصح.`;
+            return (
+              <div style={{ maxWidth: 480, marginInline: 'auto', borderRadius: 20, overflow: 'hidden', boxShadow: '0 24px 64px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,0.07)', border: `1px solid ${CBR}` }}>
+                {/* WA top bar */}
+                <div style={{ background: '#1F2C34', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{ width: 42, height: 42, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, border: '2px solid #25D366' }}>
+                    <img src={adv.imageSrc} alt={adv.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontFamily: F, fontWeight: 700, fontSize: 14.5, color: '#E9EEF1', lineHeight: 1.3 }}>{adv.name}</div>
+                    <div style={{ fontFamily: F, fontSize: 12, color: '#8696A0', marginTop: 1 }}>{adv.role}</div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#25D366', boxShadow: '0 0 6px #25D366' }} />
+                    <span style={{ fontFamily: F, fontSize: 11, color: '#25D366', fontWeight: 600 }}>متاحة</span>
+                  </div>
+                </div>
+                {/* chat body */}
+                <div style={{ background: '#0B141A', padding: '20px 16px 16px', minHeight: 140, position: 'relative' }}>
+                  <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle,rgba(255,255,255,.025) 1px,transparent 1px)', backgroundSize: '20px 20px', pointerEvents: 'none' }} />
+                  <div style={{ position: 'relative', maxWidth: '82%', background: '#1F2C34', borderRadius: '0 14px 14px 14px', padding: '10px 14px 8px', marginRight: 'auto' }}>
+                    <div style={{ position: 'absolute', top: 0, right: '100%', width: 0, height: 0, borderStyle: 'solid', borderWidth: '0 8px 8px 0', borderColor: `transparent #1F2C34 transparent transparent` }} />
+                    <p style={{ fontFamily: F, fontSize: 14.5, color: '#E9EEF1', lineHeight: 1.7, margin: 0 }} dir="rtl">{msg}</p>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 4, marginTop: 5 }}>
+                      <span style={{ fontFamily: F, fontSize: 10.5, color: '#8696A0' }}>الآن</span>
+                      <svg width="14" height="9" viewBox="0 0 16 10" fill="none"><path d="M1 5l3.5 3.5L10 1M6 5l3.5 3.5L15 1" stroke="#53BDEB" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </div>
+                  </div>
+                </div>
+                {/* input bar → opens WA */}
+                <a href={link} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#1F2C34', padding: '10px 12px', textDecoration: 'none', borderTop: '1px solid rgba(255,255,255,0.06)', cursor: 'pointer' }}>
+                  <div style={{ flex: 1, background: '#2A3942', borderRadius: 22, padding: '9px 16px' }}>
+                    <span style={{ fontFamily: F, fontSize: 14, color: '#8696A0' }}>ابدأ المحادثة…</span>
+                  </div>
+                  <div style={{ width: 44, height: 44, borderRadius: '50%', background: '#25D366', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 14px rgba(37,211,102,.4)' }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                  </div>
+                </a>
+              </div>
+            );
+          })()}
         </div>
       </section>
 
