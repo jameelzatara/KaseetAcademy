@@ -747,13 +747,13 @@ export default function MasarSotiPage() {
           <div style={SH}>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GLD, color: '#1A1206', fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '7px 16px', borderRadius: 999 }}>
               <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#1A1206' }} />
-              هيئة التدريب
+              خبراء ماستركلاس التعليق
             </span>
             <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(28px,4.4vw,44px)', lineHeight: 1.35, margin: '18px 0 0', color: OFF }}>
-              مَن <span style={{ color: GLD }}>يُدرّبك</span>
+              مَن يُرشدك في <span style={{ color: GLD }}>هذا المسار؟</span>
             </h2>
             <p style={{ fontFamily: F, fontSize: 16, color: MUT, maxWidth: 620, marginTop: 14, marginInline: 'auto' }}>
-              مدرّبان متخصّصان: الأداء الصوتي، والتحرير اللغوي وعلم الأصوات.
+              معلّقون محترفون من داخل بيئة العمل الحقيقية — يمنحونك خبرة المايكرفون وتوجيه الأداء طوال رحلتك التدريبية.
             </p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24, marginTop: 52 }}>
