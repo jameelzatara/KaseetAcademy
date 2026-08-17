@@ -2,9 +2,8 @@
  * صفحة ماستركلاس التعليق والأداء الصوتي — كاسيت أكاديمي
  */
 import { useState, useEffect } from 'react';
-import { useLocation } from 'wouter';
 import { usePageMeta } from '../hooks/usePageMeta';
-import { ChevronDown, ArrowLeft, MapPin, Wifi } from 'lucide-react';
+import { ChevronDown, ArrowLeft, MapPin, Wifi, Home, Layers, Clock, Mic } from 'lucide-react';
 import { GOLD, OFF, F, FP, INNER, waLink } from './shared/coursePageHelpers';
 import ReelsSection from '../components/ReelsSection';
 import { Gold } from '../components/SectionHeader';
@@ -361,7 +360,6 @@ function StudyRow({ variant }: { variant: 'inperson' | 'online' }) {
 
 /* ── page ─────────────────────────────────────────── */
 export default function MasarSotiPage() {
-  const [, navigate]  = useLocation();
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const [expandAll, setExpandAll] = useState(false);
 
@@ -383,11 +381,15 @@ export default function MasarSotiPage() {
       <style>{`
         @keyframes vu { 0%,100%{height:22%} 50%{height:100%} }
         @keyframes soti-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+        @keyframes kaseetSpin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
         .soti-vu-bar { width:3px;border-radius:2px;background:rgba(255,193,7,.85);animation:vu 1.5s ease-in-out infinite; }
         .soti-live-dot { animation:soti-pulse 2s ease-in-out infinite; }
+        .ka-spin-ring { animation:kaseetSpin 18s linear infinite; transform-origin:200px 200px; }
+        .ka-spin-slow { animation:kaseetSpin 32s linear infinite reverse; transform-origin:200px 200px; }
+        @media (prefers-reduced-motion:reduce){ .ka-spin-ring,.ka-spin-slow{animation:none!important} }
         @media (max-width:768px) {
           .soti-hero-grid { grid-template-columns:1fr !important; }
-          .soti-hero-shot { max-width:260px !important; order:-1; margin:0 auto 20px; }
+          .soti-hero-shot { max-width:300px !important; order:-1; margin:0 auto 20px; }
           .soti-modes-grid { grid-template-columns:1fr !important; }
           .soti-acc-grid { grid-template-columns:1fr !important; }
           .soti-enroll-grid { grid-template-columns:1fr !important; }
@@ -395,68 +397,87 @@ export default function MasarSotiPage() {
         :focus-visible { outline:2px solid #FFC107 !important;outline-offset:3px !important;border-radius:4px !important; }
       `}</style>
 
-      {/* back nav */}
-      <div style={{ ...WRP, paddingTop: 92, paddingBottom: 0 }}>
-        <button onClick={() => navigate('/')} aria-label="العودة إلى الدورات"
-          style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: F, fontSize: 13, color: MUT, padding: 0 }}>
-          <ArrowLeft size={13} /> العودة إلى الدورات
-        </button>
-      </div>
-
       {/* ═══════════════════════════════════════
-          01. HERO
+          01. HERO — breadcrumb داخل الهيرو + حلقة دوّارة + بطاقات ميزات
       ═══════════════════════════════════════ */}
-      <section className="sec sec--hero" style={{ padding: '52px 0 88px' }}>
+      <section className="sec sec--hero" style={{ padding: '0 0 88px' }}>
         <div style={WRP}>
+
+          {/* breadcrumb — inside hero */}
+          <nav aria-label="مسار التنقل" style={{ display:'flex', alignItems:'center', gap:6, paddingTop:96, paddingBottom:0, marginBottom:28 }}>
+            <a href="/" style={{ display:'inline-flex', alignItems:'center', gap:4, fontFamily:F, fontSize:12.5, color:MUT, textDecoration:'none' }}>
+              <Home size={12} strokeWidth={2} /> الرئيسية
+            </a>
+            <span style={{ color:'rgba(255,255,255,.20)', fontSize:11 }}>/</span>
+            <a href="/#masterclasses" style={{ fontFamily:F, fontSize:12.5, color:MUT, textDecoration:'none' }}>الماستركلاسات</a>
+            <span style={{ color:'rgba(255,255,255,.20)', fontSize:11 }}>/</span>
+            <span style={{ fontFamily:F, fontSize:12.5, color:GLD }}>التعليق والأداء الصوتي</span>
+          </nav>
+
           <div className="soti-hero-grid" style={{ display: 'grid', gridTemplateColumns: '1.12fr .88fr', gap: 52, alignItems: 'center' }}>
 
             <div>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: GS, border: `1px solid ${GL}`, color: GLD, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '6px 15px', borderRadius: 999 }}>
-                <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD }} />
-                ماستركلاس · 44 ساعة
-              </span>
+              {/* two audience / skill pills */}
+              <div style={{ display:'flex', flexWrap:'wrap', gap:8, marginBottom:20 }}>
+                <span style={{ display:'inline-flex', alignItems:'center', gap:7, background:GS, border:`1px solid ${GL}`, color:GLD, fontFamily:F, fontSize:12.5, fontWeight:700, padding:'6px 15px', borderRadius:999 }}>
+                  🎯 للمبتدئين والصاعدين
+                </span>
+                <span style={{ display:'inline-flex', alignItems:'center', gap:7, background:'rgba(103,232,249,.08)', border:'1px solid rgba(103,232,249,.22)', color:'#67e8f9', fontFamily:F, fontSize:12.5, fontWeight:700, padding:'6px 15px', borderRadius:999 }}>
+                  🎙️ إعلانات وبودكاست
+                </span>
+              </div>
 
-              <h1 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(34px,5vw,58px)', lineHeight: 1.22, letterSpacing: -1.2, margin: '18px 0 0', color: OFF }}>
+              <h1 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(34px,5vw,58px)', lineHeight: 1.22, letterSpacing: -1.2, margin: '0 0 0', color: OFF }}>
                 ماستركلاس التعليق<br />
                 <span style={{ color: GLD }}>والأداء الصوتي</span>
               </h1>
 
-              <p style={{ fontFamily: F, fontSize: 17, color: MUT, maxWidth: 560, marginTop: 16, lineHeight: 1.85 }}>
+              <p style={{ fontFamily: F, fontSize: 16, color: MUT, maxWidth: 560, marginTop: 16, lineHeight: 1.85 }}>
                 برنامج تدريبي يأخذك من تأسيس الصوت إلى التعامل مع السوق: 12 محطة متسلسلة، 13 مخرجاً صوتياً في محفظتك، ومشروع تخرّج تنتجه داخل استوديو كاسيت — وصوتك يخرج مؤهَّلاً للنشر على تطبيق وجيز.
               </p>
 
-              {/* stats boxes */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 28 }}>
-                {[
-                  { num: '44',  label: 'ساعة تدريبية' },
-                  { num: '22',  label: 'جلسة مباشرة' },
-                  { num: '12',  label: 'محطة تدريبية' },
-                  { num: '13',  label: 'مخرجاً صوتياً' },
-                ].map(({ num, label }) => (
-                  <div key={label} style={{ background: 'rgba(255,255,255,.045)', border: `1px solid ${CBR}`, borderRadius: 12, padding: '10px 16px', textAlign: 'center', minWidth: 80 }}>
-                    <div style={{ fontFamily: FP, fontSize: 24, fontWeight: 700, color: GLD, lineHeight: 1 }}>{num}</div>
-                    <div style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 4 }}>{label}</div>
-                  </div>
-                ))}
+              {/* feature cards — 2×2 grid with icons */}
+              <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:10, marginTop:24, maxWidth:500 }}>
+
+                {/* 12 محطة */}
+                <span style={{ display:'inline-flex', alignItems:'center', gap:9, background:'rgba(255,255,255,.04)', border:`1px solid ${CBR}`, padding:'10px 13px', borderRadius:11, fontFamily:F, fontSize:13, color:LT }}>
+                  <Layers size={14} color={GLD} strokeWidth={2} style={{ flexShrink:0 }} />
+                  <b style={{ fontFamily:FP, color:OFF, fontWeight:700 }}>12</b> محطة تدريبية متسلسلة
+                </span>
+
+                {/* 44 ساعة */}
+                <span style={{ display:'inline-flex', alignItems:'center', gap:9, background:'rgba(255,255,255,.04)', border:`1px solid ${CBR}`, padding:'10px 13px', borderRadius:11, fontFamily:F, fontSize:13, color:LT }}>
+                  <Clock size={14} color={GLD} strokeWidth={2} style={{ flexShrink:0 }} />
+                  <b style={{ fontFamily:FP, color:OFF, fontWeight:700 }}>44</b> ساعة تدريبية مكثفة
+                </span>
+
+                {/* ★ 13 مخرجاً — dominant */}
+                <span style={{ display:'inline-flex', alignItems:'center', gap:9, background:'rgba(255,193,7,.11)', border:`1px solid ${GL}`, padding:'10px 13px', borderRadius:11, fontFamily:F, fontSize:13, color:GLD, fontWeight:700 }}>
+                  <Mic size={14} color={GLD} strokeWidth={2} style={{ flexShrink:0 }} />
+                  <b style={{ fontFamily:FP, fontSize:19, color:GLD, fontWeight:900, lineHeight:1 }}>13</b> مخرجاً صوتياً (ألبوم التخرج)
+                </span>
+
+                {/* حضوري / أونلاين */}
+                <span style={{ display:'inline-flex', alignItems:'center', gap:9, background:'rgba(255,255,255,.04)', border:`1px solid ${CBR}`, padding:'10px 13px', borderRadius:11, fontFamily:F, fontSize:13, color:LT }}>
+                  <MapPin size={14} color={GLD} strokeWidth={2} style={{ flexShrink:0 }} />
+                  حضوري في الاستوديو أو أونلاين (Online LIVE)
+                </span>
+
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 18, fontFamily: F, fontSize: 13.5, color: LT }}>
-                <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD, flexShrink: 0 }} />
-                حضوري في عمّان أو مباشر تفاعلي (Online LIVE)
-              </div>
-
-              {/* wajeez chip */}
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 13, marginTop: 22, background: 'rgba(30,122,133,.16)', border: '1px solid rgba(30,122,133,.48)', borderRadius: 14, padding: '11px 16px 11px 13px' }}>
-                <div style={{ flexShrink: 0, width: 40, height: 40, borderRadius: 9, background: '#fff', display: 'grid', placeContent: 'center', padding: 5 }}>
-                  <img src={wajeezLogo} alt="وجيز" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              {/* wajeez badge — same pattern as Elami */}
+              <div style={{ display:'flex', alignItems:'center', gap:14, marginTop:18, background:'rgba(2,6,23,.75)', border:'1px solid rgba(255,193,7,.18)', backdropFilter:'blur(12px)', WebkitBackdropFilter:'blur(12px)', borderRadius:14, padding:'12px 16px', maxWidth:500 }}>
+                <div style={{ flexShrink:0, width:38, height:38, borderRadius:8, background:'#fff', display:'grid', placeContent:'center', padding:4 }}>
+                  <img src={wajeezLogo} alt="وجيز" style={{ width:'100%', height:'100%', objectFit:'contain' }} />
                 </div>
                 <div>
-                  <span style={{ fontFamily: F, fontWeight: 700, fontSize: 13.5, display: 'block' }}>شريك الاعتماد الرسمي — تطبيق وجيز</span>
-                  <span style={{ fontFamily: F, fontSize: 12, color: MUT, display: 'block' }}>أكبر مكتبة صوتية وبودكاست في الشرق الأوسط</span>
+                  <div style={{ fontFamily:F, fontSize:13, fontWeight:700, color:OFF }}>شريك الاعتماد الرسمي — تطبيق وجيز</div>
+                  <div style={{ fontFamily:F, fontSize:11.5, color:MUT }}>أكبر مكتبة صوتية وبودكاست في الشرق الأوسط</div>
                 </div>
               </div>
 
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 24 }}>
+              {/* CTAs */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 22 }}>
                 <a href={WA_ENROLL} target="_blank" rel="noopener noreferrer"
                   style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '13px 26px', borderRadius: 12, textDecoration: 'none', boxShadow: '0 6px 20px rgba(255,193,7,.22)' }}>
                   التسجيل في الماستركلاس <ArrowLeft size={14} />
@@ -468,30 +489,30 @@ export default function MasarSotiPage() {
               </div>
             </div>
 
-            {/* hero shot */}
-            <div className="soti-hero-shot" style={{ position: 'relative', maxWidth: 380, marginInline: 'auto', width: '100%' }}>
-              <div style={{ position: 'absolute', inset: '-14% -10% -8%', borderRadius: 40, background: 'radial-gradient(ellipse at 50% 40%, rgba(255,193,7,.22), transparent 68%)', filter: 'blur(8px)', zIndex: -1 }} />
-              <div style={{ position: 'relative', borderRadius: 26, overflow: 'hidden', border: `1px solid ${GL}`, aspectRatio: '3/4', boxShadow: '0 34px 90px rgba(0,0,0,.5)' }}>
-                <img src={heroShot} alt="ماستركلاس التعليق والأداء الصوتي" fetchPriority="high"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: '52% 20%', display: 'block' }} />
-                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(26,37,51,.95) 0%, rgba(26,37,51,.32) 30%, transparent 58%)' }} />
-                {/* pill */}
-                <span style={{ position: 'absolute', top: 18, right: 18, zIndex: 3, display: 'inline-flex', alignItems: 'center', gap: 7, background: 'rgba(26,37,51,.74)', backdropFilter: 'blur(6px)', border: `1px solid ${GL}`, color: GLD, fontSize: 11.5, fontWeight: 700, fontFamily: F, padding: '7px 13px', borderRadius: 999 }}>
-                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: GLD }} />
-                   تسجيل داخل استوديو كاسيت
-                </span>
-                {/* foot */}
-                <div style={{ position: 'absolute', inset: 'auto 0 0 0', zIndex: 3, padding: '22px 22px 24px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16 }}>
-                  <div>
-                    <span style={{ fontFamily: FP, fontSize: 38, fontWeight: 700, color: GLD, lineHeight: .95 }}>44</span>
-                    <span style={{ fontFamily: F, fontSize: 12.5, color: LT, marginTop: 4, display: 'block' }}>ساعة · 13 مخرجاً صوتياً</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 34 }}>
-                    {Array.from({ length: 9 }, (_, i) => (
-                      <span key={i} className="soti-vu-bar" style={{ animationDelay: `${i * 0.11}s` }} />
-                    ))}
-                  </div>
-                </div>
+            {/* ── spinning ring — 13 في المنتصف + "عمل صوتي" ── */}
+            <div className="soti-hero-shot" style={{ position:'relative', maxWidth:400, marginInline:'auto', width:'100%', aspectRatio:'1' }}>
+              <svg viewBox="0 0 400 400" style={{ width:'100%', height:'100%', display:'block' }}>
+                <circle cx="200" cy="200" r="186" fill="none" stroke="rgba(255,255,255,.05)" />
+                <circle cx="200" cy="200" r="150" fill="none" stroke="rgba(255,255,255,.04)" />
+                <g className="ka-spin-ring">
+                  <circle cx="200" cy="200" r="168" fill="none" stroke="rgba(255,193,7,.90)" strokeWidth="3" strokeLinecap="round" strokeDasharray="260 1056" transform="rotate(-90 200 200)" />
+                  <circle cx="200" cy="200" r="168" fill="none" stroke="rgba(255,193,7,.40)" strokeWidth="3" strokeLinecap="round" strokeDasharray="340 1056" strokeDashoffset="-280" transform="rotate(-90 200 200)" />
+                  <circle cx="200" cy="200" r="168" fill="none" stroke="rgba(255,255,255,.18)" strokeWidth="3" strokeLinecap="round" strokeDasharray="110 1056" strokeDashoffset="-660" transform="rotate(-90 200 200)" />
+                  <circle cx="200" cy="200" r="168" fill="none" stroke="rgba(30,122,133,.90)" strokeWidth="3" strokeLinecap="round" strokeDasharray="90 1056" strokeDashoffset="-800" transform="rotate(-90 200 200)" />
+                  <circle cx="200" cy="32"  r="6" fill="#FFC107" />
+                  <circle cx="352" cy="268" r="6" fill="#FFC107" />
+                  <circle cx="66"  cy="286" r="6" fill="#1E7A85" />
+                </g>
+                <g className="ka-spin-slow">
+                  <circle cx="200" cy="200" r="186" fill="none" stroke="rgba(255,193,7,.06)" strokeWidth="1" strokeDasharray="12 20" />
+                </g>
+              </svg>
+              {/* center content */}
+              <div style={{ position:'absolute', inset:0, display:'grid', placeContent:'center', textAlign:'center' }}>
+                <div style={{ fontFamily:FP, fontSize:72, fontWeight:700, color:OFF, lineHeight:1 }}>13</div>
+                <div style={{ fontFamily:F, fontSize:15, color:MUT, marginTop:4 }}>عمل صوتي</div>
+                <div style={{ width:36, height:1, background:'rgba(255,193,7,.35)', margin:'10px auto' }} />
+                <div style={{ fontFamily:F, fontSize:11.5, color:'rgba(255,193,7,.65)' }}>تتخرج بألبوم لا بشهادة</div>
               </div>
             </div>
 
