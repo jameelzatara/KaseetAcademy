@@ -74,11 +74,13 @@ export interface ModeConfig {
   waPhone: string;
   waMessage: string;
   accentStyle: 'gold' | 'teal';
+  currencyNote?: string;
+  guaranteeNote?: string;
 }
 
 export interface AdvisorConfig  { name: string; role: string; img: string; href: string; }
 export interface GoalConfig     { icon: React.ReactNode; title: string; text: string; }
-export interface OutcomeConfig  { icon: React.ReactNode; title: string; text: string; }
+export interface OutcomeConfig  { n?: string; icon?: React.ReactNode; title: string; text: string; }
 export interface LectureConfig  { title: string; desc: string; }
 
 export interface CurriculumModeConfig {
@@ -140,8 +142,9 @@ function FillBar({ fill, remaining }: { fill: number | null; remaining: number |
 /* ══════════════════════════════════════════════════════════════
    § CohortRow
    ══════════════════════════════════════════════════════════════ */
-function CohortRow({ c, onRegister, accentStyle }: {
+function CohortRow({ c, onRegister, accentStyle, currencyNote, guaranteeNote }: {
   c: Cohort; onRegister: (id: number) => void; accentStyle: 'gold' | 'teal';
+  currencyNote?: string; guaranteeNote?: string;
 }) {
   const isOpen = c.status === 'open'; const isRunning = c.status === 'running';
   const r = c.remaining ?? 0;
@@ -190,14 +193,28 @@ function CohortRow({ c, onRegister, accentStyle }: {
         </div>
         {/* Register */}
         {isOpen && !full && (
-          <div className="ka-cohort-register" style={{ flexShrink: 0, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-            <FillBar fill={c.fill} remaining={c.remaining} />
-            <button onClick={() => onRegister(c.id)} style={{ background: btnBg, color: btnColor, border: 'none', borderRadius: 10, cursor: 'pointer', fontFamily: F, fontWeight: 800, fontSize: 13.5, padding: '10px 18px', display: 'inline-flex', alignItems: 'center', gap: 5, boxShadow: btnShadow, transition: 'transform .15s, box-shadow .15s', whiteSpace: 'nowrap' }}
-              onMouseEnter={e => Object.assign(e.currentTarget.style, { transform: 'translateY(-1px)', boxShadow: btnShadow.replace('.35', '.45') })}
-              onMouseLeave={e => Object.assign(e.currentTarget.style, { transform: 'none', boxShadow: btnShadow })}
-            >
-              سجّل الآن <ArrowLeft size={13} strokeWidth={2} />
-            </button>
+          <div className="ka-cohort-register" style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6 }}>
+            {(currencyNote || guaranteeNote) && (
+              <div style={{ textAlign: 'right', maxWidth: 210 }}>
+                {currencyNote && (
+                  <div style={{ fontFamily: F, fontSize: 10.5, color: MUTED, direction: 'rtl', lineHeight: 1.5 }}>{currencyNote}</div>
+                )}
+                {guaranteeNote && (
+                  <div style={{ fontFamily: F, fontSize: 10.5, color: '#22c55e', direction: 'rtl', lineHeight: 1.5, display: 'flex', alignItems: 'center', gap: 3, justifyContent: 'flex-end', marginTop: currencyNote ? 2 : 0 }}>
+                    <ShieldCheck size={10} strokeWidth={2} />{guaranteeNote}
+                  </div>
+                )}
+              </div>
+            )}
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+              <FillBar fill={c.fill} remaining={c.remaining} />
+              <button onClick={() => onRegister(c.id)} style={{ background: btnBg, color: btnColor, border: 'none', borderRadius: 10, cursor: 'pointer', fontFamily: F, fontWeight: 800, fontSize: 13.5, padding: '10px 18px', display: 'inline-flex', alignItems: 'center', gap: 5, boxShadow: btnShadow, transition: 'transform .15s, box-shadow .15s', whiteSpace: 'nowrap' }}
+                onMouseEnter={e => Object.assign(e.currentTarget.style, { transform: 'translateY(-1px)', boxShadow: btnShadow.replace('.35', '.45') })}
+                onMouseLeave={e => Object.assign(e.currentTarget.style, { transform: 'none', boxShadow: btnShadow })}
+              >
+                سجّل الآن <ArrowLeft size={13} strokeWidth={2} />
+              </button>
+            </div>
           </div>
         )}
       </div>
@@ -333,7 +350,10 @@ function CohortsSection({ courseSlug, modes, defaultModeKey, onModeChange }: {
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 28 }}>
-            {openCohorts.map(c => <CohortRow key={c.id} c={c} onRegister={handleRegister} accentStyle={activeMode.accentStyle} />)}
+            {openCohorts.map(c => (
+              <CohortRow key={c.id} c={c} onRegister={handleRegister} accentStyle={activeMode.accentStyle}
+                currencyNote={activeMode.currencyNote} guaranteeNote={activeMode.guaranteeNote} />
+            ))}
           </div>
         )}
 
@@ -463,13 +483,20 @@ function OutcomesSection({ outcomes, graduationProject }: {
       <div style={{ ...WRAP, direction: 'rtl' }}>
         <SecTitle>المخرجات التدريبية المتوقّعة</SecTitle>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 16, marginBottom: graduationProject ? 40 : 0 }}>
-          {outcomes.map(({ icon, title, text }) => (
+          {outcomes.map(({ n, icon, title, text }) => (
             <div key={title} style={{ background: CREAM_CARD, border: `1px solid ${CREAM_LINE}`, borderRadius: 18, padding: '26px 24px', boxShadow: '0 12px 34px rgba(24,32,47,.07)', transition: 'transform .25s, box-shadow .25s, border-color .25s' }}
               onMouseEnter={e => Object.assign((e.currentTarget as HTMLElement).style, { transform:'translateY(-3px)', boxShadow:'0 18px 44px rgba(24,32,47,.12)', borderColor:'rgba(138,98,0,.30)' })}
               onMouseLeave={e => Object.assign((e.currentTarget as HTMLElement).style, { transform:'none', boxShadow:'0 12px 34px rgba(24,32,47,.07)', borderColor:CREAM_LINE })}
             >
-              <div style={{ width: 46, height: 46, borderRadius: 13, background: 'rgba(255,193,7,.16)', display: 'grid', placeContent: 'center', marginBottom: 16 }}>{icon}</div>
-              <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: 15, color: INK, margin: '0 0 8px' }}>{title}</h3>
+              {n ? (
+                /* numbered card — ordinal badge smaller than heading */
+                <div style={{ display: 'inline-flex', alignItems: 'center', background: 'rgba(255,193,7,.13)', border: '1px solid rgba(138,98,0,.18)', borderRadius: 8, padding: '3px 11px', marginBottom: 16 }}>
+                  <span style={{ fontFamily: FP, fontWeight: 700, fontSize: 12, color: GOLD_INK, letterSpacing: '0.06em' }}>{n}</span>
+                </div>
+              ) : icon ? (
+                <div style={{ width: 46, height: 46, borderRadius: 13, background: 'rgba(255,193,7,.16)', display: 'grid', placeContent: 'center', marginBottom: 16 }}>{icon}</div>
+              ) : null}
+              <h3 style={{ fontFamily: F, fontWeight: 800, fontSize: n ? 19 : 15, color: INK, margin: '0 0 8px' }}>{title}</h3>
               <p style={{ fontFamily: F, fontSize: 13.5, color: INK2, lineHeight: 1.75, margin: 0 }}>{text}</p>
             </div>
           ))}

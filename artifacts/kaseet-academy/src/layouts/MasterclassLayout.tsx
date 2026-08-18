@@ -715,16 +715,6 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
                 </div>
               ))}
             </div>
-            {/* portfolio lead note — merged from portfolio section */}
-            {data.portfolio && (
-              <div style={{ marginTop: 28, background: GS, border: `1px solid ${GL}`, borderRadius: 16, padding: '22px 24px', display: 'flex', alignItems: 'flex-start', gap: 16 }}>
-                <span style={{ flexShrink: 0, fontFamily: FP, fontSize: 22, color: GLD, marginTop: 2 }}>★</span>
-                <div>
-                  <div style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: GLD, marginBottom: 6 }}>{data.portfolio.heading}</div>
-                  <p style={{ fontFamily: F, fontSize: 14, color: LT, lineHeight: 1.8, margin: 0 }}>{data.portfolio.desc}</p>
-                </div>
-              </div>
-            )}
             <div style={{ textAlign: 'center', marginTop: 32 }}>
               <a href="#checkout" onClick={e => { e.preventDefault(); scrollToCheckout(); }}
                 style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: GLD, color: '#1A1206', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 32px', borderRadius: 999, textDecoration: 'none', boxShadow: '0 8px 24px rgba(255,193,7,.24)' }}>
@@ -900,7 +890,11 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
         </div>
       </section>
 
-      {/* portfolio section merged into outcomes above */}
+      {/* ═══════════════════════════════════
+          01-D-2. PORTFOLIO TABLE cream section — khataba (Soti-style)
+      ═══════════════════════════════════ */}
+      {data.outcomes.acquisitions && data.portfolio &&
+        renderPortfolio(data.portfolio, { INK, INK2, WRP })}
 
       {/* ═══════════════════════════════════
           03-B. METHOD (khataba — after curriculum)

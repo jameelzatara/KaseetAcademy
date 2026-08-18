@@ -4,7 +4,7 @@
  * نفس بيانات VoiceoverPage · بدون back link
  */
 
-import { AudioLines, Volume2, SlidersHorizontal, Mic, Sparkles, Briefcase, AudioWaveform, Award } from 'lucide-react';
+import { AudioLines, Volume2, SlidersHorizontal, Mic, Sparkles, Briefcase } from 'lucide-react';
 import CoursePageLayout, { type CoursePageLayoutProps } from '../components/CoursePageLayout';
 import { usePageMeta } from '../hooks/usePageMeta';
 
@@ -44,6 +44,8 @@ const config: CoursePageLayoutProps = {
       waPhone: '962790234483',
       waMessage: 'السلام عليكم، أرغب في التسجيل في دورة أساسيات التعليق والأداء الصوتي (حضوري)',
       accentStyle: 'gold',
+      currencyNote: '218 دينار · يعادل $307 · قد يضيف بنكك عمولة تحويل',
+      guaranteeNote: 'استرداد كامل خلال 24 ساعة من الجلسة الأولى',
     },
     {
       key: 'live',
@@ -60,6 +62,7 @@ const config: CoursePageLayoutProps = {
       waPhone: '962771052222',
       waMessage: 'السلام عليكم، أرغب في التسجيل في دورة أساسيات التعليق والأداء الصوتي (مباشر تفاعلي Online LIVE)',
       accentStyle: 'teal',
+      guaranteeNote: 'استرداد كامل خلال 24 ساعة من الجلسة الأولى',
     },
   ],
   defaultModeKey: 'onsite',
@@ -90,9 +93,9 @@ const config: CoursePageLayoutProps = {
   ],
 
   outcomes: [
-    { icon: <AudioWaveform size={22} strokeWidth={1.8} color={GOLD_INK} />, title: 'تسجيلات استوديو عالية الجودة',       text: 'عيّنات صوتية احترافية مسجّلة بأحدث اللاقطات داخل استوديوهات كاسيت الفعلية.' },
-    { icon: <Mic  size={22} strokeWidth={1.8} color={GOLD_INK} />,          title: 'ديمو صوتي احترافي (Voice Demo CV)', text: 'ملفّ صوتي متكامل مُهندَس بأحدث المؤثّرات، يستعرض خامات صوتك في مختلف ألوان التعليق.' },
-    { icon: <Award size={22} strokeWidth={1.8} color={GOLD_INK} />,         title: 'شهادة معتمدة رسمياً',               text: 'شهادة إتمام البرنامج، معتمدة من تطبيق وجيز، أكبر منصة صوتية في الشرق الأوسط.' },
+    { n: '01', title: 'تسجيلات استوديو عالية الجودة',       text: 'عيّنات صوتية احترافية مسجّلة بأحدث اللاقطات داخل استوديوهات كاسيت الفعلية.' },
+    { n: '02', title: 'ديمو صوتي احترافي (Voice Demo CV)', text: 'ملفّ صوتي متكامل مُهندَس بأحدث المؤثّرات، يستعرض خامات صوتك في مختلف ألوان التعليق.' },
+    { n: '03', title: 'شهادة معتمدة رسمياً',               text: 'شهادة إتمام البرنامج، معتمدة من تطبيق وجيز، أكبر منصة صوتية في الشرق الأوسط.' },
   ],
 
   graduationProject: {

@@ -148,16 +148,29 @@ const AUDIENCE_ITEMS = [
   'توازن بين الالتزام بالسكريبت والارتجال العفوي المؤثر',
 ];
 
+/* ─── wave thumbnail (same helper as Soti) ──────────────────────── */
+function waveThumb(seed: number, n = 38, w = 120, h = 26): string {
+  let s = ((seed * 1234567 + 89) >>> 0);
+  const rand = () => { s = ((s * 1664525 + 1013904223) >>> 0); return s / 4294967296; };
+  const step = w / n;
+  const lines = Array.from({ length: n }, (_, i) => {
+    const a = (0.28 + rand() * 0.72) * (h / 2 - 1);
+    const x = (i * step + step / 2);
+    return `<line x1="${x.toFixed(1)}" y1="${(h/2-a).toFixed(1)}" x2="${x.toFixed(1)}" y2="${(h/2+a).toFixed(1)}"/>`;
+  });
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><g stroke="currentColor" stroke-width="1.8" stroke-linecap="round">${lines.join('')}</g></svg>`;
+}
+
 /* ─── portfolio (8 filmed deliverables) ────────────────────────── */
 const PORTFOLIO = [
-  { n:'01', title:'تقرير مرئي',      desc:'أمام الكاميرا · لجنة تقييم' },
-  { n:'03', title:'تقرير صحفي',     desc:'تحقيق من مصادر متعددة' },
-  { n:'04', title:'تقرير ميداني',   desc:'تصوير + تعليق + إخراج' },
-  { n:'05', title:'سلسلة محتوى',    desc:'ثلاث قطع لعلامة أو موضوع' },
-  { n:'06', title:'حلقة بودكاست',   desc:'منتَجة ومنشورة على منصّة' },
-  { n:'07', title:'محاكاة صحفية',   desc:'مؤتمر صحفي وإدارة أزمة' },
-  { n:'08', title:'فيلم إعلامي',    desc:'منتَج بالكامل: سيناريو + إخراج' },
-  { n:'09', title:'مشروع الذكاء',   desc:'مشروع إعلامي بأدوات AI' },
+  { n:'01', title:'تقرير مرئي',      kind:'تقرير',    desc:'أمام الكاميرا · لجنة تقييم',              hot:false },
+  { n:'02', title:'تقرير صحفي',     kind:'صحافة',    desc:'تحقيق من مصادر متعددة',                  hot:false },
+  { n:'03', title:'تقرير ميداني',   kind:'ميدان',    desc:'تصوير + تعليق + إخراج',                  hot:true  },
+  { n:'04', title:'سلسلة محتوى',    kind:'محتوى',    desc:'ثلاث قطع لعلامة أو موضوع',                hot:false },
+  { n:'05', title:'حلقة بودكاست',   kind:'بودكاست',  desc:'منتَجة ومنشورة على منصّة',                 hot:true  },
+  { n:'06', title:'محاكاة صحفية',   kind:'محاكاة',   desc:'مؤتمر صحفي وإدارة أزمة',                  hot:false },
+  { n:'07', title:'فيلم إعلامي',    kind:'إنتاج',    desc:'منتَج بالكامل: سيناريو + إخراج',           hot:true  },
+  { n:'08', title:'مشروع الذكاء',   kind:'AI',       desc:'مشروع إعلامي بأدوات AI',                  hot:false },
 ];
 
 /* ─── outcomes ─────────────────────────────────────────────────── */
@@ -171,7 +184,7 @@ const OUTCOMES = [
 /* ─── faqs ──────────────────────────────────────────────────────── */
 const FAQS = [
   { q:'هل يمكن اختيار بعض المحطات فقط؟', a:'لا، ولذلك مقصود. المسار مصمَّم ليخرّج إعلامياً متكاملاً قادراً على الكتابة والتقديم والتغطية والإنتاج، لأن سوق الإعلام اليوم لا يطلب مهارة واحدة بمعزل عن سواها. إن كنتَ تبحث عن مهارة محددة، فالدورة المنفردة هي الخيار الأنسب.' },
-  { q:'التعليق الصوتي ثلاث جلسات فقط — لماذا؟', a:'لأن هدفه هنا محدود: ضبط تنفّسك ومخارج حروفك ونبرتك تمهيداً للكاميرا والمايكروفون في بقية المحطات. أما إن كان هدفك أن تصبح معلّقاً صوتياً محترفاً، فذلك تخصص مستقل يستلزم دورة أعمق.' },
+  { q:'التعليق الصوتي ثلاث جلسات فقط — لماذا؟', a:'لأن هدفه هنا محدود: ضبط تنفّسك ومخارج حروفك ونبرتك تمهيداً للكاميرا والاستوديو في بقية المحطات. أما إن كان هدفك أن تصبح معلّقاً صوتياً محترفاً، فذلك تخصص مستقل يستلزم دورة أعمق.' },
   { q:'أنا مبتدئ تماماً — هل المسار مناسب لي؟', a:'نعم، وهذا بالضبط ما بُني عليه المسار. المرحلة التأسيسية لا تفترض أي خبرة سابقة، وتبني معك الإلقاء والحضور والصوت من البداية قبل الدخول إلى التخصصات.' },
   { q:'ما الفرق بين محطة القيادة وباقي المحطات؟', a:'المحطات 01–09 تُعلّمك التنفيذ: التقديم، الكتابة، التغطية، والإنتاج. أما المحطة 10 فهي مستوى مختلف تُعلّمك الإدارة: مؤسسة، فريق، خطة، وهوية إعلامية.' },
   { q:'درستُ إحدى الدورات الثلاث سابقاً — هل تُحتسب لي؟', a:'نعم. إن أكملتَ دورة المذيع المحترف معنا، تُخصم قيمتها من سعر المسار ولن تُعيد دراستها، إذ هي نفسها المحطة 01. تحدّث مع ياقوت عبر واتساب لمراجعة سجلك.' },
@@ -541,53 +554,63 @@ export default function MasarElamiPage() {
       </section>
 
       {/* ════════════════════════════════════════════════════════════
-          §03 محفظة الأعمال — CREAM (matching Soti)
+          §03 محفظة الأعمال — CREAM · تصميم سوتي
       ════════════════════════════════════════════════════════════ */}
       <section className="sec sec--cream" style={{ padding:'96px 0', position:'relative', overflow:'hidden' }}>
         <div className="geo geo--halftone" style={{ position:'absolute', inset:0, zIndex:1, pointerEvents:'none' }} />
         <div style={{ ...INNER, position:'relative', zIndex:3 }}>
+
+          {/* header */}
           <div style={{ textAlign:'center', marginBottom:48 }}>
             <span style={{ display:'inline-flex', alignItems:'center', gap:8, background:'rgba(138,98,0,.09)', border:'1px solid rgba(138,98,0,.28)', color:'#8A6200', fontFamily:F, fontSize:12.5, fontWeight:700, padding:'6px 15px', borderRadius:999 }}>محفظة الأعمال</span>
             <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(28px,4.4vw,44px)', lineHeight:1.35, letterSpacing:-.5, margin:'18px 0 0', color:DH }}>
               تتخرّج <span style={{ color:'#8A6200' }}>بمحفظة</span> لا بشهادة
             </h2>
             <p style={{ fontFamily:F, fontSize:16, color:DM, maxWidth:680, marginTop:14, marginInline:'auto', lineHeight:1.8 }}>
-              8 مشاريع تطبيقية حقيقية — كلّ محطة تنتهي بمخرج موثَّق يُضاف إلى محفظة أعمالك المهنية.
+              ثمانية مخرجات إعلامية حقيقية — كلّ محطة تُسلّم مشروعاً موثَّقاً يُضاف إلى محفظة أعمالك.
             </p>
           </div>
 
-          {/* portfolio grid */}
-          <div className="elam-pf-grid" style={{ maxWidth:900, marginInline:'auto' }}>
-            {PORTFOLIO.map(p => (
-              <div key={p.n} style={{ background:'#fff', border:'1px solid rgba(24,32,47,.10)', borderRadius:14, padding:'20px 18px', boxShadow:'0 2px 10px rgba(24,32,47,.06)' }}>
-                <div style={{ fontFamily:FP, fontSize:11, color:'#8A6200', fontWeight:700, marginBottom:8, letterSpacing:'.04em' }}>مشروع {p.n}</div>
-                <h4 style={{ fontFamily:F, fontWeight:800, fontSize:15, color:DH, margin:'0 0 6px' }}>{p.title}</h4>
-                <p style={{ fontFamily:F, fontSize:12.5, color:DM, margin:0, lineHeight:1.65 }}>{p.desc}</p>
+          {/* project table — same structure as Soti's album table */}
+          <div style={{ background:'#fff', border:'1px solid rgba(24,32,47,.10)', borderRadius:22, boxShadow:'0 22px 60px rgba(24,32,47,.12)', overflow:'hidden' }}>
+            <div style={{ padding:'24px 28px', borderBottom:'1px solid rgba(24,32,47,.10)', display:'flex', flexWrap:'wrap', gap:16, alignItems:'center', justifyContent:'space-between' }}>
+              <div>
+                <div style={{ fontFamily:F, fontWeight:800, fontSize:20, color:DH }}>محفظتك الإعلامية</div>
+                <div style={{ fontFamily:F, fontSize:13, color:DM, marginTop:3 }}>ثمانية مشاريع تطبيقية من المحطات، ومشروع التخرّج المُنتَج بالكامل</div>
+              </div>
+              <span style={{ fontFamily:FP, fontSize:13, fontWeight:700, color:'#8A6200', border:'1px solid rgba(138,98,0,.32)', background:'rgba(138,98,0,.07)', padding:'7px 15px', borderRadius:999, whiteSpace:'nowrap' as const }}>8 مخرجات</span>
+            </div>
+            {PORTFOLIO.map((p, i) => (
+              <div key={p.n} style={{
+                display:'grid', gridTemplateColumns:'44px 1fr 100px 130px', gap:14, alignItems:'center',
+                padding:'13px 28px', borderBottom:'1px solid rgba(24,32,47,.10)',
+                background: p.hot ? 'rgba(255,193,7,.10)' : 'transparent',
+                transition:'background .2s',
+              }}>
+                <span style={{ fontFamily:FP, fontSize:12.5, fontWeight:700, color: p.hot ? '#8A6200' : DM }}>{p.n}</span>
+                <span style={{ fontFamily:F, fontSize:14.5, fontWeight:700, color: p.hot ? '#8A6200' : DH, lineHeight:1.5 }}>{p.title}</span>
+                <span style={{ fontFamily:F, fontSize:11.5, color:DM, border:'1px solid rgba(24,32,47,.10)', background:'rgba(24,32,47,.035)', padding:'3px 11px', borderRadius:999, textAlign:'center' as const, whiteSpace:'nowrap' as const }}>{p.kind}</span>
+                <span style={{ color: p.hot ? 'rgba(138,98,0,.78)' : 'rgba(138,98,0,.34)', height:26, display:'block' }}
+                  dangerouslySetInnerHTML={{ __html: waveThumb(50 + i) }} />
               </div>
             ))}
-          </div>
-
-          {/* wajeez strip */}
-          <div style={{ maxWidth:900, marginInline:'auto', marginTop:20, border:'1px solid rgba(30,122,133,.40)', borderRadius:16, background:'linear-gradient(160deg,rgba(30,122,133,.10),rgba(24,32,47,.04) 56%)', padding:'26px 24px', display:'flex', flexWrap:'wrap', gap:18, alignItems:'center', justifyContent:'space-between' }}>
-            <div style={{ display:'flex', gap:16, alignItems:'center', flexWrap:'wrap' }}>
-              <div style={{ width:54, height:54, borderRadius:12, background:'#fff', display:'grid', placeContent:'center', padding:7, flexShrink:0 }}>
-                <img src={wajeezLogo} alt="وجيز" style={{ width:'100%', height:'100%', objectFit:'contain' }} />
-              </div>
-              <div>
-                <h4 style={{ fontFamily:F, fontWeight:800, fontSize:17, color:DH, margin:'0 0 3px' }}>شهادة كاسيت أكاديمي · معتمدة من تطبيق وجيز</h4>
-                <p style={{ fontFamily:F, fontSize:13, color:DM, margin:0 }}>شهادة الماستركلاس الكاملة + محفظة 8 مشاريع + توصية مهنية من المدربين</p>
-              </div>
+            {/* graduation row */}
+            <div style={{ display:'grid', gridTemplateColumns:'44px 1fr 100px 130px', gap:14, alignItems:'center', padding:'14px 28px', background:'linear-gradient(90deg,rgba(255,193,7,.24),rgba(255,193,7,.08))', borderTop:'1px solid rgba(138,98,0,.28)' }}>
+              <span style={{ fontFamily:FP, fontSize:15, fontWeight:700, color:'#8A6200' }}>★</span>
+              <span style={{ fontFamily:F, fontSize:14.5, fontWeight:800, color:'#8A6200' }}>مشروع التخرّج · فيلم إعلامي مكتمل بجودة النشر</span>
+              <span style={{ fontFamily:F, fontSize:11.5, color:'#8A6200', border:'1px solid rgba(138,98,0,.32)', background:'rgba(138,98,0,.08)', padding:'3px 11px', borderRadius:999, textAlign:'center' as const }}>التخرّج</span>
+              <span style={{ color:'rgba(138,98,0,.9)', height:26, display:'block' }}
+                dangerouslySetInnerHTML={{ __html: waveThumb(999) }} />
             </div>
-            <a href={WA_TRACK} target="_blank" rel="noopener noreferrer"
-              style={{ display:'inline-flex', alignItems:'center', gap:8, background:'#8A6200', color:'#fff', fontFamily:F, fontWeight:700, fontSize:13.5, padding:'11px 22px', borderRadius:12, textDecoration:'none' }}>
-              التسجيل في الماستركلاس <ArrowLeft size={13} />
-            </a>
+            <div style={{ padding:'20px 28px', borderTop:'1px solid rgba(24,32,47,.10)', fontFamily:F, fontSize:14, color:DM, lineHeight:1.8 }}>
+              <strong style={{ color:DH }}>المخرجات المميّزة بالذهبي</strong> هي الأكثر أثراً في السوق: التقرير الميداني أكثر المهارات طلباً، وحلقة البودكاست منشورة على منصّة حقيقية، ومشروع التخرّج أثقل قطعة في محفظتك.
+            </div>
           </div>
 
-          {/* outcome cards */}
+          {/* outcome cards — same style as Soti */}
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(240px,1fr))', gap:18, marginTop:40 }}>
             {OUTCOMES.map(o => (
-              <div key={o.n} style={{ background:'rgba(24,32,47,.05)', border:'1px solid rgba(24,32,47,.10)', borderRadius:18, padding:'30px 26px' }}>
+              <div key={o.n} style={{ background:'rgba(24,32,47,.06)', border:'1px solid rgba(24,32,47,.10)', borderRadius:18, padding:'30px 26px' }}>
                 <span style={{ display:'block', fontFamily:FP, fontSize:44, fontWeight:700, lineHeight:1, color:'#8A6200', opacity:.28 }}>{o.n}</span>
                 <div style={{ marginTop:18, paddingTop:18, borderTop:'1px solid rgba(24,32,47,.10)', position:'relative' }}>
                   <div style={{ position:'absolute', top:0, right:0, width:32, height:3, background:'#8A6200', borderRadius:2 }} />
@@ -597,6 +620,40 @@ export default function MasarElamiPage() {
               </div>
             ))}
           </div>
+
+          {/* wajeez strip — same 3-step layout as Soti */}
+          <div style={{ marginTop:40, border:'1px solid rgba(30,122,133,.40)', borderRadius:20, background:'linear-gradient(150deg,rgba(30,122,133,.10),rgba(24,32,47,.04) 56%)', padding:'clamp(22px,3vw,34px)' }}>
+            <div style={{ display:'flex', flexWrap:'wrap', gap:18, alignItems:'center', marginBottom:22 }}>
+              <div style={{ flexShrink:0, width:54, height:54, borderRadius:12, background:'#fff', display:'grid', placeContent:'center', padding:7 }}>
+                <img src={wajeezLogo} alt="وجيز" style={{ width:'100%', height:'100%', objectFit:'contain' }} />
+              </div>
+              <div>
+                <h3 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(17px,2.2vw,22px)', lineHeight:1.35, margin:0, color:DH }}>
+                  من متدرّب <span style={{ color:'#1e7a85' }}>إلى إعلامي معتمد من وجيز</span>
+                </h3>
+                <p style={{ fontFamily:F, fontSize:13.5, color:DM, marginTop:5 }}>
+                  وجيز — أكبر مكتبة صوتية وبودكاست في الشرق الأوسط — هي جهة الاعتماد الرسمي لشهادة الماستركلاس.
+                </p>
+              </div>
+            </div>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(210px,1fr))', gap:12 }}>
+              {[
+                { n:'STEP 01', t:'تتخرّج بمحفظة 8 مخرجات + مشروع تخرّج', d:'كلّ محطة تُسلَّم بمشروع تطبيقي موثَّق — ليست شهادة فارغة بل محفظة أعمال إعلامية حقيقية.' },
+                { n:'STEP 02', t:'شهادتك معتمدة رسمياً من وجيز', d:'تصدر شهادة الماستركلاس بختم وجيز — أكبر جهة اعتماد في مجال الإعلام الرقمي في الشرق الأوسط.' },
+                { n:'STEP 03', t:'توصية مهنية من مدرّبيك', d:'تتخرّج بتوصية مكتوبة من المدربين تُعزّز ملفّك أمام أصحاب العمل والعملاء في السوق الإعلامي.' },
+              ].map(({ n, t, d }) => (
+                <div key={n} style={{ background:'rgba(24,32,47,.05)', border:'1px solid rgba(24,32,47,.09)', borderRadius:12, padding:'16px 15px' }}>
+                  <div style={{ fontFamily:FP, fontSize:11, fontWeight:700, color:'#1e7a85', letterSpacing:1.2, marginBottom:7 }}>{n}</div>
+                  <h4 style={{ fontFamily:F, fontWeight:800, fontSize:15, marginBottom:6, color:DH, lineHeight:1.5 }}>{t}</h4>
+                  <p style={{ fontFamily:F, fontSize:12.5, color:DM, lineHeight:1.75 }}>{d}</p>
+                </div>
+              ))}
+            </div>
+            <p style={{ fontFamily:F, fontSize:12, color:DM, borderTop:'1px solid rgba(24,32,47,.08)', paddingTop:16, marginTop:18, lineHeight:1.8 }}>
+              الشهادة والاعتماد مضمونان لكلّ من يُكمل الماستركلاس. المحفظة والتوصية المهنية هما اللذان يُحدثان الفرق الفعلي مع أصحاب العمل.
+            </p>
+          </div>
+
         </div>
       </section>
 
@@ -607,7 +664,7 @@ export default function MasarElamiPage() {
         <div className="geo geo--columns" aria-hidden="true" />
         <div style={{ ...INNER }}>
           <div style={{ textAlign:'center', marginBottom:48 }}>
-            <SectionLabel text="شجرة المسار" />
+            <SectionLabel text="منهج الماستركلاس" />
             <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(26px,4vw,42px)', marginTop:16, lineHeight:1.35, color:OFF }}>
               10 محطات من أول يوم <span style={{ color:GLD }}>حتى الشهادة</span>
             </h2>
@@ -649,7 +706,75 @@ export default function MasarElamiPage() {
       </section>
 
       {/* ════════════════════════════════════════════════════════════
-          §06 TRAINERS — رامي + رنا
+          §06 STUDY MODES — أسلوب الدراسة (before trainers)
+      ════════════════════════════════════════════════════════════ */}
+      <section className="sec sec--modes" style={{ borderTop:`1px solid ${CARD_BORDER}`, padding:'80px 0' }}>
+        <div style={{ ...INNER }}>
+          <div style={{ textAlign:'center', marginBottom:44 }}>
+            <SectionLabel text="أسلوب الدراسة" />
+            <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(26px,4vw,42px)', marginTop:16, lineHeight:1.35, color:OFF }}>
+              اختر <span style={{ color:GLD }}>أسلوب تعلّمك</span>
+            </h2>
+            <p style={{ fontFamily:F, fontSize:15.5, color:MUT, marginTop:12, maxWidth:520, marginInline:'auto', lineHeight:1.8 }}>
+              نفس المنهج ونفس المدربين والشهادة المعتمدة — فقط اختر ما يناسب جدولك وحياتك
+            </p>
+          </div>
+
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(230px,1fr))', gap:14, marginBottom:32, maxWidth:820, marginInline:'auto' }}>
+            <div style={{ background:'rgba(255,193,7,.05)', border:'1px solid rgba(255,193,7,.22)', borderRadius:16, padding:'22px 20px' }}>
+              <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:16 }}>
+                <div style={{ width:40, height:40, borderRadius:'50%', background:'rgba(255,193,7,.14)', display:'inline-flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                  <MapPin size={17} color={GLD} strokeWidth={2.2} />
+                </div>
+                <div>
+                  <div style={{ fontFamily:F, fontWeight:800, fontSize:14.5, color:GLD }}>حضوري — استوديو كاسيت</div>
+                  <div style={{ fontFamily:F, fontSize:12, color:MUT }}>حضور فعلي في عمّان</div>
+                </div>
+              </div>
+              <ul style={{ margin:0, padding:0, listStyle:'none', display:'flex', flexDirection:'column', gap:9 }}>
+                {['تفاعل مباشر مع المدرب والزملاء','تطبيق عملي داخل الاستوديوهات المجهَّزة','بيئة تعلم منظَّمة بلا إلهاء','تشبيك مع المتدربين وفرص العمل'].map(pt => (
+                  <li key={pt} style={{ display:'flex', alignItems:'flex-start', gap:8, fontFamily:F, fontSize:13, color:LT }}>
+                    <CheckCircle2 size={13} color={GLD} strokeWidth={2.2} style={{ flexShrink:0, marginTop:2 }} /> {pt}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div style={{ background:'rgba(103,232,249,.04)', border:'1px solid rgba(103,232,249,.20)', borderRadius:16, padding:'22px 20px' }}>
+              <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:16 }}>
+                <div style={{ width:40, height:40, borderRadius:'50%', background:'rgba(103,232,249,.12)', display:'inline-flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                  <Wifi size={17} color="#67e8f9" strokeWidth={2.2} />
+                </div>
+                <div>
+                  <div style={{ fontFamily:F, fontWeight:800, fontSize:14.5, color:'#67e8f9' }}>كاسيت لايف — Online LIVE</div>
+                  <div style={{ fontFamily:F, fontSize:12, color:MUT }}>من أي مكان في العالم العربي</div>
+                </div>
+              </div>
+              <ul style={{ margin:0, padding:0, listStyle:'none', display:'flex', flexDirection:'column', gap:9 }}>
+                {['جلسات مباشرة مع المدرب في الوقت الفعلي','تسجيلات الجلسات متاحة للمراجعة','تسليم واجبات وتقييم فردي','متاح من أي مكان في العالم العربي'].map(pt => (
+                  <li key={pt} style={{ display:'flex', alignItems:'flex-start', gap:8, fontFamily:F, fontSize:13, color:LT }}>
+                    <CheckCircle2 size={13} color="#67e8f9" strokeWidth={2.2} style={{ flexShrink:0, marginTop:2 }} /> {pt}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* guarantee */}
+          <div style={{ maxWidth:680, margin:'0 auto', background:'rgba(255,193,7,.06)', border:'1px solid rgba(255,193,7,.32)', borderRadius:22, padding:'clamp(28px,3.5vw,44px)', textAlign:'center' }}>
+            <ShieldCheck size={40} strokeWidth={1.5} color={GLD} aria-hidden="true" />
+            <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(20px,2.8vw,27px)', color:OFF, margin:'16px 0 12px', lineHeight:1.4 }}>
+              ضمان الجلسة الأولى
+            </h2>
+            <p style={{ fontFamily:F, fontSize:15, color:MUT, lineHeight:1.9, maxWidth:500, marginInline:'auto', margin:0 }}>
+              جرّب الجلسة الأولى كاملة. وإن شعرت أنّ الماستركلاس لا يلبّي توقّعاتك، اطلب استرداداً كاملاً خلال 24 ساعة من انتهائها — دون أسئلة.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════════════════════════
+          §07 TRAINERS — خبراء الإعلام
       ════════════════════════════════════════════════════════════ */}
       <section className="sec sec--trainers" style={{ borderTop:`1px solid ${CARD_BORDER}`, padding:'80px 0' }}>
         <div className="geo" aria-hidden="true">
@@ -664,10 +789,10 @@ export default function MasarElamiPage() {
           <div style={{ textAlign:'center', marginBottom:48 }}>
             <SectionLabel text="خبراء ماستركلاس الإعلام" />
             <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(26px,4vw,42px)', marginTop:16, lineHeight:1.35, color:OFF }}>
-              مَن <span style={{ color:GLD }}>يُرشدك</span> في هذا المسار
+              مَن <span style={{ color:GLD }}>يُرشدك</span> في هذا المسار؟
             </h2>
             <p style={{ fontFamily:F, fontSize:15.5, color:MUT, maxWidth:540, marginInline:'auto', marginTop:12 }}>
-              خبراء إعلاميون بمسيرات مهنية حقيقية — يُرشدونك ويُقيّمونك على مدار المسار.
+              إعلاميون ومدرّبون من داخل بيئة العمل الحقيقية — يمنحونك خبرة الكاميرا والاستوديو وتوجيه الأداء طوال رحلتك التدريبية.
             </p>
           </div>
 
@@ -740,102 +865,15 @@ export default function MasarElamiPage() {
       </section>
 
       {/* ════════════════════════════════════════════════════════════
-          §07 CONSULTATION — WhatsApp chat mockup (after trainers)
-      ════════════════════════════════════════════════════════════ */}
-      <section id="consult" className="sec sec--consult" style={{ padding:'0 0 88px' }}>
-        <div style={{ ...INNER }}>
-          <div style={{ textAlign:'center', marginBottom:40 }}>
-            <span style={{ display:'inline-flex', alignItems:'center', gap:7, background:GS, border:`1px solid ${GL}`, color:GLD, fontFamily:F, fontSize:12, fontWeight:700, padding:'5px 15px', borderRadius:999 }}>
-              <span style={{ width:5, height:5, borderRadius:'50%', background:GLD, flexShrink:0 }} />
-              استشارة مجانية · دون التزام
-            </span>
-            <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(24px,3.4vw,36px)', lineHeight:1.4, color:OFF, margin:'16px 0 10px' }}>
-              قبل أن تسجّل، تحدّث مع <span style={{ color:GLD }}>مستشارتك</span>
-            </h2>
-            <p style={{ fontFamily:F, fontSize:15.5, color:MUT, lineHeight:1.75, maxWidth:520, marginInline:'auto' }}>
-              جلسة قصيرة على واتساب تُحدَّد فيها نقطة بدايتك — لكلّ مسار مستشارة مخصّصة.
-            </p>
-          </div>
-          <div style={{ display:'flex', justifyContent:'center', gap:10, marginBottom:28 }}>
-            {[
-              { mode: 'onsite' as const, label:'الحضوري',  img:advisorAya,    name:'آية القماز' },
-              { mode: 'live'   as const, label:'المباشر',  img:advisorYaqout, name:'ياقوت الخشاشنة' },
-            ].map(({ mode, label, img, name }) => (
-              <button key={mode} onClick={() => setCheckoutMode(mode)} style={{
-                display:'flex', alignItems:'center', gap:9,
-                background: checkoutMode === mode ? GS : 'transparent',
-                border:`1px solid ${checkoutMode === mode ? GL : CARD_BORDER}`,
-                borderRadius:999, padding:'7px 16px 7px 10px', cursor:'pointer',
-              }}>
-                <div style={{ width:30, height:30, borderRadius:'50%', overflow:'hidden', flexShrink:0, border: checkoutMode === mode ? `2px solid ${GLD}` : '2px solid transparent' }}>
-                  <img src={img} alt={name} style={{ width:'100%', height:'100%', objectFit:'cover' }} />
-                </div>
-                <span style={{ fontFamily:F, fontWeight:700, fontSize:13, color: checkoutMode === mode ? GLD : MUT }}>{label}</span>
-              </button>
-            ))}
-          </div>
-          {(() => {
-            const isOnsite = checkoutMode === 'onsite';
-            const adv = isOnsite
-              ? { name:'آية القماز', role:'مستشارة ماستركلاس الإعلام الحضوري', img:advisorAya,
-                  msg:'أهلاً 👋 أنا آية، مستشارة ماستركلاس الإعلام الحضوري. أخبريني عن طموحاتك الإعلامية — وأساعدك تختاري نقطة البداية الصح.',
-                  link:WA_AYA_LINK }
-              : { name:'ياقوت الخشاشنة', role:'مستشارة ماستركلاس الإعلام المباشر', img:advisorYaqout,
-                  msg:'أهلاً 👋 أنا ياقوت، مستشارة ماستركلاس الإعلام المباشر. أخبريني عن طموحاتك الإعلامية — وأساعدك تختاري نقطة البداية الصح.',
-                  link:WA_CONSULT };
-            return (
-              <div style={{ maxWidth:480, marginInline:'auto', borderRadius:20, overflow:'hidden', boxShadow:'0 24px 64px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,0.07)', border:`1px solid ${CARD_BORDER}` }}>
-                <div style={{ background:'#1F2C34', padding:'12px 16px', display:'flex', alignItems:'center', gap:12 }}>
-                  <div style={{ width:42, height:42, borderRadius:'50%', overflow:'hidden', flexShrink:0, border:'2px solid #25D366' }}>
-                    <img src={adv.img} alt={adv.name} style={{ width:'100%', height:'100%', objectFit:'cover' }} />
-                  </div>
-                  <div style={{ flex:1, minWidth:0 }}>
-                    <div style={{ fontFamily:F, fontWeight:700, fontSize:14.5, color:'#E9EEF1', lineHeight:1.3 }}>{adv.name}</div>
-                    <div style={{ fontFamily:F, fontSize:12, color:'#8696A0', marginTop:1 }}>{adv.role}</div>
-                  </div>
-                  <div style={{ display:'flex', alignItems:'center', gap:4 }}>
-                    <span style={{ width:7, height:7, borderRadius:'50%', background:'#25D366', boxShadow:'0 0 6px #25D366' }} />
-                    <span style={{ fontFamily:F, fontSize:11, color:'#25D366', fontWeight:600 }}>متاحة</span>
-                  </div>
-                </div>
-                <div style={{ background:'#0B141A', padding:'20px 16px 16px', minHeight:140, position:'relative' }}>
-                  <div style={{ position:'absolute', inset:0, backgroundImage:'radial-gradient(circle,rgba(255,255,255,.025) 1px,transparent 1px)', backgroundSize:'20px 20px', pointerEvents:'none' }} />
-                  <div style={{ position:'relative', maxWidth:'82%', background:'#1F2C34', borderRadius:'0 14px 14px 14px', padding:'10px 14px 8px', marginRight:'auto' }}>
-                    <div style={{ position:'absolute', top:0, right:'100%', width:0, height:0, borderStyle:'solid', borderWidth:'0 8px 8px 0', borderColor:`transparent #1F2C34 transparent transparent` }} />
-                    <p style={{ fontFamily:F, fontSize:14.5, color:'#E9EEF1', lineHeight:1.7, margin:0 }} dir="rtl">{adv.msg}</p>
-                    <div style={{ display:'flex', alignItems:'center', justifyContent:'flex-end', gap:4, marginTop:5 }}>
-                      <span style={{ fontFamily:F, fontSize:10.5, color:'#8696A0' }}>الآن</span>
-                      <svg width="14" height="9" viewBox="0 0 16 10" fill="none"><path d="M1 5l3.5 3.5L10 1M6 5l3.5 3.5L15 1" stroke="#53BDEB" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                    </div>
-                  </div>
-                </div>
-                <a href={adv.link} target="_blank" rel="noopener noreferrer" style={{ display:'flex', alignItems:'center', gap:10, background:'#1F2C34', padding:'10px 12px', textDecoration:'none', borderTop:'1px solid rgba(255,255,255,0.06)', cursor:'pointer' }}>
-                  <div style={{ flex:1, background:'#2A3942', borderRadius:22, padding:'9px 16px' }}>
-                    <span style={{ fontFamily:F, fontSize:14, color:'#8696A0' }}>ابدأ المحادثة…</span>
-                  </div>
-                  <div style={{ width:44, height:44, borderRadius:'50%', background:'#25D366', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, boxShadow:'0 4px 14px rgba(37,211,102,.4)' }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-                  </div>
-                </a>
-              </div>
-            );
-          })()}
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════════════════════════
           §08 CHECKOUT — interactive (Stripe)
       ════════════════════════════════════════════════════════════ */}
       <section id="checkout" className="sec sec--access" style={{ position:'relative', borderTop:`1px solid ${CARD_BORDER}`, padding:'80px 0', scrollMarginTop:80 }}>
         <div style={{ ...INNER }}>
           {/* heading */}
           <div style={{ textAlign:'center', maxWidth:580, margin:'0 auto 52px' }}>
-            <span style={{ display:'inline-flex', alignItems:'center', gap:8, background:GS, border:`1px solid ${GL}`, color:GLD, fontFamily:F, fontSize:12.5, fontWeight:700, padding:'6px 15px', borderRadius:999 }}>
-              <span style={{ width:5, height:5, borderRadius:'50%', background:GLD }} />
-              استثمر في مستقبلك المهني
-            </span>
+            <SectionLabel text="خطوتك نحو السوق" />
             <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(28px,4.4vw,44px)', lineHeight:1.35, margin:'18px 0 0', color:OFF }}>
-              الماستركلاس الكامل — <span style={{ color:GLD }}>اختر أسلوبك</span>
+              استثمر في <span style={{ color:GLD }}>مستقبلك المهني</span>
             </h2>
             <p style={{ fontFamily:F, fontSize:15, fontWeight:700, color:LT, marginTop:10, marginBottom:0 }}>
               10 محطات من التأسيس إلى القيادة الإعلامية
@@ -987,97 +1025,58 @@ export default function MasarElamiPage() {
       </section>
 
       {/* ════════════════════════════════════════════════════════════
-          §08 COHORT — الفوج القادم + CTA
+          §10 CONSULTATION — استشارة مجانية (after checkout)
       ════════════════════════════════════════════════════════════ */}
-      <section className="sec sec--cohort" style={{ borderTop:`1px solid ${CARD_BORDER}`, padding:'64px 0 80px' }}>
-        <div style={{ ...INNER, textAlign:'center' }}>
-          <SectionLabel text="الفوج القادم" />
-          <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(28px,4.4vw,46px)', marginTop:16, lineHeight:1.3, color:OFF }}>
-            يبدأ <span style={{ color:GLD }}>14 أيلول</span>
-          </h2>
-
-          <div className="cohort-facts">
-            <div><span className="cf-l">الجدول</span><b>الأحد والثلاثاء · 6:00–8:00 مساءً</b></div>
-            <div><span className="cf-l">المدة</span><b>40 ساعة · 10 محطات · 3 أشهر</b></div>
-            <div><span className="cf-l">المقاعد</span><b>10 مقاعد فقط</b></div>
-          </div>
-
-          <button onClick={scrollToCheckout} style={{ display:'inline-flex', alignItems:'center', gap:10, background:GLD, color:'#0f172a', fontFamily:F, fontWeight:800, fontSize:15.5, padding:'15px 32px', borderRadius:12, border:'none', cursor:'pointer', boxShadow:'0 8px 26px rgba(255,193,7,.24)' }}>
-            احجز مقعدك في هذا الفوج <ArrowLeft size={15} />
-          </button>
-          <p style={{ fontFamily:F, fontSize:14, color:MUT, marginTop:18 }}>
-            أو <a href="#consult" style={{ color:GLD, textDecoration:'underline', textUnderlineOffset:3 }}>احكِ مع المستشارة أولاً</a> — استشارة مجانية بدون التزام.
-          </p>
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════════════════════════
-          §09 STUDY MODES — أسلوب الدراسة
-      ════════════════════════════════════════════════════════════ */}
-      <section className="sec sec--modes" style={{ borderTop:`1px solid ${CARD_BORDER}`, padding:'80px 0' }}>
+      <section id="consult" className="sec sec--consult" style={{ padding:'0 0 88px' }}>
         <div style={{ ...INNER }}>
-          <div style={{ textAlign:'center', marginBottom:44 }}>
-            <SectionLabel text="أسلوب الدراسة" />
-            <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(26px,4vw,42px)', marginTop:16, lineHeight:1.35, color:OFF }}>
-              اختر <span style={{ color:GLD }}>أسلوب تعلّمك</span>
+          <div style={{ textAlign:'center', marginBottom:40 }}>
+            <span style={{ display:'inline-flex', alignItems:'center', gap:7, background:GS, border:`1px solid ${GL}`, color:GLD, fontFamily:F, fontSize:12, fontWeight:700, padding:'5px 15px', borderRadius:999 }}>
+              <span style={{ width:5, height:5, borderRadius:'50%', background:GLD, flexShrink:0 }} />
+              استشارة مجانية · دون التزام
+            </span>
+            <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(24px,3.4vw,36px)', lineHeight:1.4, color:OFF, margin:'16px 0 10px' }}>
+              قبل أن تسجّل، تحدّث مع <span style={{ color:GLD }}>مستشارتك</span>
             </h2>
-            <p style={{ fontFamily:F, fontSize:15.5, color:MUT, marginTop:12, maxWidth:520, marginInline:'auto', lineHeight:1.8 }}>
-              نفس المنهج ونفس المدربين والشهادة المعتمدة — فقط اختر ما يناسب جدولك وحياتك
+            <p style={{ fontFamily:F, fontSize:15.5, color:MUT, lineHeight:1.75, maxWidth:520, marginInline:'auto' }}>
+              جلسة قصيرة على واتساب تُحدَّد فيها نقطة بدايتك — لكلّ مسار مستشارة مخصّصة.
             </p>
           </div>
-
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(230px,1fr))', gap:14, marginBottom:32, maxWidth:820, marginInline:'auto' }}>
-
-            <div style={{ background:'rgba(255,193,7,.05)', border:'1px solid rgba(255,193,7,.22)', borderRadius:16, padding:'22px 20px' }}>
-              <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:16 }}>
-                <div style={{ width:40, height:40, borderRadius:'50%', background:'rgba(255,193,7,.14)', display:'inline-flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                  <MapPin size={17} color={GLD} strokeWidth={2.2} />
+          <div className="elam-adv-card">
+            <div className="elam-adv-col-a">
+              <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:20 }}>
+                <div style={{ width:70, height:70, borderRadius:'50%', overflow:'hidden', flexShrink:0, border:`2px solid ${GL}` }}>
+                  <img src={advisorAya} alt="آية القماز" style={{ width:'100%', height:'100%', objectFit:'cover' }} />
                 </div>
                 <div>
-                  <div style={{ fontFamily:F, fontWeight:800, fontSize:14.5, color:GLD }}>حضوري — استوديو كاسيت</div>
-                  <div style={{ fontFamily:F, fontSize:12, color:MUT }}>حضور فعلي في عمّان</div>
+                  <div style={{ fontFamily:F, fontWeight:800, fontSize:15, color:OFF, marginBottom:6 }}>آية القماز</div>
+                  <div style={{ display:'flex', alignItems:'center', gap:5, fontFamily:F, fontSize:12.5, color:MUT }}>
+                    <MapPin size={12} color={GLD} strokeWidth={2} /> حضوري · عمّان
+                  </div>
                 </div>
               </div>
-              <ul style={{ margin:0, padding:0, listStyle:'none', display:'flex', flexDirection:'column', gap:9 }}>
-                {['تفاعل مباشر مع المدرب والزملاء','تطبيق عملي داخل الاستوديوهات المجهَّزة','بيئة تعلم منظَّمة بلا إلهاء','تشبيك مع المتدربين وفرص العمل'].map(pt => (
-                  <li key={pt} style={{ display:'flex', alignItems:'flex-start', gap:8, fontFamily:F, fontSize:13, color:LT }}>
-                    <CheckCircle2 size={13} color={GLD} strokeWidth={2.2} style={{ flexShrink:0, marginTop:2 }} /> {pt}
-                  </li>
-                ))}
-              </ul>
+              <a href={WA_AYA_LINK} target="_blank" rel="noopener noreferrer"
+                style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8, background:'transparent', border:'1.5px solid #25D366', color:'#25D366', fontFamily:F, fontWeight:700, fontSize:13.5, padding:'11px 20px', borderRadius:12, textDecoration:'none', boxSizing:'border-box' as const }}>
+                <FaWhatsapp size={16} /> تواصلي مع آية
+              </a>
             </div>
-
-            <div style={{ background:'rgba(103,232,249,.04)', border:'1px solid rgba(103,232,249,.20)', borderRadius:16, padding:'22px 20px' }}>
-              <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:16 }}>
-                <div style={{ width:40, height:40, borderRadius:'50%', background:'rgba(103,232,249,.12)', display:'inline-flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                  <Wifi size={17} color="#67e8f9" strokeWidth={2.2} />
+            <div className="elam-adv-col-b">
+              <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:20 }}>
+                <div style={{ width:70, height:70, borderRadius:'50%', overflow:'hidden', flexShrink:0, border:'2px solid rgba(103,232,249,.30)' }}>
+                  <img src={advisorYaqout} alt="ياقوت خشاشنة" style={{ width:'100%', height:'100%', objectFit:'cover' }} />
                 </div>
                 <div>
-                  <div style={{ fontFamily:F, fontWeight:800, fontSize:14.5, color:'#67e8f9' }}>كاسيت لايف — Online LIVE</div>
-                  <div style={{ fontFamily:F, fontSize:12, color:MUT }}>من أي مكان في العالم العربي</div>
+                  <div style={{ fontFamily:F, fontWeight:800, fontSize:15, color:OFF, marginBottom:6 }}>ياقوت خشاشنة</div>
+                  <div style={{ display:'flex', alignItems:'center', gap:5, fontFamily:F, fontSize:12.5, color:MUT }}>
+                    <Wifi size={12} color="#67e8f9" strokeWidth={2} /> مباشر تفاعلي · Online LIVE
+                  </div>
                 </div>
               </div>
-              <ul style={{ margin:0, padding:0, listStyle:'none', display:'flex', flexDirection:'column', gap:9 }}>
-                {['جلسات مباشرة مع المدرب في الوقت الفعلي','تسجيلات الجلسات متاحة للمراجعة','تسليم واجبات وتقييم فردي','متاح من أي مكان في العالم العربي'].map(pt => (
-                  <li key={pt} style={{ display:'flex', alignItems:'flex-start', gap:8, fontFamily:F, fontSize:13, color:LT }}>
-                    <CheckCircle2 size={13} color="#67e8f9" strokeWidth={2.2} style={{ flexShrink:0, marginTop:2 }} /> {pt}
-                  </li>
-                ))}
-              </ul>
+              <a href={WA_CONSULT} target="_blank" rel="noopener noreferrer"
+                style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8, background:'transparent', border:'1.5px solid #25D366', color:'#25D366', fontFamily:F, fontWeight:700, fontSize:13.5, padding:'11px 20px', borderRadius:12, textDecoration:'none', boxSizing:'border-box' as const }}>
+                <FaWhatsapp size={16} /> تواصلي مع ياقوت
+              </a>
             </div>
           </div>
-
-          {/* guarantee */}
-          <div style={{ maxWidth:680, margin:'0 auto', background:'rgba(255,193,7,.06)', border:'1px solid rgba(255,193,7,.32)', borderRadius:22, padding:'clamp(28px,3.5vw,44px)', textAlign:'center' }}>
-            <ShieldCheck size={40} strokeWidth={1.5} color={GLD} aria-hidden="true" />
-            <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(20px,2.8vw,27px)', color:OFF, margin:'16px 0 12px', lineHeight:1.4 }}>
-              ضمان الجلسة الأولى
-            </h2>
-            <p style={{ fontFamily:F, fontSize:15, color:MUT, lineHeight:1.9, maxWidth:500, marginInline:'auto', margin:0 }}>
-              جرّب الجلسة الأولى كاملة. وإن شعرت أنّ الماستركلاس لا يلبّي توقّعاتك، اطلب استرداداً كاملاً خلال 24 ساعة من انتهائها — دون أسئلة.
-            </p>
-          </div>
-
         </div>
       </section>
 
