@@ -55,6 +55,8 @@ export const ordersTable = pgTable("orders", {
   // 'pending'|'deposit_paid'|'paid_full'|'partially_paid'|'completed'|'refunded'|'cancelled'
   installments:    jsonb("installments").notNull(),     // legacy JSONB
   notes:           text("notes"),
+  consultantId:    integer("consultant_id"),          // referring consultant (nullable)
+  discountCode:    text("discount_code"),             // applied discount code (nullable)
   createdAt:       timestamp("created_at").defaultNow().notNull(),
   updatedAt:       timestamp("updated_at").defaultNow().notNull(),
 });
@@ -121,3 +123,111 @@ export const holdsTable = pgTable("holds", {
 });
 
 export type Hold = typeof holdsTable.$inferSelect;
+
+// ─── Consultant Accounts ──────────────────────────────────
+// Role-based admin access: 'admin' (owner, full access) | 'consultant' (limited)
+export const consultantAccountsTable = pgTable("consultant_accounts", {
+  id:           serial("id").primaryKey(),
+  name:         text("name").notNull(),
+  email:        text("email").notNull().unique(),
+  passwordHash: text("password_hash").notNull(),
+  role:         text("role").notNull().default("consultant"), // 'admin' | 'consultant'
+  isActive:     boolean("is_active").notNull().default(true),
+  lastLoginAt:  timestamp("last_login_at"),
+  createdAt:    timestamp("created_at").defaultNow().notNull(),
+  updatedAt:    timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type ConsultantAccount = typeof consultantAccountsTable.$inferSelect;
+
+// ─── Discount Codes ───────────────────────────────────────
+export const discountCodesTable = pgTable("discount_codes", {
+  id:          serial("id").primaryKey(),
+  code:        text("code").notNull().unique(),           // stored uppercase
+  type:        text("type").notNull(),                    // 'percent' | 'fixed'
+  value:       numeric("value").notNull(),                // percent (0-100) or JOD amount
+  appliesTo:   text("applies_to").notNull().default("all"), // 'all' | courseSlug
+  maxUses:     integer("max_uses"),                       // NULL = unlimited
+  usedCount:   integer("used_count").notNull().default(0),
+  expiresAt:   timestamp("expires_at"),                   // NULL = never
+  isActive:    boolean("is_active").notNull().default(true),
+  createdById: integer("created_by_id"),                  // consultant_accounts.id, NULL = owner/admin
+  createdBy:   text("created_by").notNull().default("admin"), // display name
+  createdAt:   timestamp("created_at").defaultNow().notNull(),
+  updatedAt:   timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type DiscountCode = typeof discountCodesTable.$inferSelect;
+
+// ─── Courses (DB source of truth for admin editing) ──────
+export const coursesTable = pgTable("courses", {
+  id:            serial("id").primaryKey(),
+  slug:          text("slug").notNull().unique(),
+  nameAr:        text("name_ar").notNull(),
+  level:         text("level").notNull().default("beginner"), // 'beginner' | 'advanced'
+  status:        text("status").notNull().default("draft"),   // 'active' | 'draft' | 'archived'
+  // Onsite mode (nullable = mode not offered)
+  onsiteEnabled:  boolean("onsite_enabled").notNull().default(false),
+  onsitePriceJOD: integer("onsite_price_jod"),
+  onsiteHours:    integer("onsite_hours"),
+  onsiteSessions: integer("onsite_sessions"),
+  onsiteCapacity: integer("onsite_capacity"),
+  // Live mode
+  liveEnabled:    boolean("live_enabled").notNull().default(false),
+  livePriceUSD:   integer("live_price_usd"),
+  liveHours:      integer("live_hours"),
+  liveSessions:   integer("live_sessions"),
+  liveCapacity:   integer("live_capacity"),
+  createdAt:     timestamp("created_at").defaultNow().notNull(),
+  updatedAt:     timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type Course = typeof coursesTable.$inferSelect;
+
+// ─── Voice Evaluations ("سمّعنا صوتك") ─────────────────────
+export const voiceEvaluationsTable = pgTable("voice_evaluations", {
+  id:            serial("id").primaryKey(),
+  name:          text("name").notNull(),
+  phone:         text("phone").notNull(),
+  audioRef:      text("audio_ref"),                       // URL or file reference
+  reviewer:      text("reviewer"),                        // assigned reviewer name
+  status:        text("status").notNull().default("pending"), // pending | reviewed | accepted | rejected
+  notes:         text("notes"),
+  submittedAt:   timestamp("submitted_at").defaultNow().notNull(),
+  updatedAt:     timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type VoiceEvaluation = typeof voiceEvaluationsTable.$inferSelect;
+
+// ─── Instagram Leads ──────────────────────────────────────
+export const instagramLeadsTable = pgTable("instagram_leads", {
+  id:              serial("id").primaryKey(),
+  campaignName:    text("campaign_name").notNull(),
+  carouselRef:     text("carousel_ref"),                  // carousel ID or link
+  keywords:        text("keywords"),                      // comma-separated
+  leadCount:       integer("lead_count").notNull().default(0),
+  conversionCount: integer("conversion_count").notNull().default(0),
+  notes:           text("notes"),
+  campaignDate:    date("campaign_date"),
+  createdAt:       timestamp("created_at").defaultNow().notNull(),
+  updatedAt:       timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type InstagramLead = typeof instagramLeadsTable.$inferSelect;
+
+// ─── Discount Reservations ────────────────────────────────
+// One row per checkout attempt that claimed a discount use.
+// Keyed by order_id (present in Stripe metadata for both the Checkout
+// Session and Payment Element flows) so claim/complete/release are
+// idempotent per payment object, not just an aggregate counter.
+export const discountReservationsTable = pgTable("discount_reservations", {
+  id:        serial("id").primaryKey(),
+  orderId:   text("order_id").notNull().unique(),
+  code:      text("code").notNull(),
+  status:    text("status").notNull().default("reserved"), // reserved | completed | released
+  expiresAt: timestamp("expires_at").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type DiscountReservation = typeof discountReservationsTable.$inferSelect;

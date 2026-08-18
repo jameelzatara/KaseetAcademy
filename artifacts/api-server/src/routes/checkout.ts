@@ -23,6 +23,16 @@ import type { CustomerInfo, InstallmentRecord } from "@workspace/db";
 import { logger } from "../lib/logger.js";
 import { notifyOrderCompleted } from "../lib/whatsapp.js";
 import { sendOrderConfirmation } from "../lib/email.js";
+import {
+  validateDiscountCode,
+  applyDiscount,
+  claimDiscountReservation,
+  releaseDiscountReservation,
+  completeDiscountReservation,
+  DISCOUNT_ERROR_AR,
+  type ValidDiscount,
+  type DiscountError,
+} from "../lib/discounts.js";
 
 // Extend express-session with checkout-specific fields
 declare module "express-session" {
@@ -33,10 +43,27 @@ declare module "express-session" {
 
 const router = Router();
 
+/** Resolve an optional consultant referral id — returns the id only if it
+ *  points to an active consultant account; otherwise null (never blocks checkout). */
+async function resolveConsultantRef(ref: unknown): Promise<number | null> {
+  const id = Number(ref);
+  if (!Number.isInteger(id) || id <= 0) return null;
+  try {
+    const { rows } = await pool.query(
+      `SELECT id FROM consultant_accounts WHERE id = $1 AND is_active = TRUE`,
+      [id],
+    );
+    return rows.length ? id : null;
+  } catch {
+    return null;
+  }
+}
+
 const BASE_URL = process.env.BASE_URL ?? `https://${process.env.REPLIT_DOMAINS?.split(",")[0]}`;
 
 // ── POST /checkout/session ─────────────────────────────────
 router.post("/checkout/session", async (req, res) => {
+  let reservedOrderId: string | null = null;
   try {
     const {
       cohortId,
@@ -51,6 +78,8 @@ router.post("/checkout/session", async (req, res) => {
       cohortTrainer,
       cohortPlatform,
       customer,
+      discountCode,
+      consultantRef,
     } = req.body as {
       cohortId: number;
       courseSlug: string;
@@ -62,6 +91,8 @@ router.post("/checkout/session", async (req, res) => {
       cohortTrainer: string;
       cohortPlatform: string;
       customer: CustomerInfo;
+      discountCode?: string;
+      consultantRef?: number;
     };
 
     if (!cohortId || !courseSlug || !mode || !customer?.firstName || !customer?.phone) {
@@ -74,6 +105,21 @@ router.post("/checkout/session", async (req, res) => {
       res.status(400).json({ error: "دورة أو وضع غير صالح" });
       return;
     }
+
+    // ── Discount code validation (DB-backed) ─────────────────
+    let discount: ValidDiscount | null = null;
+    if (discountCode) {
+      try {
+        discount = await validateDiscountCode(discountCode, courseSlug);
+      } catch (err: any) {
+        const code = (err?.message ?? "CODE_NOT_FOUND") as DiscountError;
+        res.status(400).json({ error: DISCOUNT_ERROR_AR[code] ?? "كود الخصم غير صالح", code });
+        return;
+      }
+    }
+
+    // ── Consultant referral (optional, never blocks checkout) ─
+    const consultantId = await resolveConsultantRef(consultantRef);
 
     // ── Server-side cohort validation ─────────────────────────
     let validCohortId: number;
@@ -104,10 +150,19 @@ router.post("/checkout/session", async (req, res) => {
     if (mode === "live") {
       effectivePlan = "full";
       totalUSD  = (pricing as { totalUSD: number }).totalUSD;
+      // Integer USD (total_usd column is integer)
+      if (discount) totalUSD = Math.round(applyDiscount(totalUSD, discount));
       chargeUSD = totalUSD;
       installments = [{ seq: 1, amountJOD: 0, method: "stripe", paidAt: null }];
     } else {
       totalJOD = (pricing as { totalJOD: number }).totalJOD;
+      if (discount) {
+        // Integer JOD (total_jod column is integer)
+        totalJOD = Math.round(applyDiscount(totalJOD, discount));
+        // Deposit invariant: the fixed deposit is always charged, so the
+        // discounted total can never drop below it (remaining stays >= 0)
+        if (effectivePlan === "deposit") totalJOD = Math.max(totalJOD, DEPOSIT_JOD);
+      }
       const [dep, inst2, inst3] = splitInstallments(totalJOD);
       if (effectivePlan === "full") {
         chargeUSD    = jodToChargeUSD(totalJOD);
@@ -128,6 +183,20 @@ router.post("/checkout/session", async (req, res) => {
     // ── Create hold ──────────────────────────────────────────
     const holdId  = await createHold(validCohortId);
     const orderId = await generateOrderId();
+
+    // ── Claim the discount use BEFORE issuing a discounted payment ──
+    // Per-order reservation row + atomic counter claim: under concurrency
+    // only max_uses checkouts proceed with the discounted price. Released
+    // idempotently on session expiry, cancellation, failure, or sweep.
+    if (discount) {
+      const claimed = await claimDiscountReservation(discount.code, orderId, 40);
+      if (!claimed) {
+        res.status(400).json({ error: DISCOUNT_ERROR_AR.CODE_EXHAUSTED, code: "CODE_EXHAUSTED" });
+        return;
+      }
+      reservedOrderId = orderId;
+    }
+
     const stripe  = await getUncachableStripeClient();
 
     const session = await stripe.checkout.sessions.create({
@@ -165,6 +234,8 @@ router.post("/checkout/session", async (req, res) => {
         cohortTimeAr:  cohortTimeAr ?? "",
         cohortTrainer: cohortTrainer ?? "",
         cohortPlatform: cohortPlatform ?? "",
+        discountCode:  discount?.code ?? "",
+        consultantId:  consultantId ? String(consultantId) : "",
       },
       payment_intent_data: { description: `كاسيت أكاديمي — طلب ${orderId}` },
       success_url: `${BASE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
@@ -180,6 +251,10 @@ router.post("/checkout/session", async (req, res) => {
 
     res.json({ url: session.url, sessionId: session.id });
   } catch (err: any) {
+    // Failure after the claim — return the reserved discount use
+    if (reservedOrderId) {
+      await releaseDiscountReservation(reservedOrderId).catch(() => {});
+    }
     logger.error({ err }, "checkout/session error");
     res.status(500).json({ error: "خطأ في إنشاء جلسة الدفع" });
   }
@@ -301,6 +376,15 @@ export async function processWebhookEvent(
     } else if (event.type === "checkout.session.expired") {
       const s = event.data.object as import("stripe").Stripe.Checkout.Session;
       await releaseHoldBySession(s.id);
+      // Abandoned checkout — return the reserved discount use (idempotent)
+      if (s.metadata?.orderId && s.metadata?.discountCode) {
+        await releaseDiscountReservation(s.metadata.orderId);
+      }
+    } else if (event.type === "payment_intent.canceled") {
+      const pi = event.data.object as import("stripe").Stripe.PaymentIntent;
+      if (pi.metadata?.orderId && pi.metadata?.discountCode) {
+        await releaseDiscountReservation(pi.metadata.orderId);
+      }
     } else if (event.type === "charge.refunded") {
       const charge = event.data.object as import("stripe").Stripe.Charge;
       const pi = typeof charge.payment_intent === "string" ? charge.payment_intent : null;
@@ -390,7 +474,22 @@ export async function onSessionCompleted(s: import("stripe").Stripe.Checkout.Ses
       city:      meta.city || undefined,
     },
     holdId: meta.holdId || undefined,
+    discountCode: meta.discountCode || undefined,
+    consultantId: meta.consultantId ? parseInt(meta.consultantId, 10) : undefined,
   });
+
+  // Consume the discount reservation (idempotent per orderId; also covers
+  // "duplicate" results from webhook retries).
+  if (meta.discountCode && meta.orderId && (result === "created" || result === "duplicate")) {
+    completeDiscountReservation(meta.orderId, meta.discountCode)
+      .then((outcome) => {
+        if (outcome === "cap_exceeded") {
+          logger.warn({ orderId: meta.orderId, code: meta.discountCode },
+            "discount completed past max-uses (late payment after expiry) — needs manual review");
+        }
+      })
+      .catch((err) => logger.warn({ err, orderId: meta.orderId }, "completeDiscountReservation failed"));
+  }
 
   if (result === "overbooked") {
     // Cohort was full by the time webhook fired — create order with overbooked status
@@ -499,6 +598,7 @@ router.get("/checkout/config", (_req, res) => {
 
 // ── POST /checkout/payment-intent — Stripe Elements flow ──
 router.post("/checkout/payment-intent", async (req, res) => {
+  let reservedOrderId: string | null = null;
   try {
     const {
       cohortId,
@@ -511,6 +611,8 @@ router.post("/checkout/payment-intent", async (req, res) => {
       cohortTrainer,
       cohortPlatform,
       customer,
+      discountCode,
+      consultantRef,
     } = req.body as {
       cohortId: number;
       courseSlug: string;
@@ -522,6 +624,8 @@ router.post("/checkout/payment-intent", async (req, res) => {
       cohortTrainer: string;
       cohortPlatform: string;
       customer: CustomerInfo;
+      discountCode?: string;
+      consultantRef?: number;
     };
 
     if (!cohortId || !courseSlug || !mode || !customer?.firstName || !customer?.phone) {
@@ -534,6 +638,21 @@ router.post("/checkout/payment-intent", async (req, res) => {
       res.status(400).json({ error: "دورة أو وضع غير صالح" });
       return;
     }
+
+    // ── Discount code validation (DB-backed) ─────────────────
+    let discount: ValidDiscount | null = null;
+    if (discountCode) {
+      try {
+        discount = await validateDiscountCode(discountCode, courseSlug);
+      } catch (err: any) {
+        const code = (err?.message ?? "CODE_NOT_FOUND") as DiscountError;
+        res.status(400).json({ error: DISCOUNT_ERROR_AR[code] ?? "كود الخصم غير صالح", code });
+        return;
+      }
+    }
+
+    // ── Consultant referral (optional, never blocks checkout) ─
+    const consultantId = await resolveConsultantRef(consultantRef);
 
     // ── Server-side cohort validation — reject mismatched / unknown cohorts ─
     let validCohortId: number;
@@ -562,9 +681,14 @@ router.post("/checkout/payment-intent", async (req, res) => {
     if (mode === "live") {
       effectivePlan = "full";
       totalUSD  = (pricing as { totalUSD: number }).totalUSD;
+      if (discount) totalUSD = Math.round(applyDiscount(totalUSD, discount));
       chargeUSD = totalUSD;
     } else {
       totalJOD = (pricing as { totalJOD: number }).totalJOD;
+      if (discount) {
+        totalJOD = Math.round(applyDiscount(totalJOD, discount));
+        if (effectivePlan === "deposit") totalJOD = Math.max(totalJOD, DEPOSIT_JOD);
+      }
       if (effectivePlan === "full") {
         chargeUSD = jodToChargeUSD(totalJOD);
       } else {
@@ -574,6 +698,16 @@ router.post("/checkout/payment-intent", async (req, res) => {
 
     const holdId  = await createHold(validCohortId);
     const orderId = await generateOrderId();
+
+    // ── Claim the discount use BEFORE issuing a discounted payment ──
+    if (discount) {
+      const claimed = await claimDiscountReservation(discount.code, orderId, 60);
+      if (!claimed) {
+        res.status(400).json({ error: DISCOUNT_ERROR_AR.CODE_EXHAUSTED, code: "CODE_EXHAUSTED" });
+        return;
+      }
+      reservedOrderId = orderId;
+    }
     const stripe  = await getUncachableStripeClient();
 
     const pi = await stripe.paymentIntents.create({
@@ -599,6 +733,8 @@ router.post("/checkout/payment-intent", async (req, res) => {
         cohortTimeAr:  cohortTimeAr ?? "",
         cohortTrainer: cohortTrainer ?? "",
         cohortPlatform: cohortPlatform ?? "",
+        discountCode:  discount?.code ?? "",
+        consultantId:  consultantId ? String(consultantId) : "",
       },
     });
 
@@ -609,6 +745,9 @@ router.post("/checkout/payment-intent", async (req, res) => {
 
     res.json({ clientSecret: pi.client_secret, paymentIntentId: pi.id, orderId });
   } catch (err: any) {
+    if (reservedOrderId) {
+      await releaseDiscountReservation(reservedOrderId).catch(() => {});
+    }
     logger.error({ err }, "checkout/payment-intent error");
     res.status(500).json({ error: "خطأ في إنشاء جلسة الدفع" });
   }
@@ -735,7 +874,22 @@ export async function onPaymentIntentSucceeded(pi: import("stripe").Stripe.Payme
       city:      meta.city || undefined,
     },
     holdId: meta.holdId || undefined,
+    discountCode: meta.discountCode || undefined,
+    consultantId: meta.consultantId ? parseInt(meta.consultantId, 10) : undefined,
   });
+
+  // Consume the discount reservation (idempotent per orderId; also covers
+  // "duplicate" results from webhook retries).
+  if (meta.discountCode && meta.orderId && (result === "created" || result === "duplicate")) {
+    completeDiscountReservation(meta.orderId, meta.discountCode)
+      .then((outcome) => {
+        if (outcome === "cap_exceeded") {
+          logger.warn({ orderId: meta.orderId, code: meta.discountCode },
+            "discount completed past max-uses (late payment after expiry) — needs manual review");
+        }
+      })
+      .catch((err) => logger.warn({ err, orderId: meta.orderId }, "completeDiscountReservation failed"));
+  }
 
   if (result === "overbooked") {
     logger.error({ orderId, cohortId }, "⚠️ OVERBOOKED via PaymentIntent");

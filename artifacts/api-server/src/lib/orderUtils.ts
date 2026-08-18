@@ -186,6 +186,8 @@ export async function createOrderWithSeat(params: {
     city?:     string;
   };
   holdId?: string;
+  discountCode?: string;
+  consultantId?: number;
 }): Promise<"created" | "duplicate" | "overbooked"> {
   // Use the shared pool for a raw transaction with FOR UPDATE
   const client = await pool.connect();
@@ -233,7 +235,7 @@ export async function createOrderWithSeat(params: {
         first_name, last_name, phone, email, country, city,
         total_jod, total_usd, paid_jod, remaining_jod,
         amount_paid_minor, charged_usd, currency, status,
-        installments, created_at, updated_at
+        installments, discount_code, consultant_id, created_at, updated_at
       ) VALUES (
         $1,$2,$2,$3,$3,
         $4,$5,$6,$7,
@@ -241,7 +243,7 @@ export async function createOrderWithSeat(params: {
         $9,$10,$11,$12,$13,$14,
         $15,$16,$17,$18,
         $19,$20,'usd',$21,
-        $22::jsonb,$23,$23
+        $22::jsonb,$24,$25,$23,$23
       )`,
       [
         params.orderId,
@@ -274,6 +276,8 @@ export async function createOrderWithSeat(params: {
         params.status,
         JSON.stringify(params.installments),
         now,
+        params.discountCode ?? null,
+        params.consultantId ?? null,
       ],
     );
 

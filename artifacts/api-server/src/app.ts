@@ -132,6 +132,21 @@ app.use((_req, res, next) => {
 });
 
 // ── Routes ────────────────────────────────────────────────
+// ── CSRF protection for admin mutations ───────────────────
+// Session cookie is SameSite=None, so cross-site form posts would carry it.
+// Browsers always send an Origin header on cross-site POST — reject untrusted
+// origins on any state-changing /api/admin request. (Requests without an
+// Origin header — curl, server-to-server — are not browser CSRF vectors.)
+app.use("/api/admin", (req, res, next) => {
+  if (["GET", "HEAD", "OPTIONS"].includes(req.method)) { next(); return; }
+  const origin = req.headers.origin;
+  if (origin && !isTrustedOrigin(origin)) {
+    res.status(403).json({ error: "مصدر الطلب غير موثوق" });
+    return;
+  }
+  next();
+});
+
 app.use("/api", router);
 
 export default app;

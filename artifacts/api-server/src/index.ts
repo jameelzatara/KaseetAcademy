@@ -1,6 +1,9 @@
 import app from "./app.js";
 import { logger } from "./lib/logger.js";
 import { syncToSheet } from "./lib/sheetsSync.js";
+import { seedCoursesIfEmpty } from "./lib/seedCourses.js";
+import { ensureAdminSchema } from "./lib/ensureSchema.js";
+import { sweepExpiredDiscountReservations } from "./lib/discounts.js";
 
 // ── Stripe init (non-blocking) ────────────────────────────
 async function initStripe() {
@@ -64,4 +67,14 @@ app.listen(port, async (err) => {
   logger.info({ port }, "Server listening");
   await initStripe();
   startSheetsSync();
+  ensureAdminSchema()
+    .then(() => seedCoursesIfEmpty())
+    .catch((err) => logger.error({ err }, "admin schema/seed failed"));
+  // Release discount reservations whose checkout was abandoned without a
+  // Stripe cancel/expiry event (Payment Element intents never auto-cancel).
+  setInterval(() => {
+    sweepExpiredDiscountReservations()
+      .then((n) => { if (n > 0) logger.info({ released: n }, "expired discount reservations released"); })
+      .catch((err) => logger.warn({ err }, "discount reservation sweep failed"));
+  }, 10 * 60 * 1000);
 });

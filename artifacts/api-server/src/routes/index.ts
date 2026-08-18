@@ -3,6 +3,7 @@ import healthRouter from "./health";
 // authRouter removed — student auth deleted (⑤)
 import checkoutRouter from "./checkout";
 import adminRouter from "./admin";
+import adminSectionsRouter from "./adminSections";
 import blogRouter from "./blog";
 
 const router: IRouter = Router();
@@ -12,5 +13,6 @@ router.use(healthRouter);
 router.use(checkoutRouter);
 router.use(blogRouter);
 router.use("/admin", adminRouter);
+router.use("/admin", adminSectionsRouter);
 
 export default router;

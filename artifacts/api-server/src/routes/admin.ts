@@ -4,6 +4,7 @@ import { db, pool, ordersTable, installmentsTable, cohortSeatsTable } from "@wor
 import { eq, desc, sql, and, gt, lt, gte } from "drizzle-orm";
 import { notifyOrderCompleted } from "../lib/whatsapp.js";
 import { sendOrderConfirmation } from "../lib/email.js";
+import { requireAdmin, requireStaff } from "../middlewares/adminAuth.js";
 
 const router = Router();
 
@@ -36,11 +37,8 @@ router.post("/logout", (req, res) => {
   res.json({ ok: true });
 });
 
-// ── Middleware ─────────────────────────────────────────────
-function requireAdmin(req: any, res: any, next: any) {
-  if (!req.session?.isAdmin) { res.status(401).json({ error: "غير مصرّح" }); return; }
-  next();
-}
+// ── Middleware (shared with adminSections) ─────────────────
+// requireStaff scopes consultants to their own referrals in the routes below.
 
 // ── GET /admin/kpi ─────────────────────────────────────────
 // 5 indicators per spec §09-1
@@ -159,7 +157,7 @@ router.get("/kpi", requireAdmin, async (req, res) => {
 });
 
 // ── GET /admin/orders ──────────────────────────────────────
-router.get("/orders", requireAdmin, async (req, res) => {
+router.get("/orders", requireStaff, async (req, res) => {
   try {
     const { status, cohortId, hasDues } = req.query as {
       status?: string;
@@ -173,6 +171,11 @@ router.get("/orders", requireAdmin, async (req, res) => {
       .orderBy(desc(ordersTable.createdAt))
       .limit(200);
 
+    // Consultants see only orders they referred
+    if (!req.session?.isAdmin && req.session?.consultantId) {
+      orders = orders.filter((o) => o.consultantId === req.session!.consultantId);
+    }
+
     if (status)    orders = orders.filter((o) => o.status === status);
     if (cohortId)  orders = orders.filter((o) => o.cohortId === parseInt(cohortId, 10));
     if (hasDues === "1") orders = orders.filter((o) => (o.remainingJOD ?? 0) > 0);
@@ -184,21 +187,28 @@ router.get("/orders", requireAdmin, async (req, res) => {
 });
 
 // ── GET /admin/orders/:id ─────────────────────────────────
-router.get("/orders/:id", requireAdmin, async (req, res) => {
+router.get("/orders/:id", requireStaff, async (req, res) => {
   try {
+    const orderIdParam = String(req.params.id);
     const [order] = await db
       .select()
       .from(ordersTable)
-      .where(eq(ordersTable.id, req.params.id))
+      .where(eq(ordersTable.id, orderIdParam))
       .limit(1);
 
     if (!order) { res.status(404).json({ error: "الطلب غير موجود" }); return; }
+
+    // Consultants may only open orders they referred
+    if (!req.session?.isAdmin && req.session?.consultantId
+        && order.consultantId !== req.session.consultantId) {
+      res.status(403).json({ error: "غير مصرّح" }); return;
+    }
 
     // Also fetch relational installments
     const insts = await db
       .select()
       .from(installmentsTable)
-      .where(eq(installmentsTable.orderId, req.params.id))
+      .where(eq(installmentsTable.orderId, orderIdParam))
       .orderBy(installmentsTable.seq);
 
     res.json({ order, installments: insts });
@@ -312,7 +322,7 @@ router.post("/orders/:id/resend-email", requireAdmin, async (req, res) => {
     const [order] = await db
       .select()
       .from(ordersTable)
-      .where(eq(ordersTable.id, req.params.id))
+      .where(eq(ordersTable.id, String(req.params.id)))
       .limit(1);
 
     if (!order) { res.status(404).json({ error: "الطلب غير موجود" }); return; }
@@ -373,7 +383,7 @@ router.post("/orders/:id/status", requireAdmin, async (req, res) => {
     await db
       .update(ordersTable)
       .set({ status, notes: notes ?? undefined, updatedAt: new Date() })
-      .where(eq(ordersTable.id, req.params.id));
+      .where(eq(ordersTable.id, String(req.params.id)));
     res.json({ ok: true });
   } catch (err) {
     res.status(500).json({ error: "خطأ في الخادم" });
@@ -405,7 +415,7 @@ router.post("/cohorts/:id/seats", requireAdmin, async (req, res) => {
     await db
       .update(cohortSeatsTable)
       .set(updates)
-      .where(eq(cohortSeatsTable.cohortId, parseInt(req.params.id, 10)));
+      .where(eq(cohortSeatsTable.cohortId, parseInt(String(req.params.id), 10)));
 
     res.json({ ok: true });
   } catch (err) {
@@ -501,7 +511,7 @@ router.get("/email-log", requireAdmin, async (req, res) => {
 // يُعيد إرسال البريد من سجل البريد مباشرةً — بدون الحاجة للبحث عن الطلب
 router.post("/email-log/:logId/resend", requireAdmin, async (req, res) => {
   try {
-    const logId = parseInt(req.params.logId, 10);
+    const logId = parseInt(String(req.params.logId), 10);
     if (isNaN(logId)) { res.status(400).json({ error: "معرّف السجل غير صالح" }); return; }
 
     // جلب سجل البريد
