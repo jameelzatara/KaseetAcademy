@@ -12,7 +12,7 @@ import {
 import { GOLD, OFF, F, FP, INNER, waLink } from './shared/coursePageHelpers';
 import PaymentModal from '../components/PaymentModal';
 import wajeezLogo    from '@assets/wajeez-logo_1785688262989.png';
-import heroShot      from '@assets/cover-public-speaking-tedx_1785865159100.jpeg';
+import heroShot      from '@assets/engage-your-audience-2_1787084523466.jpg';
 import trainerSohaib from '@assets/instructor-sohaib_1785863334821.jpeg';
 import trainerOmar   from '@assets/trainer-omar_1785692015818.jpg';
 import advisorImg    from '@assets/ياقوت_الخشاشنة_المستشارة_1785852509109.jpeg';

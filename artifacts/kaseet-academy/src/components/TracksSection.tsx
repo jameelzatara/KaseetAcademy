@@ -6,7 +6,7 @@ import SectionHeader, { Gold } from './SectionHeader';
 
 import mediaTrackImg     from '@assets/media-track_1785431174381.jpeg';
 import voiceoverTrackImg from '@assets/voiceover-track_1785431174382.jpeg';
-import publicSpeakingImg from '@assets/public-speaking-track_1785431174381.jpg';
+import publicSpeakingImg from '@assets/engage-your-audience-2_1787084523466.jpg';
 
 interface Track {
   id:              number;
@@ -58,7 +58,7 @@ const TRACKS: Track[] = [
     desc:             'برنامج تطبيقي لبناء الكاريزما والقيادة الصوتية، إتقان لغة الجسد والتأثير في الجمهور والتخلص من رهبة المسرح.',
     hours:            '42 ساعة · 12 محطة · 13 مخرجاً',
     image:            publicSpeakingImg,
-    imgPos:           'center 30%',
+    imgPos:           'center center',
     route:            '/masterclass-khataba',
     inPersonOld:      '260 د.أ',
     inPersonNew:      '218 د.أ',
