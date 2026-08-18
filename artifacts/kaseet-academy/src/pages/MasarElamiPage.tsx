@@ -20,7 +20,7 @@ import { usePageMeta }         from '../hooks/usePageMeta';
 import {
   ChevronDown, ArrowLeft, MapPin, Wifi, Layers, Clock,
   FolderCheck, CheckCircle2, CalendarDays, Users, Home, Lock,
-  Target, Radio,
+  Target, Radio, ShieldCheck,
 } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa6';
 import PaymentModal from '../components/PaymentModal';
@@ -1007,25 +1007,25 @@ export default function MasarElamiPage() {
                   ))}
                 </ul>
 
-                {/* installment — onsite only (live is always full payment) */}
-                {checkoutMode === 'onsite' && (
-                  <div style={{ display:'flex', alignItems:'flex-start', gap:10, background:GS, border:`1px solid ${GL}`, borderRadius:12, padding:'11px 15px', marginBottom:22 }}>
-                    <span style={{ width:6, height:6, borderRadius:'50%', background:GLD, flexShrink:0, marginTop:6 }} />
-                    <span style={{ fontFamily:F, fontSize:13, color:LT, lineHeight:1.7 }}>
-                      <strong style={{ color:OFF }}>التقسيط متاح:</strong> يمكنك تثبيت مقعدك بدفع الدفعة الأولى فقط
-                      {' '}<strong style={{ color:GLD }}>(50 JOD)</strong>.
-                    </span>
+                {/* ضمان الجلسة الأولى — Risk Reversal */}
+                <div style={{ display:'flex', alignItems:'flex-start', gap:13, background:'rgba(255,193,7,.07)', border:`1px solid rgba(255,193,7,.26)`, borderRadius:16, padding:'16px 18px', marginBottom:18 }}>
+                  <ShieldCheck size={22} color={GLD} strokeWidth={2} style={{ flexShrink:0, marginTop:2 }} />
+                  <div>
+                    <div style={{ fontFamily:F, fontWeight:800, fontSize:14, color:OFF, marginBottom:5 }}>ضمان الجلسة الأولى — Risk Reversal</div>
+                    <p style={{ fontFamily:F, fontSize:13, color:LT, lineHeight:1.8, margin:0 }}>
+                      جرّب الجلسة الأولى كاملة. إن شعرت أنّ الماستركلاس لا يلبّي توقّعاتك، اطلب استرداداً كاملاً لرسومك خلال 24 ساعة من انتهائها — <strong style={{ color:OFF }}>دون أسئلة ولا شروط</strong>.
+                    </p>
                   </div>
-                )}
-                {checkoutMode === 'live' && (
-                  <div style={{ display:'flex', alignItems:'flex-start', gap:10, background:GS, border:`1px solid rgba(103,232,249,.22)`, borderRadius:12, padding:'11px 15px', marginBottom:22 }}>
-                    <span style={{ width:6, height:6, borderRadius:'50%', background:'#67e8f9', flexShrink:0, marginTop:6 }} />
-                    <span style={{ fontFamily:F, fontSize:13, color:LT, lineHeight:1.7 }}>
-                      الدفع الكامل مطلوب للتسجيل في الخيار المباشر —{' '}
-                      <strong style={{ color:'#67e8f9' }}>$1000</strong>.
-                    </span>
-                  </div>
-                )}
+                </div>
+
+                {/* installment notice */}
+                <div style={{ display:'flex', alignItems:'flex-start', gap:10, background:GS, border:`1px solid ${GL}`, borderRadius:12, padding:'11px 15px', marginBottom:22 }}>
+                  <span style={{ width:6, height:6, borderRadius:'50%', background:GLD, flexShrink:0, marginTop:6 }} />
+                  <span style={{ fontFamily:F, fontSize:13, color:LT, lineHeight:1.7 }}>
+                    <strong style={{ color:OFF }}>التقسيط متاح:</strong> يمكنك الدفع كاملاً الآن أو تثبيت مقعدك بدفع الدفعة الأولى فقط
+                    {' '}<strong style={{ color:GLD }}>{checkoutMode === 'onsite' ? '(50 JOD)' : '($100)'}</strong>.
+                  </span>
+                </div>
 
                 {/* CTA */}
                 <button
@@ -1042,9 +1042,7 @@ export default function MasarElamiPage() {
                   onMouseEnter={e => { e.currentTarget.style.transform='translateY(-2px)'; e.currentTarget.style.boxShadow='0 14px 38px rgba(255,193,7,.38)'; }}
                   onMouseLeave={e => { e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.boxShadow='0 8px 28px rgba(255,193,7,.30)'; }}>
                   <Lock size={15} />
-                  {checkoutMode === 'onsite'
-                    ? 'احجز مقعدك — ادفع 50 ديناراً الآن'
-                    : 'سجّل الآن — ادفع $1000 كاملاً'}
+                  احجز مقعدك في الماستركلاس — ادفع {checkoutMode === 'onsite' ? '50 ديناراً' : '$100'} الآن
                   <ArrowLeft size={15} />
                 </button>
 
