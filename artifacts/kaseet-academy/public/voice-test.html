@@ -869,6 +869,20 @@ document.getElementById('frm').addEventListener('submit',async function(e){
     marketing:document.getElementById('c2').checked
   };
 
+  /* ── تسجيل الطلب في قاعدة بيانات كاسيت (غير معيق للإرسال الأصلي) ── */
+  fetch('/api/voice-evaluation',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      name:payload.name,
+      phone:payload.phone,
+      code:CODE,
+      email:payload.email,
+      country:payload.country,
+      category:payload.category
+    })
+  }).catch(function(){/* نتجاهل الخطأ — الإرسال الأصلي لا يتأثّر */});
+
   try{
     if(!ENDPOINT){
       /* ⚠️ وضع العرض: لم يُضبط ENDPOINT بعد. لا إرسال فعلي. */
