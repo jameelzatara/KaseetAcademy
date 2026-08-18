@@ -92,6 +92,33 @@ function TrackCard({ track }: { track: Track }) {
 
   const inner = (
     <>
+      {/* Cover image */}
+      <div style={{ position: 'relative', aspectRatio: '4/3', overflow: 'hidden', flexShrink: 0 }}>
+        <img
+          src={track.image}
+          alt={track.title}
+          style={{
+            width: '100%', height: '100%',
+            objectFit: 'cover', objectPosition: track.imgPos,
+            display: 'block',
+            transform: hov ? 'scale(1.05)' : 'scale(1.0)',
+            transition: 'transform 0.55s ease',
+          }}
+        />
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0, height: 60,
+          background: 'linear-gradient(to bottom, transparent, rgba(18,28,46,0.88))',
+          pointerEvents: 'none',
+        }} />
+        {hov && (
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: 'linear-gradient(135deg, rgba(255,193,7,0.06) 0%, transparent 55%)',
+            pointerEvents: 'none',
+          }} />
+        )}
+      </div>
+
       {/* Card body */}
       <div style={{
         padding: 'clamp(18px,2.2vw,26px)',
@@ -151,40 +178,11 @@ function TrackCard({ track }: { track: Track }) {
           {track.desc}
         </p>
 
-        {/* Pricing block */}
-        <div style={{
-          display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8,
-          borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 14,
-        }}>
-          {/* الحضوري */}
-          <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 10, padding: '10px 12px', textAlign: 'right' }}>
-            <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 10.5, color: 'rgba(252,251,251,0.38)', marginBottom: 4 }}>الحضوري</div>
-            <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11, color: 'rgba(252,251,251,0.30)', textDecoration: 'line-through', lineHeight: 1 }}>
-              {track.inPersonOld}
-            </div>
-            <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: 17, fontWeight: 700, color: '#FFC107', lineHeight: 1.2, marginTop: 2 }}>
-              {track.inPersonNew}
-            </div>
-            <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 10, color: 'rgba(252,251,251,0.35)', marginTop: 3 }}>
-              {track.inPersonSessions}
-            </div>
-          </div>
-          {/* Online LIVE */}
-          <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 10, padding: '10px 12px', textAlign: 'right' }}>
-            <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 10.5, color: 'rgba(252,251,251,0.38)', marginBottom: 4 }}>مباشر تفاعلي</div>
-            <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11, color: 'rgba(252,251,251,0.30)', textDecoration: 'line-through', lineHeight: 1 }}>
-              {track.onlineOld}
-            </div>
-            <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: 17, fontWeight: 700, color: 'rgba(252,251,251,0.88)', lineHeight: 1.2, marginTop: 2 }}>
-              {track.onlineNew}
-            </div>
-          </div>
-        </div>
-
         {/* CTA */}
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'flex-start',
-          gap: 6, paddingTop: 10, marginTop: 4,
+          gap: 6, paddingTop: 8,
+          borderTop: '1px solid rgba(255,255,255,0.07)', marginTop: 'auto',
         }}>
           <span style={{
             fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 14,
