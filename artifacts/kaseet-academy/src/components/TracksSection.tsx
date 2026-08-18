@@ -92,34 +92,6 @@ function TrackCard({ track }: { track: Track }) {
 
   const inner = (
     <>
-      {/* Cover image */}
-      <div style={{ position: 'relative', aspectRatio: '4/3', overflow: 'hidden', flexShrink: 0 }}>
-        <img
-          src={track.image}
-          alt={track.title}
-          style={{
-            width: '100%', height: '100%',
-            objectFit: 'cover', objectPosition: track.imgPos,
-            display: 'block',
-            transform: hov ? 'scale(1.05)' : 'scale(1.0)',
-            transition: 'transform 0.55s ease',
-          }}
-        />
-        <div style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0, height: 60,
-          background: 'linear-gradient(to bottom, transparent, rgba(18,28,46,0.88))',
-          pointerEvents: 'none',
-        }} />
-        {hov && (
-          <div style={{
-            position: 'absolute', inset: 0,
-            background: 'linear-gradient(135deg, rgba(255,193,7,0.06) 0%, transparent 55%)',
-            pointerEvents: 'none',
-          }} />
-        )}
-        {/* Badge */}
-      </div>
-
       {/* Card body */}
       <div style={{
         padding: 'clamp(18px,2.2vw,26px)',
