@@ -17,6 +17,10 @@ import trainerSohaib from '@assets/instructor-sohaib_1785863334821.jpeg';
 import trainerOmar   from '@assets/trainer-omar_1785692015818.jpg';
 import advisorImg    from '@assets/ياقوت_الخشاشنة_المستشارة_1785852509109.jpeg';
 import advisorAyaImg from '@assets/0_اية_القماز_1786476075148.jpeg';
+import galleryImg1   from '@assets/khataba-g1.jpg';
+import galleryImg2   from '@assets/khataba-g2.jpg';
+import galleryImg3   from '@assets/khataba-g3.jpg';
+import galleryImg4   from '@assets/khataba-g4.jpg';
 
 /* ── tokens ─────────────────────────────────────── */
 const GLD  = GOLD;
@@ -832,7 +836,83 @@ export default function MasarKhatabaPage() {
       </section>
 
       {/* ═══════════════════════════════════════
-          07. التسجيل والدفع
+          07. معرض الصور — من داخل القاعة
+      ═══════════════════════════════════════ */}
+      <section style={{ padding:'96px 0', background:'#080610', overflow:'hidden' }}>
+        <div style={WRP}>
+
+          {/* Header */}
+          <div style={{ display:'flex', flexDirection:'column', alignItems:'center', textAlign:'center', marginBottom:52 }}>
+            <span style={{ display:'inline-flex', alignItems:'center', gap:8, background:'rgba(255,193,7,.1)', border:`1px solid rgba(255,193,7,.25)`, color:GLD, fontFamily:F, fontSize:12.5, fontWeight:700, padding:'7px 16px', borderRadius:999, marginBottom:18 }}>
+              <span style={{ width:6, height:6, borderRadius:'50%', background:GLD }} />
+              من داخل القاعة
+            </span>
+            <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(26px,4vw,42px)', color:OFF, lineHeight:1.3, margin:0 }}>
+              لحظات <span style={{ color:GLD }}>حقيقية</span>
+            </h2>
+            <p style={{ fontFamily:F, fontSize:16, color:MUT, marginTop:12, maxWidth:520 }}>
+              تدريب أمام جمهور حقيقي، في قاعة حقيقية — هذا ما يميّز الماستركلاس.
+            </p>
+          </div>
+
+          {/* ── Grid ── */}
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gridTemplateRows:'320px 240px', gap:8, borderRadius:24, overflow:'hidden' }}>
+
+            {/* صورة 1 — صهيب يتكلم، تمتد عامودياً */}
+            <div style={{ gridColumn:'1', gridRow:'1 / 3', position:'relative', overflow:'hidden' }}>
+              <img src={galleryImg1} alt="د. صهيب الخوالدة يتحدث أمام الجمهور"
+                style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover', objectPosition:'center top' }} />
+              <div style={{ position:'absolute', inset:0, background:'linear-gradient(to top, rgba(8,6,16,.7) 0%, transparent 50%)' }} />
+              <div style={{ position:'absolute', bottom:16, right:16, left:16 }}>
+                <span style={{ fontFamily:F, fontSize:12, fontWeight:700, color:'rgba(255,255,255,.9)', background:'rgba(0,0,0,.45)', backdropFilter:'blur(6px)', padding:'5px 12px', borderRadius:999 }}>
+                  د. صهيب · أمام جمهور حقيقي
+                </span>
+              </div>
+            </div>
+
+            {/* صورة 2 — قاعة جمهور كبيرة */}
+            <div style={{ gridColumn:'2 / 4', gridRow:'1', position:'relative', overflow:'hidden' }}>
+              <img src={galleryImg2} alt="جمهور ماستركلاس الخطابة في قاعة كبيرة"
+                style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover', objectPosition:'center 30%' }} />
+              <div style={{ position:'absolute', inset:0, background:'linear-gradient(to top, rgba(8,6,16,.65) 0%, transparent 55%)' }} />
+              <div style={{ position:'absolute', bottom:16, right:16 }}>
+                <span style={{ fontFamily:F, fontSize:12, fontWeight:700, color:'rgba(255,255,255,.9)', background:'rgba(0,0,0,.45)', backdropFilter:'blur(6px)', padding:'5px 12px', borderRadius:999 }}>
+                  تدريب أمام جمهور حقيقي
+                </span>
+              </div>
+            </div>
+
+            {/* صورة 3 — جلسة ورشة عمل */}
+            <div style={{ gridColumn:'2', gridRow:'2', position:'relative', overflow:'hidden' }}>
+              <img src={galleryImg4} alt="جلسة تدريب تفاعلية داخل قاعة الماستركلاس"
+                style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover', objectPosition:'center center' }} />
+              <div style={{ position:'absolute', inset:0, background:'linear-gradient(to top, rgba(8,6,16,.6) 0%, transparent 50%)' }} />
+              <div style={{ position:'absolute', bottom:14, right:14 }}>
+                <span style={{ fontFamily:F, fontSize:11.5, fontWeight:700, color:'rgba(255,255,255,.9)', background:'rgba(0,0,0,.45)', backdropFilter:'blur(6px)', padding:'4px 10px', borderRadius:999 }}>
+                  Workshop تفاعلي
+                </span>
+              </div>
+            </div>
+
+            {/* خانة 4 — إحصاء + صورة فوج الإمارات كـبيكغراوند */}
+            <div style={{ gridColumn:'3', gridRow:'2', position:'relative', overflow:'hidden' }}>
+              <img src={galleryImg3} alt="فوج خريجي الماستركلاس"
+                style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover', objectPosition:'center top', filter:'brightness(.35)' }} />
+              <div style={{ position:'absolute', inset:0, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:4 }}>
+                <span style={{ fontFamily:FP, fontSize:52, fontWeight:800, color:GLD, lineHeight:1 }}>+100</span>
+                <span style={{ fontFamily:F, fontSize:13, fontWeight:700, color:OFF }}>خطيب تخرّج</span>
+                <span style={{ fontFamily:F, fontSize:11, color:'rgba(255,255,255,.5)', textAlign:'center', maxWidth:120 }}>من أفواج الماستركلاس السابقة</span>
+              </div>
+            </div>
+
+          </div>
+          {/* ── نهاية الـGrid ── */}
+
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════
+          08. التسجيل والدفع
       ═══════════════════════════════════════ */}
       <section id="checkout" className="sec sec--access" style={{ padding:'96px 0', scrollMarginTop:80 }}>
         <div style={WRP}>
