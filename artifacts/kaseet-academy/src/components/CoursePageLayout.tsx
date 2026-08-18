@@ -139,8 +139,9 @@ function FillBar({ fill, remaining }: { fill: number | null; remaining: number |
 /* ══════════════════════════════════════════════════════════════
    § CohortRow
    ══════════════════════════════════════════════════════════════ */
-function CohortRow({ c, onRegister, accentStyle }: {
+function CohortRow({ c, onRegister, accentStyle, price, strikePrice, currency }: {
   c: Cohort; onRegister: (id: number) => void; accentStyle: 'gold' | 'teal';
+  price?: string; strikePrice?: string; currency?: string;
 }) {
   const isOpen = c.status === 'open'; const isRunning = c.status === 'running';
   const r = c.remaining ?? 0;
@@ -189,14 +190,29 @@ function CohortRow({ c, onRegister, accentStyle }: {
         </div>
         {/* Register */}
         {isOpen && !full && (
-          <div className="ka-cohort-register" style={{ flexShrink: 0, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-            <FillBar fill={c.fill} remaining={c.remaining} />
-            <button onClick={() => onRegister(c.id)} style={{ background: btnBg, color: btnColor, border: 'none', borderRadius: 10, cursor: 'pointer', fontFamily: F, fontWeight: 800, fontSize: 13.5, padding: '10px 18px', display: 'inline-flex', alignItems: 'center', gap: 5, boxShadow: btnShadow, transition: 'transform .15s, box-shadow .15s', whiteSpace: 'nowrap' }}
-              onMouseEnter={e => Object.assign(e.currentTarget.style, { transform: 'translateY(-1px)', boxShadow: btnShadow.replace('.35', '.45') })}
-              onMouseLeave={e => Object.assign(e.currentTarget.style, { transform: 'none', boxShadow: btnShadow })}
-            >
-              سجّل الآن <ArrowLeft size={13} strokeWidth={2} />
-            </button>
+          <div className="ka-cohort-register" style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 8 }}>
+            {/* Price with strikethrough */}
+            {price && (
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, direction: 'rtl' }}>
+                {strikePrice && (
+                  <span style={{ fontFamily: FP, fontSize: 12, color: 'rgba(252,251,251,.35)', textDecoration: 'line-through' }}>
+                    {strikePrice} {currency}
+                  </span>
+                )}
+                <span style={{ fontFamily: FP, fontSize: 17, fontWeight: 800, color: accentStyle === 'gold' ? GOLD : TEAL }}>
+                  {price} {currency}
+                </span>
+              </div>
+            )}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <FillBar fill={c.fill} remaining={c.remaining} />
+              <button onClick={() => onRegister(c.id)} style={{ background: btnBg, color: btnColor, border: 'none', borderRadius: 10, cursor: 'pointer', fontFamily: F, fontWeight: 800, fontSize: 13.5, padding: '10px 18px', display: 'inline-flex', alignItems: 'center', gap: 5, boxShadow: btnShadow, transition: 'transform .15s, box-shadow .15s', whiteSpace: 'nowrap' }}
+                onMouseEnter={e => Object.assign(e.currentTarget.style, { transform: 'translateY(-1px)', boxShadow: btnShadow.replace('.35', '.45') })}
+                onMouseLeave={e => Object.assign(e.currentTarget.style, { transform: 'none', boxShadow: btnShadow })}
+              >
+                سجّل الآن <ArrowLeft size={13} strokeWidth={2} />
+              </button>
+            </div>
           </div>
         )}
       </div>
@@ -332,7 +348,7 @@ function CohortsSection({ courseSlug, modes, defaultModeKey, onModeChange }: {
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 28 }}>
-            {openCohorts.map(c => <CohortRow key={c.id} c={c} onRegister={handleRegister} accentStyle={activeMode.accentStyle} />)}
+            {openCohorts.map(c => <CohortRow key={c.id} c={c} onRegister={handleRegister} accentStyle={activeMode.accentStyle} price={activeMode.price} strikePrice={activeMode.strikePrice} currency={activeMode.currency} />)}
           </div>
         )}
 
