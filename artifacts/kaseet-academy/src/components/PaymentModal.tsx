@@ -743,7 +743,17 @@ export default function PaymentModal({
   const [paidAmount, setPaidAmount]   = useState<number>(0);
   const [paidCurrency, setPaidCurrency] = useState<string>('JOD');
   const [remaining, setRemaining]     = useState<number>(0);
-  const [displayCurrency, setDisplayCurrency] = useState<CurrencyCode>('USD');
+  const [displayCurrency, setDisplayCurrencyState] = useState<CurrencyCode>(() => {
+    try {
+      const v = localStorage.getItem('kaseet-currency');
+      if (v && (CURRENCY_LIST as string[]).includes(v)) return v as CurrencyCode;
+    } catch { /* ignore */ }
+    return 'USD';
+  });
+  const setDisplayCurrency = useCallback((c: CurrencyCode) => {
+    try { localStorage.setItem('kaseet-currency', c); } catch { /* ignore */ }
+    setDisplayCurrencyState(c);
+  }, []);
   const { rates: liveRates } = useExchangeRates();
 
   /* reset on open */
