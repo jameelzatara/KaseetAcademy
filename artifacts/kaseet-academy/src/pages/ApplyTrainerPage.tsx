@@ -179,81 +179,19 @@ export default function ApplyTrainerPage() {
             <span style={{ fontFamily: F, fontSize: 12.5, color: GOLD }}>التسجيل كمدرب</span>
           </nav>
 
-          <div className="tr-hero-grid" style={{ display: 'grid', gridTemplateColumns: '1.12fr 0.88fr', gap: 52, alignItems: 'center', position: 'relative', zIndex: 3 }}>
-
-            {/* text */}
-            <div>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: GS, border: `1px solid ${GL}`, color: GOLD, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '6px 15px', borderRadius: 999, marginBottom: 20 }}>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: GOLD, flexShrink: 0 }} /> تقديم مدرب
-              </div>
-
-              <h1 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(34px,5vw,58px)', lineHeight: 1.22, letterSpacing: -1.2, margin: '0 0 0', color: OFF }}>
-                انضم إلى فريق{' '}<br />
-                <span style={{ color: GOLD }}>مدربي كاسيت</span>
-              </h1>
-
-              <p style={{ fontFamily: F, fontSize: 16, color: MUT, maxWidth: 520, marginTop: 16, lineHeight: 1.85 }}>
-                نبحث عن مدربين ذوي خبرة وشغف حقيقي بتطوير المواهب الصوتية والإعلامية. أخبرنا عنك وسنتواصل معك.
-              </p>
-
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 24 }}>
-                {[
-                  '٧ تخصصات متاحة',
-                  'بيئة تدريب احترافية',
-                  'استوديو كاسيت المجهّز',
-                  'رد خلال ٣–٥ أيام',
-                ].map(txt => (
-                  <span key={txt} style={{ display: 'inline-flex', alignItems: 'center', background: 'rgba(255,255,255,0.04)', border: `1px solid ${CBR}`, padding: '9px 14px', borderRadius: 10, fontFamily: F, fontSize: 13, color: LT }}>
-                    {txt}
-                  </span>
-                ))}
-              </div>
+          <div style={{ position: 'relative', zIndex: 3, maxWidth: 680 }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: GS, border: `1px solid ${GL}`, color: GOLD, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '6px 15px', borderRadius: 999, marginBottom: 20 }}>
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: GOLD, flexShrink: 0 }} /> تقديم مدرب
             </div>
 
-            {/* visual — trainer stats card matching MasarSoti hero-shot style */}
-            <div className="tr-hero-vis" style={{ position: 'relative', maxWidth: 380, marginInline: 'auto', width: '100%' }}>
-              <div style={{ position: 'absolute', inset: '-14% -10% -8%', borderRadius: 40, background: `radial-gradient(ellipse at 50% 40%, rgba(255,193,7,.18), transparent 68%)`, filter: 'blur(8px)', zIndex: 0 }} />
-              <div style={{ position: 'relative', zIndex: 1, borderRadius: 26, overflow: 'hidden', border: `1px solid ${GL}`, boxShadow: '0 34px 90px rgba(0,0,0,.55)', background: 'rgba(16,25,34,0.80)', backdropFilter: 'blur(12px)' }}>
-                {/* header strip */}
-                <div style={{ padding: '22px 22px 18px', borderBottom: `1px solid ${CBR}`, display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <div style={{ width: 44, height: 44, borderRadius: 12, background: GS, border: `1px solid ${GL}`, display: 'grid', placeContent: 'center', flexShrink: 0, fontSize: 20, color: GOLD }}>
-                    ★
-                  </div>
-                  <div>
-                    <div style={{ fontFamily: F, fontWeight: 700, fontSize: 13.5, color: OFF }}>مدرب كاسيت أكاديمي</div>
-                    <div style={{ fontFamily: F, fontSize: 11.5, color: MUT }}>شريك في بناء الأجيال الصوتية</div>
-                  </div>
-                </div>
+            <h1 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(34px,5vw,58px)', lineHeight: 1.22, letterSpacing: -1.2, margin: '0 0 0', color: OFF }}>
+              انضم إلى فريق{' '}<br />
+              <span style={{ color: GOLD }}>مدربي كاسيت</span>
+            </h1>
 
-                {/* spec rows */}
-                <div style={{ padding: '14px 22px', display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  {[
-                    { label: 'التعليق الصوتي', active: true },
-                    { label: 'الإعلام والتقديم التلفزيوني', active: false },
-                    { label: 'الخطابة والتواصل العام', active: true },
-                    { label: 'البودكاست والمحتوى الرقمي', active: false },
-                    { label: 'اللغة العربية والنطق', active: false },
-                  ].map((item, i) => (
-                    <div key={i} style={{
-                      padding: '10px 14px', borderRadius: 9,
-                      background: item.active ? 'rgba(255,193,7,0.08)' : 'rgba(255,255,255,0.03)',
-                      border: `1px solid ${item.active ? GL : CBR}`,
-                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    }}>
-                      <span style={{ fontFamily: F, fontSize: 13, color: item.active ? GOLD : LT, fontWeight: item.active ? 700 : 400 }}>{item.label}</span>
-                      {item.active && <span style={{ width: 6, height: 6, borderRadius: '50%', background: GOLD, flexShrink: 0 }} />}
-                    </div>
-                  ))}
-                </div>
-
-                {/* footer stat */}
-                <div style={{ margin: '0 22px 22px', padding: '14px', background: GS, border: `1px solid ${GL}`, borderRadius: 12, textAlign: 'center' }}>
-                  <span style={{ fontFamily: FP, fontWeight: 700, fontSize: 28, color: GOLD, lineHeight: 1 }}>+٣٠</span>
-                  <div style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 4 }}>طالب لكل مدرب سنوياً</div>
-                </div>
-              </div>
-            </div>
-
+            <p style={{ fontFamily: F, fontSize: 16, color: MUT, maxWidth: 520, marginTop: 16, lineHeight: 1.85 }}>
+              نبحث عن مدربين ذوي خبرة وشغف حقيقي بتطوير المواهب الصوتية والإعلامية. أخبرنا عنك وسنتواصل معك.
+            </p>
           </div>
         </div>
       </section>
@@ -266,7 +204,7 @@ export default function ApplyTrainerPage() {
             {/* ١ — Personal */}
             <div style={{ background: CARD, border: `1px solid ${CBR}`, borderRadius: 20, padding: '28px 26px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 22 }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: 8, background: GS, border: `1px solid ${GL}`, fontFamily: FP, fontWeight: 700, fontSize: 12, color: GOLD, flexShrink: 0 }}>١</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: 8, background: GS, border: `1px solid ${GL}`, fontFamily: F, fontWeight: 700, fontSize: 12, color: GOLD, flexShrink: 0 }}>١</span>
                 <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: GOLD, margin: 0 }}>المعلومات الشخصية</h2>
               </div>
               <div className="tr-form-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
@@ -294,7 +232,7 @@ export default function ApplyTrainerPage() {
             {/* ٢ — Expertise */}
             <div style={{ background: CARD, border: `1px solid ${CBR}`, borderRadius: 20, padding: '28px 26px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: 8, background: GS, border: `1px solid ${GL}`, fontFamily: FP, fontWeight: 700, fontSize: 12, color: GOLD, flexShrink: 0 }}>٢</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: 8, background: GS, border: `1px solid ${GL}`, fontFamily: F, fontWeight: 700, fontSize: 12, color: GOLD, flexShrink: 0 }}>٢</span>
                 <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: GOLD, margin: 0 }}>الخبرة والتخصص</h2>
               </div>
               <p style={{ fontFamily: F, fontSize: 13, color: MUT, margin: '0 0 14px 40px' }}>اختر مجالات تخصصك (يمكن اختيار أكثر من واحد)</p>
@@ -330,7 +268,7 @@ export default function ApplyTrainerPage() {
             {/* ٣ — Links */}
             <div style={{ background: CARD, border: `1px solid ${CBR}`, borderRadius: 20, padding: '28px 26px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 22 }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: 8, background: GS, border: `1px solid ${GL}`, fontFamily: FP, fontWeight: 700, fontSize: 12, color: GOLD, flexShrink: 0 }}>٣</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: 8, background: GS, border: `1px solid ${GL}`, fontFamily: F, fontWeight: 700, fontSize: 12, color: GOLD, flexShrink: 0 }}>٣</span>
                 <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: GOLD, margin: 0 }}>الروابط والملف المهني</h2>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -348,7 +286,7 @@ export default function ApplyTrainerPage() {
             {/* ٤ — Availability */}
             <div style={{ background: CARD, border: `1px solid ${CBR}`, borderRadius: 20, padding: '28px 26px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: 8, background: GS, border: `1px solid ${GL}`, fontFamily: FP, fontWeight: 700, fontSize: 12, color: GOLD, flexShrink: 0 }}>٤</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: 8, background: GS, border: `1px solid ${GL}`, fontFamily: F, fontWeight: 700, fontSize: 12, color: GOLD, flexShrink: 0 }}>٤</span>
                 <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: GOLD, margin: 0 }}>التوفر وطريقة التدريس</h2>
               </div>
               <p style={{ fontFamily: F, fontSize: 13, color: MUT, margin: '0 0 14px 40px' }}>أوقات توفّرك للتدريس</p>
@@ -382,7 +320,7 @@ export default function ApplyTrainerPage() {
             {/* ٥ — Why Kaseet */}
             <div style={{ background: CARD, border: `1px solid ${CBR}`, borderRadius: 20, padding: '28px 26px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 22 }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: 8, background: GS, border: `1px solid ${GL}`, fontFamily: FP, fontWeight: 700, fontSize: 12, color: GOLD, flexShrink: 0 }}>٥</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: 8, background: GS, border: `1px solid ${GL}`, fontFamily: F, fontWeight: 700, fontSize: 12, color: GOLD, flexShrink: 0 }}>٥</span>
                 <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: GOLD, margin: 0 }}>لماذا كاسيت؟</h2>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>

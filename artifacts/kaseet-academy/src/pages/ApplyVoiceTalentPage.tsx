@@ -222,7 +222,7 @@ export default function ApplyVoiceTalentPage() {
                   استوديو كاسيت الأكاديمي
                 </span>
                 <div style={{ position: 'absolute', inset: 'auto 0 0 0', zIndex: 3, padding: '22px 22px 24px' }}>
-                  <span style={{ fontFamily: FP, fontSize: 36, fontWeight: 700, color: GOLD, lineHeight: 0.95 }}>🎙️</span>
+                  <span style={{ fontFamily: F, fontSize: 36, fontWeight: 700, color: GOLD, lineHeight: 0.95 }}>🎙️</span>
                   <div style={{ fontFamily: F, fontSize: 12.5, color: LT, marginTop: 6 }}>صوتك بداية رحلتك</div>
                 </div>
               </div>
@@ -240,7 +240,7 @@ export default function ApplyVoiceTalentPage() {
             {/* ١ — Personal */}
             <div style={{ background: CARD, border: `1px solid ${CBR}`, borderRadius: 20, padding: '28px 26px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 22 }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: 8, background: GS, border: `1px solid ${GL}`, fontFamily: FP, fontWeight: 700, fontSize: 12, color: GOLD, flexShrink: 0 }}>١</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: 8, background: GS, border: `1px solid ${GL}`, fontFamily: F, fontWeight: 700, fontSize: 12, color: GOLD, flexShrink: 0 }}>١</span>
                 <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: GOLD, margin: 0 }}>المعلومات الشخصية</h2>
               </div>
               <div className="vt-form-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
@@ -272,7 +272,7 @@ export default function ApplyVoiceTalentPage() {
             {/* ٢ — Background */}
             <div style={{ background: CARD, border: `1px solid ${CBR}`, borderRadius: 20, padding: '28px 26px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 22 }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: 8, background: GS, border: `1px solid ${GL}`, fontFamily: FP, fontWeight: 700, fontSize: 12, color: GOLD, flexShrink: 0 }}>٢</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: 8, background: GS, border: `1px solid ${GL}`, fontFamily: F, fontWeight: 700, fontSize: 12, color: GOLD, flexShrink: 0 }}>٢</span>
                 <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: GOLD, margin: 0 }}>الخلفية الصوتية</h2>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -297,7 +297,7 @@ export default function ApplyVoiceTalentPage() {
             {/* ٣ — Tracks */}
             <div style={{ background: CARD, border: `1px solid ${CBR}`, borderRadius: 20, padding: '28px 26px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: 8, background: GS, border: `1px solid ${GL}`, fontFamily: FP, fontWeight: 700, fontSize: 12, color: GOLD, flexShrink: 0 }}>٣</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: 8, background: GS, border: `1px solid ${GL}`, fontFamily: F, fontWeight: 700, fontSize: 12, color: GOLD, flexShrink: 0 }}>٣</span>
                 <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: GOLD, margin: 0 }}>المسارات التي تهمّك</h2>
               </div>
               <p style={{ fontFamily: F, fontSize: 13, color: MUT, margin: '0 0 16px 42px' }}>يمكنك اختيار أكثر من مسار</p>
@@ -320,7 +320,7 @@ export default function ApplyVoiceTalentPage() {
             {/* ٤ — Goal */}
             <div style={{ background: CARD, border: `1px solid ${CBR}`, borderRadius: 20, padding: '28px 26px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 22 }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: 8, background: GS, border: `1px solid ${GL}`, fontFamily: FP, fontWeight: 700, fontSize: 12, color: GOLD, flexShrink: 0 }}>٤</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: 8, background: GS, border: `1px solid ${GL}`, fontFamily: F, fontWeight: 700, fontSize: 12, color: GOLD, flexShrink: 0 }}>٤</span>
                 <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: GOLD, margin: 0 }}>هدفك من الانضمام</h2>
               </div>
               <Field label="أخبرنا عن هدفك" required>
@@ -333,7 +333,7 @@ export default function ApplyVoiceTalentPage() {
             {/* ٥ — Additional */}
             <div style={{ background: CARD, border: `1px solid ${CBR}`, borderRadius: 20, padding: '28px 26px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 22 }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: 8, background: GS, border: `1px solid ${GL}`, fontFamily: FP, fontWeight: 700, fontSize: 12, color: GOLD, flexShrink: 0 }}>٥</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: 8, background: GS, border: `1px solid ${GL}`, fontFamily: F, fontWeight: 700, fontSize: 12, color: GOLD, flexShrink: 0 }}>٥</span>
                 <h2 style={{ fontFamily: F, fontWeight: 800, fontSize: 16, color: GOLD, margin: 0 }}>معلومات إضافية</h2>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
