@@ -2,13 +2,18 @@
  * PaymentModal — Stripe Elements checkout for Kaseet masterclass pages.
  * RTL, phone = clean dial-code select + number input, email required, back button.
  */
-import { useState, useEffect, useCallback, type CSSProperties } from 'react';
+import { useState, useEffect, useCallback, useRef, type CSSProperties } from 'react';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { getStripePromise } from '../lib/stripeClient';
 import {
   Lock, ShieldCheck, CheckCircle2, X, AlertCircle,
-  MapPin, Wifi, User, Phone, Mail, CalendarDays,
+  MapPin, Wifi, User, Phone, Mail, CalendarDays, ChevronDown,
 } from 'lucide-react';
+import {
+  type CurrencyCode,
+  CURRENCY_LIST, CURRENCY_NAMES, CURRENCY_SYMBOLS,
+  convertPrice, formatPrice,
+} from '../data/currency';
 
 /* ── design tokens ─────────────────────────────────── */
 const GLD   = '#FFC107';
@@ -326,19 +331,92 @@ function Stepper({ step }: { step: Step }) {
   );
 }
 
+/* ── Currency picker (inside modal) ───────────────── */
+function CurrencyPicker({
+  value, onChange,
+}: { value: CurrencyCode; onChange: (c: CurrencyCode) => void }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [open]);
+
+  return (
+    <div ref={ref} style={{ position: 'relative', display: 'inline-block' }}>
+      <button
+        type="button"
+        onClick={() => setOpen(o => !o)}
+        style={{
+          display: 'inline-flex', alignItems: 'center', gap: 5,
+          background: 'rgba(255,255,255,0.06)', border: `1px solid ${CBR}`,
+          borderRadius: 8, padding: '4px 10px 4px 6px',
+          fontFamily: F, fontSize: 12, fontWeight: 700, color: LT,
+          cursor: 'pointer', outline: 'none',
+        }}
+      >
+        {CURRENCY_SYMBOLS[value]} {value}
+        <ChevronDown size={11} color={MUT} />
+      </button>
+
+      {open && (
+        <div style={{
+          position: 'absolute', top: 'calc(100% + 6px)', left: 0, zIndex: 200,
+          background: '#131B27', border: `1px solid ${CBR}`,
+          borderRadius: 12, overflow: 'hidden',
+          boxShadow: '0 16px 40px rgba(0,0,0,0.6)',
+          minWidth: 200,
+        }}>
+          {CURRENCY_LIST.map(c => (
+            <button
+              key={c}
+              type="button"
+              onClick={() => { onChange(c); setOpen(false); }}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                width: '100%', background: c === value ? 'rgba(255,193,7,0.08)' : 'transparent',
+                border: 'none', borderBottom: `1px solid rgba(255,255,255,0.05)`,
+                padding: '10px 14px', cursor: 'pointer',
+                fontFamily: F, fontSize: 13, color: c === value ? GLD : LT,
+                fontWeight: c === value ? 700 : 400,
+                textAlign: 'right',
+              }}
+            >
+              <span style={{ color: MUT, fontWeight: 600, direction: 'ltr' }}>{c} {CURRENCY_SYMBOLS[c]}</span>
+              {CURRENCY_NAMES[c]}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ── Order summary card ────────────────────────────── */
 function OrderSummary({
   courseTitle, mode, cohortStartAr, cohortDays, priceJOD, priceUSD, plan,
+  displayCurrency, onCurrencyChange,
 }: {
   courseTitle: string; mode: 'onsite' | 'live';
   cohortStartAr: string; cohortDays: string;
   priceJOD: number; priceUSD: number; plan: 'full' | 'deposit';
+  displayCurrency: CurrencyCode; onCurrencyChange: (c: CurrencyCode) => void;
 }) {
-  const isOnsite  = mode === 'onsite';
-  const accent    = isOnsite ? GLD : CYN;
-  const charge    = isOnsite
-    ? (plan === 'deposit' ? `${DEPOSIT_JOD} JOD الآن` : `${priceJOD} JOD`)
-    : `$${priceUSD}`;
+  const isOnsite = mode === 'onsite';
+  const accent   = isOnsite ? GLD : CYN;
+
+  const dispFull    = formatPrice(convertPrice(priceJOD, displayCurrency), displayCurrency);
+  const dispDeposit = formatPrice(convertPrice(DEPOSIT_JOD, displayCurrency), displayCurrency);
+  const dispRemain  = formatPrice(convertPrice(priceJOD - DEPOSIT_JOD, displayCurrency), displayCurrency);
+
+  const charge = isOnsite
+    ? (plan === 'deposit' ? `${dispDeposit}` : dispFull)
+    : dispFull;
 
   return (
     <div style={{
@@ -360,9 +438,15 @@ function OrderSummary({
           </div>
         </div>
         <div style={{ flexShrink: 0, textAlign: 'left' }}>
+          {/* currency picker */}
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 6 }}>
+            <CurrencyPicker value={displayCurrency} onChange={onCurrencyChange} />
+          </div>
           <div style={{ fontFamily: FP, fontSize: 22, fontWeight: 800, color: accent, lineHeight: 1 }}>{charge}</div>
           {isOnsite && plan === 'deposit' && (
-            <div style={{ fontFamily: F, fontSize: 11, color: MUT, marginTop: 3 }}>والباقي {priceJOD - DEPOSIT_JOD} JOD لاحقاً</div>
+            <div style={{ fontFamily: F, fontSize: 11, color: MUT, marginTop: 3 }}>
+              + {dispRemain} لاحقاً
+            </div>
           )}
         </div>
       </div>
@@ -635,6 +719,7 @@ export default function PaymentModal({
   const [paidAmount, setPaidAmount]   = useState<number>(0);
   const [paidCurrency, setPaidCurrency] = useState<string>('JOD');
   const [remaining, setRemaining]     = useState<number>(0);
+  const [displayCurrency, setDisplayCurrency] = useState<CurrencyCode>('USD');
 
   /* reset on open */
   useEffect(() => {
@@ -888,7 +973,7 @@ export default function PaymentModal({
                 </div>
 
                 {/* ملخص + خطأ + زر */}
-                <OrderSummary courseTitle={courseTitle} mode={form.mode} cohortStartAr={cohortStartAr} cohortDays={cohortDays} priceJOD={priceJOD} priceUSD={priceUSD} plan={form.plan} />
+                <OrderSummary courseTitle={courseTitle} mode={form.mode} cohortStartAr={cohortStartAr} cohortDays={cohortDays} priceJOD={priceJOD} priceUSD={priceUSD} plan={form.plan} displayCurrency={displayCurrency} onCurrencyChange={setDisplayCurrency} />
 
                 {formErr && (
                   <div style={{ display: 'flex', gap: 10, background: 'rgba(248,113,113,.08)', border: '1px solid rgba(248,113,113,.28)', borderRadius: 12, padding: '12px 14px' }}>
