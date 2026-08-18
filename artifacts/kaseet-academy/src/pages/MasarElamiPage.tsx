@@ -1069,6 +1069,8 @@ export default function MasarElamiPage() {
         cohortIdOnsite={305}
         cohortIdLive={306}
         cohortStartAr={checkoutMode === 'onsite' ? 'الثلاثاء، 15 أيلول 2025' : 'الأربعاء، 16 أيلول 2025'}
+        cohortStartISOOnsite="2025-09-15"
+        cohortStartISOLive="2025-09-16"
         cohortDays={checkoutMode === 'onsite' ? 'الأحد والثلاثاء' : 'الأربعاء والسبت'}
         cohortTimeAr={checkoutMode === 'onsite' ? '6:00 مساءً' : '7:00 مساءً'}
         cohortTrainer="رامي أبو جبارة، رنا العزام"

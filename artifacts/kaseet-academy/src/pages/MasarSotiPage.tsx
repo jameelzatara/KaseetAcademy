@@ -1182,6 +1182,8 @@ export default function MasarSotiPage() {
         cohortIdOnsite={301}
         cohortIdLive={302}
         cohortStartAr={checkoutMode === 'onsite' ? 'الثلاثاء، 15 أيلول 2025' : 'الأربعاء، 16 أيلول 2025'}
+        cohortStartISOOnsite="2025-09-15"
+        cohortStartISOLive="2025-09-16"
         cohortDays={checkoutMode === 'onsite' ? 'الأحد، الثلاثاء، الخميس' : 'الأربعاء والسبت'}
         cohortTimeAr={checkoutMode === 'onsite' ? '5:00 مساءً' : '7:00 مساءً'}
         cohortTrainer="يسار عبده، عمر شروم"

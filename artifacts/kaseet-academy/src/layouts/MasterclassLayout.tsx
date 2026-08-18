@@ -1493,6 +1493,8 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
         cohortIdOnsite={data.payment.cohortIdOnsite}
         cohortIdLive={data.payment.cohortIdLive}
         cohortStartAr={data.payment.cohortStartAr}
+        cohortStartISOOnsite={data.payment.cohortStartISOOnsite}
+        cohortStartISOLive={data.payment.cohortStartISOLive}
         cohortDays={data.payment.cohortDays}
         cohortTimeAr={data.payment.cohortTimeAr}
         cohortTrainer={data.payment.cohortTrainer}

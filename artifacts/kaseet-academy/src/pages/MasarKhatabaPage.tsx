@@ -1181,9 +1181,19 @@ export default function MasarKhatabaPage() {
       <PaymentModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        mode={checkoutMode}
         courseSlug="masar-khataba"
         courseTitle="ماستركلاس فن الخطابة والتواصل القيادي"
+        cohortIdOnsite={303}
+        cohortIdLive={304}
+        cohortStartAr={checkoutMode === 'onsite' ? 'الاثنين، 14 أيلول 2025' : 'الأربعاء، 17 أيلول 2025'}
+        cohortStartISOOnsite="2025-09-14"
+        cohortStartISOLive="2025-09-17"
+        cohortDays={checkoutMode === 'onsite' ? 'الاثنين والأربعاء والسبت' : 'الأربعاء والسبت'}
+        cohortTimeAr="6:00 مساءً"
+        cohortTrainer="د. صهيب الخوالدة"
+        priceJOD={500}
+        priceUSD={700}
+        initialMode={checkoutMode}
       />
     </div>
   );

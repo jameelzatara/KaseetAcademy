@@ -305,6 +305,8 @@ export interface MasterclassData {
     cohortIdOnsite: number;
     cohortIdLive: number;
     cohortStartAr: string;
+    cohortStartISOOnsite?: string; // YYYY-MM-DD onsite cohort start (Jordan time) for Google Calendar
+    cohortStartISOLive?: string;   // YYYY-MM-DD live cohort start (Jordan time) for Google Calendar
     cohortDays: string;
     cohortTimeAr: string;
     cohortTrainer: string;
@@ -576,6 +578,8 @@ export function getVoiceData(assets: {
       cohortIdOnsite: 301,
       cohortIdLive: 302,
       cohortStartAr: '9 آب',
+      cohortStartISOOnsite: '2025-08-09',
+      cohortStartISOLive: '2025-08-09',
       cohortDays: 'الأحد والثلاثاء',
       cohortTimeAr: '6:00 – 8:00 مساءً',
       cohortTrainer: 'يسار عبده',
@@ -867,6 +871,8 @@ export function getElamData(assets: {
       cohortIdOnsite: 305,
       cohortIdLive: 306,
       cohortStartAr: '15 أيلول',
+      cohortStartISOOnsite: '2025-09-15',
+      cohortStartISOLive: '2025-09-15',
       cohortDays: 'الأحد والثلاثاء',
       cohortTimeAr: '6:00 – 8:00 مساءً',
       cohortTrainer: 'رنا العزام',
@@ -1192,6 +1198,8 @@ export function getKhatabaData(assets: {
       cohortIdOnsite: 303,
       cohortIdLive: 304,
       cohortStartAr: '14 أيلول',
+      cohortStartISOOnsite: '2025-09-14',
+      cohortStartISOLive: '2025-09-17',
       cohortDays: 'الاثنين والأربعاء والسبت',
       cohortTimeAr: '6:00 – 8:00 مساءً',
       cohortTrainer: 'د. صهيب الخوالدة',

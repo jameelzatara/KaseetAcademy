@@ -105,6 +105,77 @@ const COUNTRIES: Country[] = [
   { code:'LK', dial:'+94',  name:'سريلانكا' },
 ];
 
+/* ── Google Calendar deep-link builder ─────────────── */
+function buildGCalUrl({
+  title, cohortStartAr, cohortTimeAr, cohortDays, details, location, cohortStartISO,
+}: {
+  title: string; cohortStartAr: string; cohortTimeAr: string;
+  cohortDays: string; details: string; location: string;
+  cohortStartISO?: string; // YYYY-MM-DD — bypasses Arabic parsing if provided
+}): string {
+  const base   = 'https://calendar.google.com/calendar/render?action=TEMPLATE&ctz=Asia%2FAmman';
+  const params = new URLSearchParams({ text: title, details, location });
+
+  try {
+    let year: number, month: number, day: number;
+
+    if (cohortStartISO) {
+      // Canonical ISO date — most reliable path
+      const parts = cohortStartISO.split('-').map(Number);
+      if (parts.length !== 3 || parts.some(isNaN)) throw new Error('invalid ISO');
+      [year, month, day] = parts;
+    } else {
+      // Parse Arabic date string — handles both:
+      //   "الثلاثاء، 15 أيلول 2025"  (with year)
+      //   "9 آب"                       (without year)
+      const MONTHS: Record<string, number> = {
+        'يناير':1,'فبراير':2,'مارس':3,'أبريل':4,'مايو':5,'يونيو':6,
+        'يوليو':7,'أغسطس':8,'سبتمبر':9,'أكتوبر':10,'نوفمبر':11,'ديسمبر':12,
+        'كانون الثاني':1,'شباط':2,'آذار':3,'نيسان':4,'أيار':5,'حزيران':6,
+        'تموز':7,'آب':8,'أيلول':9,'تشرين الأول':10,'تشرين الثاني':11,'كانون الأول':12,
+      };
+      // Regex: optional day-name prefix, then DD MONTH [YYYY]
+      const dm = cohortStartAr.match(/(\d+)\s+([\u0600-\u06FF\s]+?)(?:\s+(\d{4}))?\s*$/);
+      if (!dm) throw new Error('date parse failed');
+      day   = parseInt(dm[1], 10);
+      month = MONTHS[dm[2].trim()];
+      if (!month) throw new Error('unknown month: ' + dm[2]);
+      if (dm[3]) {
+        year = parseInt(dm[3], 10);
+      } else {
+        // Infer year: use next upcoming occurrence
+        const now  = new Date();
+        year = now.getFullYear();
+        if (new Date(year, month - 1, day) < now) year++;
+      }
+    }
+
+    // "6:00 مساءً" / "6:00 – 8:00 مساءً" / "07:00 م" → 24-hour start
+    const tm = cohortTimeAr.match(/(\d+):(\d+)\s*(?:[–-]\s*\d+:\d+\s*)?(مساء[ًا]?|صباح[ًا]?|[مص])/);
+    let hour = 18, min = 0;
+    if (tm) {
+      hour = parseInt(tm[1], 10);
+      min  = parseInt(tm[2], 10);
+      const pm = tm[3] && (tm[3].startsWith('مساء') || tm[3] === 'م');
+      if (pm && hour < 12) hour += 12;
+      if (!pm && hour === 12) hour = 0;
+    }
+
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const fmt = (y: number, mo: number, d: number, h: number, m: number) =>
+      `${y}${pad(mo)}${pad(d)}T${pad(h)}${pad(m)}00`;
+
+    // Only the first session — buyer can repeat manually.
+    // Recurrence omitted: session counts differ per course and are not
+    // available in the props passed to this component.
+    params.set('dates', `${fmt(year, month, day, hour, min)}/${fmt(year, month, day, hour + 2, min)}`);
+  } catch {
+    // fallback: open Google Calendar with just the title (user fills dates manually)
+  }
+
+  return `${base}&${params.toString()}`;
+}
+
 /* ── prop / state types ─────────────────────────────── */
 export interface PaymentModalProps {
   isOpen: boolean;
@@ -117,6 +188,8 @@ export interface PaymentModalProps {
   cohortDays: string;
   cohortTimeAr: string;
   cohortTrainer: string;
+  cohortStartISOOnsite?: string; // YYYY-MM-DD — onsite cohort start date (Jordan time) for Google Calendar
+  cohortStartISOLive?: string;   // YYYY-MM-DD — live cohort start date (Jordan time) for Google Calendar
   priceJOD: number;
   priceUSD: number;
   initialMode?: 'onsite' | 'live';
@@ -473,6 +546,7 @@ export default function PaymentModal({
   courseSlug, courseTitle,
   cohortIdOnsite, cohortIdLive,
   cohortStartAr, cohortDays, cohortTimeAr, cohortTrainer,
+  cohortStartISOOnsite, cohortStartISOLive,
   priceJOD, priceUSD,
   initialMode = 'onsite',
 }: PaymentModalProps) {
@@ -527,6 +601,11 @@ export default function PaymentModal({
         if (data.status === 'paid_full' || data.status === 'deposit_paid') {
           if (data.order) {
             setOrderId(data.order.id);
+            // Recover the exact mode from the confirmed order so the success screen
+            // (including the Google Calendar link) reflects the actual enrolment.
+            if (data.order.mode === 'live' || data.order.mode === 'onsite') {
+              setForm(f => ({ ...f, mode: data.order!.mode as 'onsite' | 'live' }));
+            }
             if (data.order.mode === 'live') { setPaidAmount(data.order.totalUSD); setPaidCurrency('USD'); setRemaining(0); }
             else { setPaidAmount(data.order.paidJOD); setPaidCurrency('JOD'); setRemaining(data.order.remainingJOD); }
           }
@@ -815,6 +894,34 @@ export default function PaymentModal({
                   📧 أرسلنا إيصال الدفع وتفاصيل التسجيل إلى بريدك.<br />
                   لم يصلك؟ تفقّد مجلد الرسائل غير المرغوب فيها.
                 </div>
+                {/* Google Calendar button */}
+                <a
+                  href={buildGCalUrl({
+                    title: `كاسيت أكاديمي — ${courseTitle}`,
+                    cohortStartAr,
+                    cohortTimeAr,
+                    cohortDays,
+                    details: `دورة ${courseTitle} · ${cohortDays} · ${cohortTimeAr}\nالمدرّب: ${cohortTrainer}\nكاسيت أكاديمي — kaseet.com`,
+                    location: form.mode === 'onsite' ? 'استوديو كاسيت، شارع باريس، عمّان' : 'Google Meet (الرابط يُرسَل عبر البريد)',
+                    cohortStartISO: form.mode === 'live' ? cohortStartISOLive : cohortStartISOOnsite,
+                  })}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 8,
+                    fontFamily: F, fontSize: 14, fontWeight: 700,
+                    color: '#4285F4',
+                    background: 'rgba(66,133,244,0.08)',
+                    border: '1px solid rgba(66,133,244,0.28)',
+                    borderRadius: 10, padding: '10px 22px',
+                    textDecoration: 'none', marginBottom: 10,
+                    cursor: 'pointer',
+                  }}
+                >
+                  <CalendarDays size={16} color="#4285F4" strokeWidth={2} />
+                  أضف إلى Google Calendar
+                </a>
+                <br />
                 <button onClick={onClose} style={{ fontFamily: F, fontSize: 14, fontWeight: 700, color: GLD, background: GS, border: `1px solid ${GL}`, borderRadius: 10, padding: '10px 32px', cursor: 'pointer' }}>إغلاق</button>
               </div>
             )}
