@@ -20,6 +20,7 @@ import { usePageMeta }         from '../hooks/usePageMeta';
 import {
   ChevronDown, ArrowLeft, MapPin, Wifi, Layers, Clock,
   FolderCheck, CheckCircle2, ShieldCheck, Home, Lock,
+  Target, Radio,
 } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa6';
 import PaymentModal from '../components/PaymentModal';
@@ -311,28 +312,13 @@ export default function MasarElamiPage() {
     <div dir="rtl" className="page-masar-elami" style={{ fontFamily:F, color:OFF, minHeight:'100vh', overflowX:'hidden' }}>
 
       <style>{`
-        @keyframes kaseetSpin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-        @keyframes kaPulse    { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
-        .ka-spin-ring { animation:kaseetSpin 18s linear infinite; transform-origin:200px 200px; }
-        .ka-spin-slow { animation:kaseetSpin 32s linear infinite reverse; transform-origin:200px 200px; }
-        .ka-pulse-dot { animation:kaPulse 2s ease-in-out infinite; }
-        @media (prefers-reduced-motion:reduce){
-          .ka-spin-ring,.ka-spin-slow{animation:none!important}
-          .ka-pulse-dot{animation:none!important}
-        }
+        @keyframes elam-vu { 0%,100%{height:22%} 50%{height:100%} }
+        .elam-vu-bar { width:3px; border-radius:2px; background:rgba(255,193,7,.85); animation:elam-vu 1.5s ease-in-out infinite; }
         html { scroll-behavior:smooth }
         :focus-visible { outline:2px solid #FFC107!important; outline-offset:3px!important; border-radius:4px!important; }
 
         /* § 01 hero */
-        .elam-hero-grid   { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr); gap:56px; align-items:center; }
-        .elam-hero-visual { position:relative; aspect-ratio:1; max-width:400px; width:100%; margin-inline:auto; }
-
-        /* camera HUD — single instance */
-        .elam-hud { display:none; position:absolute; top:72px; left:0; right:0; z-index:5;
-          padding:0 clamp(16px,4vw,48px); align-items:center; justify-content:space-between;
-          opacity:.38; pointer-events:none; direction:ltr; font-family:monospace; font-size:11px;
-          color:rgba(255,255,255,.7); letter-spacing:.06em; }
-        @media (min-width:769px){ .elam-hud{display:flex!important} }
+        .elam-hero-grid { display:grid; grid-template-columns:1.12fr .88fr; gap:52px; align-items:center; }
 
         /* § 02 audience */
         .elam-aud-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; align-items:stretch; }
@@ -349,11 +335,11 @@ export default function MasarElamiPage() {
         .elam-trainer-photo { position:relative; min-height:340px; background:#050810; overflow:hidden; }
         @media (max-width:768px){
           .elam-hero-grid    { grid-template-columns:1fr!important }
-          .elam-hero-visual  { max-width:240px!important; order:-1; margin:0 auto 24px; }
+          .elam-hero-shot    { max-width:300px!important; order:-1; margin:0 auto 20px; }
           .elam-trainer-card { grid-template-columns:1fr!important }
           .elam-trainer-photo{ min-height:220px!important }
         }
-        @media (max-width:400px){ .elam-hero-visual{max-width:200px!important} }
+        @media (max-width:400px){ .elam-hero-shot{max-width:240px!important} }
 
         /* § 10 advisor */
         .elam-adv-card { display:grid; grid-template-columns:1fr 1fr; gap:0; max-width:720px; margin-inline:auto;
@@ -381,138 +367,123 @@ export default function MasarElamiPage() {
       `}</style>
 
       {/* ════════════════════════════════════════════════════════════
-          §01 HERO — full-cover with camera HUD
+          §01 HERO — Soti-style dark background
       ════════════════════════════════════════════════════════════ */}
-      <section className="sec sec--hero" style={{ position:'relative', minHeight:640, padding:'0 0 88px', overflow:'hidden', display:'flex', flexDirection:'column', justifyContent:'flex-end' }}>
+      <section className="sec sec--hero" style={{ padding: '0 0 88px' }}>
+        <div style={{ ...INNER }}>
 
-        {/* cover image — objectPosition tuned to show face */}
-        <img
-          src={coverMasar} alt="" aria-hidden="true"
-          fetchPriority="high" decoding="async"
-          style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover', objectPosition:'50% 12%', zIndex:0 }}
-        />
-
-        {/* darkening overlay */}
-        <div style={{ position:'absolute', inset:0, zIndex:1, background:'linear-gradient(to bottom, rgba(2,6,23,.72) 0%, rgba(2,6,23,.40) 38%, rgba(2,6,23,.90) 100%)' }} />
-
-        {/* ── camera HUD — SINGLE instance inside hero ── */}
-        <div className="elam-hud" aria-hidden="true" style={{ zIndex:5, position:'absolute', top:72, left:0, right:0 }}>
-          <span>● REC &nbsp;|&nbsp; 1920×1080</span>
-          <span>00:00:08:15</span>
-          <span>50FPS &nbsp;|&nbsp; 35mm &nbsp;|&nbsp; ▮▮▮▮▯ 78%</span>
-        </div>
-
-        {/* content */}
-        <div style={{ position:'relative', zIndex:3, ...INNER }}>
-
-          {/* breadcrumb — inside hero, not a separate bar */}
-          <nav aria-label="مسار التنقل" style={{ display:'flex', alignItems:'center', gap:6, marginBottom:28, paddingTop:96 }}>
+          {/* breadcrumb */}
+          <nav aria-label="مسار التنقل" style={{ display:'flex', alignItems:'center', gap:6, paddingTop:96, paddingBottom:0, marginBottom:28 }}>
             <a href="/" style={{ display:'inline-flex', alignItems:'center', gap:4, fontFamily:F, fontSize:12.5, color:MUT, textDecoration:'none' }}>
               <Home size={12} strokeWidth={2} /> الرئيسية
             </a>
             <span style={{ color:'rgba(255,255,255,.20)', fontSize:11 }}>/</span>
             <a href="/#masterclasses" style={{ fontFamily:F, fontSize:12.5, color:MUT, textDecoration:'none' }}>الماستركلاسات</a>
             <span style={{ color:'rgba(255,255,255,.20)', fontSize:11 }}>/</span>
-            <span style={{ fontFamily:F, fontSize:12.5, color:GLD }}>الإعلامي</span>
+            <span style={{ fontFamily:F, fontSize:12.5, color:GLD }}>المسار الإعلامي</span>
           </nav>
 
           <div className="elam-hero-grid">
 
-            {/* text column */}
             <div>
-              {/* chip */}
-              <span style={{ display:'inline-flex', alignItems:'center', gap:8, background:'rgba(255,193,7,.10)', border:'1px solid rgba(255,193,7,.28)', color:GLD, fontFamily:F, fontSize:13, fontWeight:700, padding:'7px 16px', borderRadius:999 }}>
-                <span style={{ width:6, height:6, borderRadius:'50%', background:GLD }} />
-                مسار متكامل · 10 محطات
-              </span>
-
-              <h1 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(36px,5.5vw,64px)', lineHeight:1.2, letterSpacing:-1.2, margin:'18px 0 0', color:OFF }}>
-                المسار <span style={{ color:GLD }}>الإعلامي</span>
-              </h1>
-
-              <p style={{ fontFamily:F, fontSize:'clamp(14px,1.2vw,16.5px)', color:MUT, maxWidth:540, marginTop:16, lineHeight:1.85 }}>
-                منهج واحد متكامل من 10 محطات: يبدأ بالتقديم والحضور أمام الكاميرا، ويمرّ بكل تخصص إعلامي —
-                صحافة، ميدان، محتوى، بودكاست، متحدث رسمي، وإنتاج — وكل محطة تُسلَّم فيها مشروع تطبيقي.
-              </p>
-
-              {/* stat chips — hours (40) dominant */}
-              <div style={{ display:'flex', flexWrap:'wrap', gap:9, marginTop:22 }}>
-
-                {/* ★ hours chip — bigger/bolder */}
-                <span style={{ display:'inline-flex', alignItems:'center', gap:8, background:'rgba(255,193,7,.13)', border:`1px solid ${GL}`, backdropFilter:'blur(12px)', WebkitBackdropFilter:'blur(12px)', padding:'10px 16px', borderRadius:11, fontFamily:F, fontSize:13, color:GLD, fontWeight:700 }}>
-                  <Clock size={14} color={GLD} strokeWidth={2} style={{ flexShrink:0 }} />
-                  <b style={{ fontFamily:FP, fontSize:20, color:GLD, fontWeight:900, lineHeight:1 }}>40</b>
-                  ساعة تدريبية موزَّعة
+              {/* two audience pills */}
+              <div style={{ display:'flex', flexWrap:'wrap', gap:8, marginBottom:20 }}>
+                <span style={{ display:'inline-flex', alignItems:'center', gap:7, background:GS, border:`1px solid ${GL}`, color:GLD, fontFamily:F, fontSize:12.5, fontWeight:700, padding:'6px 15px', borderRadius:999 }}>
+                  <Target size={12} strokeWidth={2.2} /> للمبتدئين والصاعدين
                 </span>
-
-                <span style={{ display:'inline-flex', alignItems:'center', gap:8, background:'rgba(2,6,23,.60)', border:'1px solid rgba(255,255,255,.10)', backdropFilter:'blur(12px)', WebkitBackdropFilter:'blur(12px)', padding:'10px 13px', borderRadius:11, fontFamily:F, fontSize:13, color:LT }}>
-                  <Layers size={14} color={GLD} strokeWidth={2} style={{ flexShrink:0 }} />
-                  <b style={{ fontFamily:FP, color:OFF, fontWeight:700 }}>10</b> محطات تدريبية
-                </span>
-
-                <span style={{ display:'inline-flex', alignItems:'center', gap:8, background:'rgba(2,6,23,.60)', border:'1px solid rgba(255,255,255,.10)', backdropFilter:'blur(12px)', WebkitBackdropFilter:'blur(12px)', padding:'10px 13px', borderRadius:11, fontFamily:F, fontSize:13, color:LT }}>
-                  <FolderCheck size={14} color={GLD} strokeWidth={2} style={{ flexShrink:0 }} />
-                  <b style={{ fontFamily:FP, color:OFF, fontWeight:700 }}>8</b> مشاريع تُسلَّم
-                </span>
-
-                <span style={{ display:'inline-flex', alignItems:'center', gap:8, background:'rgba(2,6,23,.60)', border:'1px solid rgba(255,255,255,.10)', backdropFilter:'blur(12px)', WebkitBackdropFilter:'blur(12px)', padding:'10px 13px', borderRadius:11, fontFamily:F, fontSize:13, color:LT }}>
-                  <MapPin size={14} color={GLD} strokeWidth={2} style={{ flexShrink:0 }} />
-                  حضوري في عمّان أو Online LIVE
+                <span style={{ display:'inline-flex', alignItems:'center', gap:7, background:'rgba(103,232,249,.08)', border:'1px solid rgba(103,232,249,.22)', color:'#67e8f9', fontFamily:F, fontSize:12.5, fontWeight:700, padding:'6px 15px', borderRadius:999 }}>
+                  <Radio size={12} strokeWidth={2.2} /> صحافة وإعلام
                 </span>
               </div>
 
-              {/* Wajeez badge */}
-              <div style={{ display:'flex', alignItems:'center', gap:14, marginTop:16, background:'rgba(2,6,23,.75)', border:'1px solid rgba(255,193,7,.18)', backdropFilter:'blur(12px)', WebkitBackdropFilter:'blur(12px)', borderRadius:14, padding:'12px 16px', maxWidth:500 }}>
+              <h1 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(34px,5vw,58px)', lineHeight:1.22, letterSpacing:-1.2, margin:'0 0 0', color:OFF }}>
+                ماستركلاس الإعلام{' '}<br />
+                <span style={{ color:GLD }}>والأداء الإعلامي</span>
+              </h1>
+
+              <p style={{ fontFamily:F, fontSize:16, color:MUT, maxWidth:560, marginTop:16, lineHeight:1.85 }}>
+                منهج واحد متكامل من 10 محطات: يبدأ بالتقديم والحضور أمام الكاميرا، ويمرّ بكل تخصص إعلامي — صحافة، ميدان، محتوى، بودكاست، متحدث رسمي، وإنتاج — وكل محطة تُسلَّم فيها مشروع تطبيقي.
+              </p>
+
+              {/* feature cards — 2×2 grid */}
+              <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:10, marginTop:24, maxWidth:500 }}>
+
+                <span style={{ display:'inline-flex', alignItems:'center', gap:9, background:'rgba(255,255,255,.04)', border:`1px solid ${CARD_BORDER}`, padding:'10px 13px', borderRadius:11, fontFamily:F, fontSize:13, color:LT }}>
+                  <Layers size={14} color={GLD} strokeWidth={2} style={{ flexShrink:0 }} />
+                  <b style={{ fontFamily:FP, color:OFF, fontWeight:700 }}>10</b> محطات تدريبية متسلسلة
+                </span>
+
+                <span style={{ display:'inline-flex', alignItems:'center', gap:9, background:'rgba(255,255,255,.04)', border:`1px solid ${CARD_BORDER}`, padding:'10px 13px', borderRadius:11, fontFamily:F, fontSize:13, color:LT }}>
+                  <Clock size={14} color={GLD} strokeWidth={2} style={{ flexShrink:0 }} />
+                  <b style={{ fontFamily:FP, color:OFF, fontWeight:700 }}>40</b> ساعة تدريبية موزَّعة
+                </span>
+
+                {/* ★ مشاريع — dominant */}
+                <span style={{ display:'inline-flex', alignItems:'center', gap:9, background:'rgba(255,193,7,.11)', border:`1px solid ${GL}`, padding:'10px 13px', borderRadius:11, fontFamily:F, fontSize:13, color:GLD, fontWeight:700 }}>
+                  <FolderCheck size={14} color={GLD} strokeWidth={2} style={{ flexShrink:0 }} />
+                  <b style={{ fontFamily:FP, fontSize:19, color:GLD, fontWeight:900, lineHeight:1 }}>8</b> مشاريع تطبيقية (ألبوم التخرّج)
+                </span>
+
+                <span style={{ display:'inline-flex', alignItems:'center', gap:9, background:'rgba(255,255,255,.04)', border:`1px solid ${CARD_BORDER}`, padding:'10px 13px', borderRadius:11, fontFamily:F, fontSize:13, color:LT }}>
+                  <MapPin size={14} color={GLD} strokeWidth={2} style={{ flexShrink:0 }} />
+                  حضوري في عمّان أو Online LIVE
+                </span>
+
+              </div>
+
+              {/* wajeez badge — clickable link */}
+              <a href="https://wajeez.com" target="_blank" rel="noopener noreferrer"
+                style={{ display:'flex', alignItems:'center', gap:14, marginTop:18, background:'rgba(2,6,23,.75)', border:'1px solid rgba(255,193,7,.18)', backdropFilter:'blur(12px)', WebkitBackdropFilter:'blur(12px)', borderRadius:14, padding:'12px 16px', maxWidth:500, textDecoration:'none', cursor:'pointer', transition:'border-color .2s' }}
+                onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(255,193,7,.42)')}
+                onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,193,7,.18)')}>
                 <div style={{ flexShrink:0, width:38, height:38, borderRadius:8, background:'#fff', display:'grid', placeContent:'center', padding:4 }}>
                   <img src={wajeezLogo} alt="وجيز" style={{ width:'100%', height:'100%', objectFit:'contain' }} />
                 </div>
                 <div>
-                  <div style={{ fontFamily:F, fontSize:13, fontWeight:700, color:OFF }}>الشهادة معتمدة من تطبيق وجيز</div>
+                  <div style={{ fontFamily:F, fontSize:13, fontWeight:700, color:OFF }}>شريك الاعتماد الرسمي — تطبيق وجيز</div>
                   <div style={{ fontFamily:F, fontSize:11.5, color:MUT }}>أكبر مكتبة صوتية وبودكاست في الشرق الأوسط</div>
                 </div>
-              </div>
+              </a>
 
               {/* CTAs */}
-              <div style={{ display:'flex', flexWrap:'wrap', alignItems:'center', gap:12, marginTop:22 }}>
-                <button
-                  onClick={scrollToCheckout}
-                  style={{ display:'inline-flex', alignItems:'center', gap:9, background:GLD, color:'#0f172a', fontFamily:F, fontWeight:800, fontSize:14.5, padding:'13px 26px', borderRadius:12, border:'none', cursor:'pointer', boxShadow:'0 6px 20px rgba(255,193,7,.22)' }}>
-                  <Lock size={15} /> احجز مقعدك الآن
+              <div style={{ display:'flex', flexWrap:'wrap', gap:12, marginTop:22 }}>
+                <button onClick={scrollToCheckout}
+                  style={{ display:'inline-flex', alignItems:'center', gap:9, background:GLD, color:'#0f172a', fontFamily:F, fontWeight:800, fontSize:15, padding:'13px 26px', borderRadius:12, border:'none', cursor:'pointer', boxShadow:'0 6px 20px rgba(255,193,7,.22)' }}>
+                  احجز مقعدك في الماستركلاس <ArrowLeft size={14} />
                 </button>
                 <a href="#tree"
-                  style={{ display:'inline-flex', alignItems:'center', gap:9, background:'rgba(255,255,255,.05)', border:'1px solid rgba(255,255,255,.13)', backdropFilter:'blur(12px)', WebkitBackdropFilter:'blur(12px)', color:OFF, fontFamily:F, fontWeight:700, fontSize:14.5, padding:'13px 26px', borderRadius:12, textDecoration:'none' }}>
-                  استكشف شجرة المسار <ArrowLeft size={14} />
+                  style={{ display:'inline-flex', alignItems:'center', gap:9, background:'rgba(255,255,255,.05)', border:`1px solid ${CARD_BORDER}`, color:OFF, fontFamily:F, fontWeight:700, fontSize:15, padding:'13px 26px', borderRadius:12, textDecoration:'none' }}>
+                  استكشف المنهج <ArrowLeft size={14} />
                 </a>
               </div>
             </div>
 
-            {/* spinning ring visual */}
-            <div className="elam-hero-visual">
-              <svg viewBox="0 0 400 400" style={{ width:'100%', height:'100%', display:'block' }}>
-                <circle cx="200" cy="200" r="186" fill="none" stroke="rgba(255,255,255,.05)" />
-                <circle cx="200" cy="200" r="150" fill="none" stroke="rgba(255,255,255,.04)" />
-                <g className="ka-spin-ring">
-                  <circle cx="200" cy="200" r="168" fill="none" stroke="rgba(255,193,7,.90)" strokeWidth="3" strokeLinecap="round" strokeDasharray="300 1056" transform="rotate(-90 200 200)" />
-                  <circle cx="200" cy="200" r="168" fill="none" stroke="rgba(255,193,7,.40)" strokeWidth="3" strokeLinecap="round" strokeDasharray="380 1056" strokeDashoffset="-330" transform="rotate(-90 200 200)" />
-                  <circle cx="200" cy="200" r="168" fill="none" stroke="rgba(255,255,255,.18)" strokeWidth="3" strokeLinecap="round" strokeDasharray="150 1056" strokeDashoffset="-740" transform="rotate(-90 200 200)" />
-                  <circle cx="200" cy="200" r="168" fill="none" stroke="rgba(30,122,133,.90)" strokeWidth="3" strokeLinecap="round" strokeDasharray="120 1056" strokeDashoffset="-910" transform="rotate(-90 200 200)" />
-                  <circle cx="200" cy="32"  r="6" fill={GLD} />
-                  <circle cx="352" cy="268" r="6" fill={GLD} />
-                  <circle cx="66"  cy="286" r="6" fill="#1E7A85" />
-                </g>
-                <g className="ka-spin-slow">
-                  <circle cx="200" cy="200" r="186" fill="none" stroke="rgba(255,193,7,.06)" strokeWidth="1" strokeDasharray="12 20" />
-                </g>
-              </svg>
-              <div style={{ position:'absolute', inset:0, display:'grid', placeContent:'center', textAlign:'center' }}>
-                <div style={{ fontFamily:FP, fontSize:68, fontWeight:700, color:OFF, lineHeight:1 }}>10</div>
-                <div style={{ fontFamily:F, fontSize:15, color:MUT, marginTop:4 }}>محطات</div>
-                <div style={{ width:36, height:1, background:'rgba(255,193,7,.35)', margin:'10px auto' }} />
-                <div style={{ fontFamily:F, fontSize:11.5, color:'rgba(255,193,7,.65)' }}>تأسيس ← تخصصات ← قيادة</div>
+            {/* ── hero shot ── */}
+            <div className="elam-hero-shot" style={{ position:'relative', maxWidth:380, marginInline:'auto', width:'100%' }}>
+              <div style={{ position:'absolute', inset:'-14% -10% -8%', borderRadius:40, background:'radial-gradient(ellipse at 50% 40%, rgba(255,193,7,.22), transparent 68%)', filter:'blur(8px)', zIndex:-1 }} />
+              <div style={{ position:'relative', borderRadius:26, overflow:'hidden', border:`1px solid ${GL}`, aspectRatio:'3/4', boxShadow:'0 34px 90px rgba(0,0,0,.5)' }}>
+                <img src={coverMasar} alt="ماستركلاس المسار الإعلامي" fetchPriority="high"
+                  style={{ width:'100%', height:'100%', objectFit:'cover', objectPosition:'50% 12%', display:'block' }} />
+                <div style={{ position:'absolute', inset:0, background:'linear-gradient(to top, rgba(26,37,51,.95) 0%, rgba(26,37,51,.32) 30%, transparent 58%)' }} />
+                <span style={{ position:'absolute', top:18, right:18, zIndex:3, display:'inline-flex', alignItems:'center', gap:7, background:'rgba(26,37,51,.74)', backdropFilter:'blur(6px)', border:`1px solid ${GL}`, color:GLD, fontSize:11.5, fontWeight:700, fontFamily:F, padding:'7px 13px', borderRadius:999 }}>
+                  <span style={{ width:6, height:6, borderRadius:'50%', background:GLD }} />
+                  تصوير داخل استوديو الإنتاج
+                </span>
+                <div style={{ position:'absolute', inset:'auto 0 0 0', zIndex:3, padding:'22px 22px 24px', display:'flex', alignItems:'flex-end', justifyContent:'space-between', gap:16 }}>
+                  <div>
+                    <span style={{ fontFamily:FP, fontSize:38, fontWeight:700, color:GLD, lineHeight:.95 }}>8</span>
+                    <span style={{ fontFamily:F, fontSize:12.5, color:LT, marginTop:4, display:'block' }}>مشاريع إعلامية · ألبوم التخرّج</span>
+                  </div>
+                  <div style={{ display:'flex', alignItems:'flex-end', gap:3, height:34 }}>
+                    {Array.from({ length:9 }, (_, i) => (
+                      <span key={i} className="elam-vu-bar" style={{ animationDelay:`${i * 0.11}s` }} />
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
 
-          </div>{/* /hero grid */}
+          </div>
         </div>
       </section>
 

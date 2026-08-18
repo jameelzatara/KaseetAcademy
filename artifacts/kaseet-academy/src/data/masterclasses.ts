@@ -126,20 +126,24 @@ export interface MasterclassData {
     h1GoldLine: string;
     h1Line3?: string;
     desc: string;
-    heroBgSrc?: string;         // full-cover bg image (elam, khataba)
-    heroCardSrc?: string;       // portrait card image (voice)
+    heroBgSrc?: string;         // full-cover bg image only
+    heroCardSrc?: string;       // portrait card image (Soti-style dark hero)
     heroCardPosition?: string;
-    useSpinningRing?: boolean;  // elam
-    stats?: { num: string; label: string }[];
-    statsEnabled: boolean;       // false for elam/khataba
-    modeChip: string;
+    heroCardPillText?: string;  // pill text inside portrait card
+    heroCardBottomNum?: string; // big number at bottom of portrait card
+    heroCardBottomLabel?: string; // label next to number
+    useSpinningRing?: boolean;
+    heroPills?: { text: string; variant: 'gold' | 'teal' }[]; // two audience pills
+    stats?: { num: string; label: string; hot?: boolean }[];
+    statsEnabled: boolean;
+    modeChip?: string;
     ctaEnroll: string;
     ctaExplore: string;
     ctaExploreHref: string;
     wajeezSubtitle: string;
-    audienceTags?: string[];    // elam: 4 tags shown above chip
-    factChips?: string[];       // khataba: 3 fact chips shown in cover hero
-    ctaEnrollIsWa?: boolean;    // elam: primary CTA opens WhatsApp instead of payment modal
+    audienceTags?: string[];
+    factChips?: string[];
+    ctaEnrollIsWa?: boolean;
   };
 
   /** reels — disabled for all three until consent */
@@ -899,18 +903,29 @@ export function getKhatabaData(assets: {
 
     hero: {
       chip: 'ماستركلاس · 42 ساعة تدريبية',
-      h1Line1: 'ماستركلاس',
-      h1GoldLine: 'فن الخطابة',
-      h1Line3: 'والتواصل القيادي',
+      heroPills: [
+        { text: 'للمهنيين والقادة',  variant: 'gold' },
+        { text: 'خطابة وتواصل',      variant: 'teal' },
+      ],
+      h1Line1: 'ماستركلاس فن الخطابة',
+      h1GoldLine: 'والتواصل القيادي',
       desc: 'برنامج مهني متكامل يُعِدّك للحديث أمام جمهور والتأثير فيه: اثنتا عشرة محطة تبدأ من تحليل الجمهور وضبط رهبة المنصّة، وتمرّ ببناء الخطاب والحجاج والسرد، وتُختَم بمشروع تخرّج مصوَّر أمام جمهور حقيقي — وأربعة عشر مخرجاً موثَّقاً تغادر بها القاعة.',
-      heroBgSrc: assets.heroBgSrc,
-      statsEnabled: false,
-      modeChip: 'حضوري في عمّان أو مباشر تفاعلي (Online LIVE)',
+      heroCardSrc: assets.heroBgSrc,
+      heroCardPosition: '18% 18%',
+      heroCardPillText: 'تدريب أمام جمهور حقيقي',
+      heroCardBottomNum: '14',
+      heroCardBottomLabel: 'مخرجاً موثَّقاً · ألبوم التخرّج',
+      statsEnabled: true,
+      stats: [
+        { num: '12', label: 'محطة تدريبية متسلسلة' },
+        { num: '42', label: 'ساعة تدريبية مكثفة'   },
+        { num: '14', label: 'مخرجاً موثَّقاً (ألبوم التخرّج)', hot: true },
+        { num: '',   label: 'حضوري في عمّان أو مباشر تفاعلي (Online LIVE)' },
+      ],
       wajeezSubtitle: 'شهادة معتمدة من تطبيق وجيز — أكبر منصّة صوتية في الشرق الأوسط',
-      ctaEnroll: 'سجّل في الماستركلاس',
-      ctaExplore: 'تصفّح المحطات الاثنتَي عشرة',
+      ctaEnroll: 'احجز مقعدك في الماستركلاس',
+      ctaExplore: 'استكشف المنهج',
       ctaExploreHref: '#tree',
-      factChips: ['42 ساعة · 21 جلسة', '14 مخرجاً موثَّقاً', 'حضوري أو مباشر تفاعلي (Online LIVE)'],
     },
 
     reels: { enabled: false },

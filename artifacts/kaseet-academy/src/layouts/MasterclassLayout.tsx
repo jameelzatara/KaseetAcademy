@@ -4,7 +4,7 @@
  */
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { ChevronDown, ArrowLeft, MapPin, Wifi, Layers, Clock, FolderCheck, ShieldCheck, Video, AudioLines, FileText, Clapperboard, Lock, CheckCircle2 } from 'lucide-react';
+import { ChevronDown, ArrowLeft, MapPin, Wifi, Layers, Clock, FolderCheck, ShieldCheck, Video, AudioLines, FileText, Clapperboard, Lock, CheckCircle2, Home, Target, Radio, Mic } from 'lucide-react';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { GOLD, OFF, F, FP, INNER, waLink } from '../pages/shared/coursePageHelpers';
 import type { MasterclassData, StationItem } from '../data/masterclasses';
@@ -351,22 +351,14 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
         @media (prefers-reduced-motion:reduce) { .mc-spin-ring,.mc-spin-slow { animation:none !important; } .mc-live-dot { animation:none !important; } }
       `}</style>
 
-      {/* ── back nav (non-cover pages only) ───────────────── */}
-      {!isCoverHero && (
-        <div style={{ ...WRP, paddingTop: 94, paddingBottom: 0 }}>
-          <button onClick={() => navigate('/')} aria-label="العودة إلى الدورات"
-            style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: F, fontSize: 13, color: MUT, padding: 0 }}>
-            <ArrowLeft size={13} /> العودة إلى الدورات
-          </button>
-        </div>
-      )}
+      {/* back nav removed — breadcrumb is now inside the hero for non-cover pages */}
 
       {/* ═══════════════════════════════════
           01. HERO
       ═══════════════════════════════════ */}
       <section className="sec sec--hero" style={{
         position: 'relative',
-        padding: isCoverHero ? '92px 0 clamp(60px,8vw,100px)' : '52px 0 88px',
+        padding: isCoverHero ? '92px 0 clamp(60px,8vw,100px)' : '0 0 88px',
         overflow: 'hidden',
         minHeight: isCoverHero ? 580 : undefined,
       }}>
@@ -411,8 +403,8 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
         )}
 
         <div style={{ position: 'relative', zIndex: 3, ...WRP }}>
-          {/* breadcrumbs (cover-hero pages) */}
-          {isCoverHero && (
+          {/* breadcrumb */}
+          {isCoverHero ? (
             <div style={{ marginBottom: 16, marginTop: 18, direction: 'rtl', display: 'flex', alignItems: 'center', gap: 0, flexWrap: 'nowrap', overflow: 'hidden' }}>
               <button onClick={() => navigate('/')}
                 style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontFamily: F, fontSize: 12, color: 'rgba(180,190,210,0.65)', display: 'inline-flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
@@ -426,58 +418,66 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
                 {data.hero.h1GoldLine ?? data.meta.title}
               </span>
             </div>
+          ) : (
+            /* non-cover: Soti-style breadcrumb inside hero */
+            <nav aria-label="مسار التنقل" style={{ display: 'flex', alignItems: 'center', gap: 6, paddingTop: 96, paddingBottom: 0, marginBottom: 28 }}>
+              <a href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: F, fontSize: 12.5, color: MUT, textDecoration: 'none' }}>
+                <Home size={12} strokeWidth={2} /> الرئيسية
+              </a>
+              <span style={{ color: 'rgba(255,255,255,.20)', fontSize: 11 }}>/</span>
+              <a href="/#masterclasses" style={{ fontFamily: F, fontSize: 12.5, color: MUT, textDecoration: 'none' }}>الماستركلاسات</a>
+              <span style={{ color: 'rgba(255,255,255,.20)', fontSize: 11 }}>/</span>
+              <span style={{ fontFamily: F, fontSize: 12.5, color: GLD }}>{data.hero.h1GoldLine}</span>
+            </nav>
           )}
 
           <div className="mc-hero-grid" style={{ display: 'grid', gridTemplateColumns: (data.hero.heroCardSrc || data.hero.useSpinningRing) ? '1.12fr .88fr' : '1fr', gap: 52, alignItems: 'center' }}>
 
             {/* text column */}
             <div>
-              {/* audience tags — elam */}
-              {data.hero.audienceTags && (
+              {/* audience pills — Soti-style two colored pills */}
+              {data.hero.heroPills ? (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 20 }}>
+                  {data.hero.heroPills.map(pill => (
+                    <span key={pill.text} style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 7,
+                      background: pill.variant === 'gold' ? GS : 'rgba(103,232,249,.08)',
+                      border: `1px solid ${pill.variant === 'gold' ? GL : 'rgba(103,232,249,.22)'}`,
+                      color: pill.variant === 'gold' ? GLD : '#67e8f9',
+                      fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '6px 15px', borderRadius: 999,
+                    }}>
+                      {pill.variant === 'gold'
+                        ? <Target size={12} strokeWidth={2.2} />
+                        : <Radio size={12} strokeWidth={2.2} />}
+                      {pill.text}
+                    </span>
+                  ))}
+                </div>
+              ) : data.hero.audienceTags ? (
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginBottom: 18 }}>
                   {data.hero.audienceTags.map(tag => (
                     <span key={tag} style={{ fontFamily: F, fontSize: 11.5, color: LT, background: 'rgba(255,255,255,.07)', border: `1px solid ${CBR}`, padding: '4px 12px', borderRadius: 999 }}>{tag}</span>
                   ))}
                 </div>
+              ) : (
+                <GoldChip text={data.hero.chip} outline />
               )}
-              {/* chip badge — hide when audienceTags are present (elam) */}
-              {!data.hero.audienceTags && <GoldChip text={data.hero.chip} outline />}
 
-              <h1 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(34px,5vw,60px)', lineHeight: 1.22, letterSpacing: -1.2, margin: '12px 0 0', color: OFF, maxWidth: 720 }}>
+              <h1 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(34px,5vw,58px)', lineHeight: 1.22, letterSpacing: -1.2, margin: data.hero.heroPills ? '0 0 0' : '12px 0 0', color: OFF, maxWidth: 720 }}>
                 {data.hero.h1Line1}<br />
                 <span style={{ color: GLD }}>{data.hero.h1GoldLine}</span>
                 {data.hero.h1Line3 && <><br />{data.hero.h1Line3}</>}
               </h1>
 
               <p style={{
-                fontFamily: F, fontSize: isCoverHero ? 15.5 : 17, color: LT,
-                maxWidth: 560, marginTop: 10, lineHeight: 1.8,
+                fontFamily: F, fontSize: isCoverHero ? 15.5 : 16, color: isCoverHero ? LT : MUT,
+                maxWidth: 560, marginTop: 16, lineHeight: 1.85,
                 ...(isCoverHero ? { background: 'rgba(2,6,23,.52)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,.07)', borderRadius: 12, padding: '13px 18px', marginBottom: 14 } : {}),
               }}>
                 {data.hero.desc}
               </p>
 
-              {/* stats — voice only */}
-              {data.hero.statsEnabled && data.hero.stats && (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 28 }}>
-                  {data.hero.stats.map(({ num, label }) => (
-                    <div key={label} style={{ background: 'rgba(255,255,255,.045)', border: `1px solid ${CBR}`, borderRadius: 12, padding: '10px 16px', textAlign: 'center', minWidth: 80 }}>
-                      <div style={{ fontFamily: FP, fontSize: 24, fontWeight: 700, color: GLD, lineHeight: 1 }}>{num}</div>
-                      <div style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 4 }}>{label}</div>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* mode chip */}
-              {!isCoverHero && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 18, fontFamily: F, fontSize: 13.5, color: LT }}>
-                  <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD, flexShrink: 0 }} />
-                  {data.hero.modeChip}
-                </div>
-              )}
-
-              {/* fact chips for cover hero — data-driven */}
+              {/* fact chips for cover hero */}
               {isCoverHero && !data.hero.statsEnabled && !data.hero.useSpinningRing && data.hero.factChips && (
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 24 }}>
                   {data.hero.factChips.map(text => (
@@ -488,7 +488,39 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
                 </div>
               )}
 
-              {/* spinning ring stats for elam — 2×2 grid with dedicated icons */}
+              {/* stats — Soti-style 2×2 grid with icons */}
+              {data.hero.statsEnabled && data.hero.stats && (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0,1fr))', gap: 10, marginTop: 24, maxWidth: 500 }}>
+                  {data.hero.stats.map(({ num, label, hot }, i) => {
+                    const icons = [Layers, Clock, AudioLines, MapPin] as const;
+                    const Icon = icons[i] ?? Layers;
+                    return (
+                      <span key={label} style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 9,
+                        background: hot ? 'rgba(255,193,7,.11)' : 'rgba(255,255,255,.04)',
+                        border: `1px solid ${hot ? GL : CBR}`,
+                        padding: '10px 13px', borderRadius: 11,
+                        fontFamily: F, fontSize: 13,
+                        color: hot ? GLD : LT, fontWeight: hot ? 700 : 400,
+                      }}>
+                        <Icon size={14} color={GLD} strokeWidth={2} style={{ flexShrink: 0 }} />
+                        {num && <b style={{ fontFamily: FP, fontSize: hot ? 19 : undefined, color: hot ? GLD : OFF, fontWeight: hot ? 900 : 700, lineHeight: hot ? 1 : undefined }}>{num}</b>}
+                        {label}
+                      </span>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* mode chip — non-Soti pages only */}
+              {!isCoverHero && !data.hero.heroPills && data.hero.modeChip && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 18, fontFamily: F, fontSize: 13.5, color: LT }}>
+                  <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD, flexShrink: 0 }} />
+                  {data.hero.modeChip}
+                </div>
+              )}
+
+              {/* spinning ring stats — legacy path */}
               {data.hero.useSpinningRing && (
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0,1fr))', gap: 8, marginTop: 18, maxWidth: 500 }}>
                   {([
@@ -506,16 +538,31 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
                 </div>
               )}
 
-              {/* wajeez chip */}
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: isCoverHero ? 10 : 13, marginTop: 14, background: isCoverHero ? 'rgba(2,6,23,.60)' : `${TEAL}0.16)`, backdropFilter: isCoverHero ? 'blur(10px)' : 'none', WebkitBackdropFilter: isCoverHero ? 'blur(10px)' : 'none', border: `1px solid ${isCoverHero ? CBR : `${TEAL}0.48)`}`, borderRadius: 14, padding: '11px 16px 11px 13px', marginBottom: isCoverHero ? 28 : 0 }}>
-                <div style={{ flexShrink: 0, width: isCoverHero ? 38 : 40, height: isCoverHero ? 38 : 40, borderRadius: 9, background: '#fff', display: 'grid', placeContent: 'center', padding: 5 }}>
-                  <img src={wajeezLogo} alt="وجيز" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              {/* wajeez badge — clickable link for non-cover (Soti-style), static chip for cover */}
+              {!isCoverHero ? (
+                <a href="https://wajeez.com" target="_blank" rel="noopener noreferrer"
+                  style={{ display: 'flex', alignItems: 'center', gap: 14, marginTop: 18, background: 'rgba(2,6,23,.75)', border: '1px solid rgba(255,193,7,.18)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderRadius: 14, padding: '12px 16px', maxWidth: 500, textDecoration: 'none', cursor: 'pointer', transition: 'border-color .2s' }}
+                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(255,193,7,.42)')}
+                  onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,193,7,.18)')}>
+                  <div style={{ flexShrink: 0, width: 38, height: 38, borderRadius: 8, background: '#fff', display: 'grid', placeContent: 'center', padding: 4 }}>
+                    <img src={wajeezLogo} alt="وجيز" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: F, fontSize: 13, fontWeight: 700, color: OFF }}>شريك الاعتماد الرسمي — تطبيق وجيز</div>
+                    <div style={{ fontFamily: F, fontSize: 11.5, color: MUT }}>{data.hero.wajeezSubtitle}</div>
+                  </div>
+                </a>
+              ) : (
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginTop: 14, background: 'rgba(2,6,23,.60)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', border: `1px solid ${CBR}`, borderRadius: 14, padding: '11px 16px 11px 13px', marginBottom: 28 }}>
+                  <div style={{ flexShrink: 0, width: 38, height: 38, borderRadius: 9, background: '#fff', display: 'grid', placeContent: 'center', padding: 5 }}>
+                    <img src={wajeezLogo} alt="وجيز" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                  </div>
+                  <span style={{ fontFamily: F, fontSize: 13, color: MUT, lineHeight: 1.5 }}>
+                    <strong style={{ color: OFF, display: 'block' }}>شهادة معتمدة من تطبيق وجيز</strong>
+                    {data.hero.wajeezSubtitle}
+                  </span>
                 </div>
-                <span style={{ fontFamily: F, fontSize: 13, color: MUT, lineHeight: 1.5 }}>
-                  <strong style={{ color: OFF, display: 'block' }}>شهادة معتمدة من تطبيق وجيز</strong>
-                  {data.hero.wajeezSubtitle}
-                </span>
-              </div>
+              )}
 
               {/* CTAs */}
               <div className="mc-hero-cta-row" style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 16 }}>
@@ -548,12 +595,13 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
                     style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: data.hero.heroCardPosition || '50% 20%', display: 'block' }} />
                   <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(26,37,51,.95) 0%, rgba(26,37,51,.32) 30%, transparent 58%)' }} />
                   <span style={{ position: 'absolute', top: 18, right: 18, zIndex: 3, display: 'inline-flex', alignItems: 'center', gap: 7, background: 'rgba(26,37,51,.74)', backdropFilter: 'blur(6px)', border: `1px solid ${GL}`, color: GLD, fontSize: 11.5, fontWeight: 700, fontFamily: F, padding: '7px 13px', borderRadius: 999 }}>
-                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: GLD }} /> تسجيل داخل استوديو كاسيت
+                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: GLD }} />
+                    {data.hero.heroCardPillText ?? 'تسجيل داخل استوديو كاسيت'}
                   </span>
                   <div style={{ position: 'absolute', inset: 'auto 0 0 0', zIndex: 3, padding: '22px 22px 24px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16 }}>
                     <div>
-                      <span style={{ fontFamily: FP, fontSize: 38, fontWeight: 700, color: GLD, lineHeight: .95 }}>44</span>
-                      <span style={{ fontFamily: F, fontSize: 12.5, color: LT, marginTop: 4, display: 'block' }}>ساعة · 13 مخرجاً صوتياً</span>
+                      <span style={{ fontFamily: FP, fontSize: 38, fontWeight: 700, color: GLD, lineHeight: .95 }}>{data.hero.heroCardBottomNum ?? '44'}</span>
+                      <span style={{ fontFamily: F, fontSize: 12.5, color: LT, marginTop: 4, display: 'block' }}>{data.hero.heroCardBottomLabel ?? 'ساعة · 13 مخرجاً صوتياً'}</span>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 34 }}>
                       {Array.from({ length: 9 }, (_, i) => (
