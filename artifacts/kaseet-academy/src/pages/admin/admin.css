@@ -1,0 +1,145 @@
+/* Kaseet Admin Dashboard — dark operational theme (per HTML prototype) */
+.ka-admin {
+  --canvas:#1A2533; --card:#22303F; --cardhi:#2B3B4E; --side:#111925;
+  --gold:#FFC107; --goldink:#CE9E1B; --violet:#8B7BC8; --violetbtn:#6B5BA8; --vline:rgba(107,91,168,.35);
+  --green:#1F9D57; --red:#C2453C;
+  --t1:#FFFFFF; --t2:#C7D1DF; --t3:#9DA9BB; --t4:#8893A7;
+  --line:rgba(255,255,255,.09);
+  font-family:'Tajawal','Cairo',Arial,sans-serif;
+  background:var(--canvas); color:var(--t1); direction:rtl;
+}
+.ka-admin .num{font-family:'Poppins','Tajawal',sans-serif}
+.ka-admin ::-webkit-scrollbar{width:9px;height:9px}
+.ka-admin ::-webkit-scrollbar-thumb{background:rgba(255,193,7,.28);border-radius:9px}
+
+/* Shell */
+.ka-shell{display:grid;grid-template-columns:236px 1fr;height:100vh}
+.ka-side{background:var(--side);border-inline-end:1px solid var(--line);display:flex;flex-direction:column;overflow-y:auto}
+.ka-side-brand{padding:20px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line)}
+.ka-side-brand b{font-size:16px;font-weight:800;color:var(--gold)}
+.ka-side-brand small{display:block;font-size:10.5px;color:var(--t4);margin-top:1px}
+.ka-side-badge{margin:12px 14px 0;background:rgba(107,91,168,.12);border:1px solid var(--vline);color:var(--violet);font-size:11px;font-weight:700;padding:6px 10px;border-radius:8px;text-align:center}
+.ka-nav{flex:1;padding:14px 10px;display:flex;flex-direction:column;gap:2px}
+.ka-nav-group{font-size:10.5px;color:var(--t4);font-weight:700;margin:14px 10px 6px;letter-spacing:.5px}
+.ka-nav-group:first-child{margin-top:2px}
+.ka-nav-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:10px;color:var(--t3);font-size:14px;font-weight:700;cursor:pointer;transition:.15s;background:none;border:0;width:100%;text-align:right;font-family:inherit}
+.ka-nav-item:hover{background:rgba(255,255,255,.05);color:var(--t1)}
+.ka-nav-item.on{background:rgba(107,91,168,.16);color:var(--violet)}
+.ka-nav-badge{margin-inline-start:auto;background:var(--violetbtn);color:#fff;font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:99px;font-family:'Poppins'}
+.ka-side-foot{padding:14px;border-top:1px solid var(--line)}
+.ka-logout{display:flex;align-items:center;gap:9px;width:100%;background:none;border:0;color:var(--t4);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;padding:8px}
+.ka-logout:hover{color:var(--red)}
+.ka-main{overflow-y:auto;background:var(--canvas)}
+.ka-topbar{position:sticky;top:0;z-index:20;background:rgba(26,37,51,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.ka-topbar h1{font-size:19px;font-weight:800;margin:0}
+.ka-topbar .sub{font-size:12.5px;color:var(--t4);margin-top:2px}
+.ka-content{padding:24px 28px 60px}
+
+/* Buttons */
+.ka-btn{display:inline-flex;align-items:center;gap:8px;font-family:inherit;font-size:13.5px;font-weight:700;padding:10px 18px;border-radius:10px;border:1px solid transparent;cursor:pointer;transition:.18s;white-space:nowrap}
+.ka-btn--violet{background:var(--violetbtn);color:#fff}
+.ka-btn--violet:hover{filter:brightness(1.12)}
+.ka-btn--gold{background:var(--gold);color:#1A1206}
+.ka-btn--ghost{background:rgba(255,255,255,.05);color:var(--t1);border-color:var(--line)}
+.ka-btn--ghost:hover{border-color:var(--vline)}
+.ka-btn--danger{background:rgba(194,69,60,.14);color:#F0918A;border-color:rgba(194,69,60,.4)}
+.ka-btn--sm{padding:7px 13px;font-size:12.5px;border-radius:8px}
+.ka-btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* Badges */
+.ka-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:4px 10px;border-radius:99px;white-space:nowrap}
+.ka-badge--green{background:rgba(31,157,87,.16);color:#6FD79B}
+.ka-badge--gray{background:rgba(122,140,163,.16);color:var(--t4)}
+.ka-badge--violet{background:rgba(107,91,168,.18);color:var(--violet)}
+.ka-badge--gold{background:rgba(255,193,7,.14);color:var(--goldink)}
+.ka-badge--red{background:rgba(194,69,60,.16);color:#F0918A}
+.ka-badge--blue{background:rgba(59,130,246,.16);color:#7FB2F7}
+
+/* KPI cards */
+.ka-kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:14px;margin-bottom:22px}
+.ka-kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:17px 16px}
+.ka-kpi--gold{border-color:rgba(255,193,7,.28);background:rgba(255,193,7,.05)}
+.ka-kpi .lbl{font-size:12px;font-weight:700;color:var(--t3);margin-bottom:7px;line-height:1.4}
+.ka-kpi .val{font-size:22px;font-weight:800;line-height:1}
+.ka-kpi .sub{font-size:11.5px;color:var(--t4);margin-top:5px}
+.ka-kpi .delta{display:flex;align-items:center;gap:4px;margin-top:6px;font-size:11.5px;font-weight:700}
+
+/* Alert strip */
+.ka-alert{display:flex;align-items:center;gap:10px;background:rgba(194,69,60,.1);border:1px solid rgba(194,69,60,.35);border-radius:12px;padding:12px 16px;font-size:13px;color:#F0918A;font-weight:700;margin-bottom:22px}
+.ka-alert button{margin-inline-start:auto}
+
+/* Cards + tables */
+.ka-grid-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.ka-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;transition:.2s}
+.ka-card:hover{border-color:var(--vline);background:var(--cardhi)}
+.ka-card.is-advanced{border-color:var(--vline)}
+.ka-card.is-draft{opacity:.72}
+.ka-add-card{border:1.5px dashed var(--vline);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:30px;cursor:pointer;color:var(--violet);transition:.2s;background:rgba(107,91,168,.04)}
+.ka-add-card:hover{background:rgba(107,91,168,.09);border-color:var(--violet)}
+.ka-table-card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.ka-table-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.ka-table-wrap{overflow-x:auto}
+.ka-admin table{width:100%;border-collapse:collapse;font-size:13px}
+.ka-admin thead th{background:var(--side);color:var(--violet);padding:11px 14px;text-align:right;font-weight:700;font-size:11.5px;white-space:nowrap}
+.ka-admin tbody td{padding:12px 14px;border-bottom:1px solid var(--line);color:var(--t2);white-space:nowrap;vertical-align:middle}
+.ka-admin tbody tr:hover td{background:var(--cardhi)}
+.ka-admin tbody tr.clickable{cursor:pointer}
+.ka-code-chip{font-family:'Poppins';font-weight:700;background:rgba(107,91,168,.16);color:var(--violet);padding:5px 12px;border-radius:8px;font-size:12.5px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;border:0}
+.ka-usage-bar{width:70px;height:6px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;display:inline-block;vertical-align:middle;margin-inline-end:8px}
+.ka-usage-bar i{display:block;height:100%;background:var(--violetbtn)}
+.ka-icon-btn{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:8px;width:30px;height:30px;display:grid;place-content:center;cursor:pointer;color:var(--t3)}
+.ka-icon-btn:hover{border-color:var(--vline);color:var(--violet)}
+
+/* Forms */
+.ka-field{text-align:right;margin-bottom:14px}
+.ka-field label{display:block;font-size:12.5px;color:var(--t3);margin-bottom:6px;font-weight:700}
+.ka-field input,.ka-field select,.ka-field textarea{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;padding:11px 14px;color:var(--t1);font-family:inherit;font-size:14px;box-sizing:border-box}
+.ka-field input:focus,.ka-field select:focus,.ka-field textarea:focus{border-color:var(--vline);outline:none}
+.ka-field select option{background:var(--card);color:var(--t1)}
+.ka-grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ka-inline-select{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:8px;padding:6px 9px;color:var(--t1);font-family:inherit;font-size:12.5px}
+.ka-inline-select option{background:var(--card)}
+.ka-search{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;padding:9px 13px;color:var(--t1);font-family:inherit;font-size:13px;min-width:210px}
+.ka-search:focus{border-color:var(--vline);outline:none}
+.ka-inline-input{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:8px;padding:6px 9px;color:var(--t1);font-family:inherit;font-size:12.5px;min-width:150px}
+.ka-inline-input:focus{border-color:var(--vline);outline:none}
+.ka-checkbox-row{display:flex;align-items:center;gap:9px;margin-bottom:14px;cursor:pointer}
+.ka-checkbox-row input{width:17px;height:17px;accent-color:var(--violetbtn)}
+.ka-checkbox-row label{font-size:13.5px;color:var(--t2);cursor:pointer}
+.ka-mode-section{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:14px}
+.ka-mode-section h4{font-size:13px;font-weight:800;margin:0 0 12px;display:flex;align-items:center;gap:8px}
+.ka-hint-box{background:rgba(107,91,168,.08);border:1px solid var(--vline);border-radius:12px;padding:13px 16px;font-size:12.5px;color:var(--t3);margin-bottom:18px;display:flex;gap:10px;line-height:1.7}
+.ka-toggle-btn{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:9px;padding:8px 13px;font-size:12.5px;font-weight:700;color:var(--t3);cursor:pointer;font-family:inherit}
+.ka-toggle-btn.is-on{color:#6FD79B;border-color:rgba(31,157,87,.35)}
+
+/* Modal */
+.ka-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;direction:rtl}
+.ka-modal{width:min(560px,100%);background:var(--card);border:1px solid var(--vline);border-radius:18px;padding:28px;max-height:90vh;overflow-y:auto;font-family:'Tajawal','Cairo',Arial,sans-serif;color:var(--t1)}
+.ka-modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.ka-modal-head h3{font-size:17px;font-weight:800;margin:0}
+.ka-modal-head button{background:none;border:0;color:var(--t4);cursor:pointer}
+.ka-modal-sub{font-size:12.5px;color:var(--t4);margin-bottom:20px}
+.ka-form-actions{display:flex;gap:10px;margin-top:8px}
+.ka-form-err{background:rgba(194,69,60,.14);border:1px solid rgba(194,69,60,.4);color:#F0918A;font-size:12.5px;padding:9px 12px;border-radius:9px;margin-bottom:14px}
+
+/* Toast */
+.ka-toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--vline);color:var(--t1);padding:12px 22px;border-radius:12px;font-size:13.5px;font-weight:700;z-index:900;box-shadow:0 14px 40px rgba(0,0,0,.4);display:flex;align-items:center;gap:9px;direction:rtl;font-family:'Tajawal',sans-serif}
+.ka-toast.err{border-color:rgba(194,69,60,.5)}
+
+/* Login */
+.ka-login{position:fixed;inset:0;background:#1A2533;z-index:80;display:flex;align-items:center;justify-content:center;background-image:radial-gradient(ellipse 60% 50% at 30% 20%,rgba(107,91,168,.14),transparent 70%);direction:rtl;font-family:'Tajawal','Cairo',Arial,sans-serif}
+.ka-login-card{width:min(390px,90vw);background:#22303F;border:1px solid rgba(107,91,168,.35);border-radius:20px;padding:38px 32px;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.5);color:#fff}
+.ka-login-mark{width:52px;height:52px;border-radius:14px;background:#FFC107;color:#1A1206;display:grid;place-content:center;margin:0 auto 18px}
+.ka-login-tabs{display:flex;gap:6px;background:rgba(255,255,255,.05);border-radius:11px;padding:5px;margin-bottom:20px}
+.ka-login-tabs button{flex:1;padding:9px 0;border:0;border-radius:8px;background:transparent;color:#9DA9BB;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.ka-login-tabs button.on{background:#6B5BA8;color:#fff}
+
+.ka-empty{padding:36px 20px;text-align:center;color:var(--t4);font-size:13.5px}
+.ka-expand-panel{background:rgba(255,255,255,.02);border-top:1px solid var(--line);padding:16px 20px}
+.ka-detail-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px 20px;margin-bottom:14px}
+.ka-detail-grid .dl{font-size:11.5px;color:var(--t4)}
+.ka-detail-grid .dv{font-size:13.5px;color:var(--t1);font-weight:600}
+.ka-pills{display:flex;flex-wrap:wrap;gap:5px}
+.ka-pill{background:rgba(107,91,168,.14);color:var(--violet);border-radius:99px;padding:2px 9px;font-size:11px;font-weight:700}
+
+@media(max-width:900px){.ka-shell{grid-template-columns:64px 1fr}.ka-nav-item span,.ka-nav-group,.ka-side-badge,.ka-side-brand div:last-child,.ka-logout span{display:none}.ka-grid-cards{grid-template-columns:1fr}.ka-grid2{grid-template-columns:1fr}}

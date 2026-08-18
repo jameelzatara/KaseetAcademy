@@ -366,6 +366,11 @@ router.post("/courses", requireStaff, async (req, res) => {
     if (!/^[a-z0-9-]+$/.test(slug)) { res.status(400).json({ error: "المعرّف يجب أن يكون أحرفاً إنجليزية صغيرة وأرقاماً وشرطات فقط" }); return; }
 
     const updates = courseUpdatesFromBody(req.body);
+    // Base price authority is admin-only — strip price fields from consultant creates
+    if (!isAdmin(req)) {
+      delete updates.onsitePriceJOD;
+      delete updates.livePriceUSD;
+    }
     const [created] = await db.insert(coursesTable).values({
       slug, nameAr,
       ...updates,

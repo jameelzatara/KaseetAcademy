@@ -391,7 +391,8 @@ router.post("/orders/:id/status", requireAdmin, async (req, res) => {
 });
 
 // ── GET /admin/cohorts ─────────────────────────────────────
-router.get("/cohorts", requireAdmin, async (req, res) => {
+// Staff-viewable (consultants can see seats; toggling is admin-only below)
+router.get("/cohorts", requireStaff, async (req, res) => {
   try {
     const seats = await db.select().from(cohortSeatsTable);
     res.json({ seats });

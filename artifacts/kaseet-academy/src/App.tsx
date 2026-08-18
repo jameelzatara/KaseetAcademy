@@ -1,4 +1,4 @@
-import { Route, Switch, Router as WouterRouter, Redirect } from 'wouter';
+import { Route, Switch, Router as WouterRouter, Redirect, useLocation } from 'wouter';
 import { CurrencyProvider } from '@/context/CurrencyContext';
 // AuthProvider removed — student auth deleted (⑤)
 import ScrollToTop from '@/components/ScrollToTop';
@@ -22,7 +22,7 @@ import ApplyVoiceTalentPage      from '@/pages/ApplyVoiceTalentPage';
 import ApplyTrainerPage          from '@/pages/ApplyTrainerPage';
 import CheckoutPage              from '@/pages/CheckoutPage';
 import CheckoutSuccessPage       from '@/pages/CheckoutSuccessPage';
-import AdminOrdersPage           from '@/pages/AdminOrdersPage';
+import AdminDashboard            from '@/pages/admin/AdminDashboard';
 import EventsPage                from '@/pages/EventsPage';
 import TrainersPage              from '@/pages/TrainersPage';
 import TrainerDetailPage         from '@/pages/TrainerDetailPage';
@@ -58,8 +58,8 @@ function Router() {
         {/* Checkout & admin */}
         <Route path="/checkout/success"         component={CheckoutSuccessPage} />
         <Route path="/checkout"                 component={CheckoutPage} />
-        <Route path="/admin"                    component={() => <Redirect to="/admin/orders" />} />
-        <Route path="/admin/orders"             component={AdminOrdersPage} />
+        <Route path="/admin/orders"             component={() => <Redirect to="/admin" />} />
+        <Route path="/admin"                    component={AdminDashboard} />
 
         {/* Community & Resources */}
         <Route path="/events"                   component={EventsPage} />
@@ -88,12 +88,19 @@ function Router() {
   );
 }
 
+/** Hide the public site navbar on the full-screen admin dashboard. */
+function ChromeAwareNavbar() {
+  const [location] = useLocation();
+  if (location.startsWith('/admin')) return null;
+  return <Navbar />;
+}
+
 function App() {
   return (
     <CurrencyProvider>
       <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
         <Analytics />
-        <Navbar />
+        <ChromeAwareNavbar />
         <Router />
       </WouterRouter>
     </CurrencyProvider>

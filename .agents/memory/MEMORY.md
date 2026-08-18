@@ -11,4 +11,5 @@
 - [Email service](email-service.md) — Brevo REST API (not Resend/Gmail); BREVO_API_KEY + SENDER_EMAIL=notify@kaseet.com; generateOrderId now async DB sequence
 - [Icon system](icon-system.md) — all icons are lucide-react SVG components; no other icon library used anywhere
 - [Launch 13 items](launch-13-items.md) — all 13 items complete; prerender.mjs ✅ done; blog content ✅ from real PDFs; nav links ✅ in QuickMenu+SiteFooter
+- [Admin dashboard UI](admin-dashboard-ui.md) — dark 11-section dashboard at /admin; role-gated sidebar; verify section shapes against API before wiring
 - [Admin system backend](admin-system-backend.md) — consultant auth (DB-rechecked sessions), CSRF origin guard, discount invariants (integer + deposit clamp, atomic redemption), referral via consultantRef
