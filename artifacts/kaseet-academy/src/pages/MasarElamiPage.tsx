@@ -910,6 +910,76 @@ export default function MasarElamiPage() {
       </section>
 
       {/* ════════════════════════════════════════════════════════════
+          §07-B GALLERY — من داخل الاستوديو
+      ════════════════════════════════════════════════════════════ */}
+      <section style={{ padding:'96px 0', background:'#060510', overflow:'hidden' }}>
+        <div style={{ ...INNER }}>
+
+          {/* Header */}
+          <div style={{ display:'flex', flexDirection:'column', alignItems:'center', textAlign:'center', marginBottom:52 }}>
+            <span style={{ display:'inline-flex', alignItems:'center', gap:8, background:'rgba(103,232,249,.08)', border:'1px solid rgba(103,232,249,.22)', color:'#67e8f9', fontFamily:F, fontSize:12.5, fontWeight:700, padding:'7px 16px', borderRadius:999, marginBottom:18 }}>
+              <span style={{ width:6, height:6, borderRadius:'50%', background:'#67e8f9' }} />
+              من داخل الاستوديو
+            </span>
+            <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(26px,4vw,42px)', color:OFF, lineHeight:1.3, margin:0 }}>
+              لحظات <span style={{ color:'#67e8f9' }}>حقيقية</span>
+            </h2>
+            <p style={{ fontFamily:F, fontSize:16, color:MUT, marginTop:12, maxWidth:520 }}>
+              تدريب أمام الكاميرا، داخل الاستوديو، بأدوات إعلامية حقيقية.
+            </p>
+          </div>
+
+          {/* ── Grid ── */}
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gridTemplateRows:'320px 240px', gap:8, borderRadius:24, overflow:'hidden' }}>
+
+            {/* Slot 1 — tall left: صورة رأسية (مقدّم أمام الكاميرا) */}
+            <div style={{ gridColumn:'1', gridRow:'1 / 3', position:'relative', overflow:'hidden', background:'rgba(103,232,249,.04)', border:'1px solid rgba(103,232,249,.1)', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:12 }}>
+              <div style={{ width:56, height:56, borderRadius:'50%', background:'rgba(103,232,249,.12)', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                <Radio size={22} color="#67e8f9" strokeWidth={1.8} />
+              </div>
+              <div style={{ textAlign:'center', padding:'0 20px' }}>
+                <div style={{ fontFamily:F, fontWeight:700, fontSize:13, color:'#67e8f9' }}>صورة رأسية كبيرة</div>
+                <div style={{ fontFamily:F, fontSize:12, color:MUT, marginTop:4 }}>مقدّم أمام الكاميرا أو داخل الاستوديو</div>
+              </div>
+              {/* ← استبدل كل هذا الـdiv بـ: <img src={...} style={{ position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',objectPosition:'center top' }} /> */}
+            </div>
+
+            {/* Slot 2 — top-middle: جلسة تدريب جماعية */}
+            <div style={{ gridColumn:'2 / 4', gridRow:'1', position:'relative', overflow:'hidden', background:'rgba(103,232,249,.04)', border:'1px solid rgba(103,232,249,.08)', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:10 }}>
+              <div style={{ width:46, height:46, borderRadius:'50%', background:'rgba(103,232,249,.12)', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                <Users size={20} color="#67e8f9" strokeWidth={1.8} />
+              </div>
+              <div style={{ textAlign:'center', padding:'0 20px' }}>
+                <div style={{ fontFamily:F, fontWeight:700, fontSize:13, color:'#67e8f9' }}>صورة أفقية واسعة</div>
+                <div style={{ fontFamily:F, fontSize:12, color:MUT, marginTop:4 }}>جلسة تدريب جماعية أو الطلاب أمام الشاشة</div>
+              </div>
+            </div>
+
+            {/* Slot 3 — bottom-middle: لقطة تفاعلية */}
+            <div style={{ gridColumn:'2', gridRow:'2', position:'relative', overflow:'hidden', background:'rgba(103,232,249,.04)', border:'1px solid rgba(103,232,249,.08)', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:8 }}>
+              <div style={{ width:40, height:40, borderRadius:'50%', background:'rgba(103,232,249,.12)', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                <Target size={17} color="#67e8f9" strokeWidth={1.8} />
+              </div>
+              <div style={{ textAlign:'center', padding:'0 16px' }}>
+                <div style={{ fontFamily:F, fontWeight:700, fontSize:12.5, color:'#67e8f9' }}>صورة أفقية صغيرة</div>
+                <div style={{ fontFamily:F, fontSize:11.5, color:MUT, marginTop:3 }}>لقطة تفصيلية أو تمرين</div>
+              </div>
+            </div>
+
+            {/* Slot 4 — bottom-right: إحصاء */}
+            <div style={{ gridColumn:'3', gridRow:'2', position:'relative', overflow:'hidden', background:'rgba(103,232,249,.06)', border:'1px solid rgba(103,232,249,.12)', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:4 }}>
+              <span style={{ fontFamily:FP, fontSize:52, fontWeight:800, color:'#67e8f9', lineHeight:1 }}>+50</span>
+              <span style={{ fontFamily:F, fontSize:13, fontWeight:700, color:OFF }}>خريج إعلامي</span>
+              <span style={{ fontFamily:F, fontSize:11, color:MUT, textAlign:'center', maxWidth:120 }}>من أفواج المسار الإعلامي</span>
+            </div>
+
+          </div>
+          {/* ── نهاية الـGrid ── */}
+
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════════════════════════
           §08 CHECKOUT — interactive (Stripe)
       ════════════════════════════════════════════════════════════ */}
       <section id="checkout" className="sec sec--access" style={{ position:'relative', padding:'96px 0', scrollMarginTop:80 }}>
