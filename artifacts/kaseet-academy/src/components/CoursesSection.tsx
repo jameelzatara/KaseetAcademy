@@ -140,14 +140,15 @@ function GridCard({ card, hidden }: { card: GCard; hidden: boolean }) {
         flexDirection: 'column',
         position:      'relative',
         background:    CARD_BG,
-        border:        `1px solid ${hov ? 'rgba(255,193,7,0.45)' : 'rgba(255,255,255,0.10)'}`,
+        border:        '1px solid rgba(255,255,255,0.10)',
         borderRadius:  18,
         overflow:      'hidden',
+        willChange:    'transform',
         boxShadow:     hov
-          ? '0 24px 54px rgba(255,193,7,0.18)'
+          ? '0 20px 48px rgba(0,0,0,0.45), 0 0 0 1.5px rgba(255,193,7,0.50)'
           : '0 12px 30px rgba(0,0,0,0.35)',
         transform:  hov ? 'translateY(-5px)' : 'translateY(0)',
-        transition: 'transform 0.30s, box-shadow 0.30s, border-color 0.30s',
+        transition: 'transform 0.28s ease, box-shadow 0.28s ease',
       }}
     >
       {/* ── Image area ── */}
@@ -272,11 +273,10 @@ function GridCard({ card, hidden }: { card: GCard; hidden: boolean }) {
       {/* ── Hover overlay ── */}
       <div style={{
         position: 'absolute', inset: 0, zIndex: 2,
-        background: 'linear-gradient(180deg, rgba(30,38,54,0.94), rgba(18,24,36,0.98))',
-        backdropFilter: 'blur(3px)',
+        background: 'linear-gradient(180deg, rgba(22,30,46,0.97) 0%, rgba(14,20,34,0.99) 100%)',
         opacity:    hov ? 1 : 0,
         visibility: hov ? 'visible' : 'hidden',
-        transition: 'opacity 0.35s',
+        transition: 'opacity 0.28s',
         display: 'flex', flexDirection: 'column', justifyContent: 'center',
         gap: 15, padding: 20, textAlign: 'right', direction: 'rtl',
       }}>
@@ -374,7 +374,7 @@ export default function CoursesSection() {
             fontSize: 'clamp(28px,4.6vw,50px)',
             color: OFF, lineHeight: 1.25, margin: 0,
           }}>
-            ماستركلاساتنا <span style={{ color: GOLD }}>المتميّزة</span>
+            دوراتنا <span style={{ color: GOLD }}>المتميّزة</span>
           </h2>
           <p style={{
             fontFamily: F, fontWeight: 500,
@@ -382,7 +382,7 @@ export default function CoursesSection() {
             color: 'rgba(252,251,251,0.72)',
             marginTop: 14, maxWidth: 660, marginInlineStart: 0, lineHeight: 1.8,
           }}>
-            كل موهبة تستحق ماستركلاساً احترافياً — حضوري أو مباشر تفاعلي (Online LIVE)، ومقاعد محدودة.
+            اختر من بين برامجنا الأكثر طلباً — حضوري أو مباشر تفاعلي (Online LIVE)، ومقاعد محدودة.
           </p>
 
         </header>

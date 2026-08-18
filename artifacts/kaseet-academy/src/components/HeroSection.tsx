@@ -203,7 +203,7 @@ export default function HeroSection() {
               transform: 'none',
             })}
           >
-            تصفح ماستركلاساتنا ↗
+            تصفح دوراتنا المتميزة ↗
           </button>
         </motion.div>
 
