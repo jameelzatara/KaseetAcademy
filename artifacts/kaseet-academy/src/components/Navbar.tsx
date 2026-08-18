@@ -138,6 +138,7 @@ export default function Navbar() {
                       boxShadow: '0 12px 40px rgba(0,0,0,0.45)',
                       minWidth: 210, zIndex: 9999,
                       direction: 'rtl',
+                      maxHeight: 380, overflowY: 'auto',
                     }}
                   >
                     {CURRENCY_LIST.map(c => (

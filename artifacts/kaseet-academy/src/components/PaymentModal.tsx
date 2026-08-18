@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import {
   type CurrencyCode,
-  CURRENCY_LIST, CURRENCY_NAMES, CURRENCY_SYMBOLS,
+  CURRENCY_LIST, CURRENCY_NAMES, CURRENCY_SYMBOLS, CURRENCY_RATES,
   convertPrice, formatPrice,
 } from '../data/currency';
 
@@ -370,7 +370,7 @@ function CurrencyPicker({
           background: '#131B27', border: `1px solid ${CBR}`,
           borderRadius: 12, overflow: 'hidden',
           boxShadow: '0 16px 40px rgba(0,0,0,0.6)',
-          minWidth: 200,
+          minWidth: 200, maxHeight: 320, overflowY: 'auto',
         }}>
           {CURRENCY_LIST.map(c => (
             <button
@@ -410,12 +410,25 @@ function OrderSummary({
   const isOnsite = mode === 'onsite';
   const accent   = isOnsite ? GLD : CYN;
 
-  const dispFull    = formatPrice(convertPrice(priceJOD, displayCurrency), displayCurrency);
+  // For LIVE, the authoritative price is priceUSD (what Stripe charges).
+  // Derive a JOD base from priceUSD so all currency conversions stay consistent.
+  const baseJOD = isOnsite ? priceJOD : priceUSD / CURRENCY_RATES['USD'];
+
+  // For LIVE+USD show the exact Stripe charge amount, not a rounded conversion.
+  const dispFull = (!isOnsite && displayCurrency === 'USD')
+    ? formatPrice(priceUSD, 'USD')
+    : formatPrice(convertPrice(baseJOD, displayCurrency), displayCurrency);
+
   const dispDeposit = formatPrice(convertPrice(DEPOSIT_JOD, displayCurrency), displayCurrency);
   const dispRemain  = formatPrice(convertPrice(priceJOD - DEPOSIT_JOD, displayCurrency), displayCurrency);
 
+  // Is the display currency different from what Stripe will actually charge?
+  const isApprox = isOnsite
+    ? displayCurrency !== 'JOD'
+    : displayCurrency !== 'USD';
+
   const charge = isOnsite
-    ? (plan === 'deposit' ? `${dispDeposit}` : dispFull)
+    ? (plan === 'deposit' ? dispDeposit : dispFull)
     : dispFull;
 
   return (
@@ -442,10 +455,18 @@ function OrderSummary({
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 6 }}>
             <CurrencyPicker value={displayCurrency} onChange={onCurrencyChange} />
           </div>
-          <div style={{ fontFamily: FP, fontSize: 22, fontWeight: 800, color: accent, lineHeight: 1 }}>{charge}</div>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+            {isApprox && <span style={{ fontFamily: F, fontSize: 10, color: MUT, fontWeight: 600 }}>≈</span>}
+            <div style={{ fontFamily: FP, fontSize: 22, fontWeight: 800, color: accent, lineHeight: 1 }}>{charge}</div>
+          </div>
           {isOnsite && plan === 'deposit' && (
             <div style={{ fontFamily: F, fontSize: 11, color: MUT, marginTop: 3 }}>
               + {dispRemain} لاحقاً
+            </div>
+          )}
+          {isApprox && (
+            <div style={{ fontFamily: F, fontSize: 10, color: MUT, marginTop: 2, textAlign: 'right' }}>
+              الشحن الفعلي: {isOnsite ? `${priceJOD} JOD` : `$${priceUSD}`}
             </div>
           )}
         </div>
