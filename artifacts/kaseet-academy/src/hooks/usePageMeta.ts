@@ -71,6 +71,14 @@ export function usePageMeta({ title, description, ogImage }: PageMeta) {
     // Restore homepage defaults when component unmounts
     return () => {
       document.title = `${SITE_NAME} | Kaseet Academy`;
+      setMeta('meta[name="description"]',           'content', 'الأكاديمية الأولى في تدريب التعليق الصوتي، صناعة البودكاست، والإنتاج المرئي.');
+      setMeta('meta[property="og:title"]',          'content', `${SITE_NAME} | Kaseet Academy`);
+      setMeta('meta[property="og:description"]',    'content', 'الأكاديمية الأولى في تدريب التعليق الصوتي، صناعة البودكاست، والإنتاج المرئي.');
+      setMeta('meta[property="og:image"]',          'content', OG_IMG_DEFAULT);
+      setMeta('meta[property="og:url"]',            'content', OG_BASE);
+      setMeta('meta[name="twitter:title"]',         'content', `${SITE_NAME} | Kaseet Academy`);
+      setMeta('meta[name="twitter:description"]',   'content', 'الأكاديمية الأولى في تدريب التعليق الصوتي، صناعة البودكاست، والإنتاج المرئي.');
+      setMeta('meta[name="twitter:image"]',         'content', OG_IMG_DEFAULT);
     };
   }, [title, description, ogImage]);
 }

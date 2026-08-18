@@ -11,7 +11,10 @@ declare module "express-session" {
   interface SessionData { isAdmin?: boolean; }
 }
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "kaseet-admin-2026";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+if (!ADMIN_PASSWORD) {
+  throw new Error("ADMIN_PASSWORD environment variable is required — set it in Replit Secrets.");
+}
 
 // ── POST /admin/login ──────────────────────────────────────
 router.post("/login", async (req, res) => {

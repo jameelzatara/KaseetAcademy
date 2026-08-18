@@ -34,7 +34,7 @@ const LT    = '#CBD5E1';
 const ERR   = '#f87171';
 const GRN   = '#4ade80';
 const DEPOSIT_JOD = 50;
-const DEPOSIT_USD = 70;
+const DEPOSIT_USD = 71; // ceil(50 JOD × 1.41) — must match server pricing.ts
 
 /* ── country/dial-code list ─────────────────────────── */
 interface Country { code: string; dial: string; name: string; }
@@ -1156,7 +1156,7 @@ export default function PaymentModal({
                 {orderId && <div style={{ fontFamily: F, fontSize: 12.5, color: MUT, marginBottom: 18 }}>رقم الطلب: <span style={{ color: GLD, fontWeight: 700 }}>{orderId}</span></div>}
                 <div style={{ background: CARD, border: `1px solid ${CBR}`, borderRadius: 12, padding: '14px 18px', textAlign: 'right', marginBottom: 24 }}>
                   <div style={{ fontFamily: F, fontSize: 13, color: MUT }}>لم يصلك إيصال خلال 5 دقائق؟ تواصل معنا:</div>
-                  <a href="https://wa.me/962771052222" target="_blank" rel="noopener noreferrer"
+                  <a href="https://wa.me/962771052222?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D9%84%D9%85%20%D9%8A%D8%B5%D9%84%D9%86%D9%8A%20%D8%A5%D9%8A%D8%B5%D8%A7%D9%84%20%D8%A8%D8%B9%D8%AF%20%D8%A7%D9%84%D8%AF%D9%81%D8%B9" target="_blank" rel="noopener noreferrer"
                     style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 8, fontFamily: F, fontSize: 13.5, fontWeight: 700, color: '#25D366', textDecoration: 'none' }}>
                     واتساب كاسيت (+962 77 105 2222)
                   </a>
