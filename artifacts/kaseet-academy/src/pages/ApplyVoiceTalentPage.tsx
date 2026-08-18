@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import SiteFooter from '@/components/SiteFooter';
 import Navbar from '@/components/Navbar';
-import { CheckCircle, Mic, ChevronDown, Home, ArrowLeft } from 'lucide-react';
+import { CheckCircle, ChevronDown, Home, ArrowLeft } from 'lucide-react';
 import { GOLD, OFF, F, FP, INNER } from './shared/coursePageHelpers';
 
 const MUT  = '#8A97AE';
@@ -138,6 +138,32 @@ export default function ApplyVoiceTalentPage() {
 
       {/* ── Hero ── */}
       <section className="sec sec--hero" style={{ padding: '0 0 80px' }}>
+
+        {/* ── Foam bubble geometry (right edge) ── */}
+        <div className="geo" aria-hidden="true">
+          <svg viewBox="0 0 260 280" fill="none" xmlns="http://www.w3.org/2000/svg"
+            style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)', width: '11%', minWidth: 60, height: 'auto', opacity: 0.7 }}>
+            {[0,1,2,3,4,5].flatMap(row =>
+              [0,1,2,3,4].map(col => (
+                <circle key={`${row}-${col}`}
+                  cx={col * 48 + (row % 2) * 24 + 10}
+                  cy={row * 44 + 10}
+                  r={6}
+                  fill={`rgba(255,193,7,${0.08 + ((row + col) % 3) * 0.04})`}
+                />
+              ))
+            )}
+          </svg>
+          {/* Audio waveform — bottom */}
+          <svg viewBox="0 0 1440 80" preserveAspectRatio="none" fill="none"
+            style={{ position: 'absolute', bottom: 0, left: 0, right: 0, width: '100%', height: 80 }}>
+            <path d="M0 50 C200 10 400 65 600 40 S1000 10 1200 40 S1440 55 1440 50"
+              stroke="rgba(255,193,7,.07)" strokeWidth="1.5" fill="none"/>
+            <path d="M0 40 C200 65 400 10 600 40 S1000 65 1200 40 S1440 25 1440 40"
+              stroke="rgba(74,130,196,.05)" strokeWidth="1" fill="none"/>
+          </svg>
+        </div>
+
         <div style={INNER}>
 
           {/* breadcrumb */}
@@ -154,7 +180,7 @@ export default function ApplyVoiceTalentPage() {
             {/* text */}
             <div>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: GS, border: `1px solid ${GL}`, color: GOLD, fontFamily: F, fontSize: 12.5, fontWeight: 700, padding: '6px 15px', borderRadius: 999, marginBottom: 20 }}>
-                <Mic size={12} strokeWidth={2.2} /> تقديم موهبة صوتية
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: GOLD, flexShrink: 0 }} /> تقديم موهبة صوتية
               </div>
 
               <h1 style={{ fontFamily: F, fontWeight: 800, fontSize: 'clamp(34px,5vw,58px)', lineHeight: 1.22, letterSpacing: -1.2, margin: '0 0 0', color: OFF }}>
