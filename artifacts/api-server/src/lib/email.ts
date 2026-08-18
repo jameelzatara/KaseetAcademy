@@ -10,6 +10,7 @@
  */
 import { logger } from "./logger.js";
 import { pool } from "@workspace/db";
+import { sendWhatsAppNotification } from "./whatsapp.js";
 
 const BREVO_API_URL = "https://api.brevo.com/v3/smtp/email";
 
@@ -55,6 +56,24 @@ async function logEmail(row: {
     );
   } catch {
     // سجلّ البريد غير حرج — لا نوقف الإرسال
+  }
+
+  // ── تنبيه فوري عند فشل إرسال البريد ──
+  if (row.status === "failed") {
+    const alertText = [
+      "⚠️ فشل إرسال بريد إلكتروني — كاسيت أكاديمي",
+      `📧 المستلم: ${row.to}`,
+      `📌 الموضوع: ${row.subject}`,
+      row.tag ? `🏷️ النوع: ${row.tag}` : null,
+      `❌ الخطأ: ${row.error ?? "غير معروف"}`,
+    ]
+      .filter(Boolean)
+      .join("\n");
+
+    // fire-and-forget — لا نوقف أيّ عملية بسبب فشل التنبيه
+    sendWhatsAppNotification(alertText).catch((err) => {
+      logger.error({ err }, "Failed to send WhatsApp alert for email failure");
+    });
   }
 }
 
