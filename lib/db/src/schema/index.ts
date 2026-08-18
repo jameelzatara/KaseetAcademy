@@ -186,6 +186,8 @@ export const coursesTable = pgTable("courses", {
   liveHours:      integer("live_hours"),
   liveSessions:   integer("live_sessions"),
   liveCapacity:   integer("live_capacity"),
+  /** When true, consultant staff may NOT change prices (admin-only override) */
+  priceLocked:   boolean("price_locked").notNull().default(false),
   createdAt:     timestamp("created_at").defaultNow().notNull(),
   updatedAt:     timestamp("updated_at").defaultNow().notNull(),
 });

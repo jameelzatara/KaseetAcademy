@@ -348,7 +348,7 @@ router.get("/courses", requireStaff, async (_req, res) => {
   }
 });
 
-function courseUpdatesFromBody(body: any): Record<string, any> {
+function courseUpdatesFromBody(body: any, adminOnly = false): Record<string, any> {
   const updates: Record<string, any> = {};
   const fields = [
     "nameAr", "level", "status",
@@ -356,6 +356,8 @@ function courseUpdatesFromBody(body: any): Record<string, any> {
     "liveEnabled", "livePriceUSD", "liveHours", "liveSessions", "liveCapacity",
   ] as const;
   for (const f of fields) if (body[f] !== undefined) updates[f] = body[f];
+  // priceLocked toggle is admin-only
+  if (adminOnly && body.priceLocked !== undefined) updates.priceLocked = body.priceLocked;
   return updates;
 }
 
@@ -365,12 +367,8 @@ router.post("/courses", requireStaff, async (req, res) => {
     if (!slug || !nameAr) { res.status(400).json({ error: "المعرّف والاسم مطلوبان" }); return; }
     if (!/^[a-z0-9-]+$/.test(slug)) { res.status(400).json({ error: "المعرّف يجب أن يكون أحرفاً إنجليزية صغيرة وأرقاماً وشرطات فقط" }); return; }
 
-    const updates = courseUpdatesFromBody(req.body);
-    // Base price authority is admin-only — strip price fields from consultant creates
-    if (!isAdmin(req)) {
-      delete updates.onsitePriceJOD;
-      delete updates.livePriceUSD;
-    }
+    const updates = courseUpdatesFromBody(req.body, isAdmin(req));
+    // priceLocked defaults to false for new courses; admin can override on create
     const [created] = await db.insert(coursesTable).values({
       slug, nameAr,
       ...updates,
@@ -388,10 +386,11 @@ router.put("/courses/:slug", requireStaff, async (req, res) => {
     const [existing] = await db.select().from(coursesTable).where(eq(coursesTable.slug, String(req.params.slug))).limit(1);
     if (!existing) { res.status(404).json({ error: "الدورة غير موجودة" }); return; }
 
-    const updates = courseUpdatesFromBody(req.body);
-    // Base price edits are admin-only
-    if (!isAdmin(req) && (updates.onsitePriceJOD !== undefined || updates.livePriceUSD !== undefined)) {
-      res.status(403).json({ error: "تعديل الأسعار الأساسية للمدير فقط" }); return;
+    const updates = courseUpdatesFromBody(req.body, isAdmin(req));
+    // Price edits blocked for consultants on courses with priceLocked=true
+    const priceEdit = updates.onsitePriceJOD !== undefined || updates.livePriceUSD !== undefined;
+    if (!isAdmin(req) && priceEdit && existing.priceLocked) {
+      res.status(403).json({ error: "سعر هذه الدورة مقفل — تعديل السعر للمدير فقط" }); return;
     }
     updates.updatedAt = new Date();
     await db.update(coursesTable).set(updates).where(eq(coursesTable.slug, String(req.params.slug)));

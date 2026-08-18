@@ -89,11 +89,10 @@ export default function Courses() {
       liveHours: num(form.liveHours), liveSessions: num(form.liveSessions),
       liveCapacity: num(form.capacity),
     };
-    // Prices: admin-only (create & edit) — consultants omit price fields entirely
-    if (isAdmin) {
-      body.onsitePriceJOD = num(form.onsitePrice);
-      body.livePriceUSD = num(form.livePrice);
-    }
+    // Always include prices — backend enforces priceLocked rule on PUT.
+    // Consultants may price new courses freely; only locked-course price edits are blocked.
+    body.onsitePriceJOD = num(form.onsitePrice);
+    body.livePriceUSD = num(form.livePrice);
     try {
       if (modal?.mode === 'new') {
         await api('/admin/courses', { method: 'POST', body: { slug: form.slug || slugify(form.nameAr), ...body } });
@@ -130,6 +129,10 @@ export default function Courses() {
       load();
     } catch (e: any) { toast(e.message, 'err'); setDeleting(null); }
   }
+
+  // Price fields disabled for consultants only when editing a price-locked course.
+  // Creating a new course: both admin and consultant may set prices freely.
+  const priceDisabled = !isAdmin && modal?.mode === 'edit' && !!(modal as any).course?.priceLocked;
 
   return (
     <>
@@ -204,9 +207,9 @@ export default function Courses() {
                 <Field label="الساعات"><input type="number" value={form.onsiteHours} onChange={e => setForm(f => ({ ...f, onsiteHours: e.target.value }))} placeholder="16" /></Field>
                 <Field label="عدد الجلسات"><input type="number" value={form.onsiteSessions} onChange={e => setForm(f => ({ ...f, onsiteSessions: e.target.value }))} placeholder="8" /></Field>
               </div>
-              <Field label="السعر (دينار أردني)" hint={!isAdmin ? 'تحديد السعر للمدير فقط' : undefined}>
+              <Field label="السعر (دينار أردني)" hint={priceDisabled ? 'السعر مقفل — التعديل للمدير فقط' : undefined}>
                 <input type="number" value={form.onsitePrice} onChange={e => setForm(f => ({ ...f, onsitePrice: e.target.value }))} placeholder="250"
-                  disabled={!isAdmin} />
+                  disabled={priceDisabled} />
               </Field>
             </>}
           </div>
@@ -222,9 +225,9 @@ export default function Courses() {
                 <Field label="الساعات"><input type="number" value={form.liveHours} onChange={e => setForm(f => ({ ...f, liveHours: e.target.value }))} placeholder="16" /></Field>
                 <Field label="عدد الجلسات"><input type="number" value={form.liveSessions} onChange={e => setForm(f => ({ ...f, liveSessions: e.target.value }))} placeholder="8" /></Field>
               </div>
-              <Field label="السعر (دولار أمريكي)" hint={!isAdmin ? 'تحديد السعر للمدير فقط' : undefined}>
+              <Field label="السعر (دولار أمريكي)" hint={priceDisabled ? 'السعر مقفل — التعديل للمدير فقط' : undefined}>
                 <input type="number" value={form.livePrice} onChange={e => setForm(f => ({ ...f, livePrice: e.target.value }))} placeholder="250"
-                  disabled={!isAdmin} />
+                  disabled={priceDisabled} />
               </Field>
             </>}
           </div>

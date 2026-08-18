@@ -148,6 +148,8 @@ export interface Course {
   nameAr: string;
   level: CourseLevel;
   status: CourseStatus;
+  /** When true, only admin may change prices (onsitePriceJOD / livePriceUSD) */
+  priceLocked: boolean;
   onsiteEnabled: boolean;
   onsitePriceJOD: number | null;
   onsiteHours: number | null;
