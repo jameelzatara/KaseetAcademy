@@ -1317,7 +1317,11 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
                     <span style={{ fontFamily: F, fontSize: 14.5, fontWeight: 800, color: checkoutMode === 'onsite' ? GLD : MUT }}>حضوري</span>
                   </div>
                   <span style={{ fontFamily: F, fontSize: 11.5, color: MUT }}>استوديو كاسيت · عمّان · {data.payment.cohortStartAr}</span>
-                  <span style={{ fontFamily: FP, fontSize: 22, fontWeight: 700, color: checkoutMode === 'onsite' ? GLD : LT, lineHeight: 1 }}>{data.payment.priceJOD} <span style={{ fontSize: 13 }}>JOD</span></span>
+                  <span style={{ fontFamily: FP, fontSize: 22, fontWeight: 700, color: checkoutMode === 'onsite' ? GLD : LT, lineHeight: 1 }}>
+                    {data.payment.priceJOD != null
+                      ? <>{data.payment.priceJOD} <span style={{ fontSize: 13 }}>JOD</span></>
+                      : <span style={{ fontSize: 13, fontWeight: 700, color: MUT }}>السعر يُعلَن قريباً</span>}
+                  </span>
                 </button>
                 {/* مباشر تفاعلي */}
                 <button
@@ -1335,7 +1339,11 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
                     <span style={{ fontFamily: F, fontSize: 14.5, fontWeight: 800, color: checkoutMode === 'live' ? '#67e8f9' : MUT }}>مباشر تفاعلي</span>
                   </div>
                   <span style={{ fontFamily: F, fontSize: 11.5, color: MUT }}>عن بُعد (Online LIVE) · {data.payment.cohortStartAr}</span>
-                  <span style={{ fontFamily: FP, fontSize: 22, fontWeight: 700, color: checkoutMode === 'live' ? '#67e8f9' : LT, lineHeight: 1 }}>${data.payment.priceUSD}</span>
+                  <span style={{ fontFamily: FP, fontSize: 22, fontWeight: 700, color: checkoutMode === 'live' ? '#67e8f9' : LT, lineHeight: 1 }}>
+                    {data.payment.priceUSD != null
+                      ? <>${data.payment.priceUSD}</>
+                      : <span style={{ fontSize: 13, fontWeight: 700, color: MUT }}>السعر يُعلَن قريباً</span>}
+                  </span>
                 </button>
               </div>
 
@@ -1365,8 +1373,9 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, background: GS, border: `1px solid rgba(103,232,249,.22)`, borderRadius: 12, padding: '11px 15px', marginBottom: 22 }}>
                     <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#67e8f9', flexShrink: 0, marginTop: 6 }} />
                     <span style={{ fontFamily: F, fontSize: 13, color: LT, lineHeight: 1.7 }}>
-                      الدفع الكامل مطلوب للتسجيل في الخيار المباشر —{' '}
-                      <strong style={{ color: '#67e8f9' }}>${data.payment.priceUSD}</strong>.
+                      {data.payment.priceUSD != null
+                        ? <>الدفع الكامل مطلوب للتسجيل في الخيار المباشر — <strong style={{ color: '#67e8f9' }}>${data.payment.priceUSD}</strong>.</>
+                        : <>السعر يُعلَن قريباً — تواصل معنا عبر واتساب لتثبيت مقعدك مبكراً.</>}
                     </span>
                   </div>
                 )}
@@ -1387,8 +1396,12 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
                   onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(255,193,7,.30)'; }}>
                   <Lock size={15} />
                   {checkoutMode === 'onsite'
-                    ? `احجز مقعدك — ادفع ${data.pricing.installments[0]} ديناراً الآن`
-                    : `سجّل الآن — ادفع $${data.payment.priceUSD} كاملاً`}
+                    ? (data.payment.priceJOD != null
+                        ? `احجز مقعدك — ادفع ${data.pricing.installments[0]} ديناراً الآن`
+                        : 'تواصل معنا لتثبيت مقعدك')
+                    : (data.payment.priceUSD != null
+                        ? `سجّل الآن — ادفع $${data.payment.priceUSD} كاملاً`
+                        : 'تواصل معنا لتثبيت مقعدك')}
                   <ArrowLeft size={15} />
                 </button>
 

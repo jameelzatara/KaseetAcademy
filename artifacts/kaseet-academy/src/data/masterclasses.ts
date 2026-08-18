@@ -261,8 +261,8 @@ export interface MasterclassData {
     headingGold: string;
     cardTitle: string;
     cardDesc: string;
-    priceJOD: number;
-    priceUSD: number;
+    priceJOD: number | null;
+    priceUSD: number | null;
     equivalentUSD: number;
     installments: [number, number, number];
     showPerHourLine: boolean;
@@ -310,8 +310,8 @@ export interface MasterclassData {
     cohortDays: string;
     cohortTimeAr: string;
     cohortTrainer: string;
-    priceJOD: number;
-    priceUSD: number;
+    priceJOD: number | null;
+    priceUSD: number | null;
   };
 
   /** wa links */
@@ -561,11 +561,11 @@ export function getVoiceData(assets: {
     cohort: {
       badge: 'الفوج القادم',
       startLabel: 'يبدأ',
-      startGold: 'الأحد، 9 آب',
+      startGold: '15 أيلول',
       facts: [
-        { label: 'الجدول الأسبوعي', value: 'الأحد والثلاثاء · 6–8 مساءً' },
+        { label: 'الجدول الأسبوعي', value: 'الأحد والثلاثاء والخميس · 6–8 مساءً' },
         { label: 'المدّة', value: '44 ساعة تدريبية · 22 جلسة\n+ 3 ساعات لإنتاج مشروع التخرّج' },
-        { label: 'المقاعد', value: '4 مقاعد متبقية' },
+        { label: 'المقاعد', value: '10 مقاعد' },
       ],
       ctaLabel: 'التسجيل في الماستركلاس',
       consultNote: 'أو تحدّث مع ياقوت أوّلاً — استشارة مجانية دون التزام.',
@@ -575,16 +575,16 @@ export function getVoiceData(assets: {
     payment: {
       courseSlug: 'masar-soti',
       courseTitle: 'ماستركلاس التعليق والأداء الصوتي',
-      cohortIdOnsite: 301,
-      cohortIdLive: 302,
-      cohortStartAr: '9 آب',
-      cohortStartISOOnsite: '2025-08-09',
-      cohortStartISOLive: '2025-08-09',
-      cohortDays: 'الأحد والثلاثاء',
+      cohortIdOnsite: 204,
+      cohortIdLive: 205,
+      cohortStartAr: '15 أيلول',
+      cohortStartISOOnsite: '2026-09-15',
+      cohortStartISOLive: '2026-09-16',
+      cohortDays: 'الأحد والثلاثاء والخميس',
       cohortTimeAr: '6:00 – 8:00 مساءً',
       cohortTrainer: 'يسار عبده',
-      priceJOD: 550,
-      priceUSD: 750,
+      priceJOD: null,
+      priceUSD: null,
     },
 
     wa: {
@@ -854,7 +854,7 @@ export function getElamData(assets: {
     cohort: {
       badge: 'الفوج القادم',
       startLabel: 'يبدأ',
-      startGold: '14 أيلول',
+      startGold: '15 أيلول',
       facts: [
         { label: 'الجدول', value: 'الأحد والثلاثاء · 6:00–8:00 مساءً' },
         { label: 'المدة',  value: '40 ساعة · 10 محطات · 3 أشهر' },
@@ -868,16 +868,16 @@ export function getElamData(assets: {
     payment: {
       courseSlug: 'masar-elami',
       courseTitle: 'ماستركلاس الإعلام المتكامل',
-      cohortIdOnsite: 305,
-      cohortIdLive: 306,
+      cohortIdOnsite: 206,
+      cohortIdLive: 206,
       cohortStartAr: '15 أيلول',
-      cohortStartISOOnsite: '2025-09-15',
-      cohortStartISOLive: '2025-09-15',
+      cohortStartISOOnsite: '2026-09-15',
+      cohortStartISOLive: '2026-09-15',
       cohortDays: 'الأحد والثلاثاء',
       cohortTimeAr: '6:00 – 8:00 مساءً',
       cohortTrainer: 'رنا العزام',
-      priceJOD: 700,
-      priceUSD: 1000,
+      priceJOD: null,
+      priceUSD: null,
     },
 
     wa: {
@@ -1181,10 +1181,10 @@ export function getKhatabaData(assets: {
     cohort: {
       badge: 'الفوج القادم',
       startLabel: 'يبدأ',
-      startGold: '14 أيلول',
+      startGold: '17 أيلول',
       facts: [
-        { label: 'الجدول الأسبوعي', value: 'الاثنين والأربعاء والسبت' },
-        { label: 'المدّة',           value: '42 ساعة تدريبية · 21 جلسة' },
+        { label: 'الجدول الأسبوعي', value: 'الأربعاء والسبت · 6:00–8:00 مساءً' },
+        { label: 'المدّة',           value: '44 ساعة تدريبية · 22 جلسة' },
         { label: 'المقاعد',          value: 'فوج من 15 متدرّباً' },
       ],
       ctaLabel: 'احجز مقعدك في الفوج القادم',
@@ -1195,16 +1195,16 @@ export function getKhatabaData(assets: {
     payment: {
       courseSlug: 'masar-khataba',
       courseTitle: 'ماستركلاس فن الخطابة والتواصل القيادي',
-      cohortIdOnsite: 303,
-      cohortIdLive: 304,
-      cohortStartAr: '14 أيلول',
-      cohortStartISOOnsite: '2025-09-14',
-      cohortStartISOLive: '2025-09-17',
-      cohortDays: 'الاثنين والأربعاء والسبت',
+      cohortIdOnsite: 207,
+      cohortIdLive: 207,
+      cohortStartAr: '17 أيلول',
+      cohortStartISOOnsite: '2026-09-17',
+      cohortStartISOLive: '2026-09-17',
+      cohortDays: 'الأربعاء والسبت',
       cohortTimeAr: '6:00 – 8:00 مساءً',
       cohortTrainer: 'د. صهيب الخوالدة',
-      priceJOD: 500,
-      priceUSD: 700,
+      priceJOD: null,
+      priceUSD: null,
     },
 
     wa: {
