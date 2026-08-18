@@ -1166,7 +1166,7 @@ export default function MasarKhatabaPage() {
 
       {/* sticky CTA */}
       {stickyVisible && (
-        <div style={{ position:'fixed', bottom:0, insetInline:0, zIndex:50, padding:'12px 16px', background:'rgba(13,11,20,.94)', backdropFilter:'blur(14px)', WebkitBackdropFilter:'blur(14px)', borderTop:`1px solid ${CBR}`, display:'flex', alignItems:'center', justifyContent:'space-between', gap:12 }}>
+        <div style={{ position:'fixed', bottom:0, insetInline:0, zIndex:50, padding:'12px 16px', paddingBottom:'max(12px, env(safe-area-inset-bottom))', background:'rgba(13,11,20,.94)', backdropFilter:'blur(14px)', WebkitBackdropFilter:'blur(14px)', borderTop:`1px solid ${CBR}`, display:'flex', alignItems:'center', justifyContent:'space-between', gap:12 }}>
           <div style={{ fontFamily:F, fontSize:13.5, color:LT, lineHeight:1.4 }}>
             <span style={{ fontWeight:800, color:OFF }}>ماستركلاس الخطابة</span>
             <span style={{ color:MUT, marginInlineStart:8 }}>يبدأ 14 أيلول</span>

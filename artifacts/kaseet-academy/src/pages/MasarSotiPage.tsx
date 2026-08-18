@@ -1194,7 +1194,7 @@ export default function MasarSotiPage() {
 
       {/* ── sticky CTA (mobile only, hides when #checkout is visible) ── */}
       {stickyVisible && (
-        <div className="soti-sticky-cta" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 50, padding: '10px 16px 16px', background: 'rgba(10,14,24,0.96)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+        <div className="soti-sticky-cta" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 50, padding: '10px 16px 16px', paddingBottom: 'max(16px, env(safe-area-inset-bottom))', background: 'rgba(10,14,24,0.96)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
           <button
             onClick={scrollToCheckout}
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9, width: '100%', boxSizing: 'border-box', background: GLD, color: '#0f172a', fontFamily: F, fontWeight: 800, fontSize: 15, padding: '14px 20px', borderRadius: 14, border: 'none', cursor: 'pointer', boxShadow: '0 6px 20px rgba(255,193,7,.28)' }}>
