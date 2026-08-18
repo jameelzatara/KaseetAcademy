@@ -135,7 +135,7 @@ const STATIONS = [
 
 type StationType = typeof STATIONS[number];
 
-/* ─── audience items (9 — 3×3) ───────────────────────────────── */
+/* ─── audience items (9 — 2 cols grid) ──────────────────────────── */
 const AUDIENCE_ITEMS = [
   'تتحدّث أمام الكاميرا بحضور كاريزمي وتفاعل طبيعي مع العدسة',
   'تبني هويتك الإعلامية الخاصة التي تميزك في سوق الإعلام',
@@ -146,6 +146,26 @@ const AUDIENCE_ITEMS = [
   'تبني جسور الثقة مع جمهورك عبر الشاشة من اللحظة الأولى',
   'تستخدم أدوات التقديم لجذب انتباه المشاهد في الاستوديو والميدان',
   'توازن بين الالتزام بالسكريبت والارتجال العفوي المؤثر',
+];
+
+/* ─── trainers ───────────────────────────────────────────────────── */
+const TRAINERS = [
+  {
+    name: 'رامي أبو جبارة',
+    role: 'صحفي تلفزيوني ومدرّب الإعلامي الشامل',
+    bio: 'خبرة تمتد لـ 17 عاماً في الصحافة التلفزيونية والقيادة التحريرية؛ تنقّل خلالها بين كبرى المؤسسات الإعلامية مثل Sky News عربية، وصولاً إلى رئاسة تحرير «الشرق مع Bloomberg».',
+    chips: ['الصحافة التلفزيونية','القيادة التحريرية','Sky News عربية','الشرق مع Bloomberg'],
+    img: instructorRami,
+    imgPosition: '50% 15%',
+  },
+  {
+    name: 'أ. رنا محمد العزام',
+    role: 'مدرّبة الأداء والتحرير اللغوي والتقديم التلفزيوني',
+    bio: 'إعلامية ومدربة أداء متخصصة في التقديم التلفزيوني والتحرير اللغوي وتأهيل المتحدث الرسمي — تُدرّس محطتَي التأسيس في المسار وتُشرف على تطوير الحضور الإعلامي لكل متدرّب.',
+    chips: ['الإعلام التلفزيوني','التحرير اللغوي','المتحدث الرسمي','الحضور الإعلامي'],
+    img: instructorRana,
+    imgPosition: '50% 12%',
+  },
 ];
 
 /* ─── wave thumbnail (same helper as Soti) ──────────────────────── */
@@ -501,7 +521,7 @@ export default function MasarElamiPage() {
       </section>
 
       {/* ════════════════════════════════════════════════════════════
-          §02 FOR WHOM — لمن صُمِّم البرنامج؟
+          §02 FOR WHOM — لمن صُمِّم البرنامج؟ (Soti-style checkmark grid)
       ════════════════════════════════════════════════════════════ */}
       <section style={{ padding:'88px 0', borderTop:`1px solid ${CARD_BORDER}` }}>
         <div style={{ ...INNER }}>
@@ -510,43 +530,18 @@ export default function MasarElamiPage() {
               <span style={{ width:5, height:5, borderRadius:'50%', background:GLD, flexShrink:0 }} />
               لمن صُمِّم البرنامج؟
             </span>
-            <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(26px,3.6vw,40px)', color:OFF, marginTop:18, marginBottom:12, lineHeight:1.35 }}>
-              ما الذي ستُتقنه <span style={{ color:GLD }}>بعد الماستركلاس؟</span>
+            <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(26px,3.8vw,42px)', color:OFF, marginTop:18, marginBottom:0, lineHeight:1.3 }}>
+              هذه الرحلة لك إذا كنت تريد أن <span style={{ color:GLD }}>...</span>
             </h2>
-            <p style={{ fontFamily:F, fontSize:15.5, color:MUT, maxWidth:560, marginInline:'auto', lineHeight:1.8 }}>
-              ثلاثة محاور تُغطّي المهارة الكاملة — من الحضور أمام الكاميرا حتى بناء الهوية الإعلامية.
-            </p>
           </div>
 
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))', gap:20, maxWidth:980, marginInline:'auto' }}>
-            {[
-              {
-                focus: 'الحضور، لغة الجسد، وبناء الثقة',
-                title: 'الأداء والكاريزما أمام الكاميرا',
-                desc: 'تتحدث أمام العدسة بحضور كاريزمي وتفاعل طبيعي، وتتقن لغة الجسد ونبرات الصوت لتوصيل رسالتك وقراءة النصوص بتمكّن وبناء ثقة فورية مع المشاهد.',
-              },
-              {
-                focus: 'الثبات الميداني والسيطرة على الاستوديو',
-                title: 'إدارة الحوار والبث المباشر',
-                desc: 'تدير الحوارات التلفزيونية بذكاء وقدرة على توجيه الضيوف، وتتعامل باحترافية مع البث المباشر والمواقف الطارئة في الاستوديو والميدان.',
-              },
-              {
-                focus: 'البصمة الخاصة والسرعة الذكائية',
-                title: 'الهوية الإعلامية والارتجال',
-                desc: 'تبني هويتك الإعلامية المستقلة التي تميزك في السوق، وتوازن ببراعة بين الالتزام بالنص (السكريبت) والارتجال العفوي المؤثر.',
-              },
-            ].map((card, i) => (
-              <div key={i} style={{ background:CARD, border:`1px solid ${CARD_BORDER}`, borderRadius:20, padding:'30px 26px', display:'flex', flexDirection:'column', gap:14 }}>
-                <div style={{ width:36, height:3, background:GLD, borderRadius:2 }} />
-                <span style={{ fontFamily:F, fontSize:11.5, fontWeight:700, color:MUT, display:'flex', alignItems:'center', gap:5 }}>
-                  <span style={{ color:GLD }}>التركيز:</span> {card.focus}
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, maxWidth:860, marginInline:'auto' }}>
+            {AUDIENCE_ITEMS.map((item, i) => (
+              <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:13, background:CARD, border:`1px solid ${CARD_BORDER}`, borderRadius:14, padding:'16px 18px' }}>
+                <span style={{ flexShrink:0, width:22, height:22, borderRadius:'50%', background:GLD, display:'inline-flex', alignItems:'center', justifyContent:'center', marginTop:1 }}>
+                  <CheckCircle2 size={13} color="#1A1206" strokeWidth={2.5} />
                 </span>
-                <h3 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(17px,2.2vw,21px)', color:OFF, margin:0, lineHeight:1.45 }}>
-                  {card.title}
-                </h3>
-                <p style={{ fontFamily:F, fontSize:14, color:MUT, lineHeight:1.85, margin:0 }}>
-                  {card.desc}
-                </p>
+                <span style={{ fontFamily:F, fontSize:14, color:LT, lineHeight:1.75 }}>{item}</span>
               </div>
             ))}
           </div>
@@ -822,89 +817,42 @@ export default function MasarElamiPage() {
           §07 TRAINERS — خبراء الإعلام
       ════════════════════════════════════════════════════════════ */}
       <section className="sec sec--trainers" style={{ padding:'96px 0' }}>
-        <div className="geo" aria-hidden="true">
-          <svg viewBox="0 0 1440 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-            <g fill="none" stroke="rgba(255,255,255,.10)" strokeWidth="1.5">
-              <circle cx="80" cy="80" r="190"/><circle cx="80" cy="80" r="330"/>
-              <circle cx="80" cy="80" r="470"/><circle cx="80" cy="80" r="610"/>
-            </g>
-          </svg>
-        </div>
         <div style={{ ...INNER }}>
-          <div style={{ textAlign:'center', marginBottom:48 }}>
-            <SectionLabel text="خبراء ماستركلاس الإعلام" />
-            <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(26px,4vw,42px)', marginTop:16, lineHeight:1.35, color:OFF }}>
+          <div style={{ textAlign:'center', marginBottom:52, direction:'rtl' }}>
+            <span style={{ display:'inline-flex', alignItems:'center', gap:8, background:GLD, color:'#1A1206', fontFamily:F, fontSize:12.5, fontWeight:700, padding:'7px 16px', borderRadius:999 }}>
+              <span style={{ width:6, height:6, borderRadius:'50%', background:'#1A1206' }} />
+              خبراء ماستركلاس الإعلام
+            </span>
+            <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(28px,4.4vw,44px)', lineHeight:1.35, margin:'18px 0 0', color:OFF }}>
               مَن <span style={{ color:GLD }}>يُرشدك</span> في هذا المسار؟
             </h2>
-            <p style={{ fontFamily:F, fontSize:15.5, color:MUT, maxWidth:540, marginInline:'auto', marginTop:12 }}>
-              إعلاميون ومدرّبون من داخل بيئة العمل الحقيقية — يمنحونك خبرة الكاميرا والاستوديو وتوجيه الأداء طوال رحلتك التدريبية.
-            </p>
           </div>
 
-          <div style={{ display:'flex', flexDirection:'column', gap:18, maxWidth:900, marginInline:'auto' }}>
-
-            {/* Rami */}
-            <div className="elam-trainer-card" style={{ background:`linear-gradient(135deg,rgba(255,193,7,.04),rgba(255,255,255,.025) 60%)`, border:`1px solid ${GL}` }}>
-              <div className="elam-trainer-photo">
-                <img src={instructorRami} alt="رامي أبو جبارة" loading="lazy" decoding="async"
-                  style={{ width:'100%', height:'100%', objectFit:'cover', objectPosition:'center top', display:'block', position:'absolute', inset:0 }} />
-                <div style={{ position:'absolute', inset:0, background:'linear-gradient(to left,rgba(8,13,23,.85) 0%,transparent 55%)' }} />
-                <div style={{ position:'absolute', bottom:16, right:16, display:'inline-flex', alignItems:'center', gap:8, background:'rgba(0,0,0,.68)', backdropFilter:'blur(8px)', border:'1px solid rgba(255,193,7,.25)', borderRadius:10, padding:'7px 13px' }}>
-                  <div style={{ width:26, height:26, borderRadius:6, background:'#fff', display:'grid', placeContent:'center', flexShrink:0, padding:3 }}>
-                    <img src={wajeezLogo} alt="وجيز" style={{ width:'100%', height:'100%', objectFit:'contain' }} />
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))', gap:18, maxWidth:860, margin:'52px auto 0' }}>
+            {TRAINERS.map(tr => (
+              <div key={tr.name} style={{ background:CARD, border:`1px solid ${CARD_BORDER}`, borderRadius:22, overflow:'hidden', display:'flex', flexDirection:'column' }}>
+                {/* photo */}
+                <div style={{ height:220, position:'relative', overflow:'hidden' }}>
+                  <img src={tr.img} alt={tr.name} loading="lazy" decoding="async"
+                    style={{ width:'100%', height:'100%', objectFit:'cover', objectPosition:tr.imgPosition }} />
+                  <div style={{ position:'absolute', inset:0, background:'linear-gradient(to top, rgba(8,13,23,.80) 0%, transparent 55%)' }} />
+                </div>
+                {/* body */}
+                <div style={{ padding:'22px 22px 24px', display:'flex', flexDirection:'column', gap:10, flex:1 }}>
+                  <span style={{ fontFamily:F, fontSize:11.5, fontWeight:700, color:GLD }}>{tr.role}</span>
+                  <h3 style={{ fontFamily:F, fontWeight:900, fontSize:'clamp(17px,2vw,22px)', color:OFF, margin:0, lineHeight:1.3 }}>{tr.name}</h3>
+                  <p style={{ fontFamily:F, fontSize:13.5, color:MUT, lineHeight:1.85, margin:0 }}>{tr.bio}</p>
+                  <div style={{ display:'flex', flexWrap:'wrap', gap:6, marginTop:4 }}>
+                    {tr.chips.map(c => (
+                      <span key={c} style={{ fontFamily:F, fontSize:11.5, color:GLD, background:GS, border:`1px solid ${GL}`, borderRadius:999, padding:'3px 11px' }}>{c}</span>
+                    ))}
                   </div>
-                  <span style={{ fontFamily:F, fontSize:11.5, fontWeight:700, color:GLD, lineHeight:1.35 }}>الشريك المؤسس<br/>لتطبيق وجيز</span>
+                  <a href={WA_TRACK} target="_blank" rel="noopener noreferrer" style={{ marginTop:'auto', paddingTop:14, display:'inline-flex', alignItems:'center', gap:7, alignSelf:'flex-start', color:GLD, fontFamily:F, fontWeight:700, fontSize:13, textDecoration:'none' }}>
+                    <FaWhatsapp size={14} /> تواصل للاستفسار
+                  </a>
                 </div>
               </div>
-              <div style={{ padding:'32px 32px 28px', display:'flex', flexDirection:'column' }}>
-                <div style={{ display:'inline-flex', alignItems:'center', gap:7, background:GS, border:`1px solid ${GL}`, borderRadius:999, padding:'4px 13px', marginBottom:12, alignSelf:'flex-start' }}>
-                  <span style={{ width:4, height:4, borderRadius:'50%', background:GLD }} />
-                  <span style={{ fontFamily:F, fontSize:12, fontWeight:700, color:GLD }}>مدرّب برنامج الإعلامي الشامل</span>
-                </div>
-                <h3 style={{ fontFamily:F, fontWeight:900, fontSize:'clamp(20px,2.2vw,28px)', color:OFF, margin:'0 0 8px' }}>رامي أبو جبارة</h3>
-                <p style={{ fontFamily:F, fontSize:14, color:MUT, lineHeight:1.85, marginBottom:20 }}>
-                  خبرة تمتد لـ <b style={{ color:LT, fontFamily:FP }}>17</b> عاماً في الصحافة التلفزيونية والقيادة التحريرية؛ تنقّل خلالها بين كبرى المؤسسات الإعلامية مثل <b style={{ color:LT }}>Sky News عربية</b>، وصولاً إلى رئاسة تحرير <b style={{ color:LT }}>«الشرق مع Bloomberg»</b>.
-                </p>
-                <div style={{ display:'flex', flexWrap:'wrap', gap:7, marginBottom:22 }}>
-                  {['الصحافة التلفزيونية','القيادة التحريرية','Sky News عربية','الشرق مع Bloomberg'].map(t => (
-                    <span key={t} style={{ fontFamily:F, fontSize:12, color:GLD, background:GS, border:`1px solid ${GL}`, borderRadius:999, padding:'4px 12px' }}>{t}</span>
-                  ))}
-                </div>
-                <a href={WA_TRACK} target="_blank" rel="noopener noreferrer"
-                  style={{ marginTop:'auto', display:'inline-flex', alignItems:'center', gap:8, alignSelf:'flex-start', background:GLD, color:'#0f172a', fontFamily:F, fontWeight:800, fontSize:13.5, padding:'11px 22px', borderRadius:11, textDecoration:'none' }}>
-                  تواصل للاستفسار <ArrowLeft size={13} />
-                </a>
-              </div>
-            </div>
-
-            {/* Rana */}
-            <div className="elam-trainer-card" style={{ background:`linear-gradient(135deg,rgba(103,232,249,.04),rgba(255,255,255,.020) 60%)`, border:'1px solid rgba(103,232,249,.20)' }}>
-              <div className="elam-trainer-photo">
-                <img src={instructorRana} alt="أ. رنا محمد العزام" loading="lazy" decoding="async"
-                  style={{ width:'100%', height:'100%', objectFit:'cover', objectPosition:'center top', display:'block', position:'absolute', inset:0 }} />
-                <div style={{ position:'absolute', inset:0, background:'linear-gradient(to left,rgba(8,13,23,.85) 0%,transparent 55%)' }} />
-              </div>
-              <div style={{ padding:'32px 32px 28px', display:'flex', flexDirection:'column' }}>
-                <div style={{ display:'inline-flex', alignItems:'center', gap:7, background:'rgba(103,232,249,.07)', border:'1px solid rgba(103,232,249,.22)', borderRadius:999, padding:'4px 13px', marginBottom:12, alignSelf:'flex-start' }}>
-                  <span style={{ width:4, height:4, borderRadius:'50%', background:'#67e8f9' }} />
-                  <span style={{ fontFamily:F, fontSize:12, fontWeight:700, color:'#67e8f9' }}>مدرّبة الأداء والتحرير اللغوي</span>
-                </div>
-                <h3 style={{ fontFamily:F, fontWeight:900, fontSize:'clamp(20px,2.2vw,28px)', color:OFF, margin:'0 0 8px' }}>أ. رنا محمد العزام</h3>
-                <p style={{ fontFamily:F, fontSize:14, color:MUT, lineHeight:1.85, marginBottom:20 }}>
-                  إعلامية ومدربة أداء متخصصة في <b style={{ color:LT }}>التقديم التلفزيوني</b> والتحرير اللغوي وتأهيل المتحدث الرسمي — تُدرّس محطتَي التأسيس في المسار.
-                </p>
-                <div style={{ display:'flex', flexWrap:'wrap', gap:7, marginBottom:22 }}>
-                  {['الإعلام التلفزيوني','التحرير اللغوي','المتحدث الرسمي','الحضور الإعلامي'].map(t => (
-                    <span key={t} style={{ fontFamily:F, fontSize:12, color:'#67e8f9', background:'rgba(103,232,249,.07)', border:'1px solid rgba(103,232,249,.20)', borderRadius:999, padding:'4px 12px' }}>{t}</span>
-                  ))}
-                </div>
-                <a href={WA_TRACK} target="_blank" rel="noopener noreferrer"
-                  style={{ marginTop:'auto', display:'inline-flex', alignItems:'center', gap:8, alignSelf:'flex-start', background:'rgba(103,232,249,.10)', border:'1px solid rgba(103,232,249,.30)', color:'#67e8f9', fontFamily:F, fontWeight:800, fontSize:13.5, padding:'11px 22px', borderRadius:11, textDecoration:'none' }}>
-                  تواصل للاستفسار <ArrowLeft size={13} />
-                </a>
-              </div>
-            </div>
-
+            ))}
           </div>
         </div>
       </section>
@@ -1129,7 +1077,7 @@ export default function MasarElamiPage() {
       </section>
 
       {/* ════════════════════════════════════════════════════════════
-          §10 CONSULTATION — استشارة مجانية (after checkout)
+          §10 CONSULTATION — استشارة مجانية (WhatsApp mockup — Soti style)
       ════════════════════════════════════════════════════════════ */}
       <section id="consult" className="sec sec--consult" style={{ padding:'0 0 88px' }}>
         <div style={{ ...INNER }}>
@@ -1145,42 +1093,77 @@ export default function MasarElamiPage() {
               جلسة قصيرة على واتساب تُحدَّد فيها نقطة بدايتك — لكلّ مسار مستشارة مخصّصة.
             </p>
           </div>
-          <div className="elam-adv-card">
-            <div className="elam-adv-col-a">
-              <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:20 }}>
-                <div style={{ width:70, height:70, borderRadius:'50%', overflow:'hidden', flexShrink:0, border:`2px solid ${GL}` }}>
-                  <img src={advisorAya} alt="آية القماز" style={{ width:'100%', height:'100%', objectFit:'cover' }} />
+
+          {/* advisor toggle */}
+          <div style={{ display:'flex', justifyContent:'center', gap:10, marginBottom:28 }}>
+            {[
+              { mode:'onsite' as const, label:'الحضوري', img:advisorAya, name:'آية القماز' },
+              { mode:'live'   as const, label:'المباشر', img:advisorYaqout, name:'ياقوت خشاشنة' },
+            ].map(({ mode, label, img, name }) => (
+              <button key={mode} onClick={() => setCheckoutMode(mode)} style={{
+                display:'flex', alignItems:'center', gap:9,
+                background: checkoutMode === mode ? GS : 'transparent',
+                border:`1px solid ${checkoutMode === mode ? GL : 'rgba(255,255,255,0.08)'}`,
+                borderRadius:999, padding:'7px 16px 7px 10px', cursor:'pointer',
+              }}>
+                <div style={{ width:30, height:30, borderRadius:'50%', overflow:'hidden', flexShrink:0, border: checkoutMode === mode ? `2px solid ${GLD}` : '2px solid transparent' }}>
+                  <img src={img} alt={name} style={{ width:'100%', height:'100%', objectFit:'cover' }} />
                 </div>
-                <div>
-                  <div style={{ fontFamily:F, fontWeight:800, fontSize:15, color:OFF, marginBottom:6 }}>آية القماز</div>
-                  <div style={{ display:'flex', alignItems:'center', gap:5, fontFamily:F, fontSize:12.5, color:MUT }}>
-                    <MapPin size={12} color={GLD} strokeWidth={2} /> حضوري · عمّان
-                  </div>
-                </div>
-              </div>
-              <a href={WA_AYA_LINK} target="_blank" rel="noopener noreferrer"
-                style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8, background:'transparent', border:'1.5px solid #25D366', color:'#25D366', fontFamily:F, fontWeight:700, fontSize:13.5, padding:'11px 20px', borderRadius:12, textDecoration:'none', boxSizing:'border-box' as const }}>
-                <FaWhatsapp size={16} /> تواصلي مع آية
-              </a>
-            </div>
-            <div className="elam-adv-col-b">
-              <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:20 }}>
-                <div style={{ width:70, height:70, borderRadius:'50%', overflow:'hidden', flexShrink:0, border:'2px solid rgba(103,232,249,.30)' }}>
-                  <img src={advisorYaqout} alt="ياقوت خشاشنة" style={{ width:'100%', height:'100%', objectFit:'cover' }} />
-                </div>
-                <div>
-                  <div style={{ fontFamily:F, fontWeight:800, fontSize:15, color:OFF, marginBottom:6 }}>ياقوت خشاشنة</div>
-                  <div style={{ display:'flex', alignItems:'center', gap:5, fontFamily:F, fontSize:12.5, color:MUT }}>
-                    <Wifi size={12} color="#67e8f9" strokeWidth={2} /> مباشر تفاعلي · Online LIVE
-                  </div>
-                </div>
-              </div>
-              <a href={WA_CONSULT} target="_blank" rel="noopener noreferrer"
-                style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8, background:'transparent', border:'1.5px solid #25D366', color:'#25D366', fontFamily:F, fontWeight:700, fontSize:13.5, padding:'11px 20px', borderRadius:12, textDecoration:'none', boxSizing:'border-box' as const }}>
-                <FaWhatsapp size={16} /> تواصلي مع ياقوت
-              </a>
-            </div>
+                <span style={{ fontFamily:F, fontWeight:700, fontSize:13, color: checkoutMode === mode ? GLD : MUT }}>{label}</span>
+              </button>
+            ))}
           </div>
+
+          {/* WhatsApp chat mockup */}
+          {(() => {
+            const isOnsite = checkoutMode === 'onsite';
+            const advisor = isOnsite
+              ? { name:'آية القماز', role:'مستشارة المسار الحضوري', img:advisorAya,
+                  msg:'أهلاً 👋 أنا آية، مستشارة ماستركلاس الإعلام الحضوري. أخبريني عن طموحك الإعلامي الآن — وأساعدك تختاري نقطة البداية الصح.',
+                  link: WA_AYA_LINK }
+              : { name:'ياقوت خشاشنة', role:'مستشارة المسار المباشر', img:advisorYaqout,
+                  msg:'أهلاً 👋 أنا ياقوت، مستشارة ماستركلاس الإعلام المباشر. أخبريني عن طموحك الإعلامي الآن — وأساعدك تختاري نقطة البداية الصح.',
+                  link: WA_CONSULT };
+            return (
+              <div style={{ maxWidth:480, marginInline:'auto', borderRadius:20, overflow:'hidden', boxShadow:'0 24px 64px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,0.07)', border:'1px solid rgba(255,255,255,0.08)' }}>
+                {/* WA header */}
+                <div style={{ background:'#1F2C34', padding:'12px 16px', display:'flex', alignItems:'center', gap:12 }}>
+                  <div style={{ width:42, height:42, borderRadius:'50%', overflow:'hidden', flexShrink:0, border:'2px solid #25D366' }}>
+                    <img src={advisor.img} alt={advisor.name} style={{ width:'100%', height:'100%', objectFit:'cover' }} />
+                  </div>
+                  <div style={{ flex:1, minWidth:0 }}>
+                    <div style={{ fontFamily:F, fontWeight:700, fontSize:14.5, color:'#E9EEF1', lineHeight:1.3 }}>{advisor.name}</div>
+                    <div style={{ fontFamily:F, fontSize:12, color:'#8696A0', marginTop:1 }}>{advisor.role}</div>
+                  </div>
+                  <div style={{ display:'flex', alignItems:'center', gap:4 }}>
+                    <span style={{ width:7, height:7, borderRadius:'50%', background:'#25D366', boxShadow:'0 0 6px #25D366' }} />
+                    <span style={{ fontFamily:F, fontSize:11, color:'#25D366', fontWeight:600 }}>متاحة</span>
+                  </div>
+                </div>
+                {/* WA body */}
+                <div style={{ background:'#0B141A', padding:'20px 16px 16px', minHeight:140, position:'relative' }}>
+                  <div style={{ position:'absolute', inset:0, backgroundImage:'radial-gradient(circle,rgba(255,255,255,0.025) 1px,transparent 1px)', backgroundSize:'20px 20px', pointerEvents:'none' }} />
+                  <div style={{ position:'relative', maxWidth:'82%', background:'#1F2C34', borderRadius:'0 14px 14px 14px', padding:'10px 14px 8px', marginRight:'auto' }}>
+                    <div style={{ position:'absolute', top:0, right:'100%', width:0, height:0, borderStyle:'solid', borderWidth:'0 8px 8px 0', borderColor:'transparent #1F2C34 transparent transparent' }} />
+                    <p style={{ fontFamily:F, fontSize:14.5, color:'#E9EEF1', lineHeight:1.7, margin:0 }} dir="rtl">{advisor.msg}</p>
+                    <div style={{ display:'flex', alignItems:'center', justifyContent:'flex-end', gap:4, marginTop:5 }}>
+                      <span style={{ fontFamily:F, fontSize:10.5, color:'#8696A0' }}>الآن</span>
+                      <svg width="14" height="9" viewBox="0 0 16 10" fill="none"><path d="M1 5l3.5 3.5L10 1M6 5l3.5 3.5L15 1" stroke="#53BDEB" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </div>
+                  </div>
+                </div>
+                {/* WA input row */}
+                <a href={advisor.link} target="_blank" rel="noopener noreferrer" style={{ display:'flex', alignItems:'center', gap:10, background:'#1F2C34', padding:'10px 12px', textDecoration:'none', borderTop:'1px solid rgba(255,255,255,0.06)', cursor:'pointer' }}>
+                  <div style={{ flex:1, background:'#2A3942', borderRadius:22, padding:'9px 16px' }}>
+                    <span style={{ fontFamily:F, fontSize:14, color:'#8696A0' }}>ابدأ المحادثة…</span>
+                  </div>
+                  <div style={{ width:44, height:44, borderRadius:'50%', background:'#25D366', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, boxShadow:'0 4px 14px rgba(37,211,102,.4)' }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                  </div>
+                </a>
+              </div>
+            );
+          })()}
         </div>
       </section>
 
