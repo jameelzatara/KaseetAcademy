@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import ShareModal from './ShareModal';
 import SiteFooter from './SiteFooter';
+import PageBreadcrumb from './PageBreadcrumb';
 import cohortsAll from '../data/cohorts.json';
 
 /* ── Design tokens ──────────────────────────────────────────── */
@@ -692,14 +693,16 @@ function HeroSection({ props, activeMode, openCounts, onModeChange, onShare }: {
     <section className="sec--hero" data-nav-theme="light" style={{ background: CREAM, paddingTop: 'clamp(72px,9vw,110px)', paddingBottom: 60 }}>
       <div style={{ ...WRAP, direction: 'rtl' }}>
 
-        {/* Back link — always visible */}
+        {/* Breadcrumb */}
         <div style={{ marginBottom: 24 }}>
-          <button onClick={() => window.history.back()} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', padding: '4px 0', cursor: 'pointer', fontFamily: F, fontWeight: 700, fontSize: 13.5, color: INK2, transition: 'color .15s' }}
-            onMouseEnter={e => (e.currentTarget.style.color = INK)}
-            onMouseLeave={e => (e.currentTarget.style.color = INK2)}
-          >
-            <ArrowLeft size={15} strokeWidth={2} /> العودة إلى الدورات
-          </button>
+          <PageBreadcrumb
+            crumbs={[
+              { label: 'الرئيسية', href: '/' },
+              { label: 'الدورات', href: '/#courses' },
+              { label: title },
+            ]}
+            theme="light"
+          />
         </div>
 
         <div className="ka-hero-grid" style={{ display: 'grid', gridTemplateColumns: '1fr min(400px,38vw)', gap: 'clamp(24px,4vw,56px)', alignItems: 'start' }}>

@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { Link } from 'wouter';
 import Navbar from '../components/Navbar';
 import SiteFooter from '../components/SiteFooter';
+import PageBreadcrumb from '@/components/PageBreadcrumb';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { TRAINERS } from '../data/trainers';
 
@@ -54,6 +55,9 @@ export default function TrainersPage() {
           padding: 'clamp(48px,8vw,96px) clamp(16px,4vw,48px)',
           textAlign: 'center',
         }}>
+          <div style={{ maxWidth: 1100, margin: '0 auto 20px', direction: 'rtl' }}>
+            <PageBreadcrumb crumbs={[{ label: 'الرئيسية', href: '/' }, { label: 'المدرّبون' }]} theme="dark" />
+          </div>
           <p style={{
             fontFamily: FP, fontSize: 12, fontWeight: 600, letterSpacing: '0.12em',
             color: GOLD, textTransform: 'uppercase', marginBottom: 12,

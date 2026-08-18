@@ -2,7 +2,8 @@
 // مسوّدة مهنية — تحتاج مراجعة محامٍ أردني مرخَّص قبل النشر
 import { useEffect } from 'react';
 import SiteFooter from '@/components/SiteFooter';
-import BackButton from '@/components/BackButton';
+import Navbar from '@/components/Navbar';
+import PageBreadcrumb from '@/components/PageBreadcrumb';
 
 const S = {
   page:  { minHeight: '100dvh', background: '#FDFBF7', direction: 'rtl' as const },
@@ -29,9 +30,11 @@ export default function TermsPage() {
   useEffect(() => { window.scrollTo({ top: 0, left: 0, behavior: 'instant' }); }, []);
   return (
     <div style={S.page}>
-      <BackButton />
+      <Navbar />
       <main id="main" style={S.wrap}>
 
+        <PageBreadcrumb crumbs={[{ label: 'الرئيسية', href: '/' }, { label: 'الشروط والأحكام' }]} theme="light" />
+        <div style={{ marginBottom: 28 }} />
         <div style={S.badge}>الشروط والأحكام</div>
         <h1 style={S.h1}>الشروط والأحكام العامة لاستخدام الخدمات</h1>
         <span style={S.date}>آخر تحديث: [تاريخ النشر] — إصدار 1.0</span>

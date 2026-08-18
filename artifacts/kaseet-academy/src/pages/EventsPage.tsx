@@ -5,6 +5,7 @@
 import { useEffect } from 'react';
 import { Link } from 'wouter';
 import Navbar from '../components/Navbar';
+import PageBreadcrumb from '@/components/PageBreadcrumb';
 import SiteFooter from '../components/SiteFooter';
 import { usePageMeta } from '../hooks/usePageMeta';
 
@@ -67,6 +68,9 @@ export default function EventsPage() {
           padding: 'clamp(48px,8vw,96px) clamp(16px,4vw,48px)',
           textAlign: 'center',
         }}>
+          <div style={{ maxWidth: 860, margin: '0 auto 20px', direction: 'rtl' }}>
+            <PageBreadcrumb crumbs={[{ label: 'الرئيسية', href: '/' }, { label: 'الفعاليات' }]} theme="dark" />
+          </div>
           <p style={{
             fontFamily: FP, fontSize: 12, fontWeight: 600, letterSpacing: '0.12em',
             color: GOLD, textTransform: 'uppercase', marginBottom: 12,

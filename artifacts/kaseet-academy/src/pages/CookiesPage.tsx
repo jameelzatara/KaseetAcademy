@@ -2,6 +2,7 @@
 // مسوّدة مهنية — تحتاج مراجعة محامٍ أردني مرخَّص قبل النشر
 import Navbar from '@/components/Navbar';
 import SiteFooter from '@/components/SiteFooter';
+import PageBreadcrumb from '@/components/PageBreadcrumb';
 
 const S = {
   page:  { minHeight: '100dvh', background: '#0D0B14', direction: 'rtl' as const },
@@ -31,6 +32,8 @@ export default function CookiesPage() {
       <Navbar />
       <main id="main" style={S.wrap}>
 
+        <PageBreadcrumb crumbs={[{ label: 'الرئيسية', href: '/' }, { label: 'سياسة الكوكيز' }]} theme="dark" />
+        <div style={{ marginBottom: 28 }} />
         <div style={S.badge}>سياسة الكوكيز</div>
         <h1 style={S.h1}>سياسة ملفات تعريف الارتباط (Cookies)</h1>
         <span style={S.date}>آخر تحديث: [تاريخ النشر] — إصدار 1.0</span>

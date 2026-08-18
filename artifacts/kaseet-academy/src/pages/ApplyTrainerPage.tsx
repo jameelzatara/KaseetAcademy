@@ -1,7 +1,8 @@
 // ── Apply — Trainer Page ──────────────────────────────────────
 import { useState, useEffect } from 'react';
 import SiteFooter from '@/components/SiteFooter';
-import BackButton from '@/components/BackButton';
+import Navbar from '@/components/Navbar';
+import PageBreadcrumb from '@/components/PageBreadcrumb';
 import { CheckCircle, GraduationCap, ChevronDown } from 'lucide-react';
 
 const F    = 'Tajawal, sans-serif';
@@ -82,7 +83,7 @@ export default function ApplyTrainerPage() {
   if (submitted) {
     return (
       <div dir="rtl" style={{ background: '#0D0B14', minHeight: '100vh', color: '#fff', display: 'flex', flexDirection: 'column' }}>
-        <BackButton />
+        <Navbar />
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '120px 24px 80px' }}>
           <div style={{ textAlign: 'center', maxWidth: 520 }}>
             <CheckCircle size={56} color={GOLD} style={{ marginBottom: 20 }}/>
@@ -107,11 +108,14 @@ export default function ApplyTrainerPage() {
 
   return (
     <div dir="rtl" style={{ background: '#0D0B14', minHeight: '100vh', color: '#fff' }}>
-      <BackButton />
+      <Navbar />
 
       {/* Hero */}
-      <div style={{ background: 'rgba(0,0,0,0.30)', borderBottom: '1px solid rgba(255,193,7,0.12)', padding: '120px 24px 52px' }}>
+      <div style={{ background: 'rgba(0,0,0,0.30)', borderBottom: '1px solid rgba(255,193,7,0.12)', padding: '90px 24px 52px' }}>
         <div style={{ maxWidth: 700, margin: '0 auto' }}>
+          <div style={{ marginBottom: 20 }}>
+            <PageBreadcrumb crumbs={[{ label: 'الرئيسية', href: '/' }, { label: 'التسجيل كمدرب' }]} theme="dark" />
+          </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
             <GraduationCap size={22} color={GOLD}/>
             <span style={{

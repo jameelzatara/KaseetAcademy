@@ -5,6 +5,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearch } from 'wouter';
 import Navbar from '../components/Navbar';
+import PageBreadcrumb from '@/components/PageBreadcrumb';
 import SiteFooter from '../components/SiteFooter';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { BLOG_POSTS, type BlogPost } from '../data/blog';
@@ -142,6 +143,9 @@ export default function BlogIndexPage() {
       <Navbar />
 
       <div className="blog-page">
+        <div style={{ padding: '8px clamp(16px,4vw,48px)', direction: 'rtl' }}>
+          <PageBreadcrumb crumbs={[{ label: 'الرئيسية', href: '/' }, { label: 'المدوّنة' }]} theme="dark" />
+        </div>
         <div className="page">
 
           {/* ── الهيرو ──────────────────────────────────── */}

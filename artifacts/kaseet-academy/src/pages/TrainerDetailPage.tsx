@@ -4,6 +4,7 @@
 import { useEffect } from 'react';
 import { Link, useParams } from 'wouter';
 import Navbar from '../components/Navbar';
+import PageBreadcrumb from '@/components/PageBreadcrumb';
 import SiteFooter from '../components/SiteFooter';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { getTrainer } from '../data/trainers';
@@ -105,6 +106,9 @@ export default function TrainerDetailPage() {
           background: '#0D0B14',
           padding: 'clamp(48px,7vw,80px) clamp(16px,4vw,48px)',
         }}>
+          <div style={{ maxWidth: 860, margin: '0 auto 20px', direction: 'rtl' }}>
+            <PageBreadcrumb crumbs={[{ label: 'الرئيسية', href: '/' }, { label: 'المدرّبون', href: '/trainers' }, { label: trainer.name }]} theme="dark" />
+          </div>
           <div style={{ maxWidth: 860, margin: '0 auto', display: 'flex', gap: 36, flexWrap: 'wrap', alignItems: 'center' }}>
             {/* Avatar */}
             <div style={{

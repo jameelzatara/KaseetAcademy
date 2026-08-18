@@ -5,6 +5,7 @@
 import { useEffect, useRef } from 'react';
 import { Link, useParams } from 'wouter';
 import Navbar from '../components/Navbar';
+import PageBreadcrumb from '@/components/PageBreadcrumb';
 import SiteFooter from '../components/SiteFooter';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { getBlogPost, getRelatedPosts } from '../data/blog';
@@ -240,12 +241,8 @@ article tr:hover td{background:rgba(255,255,255,.03)}
         <div className="page">
 
           {/* ── التنقّل الفتاتي ────────────────────────── */}
-          <div className="crumb">
-            <Link href="/">الرئيسية</Link>
-            <span className="sep">/</span>
-            <Link href="/blog">المدوّنة</Link>
-            <span className="sep">/</span>
-            {post.category}
+          <div style={{ marginBottom: 20 }}>
+            <PageBreadcrumb crumbs={[{ label: 'الرئيسية', href: '/' }, { label: 'المدوّنة', href: '/blog' }, { label: post.category }]} theme="dark" />
           </div>
 
           {/* ── رأس المقال ────────────────────────────── */}

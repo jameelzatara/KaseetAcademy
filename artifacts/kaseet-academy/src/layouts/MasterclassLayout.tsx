@@ -12,6 +12,7 @@ import MasterclassGuarantee from '../components/masterclass/MasterclassGuarantee
 import MasterclassFaqAccordion from '../components/masterclass/MasterclassFaqAccordion';
 import MasterclassAdvisorCard from '../components/masterclass/MasterclassAdvisorCard';
 import PaymentModal from '../components/PaymentModal';
+import PageBreadcrumb from '../components/PageBreadcrumb';
 import wajeezLogo from '@assets/wajeez-logo_1785688262989.png';
 
 /* ── design tokens ─────────────────────────────────────────── */
@@ -405,30 +406,27 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
         <div style={{ position: 'relative', zIndex: 3, ...WRP }}>
           {/* breadcrumb */}
           {isCoverHero ? (
-            <div style={{ marginBottom: 16, marginTop: 18, direction: 'rtl', display: 'flex', alignItems: 'center', gap: 0, flexWrap: 'nowrap', overflow: 'hidden' }}>
-              <button onClick={() => navigate('/')}
-                style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontFamily: F, fontSize: 12, color: 'rgba(180,190,210,0.65)', display: 'inline-flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
-                <ArrowLeft size={9} style={{ opacity: 0.5 }} />
-                الرئيسية
-              </button>
-              <span style={{ color: 'rgba(180,190,210,0.28)', marginInline: 6, fontSize: 11, flexShrink: 0 }}>/</span>
-              <span style={{ fontFamily: F, fontSize: 12, color: 'rgba(180,190,210,0.50)', flexShrink: 0 }}>الماستركلاسات</span>
-              <span style={{ color: 'rgba(180,190,210,0.28)', marginInline: 6, fontSize: 11, flexShrink: 0 }}>/</span>
-              <span style={{ fontFamily: F, fontSize: 12, color: 'rgba(180,190,210,0.35)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                {data.hero.h1GoldLine ?? data.meta.title}
-              </span>
+            <div style={{ marginBottom: 16, marginTop: 18 }}>
+              <PageBreadcrumb
+                crumbs={[
+                  { label: 'الرئيسية', href: '/' },
+                  { label: 'الماستركلاسات', href: '/#masterclasses' },
+                  { label: data.hero.h1GoldLine ?? data.meta.title },
+                ]}
+                theme="dark"
+              />
             </div>
           ) : (
-            /* non-cover: Soti-style breadcrumb inside hero */
-            <nav aria-label="مسار التنقل" style={{ display: 'flex', alignItems: 'center', gap: 6, paddingTop: 96, paddingBottom: 0, marginBottom: 28 }}>
-              <a href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: F, fontSize: 12.5, color: MUT, textDecoration: 'none' }}>
-                <Home size={12} strokeWidth={2} /> الرئيسية
-              </a>
-              <span style={{ color: 'rgba(255,255,255,.20)', fontSize: 11 }}>/</span>
-              <a href="/#masterclasses" style={{ fontFamily: F, fontSize: 12.5, color: MUT, textDecoration: 'none' }}>الماستركلاسات</a>
-              <span style={{ color: 'rgba(255,255,255,.20)', fontSize: 11 }}>/</span>
-              <span style={{ fontFamily: F, fontSize: 12.5, color: GLD }}>{data.hero.h1GoldLine}</span>
-            </nav>
+            <div style={{ paddingTop: 96, marginBottom: 28 }}>
+              <PageBreadcrumb
+                crumbs={[
+                  { label: 'الرئيسية', href: '/' },
+                  { label: 'الماستركلاسات', href: '/#masterclasses' },
+                  { label: data.hero.h1GoldLine ?? data.meta.title },
+                ]}
+                theme="dark"
+              />
+            </div>
           )}
 
           <div className="mc-hero-grid" style={{ display: 'grid', gridTemplateColumns: (data.hero.heroCardSrc || data.hero.useSpinningRing) ? '1.12fr .88fr' : '1fr', gap: 52, alignItems: 'center' }}>
