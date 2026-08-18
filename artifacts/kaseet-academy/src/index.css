@@ -25,6 +25,9 @@
   border-radius: 16px !important;
   border: none !important;
 }
+@media (max-width: 600px) {
+  .reel-embed-wrap iframe { min-height: 260px !important; }
+}
 @import 'tw-animate-css';
 @plugin "@tailwindcss/typography";
 
@@ -58,6 +61,11 @@
 }
 
 @layer base {
+  /* Prevent horizontal scroll at the root — covers both html and body */
+  html {
+    overflow-x: hidden;
+  }
+
   /* Tajawal on every element — overrides browser UA for inputs & buttons */
   *, body, button, input, textarea, select {
     @apply border-border;
@@ -96,6 +104,37 @@ body::before {
 .section-block { padding-block: 60px;  padding-inline: 0; }
 @media (min-width: 768px)  { .section-block { padding-block: 80px;  } }
 @media (min-width: 1024px) { .section-block { padding-block: 110px; } }
+
+/* ── PaymentModal: collapse 2-col form grids to 1 col on narrow screens ── */
+@media (max-width: 480px) {
+  .ka-modal-body .ka-form-row-2 {
+    grid-template-columns: 1fr !important;
+  }
+  .ka-modal-card {
+    border-radius: 16px !important;
+  }
+  .ka-modal-overlay {
+    padding: 8px !important;
+    align-items: flex-end !important;
+  }
+  .ka-modal-card {
+    max-height: 94vh !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+  }
+}
+
+/* ── Soti & Khataba track/schedule grids: scroll rather than overflow on mobile ── */
+@media (max-width: 640px) {
+  .soti-track-grid-row {
+    grid-template-columns: 36px 1fr !important;
+  }
+  .soti-track-kind,
+  .soti-track-wave { display: none !important; }
+  .khataba-modes-grid { grid-template-columns: 1fr !important; }
+  .khataba-gallery-grid { grid-template-columns: 1fr !important; }
+  .khataba-gallery-grid > * { height: 200px !important; }
+}
 
 @layer utilities {
   .text-glow-gold {

@@ -690,7 +690,7 @@ export default function MasarKhatabaPage() {
             </p>
           </div>
 
-          <div className="khataba-modes-grid" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:18, marginTop:52 }}>
+          <div className="khataba-modes-grid" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:18, marginTop:32 }}>
 
             {/* حضوري */}
             <div style={{ background:CARD, border:`1px solid rgba(255,193,7,.22)`, borderRadius:20, display:'flex', flexDirection:'column', overflow:'hidden' }}>
@@ -856,7 +856,7 @@ export default function MasarKhatabaPage() {
           </div>
 
           {/* ── Grid ── */}
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gridTemplateRows:'320px 240px', gap:8, borderRadius:24, overflow:'hidden' }}>
+          <div className="khataba-gallery-grid" style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gridTemplateRows:'320px 240px', gap:8, borderRadius:24, overflow:'hidden' }}>
 
             {/* صورة 1 — صهيب يتكلم، تمتد عامودياً */}
             <div style={{ gridColumn:'1', gridRow:'1 / 3', position:'relative', overflow:'hidden' }}>

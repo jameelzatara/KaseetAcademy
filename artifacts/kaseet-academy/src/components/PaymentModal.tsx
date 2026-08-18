@@ -15,6 +15,7 @@ import {
   convertPrice, formatPrice,
 } from '../data/currency';
 import { useExchangeRates } from '../hooks/useExchangeRates';
+import { useCurrency } from '../context/CurrencyContext';
 
 /* ── design tokens ─────────────────────────────────── */
 const GLD   = '#FFC107';
@@ -743,17 +744,8 @@ export default function PaymentModal({
   const [paidAmount, setPaidAmount]   = useState<number>(0);
   const [paidCurrency, setPaidCurrency] = useState<string>('JOD');
   const [remaining, setRemaining]     = useState<number>(0);
-  const [displayCurrency, setDisplayCurrencyState] = useState<CurrencyCode>(() => {
-    try {
-      const v = localStorage.getItem('kaseet-currency');
-      if (v && (CURRENCY_LIST as string[]).includes(v)) return v as CurrencyCode;
-    } catch { /* ignore */ }
-    return 'USD';
-  });
-  const setDisplayCurrency = useCallback((c: CurrencyCode) => {
-    try { localStorage.setItem('kaseet-currency', c); } catch { /* ignore */ }
-    setDisplayCurrencyState(c);
-  }, []);
+  // Currency is shared with the Navbar via CurrencyContext (persisted to localStorage there).
+  const { currency: displayCurrency, setCurrency: setDisplayCurrency } = useCurrency();
   const { rates: liveRates } = useExchangeRates();
 
   /* reset on open */
@@ -986,7 +978,7 @@ export default function PaymentModal({
                 <div>
                   <SectionLabel>{isOnsite ? '③' : '②'} بياناتك</SectionLabel>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <div className="ka-form-row-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                       <Field icon={<User size={15} />} placeholder="الاسم الأول" value={form.firstName} onChange={v => setForm(f => ({ ...f, firstName: v }))} required />
                       <Field icon={<User size={15} />} placeholder="اسم العائلة" value={form.lastName} onChange={v => setForm(f => ({ ...f, lastName: v }))} />
                     </div>
@@ -1000,7 +992,7 @@ export default function PaymentModal({
                       onNumberChange={v => setForm(f => ({ ...f, phoneNumber: v }))}
                     />
                     <Field icon={<Mail size={15} />} placeholder="البريد الإلكتروني" value={form.email} onChange={v => setForm(f => ({ ...f, email: v }))} type="email" inputDir="ltr" required />
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <div className="ka-form-row-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                       <CountrySelect value={form.country} onChange={v => setForm(f => ({ ...f, country: v }))} />
                       <Field icon={<MapPin size={15} />} placeholder="المدينة" value={form.city} onChange={v => setForm(f => ({ ...f, city: v }))} />
                     </div>

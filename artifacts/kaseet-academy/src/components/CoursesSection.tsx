@@ -231,6 +231,42 @@ function GridCard({ card, hidden }: { card: GCard; hidden: boolean }) {
             <Clock size={14} style={{ flexShrink: 0 }} />
           </span>
         </div>
+
+        {/* ── Persistent CTA — always visible (especially for touch/mobile) ── */}
+        {card.route ? (
+          <Link
+            href={card.route}
+            className="grid-card-cta"
+            style={{
+              display: 'block', width: '100%', textAlign: 'center',
+              background: GOLD, color: NAVY,
+              borderRadius: 10, padding: '11px 0',
+              fontFamily: F, fontWeight: 800, fontSize: 13.5,
+              textDecoration: 'none',
+              boxShadow: '0 6px 18px rgba(255,193,7,0.28)',
+              minHeight: 44,
+            }}
+          >
+            سجل الآن <ArrowLeft size={13} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineStart: 4 }} />
+          </Link>
+        ) : (
+          <a
+            href={waLink(card.title)}
+            target="_blank" rel="noopener noreferrer"
+            className="grid-card-cta"
+            style={{
+              display: 'block', width: '100%', textAlign: 'center',
+              background: GOLD, color: NAVY,
+              border: 'none', borderRadius: 10, padding: '11px 0',
+              fontFamily: F, fontWeight: 800, fontSize: 13.5,
+              cursor: 'pointer', textDecoration: 'none',
+              boxShadow: '0 6px 18px rgba(255,193,7,0.28)',
+              minHeight: 44,
+            }}
+          >
+            سجل الآن <ArrowLeft size={13} style={{ display: 'inline-block', verticalAlign: 'middle', marginInlineStart: 4 }} />
+          </a>
+        )}
       </div>
 
       {/* ── Hover overlay ── */}
@@ -581,6 +617,10 @@ export default function CoursesSection() {
       {/* scoped responsive + placeholder colour */}
       <style>{`
         .course-hero-card:hover { cursor: default; }
+        /* On desktop, the persistent CTA is hidden in favour of the hover overlay */
+        @media (hover: hover) and (pointer: fine) {
+          .grid-card-cta { display: none !important; }
+        }
         @media (max-width: 900px) {
           .course-hero-card { grid-template-columns: 1fr !important; }
           .ch-media-col    { min-height: 220px !important; order: -1; }
@@ -588,6 +628,8 @@ export default function CoursesSection() {
         }
         @media (max-width: 560px) {
           .courses-grid-4 { grid-template-columns: 1fr !important; }
+          /* Ensure hover overlay doesn't show on touch-only devices */
+          .grid-card-cta { display: block !important; }
         }
         input[placeholder]::placeholder { color: rgba(255,255,255,0.45); }
       `}</style>

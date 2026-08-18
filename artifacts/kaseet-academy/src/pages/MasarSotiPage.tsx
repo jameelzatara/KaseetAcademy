@@ -580,7 +580,7 @@ export default function MasarSotiPage() {
               <span style={{ fontFamily: FP, fontSize: 13, fontWeight: 700, color: '#8A6200', border: '1px solid rgba(138,98,0,.32)', background: 'rgba(138,98,0,.07)', padding: '7px 15px', borderRadius: 999, whiteSpace: 'nowrap' }}>13 مخرجاً</span>
             </div>
             {ALBUM.map((trk, i) => (
-              <div key={trk.n} style={{
+              <div key={trk.n} className="soti-track-grid-row" style={{
                 display: 'grid', gridTemplateColumns: '44px 1fr 108px 130px', gap: 14, alignItems: 'center',
                 padding: '13px 28px', borderBottom: '1px solid rgba(24,32,47,.10)',
                 background: trk.hot ? 'rgba(255,193,7,.10)' : 'transparent',
@@ -588,16 +588,16 @@ export default function MasarSotiPage() {
               }}>
                 <span style={{ fontFamily: FP, fontSize: 12.5, fontWeight: 700, color: trk.hot ? '#8A6200' : INK2 }}>{trk.n}</span>
                 <span style={{ fontFamily: F, fontSize: 14.5, fontWeight: 700, color: trk.hot ? '#8A6200' : INK, lineHeight: 1.5 }}>{trk.title}</span>
-                <span style={{ fontFamily: F, fontSize: 11.5, color: INK2, border: '1px solid rgba(24,32,47,.10)', background: 'rgba(24,32,47,.035)', padding: '3px 11px', borderRadius: 999, textAlign: 'center', whiteSpace: 'nowrap' }}>{trk.kind}</span>
-                <span style={{ color: trk.hot ? 'rgba(138,98,0,.78)' : 'rgba(138,98,0,.34)', height: 26, display: 'block' }}
+                <span className="soti-track-kind" style={{ fontFamily: F, fontSize: 11.5, color: INK2, border: '1px solid rgba(24,32,47,.10)', background: 'rgba(24,32,47,.035)', padding: '3px 11px', borderRadius: 999, textAlign: 'center', whiteSpace: 'nowrap' }}>{trk.kind}</span>
+                <span className="soti-track-wave" style={{ color: trk.hot ? 'rgba(138,98,0,.78)' : 'rgba(138,98,0,.34)', height: 26, display: 'block' }}
                   dangerouslySetInnerHTML={{ __html: waveThumb(50 + i) }} />
               </div>
             ))}
-            <div style={{ display: 'grid', gridTemplateColumns: '44px 1fr 108px 130px', gap: 14, alignItems: 'center', padding: '14px 28px', background: 'linear-gradient(90deg, rgba(255,193,7,.24), rgba(255,193,7,.08))', borderTop: '1px solid rgba(138,98,0,.28)' }}>
+            <div className="soti-track-grid-row" style={{ display: 'grid', gridTemplateColumns: '44px 1fr 108px 130px', gap: 14, alignItems: 'center', padding: '14px 28px', background: 'linear-gradient(90deg, rgba(255,193,7,.24), rgba(255,193,7,.08))', borderTop: '1px solid rgba(138,98,0,.28)' }}>
               <span style={{ fontFamily: FP, fontSize: 15, fontWeight: 700, color: '#8A6200' }}>★</span>
               <span style={{ fontFamily: F, fontSize: 14.5, fontWeight: 800, color: '#8A6200' }}>مشروع التخرّج · Demo Reel منتَج بيد مهندس صوت</span>
-              <span style={{ fontFamily: F, fontSize: 11.5, color: '#8A6200', border: '1px solid rgba(138,98,0,.32)', background: 'rgba(138,98,0,.08)', padding: '3px 11px', borderRadius: 999, textAlign: 'center' }}>التخرّج</span>
-              <span style={{ color: 'rgba(138,98,0,.9)', height: 26, display: 'block' }}
+              <span className="soti-track-kind" style={{ fontFamily: F, fontSize: 11.5, color: '#8A6200', border: '1px solid rgba(138,98,0,.32)', background: 'rgba(138,98,0,.08)', padding: '3px 11px', borderRadius: 999, textAlign: 'center' }}>التخرّج</span>
+              <span className="soti-track-wave" style={{ color: 'rgba(138,98,0,.9)', height: 26, display: 'block' }}
                 dangerouslySetInnerHTML={{ __html: waveThumb(999) }} />
             </div>
             <div style={{ padding: '20px 28px', borderTop: '1px solid rgba(24,32,47,.10)', fontFamily: F, fontSize: 14, color: INK2, lineHeight: 1.8 }}>
