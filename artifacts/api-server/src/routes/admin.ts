@@ -482,7 +482,7 @@ router.post("/notify-dryrun", requireAdmin, async (req, res) => {
 router.get("/email-log", requireAdmin, async (req, res) => {
   try {
     const { rows } = await pool.query(`
-      SELECT id, to_address, subject, tag, provider_id, status, error, sent_at
+      SELECT id, order_id, to_address, subject, tag, provider_id, status, error, sent_at
       FROM email_log
       ORDER BY sent_at DESC
       LIMIT 100
@@ -490,6 +490,89 @@ router.get("/email-log", requireAdmin, async (req, res) => {
     res.json({ logs: rows });
   } catch (err) {
     console.error("admin/email-log error", err);
+    res.status(500).json({ error: "خطأ في الخادم" });
+  }
+});
+
+// ── POST /admin/email-log/:logId/resend ────────────────────
+// يُعيد إرسال البريد من سجل البريد مباشرةً — بدون الحاجة للبحث عن الطلب
+router.post("/email-log/:logId/resend", requireAdmin, async (req, res) => {
+  try {
+    const logId = parseInt(req.params.logId, 10);
+    if (isNaN(logId)) { res.status(400).json({ error: "معرّف السجل غير صالح" }); return; }
+
+    // جلب سجل البريد
+    const { rows: logRows } = await pool.query(
+      `SELECT id, order_id, to_address, subject, tag FROM email_log WHERE id = $1`,
+      [logId],
+    );
+    if (!logRows.length) { res.status(404).json({ error: "السجل غير موجود" }); return; }
+
+    const logRow = logRows[0];
+    const orderId: string | null = logRow.order_id ?? null;
+
+    // إذا وُجد order_id → أعد الإرسال عبر sendOrderConfirmation (تضمن القالب الكامل)
+    if (orderId) {
+      const [order] = await db
+        .select()
+        .from(ordersTable)
+        .where(eq(ordersTable.id, orderId))
+        .limit(1);
+
+      if (!order) { res.status(404).json({ error: "الطلب المرتبط غير موجود" }); return; }
+
+      const COURSE_NAMES_MAP: Record<string, string> = {
+        "voiceover":           "أساسيات التعليق والأداء الصوتي",
+        "voiceover-basics":    "أساسيات التعليق والأداء الصوتي",
+        "public-speaking":     "فن الخطابة والتأثير",
+        "presenter":           "المذيع المحترف",
+        "arabic-language":     "اللغة العربية للمذيعين",
+        "masar-soti":          "المسار الصوتي المتكامل",
+        "masar-elami":         "ماستركلاس الإعلام المتكامل",
+        "masterclass-elam":    "ماستركلاس الإعلام",
+        "masterclass-voice":   "ماستركلاس التعليق والأداء الصوتي",
+        "masterclass-khataba": "ماستركلاس الخطابة والتواصل القيادي",
+      };
+
+      const result = await sendOrderConfirmation({
+        orderId:       order.id,
+        firstName:     order.firstName ?? "",
+        lastName:      order.lastName  ?? "",
+        courseName:    COURSE_NAMES_MAP[order.courseSlug ?? ""] ?? order.courseSlug ?? "",
+        cohortDate:    "",
+        cohortDays:    "",
+        cohortTime:    "",
+        trainerName:   "",
+        mode:          (order.mode as "onsite" | "live") ?? "onsite",
+        platform:      order.mode === "live" ? "Google Meet" : "استوديو كاسيت",
+        totalJOD:      order.totalJOD ?? 0,
+        paidJOD:       order.paidJOD  ?? 0,
+        remainingJOD:  order.remainingJOD ?? 0,
+        plan:          (order.plan as "full" | "deposit") ?? "deposit",
+        chargedUSD:    parseFloat(order.chargedUsd ?? "0"),
+        customerEmail: order.email ?? null,
+      });
+
+      if (result.ok)        return void res.json({ ok: true, messageId: result.id });
+      if (result.skipped)   return void res.status(400).json({ error: "لا يوجد بريد إلكتروني لهذا الطلب" });
+      return void res.status(500).json({ error: result.error ?? "فشل الإرسال" });
+    }
+
+    // لا order_id → أعد الإرسال بشكل مباشر إلى نفس العنوان بنفس الموضوع (resend بسيط)
+    const { sendEmail } = await import("../lib/email.js");
+    const simpleResult = await sendEmail({
+      to:      logRow.to_address,
+      subject: logRow.subject,
+      html:    `<p>إعادة إرسال — يرجى مراجعة البريد الأصلي.</p>`,
+      text:    "إعادة إرسال — يرجى مراجعة البريد الأصلي.",
+      tag:     logRow.tag ?? "resend",
+    });
+
+    if (simpleResult.ok) return void res.json({ ok: true, messageId: simpleResult.id });
+    return void res.status(500).json({ error: simpleResult.error ?? "فشل الإرسال" });
+
+  } catch (err) {
+    console.error("email-log resend error", err);
     res.status(500).json({ error: "خطأ في الخادم" });
   }
 });

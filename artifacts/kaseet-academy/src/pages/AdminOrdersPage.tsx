@@ -5,6 +5,7 @@ import cohortsData from '@/data/cohorts.json';
 // ── Types ─────────────────────────────────────────────────
 interface EmailLog {
   id: number;
+  order_id: string | null;
   to_address: string;
   subject: string;
   tag: string | null;
@@ -131,6 +132,8 @@ export default function AdminOrdersPage() {
   const [activeTab,    setActiveTab]    = useState<'orders' | 'email-log'>('orders');
   const [emailLogs,    setEmailLogs]    = useState<EmailLog[]>([]);
   const [emailLoading, setEmailLoading] = useState(false);
+  const [logResending, setLogResending] = useState<number | null>(null);
+  const [logResendMsg, setLogResendMsg] = useState<{ id: number; ok: boolean; text: string } | null>(null);
 
   async function login() {
     const resp = await fetch(`${API}/admin/login`, {
@@ -308,20 +311,23 @@ export default function AdminOrdersPage() {
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: F, fontSize: 13 }}>
                   <thead>
                     <tr style={{ background: CREAM_CARD, textAlign: 'right' }}>
-                      {['التاريخ', 'البريد', 'الموضوع', 'النوع', 'الحالة', 'الخطأ'].map(h => (
+                      {['التاريخ', 'البريد', 'الموضوع', 'النوع', 'الحالة', 'الخطأ', ''].map(h => (
                         <th key={h} style={{ padding: '10px 12px', fontWeight: 700, color: INK2, borderBottom: `1.5px solid ${CREAM_LINE}`, whiteSpace: 'nowrap' }}>{h}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
                     {emailLogs.map(log => {
+                      const canResend = log.status === 'failed' || log.status === 'skipped';
+                      const isResending = logResending === log.id;
+                      const rowMsg = logResendMsg?.id === log.id ? logResendMsg : null;
                       const badge = log.status === 'sent'
                         ? { label: 'أُرسل',   bg: 'rgba(22,163,74,.12)',  color: '#16a34a' }
                         : log.status === 'failed'
                         ? { label: 'فشل',     bg: 'rgba(220,38,38,.12)', color: '#dc2626' }
                         : { label: 'تخطّى',   bg: 'rgba(107,114,128,.12)', color: '#6B7280' };
                       return (
-                        <tr key={log.id} style={{ borderBottom: `1px solid ${CREAM_LINE}` }}>
+                        <tr key={log.id} style={{ borderBottom: `1px solid ${CREAM_LINE}`, background: rowMsg?.ok ? 'rgba(22,163,74,.04)' : undefined }}>
                           <td style={{ padding: '9px 12px', color: INK2, whiteSpace: 'nowrap' }}>
                             {new Date(log.sent_at).toLocaleString('ar-JO', { dateStyle: 'short', timeStyle: 'short' })}
                           </td>
@@ -341,6 +347,46 @@ export default function AdminOrdersPage() {
                           </td>
                           <td style={{ padding: '9px 12px', color: '#dc2626', fontSize: 12, maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={log.error ?? ''}>
                             {log.error ?? '—'}
+                          </td>
+                          <td style={{ padding: '9px 12px', whiteSpace: 'nowrap' }}>
+                            {rowMsg ? (
+                              <span style={{ fontSize: 12, fontWeight: 700, color: rowMsg.ok ? GREEN : '#dc2626' }}>{rowMsg.text}</span>
+                            ) : canResend ? (
+                              <button
+                                disabled={isResending}
+                                onClick={async () => {
+                                  setLogResending(log.id);
+                                  setLogResendMsg(null);
+                                  try {
+                                    const r = await fetch(`${API}/admin/email-log/${log.id}/resend`, {
+                                      method: 'POST', credentials: 'include',
+                                    });
+                                    const d = await r.json();
+                                    const msg = r.ok ? '✅ أُرسل' : `❌ ${d.error ?? 'فشل'}`;
+                                    setLogResendMsg({ id: log.id, ok: r.ok, text: msg });
+                                    if (r.ok) {
+                                      // Update the row status inline
+                                      setEmailLogs(prev => prev.map(l =>
+                                        l.id === log.id ? { ...l, status: 'sent', error: null } : l
+                                      ));
+                                    }
+                                    setTimeout(() => setLogResendMsg(null), 4000);
+                                  } finally {
+                                    setLogResending(null);
+                                  }
+                                }}
+                                style={{
+                                  display: 'inline-flex', alignItems: 'center', gap: 5,
+                                  padding: '4px 12px',
+                                  background: 'rgba(37,99,235,.08)', border: '1px solid rgba(37,99,235,.25)',
+                                  borderRadius: 8, color: '#2563eb', fontWeight: 700, fontSize: 12,
+                                  cursor: isResending ? 'wait' : 'pointer', fontFamily: F,
+                                  opacity: isResending ? .6 : 1,
+                                }}
+                              >
+                                📧 {isResending ? 'جارٍ…' : 'إعادة إرسال'}
+                              </button>
+                            ) : null}
                           </td>
                         </tr>
                       );

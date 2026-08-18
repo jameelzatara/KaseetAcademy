@@ -17,6 +17,7 @@ const BREVO_API_URL = "https://api.brevo.com/v3/smtp/email";
 pool.query(`
   CREATE TABLE IF NOT EXISTS email_log (
     id          SERIAL PRIMARY KEY,
+    order_id    TEXT,
     to_address  TEXT NOT NULL,
     subject     TEXT NOT NULL,
     tag         TEXT,
@@ -26,6 +27,11 @@ pool.query(`
     sent_at     TIMESTAMPTZ DEFAULT NOW()
   )
 `).catch(() => { /* non-fatal */ });
+
+// أضف order_id للجداول القديمة التي تفتقره
+pool.query(`
+  ALTER TABLE email_log ADD COLUMN IF NOT EXISTS order_id TEXT
+`).catch(() => { /* non-fatal — column may already exist */ });
 
 function senderEmail(): string {
   return process.env.SENDER_EMAIL ?? "notify@kaseet.com";
@@ -37,14 +43,15 @@ async function logEmail(row: {
   subject: string;
   tag?: string;
   providerId?: string;
+  orderId?: string;
   status: "sent" | "failed" | "skipped";
   error?: string;
 }) {
   try {
     await pool.query(
-      `INSERT INTO email_log (to_address, subject, tag, provider_id, status, error, sent_at)
-       VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
-      [row.to, row.subject, row.tag ?? null, row.providerId ?? null, row.status, row.error ?? null],
+      `INSERT INTO email_log (order_id, to_address, subject, tag, provider_id, status, error, sent_at)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())`,
+      [row.orderId ?? null, row.to, row.subject, row.tag ?? null, row.providerId ?? null, row.status, row.error ?? null],
     );
   } catch {
     // سجلّ البريد غير حرج — لا نوقف الإرسال
@@ -57,18 +64,19 @@ export interface SendEmailInput {
   html: string;
   text: string;   // ⛔ إلزامي مع html — غيابه يرفع احتمال Spam
   tag?: string;   // نوع الرسالة: order_confirm | payment_received | …
+  orderId?: string; // للربط في email_log
   attachments?: Array<{ filename: string; content: string | Buffer; encoding?: string }>;
 }
 
 export async function sendEmail(
   input: SendEmailInput,
 ): Promise<{ ok: boolean; id?: string; skipped?: string; error?: string }> {
-  const { to, subject, html, text, tag } = input;
+  const { to, subject, html, text, tag, orderId } = input;
 
   // ① لا بريد = لا إرسال، بلا خطأ
   if (!to || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(to)) {
     logger.info({ to, subject }, "Email skipped: no valid address");
-    await logEmail({ to: to ?? "(none)", subject, tag, status: "skipped" });
+    await logEmail({ to: to ?? "(none)", subject, tag, orderId, status: "skipped" });
     return { ok: false, skipped: "no_email" };
   }
 
@@ -76,7 +84,7 @@ export async function sendEmail(
   if (!apiKey) {
     const msg = "BREVO_API_KEY غير مضبوط";
     logger.error({ to, subject }, msg);
-    await logEmail({ to, subject, tag, status: "failed", error: msg });
+    await logEmail({ to, subject, tag, orderId, status: "failed", error: msg });
     return { ok: false, error: msg };
   }
 
@@ -117,12 +125,12 @@ export async function sendEmail(
     const data = await res.json() as { messageId?: string };
     const msgId = data.messageId ?? "";
     logger.info({ to, subject, tag, msgId }, "Email sent via Brevo API");
-    await logEmail({ to, subject, tag, providerId: msgId, status: "sent" });
+    await logEmail({ to, subject, tag, orderId, providerId: msgId, status: "sent" });
     return { ok: true, id: msgId };
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     logger.error({ to, subject, tag, err }, "Email send failed");
-    await logEmail({ to, subject, tag, status: "failed", error: msg });
+    await logEmail({ to, subject, tag, orderId, status: "failed", error: msg });
     return { ok: false, error: msg };  // ⛔ لا يُسقط الطلب
   }
 }
@@ -233,5 +241,5 @@ export async function sendOrderConfirmation(data: OrderEmailData) {
 سياسة الاسترداد: https://kaseet.com/refund-policy
 `;
 
-  return sendEmail({ to: data.customerEmail, subject, html, text, tag: "order_confirm" });
+  return sendEmail({ to: data.customerEmail, subject, html, text, tag: "order_confirm", orderId: data.orderId });
 }
