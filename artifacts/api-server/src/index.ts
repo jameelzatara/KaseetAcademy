@@ -6,6 +6,7 @@ import { ensureAdminSchema } from "./lib/ensureSchema.js";
 import { sweepExpiredDiscountReservations } from "./lib/discounts.js";
 
 // ── Stripe init (non-blocking) ────────────────────────────
+import { maybeRefreshRates } from "./lib/ratesFetcher.js";
 async function initStripe() {
   try {
     const { runMigrations } = await import("stripe-replit-sync");
@@ -58,6 +59,26 @@ function startSheetsSync() {
   logger.info({ intervalMs: INTERVAL_MS }, "Sheets sync scheduled");
 }
 
+function startRatesScheduler() {
+  // At startup: refresh if rates are older than 90 days (quarterly cadence) or missing
+  setTimeout(() => {
+    maybeRefreshRates(90).catch((err) =>
+      logger.error({ err }, "Startup exchange-rate check failed"),
+    );
+  }, 5_000); // 5s — enough for DB connections to settle
+
+  // Poll every 7 days (safe for 32-bit setInterval — max is ~24.8 days).
+  // maybeRefreshRates(90) only fetches when data is actually >90 days old.
+  const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000; // 604,800,000 ms
+  setInterval(() => {
+    maybeRefreshRates(90).catch((err) =>
+      logger.error({ err }, "Scheduled exchange-rate check failed"),
+    );
+  }, SEVEN_DAYS_MS);
+
+  logger.info({ pollIntervalDays: 7, refreshThresholdDays: 90 }, "Exchange rate scheduler started");
+}
+
 // ── Start server ──────────────────────────────────────────
 app.listen(port, async (err) => {
   if (err) {
@@ -67,6 +88,7 @@ app.listen(port, async (err) => {
   logger.info({ port }, "Server listening");
   await initStripe();
   startSheetsSync();
+  startRatesScheduler();
   ensureAdminSchema()
     .then(() => seedCoursesIfEmpty())
     .catch((err) => logger.error({ err }, "admin schema/seed failed"));

@@ -14,6 +14,7 @@ import {
   CURRENCY_LIST, CURRENCY_NAMES, CURRENCY_SYMBOLS, CURRENCY_RATES,
   convertPrice, formatPrice,
 } from '../data/currency';
+import { useExchangeRates } from '../hooks/useExchangeRates';
 
 /* ── design tokens ─────────────────────────────────── */
 const GLD   = '#FFC107';
@@ -400,27 +401,29 @@ function CurrencyPicker({
 /* ── Order summary card ────────────────────────────── */
 function OrderSummary({
   courseTitle, mode, cohortStartAr, cohortDays, priceJOD, priceUSD, plan,
-  displayCurrency, onCurrencyChange,
+  displayCurrency, onCurrencyChange, liveRates,
 }: {
   courseTitle: string; mode: 'onsite' | 'live';
   cohortStartAr: string; cohortDays: string;
   priceJOD: number; priceUSD: number; plan: 'full' | 'deposit';
   displayCurrency: CurrencyCode; onCurrencyChange: (c: CurrencyCode) => void;
+  liveRates?: Partial<Record<CurrencyCode, number>>;
 }) {
   const isOnsite = mode === 'onsite';
   const accent   = isOnsite ? GLD : CYN;
 
   // For LIVE, the authoritative price is priceUSD (what Stripe charges).
   // Derive a JOD base from priceUSD so all currency conversions stay consistent.
-  const baseJOD = isOnsite ? priceJOD : priceUSD / CURRENCY_RATES['USD'];
+  const usdRate = liveRates?.['USD'] ?? CURRENCY_RATES['USD'];
+  const baseJOD = isOnsite ? priceJOD : priceUSD / usdRate;
 
   // For LIVE+USD show the exact Stripe charge amount, not a rounded conversion.
   const dispFull = (!isOnsite && displayCurrency === 'USD')
     ? formatPrice(priceUSD, 'USD')
-    : formatPrice(convertPrice(baseJOD, displayCurrency), displayCurrency);
+    : formatPrice(convertPrice(baseJOD, displayCurrency, liveRates), displayCurrency);
 
-  const dispDeposit = formatPrice(convertPrice(DEPOSIT_JOD, displayCurrency), displayCurrency);
-  const dispRemain  = formatPrice(convertPrice(priceJOD - DEPOSIT_JOD, displayCurrency), displayCurrency);
+  const dispDeposit = formatPrice(convertPrice(DEPOSIT_JOD, displayCurrency, liveRates), displayCurrency);
+  const dispRemain  = formatPrice(convertPrice(priceJOD - DEPOSIT_JOD, displayCurrency, liveRates), displayCurrency);
 
   // Is the display currency different from what Stripe will actually charge?
   const isApprox = isOnsite
@@ -741,6 +744,7 @@ export default function PaymentModal({
   const [paidCurrency, setPaidCurrency] = useState<string>('JOD');
   const [remaining, setRemaining]     = useState<number>(0);
   const [displayCurrency, setDisplayCurrency] = useState<CurrencyCode>('USD');
+  const { rates: liveRates } = useExchangeRates();
 
   /* reset on open */
   useEffect(() => {
@@ -994,7 +998,7 @@ export default function PaymentModal({
                 </div>
 
                 {/* ملخص + خطأ + زر */}
-                <OrderSummary courseTitle={courseTitle} mode={form.mode} cohortStartAr={cohortStartAr} cohortDays={cohortDays} priceJOD={priceJOD} priceUSD={priceUSD} plan={form.plan} displayCurrency={displayCurrency} onCurrencyChange={setDisplayCurrency} />
+                <OrderSummary courseTitle={courseTitle} mode={form.mode} cohortStartAr={cohortStartAr} cohortDays={cohortDays} priceJOD={priceJOD} priceUSD={priceUSD} plan={form.plan} displayCurrency={displayCurrency} onCurrencyChange={setDisplayCurrency} liveRates={liveRates} />
 
                 {formErr && (
                   <div style={{ display: 'flex', gap: 10, background: 'rgba(248,113,113,.08)', border: '1px solid rgba(248,113,113,.28)', borderRadius: 12, padding: '12px 14px' }}>

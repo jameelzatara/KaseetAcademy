@@ -5,6 +5,7 @@ import checkoutRouter from "./checkout";
 import adminRouter from "./admin";
 import adminSectionsRouter from "./adminSections";
 import blogRouter from "./blog";
+import ratesRouter from "./rates";
 
 const router: IRouter = Router();
 
@@ -12,6 +13,7 @@ router.use(healthRouter);
 // router.use(authRouter); — removed (⑤)
 router.use(checkoutRouter);
 router.use(blogRouter);
+router.use(ratesRouter);
 router.use("/admin", adminRouter);
 router.use("/admin", adminSectionsRouter);
 

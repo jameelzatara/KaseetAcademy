@@ -124,6 +124,14 @@ export const holdsTable = pgTable("holds", {
 
 export type Hold = typeof holdsTable.$inferSelect;
 
+export const exchangeRatesTable = pgTable("exchange_rates", {
+  id:        serial("id").primaryKey(),
+  base:      text("base").notNull().default("JOD"),
+  rates:     jsonb("rates").notNull(),          // Record<CurrencyCode, number>
+  source:    text("source").notNull(),          // e.g. 'open.er-api.com'
+  fetchedAt: timestamp("fetched_at").defaultNow().notNull(),
+});
+
 // ─── Consultant Accounts ──────────────────────────────────
 // Role-based admin access: 'admin' (owner, full access) | 'consultant' (limited)
 export const consultantAccountsTable = pgTable("consultant_accounts", {
@@ -231,3 +239,5 @@ export const discountReservationsTable = pgTable("discount_reservations", {
 });
 
 export type DiscountReservation = typeof discountReservationsTable.$inferSelect;
+
+export type ExchangeRate = typeof exchangeRatesTable.$inferSelect;

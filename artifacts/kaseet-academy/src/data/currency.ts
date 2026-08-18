@@ -126,10 +126,16 @@ export const CURRENCY_LIST: CurrencyCode[] = [
   'EUR', 'GBP',
 ];
 
-/** Convert JOD base price to target currency, with rounding. */
-export function convertPrice(jodPrice: number, to: CurrencyCode): number {
+/** Convert JOD base price to target currency, with rounding.
+ *  Pass `liveRates` from `useExchangeRates` to use up-to-date rates. */
+export function convertPrice(
+  jodPrice: number,
+  to: CurrencyCode,
+  liveRates?: Partial<Record<CurrencyCode, number>>,
+): number {
   if (to === 'JOD') return jodPrice;
-  const raw = jodPrice * CURRENCY_RATES[to];
+  const rate = liveRates?.[to] ?? CURRENCY_RATES[to];
+  const raw = jodPrice * rate;
   const roundTo = ROUND[to];
   if (roundTo) return Math.ceil(raw / roundTo) * roundTo;
   return Math.round(raw * 10) / 10;
