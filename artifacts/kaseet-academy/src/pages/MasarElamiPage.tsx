@@ -19,7 +19,7 @@ import { useState, useEffect } from 'react';
 import { usePageMeta }         from '../hooks/usePageMeta';
 import {
   ChevronDown, ArrowLeft, MapPin, Wifi, Layers, Clock,
-  FolderCheck, CheckCircle2, ShieldCheck, Home, Lock,
+  FolderCheck, CheckCircle2, CalendarDays, Users, Home, Lock,
   Target, Radio,
 } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa6';
@@ -660,7 +660,7 @@ export default function MasarElamiPage() {
       {/* ════════════════════════════════════════════════════════════
           §05 CURRICULUM — شجرة المسار (10 محطات)
       ════════════════════════════════════════════════════════════ */}
-      <section id="tree" className="sec sec--tree" style={{ borderTop:`1px solid ${CARD_BORDER}`, padding:'80px 0' }}>
+      <section id="tree" className="sec sec--tree" style={{ padding:'96px 0' }}>
         <div className="geo geo--columns" aria-hidden="true" />
         <div style={{ ...INNER }}>
           <div style={{ textAlign:'center', marginBottom:48 }}>
@@ -708,7 +708,7 @@ export default function MasarElamiPage() {
       {/* ════════════════════════════════════════════════════════════
           §06 STUDY MODES — أسلوب الدراسة (before trainers)
       ════════════════════════════════════════════════════════════ */}
-      <section className="sec sec--modes" style={{ borderTop:`1px solid ${CARD_BORDER}`, padding:'80px 0' }}>
+      <section className="sec sec--modes" style={{ padding:'96px 0' }}>
         <div style={{ ...INNER }}>
           <div style={{ textAlign:'center', marginBottom:44 }}>
             <SectionLabel text="أسلوب الدراسة" />
@@ -716,59 +716,104 @@ export default function MasarElamiPage() {
               اختر <span style={{ color:GLD }}>أسلوب تعلّمك</span>
             </h2>
             <p style={{ fontFamily:F, fontSize:15.5, color:MUT, marginTop:12, maxWidth:520, marginInline:'auto', lineHeight:1.8 }}>
-              نفس المنهج ونفس المدربين والشهادة المعتمدة — فقط اختر ما يناسب جدولك وحياتك
+              نفس المنهج ونفس المدرّبين ونفس مستوى التدريب — اختر الطريقة التي تناسبك.
             </p>
           </div>
 
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(230px,1fr))', gap:14, marginBottom:32, maxWidth:820, marginInline:'auto' }}>
-            <div style={{ background:'rgba(255,193,7,.05)', border:'1px solid rgba(255,193,7,.22)', borderRadius:16, padding:'22px 20px' }}>
-              <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:16 }}>
-                <div style={{ width:40, height:40, borderRadius:'50%', background:'rgba(255,193,7,.14)', display:'inline-flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                  <MapPin size={17} color={GLD} strokeWidth={2.2} />
+          <div className="elam-modes-grid" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:18 }}>
+
+            {/* بطاقة حضوري */}
+            <div style={{ background:CARD, border:'1px solid rgba(255,193,7,.22)', borderRadius:20, display:'flex', flexDirection:'column', overflow:'hidden' }}>
+              <div style={{ padding:'clamp(22px,2.5vw,28px)', flex:1 }}>
+                <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:18 }}>
+                  <div style={{ width:38, height:38, borderRadius:'50%', background:GLD, display:'grid', placeContent:'center', flexShrink:0, boxShadow:'0 6px 16px rgba(255,193,7,.28)' }}>
+                    <MapPin size={18} color="#1A1206" strokeWidth={2.2} />
+                  </div>
+                  <div>
+                    <div style={{ fontFamily:F, fontWeight:800, fontSize:15.5, color:OFF }}>حضوري — استوديو كاسيت</div>
+                    <div style={{ fontFamily:F, fontSize:12, color:MUT, marginTop:2 }}>حضور فعلي في عمّان</div>
+                  </div>
                 </div>
-                <div>
-                  <div style={{ fontFamily:F, fontWeight:800, fontSize:14.5, color:GLD }}>حضوري — استوديو كاسيت</div>
-                  <div style={{ fontFamily:F, fontSize:12, color:MUT }}>حضور فعلي في عمّان</div>
+                <ul style={{ listStyle:'none', display:'grid', gap:9, margin:0, padding:0 }}>
+                  {['تفاعل مباشر مع المدرّب والزملاء','تطبيق عملي داخل الاستوديوهات المجهَّزة','بيئة تعلّم منظَّمة بلا إلهاء','تشبيك مع المتدرّبين وفرص العمل'].map(item => (
+                    <li key={item} style={{ display:'flex', gap:10, fontFamily:F, fontSize:13.5, color:LT, lineHeight:1.7 }}>
+                      <span style={{ color:GLD, fontSize:14, marginTop:3, flexShrink:0 }}>✓</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div style={{ borderTop:'1px solid rgba(255,193,7,.18)', background:'rgba(255,193,7,.05)', padding:'16px clamp(18px,2.5vw,24px)' }}>
+                <div style={{ display:'flex', alignItems:'center', gap:6, marginBottom:12 }}>
+                  <span style={{ width:5, height:5, borderRadius:'50%', background:GLD, flexShrink:0 }} />
+                  <span style={{ fontFamily:F, fontSize:11.5, fontWeight:700, color:GLD, letterSpacing:.5 }}>الفوج القادم</span>
+                </div>
+                <div style={{ display:'grid', gap:9 }}>
+                  <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+                    <CalendarDays size={14} color={GLD} strokeWidth={2} style={{ flexShrink:0 }} />
+                    <span style={{ fontFamily:F, fontSize:13, color:LT }}>
+                      <span style={{ color:MUT, marginInlineEnd:4 }}>يبدأ</span>
+                      <strong style={{ color:OFF }}>الثلاثاء، 15 أيلول</strong>
+                    </span>
+                  </div>
+                  <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+                    <Clock size={14} color={GLD} strokeWidth={2} style={{ flexShrink:0 }} />
+                    <span style={{ fontFamily:F, fontSize:13, color:LT }}>الأحد والثلاثاء والخميس</span>
+                  </div>
+                  <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+                    <Users size={14} color={GLD} strokeWidth={2} style={{ flexShrink:0 }} />
+                    <span style={{ fontFamily:F, fontSize:13, color:'#f87171', fontWeight:700 }}>المقاعد محدودة</span>
+                  </div>
                 </div>
               </div>
-              <ul style={{ margin:0, padding:0, listStyle:'none', display:'flex', flexDirection:'column', gap:9 }}>
-                {['تفاعل مباشر مع المدرب والزملاء','تطبيق عملي داخل الاستوديوهات المجهَّزة','بيئة تعلم منظَّمة بلا إلهاء','تشبيك مع المتدربين وفرص العمل'].map(pt => (
-                  <li key={pt} style={{ display:'flex', alignItems:'flex-start', gap:8, fontFamily:F, fontSize:13, color:LT }}>
-                    <CheckCircle2 size={13} color={GLD} strokeWidth={2.2} style={{ flexShrink:0, marginTop:2 }} /> {pt}
-                  </li>
-                ))}
-              </ul>
             </div>
 
-            <div style={{ background:'rgba(103,232,249,.04)', border:'1px solid rgba(103,232,249,.20)', borderRadius:16, padding:'22px 20px' }}>
-              <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:16 }}>
-                <div style={{ width:40, height:40, borderRadius:'50%', background:'rgba(103,232,249,.12)', display:'inline-flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                  <Wifi size={17} color="#67e8f9" strokeWidth={2.2} />
+            {/* بطاقة مباشر تفاعلي */}
+            <div style={{ background:CARD, border:'1px solid rgba(103,232,249,.22)', borderRadius:20, display:'flex', flexDirection:'column', overflow:'hidden' }}>
+              <div style={{ padding:'clamp(22px,2.5vw,28px)', flex:1 }}>
+                <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:18 }}>
+                  <div style={{ width:38, height:38, borderRadius:'50%', background:'#67e8f9', display:'grid', placeContent:'center', flexShrink:0, boxShadow:'0 6px 16px rgba(103,232,249,.22)' }}>
+                    <Wifi size={18} color="#1A1206" strokeWidth={2.2} />
+                  </div>
+                  <div>
+                    <div style={{ fontFamily:F, fontWeight:800, fontSize:15.5, color:OFF }}>مباشر تفاعلي (Online LIVE)</div>
+                    <div style={{ fontFamily:F, fontSize:12, color:MUT, marginTop:2 }}>من أي مكان في العالم العربي</div>
+                  </div>
                 </div>
-                <div>
-                  <div style={{ fontFamily:F, fontWeight:800, fontSize:14.5, color:'#67e8f9' }}>كاسيت لايف — Online LIVE</div>
-                  <div style={{ fontFamily:F, fontSize:12, color:MUT }}>من أي مكان في العالم العربي</div>
+                <ul style={{ listStyle:'none', display:'grid', gap:9, margin:0, padding:0 }}>
+                  {['جلسات مباشرة مع المدرّب في الوقت الفعلي','تسجيلات الجلسات متاحة للمراجعة','تسليم واجبات وتقييم فردي','متاح من أي مكان في العالم العربي'].map(item => (
+                    <li key={item} style={{ display:'flex', gap:10, fontFamily:F, fontSize:13.5, color:LT, lineHeight:1.7 }}>
+                      <span style={{ color:'#67e8f9', fontSize:14, marginTop:3, flexShrink:0 }}>✓</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div style={{ borderTop:'1px solid rgba(103,232,249,.18)', background:'rgba(103,232,249,.05)', padding:'16px clamp(18px,2.5vw,24px)' }}>
+                <div style={{ display:'flex', alignItems:'center', gap:6, marginBottom:12 }}>
+                  <span style={{ width:5, height:5, borderRadius:'50%', background:'#67e8f9', flexShrink:0 }} />
+                  <span style={{ fontFamily:F, fontSize:11.5, fontWeight:700, color:'#67e8f9', letterSpacing:.5 }}>الفوج القادم</span>
+                </div>
+                <div style={{ display:'grid', gap:9 }}>
+                  <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+                    <CalendarDays size={14} color="#67e8f9" strokeWidth={2} style={{ flexShrink:0 }} />
+                    <span style={{ fontFamily:F, fontSize:13, color:LT }}>
+                      <span style={{ color:MUT, marginInlineEnd:4 }}>يبدأ</span>
+                      <strong style={{ color:OFF }}>الأربعاء، 16 أيلول</strong>
+                    </span>
+                  </div>
+                  <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+                    <Clock size={14} color="#67e8f9" strokeWidth={2} style={{ flexShrink:0 }} />
+                    <span style={{ fontFamily:F, fontSize:13, color:LT }}>يومان أسبوعياً · الأربعاء والسبت</span>
+                  </div>
+                  <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+                    <Users size={14} color="#67e8f9" strokeWidth={2} style={{ flexShrink:0 }} />
+                    <span style={{ fontFamily:F, fontSize:13, color:'#f87171', fontWeight:700 }}>المقاعد محدودة</span>
+                  </div>
                 </div>
               </div>
-              <ul style={{ margin:0, padding:0, listStyle:'none', display:'flex', flexDirection:'column', gap:9 }}>
-                {['جلسات مباشرة مع المدرب في الوقت الفعلي','تسجيلات الجلسات متاحة للمراجعة','تسليم واجبات وتقييم فردي','متاح من أي مكان في العالم العربي'].map(pt => (
-                  <li key={pt} style={{ display:'flex', alignItems:'flex-start', gap:8, fontFamily:F, fontSize:13, color:LT }}>
-                    <CheckCircle2 size={13} color="#67e8f9" strokeWidth={2.2} style={{ flexShrink:0, marginTop:2 }} /> {pt}
-                  </li>
-                ))}
-              </ul>
             </div>
-          </div>
 
-          {/* guarantee */}
-          <div style={{ maxWidth:680, margin:'0 auto', background:'rgba(255,193,7,.06)', border:'1px solid rgba(255,193,7,.32)', borderRadius:22, padding:'clamp(28px,3.5vw,44px)', textAlign:'center' }}>
-            <ShieldCheck size={40} strokeWidth={1.5} color={GLD} aria-hidden="true" />
-            <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(20px,2.8vw,27px)', color:OFF, margin:'16px 0 12px', lineHeight:1.4 }}>
-              ضمان الجلسة الأولى
-            </h2>
-            <p style={{ fontFamily:F, fontSize:15, color:MUT, lineHeight:1.9, maxWidth:500, marginInline:'auto', margin:0 }}>
-              جرّب الجلسة الأولى كاملة. وإن شعرت أنّ الماستركلاس لا يلبّي توقّعاتك، اطلب استرداداً كاملاً خلال 24 ساعة من انتهائها — دون أسئلة.
-            </p>
           </div>
         </div>
       </section>
@@ -776,7 +821,7 @@ export default function MasarElamiPage() {
       {/* ════════════════════════════════════════════════════════════
           §07 TRAINERS — خبراء الإعلام
       ════════════════════════════════════════════════════════════ */}
-      <section className="sec sec--trainers" style={{ borderTop:`1px solid ${CARD_BORDER}`, padding:'80px 0' }}>
+      <section className="sec sec--trainers" style={{ padding:'96px 0' }}>
         <div className="geo" aria-hidden="true">
           <svg viewBox="0 0 1440 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
             <g fill="none" stroke="rgba(255,255,255,.10)" strokeWidth="1.5">
@@ -867,7 +912,7 @@ export default function MasarElamiPage() {
       {/* ════════════════════════════════════════════════════════════
           §08 CHECKOUT — interactive (Stripe)
       ════════════════════════════════════════════════════════════ */}
-      <section id="checkout" className="sec sec--access" style={{ position:'relative', borderTop:`1px solid ${CARD_BORDER}`, padding:'80px 0', scrollMarginTop:80 }}>
+      <section id="checkout" className="sec sec--access" style={{ position:'relative', padding:'96px 0', scrollMarginTop:80 }}>
         <div style={{ ...INNER }}>
           {/* heading */}
           <div style={{ textAlign:'center', maxWidth:580, margin:'0 auto 52px' }}>
@@ -943,17 +988,6 @@ export default function MasarElamiPage() {
                     </li>
                   ))}
                 </ul>
-
-                {/* guarantee */}
-                <div style={{ display:'flex', alignItems:'flex-start', gap:13, background:'rgba(255,193,7,.07)', border:`1px solid rgba(255,193,7,.26)`, borderRadius:16, padding:'16px 18px', marginBottom:18 }}>
-                  <ShieldCheck size={22} color={GLD} strokeWidth={2} style={{ flexShrink:0, marginTop:2 }} />
-                  <div>
-                    <div style={{ fontFamily:F, fontWeight:800, fontSize:14, color:OFF, marginBottom:5 }}>ضمان الجلسة الأولى</div>
-                    <p style={{ fontFamily:F, fontSize:13, color:LT, lineHeight:1.8, margin:0 }}>
-                      جرّب الجلسة الأولى كاملة. إن لم تلبِّ توقّعاتك، اطلب استرداداً كاملاً خلال 24 ساعة — <strong style={{ color:OFF }}>دون أسئلة ولا شروط</strong>.
-                    </p>
-                  </div>
-                </div>
 
                 {/* installment — onsite only (live is always full payment) */}
                 {checkoutMode === 'onsite' && (
@@ -1083,7 +1117,7 @@ export default function MasarElamiPage() {
       {/* ════════════════════════════════════════════════════════════
           §11 FAQ — أسئلة متكرّرة
       ════════════════════════════════════════════════════════════ */}
-      <section className="sec sec--faq" style={{ borderTop:`1px solid ${CARD_BORDER}`, padding:'80px 0' }}>
+      <section className="sec sec--faq" style={{ padding:'96px 0' }}>
         <div style={{ ...INNER }}>
           <div style={{ textAlign:'center', marginBottom:44 }}>
             <SectionLabel text="أسئلة شائعة" />
@@ -1125,7 +1159,7 @@ export default function MasarElamiPage() {
           </button>
         </div>
       )}
-      <style>{`@media (min-width:769px) { .elam-sticky-cta { display:none !important; } }`}</style>
+      <style>{`@media (min-width:769px) { .elam-sticky-cta { display:none !important; } } @media (max-width:768px) { .elam-modes-grid { grid-template-columns:1fr !important; } }`}</style>
     </div>
   );
 }

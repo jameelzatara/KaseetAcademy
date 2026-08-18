@@ -4,7 +4,7 @@
  */
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { ChevronDown, ArrowLeft, MapPin, Wifi, Layers, Clock, FolderCheck, ShieldCheck, Video, AudioLines, FileText, Clapperboard, Lock, CheckCircle2, Home, Target, Radio, Mic } from 'lucide-react';
+import { ChevronDown, ArrowLeft, MapPin, Wifi, Layers, Clock, FolderCheck, Video, AudioLines, FileText, Clapperboard, Lock, CheckCircle2, CalendarDays, Users, Home, Target, Radio, Mic } from 'lucide-react';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { GOLD, OFF, F, FP, INNER, waLink } from '../pages/shared/coursePageHelpers';
 import type { MasterclassData, StationItem } from '../data/masterclasses';
@@ -1015,40 +1015,98 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
           <SectionHead badge={data.modes.badge} heading={data.modes.heading} headingGold={data.modes.headingGold} sub={data.modes.desc} />
 
           <div className="mc-modes-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18, marginTop: 52 }}>
-            {[
-              { v: 'inperson' as const, m: data.modes.inperson, ac: GLD, acRgb: '255,193,7', icon: <MapPin size={18} color="#1A1206" strokeWidth={2.2} /> },
-              { v: 'online'   as const, m: data.modes.online,   ac: '#67e8f9', acRgb: '103,232,249', icon: <Wifi size={18} color="#1A1206" strokeWidth={2.2} /> },
-            ].map(({ v, m, ac, acRgb, icon }) => (
-              <div key={v} style={{ background: CARD, border: `1px solid rgba(${acRgb},.22)`, borderRadius: 20, padding: 'clamp(22px,2.5vw,28px)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
-                  <div style={{ width: 36, height: 36, borderRadius: '50%', background: ac, display: 'grid', placeContent: 'center', flexShrink: 0 }}>{icon}</div>
+
+            {/* حضوري */}
+            <div style={{ background: CARD, border: '1px solid rgba(255,193,7,.22)', borderRadius: 20, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+              <div style={{ padding: 'clamp(22px,2.5vw,28px)', flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
+                  <div style={{ width: 38, height: 38, borderRadius: '50%', background: GLD, display: 'grid', placeContent: 'center', flexShrink: 0, boxShadow: '0 6px 16px rgba(255,193,7,.28)' }}>
+                    <MapPin size={18} color="#1A1206" strokeWidth={2.2} />
+                  </div>
                   <div>
-                    <div style={{ fontFamily: F, fontWeight: 800, fontSize: 15.5, color: OFF }}>{m.label}</div>
-                    <div style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 2 }}>{m.sub}</div>
+                    <div style={{ fontFamily: F, fontWeight: 800, fontSize: 15.5, color: OFF }}>{data.modes.inperson.label}</div>
+                    <div style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 2 }}>{data.modes.inperson.sub}</div>
                   </div>
                 </div>
-                {/* schedule line */}
-                {m.schedule && (
-                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: `rgba(${acRgb},.08)`, border: `1px solid rgba(${acRgb},.22)`, borderRadius: 8, padding: '6px 12px', marginBottom: 14, fontFamily: F, fontSize: 12.5, color: ac }}>
-                    🗓 {m.schedule}
-                  </div>
-                )}
                 <ul style={{ listStyle: 'none', display: 'grid', gap: 9, margin: 0, padding: 0 }}>
-                  {m.items.map(item => (
+                  {data.modes.inperson.items.map(item => (
                     <li key={item} style={{ display: 'flex', gap: 10, fontFamily: F, fontSize: 13.5, color: LT, lineHeight: 1.7 }}>
-                      <span style={{ color: ac, fontSize: 14, marginTop: 3, flexShrink: 0 }}>✓</span>{item}
+                      <span style={{ color: GLD, fontSize: 14, marginTop: 3, flexShrink: 0 }}>✓</span>{item}
                     </li>
                   ))}
                 </ul>
               </div>
-            ))}
-          </div>
+              <div style={{ borderTop: '1px solid rgba(255,193,7,.18)', background: 'rgba(255,193,7,.05)', padding: '16px clamp(18px,2.5vw,24px)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
+                  <span style={{ width: 5, height: 5, borderRadius: '50%', background: GLD, flexShrink: 0 }} />
+                  <span style={{ fontFamily: F, fontSize: 11.5, fontWeight: 700, color: GLD, letterSpacing: .5 }}>{data.cohort.badge}</span>
+                </div>
+                <div style={{ display: 'grid', gap: 9 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <CalendarDays size={14} color={GLD} strokeWidth={2} style={{ flexShrink: 0 }} />
+                    <span style={{ fontFamily: F, fontSize: 13, color: LT }}>
+                      <span style={{ color: MUT, marginInlineEnd: 4 }}>{data.cohort.startLabel}</span>
+                      <strong style={{ color: OFF }}>{data.cohort.startGold}</strong>
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <Clock size={14} color={GLD} strokeWidth={2} style={{ flexShrink: 0 }} />
+                    <span style={{ fontFamily: F, fontSize: 13, color: LT }}>{data.cohort.facts[0].value}</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <Users size={14} color={GLD} strokeWidth={2} style={{ flexShrink: 0 }} />
+                    <span style={{ fontFamily: F, fontSize: 13, color: '#f87171', fontWeight: 700 }}>المقاعد محدودة</span>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-          <div style={{ marginTop: 18 }}>
-            <StudyAccordion variant="inperson" label={data.modes.inperson.label} sub={data.modes.inperson.sub} items={data.modes.inperson.details} />
-            <StudyAccordion variant="online"   label={data.modes.online.label}   sub={data.modes.online.sub}   items={data.modes.online.details} />
-          </div>
+            {/* مباشر تفاعلي */}
+            <div style={{ background: CARD, border: '1px solid rgba(103,232,249,.22)', borderRadius: 20, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+              <div style={{ padding: 'clamp(22px,2.5vw,28px)', flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
+                  <div style={{ width: 38, height: 38, borderRadius: '50%', background: '#67e8f9', display: 'grid', placeContent: 'center', flexShrink: 0, boxShadow: '0 6px 16px rgba(103,232,249,.22)' }}>
+                    <Wifi size={18} color="#1A1206" strokeWidth={2.2} />
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: F, fontWeight: 800, fontSize: 15.5, color: OFF }}>{data.modes.online.label}</div>
+                    <div style={{ fontFamily: F, fontSize: 12, color: MUT, marginTop: 2 }}>{data.modes.online.sub}</div>
+                  </div>
+                </div>
+                <ul style={{ listStyle: 'none', display: 'grid', gap: 9, margin: 0, padding: 0 }}>
+                  {data.modes.online.items.map(item => (
+                    <li key={item} style={{ display: 'flex', gap: 10, fontFamily: F, fontSize: 13.5, color: LT, lineHeight: 1.7 }}>
+                      <span style={{ color: '#67e8f9', fontSize: 14, marginTop: 3, flexShrink: 0 }}>✓</span>{item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div style={{ borderTop: '1px solid rgba(103,232,249,.18)', background: 'rgba(103,232,249,.05)', padding: '16px clamp(18px,2.5vw,24px)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
+                  <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#67e8f9', flexShrink: 0 }} />
+                  <span style={{ fontFamily: F, fontSize: 11.5, fontWeight: 700, color: '#67e8f9', letterSpacing: .5 }}>{data.cohort.badge}</span>
+                </div>
+                <div style={{ display: 'grid', gap: 9 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <CalendarDays size={14} color="#67e8f9" strokeWidth={2} style={{ flexShrink: 0 }} />
+                    <span style={{ fontFamily: F, fontSize: 13, color: LT }}>
+                      <span style={{ color: MUT, marginInlineEnd: 4 }}>{data.cohort.startLabel}</span>
+                      <strong style={{ color: OFF }}>{data.cohort.startGold}</strong>
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <Clock size={14} color="#67e8f9" strokeWidth={2} style={{ flexShrink: 0 }} />
+                    <span style={{ fontFamily: F, fontSize: 13, color: LT }}>{data.cohort.facts[0].value}</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <Users size={14} color="#67e8f9" strokeWidth={2} style={{ flexShrink: 0 }} />
+                    <span style={{ fontFamily: F, fontSize: 13, color: '#f87171', fontWeight: 700 }}>المقاعد محدودة</span>
+                  </div>
+                </div>
+              </div>
+            </div>
 
+          </div>
         </div>
       </section>
 
@@ -1292,17 +1350,6 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
                     </li>
                   ))}
                 </ul>
-
-                {/* guarantee box */}
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 13, background: 'rgba(255,193,7,.07)', border: `1px solid rgba(255,193,7,.26)`, borderRadius: 16, padding: '16px 18px', marginBottom: 18 }}>
-                  <ShieldCheck size={22} color={GLD} strokeWidth={2} style={{ flexShrink: 0, marginTop: 2 }} />
-                  <div>
-                    <div style={{ fontFamily: F, fontWeight: 800, fontSize: 14, color: OFF, marginBottom: 5 }}>ضمان الجلسة الأولى — Risk Reversal</div>
-                    <p style={{ fontFamily: F, fontSize: 13, color: LT, lineHeight: 1.8, margin: 0 }}>
-                      جرّب الجلسة الأولى كاملة. إن شعرت أنّ الماستركلاس لا يلبّي توقّعاتك، اطلب استرداداً كاملاً خلال 24 ساعة — <strong style={{ color: OFF }}>دون أسئلة ولا شروط</strong>.
-                    </p>
-                  </div>
-                </div>
 
                 {/* installment notice — onsite only (live is always full payment) */}
                 {checkoutMode === 'onsite' && (
