@@ -4,13 +4,7 @@ import { Plus, Pencil, RefreshCw } from 'lucide-react';
 import { api, COURSE_NAMES } from '../api';
 import { Modal, Field, StatusBadge, KpiCard, TableCard, useToast } from '../components';
 import { useAdminAuth } from '../context';
-
-interface Perf {
-  id: number; name: string; isActive: boolean;
-  ordersAll: number; orders30d: number; revenueJOD: number;
-  conversionRate: number | null; topCourse: string | null;
-}
-interface Account { id: number; name: string; email: string; isActive: boolean }
+import type { ConsultantPerformance, ConsultantAccount } from '@workspace/admin-types';
 
 const emptyForm = { name: '', email: '', password: '', isActive: true };
 
@@ -18,19 +12,19 @@ export default function Consultants() {
   const { user } = useAdminAuth();
   const isAdmin = user?.role === 'admin';
   const toast = useToast();
-  const [rows, setRows] = useState<Perf[]>([]);
-  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [rows, setRows] = useState<ConsultantPerformance[]>([]);
+  const [accounts, setAccounts] = useState<ConsultantAccount[]>([]);
   const [loading, setLoading] = useState(true);
-  const [modal, setModal] = useState<{ mode: 'new' } | { mode: 'edit'; row: Account } | null>(null);
+  const [modal, setModal] = useState<{ mode: 'new' } | { mode: 'edit'; row: ConsultantAccount } | null>(null);
   const [form, setForm] = useState(emptyForm);
   const [err, setErr] = useState('');
 
   const load = () => {
     setLoading(true);
     const jobs: Promise<any>[] = [
-      api<{ performance: Perf[] }>('/admin/consultants/performance').then(d => setRows(d.performance)),
+      api<{ performance: ConsultantPerformance[] }>('/admin/consultants/performance').then(d => setRows(d.performance)),
     ];
-    if (isAdmin) jobs.push(api<{ consultants: Account[] }>('/admin/consultants').then(d => setAccounts(d.consultants)).catch(() => {}));
+    if (isAdmin) jobs.push(api<{ consultants: ConsultantAccount[] }>('/admin/consultants').then(d => setAccounts(d.consultants)).catch(() => {}));
     Promise.all(jobs).catch(e => toast(e.message, 'err')).finally(() => setLoading(false));
   };
   useEffect(load, [isAdmin]);

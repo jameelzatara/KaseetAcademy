@@ -3,13 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { RefreshCw } from 'lucide-react';
 import { api, COURSE_NAMES, ORDER_STATUS, fmtDate } from '../api';
 import { Modal, StatusBadge, TableCard, useToast } from '../components';
-
-interface Subscriber {
-  email: string | null; firstName: string | null; lastName: string | null;
-  phone: string | null; country: string | null; courses: string[];
-  orderCount: number; totalPaidJOD: number; lastOrderAt: string;
-}
-interface HistOrder { id: string; course_slug: string; mode: string; plan: string; total_jod: number; paid_jod: number; remaining_jod: number; status: string; created_at: string }
+import type { Subscriber, SubscriberOrderRow } from '@workspace/admin-types';
 
 export default function Subscribers() {
   const toast = useToast();
@@ -17,7 +11,7 @@ export default function Subscribers() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState<Subscriber | null>(null);
-  const [hist, setHist] = useState<HistOrder[]>([]);
+  const [hist, setHist] = useState<SubscriberOrderRow[]>([]);
   const [histLoading, setHistLoading] = useState(false);
 
   const load = () => {
@@ -42,7 +36,7 @@ export default function Subscribers() {
     setHistLoading(true);
     try {
       const qs = s.email ? `email=${encodeURIComponent(s.email)}` : `phone=${encodeURIComponent(s.phone ?? '')}`;
-      const d = await api<{ orders: HistOrder[] }>(`/admin/subscribers/orders?${qs}`);
+      const d = await api<{ orders: SubscriberOrderRow[] }>(`/admin/subscribers/orders?${qs}`);
       setHist(d.orders);
     } catch (e: any) { toast(e.message, 'err'); }
     finally { setHistLoading(false); }

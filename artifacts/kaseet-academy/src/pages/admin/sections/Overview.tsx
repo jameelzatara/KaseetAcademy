@@ -4,27 +4,19 @@ import { AlertTriangle } from 'lucide-react';
 import { api } from '../api';
 import { KpiCard } from '../components';
 import cohortsData from '@/data/cohorts.json';
-
-interface KpiData {
-  revenue:    { thisMonth: number; lastMonth: number; delta: number | null };
-  dues:       { total: number; count: number };
-  seats:      { cohortId: number; available: number }[];
-  newOrders:  { last7: number; last14: number; delta: number | null };
-  completion: { pct: number | null; pctLast: number | null; delta: number | null };
-}
-interface DueRow { id: string; next_due_at: string | null; created_at: string }
+import type { KpiResponse, DueRow } from '@workspace/admin-types';
 
 const ALL_COHORTS = (cohortsData.cohorts as { id: number }[]);
 
 export default function Overview({ goTo }: { goTo: (section: string) => void }) {
-  const [kpi, setKpi] = useState<KpiData | null>(null);
+  const [kpi, setKpi] = useState<KpiResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [overdue30, setOverdue30] = useState(0);
 
   useEffect(() => {
     setLoading(true);
     Promise.all([
-      api<KpiData>('/admin/kpi').then(setKpi),
+      api<KpiResponse>('/admin/kpi').then(setKpi),
       api<{ dues: DueRow[] }>('/admin/dues').then(d => {
         const cutoff = Date.now() - 30 * 24 * 3600 * 1000;
         setOverdue30(d.dues.filter(r => {

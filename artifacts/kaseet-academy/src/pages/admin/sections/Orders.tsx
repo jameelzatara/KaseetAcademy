@@ -5,16 +5,9 @@ import { api, COURSE_NAMES, ORDER_STATUS, waLink, fmtDate } from '../api';
 import { Modal, Field, StatusBadge, TableCard, useToast } from '../components';
 import { useAdminAuth } from '../context';
 import cohortsData from '@/data/cohorts.json';
+import type { Order } from '@workspace/admin-types';
 
-interface Installment { seq: 1 | 2 | 3; amountJOD: number; method: string; paidAt: string | null; reference?: string }
-export interface Order {
-  id: string; cohortId: number; courseSlug: string; mode: string; plan: string;
-  customer?: { firstName: string; lastName: string; email?: string; phone: string; country: string };
-  firstName?: string; lastName?: string; phone?: string; email?: string; country?: string;
-  totalJOD: number; totalUSD: number; paidJOD: number; remainingJOD: number;
-  status: string; installments: Installment[]; createdAt: string;
-  discountCode?: string | null; consultantId?: number | null;
-}
+export type { Order };
 
 interface CohortRow { id: number; course: string; mode: string; start_ar: string }
 const ALL_COHORTS = (cohortsData.cohorts as CohortRow[]);

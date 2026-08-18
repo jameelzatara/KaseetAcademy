@@ -4,14 +4,9 @@ import { Plus, Trash2, Copy, RefreshCw } from 'lucide-react';
 import { api, COURSE_NAMES, fmtDate } from '../api';
 import { Modal, Field, StatusBadge, UsageBar, ConfirmDialog, TableCard, useToast } from '../components';
 import { useAdminAuth } from '../context';
+import type { DiscountCode, Course } from '@workspace/admin-types';
 
-interface Code {
-  id: number; code: string; type: 'percent' | 'fixed'; value: string; appliesTo: string;
-  maxUses: number | null; usedCount: number; expiresAt: string | null; isActive: boolean;
-  createdById: number | null; createdBy: string; createdAt: string;
-}
-
-interface CourseOpt { slug: string; nameAr: string }
+type CourseOpt = Pick<Course, 'slug' | 'nameAr'>;
 
 const emptyForm = { code: '', type: 'percent' as 'percent' | 'fixed', value: '', maxUses: '', appliesTo: 'all', expiresAt: '' };
 
@@ -19,24 +14,24 @@ export default function Discounts() {
   const { user } = useAdminAuth();
   const isAdmin = user?.role === 'admin';
   const toast = useToast();
-  const [codes, setCodes] = useState<Code[]>([]);
+  const [codes, setCodes] = useState<DiscountCode[]>([]);
   const [courses, setCourses] = useState<CourseOpt[]>([]);
   const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState(false);
   const [form, setForm] = useState(emptyForm);
   const [err, setErr] = useState('');
-  const [deleting, setDeleting] = useState<Code | null>(null);
+  const [deleting, setDeleting] = useState<DiscountCode | null>(null);
 
   const load = () => {
     setLoading(true);
     Promise.all([
-      api<{ codes: Code[] }>('/admin/discount-codes').then(d => setCodes(d.codes)),
+      api<{ codes: DiscountCode[] }>('/admin/discount-codes').then(d => setCodes(d.codes)),
       api<{ courses: CourseOpt[] }>('/admin/courses').then(d => setCourses(d.courses)).catch(() => {}),
     ]).catch(e => toast(e.message, 'err')).finally(() => setLoading(false));
   };
   useEffect(load, []);
 
-  const canEdit = (c: Code) => isAdmin || c.createdById === user?.id;
+  const canEdit = (c: DiscountCode) => isAdmin || c.createdById === user?.id;
 
   async function create() {
     if (!form.code.trim() || !form.value) { setErr('الكود والقيمة مطلوبان'); return; }
@@ -58,7 +53,7 @@ export default function Discounts() {
     } catch (e: any) { setErr(e.message); }
   }
 
-  async function toggle(c: Code) {
+  async function toggle(c: DiscountCode) {
     try {
       await api(`/admin/discount-codes/${c.id}`, { method: 'PUT', body: { isActive: !c.isActive } });
       setCodes(prev => prev.map(x => x.id === c.id ? { ...x, isActive: !c.isActive } : x));
@@ -80,7 +75,7 @@ export default function Discounts() {
     navigator.clipboard?.writeText(code).then(() => toast(`نُسخ: ${code}`)).catch(() => {});
   }
 
-  const expired = (c: Code) => c.expiresAt != null && new Date(c.expiresAt).getTime() < Date.now();
+  const expired = (c: DiscountCode) => c.expiresAt != null && new Date(c.expiresAt).getTime() < Date.now();
 
   return (
     <>

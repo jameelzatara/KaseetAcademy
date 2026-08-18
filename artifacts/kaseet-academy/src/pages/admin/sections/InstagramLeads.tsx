@@ -3,33 +3,28 @@ import { useEffect, useState } from 'react';
 import { Plus, Pencil, RefreshCw } from 'lucide-react';
 import { api, fmtDate } from '../api';
 import { Modal, Field, TableCard, useToast } from '../components';
-
-interface Campaign {
-  id: number; campaignName: string; carouselRef: string | null; keywords: string | null;
-  leadCount: number; conversionCount: number; notes: string | null;
-  campaignDate: string | null; createdAt: string;
-}
+import type { InstagramCampaign } from '@workspace/admin-types';
 
 const emptyForm = { campaignName: '', carouselRef: '', keywords: '', leadCount: '', conversionCount: '', campaignDate: '', notes: '' };
 
 export default function InstagramLeads() {
   const toast = useToast();
-  const [rows, setRows] = useState<Campaign[]>([]);
+  const [rows, setRows] = useState<InstagramCampaign[]>([]);
   const [loading, setLoading] = useState(true);
-  const [modal, setModal] = useState<{ mode: 'new' } | { mode: 'edit'; row: Campaign } | null>(null);
+  const [modal, setModal] = useState<{ mode: 'new' } | { mode: 'edit'; row: InstagramCampaign } | null>(null);
   const [form, setForm] = useState(emptyForm);
   const [err, setErr] = useState('');
 
   const load = () => {
     setLoading(true);
-    api<{ leads: Campaign[] }>('/admin/instagram-leads')
+    api<{ leads: InstagramCampaign[] }>('/admin/instagram-leads')
       .then(d => setRows(d.leads))
       .catch(e => toast(e.message, 'err'))
       .finally(() => setLoading(false));
   };
   useEffect(load, []);
 
-  function openEdit(r: Campaign) {
+  function openEdit(r: InstagramCampaign) {
     setForm({
       campaignName: r.campaignName, carouselRef: r.carouselRef ?? '', keywords: r.keywords ?? '',
       leadCount: String(r.leadCount), conversionCount: String(r.conversionCount),
@@ -63,7 +58,7 @@ export default function InstagramLeads() {
     } catch (e: any) { setErr(e.message); }
   }
 
-  const convRate = (r: Campaign) => r.leadCount > 0 ? Math.round((r.conversionCount / r.leadCount) * 100) : null;
+  const convRate = (r: InstagramCampaign) => r.leadCount > 0 ? Math.round((r.conversionCount / r.leadCount) * 100) : null;
 
   return (
     <>

@@ -3,12 +3,7 @@ import { useEffect, useState } from 'react';
 import { Plus, RefreshCw } from 'lucide-react';
 import { api, waLink, fmtDate } from '../api';
 import { Modal, Field, TableCard, useToast } from '../components';
-
-interface Evaluation {
-  id: number; name: string; phone: string; audioRef: string | null;
-  status: 'pending' | 'reviewed' | 'accepted' | 'rejected';
-  reviewer: string | null; notes: string | null; submittedAt: string;
-}
+import type { VoiceEvaluation } from '@workspace/admin-types';
 
 const STATUS: Record<string, string> = {
   pending: 'بانتظار المراجعة', reviewed: 'رُوجع', accepted: 'مقبول ✓', rejected: 'مرفوض',
@@ -18,7 +13,7 @@ const emptyForm = { name: '', phone: '', audioRef: '', reviewer: '', notes: '' }
 
 export default function VoiceEvals() {
   const toast = useToast();
-  const [rows, setRows] = useState<Evaluation[]>([]);
+  const [rows, setRows] = useState<VoiceEvaluation[]>([]);
   const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState(false);
   const [form, setForm] = useState(emptyForm);
@@ -26,7 +21,7 @@ export default function VoiceEvals() {
 
   const load = () => {
     setLoading(true);
-    api<{ evaluations: Evaluation[] }>('/admin/voice-evaluations')
+    api<{ evaluations: VoiceEvaluation[] }>('/admin/voice-evaluations')
       .then(d => setRows(d.evaluations))
       .catch(e => toast(e.message, 'err'))
       .finally(() => setLoading(false));
@@ -51,7 +46,7 @@ export default function VoiceEvals() {
     } catch (e: any) { setErr(e.message); }
   }
 
-  async function update(id: number, patch: Partial<Evaluation>) {
+  async function update(id: number, patch: Partial<VoiceEvaluation>) {
     try {
       await api(`/admin/voice-evaluations/${id}`, { method: 'PUT', body: patch });
       setRows(prev => prev.map(r => r.id === id ? { ...r, ...patch } : r));

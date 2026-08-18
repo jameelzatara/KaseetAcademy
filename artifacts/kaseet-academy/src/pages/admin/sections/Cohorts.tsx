@@ -5,10 +5,10 @@ import { api, COURSE_NAMES, ORDER_STATUS, fmtDate } from '../api';
 import { Modal, StatusBadge, useToast } from '../components';
 import { useAdminAuth } from '../context';
 import cohortsData from '@/data/cohorts.json';
+import type { CohortSeat, Order } from '@workspace/admin-types';
 
-interface Seat { cohortId: number; capacity: number; enrolled: number; isOpen: boolean }
+// Static cohort metadata lives in cohorts.json — not from the API
 interface CohortMeta { id: number; course: string; mode: string; start_ar: string; days: string; time_ar: string }
-interface OrderRow { id: string; firstName?: string; lastName?: string; customer?: any; phone?: string; status: string; createdAt: string; remainingJOD: number }
 
 const ALL_COHORTS = (cohortsData.cohorts as CohortMeta[]);
 
@@ -16,15 +16,15 @@ export default function Cohorts() {
   const { user } = useAdminAuth();
   const isAdmin = user?.role === 'admin';
   const toast = useToast();
-  const [seats, setSeats] = useState<Seat[]>([]);
+  const [seats, setSeats] = useState<CohortSeat[]>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState<number | null>(null);
-  const [cohortOrders, setCohortOrders] = useState<OrderRow[]>([]);
+  const [cohortOrders, setCohortOrders] = useState<Order[]>([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
 
   const load = () => {
     setLoading(true);
-    api<{ seats: Seat[] }>('/admin/cohorts')
+    api<{ seats: CohortSeat[] }>('/admin/cohorts')
       .then(d => setSeats(d.seats))
       .catch(e => toast(e.message, 'err'))
       .finally(() => setLoading(false));
@@ -43,7 +43,7 @@ export default function Cohorts() {
     setOpen(cohortId);
     setOrdersLoading(true);
     try {
-      const d = await api<{ orders: OrderRow[] }>(`/admin/orders?cohortId=${cohortId}`);
+      const d = await api<{ orders: Order[] }>(`/admin/orders?cohortId=${cohortId}`);
       setCohortOrders(d.orders);
     } catch (e: any) { toast(e.message, 'err'); }
     finally { setOrdersLoading(false); }

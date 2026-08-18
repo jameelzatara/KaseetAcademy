@@ -3,13 +3,7 @@ import { useEffect, useState } from 'react';
 import { RefreshCw } from 'lucide-react';
 import { api, COURSE_NAMES, waLink, fmtDate } from '../api';
 import { TableCard, useToast } from '../components';
-
-interface DueRow {
-  id: string; first_name: string | null; last_name: string | null; phone: string | null;
-  email: string | null; course_slug: string; cohort_id: number;
-  total_jod: number; paid_jod: number; remaining_jod: number; status: string;
-  created_at: string; next_due_at: string | null;
-}
+import type { DueRow } from '@workspace/admin-types';
 
 export default function Dues() {
   const toast = useToast();

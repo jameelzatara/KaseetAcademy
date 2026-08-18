@@ -4,12 +4,7 @@ import { Plus, Pencil, Trash2, RefreshCw } from 'lucide-react';
 import { api } from '../api';
 import { Modal, Field, StatusBadge, ConfirmDialog, useToast } from '../components';
 import { useAdminAuth } from '../context';
-
-interface Course {
-  id: number; slug: string; nameAr: string; level: 'beginner' | 'advanced'; status: 'active' | 'draft' | 'archived';
-  onsiteEnabled: boolean; onsitePriceJOD: number | null; onsiteHours: number | null; onsiteSessions: number | null; onsiteCapacity: number | null;
-  liveEnabled: boolean; livePriceUSD: number | null; liveHours: number | null; liveSessions: number | null; liveCapacity: number | null;
-}
+import type { Course } from '@workspace/admin-types';
 
 // Arabic → latin slug (matches the prototype's approach)
 function slugify(nameAr: string): string {

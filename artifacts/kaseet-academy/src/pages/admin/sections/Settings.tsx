@@ -3,21 +3,17 @@ import { useEffect, useState } from 'react';
 import { RefreshCw } from 'lucide-react';
 import { api, fmtDateTime } from '../api';
 import { StatusBadge, TableCard, useToast } from '../components';
-
-interface EmailLog {
-  id: number; order_id: string | null; to_address: string; subject: string;
-  tag: string | null; status: string; error: string | null; sent_at: string;
-}
+import type { EmailLogEntry } from '@workspace/admin-types';
 
 export default function Settings() {
   const toast = useToast();
-  const [logs, setLogs] = useState<EmailLog[]>([]);
+  const [logs, setLogs] = useState<EmailLogEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState<number | null>(null);
 
   const load = () => {
     setLoading(true);
-    api<{ logs: EmailLog[] }>('/admin/email-log')
+    api<{ logs: EmailLogEntry[] }>('/admin/email-log')
       .then(d => setLogs(d.logs))
       .catch(e => toast(e.message, 'err'))
       .finally(() => setLoading(false));

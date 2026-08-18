@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@replit/connectors-sdk": "^0.4.1",
+    "@workspace/admin-types": "workspace:*",
     "@workspace/api-zod": "workspace:*",
     "@workspace/db": "workspace:*",
     "bcryptjs": "^3.0.3",

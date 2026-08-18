@@ -1,13 +1,9 @@
 /** Admin auth context — dual-role: owner admin (password) / consultant (email+password). */
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
 import { api, ApiError } from './api';
+import type { AdminUser } from '@workspace/admin-types';
 
-export interface AdminUser {
-  role: 'admin' | 'consultant';
-  id: number | null;
-  name: string;
-  email: string | null;
-}
+export type { AdminUser };
 
 interface AuthState {
   user: AdminUser | null;
