@@ -9,42 +9,62 @@ import voiceoverTrackImg from '@assets/voiceover-track_1785431174382.jpeg';
 import publicSpeakingImg from '@assets/public-speaking-track_1785431174381.jpg';
 
 interface Track {
-  id:     number;
-  title:  string;
-  desc:   string;
-  hours:  string;
-  image:  string;
-  imgPos: string;
-  route?: string;
+  id:              number;
+  title:           string;
+  desc:            string;
+  hours:           string;
+  image:           string;
+  imgPos:          string;
+  route?:          string;
+  inPersonOld:     string;   // مشطوب
+  inPersonNew:     string;   // بارز ذهبي
+  inPersonSessions:string;   // ساعات / لقاءات
+  onlineOld:       string;
+  onlineNew:       string;
 }
 
 const TRACKS: Track[] = [
   {
     id: 1,
-    title:  'ماستركلاس التعليق والأداء الصوتي',
-    desc:   'رحلة متكاملة لتطوير نبرات الصوت، التنفس الصحيح، وتدريب الأداء الصوتي لمختلف الإعلانات، الوثائقيات والبودكاست.',
-    hours:  '44 ساعة · 12 محطة · 13 مخرجاً',
-    image:  voiceoverTrackImg,
-    imgPos: 'center 30%',
-    route:  '/masterclass-voice',
+    title:            'ماستركلاس التعليق والأداء الصوتي',
+    desc:             'رحلة متكاملة لتطوير نبرات الصوت، التنفس الصحيح، وتدريب الأداء الصوتي لمختلف الإعلانات، الوثائقيات والبودكاست.',
+    hours:            '44 ساعة · 12 محطة · 13 مخرجاً',
+    image:            voiceoverTrackImg,
+    imgPos:           'center 30%',
+    route:            '/masterclass-voice',
+    inPersonOld:      '260 د.أ',
+    inPersonNew:      '218 د.أ',
+    inPersonSessions: '16 ساعة · 8 لقاءات',
+    onlineOld:        '200 $',
+    onlineNew:        '150 $',
   },
   {
     id: 2,
-    title:  'ماستركلاس الإعلام',
-    desc:   'برنامج شامل للتدريب على التقديم التلفزيوني والإذاعي، إعداد البرامج، وإتقان الحضور أمام الكاميرا بثقة واحتراف.',
-    hours:  '40 ساعة · 10 محطات · 8 مشاريع',
-    image:  mediaTrackImg,
-    imgPos: 'center 45%',
-    route:  '/masterclass-elam',
+    title:            'ماستركلاس الإعلام',
+    desc:             'برنامج شامل للتدريب على التقديم التلفزيوني والإذاعي، إعداد البرامج، وإتقان الحضور أمام الكاميرا بثقة واحتراف.',
+    hours:            '40 ساعة · 10 محطات · 8 مشاريع',
+    image:            mediaTrackImg,
+    imgPos:           'center 45%',
+    route:            '/masterclass-elam',
+    inPersonOld:      '260 د.أ',
+    inPersonNew:      '218 د.أ',
+    inPersonSessions: '16 ساعة · 8 لقاءات',
+    onlineOld:        '200 $',
+    onlineNew:        '150 $',
   },
   {
     id: 3,
-    title:  'ماستركلاس فن الخطابة والتواصل القيادي',
-    desc:   'برنامج تطبيقي لبناء الكاريزما والقيادة الصوتية، إتقان لغة الجسد والتأثير في الجمهور والتخلص من رهبة المسرح.',
-    hours:  '42 ساعة · 12 محطة · 13 مخرجاً',
-    image:  publicSpeakingImg,
-    imgPos: 'center 30%',
-    route:  '/masterclass-khataba',
+    title:            'ماستركلاس فن الخطابة والتواصل القيادي',
+    desc:             'برنامج تطبيقي لبناء الكاريزما والقيادة الصوتية، إتقان لغة الجسد والتأثير في الجمهور والتخلص من رهبة المسرح.',
+    hours:            '42 ساعة · 12 محطة · 13 مخرجاً',
+    image:            publicSpeakingImg,
+    imgPos:           'center 30%',
+    route:            '/masterclass-khataba',
+    inPersonOld:      '260 د.أ',
+    inPersonNew:      '218 د.أ',
+    inPersonSessions: '16 ساعة · 8 لقاءات',
+    onlineOld:        '200 $',
+    onlineNew:        '150 $',
   },
 ];
 
@@ -159,11 +179,40 @@ function TrackCard({ track }: { track: Track }) {
           {track.desc}
         </p>
 
+        {/* Pricing block */}
+        <div style={{
+          display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8,
+          borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 14,
+        }}>
+          {/* الحضوري */}
+          <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 10, padding: '10px 12px', textAlign: 'right' }}>
+            <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 10.5, color: 'rgba(252,251,251,0.38)', marginBottom: 4 }}>الحضوري</div>
+            <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11, color: 'rgba(252,251,251,0.30)', textDecoration: 'line-through', lineHeight: 1 }}>
+              {track.inPersonOld}
+            </div>
+            <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: 17, fontWeight: 700, color: '#FFC107', lineHeight: 1.2, marginTop: 2 }}>
+              {track.inPersonNew}
+            </div>
+            <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 10, color: 'rgba(252,251,251,0.35)', marginTop: 3 }}>
+              {track.inPersonSessions}
+            </div>
+          </div>
+          {/* Online LIVE */}
+          <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 10, padding: '10px 12px', textAlign: 'right' }}>
+            <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 10.5, color: 'rgba(252,251,251,0.38)', marginBottom: 4 }}>مباشر تفاعلي</div>
+            <div style={{ fontFamily: 'Tajawal, sans-serif', fontSize: 11, color: 'rgba(252,251,251,0.30)', textDecoration: 'line-through', lineHeight: 1 }}>
+              {track.onlineOld}
+            </div>
+            <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: 17, fontWeight: 700, color: 'rgba(252,251,251,0.88)', lineHeight: 1.2, marginTop: 2 }}>
+              {track.onlineNew}
+            </div>
+          </div>
+        </div>
+
         {/* CTA */}
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'flex-start',
-          gap: 6, paddingTop: 8,
-          borderTop: '1px solid rgba(255,255,255,0.07)', marginTop: 'auto',
+          gap: 6, paddingTop: 10, marginTop: 4,
         }}>
           <span style={{
             fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 14,
@@ -240,8 +289,8 @@ export default function TracksSection() {
 
         {/* Section header */}
         <SectionHeader
-          badge="الماستركلاسات"
-          heading={<>كل صوت يستحق <Gold>ماستركلاساً احترافياً</Gold></>}
+          badge="دوراتنا المتميّزة"
+          heading={<>كل موهبة تستحق <Gold>ماستركلاساً احترافياً</Gold></>}
           description="اختر من بين ماستركلاساتنا الأكثر طلباً — كل برنامج صُمِّم ليأخذك خطوة أبعد في عالم الإعلام والصوت والخطابة."
           style={{ marginBottom: 48 }}
         />
