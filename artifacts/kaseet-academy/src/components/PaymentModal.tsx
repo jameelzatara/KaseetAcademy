@@ -105,36 +105,24 @@ const COUNTRIES: Country[] = [
   { code:'LK', dial:'+94',  name:'سريلانكا' },
 ];
 
-/* ── Google Calendar deep-link builder ─────────────── */
-function buildGCalUrl({
-  title, cohortStartAr, cohortTimeAr, cohortDays, details, location, cohortStartISO,
-}: {
-  title: string; cohortStartAr: string; cohortTimeAr: string;
-  cohortDays: string; details: string; location: string;
-  cohortStartISO?: string; // YYYY-MM-DD — bypasses Arabic parsing if provided
-}): string {
-  const base   = 'https://calendar.google.com/calendar/render?action=TEMPLATE&ctz=Asia%2FAmman';
-  const params = new URLSearchParams({ text: title, details, location });
+/* ── Shared date/time parser ────────────────────────── */
+interface EventDateTime { year: number; month: number; day: number; hour: number; min: number; }
 
+function parseEventDateTime(cohortStartAr: string, cohortTimeAr: string, cohortStartISO?: string): EventDateTime | null {
   try {
     let year: number, month: number, day: number;
 
     if (cohortStartISO) {
-      // Canonical ISO date — most reliable path
       const parts = cohortStartISO.split('-').map(Number);
       if (parts.length !== 3 || parts.some(isNaN)) throw new Error('invalid ISO');
       [year, month, day] = parts;
     } else {
-      // Parse Arabic date string — handles both:
-      //   "الثلاثاء، 15 أيلول 2025"  (with year)
-      //   "9 آب"                       (without year)
       const MONTHS: Record<string, number> = {
         'يناير':1,'فبراير':2,'مارس':3,'أبريل':4,'مايو':5,'يونيو':6,
         'يوليو':7,'أغسطس':8,'سبتمبر':9,'أكتوبر':10,'نوفمبر':11,'ديسمبر':12,
         'كانون الثاني':1,'شباط':2,'آذار':3,'نيسان':4,'أيار':5,'حزيران':6,
         'تموز':7,'آب':8,'أيلول':9,'تشرين الأول':10,'تشرين الثاني':11,'كانون الأول':12,
       };
-      // Regex: optional day-name prefix, then DD MONTH [YYYY]
       const dm = cohortStartAr.match(/(\d+)\s+([\u0600-\u06FF\s]+?)(?:\s+(\d{4}))?\s*$/);
       if (!dm) throw new Error('date parse failed');
       day   = parseInt(dm[1], 10);
@@ -143,8 +131,7 @@ function buildGCalUrl({
       if (dm[3]) {
         year = parseInt(dm[3], 10);
       } else {
-        // Infer year: use next upcoming occurrence
-        const now  = new Date();
+        const now = new Date();
         year = now.getFullYear();
         if (new Date(year, month - 1, day) < now) year++;
       }
@@ -161,19 +148,104 @@ function buildGCalUrl({
       if (!pm && hour === 12) hour = 0;
     }
 
+    return { year, month, day, hour, min };
+  } catch {
+    return null;
+  }
+}
+
+/* ── Google Calendar deep-link builder ─────────────── */
+function buildGCalUrl({
+  title, cohortStartAr, cohortTimeAr, cohortDays, details, location, cohortStartISO,
+}: {
+  title: string; cohortStartAr: string; cohortTimeAr: string;
+  cohortDays: string; details: string; location: string;
+  cohortStartISO?: string;
+}): string {
+  const base   = 'https://calendar.google.com/calendar/render?action=TEMPLATE&ctz=Asia%2FAmman';
+  const params = new URLSearchParams({ text: title, details, location });
+
+  const dt = parseEventDateTime(cohortStartAr, cohortTimeAr, cohortStartISO);
+  if (dt) {
     const pad = (n: number) => String(n).padStart(2, '0');
     const fmt = (y: number, mo: number, d: number, h: number, m: number) =>
       `${y}${pad(mo)}${pad(d)}T${pad(h)}${pad(m)}00`;
-
-    // Only the first session — buyer can repeat manually.
-    // Recurrence omitted: session counts differ per course and are not
-    // available in the props passed to this component.
+    const { year, month, day, hour, min } = dt;
     params.set('dates', `${fmt(year, month, day, hour, min)}/${fmt(year, month, day, hour + 2, min)}`);
-  } catch {
-    // fallback: open Google Calendar with just the title (user fills dates manually)
   }
 
   return `${base}&${params.toString()}`;
+}
+
+/* ── Apple Calendar .ics data-URI builder ───────────── */
+function buildIcsDataUri({
+  title, cohortStartAr, cohortTimeAr, details, location, cohortStartISO,
+}: {
+  title: string; cohortStartAr: string; cohortTimeAr: string;
+  details: string; location: string; cohortStartISO?: string;
+}): string {
+  const dt = parseEventDateTime(cohortStartAr, cohortTimeAr, cohortStartISO);
+  const pad = (n: number) => String(n).padStart(2, '0');
+
+  let dtstart = '', dtend = '';
+  if (dt) {
+    const { year, month, day, hour, min } = dt;
+    const fmt = (y: number, mo: number, d: number, h: number, m: number) =>
+      `${y}${pad(mo)}${pad(d)}T${pad(h)}${pad(m)}00`;
+    dtstart = fmt(year, month, day, hour, min);
+    dtend   = fmt(year, month, day, hour + 2, min);
+  } else {
+    // Fallback: today + 2h
+    const now = new Date();
+    const fmt = (d: Date) =>
+      `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+    dtstart = fmt(now);
+    const end = new Date(now.getTime() + 7200000);
+    dtend = fmt(end);
+  }
+
+  const uid = `kaseet-${Date.now()}@kaseet.com`;
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Kaseet Academy//AR',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'BEGIN:VEVENT',
+    `UID:${uid}`,
+    `DTSTART;TZID=Asia/Amman:${dtstart}`,
+    `DTEND;TZID=Asia/Amman:${dtend}`,
+    `SUMMARY:${title}`,
+    `DESCRIPTION:${details.replace(/\n/g, '\\n')}`,
+    `LOCATION:${location}`,
+    'END:VEVENT',
+    'END:VCALENDAR',
+  ].join('\r\n');
+
+  return 'data:text/calendar;charset=utf-8,' + encodeURIComponent(ics);
+}
+
+/* ── Outlook Web deep-link builder ──────────────────── */
+function buildOutlookUrl({
+  title, cohortStartAr, cohortTimeAr, details, location, cohortStartISO,
+}: {
+  title: string; cohortStartAr: string; cohortTimeAr: string;
+  details: string; location: string; cohortStartISO?: string;
+}): string {
+  const base   = 'https://outlook.live.com/calendar/deeplink/compose';
+  const params = new URLSearchParams({ subject: title, body: details, location });
+
+  const dt = parseEventDateTime(cohortStartAr, cohortTimeAr, cohortStartISO);
+  if (dt) {
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const isoLocal = (y: number, mo: number, d: number, h: number, m: number) =>
+      `${y}-${pad(mo)}-${pad(d)}T${pad(h)}:${pad(m)}:00`;
+    const { year, month, day, hour, min } = dt;
+    params.set('startdt', isoLocal(year, month, day, hour, min));
+    params.set('enddt',   isoLocal(year, month, day, hour + 2, min));
+  }
+
+  return `${base}?${params.toString()}`;
 }
 
 /* ── prop / state types ─────────────────────────────── */
@@ -894,34 +966,73 @@ export default function PaymentModal({
                   📧 أرسلنا إيصال الدفع وتفاصيل التسجيل إلى بريدك.<br />
                   لم يصلك؟ تفقّد مجلد الرسائل غير المرغوب فيها.
                 </div>
-                {/* Google Calendar button */}
-                <a
-                  href={buildGCalUrl({
-                    title: `كاسيت أكاديمي — ${courseTitle}`,
-                    cohortStartAr,
-                    cohortTimeAr,
-                    cohortDays,
-                    details: `دورة ${courseTitle} · ${cohortDays} · ${cohortTimeAr}\nالمدرّب: ${cohortTrainer}\nكاسيت أكاديمي — kaseet.com`,
-                    location: form.mode === 'onsite' ? 'استوديو كاسيت، شارع باريس، عمّان' : 'Google Meet (الرابط يُرسَل عبر البريد)',
-                    cohortStartISO: form.mode === 'live' ? cohortStartISOLive : cohortStartISOOnsite,
-                  })}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: 'inline-flex', alignItems: 'center', gap: 8,
-                    fontFamily: F, fontSize: 14, fontWeight: 700,
-                    color: '#4285F4',
-                    background: 'rgba(66,133,244,0.08)',
-                    border: '1px solid rgba(66,133,244,0.28)',
-                    borderRadius: 10, padding: '10px 22px',
-                    textDecoration: 'none', marginBottom: 10,
-                    cursor: 'pointer',
-                  }}
-                >
-                  <CalendarDays size={16} color="#4285F4" strokeWidth={2} />
-                  أضف إلى Google Calendar
-                </a>
-                <br />
+                {/* Calendar buttons */}
+                {(() => {
+                  const calTitle    = `كاسيت أكاديمي — ${courseTitle}`;
+                  const calDetails  = `دورة ${courseTitle} · ${cohortDays} · ${cohortTimeAr}\nالمدرّب: ${cohortTrainer}\nكاسيت أكاديمي — kaseet.com`;
+                  const calLocation = form.mode === 'onsite' ? 'استوديو كاسيت، شارع باريس، عمّان' : 'Google Meet (الرابط يُرسَل عبر البريد)';
+                  const calISO      = form.mode === 'live' ? cohortStartISOLive : cohortStartISOOnsite;
+                  const calArgs     = { title: calTitle, cohortStartAr, cohortTimeAr, cohortDays, details: calDetails, location: calLocation, cohortStartISO: calISO };
+
+                  const btnBase: CSSProperties = {
+                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 7,
+                    fontFamily: F, fontSize: 13, fontWeight: 700,
+                    borderRadius: 10, padding: '9px 14px',
+                    textDecoration: 'none', cursor: 'pointer', flex: '1 1 0', minWidth: 0,
+                    border: '1px solid',
+                  };
+
+                  return (
+                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 14 }}>
+                      {/* Google Calendar */}
+                      <a
+                        href={buildGCalUrl(calArgs)}
+                        target="_blank" rel="noopener noreferrer"
+                        style={{ ...btnBase, color: '#4285F4', background: 'rgba(66,133,244,0.08)', borderColor: 'rgba(66,133,244,0.28)' }}
+                      >
+                        {/* Google "G" icon */}
+                        <svg width="14" height="14" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+                          <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
+                          <path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
+                          <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+                        </svg>
+                        Google
+                      </a>
+
+                      {/* Apple Calendar — .ics download */}
+                      <a
+                        href={buildIcsDataUri(calArgs)}
+                        download="kaseet-masterclass.ics"
+                        style={{ ...btnBase, color: '#f8fafc', background: 'rgba(255,255,255,0.06)', borderColor: 'rgba(255,255,255,0.18)' }}
+                      >
+                        {/* Apple icon */}
+                        <svg width="13" height="14" viewBox="0 0 814 1000" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 790.9 0 663.3 0 541.8c0-207.1 134.5-316.7 267.3-316.7 100.6 0 184.7 66.8 246.3 66.8 59.2 0 152.4-70.8 269.7-70.8zm-137.8-127.4c45.4-55.1 74.8-131.4 74.8-207.7 0-10.3-.6-20.7-2.6-29.7-70.8 2.6-154.9 47.4-206.1 110.7-40.2 48.7-76 125-76 202.6 0 11.6 2 23.2 2.6 27.1 4.5.6 11.6 1.9 18.7 1.9 64.1 0 142.8-42.8 188.6-104.9z"/>
+                        </svg>
+                        Apple
+                      </a>
+
+                      {/* Outlook Web */}
+                      <a
+                        href={buildOutlookUrl(calArgs)}
+                        target="_blank" rel="noopener noreferrer"
+                        style={{ ...btnBase, color: '#0078D4', background: 'rgba(0,120,212,0.08)', borderColor: 'rgba(0,120,212,0.28)' }}
+                      >
+                        {/* Outlook icon */}
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <rect x="1" y="4" width="14" height="16" rx="2" fill="#0078D4"/>
+                          <rect x="7" y="9" width="4" height="4" rx="1" fill="white"/>
+                          <path d="M15 8h7v3l-3.5 2.5L15 11V8z" fill="#0078D4"/>
+                          <rect x="15" y="11" width="7" height="9" rx="1" fill="#0078D4" opacity="0.7"/>
+                          <path d="M15 11l3.5 2.5L22 11" stroke="white" strokeWidth="1" fill="none"/>
+                        </svg>
+                        Outlook
+                      </a>
+                    </div>
+                  );
+                })()}
+
                 <button onClick={onClose} style={{ fontFamily: F, fontSize: 14, fontWeight: 700, color: GLD, background: GS, border: `1px solid ${GL}`, borderRadius: 10, padding: '10px 32px', cursor: 'pointer' }}>إغلاق</button>
               </div>
             )}
