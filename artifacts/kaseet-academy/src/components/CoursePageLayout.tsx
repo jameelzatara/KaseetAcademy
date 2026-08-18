@@ -572,7 +572,11 @@ function CurriculumSection({ curriculumModes, brochureHref, brochureLabel }: {
               onClick={() => {
                 document.body.classList.add('ka-print-curriculum-only');
                 window.print();
-                window.addEventListener('afterprint', () => document.body.classList.remove('ka-print-curriculum-only'), { once: true });
+                // afterprint fires reliably in Firefox; in Chrome it sometimes doesn't.
+                // The setTimeout fallback ensures the class is always removed.
+                const cleanup = () => document.body.classList.remove('ka-print-curriculum-only');
+                window.addEventListener('afterprint', cleanup, { once: true });
+                setTimeout(cleanup, 4000);
               }}
               style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'transparent', border: `1px solid ${CREAM_LINE}`, borderRadius: 10, padding: '8px 16px', cursor: 'pointer', fontFamily: F, fontWeight: 700, fontSize: 13, color: INK2, transition: 'background .15s' }}
               onMouseEnter={e => (e.currentTarget.style.background = 'rgba(24,32,47,.05)')}

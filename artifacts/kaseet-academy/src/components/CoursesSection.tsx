@@ -140,14 +140,14 @@ function GridCard({ card, hidden }: { card: GCard; hidden: boolean }) {
         flexDirection: 'column',
         position:      'relative',
         background:    CARD_BG,
-        border:        `1px solid ${hov ? 'transparent' : 'rgba(255,255,255,0.10)'}`,
+        border:        `1px solid ${hov ? 'rgba(255,193,7,0.45)' : 'rgba(255,255,255,0.10)'}`,
         borderRadius:  18,
         overflow:      'hidden',
         boxShadow:     hov
-          ? '0 24px 54px rgba(255,193,7,0.16), 0 0 0 1px rgba(255,193,7,0.45)'
+          ? '0 24px 54px rgba(255,193,7,0.18)'
           : '0 12px 30px rgba(0,0,0,0.35)',
-        transform:  hov ? 'translateY(-6px) scale(1.02)' : 'translateY(0) scale(1)',
-        transition: 'transform 0.35s, box-shadow 0.35s, border 0.35s',
+        transform:  hov ? 'translateY(-5px)' : 'translateY(0)',
+        transition: 'transform 0.30s, box-shadow 0.30s, border-color 0.30s',
       }}
     >
       {/* ── Image area ── */}
@@ -374,7 +374,7 @@ export default function CoursesSection() {
             fontSize: 'clamp(28px,4.6vw,50px)',
             color: OFF, lineHeight: 1.25, margin: 0,
           }}>
-            دوراتنا <span style={{ color: GOLD }}>المتميّزة</span>
+            ماستركلاساتنا <span style={{ color: GOLD }}>المتميّزة</span>
           </h2>
           <p style={{
             fontFamily: F, fontWeight: 500,
@@ -382,7 +382,7 @@ export default function CoursesSection() {
             color: 'rgba(252,251,251,0.72)',
             marginTop: 14, maxWidth: 660, marginInlineStart: 0, lineHeight: 1.8,
           }}>
-            اختر من بين برامجنا الأكثر طلباً — حضوري أو مباشر تفاعلي (Online LIVE)، ومقاعد محدودة.
+            كل موهبة تستحق ماستركلاساً احترافياً — حضوري أو مباشر تفاعلي (Online LIVE)، ومقاعد محدودة.
           </p>
 
         </header>
