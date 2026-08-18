@@ -597,5 +597,23 @@ router.post("/email-log/:logId/resend", requireAdmin, async (req, res) => {
 router.get("/rates", requireAdmin, async (_req, res) => {
   try {
     const { rates, fetchedAt, stale } = await getLatestRates(90);
-export default router;
+    res.json({ rates, fetchedAt, stale });
+  } catch (err) {
+    console.error("admin/rates error", err);
+    res.status(500).json({ error: "خطأ في الخادم" });
+  }
+});
+
+// ── POST /admin/rates/refresh ──────────────────────────────
+// Manually trigger an exchange-rate refresh
+router.post("/rates/refresh", requireAdmin, async (_req, res) => {
+  try {
     const rates = await fetchAndStoreRates();
+    res.json({ ok: true, rates });
+  } catch (err) {
+    console.error("admin/rates/refresh error", err);
+    res.status(500).json({ error: "خطأ في الخادم" });
+  }
+});
+
+export default router;
