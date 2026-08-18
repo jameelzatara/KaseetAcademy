@@ -461,6 +461,7 @@ export default function CoursesSection() {
                   <span style={{ fontFamily: F, fontSize: 12, color: 'rgba(252,251,251,0.50)' }}>
                     16 ساعة · 8 لقاءات
                   </span>
+                  <span style={{ fontFamily: FP, fontSize: 11.5, color: 'rgba(252,251,251,0.35)', textDecoration: 'line-through' }}>260 د.أ</span>
                   <b style={{ fontFamily: FP, fontWeight: 800, fontSize: 15, color: GOLD }}>
                     218 <small style={{ fontSize: 11, fontFamily: F }}>د.أ</small>
                   </b>
@@ -478,6 +479,7 @@ export default function CoursesSection() {
                   <span style={{ fontFamily: F, fontSize: 12, color: 'rgba(252,251,251,0.50)' }}>
                     12 ساعة · 6 لقاءات
                   </span>
+                  <span style={{ fontFamily: FP, fontSize: 11.5, color: 'rgba(252,251,251,0.35)', textDecoration: 'line-through' }}>200$</span>
                   <b style={{ fontFamily: FP, fontWeight: 800, fontSize: 15, color: GOLD }}>
                     150 <small style={{ fontSize: 11, fontFamily: F }}>$</small>
                   </b>
