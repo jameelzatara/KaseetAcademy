@@ -36,7 +36,7 @@ const LT    = '#CBD5E1';
 const ERR   = '#f87171';
 const GRN   = '#4ade80';
 const DEPOSIT_JOD = 50;
-const DEPOSIT_USD = 71; // ceil(50 JOD × 1.41) — must match server pricing.ts
+const DEPOSIT_USD = 70; // first live-mode instalment — must match checkout.ts DEPOSIT_USD_LIVE
 
 /* ── country/dial-code list ─────────────────────────── */
 interface Country { code: string; dial: string; name: string; }
@@ -423,16 +423,18 @@ function OrderSummary({
     ? formatPrice(priceUSD, 'USD')
     : formatPrice(convertPrice(baseJOD, displayCurrency, liveRates), displayCurrency);
 
-  const dispDeposit = formatPrice(convertPrice(DEPOSIT_JOD, displayCurrency, liveRates), displayCurrency);
-  const dispRemain  = formatPrice(convertPrice(priceJOD - DEPOSIT_JOD, displayCurrency, liveRates), displayCurrency);
+  const dispDeposit     = formatPrice(convertPrice(DEPOSIT_JOD, displayCurrency, liveRates), displayCurrency);
+  const dispRemain      = formatPrice(convertPrice(priceJOD - DEPOSIT_JOD, displayCurrency, liveRates), displayCurrency);
+  const dispDepositLive = formatPrice(DEPOSIT_USD, 'USD');
+  const dispRemainLive  = `$${priceUSD - DEPOSIT_USD}`;
 
   // Is the display currency different from what Stripe will actually charge?
   const isApprox = isOnsite
     ? displayCurrency !== 'JOD'
     : displayCurrency !== 'USD';
 
-  const charge = isOnsite
-    ? (plan === 'deposit' ? dispDeposit : dispFull)
+  const charge = plan === 'deposit'
+    ? (isOnsite ? dispDeposit : dispDepositLive)
     : dispFull;
 
   return (
@@ -463,9 +465,9 @@ function OrderSummary({
             {isApprox && <span style={{ fontFamily: F, fontSize: 10, color: MUT, fontWeight: 600 }}>≈</span>}
             <div style={{ fontFamily: FP, fontSize: 22, fontWeight: 800, color: accent, lineHeight: 1 }}>{charge}</div>
           </div>
-          {isOnsite && plan === 'deposit' && (
+          {plan === 'deposit' && (
             <div style={{ fontFamily: F, fontSize: 11, color: MUT, marginTop: 3 }}>
-              + {dispRemain} لاحقاً
+              + {isOnsite ? dispRemain : dispRemainLive} لاحقاً على دفعتين
             </div>
           )}
           {isApprox && (
@@ -635,7 +637,7 @@ function StripePaymentForm({
   const [ready, setReady]   = useState(false);
 
   const chargeLabel = mode === 'live'
-    ? `$${priceUSD}`
+    ? (plan === 'deposit' ? `$${DEPOSIT_USD}` : `$${priceUSD}`)
     : plan === 'deposit' ? `${DEPOSIT_JOD} ديناراً` : `${priceJOD} ديناراً`;
 
   const handlePay = async () => {
@@ -759,7 +761,7 @@ export default function PaymentModal({
     } else {
       setStep('form'); setClientSecret(null); setPiId(null);
       setOrderId(null); setFormErr(null); setLoading(false);
-      setForm(f => ({ ...f, mode: initialMode, plan: initialMode === 'live' ? 'full' : 'deposit' }));
+      setForm(f => ({ ...f, mode: initialMode, plan: 'deposit' }));
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
@@ -814,7 +816,7 @@ export default function PaymentModal({
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           cohortId, courseSlug, mode: form.mode,
-          plan: form.mode === 'live' ? 'full' : form.plan,
+          plan: form.plan,
           cohortStartAr, cohortDays, cohortTimeAr, cohortTrainer,
           cohortPlatform: form.mode === 'onsite' ? 'استوديو كاسيت' : 'Google Meet',
           customer: {
@@ -829,7 +831,8 @@ export default function PaymentModal({
       setClientSecret(data.clientSecret);
       setPiId(data.paymentIntentId ?? null);
       setOrderId(data.orderId ?? null);
-      if (form.mode === 'live') { setPaidAmount(priceUSD); setPaidCurrency('USD'); setRemaining(0); }
+      if (form.mode === 'live' && form.plan === 'deposit') { setPaidAmount(DEPOSIT_USD); setPaidCurrency('USD'); setRemaining(priceUSD - DEPOSIT_USD); }
+      else if (form.mode === 'live') { setPaidAmount(priceUSD); setPaidCurrency('USD'); setRemaining(0); }
       else if (form.plan === 'deposit') { setPaidAmount(DEPOSIT_JOD); setPaidCurrency('JOD'); setRemaining(priceJOD - DEPOSIT_JOD); }
       else { setPaidAmount(priceJOD); setPaidCurrency('JOD'); setRemaining(0); }
       setStep('payment');
@@ -931,7 +934,7 @@ export default function PaymentModal({
                       accent={CYN}
                       accentBg={CS}
                       accentBorder={CL}
-                      onClick={() => setForm(f => ({ ...f, mode: 'live', plan: 'full' }))}
+                      onClick={() => setForm(f => ({ ...f, mode: 'live', plan: 'deposit' }))}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: 7, flexWrap: 'wrap' }}>
                         <Wifi size={13} color={form.mode === 'live' ? CYN : MUT} strokeWidth={2.2} />
@@ -944,39 +947,41 @@ export default function PaymentModal({
                   </div>
                 </div>
 
-                {/* ② خطة الدفع (حضوري فقط) */}
-                {isOnsite && (
-                  <div>
-                    <SectionLabel>② خطّة الدفع</SectionLabel>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                      <PlanCard selected={form.plan === 'deposit'} onClick={() => setForm(f => ({ ...f, plan: 'deposit' }))}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
-                          <span style={{ fontFamily: F, fontSize: 14.5, fontWeight: 800, color: form.plan === 'deposit' ? OFF : LT }}>تقسيط مريح</span>
-                          <span style={{ fontFamily: F, fontSize: 10.5, fontWeight: 700, background: GLD, color: '#0F1A2E', padding: '2px 8px', borderRadius: 999 }}>موصى به</span>
-                        </div>
-                        <div style={{ fontFamily: F, fontSize: 13, color: LT, lineHeight: 1.7 }}>
-                          ادفع <strong style={{ color: GLD }}>{DEPOSIT_JOD} ديناراً</strong> الآن · والباقي {priceJOD - DEPOSIT_JOD} على دفعتين أثناء الدورة
-                        </div>
-                        <div style={{ display: 'flex', gap: 12, marginTop: 6, flexWrap: 'wrap' }}>
-                          {['بلا فوائد', 'بلا رسوم إضافية'].map(t => (
-                            <div key={t} style={{ display: 'flex', alignItems: 'center', gap: 4, fontFamily: F, fontSize: 11.5, color: MUT }}>
-                              <CheckCircle2 size={11} color={GRN} /> {t}
-                            </div>
-                          ))}
-                        </div>
-                      </PlanCard>
+                {/* ② خطّة الدفع — تظهر للحضوري والمباشر */}
+                <div>
+                  <SectionLabel>② خطّة الدفع</SectionLabel>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    <PlanCard selected={form.plan === 'deposit'} onClick={() => setForm(f => ({ ...f, plan: 'deposit' }))}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
+                        <span style={{ fontFamily: F, fontSize: 14.5, fontWeight: 800, color: form.plan === 'deposit' ? OFF : LT }}>تقسيط مريح</span>
+                        <span style={{ fontFamily: F, fontSize: 10.5, fontWeight: 700, background: GLD, color: '#0F1A2E', padding: '2px 8px', borderRadius: 999 }}>موصى به</span>
+                      </div>
+                      <div style={{ fontFamily: F, fontSize: 13, color: LT, lineHeight: 1.7 }}>
+                        {isOnsite
+                          ? <>ادفع <strong style={{ color: GLD }}>{DEPOSIT_JOD} ديناراً</strong> الآن · والباقي {priceJOD - DEPOSIT_JOD} على دفعتين</>
+                          : <>ادفع <strong style={{ color: GLD }}>${DEPOSIT_USD}</strong> الآن · والباقي ${priceUSD - DEPOSIT_USD} على دفعتين</>}
+                      </div>
+                      <div style={{ display: 'flex', gap: 12, marginTop: 6, flexWrap: 'wrap' }}>
+                        {['بلا فوائد', 'بلا رسوم إضافية'].map(t => (
+                          <div key={t} style={{ display: 'flex', alignItems: 'center', gap: 4, fontFamily: F, fontSize: 11.5, color: MUT }}>
+                            <CheckCircle2 size={11} color={GRN} /> {t}
+                          </div>
+                        ))}
+                      </div>
+                    </PlanCard>
 
-                      <PlanCard selected={form.plan === 'full'} onClick={() => setForm(f => ({ ...f, plan: 'full' }))}>
-                        <div style={{ fontFamily: F, fontSize: 14.5, fontWeight: 800, color: form.plan === 'full' ? OFF : LT }}>دفعة واحدة</div>
-                        <div style={{ fontFamily: F, fontSize: 12.5, color: MUT, marginTop: 2 }}>{priceJOD} دينار كاملة</div>
-                      </PlanCard>
-                    </div>
+                    <PlanCard selected={form.plan === 'full'} onClick={() => setForm(f => ({ ...f, plan: 'full' }))}>
+                      <div style={{ fontFamily: F, fontSize: 14.5, fontWeight: 800, color: form.plan === 'full' ? OFF : LT }}>دفعة واحدة</div>
+                      <div style={{ fontFamily: F, fontSize: 12.5, color: MUT, marginTop: 2 }}>
+                        {isOnsite ? `${priceJOD} دينار كاملة` : `$${priceUSD} دولار كاملاً`}
+                      </div>
+                    </PlanCard>
                   </div>
-                )}
+                </div>
 
                 {/* بياناتك */}
                 <div>
-                  <SectionLabel>{isOnsite ? '③' : '②'} بياناتك</SectionLabel>
+                  <SectionLabel>③ بياناتك</SectionLabel>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                     <div className="ka-form-row-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                       <Field icon={<User size={15} />} placeholder="الاسم الأول" value={form.firstName} onChange={v => setForm(f => ({ ...f, firstName: v }))} required />

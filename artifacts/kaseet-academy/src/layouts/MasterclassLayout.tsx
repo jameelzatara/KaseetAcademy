@@ -1511,8 +1511,8 @@ export default function MasterclassLayout({ data }: { data: MasterclassData }) {
         cohortDays={data.payment.cohortDays}
         cohortTimeAr={data.payment.cohortTimeAr}
         cohortTrainer={data.payment.cohortTrainer}
-        priceJOD={data.payment.priceJOD}
-        priceUSD={data.payment.priceUSD}
+        priceJOD={data.payment.priceJOD ?? 0}
+        priceUSD={data.payment.priceUSD ?? 0}
         initialMode={checkoutMode}
       />
     </div>

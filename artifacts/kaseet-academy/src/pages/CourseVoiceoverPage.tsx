@@ -6,6 +6,7 @@
 import { AudioLines, Volume2, SlidersHorizontal, Mic, Sparkles, Briefcase, AudioWaveform, Award } from 'lucide-react';
 import CoursePageLayout, { type CoursePageLayoutProps } from '../components/CoursePageLayout';
 import { usePageMeta } from '../hooks/usePageMeta';
+import { useCoursePricing } from '../hooks/useCoursePricing';
 
 import ayaImg    from '@assets/اية_القماز_1786367975413.jpeg';
 import yaqoutImg from '@assets/ياقوت_الخشاشنة_المستشارة_1786367971950.jpeg';
@@ -175,5 +176,14 @@ export default function CourseVoiceoverPage() {
     title: 'أساسيات التعليق والأداء الصوتي',
     description: 'البرنامج التأسيسي الشامل لتعليق الصوت مع يسار عبده ورنا العزام وعمر الدرابكة. شهادة معتمدة من وجيز — كاسيت أكاديمي.',
   });
-  return <CoursePageLayout {...config} />;
+  const { pricing } = useCoursePricing('voiceover');
+  const dynamicConfig = {
+    ...config,
+    modes: config.modes.map(m => ({
+      ...m,
+      ...(m.key === 'onsite' && pricing?.onsitePriceJOD != null && { price: String(pricing.onsitePriceJOD) }),
+      ...(m.key === 'live'   && pricing?.livePriceUSD  != null && { price: String(pricing.livePriceUSD) }),
+    })),
+  };
+  return <CoursePageLayout {...dynamicConfig} />;
 }

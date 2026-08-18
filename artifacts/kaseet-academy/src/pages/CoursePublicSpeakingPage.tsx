@@ -6,6 +6,7 @@
 import { Mic, Zap, SlidersHorizontal, Star, Briefcase, Award } from 'lucide-react';
 import CoursePageLayout, { type CoursePageLayoutProps } from '../components/CoursePageLayout';
 import { usePageMeta } from '../hooks/usePageMeta';
+import { useCoursePricing } from '../hooks/useCoursePricing';
 
 import heroCover  from '@assets/cover-public-speaking-tedx_1785865159100.jpeg';
 import sohaibImg  from '@assets/instructor-sohaib_1785692401461.jpeg';
@@ -135,5 +136,14 @@ export default function CoursePublicSpeakingPage() {
     title: 'فن الخطابة والإلقاء الجماهيري المؤثر',
     description: 'دورة 16 ساعة مع د. صهيب الخوالدة. كسر رهبة المنصة وبناء كاريزما خطابية. شهادة معتمدة من وجيز — كاسيت أكاديمي.',
   });
-  return <CoursePageLayout {...config} />;
+  const { pricing } = useCoursePricing('public-speaking');
+  const dynamicConfig = {
+    ...config,
+    modes: config.modes.map(m => ({
+      ...m,
+      ...(m.key === 'onsite' && pricing?.onsitePriceJOD != null && { price: String(pricing.onsitePriceJOD) }),
+      ...(m.key === 'live'   && pricing?.livePriceUSD  != null && { price: String(pricing.livePriceUSD) }),
+    })),
+  };
+  return <CoursePageLayout {...dynamicConfig} />;
 }

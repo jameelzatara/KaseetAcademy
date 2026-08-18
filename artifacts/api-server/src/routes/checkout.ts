@@ -10,6 +10,9 @@ import {
   splitInstallments,
 } from "../lib/currency.js";
 import { getPricing, COURSE_NAMES, validateCohort } from "../lib/pricing.js";
+
+// First instalment for the live (online) 3-payment plan — must match PaymentModal.tsx DEPOSIT_USD
+const DEPOSIT_USD_LIVE = 70;
 import {
   createHold,
   setHoldSession,
@@ -148,19 +151,25 @@ router.post("/checkout/session", async (req, res) => {
     let effectivePlan: "full" | "deposit" = plan;
 
     if (mode === "live") {
-      effectivePlan = "full";
-      totalUSD  = (pricing as { totalUSD: number }).totalUSD;
-      // Integer USD (total_usd column is integer)
+      totalUSD = (pricing as { totalUSD: number }).totalUSD;
       if (discount) totalUSD = Math.round(applyDiscount(totalUSD, discount));
-      chargeUSD = totalUSD;
-      installments = [{ seq: 1, amountJOD: 0, method: "stripe", paidAt: null }];
+      if (effectivePlan === "deposit") {
+        // 3-instalment plan: $70 now, two future Stripe charges
+        chargeUSD    = DEPOSIT_USD_LIVE;
+        installments = [
+          { seq: 1, amountJOD: 0, method: "stripe", paidAt: null },
+          { seq: 2, amountJOD: 0, method: "stripe", paidAt: null },
+          { seq: 3, amountJOD: 0, method: "stripe", paidAt: null },
+        ];
+      } else {
+        effectivePlan = "full";
+        chargeUSD    = totalUSD;
+        installments = [{ seq: 1, amountJOD: 0, method: "stripe", paidAt: null }];
+      }
     } else {
       totalJOD = (pricing as { totalJOD: number }).totalJOD;
       if (discount) {
-        // Integer JOD (total_jod column is integer)
         totalJOD = Math.round(applyDiscount(totalJOD, discount));
-        // Deposit invariant: the fixed deposit is always charged, so the
-        // discounted total can never drop below it (remaining stays >= 0)
         if (effectivePlan === "deposit") totalJOD = Math.max(totalJOD, DEPOSIT_JOD);
       }
       const [dep, inst2, inst3] = splitInstallments(totalJOD);
@@ -174,8 +183,8 @@ router.post("/checkout/session", async (req, res) => {
         remainingJOD = totalJOD - DEPOSIT_JOD;
         installments = [
           { seq: 1, amountJOD: dep,   method: "stripe", paidAt: null },
-          { seq: 2, amountJOD: inst2, method: "cash",   paidAt: null },
-          { seq: 3, amountJOD: inst3, method: "cash",   paidAt: null },
+          { seq: 2, amountJOD: inst2, method: "stripe", paidAt: null },
+          { seq: 3, amountJOD: inst3, method: "stripe", paidAt: null },
         ];
       }
     }
@@ -679,10 +688,14 @@ router.post("/checkout/payment-intent", async (req, res) => {
     let effectivePlan: "full" | "deposit" = plan;
 
     if (mode === "live") {
-      effectivePlan = "full";
-      totalUSD  = (pricing as { totalUSD: number }).totalUSD;
+      totalUSD = (pricing as { totalUSD: number }).totalUSD;
       if (discount) totalUSD = Math.round(applyDiscount(totalUSD, discount));
-      chargeUSD = totalUSD;
+      if (effectivePlan === "deposit") {
+        chargeUSD = DEPOSIT_USD_LIVE;
+      } else {
+        effectivePlan = "full";
+        chargeUSD = totalUSD;
+      }
     } else {
       totalJOD = (pricing as { totalJOD: number }).totalJOD;
       if (discount) {
@@ -820,7 +833,9 @@ export async function onPaymentIntentSucceeded(pi: import("stripe").Stripe.Payme
   const chargedUsd = parseFloat(meta.chargeUSD ?? String((pi.amount ?? 0) / 100));
 
   let paidJOD = 0, remainingJOD = 0, status: string;
-  if (mode === "live") {
+  if (mode === "live" && plan === "deposit") {
+    status = "deposit_paid";
+  } else if (mode === "live") {
     status = "paid_full";
   } else if (plan === "full") {
     status = "paid_full";
@@ -838,15 +853,21 @@ export async function onPaymentIntentSucceeded(pi: import("stripe").Stripe.Payme
 
   const now = new Date().toISOString();
   let installments: InstallmentRecord[];
-  if (mode === "live") {
+  if (mode === "live" && plan === "deposit") {
+    installments = [
+      { seq: 1, amountJOD: 0, method: "stripe", paidAt: now  },
+      { seq: 2, amountJOD: 0, method: "stripe", paidAt: null },
+      { seq: 3, amountJOD: 0, method: "stripe", paidAt: null },
+    ];
+  } else if (mode === "live") {
     installments = [{ seq: 1, amountJOD: 0, method: "stripe", paidAt: now }];
   } else if (plan === "full") {
     installments = [{ seq: 1, amountJOD: dep, method: "stripe", paidAt: now }];
   } else {
     installments = [
-      { seq: 1, amountJOD: dep,   method: "stripe", paidAt: now },
-      { seq: 2, amountJOD: inst2, method: "cash",   paidAt: null },
-      { seq: 3, amountJOD: inst3, method: "cash",   paidAt: null },
+      { seq: 1, amountJOD: dep,   method: "stripe", paidAt: now  },
+      { seq: 2, amountJOD: inst2, method: "stripe", paidAt: null },
+      { seq: 3, amountJOD: inst3, method: "stripe", paidAt: null },
     ];
   }
 

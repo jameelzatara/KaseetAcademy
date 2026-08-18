@@ -295,8 +295,8 @@ const scrollToCheckout = () => {
 
 export default function MasarKhatabaPage() {
   const [openIdx, setOpenIdx]           = useState<number | null>(null);
-  const [modalOpen, setModalOpen]       = useState(false);
   const [checkoutMode, setCheckoutMode] = useState<'onsite' | 'live'>('onsite');
+  const [modalOpen, setModalOpen] = useState(false);
   const [expandAll, setExpandAll]       = useState(false);
   const [stickyVisible, setStickyVisible] = useState(true);
 
@@ -914,7 +914,9 @@ export default function MasarKhatabaPage() {
       {/* ═══════════════════════════════════════
           08. التسجيل والدفع
       ═══════════════════════════════════════ */}
-      <section id="checkout" className="sec sec--access" style={{ padding:'96px 0', scrollMarginTop:80 }}>
+      {/* استفسار وتسجيل */}
+      {/* ⑦ التسجيل والدفع */}
+      <section id="checkout" className="sec sec--access" style={{ padding: '96px 0', scrollMarginTop: 80 }}>
         <div style={WRP}>
           <div style={SH}>
             <span style={{ display:'inline-flex', alignItems:'center', gap:8, background:GS, border:`1px solid ${GL}`, color:GLD, fontFamily:F, fontSize:12.5, fontWeight:700, padding:'6px 15px', borderRadius:999 }}>
@@ -924,124 +926,75 @@ export default function MasarKhatabaPage() {
             <h2 style={{ fontFamily:F, fontWeight:800, fontSize:'clamp(28px,4.4vw,44px)', lineHeight:1.35, margin:'18px 0 0', color:OFF }}>
               استثمر في <span style={{ color:GLD }}>حضورك القيادي</span>
             </h2>
-            <p style={{ fontFamily:F, fontSize:16, fontWeight:700, color:LT, marginTop:10 }}>
-              الماستركلاس الكامل — اختر أسلوب دراستك وابدأ فوراً
-            </p>
-            <p style={{ fontFamily:F, fontSize:14.5, color:MUT, maxWidth:580, marginInline:'auto', marginTop:10, lineHeight:1.85 }}>
-              برنامج متكامل يأخذك من رهبة المنصّة إلى الإنتاج الفعلي. اختر بين الحضور المباشر في القاعة أو الأونلاين التفاعلي.
-            </p>
           </div>
 
-          <div style={{ maxWidth:600, margin:'52px auto 0', position:'relative' }}>
-            <div style={{ position:'absolute', inset:-3, background:`linear-gradient(135deg, rgba(255,193,7,.22), rgba(103,232,249,.10))`, borderRadius:30, filter:'blur(20px)', opacity:0.7, pointerEvents:'none' }} />
-
-            <div style={{ position:'relative', background:'#131B27', border:`1px solid ${GL}`, borderRadius:26, overflow:'hidden', boxShadow:'0 0 0 1px rgba(255,193,7,.12), 0 34px 70px rgba(13,11,20,.45)' }}>
-
-              {/* تبويبات */}
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', borderBottom:`1px solid ${CBR}` }}>
-                <button onClick={() => setCheckoutMode('onsite')} style={{
-                  display:'flex', flexDirection:'column', alignItems:'center', gap:4,
-                  padding:'18px 16px', border:'none', cursor:'pointer',
-                  background:checkoutMode === 'onsite' ? 'rgba(255,193,7,.08)' : 'transparent',
-                  borderBottom:checkoutMode === 'onsite' ? `2px solid ${GLD}` : '2px solid transparent',
-                  transition:'background .2s, border-color .2s',
-                }}>
-                  <div style={{ display:'flex', alignItems:'center', gap:6 }}>
-                    <MapPin size={14} color={checkoutMode === 'onsite' ? GLD : MUT} strokeWidth={2.2} />
-                    <span style={{ fontFamily:F, fontSize:14.5, fontWeight:800, color:checkoutMode === 'onsite' ? GLD : MUT }}>حضوري</span>
-                  </div>
-                  <span style={{ fontFamily:F, fontSize:11.5, color:MUT }}>قاعة كاسيت | عمّان · 14 أيلول</span>
-                  <span style={{ fontFamily:FP, fontSize:22, fontWeight:700, color:checkoutMode === 'onsite' ? GLD : LT, lineHeight:1 }}>500 <span style={{ fontSize:13 }}>JOD</span></span>
+          {/* ── اختيار المسار ── */}
+          <div style={{ display:'flex', justifyContent:'center', gap:12, marginBottom:36, flexWrap:'wrap' }}>
+            {(['onsite', 'live'] as const).map(mode => {
+              const sel = checkoutMode === mode;
+              return (
+                <button key={mode} onClick={() => setCheckoutMode(mode)}
+                  style={{ fontFamily:F, fontWeight:700, fontSize:15, padding:'12px 28px', borderRadius:12, border:`2px solid ${sel ? GLD : CBR}`, background:sel ? GS : 'transparent', color:sel ? GLD : MUT, cursor:'pointer', display:'flex', alignItems:'center', gap:8 }}>
+                  {mode === 'onsite' ? <><MapPin size={15} /> حضوري</> : <><Wifi size={15} /> مباشر أونلاين</>}
                 </button>
-                <button onClick={() => setCheckoutMode('live')} style={{
-                  display:'flex', flexDirection:'column', alignItems:'center', gap:4,
-                  padding:'18px 16px', border:'none', cursor:'pointer',
-                  background:checkoutMode === 'live' ? 'rgba(103,232,249,.07)' : 'transparent',
-                  borderBottom:checkoutMode === 'live' ? '2px solid #67e8f9' : '2px solid transparent',
-                  transition:'background .2s, border-color .2s',
-                  borderRight:`1px solid ${CBR}`,
-                }}>
-                  <div style={{ display:'flex', alignItems:'center', gap:6 }}>
-                    <Wifi size={14} color={checkoutMode === 'live' ? '#67e8f9' : MUT} strokeWidth={2.2} />
-                    <span style={{ fontFamily:F, fontSize:14.5, fontWeight:800, color:checkoutMode === 'live' ? '#67e8f9' : MUT }}>مباشر تفاعلي</span>
-                  </div>
-                  <span style={{ fontFamily:F, fontSize:11.5, color:MUT }}>عن بُعد (Online LIVE) · 17 أيلول</span>
-                  <span style={{ fontFamily:FP, fontSize:22, fontWeight:700, color:checkoutMode === 'live' ? '#67e8f9' : LT, lineHeight:1 }}>$700</span>
-                </button>
+              );
+            })}
+          </div>
+
+          <div style={{ maxWidth:540, marginInline:'auto' }}>
+            {/* السعر */}
+            <div style={{ textAlign:'center', marginBottom:28 }}>
+              <span style={{ fontFamily:FP, fontWeight:800, fontSize:56, color:GLD }}>
+                {checkoutMode === 'onsite' ? '500' : '700'}
+              </span>
+              <span style={{ fontFamily:F, fontWeight:600, fontSize:18, color:MUT, marginInlineStart:8 }}>
+                {checkoutMode === 'onsite' ? 'دينار أردني' : 'دولار أمريكي'}
+              </span>
+            </div>
+
+            {/* المميزات */}
+            {(checkoutMode === 'onsite' ? [
+              '14 مخرجاً خطابياً موثَّقاً',
+              'تصوير احترافي لكل خطبة',
+              'شهادة معتمدة من تطبيق وجيز',
+              'تغذية راجعة فردية من المدرّب',
+              'جلسات تدريب داخل القاعة',
+            ] : [
+              '14 مخرجاً خطابياً موثَّقاً',
+              'تسجيل وتحليل كل تقديم',
+              'شهادة معتمدة من تطبيق وجيز',
+              'تغذية راجعة فردية من المدرّب',
+              'جلسات تفاعلية مباشرة أونلاين',
+            ]).map((feat, i) => (
+              <div key={i} style={{ display:'flex', alignItems:'center', gap:10, background:'rgba(255,255,255,.03)', border:`1px solid ${CBR}`, borderRadius:10, padding:'10px 14px', marginBottom:8 }}>
+                <CheckCircle2 size={15} color={GLD} strokeWidth={2.5} />
+                <span style={{ fontFamily:F, fontSize:14, color:LT }}>{feat}</span>
               </div>
+            ))}
 
-              <div style={{ padding:'clamp(24px,3.5vw,36px)' }}>
+            {/* إمكانية التقسيط — متاحة للمسارين */}
+            <div style={{ padding:'14px 18px', borderRadius:12, background:'rgba(255,193,7,0.08)', border:'1px solid rgba(255,193,7,0.22)', margin:'16px 0 22px' }}>
+              <p style={{ fontFamily:F, fontSize:13.5, color:GLD, margin:0, lineHeight:1.7 }}>
+                <strong>إمكانية التقسيط:</strong>{' '}
+                {checkoutMode === 'onsite'
+                  ? 'بإمكانك دفع 50 ديناراً الآن وإكمال المبلغ قبل بدء الفوج.'
+                  : 'بإمكانك دفع $70 الآن وإكمال المبلغ على دفعتين عبر Stripe.'}
+              </p>
+            </div>
 
-                {/* سطر القيمة */}
-                <p style={{ fontFamily:F, fontSize:13.5, color:LT, textAlign:'center', margin:'0 0 22px', lineHeight:1.7, minHeight:42 }}>
-                  {checkoutMode === 'onsite'
-                    ? <>42 ساعة تدريبية بـ<strong style={{ color:GLD }}>500 ديناراً</strong> — أي <strong style={{ color:GLD }}>أقلّ من 12 دينار للساعة</strong></>
-                    : <>42 ساعة تدريبية تفاعلية — <strong style={{ color:'#67e8f9' }}>حضور مباشر من أي مكان بالعالم</strong></>
-                  }
-                </p>
+            {/* زر الحجز */}
+            <button onClick={() => setModalOpen(true)}
+              style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:10, width:'100%', boxSizing:'border-box', background:GLD, color:'#0f172a', fontFamily:F, fontWeight:800, fontSize:16, padding:'16px 24px', borderRadius:14, border:'none', cursor:'pointer', boxShadow:'0 10px 30px rgba(255,193,7,.28)', marginBottom:14 }}>
+              <Lock size={16} />
+              احجز مقعدك — {checkoutMode === 'onsite' ? 'ادفع 50 ديناراً الآن' : 'ادفع $70 الآن'}
+              <ArrowLeft size={14} />
+            </button>
 
-                {/* قائمة المحتويات */}
-                <ul style={{ listStyle:'none', display:'flex', flexDirection:'column', gap:12, padding:0, margin:'0 0 24px' }}>
-                  {CHECKOUT_FEATURES.map(feat => (
-                    <li key={feat} style={{ display:'flex', alignItems:'flex-start', gap:10, fontFamily:F, fontSize:14, color:LT, lineHeight:1.6 }}>
-                      <CheckCircle2 size={16} color={GLD} strokeWidth={2.2} style={{ flexShrink:0, marginTop:2 }} />
-                      {feat}
-                    </li>
-                  ))}
-                </ul>
-
-                {/* ضمان الجلسة الأولى */}
-                <div style={{ display:'flex', alignItems:'flex-start', gap:13, background:'rgba(255,193,7,.07)', border:`1px solid rgba(255,193,7,.26)`, borderRadius:16, padding:'16px 18px', marginBottom:18 }}>
-                  <ShieldCheck size={22} color={GLD} strokeWidth={2} style={{ flexShrink:0, marginTop:2 }} />
-                  <div>
-                    <div style={{ fontFamily:F, fontWeight:800, fontSize:14, color:OFF, marginBottom:5 }}>ضمان الجلسة الأولى — Risk Reversal</div>
-                    <p style={{ fontFamily:F, fontSize:13, color:LT, lineHeight:1.8, margin:0 }}>
-                      جرّب الجلسة الأولى كاملة. إن شعرت أنّ الماستركلاس لا يلبّي توقّعاتك، اطلب استرداداً كاملاً لرسومك خلال 24 ساعة من انتهائها — <strong style={{ color:OFF }}>دون أسئلة ولا شروط</strong>.
-                    </p>
-                  </div>
-                </div>
-
-                {/* تنبيه التقسيط */}
-                <div style={{ display:'flex', alignItems:'flex-start', gap:10, background:GS, border:`1px solid ${GL}`, borderRadius:12, padding:'11px 15px', marginBottom:22 }}>
-                  <span style={{ width:6, height:6, borderRadius:'50%', background:GLD, flexShrink:0, marginTop:6 }} />
-                  <span style={{ fontFamily:F, fontSize:13, color:LT, lineHeight:1.7 }}>
-                    <strong style={{ color:OFF }}>التقسيط متاح:</strong> يمكنك الدفع كاملاً الآن أو تثبيت مقعدك بدفع الدفعة الأولى فقط
-                    {' '}<strong style={{ color:GLD }}>{checkoutMode === 'onsite' ? '(50 JOD)' : '($70)'}</strong>.
-                  </span>
-                </div>
-
-                {/* زر الدفع */}
-                <button
-                  onClick={() => setModalOpen(true)}
-                  style={{
-                    display:'flex', alignItems:'center', justifyContent:'center', gap:10,
-                    width:'100%', boxSizing:'border-box',
-                    background:GLD, color:'#0f172a',
-                    fontFamily:F, fontWeight:800, fontSize:15.5,
-                    padding:'16px 24px', borderRadius:16, border:'none', cursor:'pointer',
-                    boxShadow:'0 8px 28px rgba(255,193,7,.30)',
-                    transition:'transform .15s, box-shadow .15s',
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.transform='translateY(-2px)'; e.currentTarget.style.boxShadow='0 14px 38px rgba(255,193,7,.38)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.boxShadow='0 8px 28px rgba(255,193,7,.30)'; }}>
-                  <Lock size={15} />
-                  احجز مقعدك في الماستركلاس — ادفع {checkoutMode === 'onsite' ? '50 ديناراً' : '$70'} الآن
-                  <ArrowLeft size={15} />
-                </button>
-
-                {/* أمان */}
-                <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:16, marginTop:16, flexWrap:'wrap' }}>
-                  <div style={{ display:'flex', alignItems:'center', gap:6, fontFamily:F, fontSize:12, color:MUT }}>
-                    <Lock size={12} color={MUT} strokeWidth={2} />
-                    معاملة آمنة ومشفّرة 100% عبر Stripe
-                  </div>
-                  <div style={{ display:'flex', alignItems:'center', gap:6 }}>
-                    <svg width="32" height="11" viewBox="0 0 48 16" aria-label="Visa"><rect width="48" height="16" rx="3" fill="#1A1F71"/><text x="50%" y="12" textAnchor="middle" fontFamily="Arial" fontWeight="bold" fontSize="11" fill="#fff">VISA</text></svg>
-                    <svg width="20" height="13" viewBox="0 0 34 22" aria-label="Mastercard"><circle cx="12" cy="11" r="11" fill="#EB001B"/><circle cx="22" cy="11" r="11" fill="#F79E1B"/><path d="M17 4.3a11 11 0 0 1 0 13.4A11 11 0 0 1 17 4.3z" fill="#FF5F00"/></svg>
-                    <svg width="32" height="13" viewBox="0 0 50 20" aria-label="Apple Pay"><rect width="50" height="20" rx="4" fill="#000"/><text x="50%" y="14.5" textAnchor="middle" fontFamily="'-apple-system',sans-serif" fontWeight="600" fontSize="10" fill="#fff">Apple Pay</text></svg>
-                  </div>
-                </div>
-
+            {/* الأمان */}
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:16, flexWrap:'wrap' }}>
+              <div style={{ display:'flex', alignItems:'center', gap:6, fontFamily:F, fontSize:12, color:MUT }}>
+                <ShieldCheck size={12} color={MUT} strokeWidth={2} />
+                معاملة آمنة ومشفّرة 100% عبر Stripe
               </div>
             </div>
           </div>
@@ -1178,6 +1131,7 @@ export default function MasarKhatabaPage() {
         </div>
       )}
 
+
       <PaymentModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
@@ -1185,9 +1139,9 @@ export default function MasarKhatabaPage() {
         courseTitle="ماستركلاس فن الخطابة والتواصل القيادي"
         cohortIdOnsite={303}
         cohortIdLive={304}
-        cohortStartAr={checkoutMode === 'onsite' ? 'الاثنين، 14 أيلول 2025' : 'الأربعاء، 17 أيلول 2025'}
-        cohortStartISOOnsite="2025-09-14"
-        cohortStartISOLive="2025-09-17"
+        cohortStartAr={checkoutMode === 'onsite' ? 'الاثنين، 14 أيلول 2026' : 'الخميس، 17 أيلول 2026'}
+        cohortStartISOOnsite="2026-09-14"
+        cohortStartISOLive="2026-09-17"
         cohortDays={checkoutMode === 'onsite' ? 'الاثنين والأربعاء والسبت' : 'الأربعاء والسبت'}
         cohortTimeAr="6:00 مساءً"
         cohortTrainer="د. صهيب الخوالدة"

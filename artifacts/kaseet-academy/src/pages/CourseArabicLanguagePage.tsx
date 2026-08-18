@@ -6,6 +6,7 @@
 import { BookOpen, SlidersHorizontal, Star, Mic, Briefcase, Zap, Tv, Video, Award } from 'lucide-react';
 import CoursePageLayout, { type CoursePageLayoutProps } from '../components/CoursePageLayout';
 import { usePageMeta } from '../hooks/usePageMeta';
+import { useCoursePricing } from '../hooks/useCoursePricing';
 
 import heroCover from '@assets/دورة_اللغة_العربية_1785758462657.png';
 import ranaImg   from '@assets/trainer-rana-azzam_1785428982698.JPG';
@@ -117,5 +118,14 @@ export default function CourseArabicLanguagePage() {
     title: 'تمكين اللغة العربية وفنون التحرير اللغوي',
     description: 'دورة 16 ساعة مباشر تفاعلي مع رنا العزام. إتقان النحو والصرف والإملاء وفنون التحرير. شهادة معتمدة من وجيز — كاسيت أكاديمي.',
   });
-  return <CoursePageLayout {...config} />;
+  const { pricing } = useCoursePricing('arabic-language');
+  const dynamicConfig = {
+    ...config,
+    modes: config.modes.map(m => ({
+      ...m,
+      ...(m.key === 'onsite' && pricing?.onsitePriceJOD != null && { price: String(pricing.onsitePriceJOD) }),
+      ...(m.key === 'live'   && pricing?.livePriceUSD  != null && { price: String(pricing.livePriceUSD) }),
+    })),
+  };
+  return <CoursePageLayout {...dynamicConfig} />;
 }

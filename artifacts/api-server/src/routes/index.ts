@@ -7,11 +7,13 @@ import adminSectionsRouter from "./adminSections";
 import blogRouter from "./blog";
 import ratesRouter from "./rates";
 import voiceEvaluationRouter from "./voiceEvaluation";
+import coursesRouter from "./courses";
 
 const router: IRouter = Router();
 
 router.use(healthRouter);
 // router.use(authRouter); — removed (⑤)
+router.use(coursesRouter);
 router.use(checkoutRouter);
 router.use(blogRouter);
 router.use(ratesRouter);

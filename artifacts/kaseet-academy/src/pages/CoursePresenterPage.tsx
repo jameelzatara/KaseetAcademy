@@ -6,6 +6,7 @@
 import { Tv, Mic, Volume2, BookOpen, Video, Briefcase, Award } from 'lucide-react';
 import CoursePageLayout, { type CoursePageLayoutProps } from '../components/CoursePageLayout';
 import { usePageMeta } from '../hooks/usePageMeta';
+import { useCoursePricing } from '../hooks/useCoursePricing';
 
 import heroCover from '@assets/دورة_الاعلام_1785758462657.png';
 import ranaImg   from '@assets/trainer-rana-azzam_1785428982698.JPG';
@@ -117,5 +118,14 @@ export default function CoursePresenterPage() {
     title: 'الدورة المكثفة: المذيع المحترف ومهارات الإعلام الرقمي',
     description: 'دورة مكثفة 16 ساعة مع المدربة رنا العزام. من التحرير الصحفي إلى الحضور أمام الكاميرا. شهادة معتمدة من وجيز — كاسيت أكاديمي بعمّان.',
   });
-  return <CoursePageLayout {...config} />;
+  const { pricing } = useCoursePricing('presenter');
+  const dynamicConfig = {
+    ...config,
+    modes: config.modes.map(m => ({
+      ...m,
+      ...(m.key === 'onsite' && pricing?.onsitePriceJOD != null && { price: String(pricing.onsitePriceJOD) }),
+      ...(m.key === 'live'   && pricing?.livePriceUSD  != null && { price: String(pricing.livePriceUSD) }),
+    })),
+  };
+  return <CoursePageLayout {...dynamicConfig} />;
 }
