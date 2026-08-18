@@ -1,0 +1,751 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>لوحة إدارة كاسيت — الدورات والخصومات</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Poppins:wght@500;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --canvas:#1A2533;--card:#22303F;--cardhi:#2B3B4E;--side:#111925;
+  --gold:#FFC107;--goldink:#8A6200;--violet:#6B5BA8;--vline:rgba(107,91,168,.35);
+  --green:#1F9D57;--red:#C2453C;
+  --t1:#FFFFFF;--t2:#C7D1DF;--t3:#9DA9BB;--t4:#7B879B;--line:rgba(255,255,255,.09);--gline:rgba(255,193,7,.28);
+}
+html,body{height:100%}
+body{font-family:'Tajawal',sans-serif;background:var(--canvas);color:var(--t1);
+  -webkit-font-smoothing:antialiased;overflow:hidden}
+.num{font-family:'Poppins'}
+.ic{flex:0 0 auto;display:block}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:rgba(255,193,7,.28);border-radius:9px}
+
+#login{position:fixed;inset:0;background:var(--canvas);z-index:999;display:flex;
+  align-items:center;justify-content:center;
+  background-image:radial-gradient(ellipse 60% 50% at 30% 20%,rgba(107,91,168,.14),transparent 70%)}
+.login-card{width:min(380px,90vw);background:var(--card);border:1px solid var(--vline);
+  border-radius:20px;padding:38px 32px;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.login-mark{width:52px;height:52px;border-radius:14px;background:var(--gold);color:#1A1206;
+  display:grid;place-content:center;margin:0 auto 18px}
+.login-card h1{font-size:20px;font-weight:800;margin-bottom:6px}
+.login-card p{font-size:13.5px;color:var(--t3);margin-bottom:26px}
+.field{text-align:right;margin-bottom:14px}
+.field label{display:block;font-size:12.5px;color:var(--t3);margin-bottom:6px;font-weight:700}
+.field input,.field select,.field textarea{width:100%;background:rgba(255,255,255,.05);
+  border:1px solid var(--line);border-radius:10px;padding:11px 14px;color:var(--t1);
+  font-family:inherit;font-size:14px}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--vline);outline:none}
+.field small{display:block;margin-top:5px;font-size:11.5px;color:var(--t4)}
+.login-err{background:rgba(194,69,60,.14);border:1px solid rgba(194,69,60,.4);color:#F0918A;
+  font-size:12.5px;padding:9px 12px;border-radius:9px;margin-bottom:14px;display:none}
+.login-err.show{display:block}
+.hint{margin-top:18px;font-size:11.5px;color:var(--t4);background:rgba(255,255,255,.03);
+  border-radius:8px;padding:8px 10px}
+
+#app{display:none;height:100vh}
+.shell{display:grid;grid-template-columns:236px 1fr;height:100%}
+.side{background:var(--side);border-inline-end:1px solid var(--line);display:flex;
+  flex-direction:column;overflow-y:auto}
+.side-brand{padding:20px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line)}
+.side-brand b{font-size:16px;font-weight:800;color:var(--gold)}
+.side-brand small{display:block;font-size:10.5px;color:var(--t4);margin-top:1px}
+.side-badge{margin:12px 14px 0;background:rgba(107,91,168,.12);border:1px solid var(--vline);
+  color:var(--violet);font-size:10.5px;font-weight:700;padding:6px 10px;border-radius:8px;text-align:center}
+nav.side-nav{flex:1;padding:14px 10px;display:flex;flex-direction:column;gap:2px}
+.nav-group{font-size:10.5px;color:var(--t4);font-weight:700;margin:14px 10px 6px;
+  text-transform:uppercase;letter-spacing:.5px}
+.nav-group:first-child{margin-top:2px}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:10px;
+  color:var(--t3);font-size:14px;font-weight:700;cursor:pointer;transition:.15s;
+  background:none;border:0;width:100%;text-align:right;font-family:inherit}
+.nav-item:hover{background:rgba(255,255,255,.05);color:var(--t1)}
+.nav-item.on{background:rgba(107,91,168,.16);color:var(--violet)}
+.nav-badge{margin-inline-start:auto;background:var(--violet);color:#fff;font-size:10.5px;
+  font-weight:700;padding:1px 7px;border-radius:99px;font-family:'Poppins'}
+.side-foot{padding:14px;border-top:1px solid var(--line)}
+.logout-btn{display:flex;align-items:center;gap:9px;width:100%;background:none;border:0;
+  color:var(--t4);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;padding:8px}
+.logout-btn:hover{color:var(--red)}
+
+main{overflow-y:auto;background:var(--canvas)}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(26,37,51,.92);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);padding:16px 28px;display:flex;align-items:center;
+  justify-content:space-between;gap:16px}
+.topbar h1{font-size:19px;font-weight:800}
+.topbar .sub{font-size:12.5px;color:var(--t4);margin-top:2px}
+.content{padding:24px 28px 60px}
+
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:inherit;font-size:13.5px;
+  font-weight:700;padding:10px 18px;border-radius:10px;border:1px solid transparent;
+  cursor:pointer;transition:.18s;white-space:nowrap}
+.btn-violet{background:var(--violet);color:#fff}
+.btn-violet:hover{filter:brightness(1.1)}
+.btn-gold{background:var(--gold);color:#1A1206}
+.btn-ghost{background:rgba(255,255,255,.05);color:var(--t1);border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--vline)}
+.btn-sm{padding:7px 13px;font-size:12.5px;border-radius:8px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;
+  padding:4px 10px;border-radius:99px}
+.badge--active{background:rgba(31,157,87,.16);color:#6FD79B}
+.badge--draft{background:rgba(122,140,163,.16);color:var(--t4)}
+.badge--advanced{background:rgba(107,91,168,.18);color:var(--violet)}
+.badge--beginner{background:rgba(255,193,7,.14);color:var(--goldink)}
+.badge--live{background:rgba(31,157,87,.16);color:#6FD79B}
+.badge--expired{background:rgba(194,69,60,.16);color:#F0918A}
+
+.grid-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.course-card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:20px;transition:.2s;position:relative}
+.course-card.is-advanced{border-color:var(--vline)}
+.course-card.is-draft{opacity:.72}
+.course-card:hover{border-color:var(--vline);background:var(--cardhi)}
+.cc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+.cc-top h3{font-size:15.5px;font-weight:800;line-height:1.4}
+.cc-badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.cc-fields{display:flex;flex-direction:column;gap:7px;font-size:13px;color:var(--t3);margin-bottom:16px}
+.cc-fields b{color:var(--t1)}
+.cc-missing{color:var(--t4);font-style:italic}
+.cc-actions{display:flex;gap:8px}
+.toggle-btn{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.04);
+  border:1px solid var(--line);border-radius:9px;padding:8px 13px;font-size:12.5px;
+  font-weight:700;color:var(--t3);cursor:pointer;font-family:inherit}
+.toggle-btn.is-on{color:#6FD79B;border-color:rgba(31,157,87,.35)}
+
+.add-card{border:1.5px dashed var(--vline);border-radius:16px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:10px;padding:30px;cursor:pointer;
+  color:var(--violet);transition:.2s;background:rgba(107,91,168,.04)}
+.add-card:hover{background:rgba(107,91,168,.09);border-color:var(--violet)}
+.add-card .ai{width:44px;height:44px;border-radius:50%;background:rgba(107,91,168,.16);
+  display:grid;place-content:center}
+.add-card span{font-size:13.5px;font-weight:700}
+
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);z-index:500;
+  display:none;align-items:center;justify-content:center;padding:20px}
+.modal-bg.show{display:flex}
+.modal{width:min(560px,100%);background:var(--card);border:1px solid var(--vline);border-radius:18px;
+  padding:28px;max-height:90vh;overflow-y:auto}
+.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.modal-head h3{font-size:17px;font-weight:800}
+.modal-head button{background:none;border:0;color:var(--t4);cursor:pointer}
+.modal-sub{font-size:12.5px;color:var(--t4);margin-bottom:20px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mode-section{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;
+  padding:14px 16px;margin-bottom:14px}
+.mode-section h4{font-size:13px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.mode-section h4 .badge{margin-inline-start:auto}
+.checkbox-row{display:flex;align-items:center;gap:9px;margin-bottom:14px;cursor:pointer}
+.checkbox-row input{width:17px;height:17px;accent-color:var(--violet)}
+.checkbox-row label{font-size:13.5px;color:var(--t2);cursor:pointer}
+.form-actions{display:flex;gap:10px;margin-top:8px}
+
+.table-card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.table-head{display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:16px 20px;border-bottom:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--side);color:var(--violet);padding:11px 14px;text-align:right;
+  font-weight:700;font-size:11.5px;white-space:nowrap}
+tbody td{padding:12px 14px;border-bottom:1px solid var(--line);color:var(--t2);white-space:nowrap}
+tbody tr:hover td{background:var(--cardhi)}
+.code-chip{font-family:'Poppins';font-weight:700;background:rgba(107,91,168,.16);
+  color:var(--violet);padding:5px 12px;border-radius:8px;font-size:12.5px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:6px}
+.usage-bar{width:70px;height:6px;background:rgba(255,255,255,.08);border-radius:99px;
+  overflow:hidden;display:inline-block;vertical-align:middle;margin-inline-end:8px}
+.usage-bar i{display:block;height:100%;background:var(--violet)}
+.icon-btn{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:8px;
+  width:30px;height:30px;display:grid;place-content:center;cursor:pointer;color:var(--t3)}
+.icon-btn:hover{border-color:var(--vline);color:var(--violet)}
+.row-actions{display:flex;gap:6px}
+
+.hint-box{background:rgba(107,91,168,.08);border:1px solid var(--vline);border-radius:12px;
+  padding:13px 16px;font-size:12.5px;color:var(--t3);margin-bottom:18px;display:flex;gap:10px}
+.hint-box .ic{color:var(--violet);flex:0 0 auto;margin-top:1px}
+
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(100px);
+  background:var(--card);border:1px solid var(--vline);color:var(--t1);padding:12px 22px;
+  border-radius:12px;font-size:13.5px;font-weight:700;z-index:900;box-shadow:0 14px 40px rgba(0,0,0,.4);
+  display:flex;align-items:center;gap:9px;transition:transform .3s ease}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast .ic{color:#6FD79B}
+.toast.err .ic{color:#F0918A}
+
+.view{display:none} .view.on{display:block}
+@media(max-width:900px){.grid-cards{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}}
+</style></head><body>
+
+<div id="login">
+  <div class="login-card">
+    <div class="login-mark"><svg class="ic " width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></div>
+    <h1>لوحة إدارة كاسيت</h1>
+    <p>نموذج تجريبي — بيانات وهمية بالكامل</p>
+    <div class="login-err" id="loginErr">كلمة المرور غير صحيحة</div>
+    <div class="field"><label>كلمة المرور</label>
+      <input type="password" id="pw" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <button class="btn btn-violet" style="width:100%;justify-content:center" onclick="doLogin()">دخول</button>
+    <div class="hint">🔑 كلمة المرور التجريبية: <b>kaseet2026</b></div>
+  </div>
+</div>
+
+<div id="app"><div class="shell">
+  <aside class="side">
+    <div class="side-brand">
+      <div style="width:36px;height:36px;border-radius:10px;background:var(--gold);display:grid;
+        place-content:center;color:#1A1206;font-weight:800;font-family:'Poppins'">K</div>
+      <div><b>كاسيت</b><small>لوحة الإدارة</small></div>
+    </div>
+    <div class="side-badge">⚠️ نموذج تجريبي — بيانات وهمية</div>
+    <nav class="side-nav">
+      <div class="nav-group">نظرة عامّة</div>
+      <button class="nav-item" data-v="overview"><svg class="ic " width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>لوحة التحكّم</span></button>
+
+      <div class="nav-group">المبيعات</div>
+      <button class="nav-item" data-v="orders"><svg class="ic " width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 13h6M9 17h4"/></svg><span>الطلبات</span></button>
+      <button class="nav-item" data-v="cohorts"><svg class="ic " width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg><span>الدفعات والمقاعد</span></button>
+
+      <div class="nav-group">الدورات ⭐ جديد</div>
+      <button class="nav-item on" data-v="courses"><svg class="ic " width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span>إدارة الدورات</span>
+        <span class="nav-badge">6</span></button>
+      <button class="nav-item" data-v="discounts"><svg class="ic " width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r="1.5" fill="currentColor" stroke="none"/></svg><span>أكواد الخصم</span>
+        <span class="nav-badge">1</span></button>
+
+      <div class="nav-group">الأشخاص</div>
+      <button class="nav-item" data-v="consultants"><svg class="ic " width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H4a1 1 0 0 1-1-1v-6a9 9 0 0 1 18 0v6a1 1 0 0 1-1 1h-2a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"/></svg><span>المستشارون</span></button>
+
+      <div class="nav-group">النظام</div>
+      <button class="nav-item" data-v="settings"><svg class="ic " width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg><span>الإعدادات</span></button>
+    </nav>
+    <div class="side-foot">
+      <button class="logout-btn" onclick="doLogout()"><svg class="ic " width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg><span>تسجيل الخروج</span></button>
+    </div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div><h1 id="pageTitle">إدارة الدورات</h1>
+        <div class="sub" id="pageSub">الدورات المتقدّمة — عبّها المستشارات وفعّلنها بأنفسهنّ</div></div>
+      <button class="btn btn-violet" id="topAddBtn"><svg class="ic " width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg> دورة جديدة</button>
+    </div>
+    <div class="content" id="content"></div>
+  </main>
+</div></div>
+
+<!-- نافذة إضافة/تعديل دورة -->
+<div class="modal-bg" id="courseModalBg">
+  <div class="modal">
+    <div class="modal-head"><h3 id="courseModalTitle">دورة جديدة</h3>
+      <button onclick="closeCourseModal()"><svg class="ic " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
+    <div class="modal-sub">
+      املئي الحقول التسويقية فقط — الاسم التقني والرابط يتولّاهما النظام تلقائياً.
+    </div>
+
+    <div class="field"><label>اسم الدورة بالعربية *</label>
+      <input id="cName" placeholder="مثال: التعليق الصوتي للإعلانات (مستوى متقدم)"></div>
+
+    <div class="checkbox-row">
+      <input type="checkbox" id="cLevel">
+      <label for="cLevel">هذه دورة من المستوى المتقدّم (لون بنفسجي مميَّز تلقائياً)</label>
+    </div>
+
+    <div class="mode-section">
+      <h4><svg class="ic " width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg> النمط الحضوري <span class="badge badge--beginner" id="onsiteBadge">اختياري</span></h4>
+      <div class="checkbox-row"><input type="checkbox" id="onsiteEnabled" onchange="toggleModeFields('onsite')">
+        <label for="onsiteEnabled">هذه الدورة تُقدَّم حضورياً</label></div>
+      <div id="onsiteFields" style="display:none">
+        <div class="grid2">
+          <div class="field"><label>الساعات</label><input type="number" id="onsiteHours" placeholder="16"></div>
+          <div class="field"><label>عدد الجلسات</label><input type="number" id="onsiteSessions" placeholder="8"></div>
+        </div>
+        <div class="field"><label>السعر (دينار أردني)</label><input type="number" id="onsitePrice" placeholder="250"></div>
+      </div>
+    </div>
+
+    <div class="mode-section">
+      <h4><svg class="ic " width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg> النمط المباشر تفاعلي <span class="badge badge--beginner" id="liveBadge">اختياري</span></h4>
+      <div class="checkbox-row"><input type="checkbox" id="liveEnabled" onchange="toggleModeFields('live')">
+        <label for="liveEnabled">هذه الدورة تُقدَّم مباشرةً تفاعلياً (أونلاين)</label></div>
+      <div id="liveFields" style="display:none">
+        <div class="grid2">
+          <div class="field"><label>الساعات</label><input type="number" id="liveHours" placeholder="16"></div>
+          <div class="field"><label>عدد الجلسات</label><input type="number" id="liveSessions" placeholder="8"></div>
+        </div>
+        <div class="field"><label>السعر (دولار أمريكي)</label><input type="number" id="livePrice" placeholder="250"></div>
+      </div>
+    </div>
+
+    <div class="field"><label>السعة القصوى للدفعة الواحدة</label>
+      <input type="number" id="cCapacity" placeholder="13"></div>
+
+    <div class="hint-box"><svg class="ic " width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+      <span id="activeHint">الدورة ستُحفَظ كـ<b>مسوَّدة</b> ولن تظهر على الموقع حتى تُفعَّل — يلزم نمط واحد على الأقلّ بساعاته وسعره كاملَين.</span></div>
+
+    <div class="form-actions">
+      <button class="btn btn-violet" style="flex:1;justify-content:center" onclick="saveCourse()">
+        <svg class="ic " width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> حفظ الدورة</button>
+      <button class="btn btn-ghost" onclick="closeCourseModal()">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- نافذة إضافة كود خصم -->
+<div class="modal-bg" id="codeModalBg">
+  <div class="modal">
+    <div class="modal-head"><h3>كود خصم جديد</h3>
+      <button onclick="closeCodeModal()"><svg class="ic " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
+    <div class="modal-sub">الكود يعمل فوراً على صفحة الدفع بمجرّد الحفظ.</div>
+
+    <div class="grid2">
+      <div class="field"><label>الكود</label><input id="dCode" placeholder="SUMMER25" style="text-transform:uppercase"></div>
+      <div class="field"><label>النوع</label>
+        <select id="dType"><option value="percent">نسبة مئوية %</option><option value="fixed">مبلغ ثابت (دينار)</option></select></div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>القيمة</label><input type="number" id="dValue" placeholder="20"></div>
+      <div class="field"><label>الحدّ الأقصى للاستخدام</label><input type="number" id="dMaxUses" placeholder="اتركه فارغاً لعدم التحديد"></div>
+    </div>
+    <div class="field"><label>ينطبق على الدورات</label>
+      <select id="dCourses"><option value="all">كلّ الدورات</option></select></div>
+    <div class="field"><label>تاريخ الانتهاء</label><input type="date" id="dExpiry"></div>
+
+    <div class="hint-box"><svg class="ic " width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+      <span>يُنشَأ الكود بحالة <b>فعّال</b> تلقائياً. يمكن تعطيله لاحقاً من الجدول — ولا يمكن حذفه إن استُخدم ولو مرّة.</span></div>
+
+    <div class="form-actions">
+      <button class="btn btn-violet" style="flex:1;justify-content:center" onclick="saveCode()">
+        <svg class="ic " width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> إنشاء الكود</button>
+      <button class="btn btn-ghost" onclick="closeCodeModal()">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+// ══════════════════════════════════════════════
+//  لوحة إدارة كاسيت — إدارة الدورات وأكواد الخصم
+//  بيانات وهمية بالكامل · كل شيء في الذاكرة
+// ══════════════════════════════════════════════
+
+const PASSWORD = 'kaseet2026';
+const TODAY = new Date('2026-08-18');
+
+// ───────── البيانات الابتدائية — مطابقة للملفّ 19 بعد التفعيل ─────────
+let COURSES = [
+  {
+    slug: 'voiceover', nameAr: 'أساسيات التعليق والأداء الصوتي', level: 'beginner', active: true,
+    onsite: { enabled: true, hours: 16, sessions: 8, price: 218 },
+    live:   { enabled: true, hours: 12, sessions: 6, price: 150 },
+    capacity: 10,
+  },
+  {
+    slug: 'voiceover-documentary', nameAr: 'التعليق الصوتي الوثائقي (مستوى متقدم)', level: 'advanced', active: true,
+    onsite: { enabled: true, hours: 16, sessions: 8, price: 250 },
+    live:   { enabled: true, hours: 16, sessions: 8, price: 250 },
+    capacity: 13,
+  },
+  {
+    slug: 'voiceover-ads', nameAr: 'التعليق الصوتي للإعلانات (مستوى متقدم)', level: 'advanced', active: false,
+    onsite: { enabled: false, hours: null, sessions: null, price: null },
+    live:   { enabled: false, hours: null, sessions: null, price: null },
+    capacity: null,
+  },
+  {
+    slug: 'voiceover-audiobooks', nameAr: 'الكتب الصوتية والروايات (مستوى متقدم)', level: 'advanced', active: false,
+    onsite: { enabled: false, hours: null, sessions: null, price: null },
+    live:   { enabled: false, hours: null, sessions: null, price: null },
+    capacity: null,
+  },
+  {
+    slug: 'voiceover-dubbing', nameAr: 'الدبلجة والتمثيل الصوتي (مستوى متقدم)', level: 'advanced', active: false,
+    onsite: { enabled: false, hours: null, sessions: null, price: null },
+    live:   { enabled: false, hours: null, sessions: null, price: null },
+    capacity: null,
+  },
+  {
+    slug: 'voiceover-elearning', nameAr: 'التعليم الإلكتروني (مستوى متقدم)', level: 'advanced', active: false,
+    onsite: { enabled: false, hours: null, sessions: null, price: null },
+    live:   { enabled: false, hours: null, sessions: null, price: null },
+    capacity: null,
+  },
+  {
+    slug: 'voiceover-ivr', nameAr: 'الرد الآلي والصوت المؤسسي (مستوى متقدم)', level: 'advanced', active: false,
+    onsite: { enabled: false, hours: null, sessions: null, price: null },
+    live:   { enabled: false, hours: null, sessions: null, price: null },
+    capacity: null,
+  },
+];
+
+let DISCOUNT_CODES = [
+  { code: 'TEST20', type: 'percent', value: 20, appliesToCourses: 'all',
+    maxUses: 50, usedCount: 12, expiresAt: '2026-08-31', issuedBy: 'حملة تجريبية', active: true },
+];
+
+let CONSULTS = [
+  { date: '2026-08-15', consultant: 'ياقوت', action: 'أنشأت الدورة', target: 'التعليق الصوتي الوثائقي (مستوى متقدم)' },
+  { date: '2026-08-12', consultant: 'آية', action: 'أنشأت كوداً', target: 'TEST20' },
+];
+
+// ───────── محرّك توليد الـslug — تلقائي بالكامل ─────────
+function slugify(nameAr) {
+  const map = { 'أ':'a','إ':'i','آ':'a','ا':'a','ب':'b','ت':'t','ث':'th','ج':'j','ح':'h','خ':'kh',
+    'د':'d','ذ':'th','ر':'r','ز':'z','س':'s','ش':'sh','ص':'s','ض':'d','ط':'t','ظ':'th','ع':'a',
+    'غ':'gh','ف':'f','ق':'q','ك':'k','ل':'l','م':'m','ن':'n','ه':'h','و':'w','ي':'y','ة':'a',
+    'ى':'a','ء':'', ' ':'-' };
+  let out = 'voiceover-';
+  const stripped = nameAr.replace(/\(.*?\)/g, '').trim();
+  for (const ch of stripped) out += map[ch] !== undefined ? map[ch] : '';
+  return out.replace(/-+/g, '-').replace(/^voiceover--/, 'voiceover-').slice(0, 40);
+}
+
+function isAdvancedByDefault(nameAr) {
+  return /متقدم|احتراف|متخصص/.test(nameAr);
+}
+
+// ───────── تسجيل الدخول ─────────
+function doLogin() {
+  const val = document.getElementById('pw').value;
+  const err = document.getElementById('loginErr');
+  if (val === PASSWORD) {
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    render('courses');
+  } else {
+    err.classList.add('show');
+    document.getElementById('pw').value = '';
+  }
+}
+function doLogout() {
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login').style.display = 'flex';
+  document.getElementById('pw').value = '';
+  document.getElementById('loginErr').classList.remove('show');
+}
+
+// ───────── أدوات مساعدة ─────────
+function toast(msg, kind = 'ok') {
+  const t = document.getElementById('toast');
+  t.className = 'toast show' + (kind === 'err' ? ' err' : '');
+  const iconPath = kind === 'err'
+    ? '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/>'
+    : '<path d="M20 6 9 17l-5-5"/>';
+  t.innerHTML = `<svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${iconPath}</svg><span>${msg}</span>`;
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+const IC = {
+  edit: '<path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>',
+  onIcon: '<rect width="20" height="12" x="2" y="6" rx="6"/><circle cx="16" cy="12" r="4" fill="currentColor" stroke="none"/>',
+  offIcon: '<rect width="20" height="12" x="2" y="6" rx="6"/><circle cx="8" cy="12" r="4" fill="currentColor" stroke="none"/>',
+  copy: '<rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>',
+  plus: '<path d="M5 12h14"/><path d="M12 5v14"/>',
+  sparkles: '<path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/>',
+};
+function svg(name, size = 15) {
+  return `<svg class="ic" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${IC[name]}</svg>`;
+}
+
+// ───────── التنقّل ─────────
+const TITLES = {
+  overview:   ['لوحة التحكّم', 'نظرة سريعة على أداء الأكاديمية'],
+  orders:     ['الطلبات', 'كلّ عمليات الدفع والتسجيل'],
+  cohorts:    ['الدفعات والمقاعد', 'السعة والامتلاء لكلّ دفعة'],
+  courses:    ['إدارة الدورات', 'الدورات المتقدّمة — عبّها المستشارات وفعّلنها بأنفسهنّ'],
+  discounts:  ['أكواد الخصم', 'أنشئي كوداً يعمل فوراً على صفحة الدفع'],
+  consultants:['المستشارون', 'سجلّ من أنشأ ماذا'],
+  settings:   ['الإعدادات', 'بيانات الحساب'],
+};
+
+document.addEventListener('click', e => {
+  const item = e.target.closest('.nav-item');
+  if (item) render(item.dataset.v);
+});
+document.getElementById('topAddBtn').addEventListener('click', () => {
+  const view = document.querySelector('.nav-item.on').dataset.v;
+  if (view === 'discounts') openCodeModal();
+  else openCourseModal(null);
+});
+
+function render(view) {
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.toggle('on', b.dataset.v === view));
+  document.getElementById('pageTitle').textContent = TITLES[view][0];
+  document.getElementById('pageSub').textContent = TITLES[view][1];
+  document.getElementById('topAddBtn').style.display = (view === 'courses' || view === 'discounts') ? 'inline-flex' : 'none';
+  document.getElementById('topAddBtn').innerHTML = view === 'discounts'
+    ? svg('plus', 16) + ' كود خصم جديد' : svg('plus', 16) + ' دورة جديدة';
+
+  const renderers = {
+    overview: renderOverview, orders: renderPlaceholderOrders, cohorts: renderPlaceholderCohorts,
+    courses: renderCourses, discounts: renderDiscounts, consultants: renderConsultants,
+    settings: renderSettings,
+  };
+  document.getElementById('content').innerHTML = renderers[view]();
+  window.scrollTo(0, 0);
+}
+
+function renderOverview() {
+  const active = COURSES.filter(c => c.active).length;
+  const draft = COURSES.filter(c => !c.active).length;
+  return `
+    <div class="hint-box">${svg('sparkles', 16)}
+      <span>هذا نموذج مركَّز على إدارة الدورات والخصومات — الأقسام الأخرى (الطلبات، الدفعات) موصوفة في النموذج السابق ومتّصلة بنفس قاعدة البيانات.</span></div>
+    <div class="grid-cards">
+      <div class="course-card"><h3>${active}</h3><p style="color:var(--t3);margin-top:6px">دورات نشطة ومعروضة على الموقع</p></div>
+      <div class="course-card"><h3>${draft}</h3><p style="color:var(--t3);margin-top:6px">دورات كمسوَّدة — بانتظار إكمال البيانات</p></div>
+      <div class="course-card"><h3>${DISCOUNT_CODES.filter(d => d.active).length}</h3><p style="color:var(--t3);margin-top:6px">كود خصم فعّال حالياً</p></div>
+    </div>`;
+}
+function renderPlaceholderOrders() {
+  return `<div class="hint-box">${svg('sparkles',16)}<span>قسم الطلبات موصوف بالتفصيل في النموذج الأوّل — غير مكرَّر هنا لتوضيح إدارة الدورات فقط.</span></div>`;
+}
+function renderPlaceholderCohorts() {
+  return `<div class="hint-box">${svg('sparkles',16)}<span>قسم الدفعات والمقاعد موصوف بالتفصيل في النموذج الأوّل مع محرّك دورة الحياة — غير مكرَّر هنا.</span></div>`;
+}
+
+// ───────── إدارة الدورات ─────────
+function renderCourses() {
+  const cards = COURSES.map(c => {
+    const levelBadge = c.level === 'advanced'
+      ? `<span class="badge badge--advanced">${svg('sparkles', 11)} متقدّم</span>`
+      : `<span class="badge badge--beginner">مبتدئ</span>`;
+    const statusBadge = c.active
+      ? `<span class="badge badge--active">نشطة على الموقع</span>`
+      : `<span class="badge badge--draft">مسوَّدة</span>`;
+
+    const modeLine = (m, label, currency) => {
+      if (!m.enabled) return `<div class="cc-missing">${label} — غير مفعَّل</div>`;
+      const complete = m.hours && m.sessions && m.price;
+      if (!complete) return `<div class="cc-missing">${label} — بيانات ناقصة</div>`;
+      return `<div>${label}: <b>${m.hours} ساعة · ${m.sessions} جلسات · ${m.price} ${currency}</b></div>`;
+    };
+
+    return `
+      <div class="course-card ${c.level === 'advanced' ? 'is-advanced' : ''} ${!c.active ? 'is-draft' : ''}">
+        <div class="cc-top"><h3>${c.nameAr}</h3></div>
+        <div class="cc-badges">${levelBadge}${statusBadge}</div>
+        <div class="cc-fields">
+          ${modeLine(c.onsite, 'حضوري', 'د.أ')}
+          ${modeLine(c.live, 'مباشر تفاعلي', '$')}
+          <div>السعة: <b>${c.capacity ?? '—'}</b></div>
+        </div>
+        <div class="cc-actions">
+          <button class="btn btn-ghost btn-sm" onclick="openCourseModal('${c.slug}')">${svg('edit', 14)} تعديل</button>
+          <button class="toggle-btn ${c.active ? 'is-on' : ''}" onclick="toggleCourseActive('${c.slug}')">
+            ${svg(c.active ? 'onIcon' : 'offIcon', 14)} ${c.active ? 'نشطة' : 'مسوَّدة'}
+          </button>
+        </div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="hint-box">${svg('sparkles', 16)}
+      <span>الدورة تُفعَّل تلقائياً فقط عندما يكون لديها نمط واحد على الأقلّ مكتمل الساعات والجلسات والسعر. الأسماء التقنية (slug) تُولَّد تلقائياً من الاسم العربي.</span></div>
+    <div class="grid-cards">
+      ${cards}
+      <div class="add-card" onclick="openCourseModal(null)">
+        <div class="ai">${svg('plus', 20)}</div><span>إضافة دورة جديدة</span>
+      </div>
+    </div>`;
+}
+
+let __editingSlug = null;
+
+function toggleModeFields(mode) {
+  const enabled = document.getElementById(mode + 'Enabled').checked;
+  document.getElementById(mode + 'Fields').style.display = enabled ? 'block' : 'none';
+}
+
+function openCourseModal(slug) {
+  __editingSlug = slug;
+  const course = slug ? COURSES.find(c => c.slug === slug) : null;
+  document.getElementById('courseModalTitle').textContent = course ? 'تعديل الدورة' : 'دورة جديدة';
+  document.getElementById('cName').value = course?.nameAr || '';
+  document.getElementById('cLevel').checked = course ? course.level === 'advanced' : true;
+  document.getElementById('cCapacity').value = course?.capacity ?? '';
+
+  document.getElementById('onsiteEnabled').checked = course?.onsite.enabled || false;
+  document.getElementById('onsiteHours').value = course?.onsite.hours ?? '';
+  document.getElementById('onsiteSessions').value = course?.onsite.sessions ?? '';
+  document.getElementById('onsitePrice').value = course?.onsite.price ?? '';
+  toggleModeFields('onsite');
+
+  document.getElementById('liveEnabled').checked = course?.live.enabled || false;
+  document.getElementById('liveHours').value = course?.live.hours ?? '';
+  document.getElementById('liveSessions').value = course?.live.sessions ?? '';
+  document.getElementById('livePrice').value = course?.live.price ?? '';
+  toggleModeFields('live');
+
+  document.getElementById('courseModalBg').classList.add('show');
+}
+function closeCourseModal() {
+  document.getElementById('courseModalBg').classList.remove('show');
+  __editingSlug = null;
+}
+
+function saveCourse() {
+  const nameAr = document.getElementById('cName').value.trim();
+  if (!nameAr) { toast('⛔ اكتبي اسم الدورة أوّلاً', 'err'); return; }
+
+  const onsiteEnabled = document.getElementById('onsiteEnabled').checked;
+  const liveEnabled = document.getElementById('liveEnabled').checked;
+  if (!onsiteEnabled && !liveEnabled) {
+    toast('⛔ فعّلي نمطاً واحداً على الأقلّ (حضوري أو مباشر تفاعلي)', 'err');
+    return;
+  }
+
+  const onsite = {
+    enabled: onsiteEnabled,
+    hours: onsiteEnabled ? Number(document.getElementById('onsiteHours').value) || null : null,
+    sessions: onsiteEnabled ? Number(document.getElementById('onsiteSessions').value) || null : null,
+    price: onsiteEnabled ? Number(document.getElementById('onsitePrice').value) || null : null,
+  };
+  const live = {
+    enabled: liveEnabled,
+    hours: liveEnabled ? Number(document.getElementById('liveHours').value) || null : null,
+    sessions: liveEnabled ? Number(document.getElementById('liveSessions').value) || null : null,
+    price: liveEnabled ? Number(document.getElementById('livePrice').value) || null : null,
+  };
+
+  // ⛔ التفعيل التلقائي — لا يعتمد على قرار يدوي، بل على اكتمال بيانات نمط واحد فعليّاً
+  const onsiteComplete = onsite.enabled && onsite.hours && onsite.sessions && onsite.price;
+  const liveComplete = live.enabled && live.hours && live.sessions && live.price;
+  const willBeActive = onsiteComplete || liveComplete;
+
+  const capacity = Number(document.getElementById('cCapacity').value) || null;
+  const level = document.getElementById('cLevel').checked ? 'advanced' : 'beginner';
+
+  if (__editingSlug) {
+    const course = COURSES.find(c => c.slug === __editingSlug);
+    Object.assign(course, { nameAr, level, onsite, live, capacity, active: willBeActive });
+    toast(`تمّ تحديث "${nameAr}"` + (willBeActive ? ' — وهي الآن نشطة على الموقع ✅' : ' — لا تزال مسوَّدة'));
+  } else {
+    const slug = slugify(nameAr);
+    if (COURSES.some(c => c.slug === slug)) { toast('⛔ يوجد بالفعل دورة بنفس الاسم تقريباً', 'err'); return; }
+    COURSES.push({ slug, nameAr, level, onsite, live, capacity, active: willBeActive });
+    CONSULTS.unshift({ date: TODAY.toISOString().slice(0,10), consultant: 'أنتِ', action: 'أنشأت الدورة', target: nameAr });
+    toast(`تمّ إنشاء "${nameAr}"` + (willBeActive ? ' وتفعيلها فوراً على الموقع ✅' : ' كمسوَّدة — أكملي البيانات لتفعيلها'));
+  }
+  closeCourseModal();
+  render('courses');
+}
+
+function toggleCourseActive(slug) {
+  const course = COURSES.find(c => c.slug === slug);
+  const onsiteComplete = course.onsite.enabled && course.onsite.hours && course.onsite.sessions && course.onsite.price;
+  const liveComplete = course.live.enabled && course.live.hours && course.live.sessions && course.live.price;
+  if (!course.active && !onsiteComplete && !liveComplete) {
+    toast('⛔ أكملي الساعات والجلسات والسعر لنمط واحد على الأقلّ قبل التفعيل', 'err');
+    return;
+  }
+  course.active = !course.active;
+  toast(course.active ? `"${course.nameAr}" أصبحت نشطة على الموقع` : `"${course.nameAr}" رجعت مسوَّدة`);
+  render('courses');
+}
+
+// ───────── إدارة أكواد الخصم ─────────
+function renderDiscounts() {
+  const options = COURSES.map(c => `<option value="${c.slug}">${c.nameAr}</option>`).join('');
+  document.getElementById('dCourses').innerHTML = `<option value="all">كلّ الدورات</option>${options}`;
+
+  const rows = DISCOUNT_CODES.map(d => {
+    const isExpired = d.expiresAt && TODAY > new Date(d.expiresAt);
+    const usagePct = d.maxUses ? Math.round(d.usedCount / d.maxUses * 100) : 0;
+    const statusBadge = isExpired
+      ? `<span class="badge badge--expired">منتهي</span>`
+      : d.active ? `<span class="badge badge--active">فعّال</span>` : `<span class="badge badge--draft">معطَّل</span>`;
+    const valueLabel = d.type === 'percent' ? `خصم ${d.value}%` : `خصم ${d.value} د.أ`;
+    const coursesLabel = d.appliesToCourses === 'all' ? 'كلّ الدورات'
+      : COURSES.find(c => c.slug === d.appliesToCourses)?.nameAr || d.appliesToCourses;
+
+    return `<tr>
+      <td><span class="code-chip" onclick="copyCode('${d.code}')">${d.code} ${svg('copy',12)}</span></td>
+      <td>${valueLabel}</td>
+      <td>${coursesLabel}</td>
+      <td>${d.maxUses ? `<span class="usage-bar"><i style="width:${usagePct}%"></i></span>${d.usedCount}/${d.maxUses}` : `${d.usedCount} (بلا حدّ)`}</td>
+      <td>${d.expiresAt || 'بلا انتهاء'}</td>
+      <td>${d.issuedBy}</td>
+      <td>${statusBadge}</td>
+      <td><div class="row-actions">
+        <button class="icon-btn" onclick="toggleCodeActive('${d.code}')" title="${d.active ? 'تعطيل' : 'تفعيل'}">
+          ${svg(d.active ? 'onIcon' : 'offIcon', 15)}</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+
+  return `
+    <div class="hint-box">${svg('sparkles', 16)}
+      <span>الكود يعمل فوراً على صفحة الدفع الفعلية بمجرّد الحفظ — لا يحتاج نشراً ولا انتظار مبرمج. ولا يمكن حذف كود استُخدم ولو مرّة، فقط تعطيله.</span></div>
+    <div class="table-card"><div style="overflow-x:auto">
+      <table><thead><tr>
+        <th>الكود</th><th>القيمة</th><th>ينطبق على</th><th>الاستخدام</th>
+        <th>ينتهي</th><th>أنشأه</th><th>الحالة</th><th></th>
+      </tr></thead><tbody>${rows}</tbody></table>
+    </div></div>`;
+}
+
+function openCodeModal() {
+  document.getElementById('dCode').value = '';
+  document.getElementById('dType').value = 'percent';
+  document.getElementById('dValue').value = '';
+  document.getElementById('dMaxUses').value = '';
+  document.getElementById('dExpiry').value = '';
+  document.getElementById('codeModalBg').classList.add('show');
+}
+function closeCodeModal() { document.getElementById('codeModalBg').classList.remove('show'); }
+
+function saveCode() {
+  const code = document.getElementById('dCode').value.trim().toUpperCase();
+  const value = Number(document.getElementById('dValue').value);
+  if (!code) { toast('⛔ اكتبي الكود أوّلاً', 'err'); return; }
+  if (!value || value <= 0) { toast('⛔ أدخلي قيمة خصم صحيحة', 'err'); return; }
+  if (DISCOUNT_CODES.some(d => d.code === code)) { toast('⛔ هذا الكود موجود بالفعل', 'err'); return; }
+
+  const type = document.getElementById('dType').value;
+  if (type === 'percent' && value > 100) { toast('⛔ النسبة المئوية لا يمكن أن تتجاوز 100', 'err'); return; }
+
+  DISCOUNT_CODES.push({
+    code, type, value,
+    appliesToCourses: document.getElementById('dCourses').value,
+    maxUses: Number(document.getElementById('dMaxUses').value) || null,
+    usedCount: 0,
+    expiresAt: document.getElementById('dExpiry').value || null,
+    issuedBy: 'أنتِ', active: true,
+  });
+  CONSULTS.unshift({ date: TODAY.toISOString().slice(0,10), consultant: 'أنتِ', action: 'أنشأت كوداً', target: code });
+  toast(`تمّ إنشاء الكود "${code}" — يعمل الآن فوراً على صفحة الدفع`);
+  closeCodeModal();
+  render('discounts');
+}
+
+function toggleCodeActive(code) {
+  const d = DISCOUNT_CODES.find(x => x.code === code);
+  d.active = !d.active;
+  toast(d.active ? `الكود "${code}" فعّال الآن` : `الكود "${code}" مُعطَّل الآن`);
+  render('discounts');
+}
+
+function copyCode(code) {
+  navigator.clipboard?.writeText(code).catch(() => {});
+  toast(`تمّ نسخ "${code}"`);
+}
+
+// ───────── سجلّ المستشارات ─────────
+function renderConsultants() {
+  const rows = CONSULTS.map(c => `
+    <tr><td>${c.date}</td><td>${c.consultant}</td><td>${c.action}</td><td>${c.target}</td></tr>
+  `).join('');
+  return `
+    <div class="table-card"><div style="overflow-x:auto">
+      <table><thead><tr><th>التاريخ</th><th>المستشارة</th><th>الإجراء</th><th>العنصر</th></tr></thead>
+      <tbody>${rows || '<tr><td colspan="4" style="text-align:center;padding:30px;color:var(--t4)">لا يوجد سجلّ بعد</td></tr>'}</tbody></table>
+    </div></div>`;
+}
+
+function renderSettings() {
+  return `<div class="hint-box">${svg('sparkles',16)}<span>الإعدادات موصوفة في النموذج الأوّل — غير مكرَّرة هنا.</span></div>`;
+}
+
+document.addEventListener('DOMContentLoaded', () => {});
+
+</script>
+</body></html>
