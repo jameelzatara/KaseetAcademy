@@ -141,7 +141,7 @@ router.post("/checkout/session", async (req, res) => {
     // ── Server-side cohort validation — reject mismatched / unknown cohorts ─
     let validCohortId: number;
     try {
-      validCohortId = validateCohort(courseSlug, mode, cohortId);
+      validCohortId = await validateCohort(courseSlug, mode, cohortId);
     } catch (err: any) {
       const code = err?.message ?? "COHORT_MISMATCH";
       logger.warn({ courseSlug, mode, cohortId, code }, "Cohort validation failed");
@@ -584,22 +584,51 @@ export async function onSessionCompleted(s: import("stripe").Stripe.Checkout.Ses
 }
 
 // ── GET /api/cohorts/seats — public, read-only ────────────────
-// يُستخدم من الواجهة لعرض السعات الحقيقية من قاعدة البيانات
+// يُستخدم من الواجهة لعرض السعات والجدول الزمني الحقيقيين من قاعدة البيانات.
+// الحالة (status) تُحسب حياً من تاريخ البدء — لا تُخزَّن أبداً — حتى لا تصبح
+// قديمة بمرور الوقت بين استيراد وآخر لملف الإكسل.
 router.get("/cohorts/seats", async (_req, res) => {
   try {
     const { rows } = await pool.query<{
       cohort_id: number; capacity: number; enrolled: number; is_open: boolean;
-    }>("SELECT cohort_id, capacity, enrolled, is_open FROM cohort_seats");
+      course_slug: string; level: string; mode: string; trainer_name: string;
+      start_date: string; end_date: string; days_ar: string;
+      time_24: string | null; time_ar: string | null; platform: string;
+    }>(`
+      SELECT s.cohort_id, s.capacity, s.enrolled, s.is_open,
+             c.course_slug, c.level, c.mode, c.trainer_name,
+             to_char(c.start_date, 'YYYY-MM-DD') AS start_date,
+             to_char(c.end_date,   'YYYY-MM-DD') AS end_date,
+             c.days_ar, c.time_24, c.time_ar, c.platform
+      FROM cohort_seats s
+      JOIN cohorts c ON c.id = s.cohort_id
+    `);
+
+    // Plain YYYY-MM-DD, string-compared against today in the same format —
+    // avoids any UTC/local timezone shift from constructing Date objects.
+    const todayIso = new Date().toISOString().slice(0, 10);
 
     const seats = rows.map((row) => {
       const remaining = Math.max(0, row.capacity - row.enrolled);
+      const started = row.start_date <= todayIso;
       return {
-        cohortId: row.cohort_id,
-        capacity:  row.capacity,
-        enrolled:  row.enrolled,
+        cohortId:    row.cohort_id,
+        capacity:    row.capacity,
+        enrolled:    row.enrolled,
         remaining,
-        fill:      Math.round((row.enrolled / Math.max(row.capacity, 1)) * 100),
-        isOpen:    row.is_open,
+        fill:        Math.round((row.enrolled / Math.max(row.capacity, 1)) * 100),
+        isOpen:      row.is_open,
+        courseSlug:  row.course_slug,
+        level:       row.level,
+        mode:        row.mode,
+        trainer:     row.trainer_name,
+        start:       row.start_date,
+        end:         row.end_date,
+        days:        row.days_ar,
+        time24:      row.time_24,
+        timeAr:      row.time_ar,
+        platform:    row.platform,
+        status:      started ? "running" : "open",
       };
     });
 
@@ -717,7 +746,7 @@ router.post("/checkout/payment-intent", async (req, res) => {
     // ── Server-side cohort validation — reject mismatched / unknown cohorts ─
     let validCohortId: number;
     try {
-      validCohortId = validateCohort(courseSlug, mode, cohortId);
+      validCohortId = await validateCohort(courseSlug, mode, cohortId);
     } catch (err: any) {
       const code = err?.message ?? "COHORT_MISMATCH";
       logger.warn({ courseSlug, mode, cohortId, code }, "Cohort validation failed");

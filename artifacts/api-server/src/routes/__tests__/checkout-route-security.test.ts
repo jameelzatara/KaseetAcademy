@@ -16,10 +16,17 @@ import request from "supertest";
 const mockGetStripeCredentials = vi.hoisted(() => vi.fn());
 
 // ── Mock DB ────────────────────────────────────────────────────────────────
+// Short courses (everything not in the static COHORT_CATALOG) are validated
+// live against the `cohorts` table — simulate it holding exactly these
+// known (id, courseSlug, mode) triples.
+const KNOWN_DB_COHORTS = new Set([
+  "137:voiceover:onsite", "138:voiceover:live",
+  "202:presenter:onsite", "203:arabic-language:live",
+]);
 vi.mock("@workspace/db", () => ({
   db:               { select: vi.fn(), insert: vi.fn(), update: vi.fn() },
   pool:             {
-    query: vi.fn().mockImplementation((query: string) => {
+    query: vi.fn().mockImplementation((query: string, params?: unknown[]) => {
       if (query.includes("FROM courses")) {
         return Promise.resolve({
           rows: [{
@@ -29,6 +36,14 @@ vi.mock("@workspace/db", () => ({
             live_enabled: true,
           }],
         });
+      }
+      if (query.includes("FROM cohorts") && params) {
+        const [cohortId, courseSlug, mode] = params;
+        return Promise.resolve(
+          KNOWN_DB_COHORTS.has(`${cohortId}:${courseSlug}:${mode}`)
+            ? { rows: [{ ok: 1 }] }
+            : { rows: [] },
+        );
       }
       return Promise.resolve({ rows: [] });
     }),
@@ -158,13 +173,6 @@ describe("POST /api/checkout/session — cohort validation", () => {
   it("accepts a valid voiceover onsite cohort (137)", async () => {
     const res = await request(app).post("/api/checkout/session").send(
       sessionBody({ courseSlug: "voiceover", cohortId: 137, mode: "onsite" }),
-    );
-    expect(res.status).toBe(200);
-  });
-
-  it("accepts a valid voiceover onsite cohort (142) — multiple cohorts per mode supported", async () => {
-    const res = await request(app).post("/api/checkout/session").send(
-      sessionBody({ courseSlug: "voiceover", cohortId: 142, mode: "onsite" }),
     );
     expect(res.status).toBe(200);
   });

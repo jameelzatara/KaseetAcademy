@@ -99,7 +99,7 @@ export const installmentsTable = pgTable("installments", {
 export type Installment = typeof installmentsTable.$inferSelect;
 
 // ─── Cohort Seats ─────────────────────────────────────────
-// enrolled is the source of truth for seat count — cohorts.json holds static metadata
+// enrolled is the source of truth for seat count — cohorts holds schedule metadata
 export const cohortSeatsTable = pgTable("cohort_seats", {
   cohortId:  integer("cohort_id").primaryKey(),
   capacity:  integer("capacity").notNull().default(10),
@@ -109,6 +109,28 @@ export const cohortSeatsTable = pgTable("cohort_seats", {
 });
 
 export type CohortSeat = typeof cohortSeatsTable.$inferSelect;
+
+// ─── Cohorts (schedule metadata) ────────────────────────────
+// Source of truth for cohort scheduling — populated from the trainer's
+// roster spreadsheet via lib/db/scripts/import-cohorts.ts. Capacity/enrolled
+// live separately in cohortSeatsTable (real-time checkout counter).
+export const cohortsTable = pgTable("cohorts", {
+  id:           integer("id").primaryKey(),
+  courseSlug:   text("course_slug").notNull(),
+  level:        text("level").notNull().default("beginner"), // 'beginner' | 'advanced'
+  mode:         text("mode").notNull(),                       // 'onsite' | 'live'
+  trainerName:  text("trainer_name").notNull(),
+  startDate:    date("start_date").notNull(),
+  endDate:      date("end_date").notNull(),
+  daysAr:       text("days_ar").notNull(),
+  time24:       text("time_24"),
+  timeAr:       text("time_ar"),
+  platform:     text("platform").notNull(),
+  createdAt:    timestamp("created_at").defaultNow(),
+  updatedAt:    timestamp("updated_at").defaultNow(),
+});
+
+export type Cohort = typeof cohortsTable.$inferSelect;
 
 // ─── Holds ────────────────────────────────────────────────
 export const holdsTable = pgTable("holds", {
