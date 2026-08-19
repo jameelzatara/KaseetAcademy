@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { Info, ChevronRight, ChevronLeft, Lock, CreditCard, MessageCircle, Check, ChevronDown } from 'lucide-react';
 import { currentCohorts } from '@/data/currentCohorts';
@@ -185,7 +185,7 @@ export default function CheckoutPage() {
   }
 
   // ── Submit ────────────────────────────────────────────────
-  const handlePay = useCallback(async () => {
+  async function handlePay() {
     // Ensure phone is built (in case customer was set before dialCode synced)
     const fullPhone = buildPhone(dialCode, localPhone);
     const custToSend = { ...customer, phone: fullPhone || customer.phone };
@@ -231,7 +231,7 @@ export default function CheckoutPage() {
       setError('تعذّر الاتصال بالخادم، تحقّق من الإنترنت وأعد المحاولة');
       setLoading(false);
     }
-  }, [customer, cohort, courseSlug, modeParam, plan, dialCode, localPhone]);
+  }
 
   // ── Progress bar ──────────────────────────────────────────
   const steps = ['اختيار الخطّة', 'بياناتك', 'الدفع الآمن'];
