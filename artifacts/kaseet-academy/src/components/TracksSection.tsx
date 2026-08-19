@@ -259,7 +259,7 @@ export default function TracksSection() {
 
         {/* Section header */}
         <SectionHeader
-          badge="دوراتنا المتميّزة"
+          badge="ماستركلاسات كاسيت"
           heading={<>كل موهبة تستحق <Gold>ماستركلاساً احترافياً</Gold></>}
           description="اختر من بين ماستركلاساتنا الأكثر طلباً — كل برنامج صُمِّم ليأخذك خطوة أبعد في عالم الإعلام والصوت والخطابة."
           style={{ marginBottom: 48 }}

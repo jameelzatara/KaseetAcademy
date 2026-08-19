@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft } from 'lucide-react';
 import StatsBar from './StatsBar';
 import Waveform from './Waveform';
 import heroBg from '@assets/hero-bg-clean-screen.jpg';
@@ -181,7 +182,7 @@ export default function HeroSection() {
               boxShadow: '0 6px 24px rgba(255,193,7,0.40)', transform: 'none',
             })}
           >
-            تصفح دوراتنا المتميزة ↗
+            تصفح دوراتنا المتميزة <ArrowLeft size={16} strokeWidth={2.4} aria-hidden="true" />
           </button>
         </motion.div>
 
