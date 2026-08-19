@@ -1,6 +1,6 @@
 /** Section 5 — إدارة الدورات. Staff create/edit (prices admin-only); admin deletes. */
 import { useEffect, useState } from 'react';
-import { Plus, Pencil, Trash2, RefreshCw } from 'lucide-react';
+import { Plus, Pencil, Trash2, RefreshCw, Archive, ArchiveRestore } from 'lucide-react';
 import { api } from '../api';
 import { Modal, Field, StatusBadge, ConfirmDialog, useToast } from '../components';
 import { useAdminAuth } from '../context';
@@ -24,11 +24,13 @@ interface FormState {
   slug: string; nameAr: string; advanced: boolean;
   onsiteEnabled: boolean; onsiteHours: string; onsiteSessions: string; onsitePrice: string; capacity: string;
   liveEnabled: boolean; liveHours: string; liveSessions: string; livePrice: string;
+  imageUrl: string; shortDescription: string; displayOrder: string; isFeatured: boolean;
 }
 const emptyForm: FormState = {
   slug: '', nameAr: '', advanced: false,
   onsiteEnabled: false, onsiteHours: '', onsiteSessions: '', onsitePrice: '', capacity: '',
   liveEnabled: false, liveHours: '', liveSessions: '', livePrice: '',
+  imageUrl: '', shortDescription: '', displayOrder: '0', isFeatured: false,
 };
 
 export default function Courses() {
@@ -62,6 +64,8 @@ export default function Courses() {
       onsitePrice: c.onsitePriceJOD?.toString() ?? '', capacity: (c.onsiteCapacity ?? c.liveCapacity)?.toString() ?? '',
       liveEnabled: c.liveEnabled, liveHours: c.liveHours?.toString() ?? '', liveSessions: c.liveSessions?.toString() ?? '',
       livePrice: c.livePriceUSD?.toString() ?? '',
+      imageUrl: c.imageUrl ?? '', shortDescription: c.shortDescription ?? '',
+      displayOrder: c.displayOrder?.toString() ?? '0', isFeatured: c.isFeatured,
     });
     setErr('');
     setModal({ mode: 'edit', course: c });
@@ -69,8 +73,11 @@ export default function Courses() {
 
   const num = (s: string) => (s.trim() === '' ? null : Number(s));
 
-  // Auto-activate rule: at least one enabled mode with hours + price complete
-  function computeStatus(f: FormState): 'active' | 'draft' {
+  // Auto-activate rule: at least one enabled mode with hours + price complete.
+  // An archived course stays archived through an edit — editing marketing/
+  // pricing fields shouldn't silently bring it back to the public site.
+  function computeStatus(f: FormState, currentStatus?: 'active' | 'draft' | 'archived'): 'active' | 'draft' | 'archived' {
+    if (currentStatus === 'archived') return 'archived';
     const onsiteOk = f.onsiteEnabled && f.onsiteHours && f.onsitePrice;
     const liveOk = f.liveEnabled && f.liveHours && f.livePrice;
     return onsiteOk || liveOk ? 'active' : 'draft';
@@ -78,16 +85,23 @@ export default function Courses() {
 
   async function save() {
     if (!form.nameAr.trim()) { setErr('اسم الدورة مطلوب'); return; }
+    if (form.imageUrl.trim() && !/^https?:\/\//.test(form.imageUrl.trim())) {
+      setErr('رابط الصورة يجب أن يبدأ بـ http:// أو https://'); return;
+    }
     const body: Record<string, unknown> = {
       nameAr: form.nameAr.trim(),
       level: form.advanced ? 'advanced' : 'beginner',
-      status: computeStatus(form),
+      status: computeStatus(form, modal?.mode === 'edit' ? modal.course.status : undefined),
       onsiteEnabled: form.onsiteEnabled,
       onsiteHours: num(form.onsiteHours), onsiteSessions: num(form.onsiteSessions),
       onsiteCapacity: num(form.capacity),
       liveEnabled: form.liveEnabled,
       liveHours: num(form.liveHours), liveSessions: num(form.liveSessions),
       liveCapacity: num(form.capacity),
+      imageUrl: form.imageUrl.trim() || null,
+      shortDescription: form.shortDescription.trim() || null,
+      displayOrder: num(form.displayOrder) ?? 0,
+      isFeatured: form.isFeatured,
     };
     // Always include prices — backend enforces priceLocked rule on PUT.
     // Consultants may price new courses freely; only locked-course price edits are blocked.
@@ -117,6 +131,22 @@ export default function Courses() {
       await api(`/admin/courses/${c.slug}`, { method: 'PUT', body: { status: next } });
       setCourses(prev => prev.map(x => x.slug === c.slug ? { ...x, status: next } : x));
       toast(next === 'active' ? 'فُعّلت الدورة' : 'حُفظت كمسوَّدة');
+    } catch (e: any) { toast(e.message, 'err'); }
+  }
+
+  async function archiveCourse(c: Course) {
+    try {
+      await api(`/admin/courses/${c.slug}`, { method: 'PUT', body: { status: 'archived' } });
+      setCourses(prev => prev.map(x => x.slug === c.slug ? { ...x, status: 'archived' } : x));
+      toast('أُرشفت الدورة — لن تظهر على الموقع، وبياناتها محفوظة');
+    } catch (e: any) { toast(e.message, 'err'); }
+  }
+
+  async function unarchiveCourse(c: Course) {
+    try {
+      await api(`/admin/courses/${c.slug}`, { method: 'PUT', body: { status: 'draft' } });
+      setCourses(prev => prev.map(x => x.slug === c.slug ? { ...x, status: 'draft' } : x));
+      toast('أُعيدت الدورة كمسوَّدة — فعّليها لتظهر على الموقع');
     } catch (e: any) { toast(e.message, 'err'); }
   }
 
@@ -162,10 +192,21 @@ export default function Courses() {
                 <span className="num" style={{ fontSize: 11, color: 'var(--t4)', direction: 'ltr', textAlign: 'right' }}>/{c.slug}</span>
               </div>
               <div style={{ display: 'flex', gap: 8 }}>
-                <button className={`ka-toggle-btn${c.status === 'active' ? ' is-on' : ''}`} onClick={() => toggleStatus(c)}>
-                  {c.status === 'active' ? '✓ فعّالة' : 'تفعيل'}
-                </button>
+                {c.status === 'archived' ? (
+                  <button className="ka-toggle-btn" onClick={() => unarchiveCourse(c)}>
+                    <ArchiveRestore size={13} /> إلغاء الأرشفة
+                  </button>
+                ) : (
+                  <button className={`ka-toggle-btn${c.status === 'active' ? ' is-on' : ''}`} onClick={() => toggleStatus(c)}>
+                    {c.status === 'active' ? '✓ فعّالة' : 'تفعيل'}
+                  </button>
+                )}
                 <button className="ka-icon-btn" title="تعديل" onClick={() => openEdit(c)}><Pencil size={14} /></button>
+                {c.status !== 'archived' && (
+                  <button className="ka-icon-btn" title="أرشفة — تخفيها عن الموقع دون حذف بياناتها" onClick={() => archiveCourse(c)}>
+                    <Archive size={14} />
+                  </button>
+                )}
                 {isAdmin && <button className="ka-icon-btn" title="حذف" onClick={() => setDeleting(c)}><Trash2 size={14} /></button>}
               </div>
             </div>
@@ -236,12 +277,44 @@ export default function Courses() {
             <input type="number" value={form.capacity} onChange={e => setForm(f => ({ ...f, capacity: e.target.value }))} placeholder="13" />
           </Field>
 
+          <div className="ka-mode-section">
+            <h4>ظهورها في الصفحة الرئيسية</h4>
+            <Field label="رابط صورة الغلاف" hint="رابط مباشر لصورة مستضافة (http:// أو https://) — تُستخدم في بطاقة الدورة على الرئيسية.">
+              <input value={form.imageUrl} onChange={e => setForm(f => ({ ...f, imageUrl: e.target.value }))} placeholder="https://example.com/cover.jpg" />
+            </Field>
+            <Field label="الوصف القصير (تسويقي)" hint="يظهر على بطاقة الدورة في الرئيسية — حتى 300 حرف.">
+              <textarea
+                value={form.shortDescription}
+                onChange={e => setForm(f => ({ ...f, shortDescription: e.target.value }))}
+                maxLength={300}
+                rows={3}
+                placeholder="جملة أو جملتان تلخّصان الدورة للزائر."
+                style={{ width: '100%', resize: 'vertical', font: 'inherit' }}
+              />
+            </Field>
+            <div className="ka-grid2">
+              <Field label="ترتيب الظهور" hint="الأصغر يظهر أولاً">
+                <input type="number" value={form.displayOrder} onChange={e => setForm(f => ({ ...f, displayOrder: e.target.value }))} placeholder="0" />
+              </Field>
+              <Field label="البطاقة المميّزة">
+                <div className="ka-checkbox-row" style={{ marginTop: 10 }}>
+                  <input type="checkbox" id="isFeatured" checked={form.isFeatured} onChange={e => setForm(f => ({ ...f, isFeatured: e.target.checked }))} />
+                  <label htmlFor="isFeatured">اجعلها البطاقة الكبيرة المميّزة في الرئيسية</label>
+                </div>
+              </Field>
+            </div>
+          </div>
+
           <div className="ka-hint-box">
             <span>⚠️</span>
             <span>
-              {computeStatus(form) === 'active'
-                ? <>الدورة ستُحفَظ <b>فعّالة</b> — نمط واحد على الأقل مكتمل الساعات والسعر.</>
-                : <>الدورة ستُحفَظ كـ<b>مسوَّدة</b> ولن تظهر على الموقع حتى تُفعَّل — يلزم نمط واحد على الأقلّ بساعاته وسعره كاملَين.</>}
+              {(() => {
+                const status = computeStatus(form, modal.mode === 'edit' ? modal.course.status : undefined);
+                if (status === 'archived') return <>الدورة <b>مؤرشفة</b> — تعديل هذه البيانات لن يُعيدها للموقع؛ استخدمي زر «إلغاء الأرشفة» من القائمة.</>;
+                return status === 'active'
+                  ? <>الدورة ستُحفَظ <b>فعّالة</b> — نمط واحد على الأقل مكتمل الساعات والسعر.</>
+                  : <>الدورة ستُحفَظ كـ<b>مسوَّدة</b> ولن تظهر على الموقع حتى تُفعَّل — يلزم نمط واحد على الأقلّ بساعاته وسعره كاملَين.</>;
+              })()}
             </span>
           </div>
 

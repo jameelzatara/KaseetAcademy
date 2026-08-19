@@ -11,10 +11,11 @@
  */
 import { Router } from "express";
 import bcrypt from "bcryptjs";
-import { db, pool, consultantAccountsTable, discountCodesTable, coursesTable, voiceEvaluationsTable, instagramLeadsTable } from "@workspace/db";
+import { db, pool, consultantAccountsTable, discountCodesTable, coursesTable, ordersTable, voiceEvaluationsTable, instagramLeadsTable } from "@workspace/db";
 import { eq, desc, asc } from "drizzle-orm";
 import { logger } from "../lib/logger.js";
 import { requireAdmin, requireStaff } from "../middlewares/adminAuth.js";
+import { COHORT_CATALOG } from "../lib/pricing.js";
 
 const router = Router();
 
@@ -354,11 +355,33 @@ function courseUpdatesFromBody(body: any, adminOnly = false): Record<string, any
     "nameAr", "level", "status",
     "onsiteEnabled", "onsitePriceJOD", "onsiteHours", "onsiteSessions", "onsiteCapacity",
     "liveEnabled", "livePriceUSD", "liveHours", "liveSessions", "liveCapacity",
+    "imageUrl", "shortDescription", "displayOrder", "isFeatured",
   ] as const;
   for (const f of fields) if (body[f] !== undefined) updates[f] = body[f];
   // priceLocked toggle is admin-only
   if (adminOnly && body.priceLocked !== undefined) updates.priceLocked = body.priceLocked;
   return updates;
+}
+
+/** Validates the homepage-marketing fields on a course update. Returns an Arabic error message, or null if valid. */
+function validateMarketingFields(updates: Record<string, any>): string | null {
+  if (updates.imageUrl !== undefined && updates.imageUrl !== null) {
+    if (typeof updates.imageUrl !== "string" || updates.imageUrl.length > 2000 || !/^https?:\/\//.test(updates.imageUrl)) {
+      return "رابط الصورة يجب أن يبدأ بـ http:// أو https://";
+    }
+  }
+  if (updates.shortDescription !== undefined && updates.shortDescription !== null) {
+    if (typeof updates.shortDescription !== "string" || updates.shortDescription.length > 300) {
+      return "الوصف القصير يجب ألّا يتجاوز 300 حرف";
+    }
+  }
+  if (updates.displayOrder !== undefined) {
+    if (!Number.isInteger(updates.displayOrder)) return "ترتيب الظهور يجب أن يكون رقماً صحيحاً";
+  }
+  if (updates.isFeatured !== undefined && typeof updates.isFeatured !== "boolean") {
+    return "قيمة الشارة المميّزة غير صالحة";
+  }
+  return null;
 }
 
 router.post("/courses", requireStaff, async (req, res) => {
@@ -368,6 +391,8 @@ router.post("/courses", requireStaff, async (req, res) => {
     if (!/^[a-z0-9-]+$/.test(slug)) { res.status(400).json({ error: "المعرّف يجب أن يكون أحرفاً إنجليزية صغيرة وأرقاماً وشرطات فقط" }); return; }
 
     const updates = courseUpdatesFromBody(req.body, isAdmin(req));
+    const marketingErr = validateMarketingFields(updates);
+    if (marketingErr) { res.status(400).json({ error: marketingErr }); return; }
     // priceLocked defaults to false for new courses; admin can override on create
     const [created] = await db.insert(coursesTable).values({
       slug, nameAr,
@@ -387,6 +412,8 @@ router.put("/courses/:slug", requireStaff, async (req, res) => {
     if (!existing) { res.status(404).json({ error: "الدورة غير موجودة" }); return; }
 
     const updates = courseUpdatesFromBody(req.body, isAdmin(req));
+    const marketingErr = validateMarketingFields(updates);
+    if (marketingErr) { res.status(400).json({ error: marketingErr }); return; }
     // Price edits blocked for consultants on courses with priceLocked=true
     const priceEdit = updates.onsitePriceJOD !== undefined || updates.livePriceUSD !== undefined;
     const priceLocked = (existing as typeof existing & { priceLocked?: boolean }).priceLocked;
@@ -403,7 +430,26 @@ router.put("/courses/:slug", requireStaff, async (req, res) => {
 
 router.delete("/courses/:slug", requireAdmin, async (req, res) => {
   try {
-    await db.delete(coursesTable).where(eq(coursesTable.slug, String(req.params.slug)));
+    const slug = String(req.params.slug);
+
+    const catalog = COHORT_CATALOG[slug];
+    const hasCohorts = Boolean(catalog?.onsite?.length) || Boolean(catalog?.live?.length);
+    if (hasCohorts) {
+      res.status(409).json({ error: "لا يمكن حذف الدورة — مرتبطة بكوهورتات نشطة. استخدم الأرشفة بدلاً من الحذف." });
+      return;
+    }
+
+    const [existingOrder] = await db
+      .select({ id: ordersTable.id })
+      .from(ordersTable)
+      .where(eq(ordersTable.courseSlug, slug))
+      .limit(1);
+    if (existingOrder) {
+      res.status(409).json({ error: "لا يمكن حذف الدورة — توجد طلبات تسجيل مرتبطة بها. استخدم الأرشفة بدلاً من الحذف." });
+      return;
+    }
+
+    await db.delete(coursesTable).where(eq(coursesTable.slug, slug));
     res.json({ ok: true });
   } catch {
     res.status(500).json({ error: "خطأ في الخادم" });

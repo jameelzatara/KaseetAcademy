@@ -92,9 +92,34 @@ CREATE TABLE IF NOT EXISTS discount_reservations (
   updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
+-- Cohort IDs below 500 are reserved for the legacy hardcoded roster
+-- (seeded once by seedCohortsIfEmpty); the import script assigns new
+-- cohorts IDs from this sequence so they never collide.
+CREATE SEQUENCE IF NOT EXISTS cohorts_id_seq START 500;
+
+CREATE TABLE IF NOT EXISTS cohorts (
+  id            INTEGER PRIMARY KEY,
+  course_slug   TEXT NOT NULL,
+  level         TEXT NOT NULL DEFAULT 'beginner',
+  mode          TEXT NOT NULL,
+  trainer_name  TEXT NOT NULL,
+  start_date    DATE NOT NULL,
+  end_date      DATE NOT NULL,
+  days_ar       TEXT NOT NULL,
+  time_24       TEXT,
+  time_ar       TEXT,
+  platform      TEXT NOT NULL,
+  created_at    TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at    TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS consultant_id INTEGER;
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS discount_code TEXT;
 ALTER TABLE courses ADD COLUMN IF NOT EXISTS price_locked BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE courses ADD COLUMN IF NOT EXISTS image_url TEXT;
+ALTER TABLE courses ADD COLUMN IF NOT EXISTS short_description TEXT;
+ALTER TABLE courses ADD COLUMN IF NOT EXISTS display_order INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE courses ADD COLUMN IF NOT EXISTS is_featured BOOLEAN NOT NULL DEFAULT false;
 `;
 
 export async function ensureAdminSchema(): Promise<void> {

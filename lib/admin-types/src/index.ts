@@ -160,6 +160,10 @@ export interface Course {
   liveHours: number | null;
   liveSessions: number | null;
   liveCapacity: number | null;
+  imageUrl: string | null;
+  shortDescription: string | null;
+  displayOrder: number;
+  isFeatured: boolean;
   createdAt: string;
   updatedAt?: string | null;
 }
