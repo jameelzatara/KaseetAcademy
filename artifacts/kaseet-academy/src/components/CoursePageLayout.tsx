@@ -230,7 +230,22 @@ function CohortRow({ c, onRegister, accentStyle, currencyNote, guaranteeNote }: 
    § CohortsSection
    ══════════════════════════════════════════════════════════════ */
 /** نوع استجابة /api/cohorts/seats */
-type LiveSeat = { cohortId: number; capacity: number; enrolled: number; remaining: number; fill: number; isOpen: boolean };
+type LiveSeat = {
+  cohortId: number; capacity: number; enrolled: number; remaining: number; fill: number; isOpen: boolean;
+  courseSlug: string; level: string; mode: string; trainer: string;
+  start: string; end: string; days: string; time24: string | null; timeAr: string | null;
+  platform: string; status: 'open' | 'running';
+};
+
+const AR_MONTHS: Record<string, string> = {
+  '01': 'يناير', '02': 'فبراير', '03': 'مارس', '04': 'أبريل', '05': 'مايو', '06': 'يونيو',
+  '07': 'يوليو', '08': 'أغسطس', '09': 'سبتمبر', '10': 'أكتوبر', '11': 'نوفمبر', '12': 'ديسمبر',
+};
+/** '2026-08-05' → '5 أغسطس' */
+function toArabicDate(iso: string): string {
+  const [, m, d] = iso.split('-');
+  return `${parseInt(d, 10)} ${AR_MONTHS[m] ?? ''}`.trim();
+}
 
 function CohortsSection({ courseSlug, modes, defaultModeKey, onModeChange, showAdvancedCohorts = false }: {
   courseSlug: string; modes: ModeConfig[]; defaultModeKey: string; showAdvancedCohorts?: boolean;
@@ -251,26 +266,45 @@ function CohortsSection({ courseSlug, modes, defaultModeKey, onModeChange, showA
 
   const activeMode = modes.find(m => m.key === tab) ?? modes[0];
 
-  // Merge live seat counts from the database over the imported cohort roster.
+  // Live schedule + seats from the database are authoritative once loaded —
+  // dates, trainer, capacity, and status (computed from start date, never
+  // stored) all come from here so a spreadsheet re-import shows up
+  // immediately without a redeploy. Falls back to the bundled static roster
+  // only if the API is unreachable.
   const allCohorts = useMemo<Cohort[]>(() => {
-    const base = currentCohorts as Cohort[];
-    if (!liveSeats.length) return base;
-    const map = new Map(liveSeats.map(s => [s.cohortId, s]));
-    return base.map(c => {
-      const live = map.get(c.id);
-      if (!live) return c;
-      return { ...c, enrolled: live.enrolled, capacity: live.capacity, remaining: live.remaining, fill: live.fill };
-    });
+    if (!liveSeats.length) return currentCohorts as Cohort[];
+    return liveSeats.map((s): Cohort => ({
+      id: s.cohortId, course: s.courseSlug, mode: s.mode, status: s.status,
+      trainer: s.trainer, start: s.start, end: s.end,
+      start_ar: toArabicDate(s.start), end_ar: toArabicDate(s.end),
+      days: s.days, time_24: s.time24, time_ar: s.timeAr, platform: s.platform,
+      enrolled: s.enrolled, capacity: s.capacity, remaining: s.remaining, fill: s.fill,
+      level: s.level === 'advanced' ? 'advanced' : undefined,
+    }));
   }, [liveSeats]);
 
   const matchesPage = (cohort: Cohort) =>
     cohort.course === courseSlug && (showAdvancedCohorts || cohort.level !== 'advanced');
 
+  // Sold-out cohorts surface first within the open bucket (social proof /
+  // urgency), then available ones, both soonest-first. Already-started
+  // ("running") cohorts render in their own always-last, collapsed section
+  // below — so this one sort plus the existing two-bucket layout together
+  // give the requested 3-tier order without changing any markup.
   const openCohorts = useMemo(() =>
-    allCohorts.filter(c => matchesPage(c) && c.mode === activeMode.cohortFilter && c.time_ar && c.status === 'open'),
+    allCohorts
+      .filter(c => matchesPage(c) && c.mode === activeMode.cohortFilter && c.time_ar && c.status === 'open')
+      .sort((a, b) => {
+        const aFull = (a.remaining ?? 0) === 0;
+        const bFull = (b.remaining ?? 0) === 0;
+        if (aFull !== bFull) return aFull ? -1 : 1;
+        return new Date(a.start).getTime() - new Date(b.start).getTime();
+      }),
   [allCohorts, activeMode.cohortFilter, courseSlug, showAdvancedCohorts]);
   const runCohorts = useMemo(() =>
-    allCohorts.filter(c => matchesPage(c) && c.mode === activeMode.cohortFilter && c.time_ar && c.status === 'running'),
+    allCohorts
+      .filter(c => matchesPage(c) && c.mode === activeMode.cohortFilter && c.time_ar && c.status === 'running')
+      .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime()),
   [allCohorts, activeMode.cohortFilter, courseSlug, showAdvancedCohorts]);
 
   const openCounts = useMemo(() => {

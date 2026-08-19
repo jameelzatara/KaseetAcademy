@@ -11,9 +11,26 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 
 // ── Mock DB ────────────────────────────────────────────────────────────────
+// Short courses (everything not in the static COHORT_CATALOG) are validated
+// live against the `cohorts` table — simulate it holding exactly these
+// known (id, courseSlug, mode) triples.
+const KNOWN_DB_COHORTS = new Set([
+  "137:voiceover:onsite", "138:voiceover:live",
+  "202:presenter:onsite", "201:public-speaking:onsite", "203:arabic-language:live",
+]);
 vi.mock("@workspace/db", () => ({
-  db:              { select: vi.fn(), insert: vi.fn(), update: vi.fn() },
-  pool:            { query: vi.fn().mockResolvedValue({ rows: [] }) },
+  db:   { select: vi.fn(), insert: vi.fn(), update: vi.fn() },
+  pool: {
+    query: vi.fn(async (sql: string, params?: unknown[]) => {
+      if (typeof sql === "string" && sql.includes("FROM cohorts") && params) {
+        const [cohortId, courseSlug, mode] = params;
+        return KNOWN_DB_COHORTS.has(`${cohortId}:${courseSlug}:${mode}`)
+          ? { rows: [{ ok: 1 }] }
+          : { rows: [] };
+      }
+      return { rows: [] };
+    }),
+  },
   ordersTable:     {},
   holdsTable:      {},
   cohortSeatsTable: {},
@@ -99,49 +116,55 @@ function makePaymentIntent(
 // ══════════════════════════════════════════════════════════════
 
 describe("validateCohort — server catalog guard", () => {
-  it("accepts all valid (courseSlug, mode, cohortId) triples from the catalog", () => {
-    expect(validateCohort("masar-soti",    "onsite", 301)).toBe(301);
-    expect(validateCohort("masar-soti",    "live",   302)).toBe(302);
-    expect(validateCohort("masar-khataba", "onsite", 303)).toBe(303);
-    expect(validateCohort("masar-elami",   "onsite", 305)).toBe(305);
-    expect(validateCohort("voiceover",     "onsite", 137)).toBe(137);
-    expect(validateCohort("voiceover",     "onsite", 142)).toBe(142);
-    expect(validateCohort("voiceover",     "live",   138)).toBe(138);
-    expect(validateCohort("presenter",     "onsite", 202)).toBe(202);
-    expect(validateCohort("public-speaking", "onsite", 201)).toBe(201);
-    expect(validateCohort("arabic-language", "live",  203)).toBe(203);
+  it("accepts masterclass triples from the static catalog", async () => {
+    await expect(validateCohort("masar-soti",    "onsite", 301)).resolves.toBe(301);
+    await expect(validateCohort("masar-soti",    "live",   302)).resolves.toBe(302);
+    await expect(validateCohort("masar-khataba", "onsite", 303)).resolves.toBe(303);
+    await expect(validateCohort("masar-elami",   "onsite", 305)).resolves.toBe(305);
   });
 
-  it("rejects an unknown courseSlug", () => {
-    expect(() => validateCohort("fake-course", "onsite", 999)).toThrow("INVALID_COURSE");
+  it("accepts short-course triples validated live against the cohorts table", async () => {
+    await expect(validateCohort("voiceover",       "onsite", 137)).resolves.toBe(137);
+    await expect(validateCohort("voiceover",       "live",   138)).resolves.toBe(138);
+    await expect(validateCohort("presenter",       "onsite", 202)).resolves.toBe(202);
+    await expect(validateCohort("public-speaking", "onsite", 201)).resolves.toBe(201);
+    await expect(validateCohort("arabic-language", "live",   203)).resolves.toBe(203);
   });
 
-  it("rejects a mode not available for the course (arabic-language has no onsite)", () => {
-    expect(() => validateCohort("arabic-language", "onsite", 203)).toThrow("MODE_NOT_AVAILABLE");
+  // Short courses aren't in the static catalog, so an unknown course/mode/id
+  // for them all resolve to the same live DB lookup finding no row — there's
+  // no way to distinguish "course doesn't exist" from "cohort doesn't match"
+  // without a second query, so all three collapse to COHORT_MISMATCH.
+  it("rejects an unknown courseSlug", async () => {
+    await expect(validateCohort("fake-course", "onsite", 999)).rejects.toThrow("COHORT_MISMATCH");
   });
 
-  it("rejects a valid course+mode with a cohortId not in the allowed array", () => {
-    expect(() => validateCohort("masar-soti", "onsite", 999)).toThrow("COHORT_MISMATCH");
+  it("rejects a mode not available for the course (arabic-language has no onsite)", async () => {
+    await expect(validateCohort("arabic-language", "onsite", 203)).rejects.toThrow("COHORT_MISMATCH");
   });
 
-  it("rejects cross-course substitution (voiceover cohort against masar-soti)", () => {
-    expect(() => validateCohort("masar-soti", "onsite", 137)).toThrow("COHORT_MISMATCH");
+  it("rejects a masterclass course+mode with a cohortId not in the allowed array", async () => {
+    await expect(validateCohort("masar-soti", "onsite", 999)).rejects.toThrow("COHORT_MISMATCH");
   });
 
-  it("rejects presenter cohort (202) used against voiceover", () => {
-    expect(() => validateCohort("voiceover", "onsite", 202)).toThrow("COHORT_MISMATCH");
+  it("rejects cross-course substitution (voiceover cohort against masar-soti)", async () => {
+    await expect(validateCohort("masar-soti", "onsite", 137)).rejects.toThrow("COHORT_MISMATCH");
   });
 
-  it("covers every catalog entry without throwing for its correct pairs", () => {
+  it("rejects presenter cohort (202) used against voiceover", async () => {
+    await expect(validateCohort("voiceover", "onsite", 202)).rejects.toThrow("COHORT_MISMATCH");
+  });
+
+  it("covers every masterclass catalog entry without throwing for its correct pairs", async () => {
     for (const [slug, ids] of Object.entries(COHORT_CATALOG)) {
       if (ids.onsite) {
         for (const id of ids.onsite) {
-          expect(() => validateCohort(slug, "onsite", id)).not.toThrow();
+          await expect(validateCohort(slug, "onsite", id)).resolves.not.toThrow();
         }
       }
       if (ids.live) {
         for (const id of ids.live) {
-          expect(() => validateCohort(slug, "live", id)).not.toThrow();
+          await expect(validateCohort(slug, "live", id)).resolves.not.toThrow();
         }
       }
     }

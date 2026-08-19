@@ -2,6 +2,7 @@
  * Course pricing config — single source of truth for charge amounts.
  * The frontend never dictates amounts; the server computes from this config.
  */
+import { pool } from "@workspace/db";
 
 export interface OnsitePricing {
   totalJOD: number;
@@ -49,48 +50,44 @@ export function getPricing(
 }
 
 /**
- * Server-owned catalog — single source of truth for which cohort IDs are
- * valid for each (courseSlug, mode) combination. The frontend passes cohort IDs
- * back for convenience, but the server validates them here before any hold or
- * PaymentIntent is created. Unknown or mismatched cohorts are rejected.
+ * Server-owned catalog — which cohort IDs are valid for each masterclass
+ * (courseSlug, mode) combination. Masterclasses (masterclasses.ts) aren't
+ * backed by the `cohorts` table, so they stay on this static whitelist.
  *
- * ⚠️  Keep in sync with:
- *   - artifacts/kaseet-academy/src/data/cohorts.json  (short courses)
- *   - artifacts/kaseet-academy/src/data/masterclasses.ts (masterclasses)
- *
- * Multiple active cohorts per (courseSlug, mode) are supported.
- * When a new cohort is added, append its numeric ID to the relevant array.
+ * ⚠️  Keep in sync with artifacts/kaseet-academy/src/data/masterclasses.ts
+ *     (cohortIdOnsite/cohortIdLive).
  */
 export const COHORT_CATALOG: Record<string, { onsite?: readonly number[]; live?: readonly number[] }> = {
-  // ── Masterclasses (IDs from masterclasses.ts cohortIdOnsite/cohortIdLive) ──
   "masar-soti":    { onsite: [301], live: [302] },
   "masar-khataba": { onsite: [303], live: [304] },
   "masar-elami":   { onsite: [305], live: [306] },
-
-  // ── Short courses (IDs from the latest cohort roster) ──────────────
-  voiceover: {
-    onsite: [135, 137, 142, 406, 407, 408],
-    live:   [136, 138, 143, 401, 402, 403, 404, 405],
-  },
-  presenter:        { onsite: [202] },
-  "public-speaking":  { onsite: [201] },
-  "arabic-language":  { live: [203] },
 };
 
 /**
- * Validates that `cohortId` belongs to the server catalog for this course+mode.
- * Throws a typed error string if the combination is not allowed.
- * Returns the validated cohortId so callers can use it downstream.
+ * Validates that `cohortId` belongs to this course+mode before any hold or
+ * PaymentIntent is created. Masterclasses check the static catalog above;
+ * every other course (the short courses driven by the trainer's roster
+ * spreadsheet, see lib/db/scripts/import-cohorts.ts) is validated live
+ * against the `cohorts` table, so a re-import never needs a matching code
+ * change here. Throws a typed error string if the combination isn't allowed.
  */
-export function validateCohort(
+export async function validateCohort(
   courseSlug: string,
   mode: "onsite" | "live",
   cohortId: number,
-): number {
+): Promise<number> {
   const catalog = COHORT_CATALOG[courseSlug];
-  if (!catalog) throw new Error("INVALID_COURSE");
-  const allowed = mode === "onsite" ? catalog.onsite : catalog.live;
-  if (!allowed) throw new Error("MODE_NOT_AVAILABLE");
-  if (!allowed.includes(cohortId)) throw new Error("COHORT_MISMATCH");
+  if (catalog) {
+    const allowed = mode === "onsite" ? catalog.onsite : catalog.live;
+    if (!allowed) throw new Error("MODE_NOT_AVAILABLE");
+    if (!allowed.includes(cohortId)) throw new Error("COHORT_MISMATCH");
+    return cohortId;
+  }
+
+  const { rows } = await pool.query(
+    `SELECT 1 FROM cohorts WHERE id = $1 AND course_slug = $2 AND mode = $3 LIMIT 1`,
+    [cohortId, courseSlug, mode],
+  );
+  if (!rows.length) throw new Error("COHORT_MISMATCH");
   return cohortId;
 }

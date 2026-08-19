@@ -2,6 +2,7 @@ import app from "./app.js";
 import { logger } from "./lib/logger.js";
 import { syncToSheet } from "./lib/sheetsSync.js";
 import { seedCoursesIfEmpty, backfillCourseMarketingDefaults } from "./lib/seedCourses.js";
+import { seedCohortsIfEmpty } from "./lib/seedCohorts.js";
 import { ensureAdminSchema } from "./lib/ensureSchema.js";
 import { sweepExpiredDiscountReservations } from "./lib/discounts.js";
 
@@ -92,6 +93,7 @@ app.listen(port, async (err) => {
   ensureAdminSchema()
     .then(() => seedCoursesIfEmpty())
     .then(() => backfillCourseMarketingDefaults())
+    .then(() => seedCohortsIfEmpty())
     .catch((err) => logger.error({ err }, "admin schema/seed failed"));
   // Release discount reservations whose checkout was abandoned without a
   // Stripe cancel/expiry event (Payment Element intents never auto-cancel).
