@@ -69,6 +69,10 @@ h2.sec-title span{color:var(--gold)}
 .btn .ar{font-size:17px;line-height:1;transition:transform .22s}
 .btn:hover .ar{transform:translateX(-4px)}
 .btn svg{width:18px;height:18px;flex:0 0 auto}
+.top-nav{position:absolute;z-index:4;top:22px;right:24px;display:flex;align-items:center;gap:9px}
+.top-nav__link{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:42px;padding:9px 15px;border:1px solid rgba(255,255,255,.22);border-radius:999px;background:rgba(26,37,51,.74);backdrop-filter:blur(10px);color:var(--t1);font-size:13px;font-weight:700;font-family:var(--font);text-decoration:none;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
+.top-nav__link:hover{background:rgba(255,193,7,.14);border-color:var(--gold-line);transform:translateY(-1px)}
+.top-nav__link--home{color:var(--gold);border-color:var(--gold-line)}
 
 /* ══ HERO: كفر كامل ══ */
 .hero{position:relative;min-height:660px;display:flex;align-items:flex-end;overflow:hidden}
@@ -270,6 +274,8 @@ h2.sec-title span{color:var(--gold)}
 @media(max-width:700px){
   .sec{padding:66px 0}.sec>.wrap{padding:0 18px}
   .hero-in{padding:100px 18px 52px}
+   .top-nav{top:14px;right:14px;left:14px;justify-content:space-between}
+   .top-nav__link{min-height:38px;padding:8px 12px;font-size:12px}
   .console{padding:21px 17px}
   .steps{gap:4px}.stp span{display:none}
   .rowb,.frm .r2,.phone-row{grid-template-columns:1fr}
@@ -285,6 +291,10 @@ h2.sec-title span{color:var(--gold)}
 
 <!-- ═══ HERO — كفر كامل ═══ -->
 <header class="hero">
+  <nav class="top-nav" aria-label="التنقل في الموقع">
+    <a class="top-nav__link top-nav__link--home" href="/"><span aria-hidden="true">⌂</span> الرئيسية</a>
+    <button class="top-nav__link" type="button" onclick="if (history.length > 1) { history.back(); } else { window.location.href = '/'; }"><span aria-hidden="true">→</span> رجوع</button>
+  </nav>
   <div class="hero-img"><img src="./hero-studio-bg.jpg" alt="متدرّبة تسجّل داخل غرفة صوتية معالجة في استوديو كاسيت" style="transform:scaleX(-1)"></div>
   <div class="hero-in">
     <div class="hero-box">
