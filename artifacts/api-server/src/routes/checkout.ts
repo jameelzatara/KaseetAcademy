@@ -62,7 +62,10 @@ async function resolveConsultantRef(ref: unknown): Promise<number | null> {
   }
 }
 
-const BASE_URL = process.env.BASE_URL ?? `https://${process.env.REPLIT_DOMAINS?.split(",")[0]}`;
+const BASE_URL =
+  process.env.BASE_URL ??
+  process.env.STRIPE_WEBHOOK_BASE_URL ??
+  (process.env.REPLIT_DOMAINS ? `https://${process.env.REPLIT_DOMAINS.split(",")[0]}` : "");
 
 // ── POST /checkout/session ─────────────────────────────────
 router.post("/checkout/session", async (req, res) => {

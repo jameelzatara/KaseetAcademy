@@ -61,6 +61,11 @@ function parseDate(v: unknown): string | null {
   }
   const s = cleanStr(v);
   if (!s) return null;
+  const isoMatch = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if (isoMatch) {
+    const [, y, m, d] = isoMatch;
+    return `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`;
+  }
   const parts = s.split(/[-/]/).map((p) => p.trim());
   if (parts.length === 3) {
     const [d, m, y] = parts;

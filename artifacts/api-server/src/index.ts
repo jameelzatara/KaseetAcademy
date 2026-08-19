@@ -8,6 +8,26 @@ import { sweepExpiredDiscountReservations } from "./lib/discounts.js";
 
 // ── Stripe init (non-blocking) ────────────────────────────
 import { maybeRefreshRates } from "./lib/ratesFetcher.js";
+
+function resolveProductionBaseUrl(): string | null {
+  const configuredUrl =
+    process.env.STRIPE_WEBHOOK_BASE_URL ??
+    process.env.BASE_URL ??
+    process.env.REPLIT_DOMAINS?.split(",")[0];
+
+  if (!configuredUrl) return null;
+
+  try {
+    const candidate = configuredUrl.includes("://")
+      ? configuredUrl
+      : `https://${configuredUrl}`;
+    const url = new URL(candidate);
+    return url.protocol === "https:" ? url.origin : null;
+  } catch {
+    return null;
+  }
+}
+
 async function initStripe() {
   try {
     const { runMigrations } = await import("stripe-replit-sync");
@@ -25,12 +45,18 @@ async function initStripe() {
 
     if (process.env.NODE_ENV === "production") {
       const stripeSync = await getStripeSync();
-      const domains = process.env.REPLIT_DOMAINS?.split(",")[0];
-      if (domains) {
-        const webhookUrl = `https://${domains}/api/stripe/webhook`;
-        await stripeSync.findOrCreateManagedWebhook(webhookUrl);
-        logger.info({ webhookUrl }, "Stripe webhook registered");
+      const baseUrl = resolveProductionBaseUrl();
+      if (!baseUrl) {
+        logger.error(
+          { hasConfiguredWebhookBaseUrl: Boolean(process.env.STRIPE_WEBHOOK_BASE_URL), hasReplitDomains: Boolean(process.env.REPLIT_DOMAINS) },
+          "Stripe webhook setup skipped: no valid HTTPS base URL",
+        );
+        return;
       }
+
+      const webhookUrl = `${baseUrl}/api/stripe/webhook`;
+      await stripeSync.findOrCreateManagedWebhook(webhookUrl);
+      logger.info({ webhookUrl }, "Stripe webhook registered");
     } else {
       // A development restart must never delete or replace the production
       // endpoint that receives real payment events.
