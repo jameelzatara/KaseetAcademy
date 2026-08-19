@@ -7,7 +7,7 @@ import { AudioLines, Volume2, SlidersHorizontal, Mic, Sparkles, Briefcase, Audio
 import CoursePageLayout, { type CoursePageLayoutProps } from '../components/CoursePageLayout';
 import { usePageMeta } from '../hooks/usePageMeta';
 
-import heroCover from '@assets/course-omar-bg_1785692015818.png';
+import heroCover from '@assets/voiceover-group-photo_1785690181212.jpg';
 import omarImg   from '@assets/trainer-omar_1785428945248.jpg';
 import ranaImg   from '@assets/trainer-rana-azzam_1785428982698.JPG';
 import yaqoutImg from '@assets/ياقوت__1785619557679.jpeg';
@@ -34,10 +34,10 @@ const config: CoursePageLayoutProps = {
       price: '150',
       currency: '$',
       cohortFilter: 'live',
-      badgeSeats: '10 مقاعد محدودة',
+      badgeSeats: '13 مقعداً',
       badgeMeetings: '6 محاضرات',
       badgeHours: '12 ساعة تدريبية',
-      brochure: { href: '/brochures/voiceover-live.pdf', label: 'تحميل البروشور', style: 'teal' },
+      brochure: { href: '/brochures/voiceover-online.pdf', label: 'بروشور الأونلاين', style: 'teal' },
       waPhone: '962771052222',
       waMessage: 'السلام عليكم، أرغب في التسجيل في دورة التعليق والأداء الصوتي (مباشر تفاعلي Online LIVE)',
       accentStyle: 'teal',
