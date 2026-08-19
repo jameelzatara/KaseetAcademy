@@ -941,7 +941,7 @@ export default function MasarKhatabaPage() {
             })}
           </div>
 
-          <div style={{ maxWidth:540, marginInline:'auto' }}>
+          <div style={{ maxWidth:600, marginInline:'auto', background:'#131B27', border:`1px solid ${GL}`, borderRadius:26, padding:'clamp(24px,3.5vw,36px)', boxShadow:'0 0 0 1px rgba(255,193,7,.12), 0 34px 70px rgba(13,11,20,.45)' }}>
             {/* السعر */}
             <div style={{ textAlign:'center', marginBottom:28 }}>
               <span style={{ fontFamily:FP, fontWeight:800, fontSize:56, color:GLD }}>
@@ -971,6 +971,17 @@ export default function MasarKhatabaPage() {
                 <span style={{ fontFamily:F, fontSize:14, color:LT }}>{feat}</span>
               </div>
             ))}
+
+            {/* ضمان الجلسة الأولى */}
+            <div style={{ display:'flex', alignItems:'flex-start', gap:13, background:'rgba(255,193,7,.07)', border:`1px solid rgba(255,193,7,.26)`, borderRadius:16, padding:'16px 18px', margin:'18px 0' }}>
+              <ShieldCheck size={22} color={GLD} strokeWidth={2} style={{ flexShrink:0, marginTop:2 }} />
+              <div>
+                <div style={{ fontFamily:F, fontWeight:800, fontSize:14, color:OFF, marginBottom:5 }}>ضمان الجلسة الأولى — Risk Reversal</div>
+                <p style={{ fontFamily:F, fontSize:13, color:LT, lineHeight:1.8, margin:0 }}>
+                  جرّب الجلسة الأولى كاملة. إن شعرت أنّ الماستركلاس لا يلبّي توقّعاتك، اطلب استرداداً كاملاً لرسومك خلال 24 ساعة من انتهائها — <strong style={{ color:OFF }}>دون أسئلة ولا شروط</strong>.
+                </p>
+              </div>
+            </div>
 
             {/* إمكانية التقسيط — متاحة للمسارين */}
             <div style={{ padding:'14px 18px', borderRadius:12, background:'rgba(255,193,7,0.08)', border:'1px solid rgba(255,193,7,0.22)', margin:'16px 0 22px' }}>
