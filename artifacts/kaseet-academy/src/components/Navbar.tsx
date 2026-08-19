@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'wouter';
 import logo from '@assets/logo_1785422080938.png';
 import { useCurrency } from '../context/CurrencyContext';
 import { CURRENCY_LIST, CURRENCY_SYMBOLS, CURRENCY_NAMES } from '../data/currency';
@@ -82,7 +83,9 @@ export default function Navbar() {
 
           {/* Logo — right (RTL start) */}
           <div style={{ flexShrink: 0 }}>
-            <img src={logo} alt="كاسيت أكاديمي" style={{ height: 46, width: 'auto', objectFit: 'contain' }} />
+            <Link href="/" aria-label="كاسيت أكاديمي — الصفحة الرئيسية" style={{ display: 'flex', alignItems: 'center' }}>
+              <img src={logo} alt="كاسيت أكاديمي" style={{ height: 46, width: 'auto', objectFit: 'contain' }} />
+            </Link>
           </div>
 
           {/* Actions — left (RTL end) */}
