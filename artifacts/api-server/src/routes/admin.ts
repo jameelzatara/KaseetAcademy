@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import { db, pool, ordersTable, installmentsTable, cohortSeatsTable } from "@workspace/db";
 import { eq, desc, sql, and, gt, lt, gte } from "drizzle-orm";
 import { notifyOrderCompleted } from "../lib/whatsapp.js";
-import { sendOrderConfirmation } from "../lib/email.js";
+import { sendOrderConfirmation, sendOrderConfirmationForStoredOrder } from "../lib/email.js";
 import { requireAdmin, requireStaff } from "../middlewares/adminAuth.js";
 import { fetchAndStoreRates, getLatestRates } from "../lib/ratesFetcher.js";
 
@@ -329,36 +329,7 @@ router.post("/orders/:id/resend-email", requireAdmin, async (req, res) => {
 
     if (!order) { res.status(404).json({ error: "الطلب غير موجود" }); return; }
 
-    const COURSE_NAMES: Record<string, string> = {
-      "voiceover":           "أساسيات التعليق والأداء الصوتي",
-      "voiceover-basics":    "أساسيات التعليق والأداء الصوتي",
-      "public-speaking":     "فن الخطابة والتأثير",
-      "presenter":           "المذيع المحترف",
-      "arabic-language":     "اللغة العربية للمذيعين",
-      "masar-soti":          "المسار الصوتي المتكامل",
-      "masterclass-elam":    "ماستركلاس الإعلام",
-      "masterclass-voice":   "ماستركلاس التعليق والأداء الصوتي",
-      "masterclass-khataba": "ماستركلاس الخطابة والتواصل القيادي",
-    };
-
-      const result = await sendOrderConfirmation({
-        orderId:       order.id,
-        firstName:     order.firstName ?? "",
-        lastName:      order.lastName  ?? "",
-        courseName:    COURSE_NAMES[order.courseSlug ?? ""] ?? order.courseSlug ?? "",
-        cohortDate:    "",
-        cohortDays:    "",
-        cohortTime:    "",
-        trainerName:   "",
-        mode:          (order.mode as "onsite" | "live") ?? "onsite",
-        platform:      order.mode === "live" ? "Google Meet" : "استوديو كاسيت",
-        totalJOD:      order.totalJOD ?? 0,
-        paidJOD:       order.paidJOD  ?? 0,
-        remainingJOD:  order.remainingJOD ?? 0,
-        plan:          (order.plan as "full" | "deposit") ?? "deposit",
-        chargedUSD:    parseFloat(order.chargedUsd ?? "0"),
-        customerEmail: order.email ?? null,
-      });
+    const result = await sendOrderConfirmationForStoredOrder(order);
 
     if (result.ok) {
       res.json({ ok: true, messageId: result.id });
@@ -537,37 +508,7 @@ router.post("/email-log/:logId/resend", requireAdmin, async (req, res) => {
 
       if (!order) { res.status(404).json({ error: "الطلب المرتبط غير موجود" }); return; }
 
-      const COURSE_NAMES_MAP: Record<string, string> = {
-        "voiceover":           "أساسيات التعليق والأداء الصوتي",
-        "voiceover-basics":    "أساسيات التعليق والأداء الصوتي",
-        "public-speaking":     "فن الخطابة والتأثير",
-        "presenter":           "المذيع المحترف",
-        "arabic-language":     "اللغة العربية للمذيعين",
-        "masar-soti":          "المسار الصوتي المتكامل",
-        "masar-elami":         "ماستركلاس الإعلام المتكامل",
-        "masterclass-elam":    "ماستركلاس الإعلام",
-        "masterclass-voice":   "ماستركلاس التعليق والأداء الصوتي",
-        "masterclass-khataba": "ماستركلاس الخطابة والتواصل القيادي",
-      };
-
-      const result = await sendOrderConfirmation({
-        orderId:       order.id,
-        firstName:     order.firstName ?? "",
-        lastName:      order.lastName  ?? "",
-        courseName:    COURSE_NAMES_MAP[order.courseSlug ?? ""] ?? order.courseSlug ?? "",
-        cohortDate:    "",
-        cohortDays:    "",
-        cohortTime:    "",
-        trainerName:   "",
-        mode:          (order.mode as "onsite" | "live") ?? "onsite",
-        platform:      order.mode === "live" ? "Google Meet" : "استوديو كاسيت",
-        totalJOD:      order.totalJOD ?? 0,
-        paidJOD:       order.paidJOD  ?? 0,
-        remainingJOD:  order.remainingJOD ?? 0,
-        plan:          (order.plan as "full" | "deposit") ?? "deposit",
-        chargedUSD:    parseFloat(order.chargedUsd ?? "0"),
-        customerEmail: order.email ?? null,
-      });
+      const result = await sendOrderConfirmationForStoredOrder(order);
 
       if (result.ok)        return void res.json({ ok: true, messageId: result.id });
       if (result.skipped)   return void res.status(400).json({ error: "لا يوجد بريد إلكتروني لهذا الطلب" });

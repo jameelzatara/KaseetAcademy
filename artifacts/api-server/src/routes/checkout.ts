@@ -248,9 +248,12 @@ router.post("/checkout/session", async (req, res) => {
         cohortId:      String(validCohortId),
         courseSlug,    mode,
         plan:          effectivePlan,
+        courseName,
         totalJOD:      String(totalJOD),
         totalUSD:      String(totalUSD),
         chargeUSD:     String(chargeUSD),
+        paidJOD:       String(paidJOD),
+        remainingJOD:  String(remainingJOD),
         firstName:     customer.firstName,
         lastName:      customer.lastName ?? "",
         email:         customer.email ?? "",
@@ -574,6 +577,7 @@ export async function onSessionCompleted(s: import("stripe").Stripe.Checkout.Ses
       mode:         mode as "onsite" | "live",
       platform:     meta.cohortPlatform || (mode === "onsite" ? "استوديو كاسيت" : "Google Meet"),
       totalJOD,
+        totalUSD,
       paidJOD,
       remainingJOD,
       plan:         plan as "full" | "deposit",
@@ -761,6 +765,12 @@ router.post("/checkout/payment-intent", async (req, res) => {
         chargeUSD = jodToChargeUSD(DEPOSIT_JOD);
       }
     }
+    const paidJOD = mode === "onsite"
+      ? (effectivePlan === "full" ? totalJOD : DEPOSIT_JOD)
+      : 0;
+    const remainingJOD = mode === "onsite" && effectivePlan === "deposit"
+      ? totalJOD - paidJOD
+      : 0;
 
 
     const holdId  = await createHold(validCohortId);
@@ -790,9 +800,12 @@ router.post("/checkout/payment-intent", async (req, res) => {
         cohortId:      String(validCohortId),
         courseSlug,    mode,
         plan:          effectivePlan,
+        courseName,
         totalJOD:      String(totalJOD),
         totalUSD:      String(totalUSD),
         chargeUSD:     String(chargeUSD),
+        paidJOD:       String(paidJOD),
+        remainingJOD:  String(remainingJOD),
         firstName:     customer.firstName,
         lastName:      customer.lastName ?? "",
         email:         customer.email ?? "",
@@ -1008,7 +1021,7 @@ export async function onPaymentIntentSucceeded(pi: import("stripe").Stripe.Payme
       trainerName:   meta.cohortTrainer ?? "",
       mode:          mode as "onsite" | "live",
       platform:      meta.cohortPlatform || (mode === "onsite" ? "استوديو كاسيت" : "Google Meet"),
-      totalJOD, paidJOD, remainingJOD,
+        totalJOD, totalUSD, paidJOD, remainingJOD,
       plan:          plan as "full" | "deposit",
       chargedUSD:    chargedUsd,
       customerEmail: meta.email || null,
