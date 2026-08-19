@@ -1,6 +1,6 @@
 /** Section 6 — أكواد الخصم. Staff create (consultant: bounded policy); admin toggles/deletes any. */
 import { useEffect, useState } from 'react';
-import { Plus, Trash2, Copy, RefreshCw } from 'lucide-react';
+import { Plus, Trash2, Copy, RefreshCw, Pencil } from 'lucide-react';
 import { api, COURSE_NAMES, fmtDate } from '../api';
 import { Modal, Field, StatusBadge, UsageBar, ConfirmDialog, TableCard, useToast } from '../components';
 import { useAdminAuth } from '../context';
@@ -21,6 +21,9 @@ export default function Discounts() {
   const [form, setForm] = useState(emptyForm);
   const [err, setErr] = useState('');
   const [deleting, setDeleting] = useState<DiscountCode | null>(null);
+  const [editing, setEditing] = useState<DiscountCode | null>(null);
+  const [editForm, setEditForm] = useState(emptyForm);
+  const [editErr, setEditErr] = useState('');
 
   const load = () => {
     setLoading(true);
@@ -59,6 +62,41 @@ export default function Discounts() {
       setCodes(prev => prev.map(x => x.id === c.id ? { ...x, isActive: !c.isActive } : x));
       toast(c.isActive ? 'عُطّل الكود' : 'فُعّل الكود');
     } catch (e: any) { toast(e.message, 'err'); }
+  }
+
+  function openEdit(c: DiscountCode) {
+    setEditForm({
+      code: c.code,
+      type: c.type as 'percent' | 'fixed',
+      value: String(Number(c.value)),
+      maxUses: c.maxUses != null ? String(c.maxUses) : '',
+      appliesTo: c.appliesTo,
+      expiresAt: c.expiresAt ? new Date(c.expiresAt).toISOString().slice(0, 10) : '',
+    });
+    setEditErr('');
+    setEditing(c);
+  }
+
+  async function saveEdit() {
+    if (!editing) return;
+    if (!editForm.value) { setEditErr('القيمة مطلوبة'); return; }
+    const body: Record<string, unknown> = {
+      maxUses: editForm.maxUses ? Number(editForm.maxUses) : null,
+      expiresAt: editForm.expiresAt || null,
+    };
+    // value/type/appliesTo are admin-only server-side — only send them for admins,
+    // matching the create form's isAdmin gating.
+    if (isAdmin) {
+      body.value = Number(editForm.value);
+      body.type = editForm.type;
+      body.appliesTo = editForm.appliesTo;
+    }
+    try {
+      await api(`/admin/discount-codes/${editing.id}`, { method: 'PUT', body });
+      toast('حُدّث الكود');
+      setEditing(null);
+      load();
+    } catch (e: any) { setEditErr(e.message); }
   }
 
   async function doDelete() {
@@ -110,6 +148,9 @@ export default function Discounts() {
                         {c.isActive ? 'تعطيل' : 'تفعيل'}
                       </button>
                     )}
+                    {canEdit(c) && (
+                      <button className="ka-icon-btn" title="تعديل بيانات الكود" onClick={() => openEdit(c)}><Pencil size={14} /></button>
+                    )}
                     {isAdmin && c.usedCount === 0 && (
                       <button className="ka-icon-btn" title="حذف" onClick={() => setDeleting(c)}><Trash2 size={14} /></button>
                     )}
@@ -159,6 +200,39 @@ export default function Discounts() {
           <div className="ka-form-actions">
             <button className="ka-btn ka-btn--violet" style={{ flex: 1, justifyContent: 'center' }} onClick={create}>✓ إنشاء الكود</button>
             <button className="ka-btn ka-btn--ghost" onClick={() => setModal(false)}>إلغاء</button>
+          </div>
+        </Modal>
+      )}
+
+      {editing && (
+        <Modal title={`تعديل الكود: ${editing.code}`} sub={editing.usedCount > 0 ? `استُخدم هذا الكود ${editing.usedCount} مرّة — التعديل لا يؤثر على الطلبات السابقة.` : undefined} onClose={() => setEditing(null)}>
+          {editErr && <div className="ka-form-err">{editErr}</div>}
+          <div className="ka-grid2">
+            <Field label="النوع" hint={!isAdmin ? 'تعديل النوع للمدير فقط' : undefined}>
+              <select value={editForm.type} onChange={e => setEditForm(f => ({ ...f, type: e.target.value as any }))} disabled={!isAdmin}>
+                <option value="percent">نسبة مئوية %</option>
+                <option value="fixed">مبلغ ثابت (دينار)</option>
+              </select>
+            </Field>
+            <Field label="القيمة" hint={!isAdmin ? 'تعديل القيمة للمدير فقط' : undefined}>
+              <input type="number" value={editForm.value} onChange={e => setEditForm(f => ({ ...f, value: e.target.value }))} disabled={!isAdmin} />
+            </Field>
+          </div>
+          <Field label="الحدّ الأقصى للاستخدام" hint={!isAdmin ? 'حتى 100 استخدام' : 'اتركه فارغاً لعدم التحديد'}>
+            <input type="number" value={editForm.maxUses} onChange={e => setEditForm(f => ({ ...f, maxUses: e.target.value }))} placeholder="∞" />
+          </Field>
+          <Field label="ينطبق على الدورات" hint={!isAdmin ? 'تعديل الدورة للمدير فقط' : undefined}>
+            <select value={editForm.appliesTo} onChange={e => setEditForm(f => ({ ...f, appliesTo: e.target.value }))} disabled={!isAdmin}>
+              <option value="all">كلّ الدورات</option>
+              {courses.map(c => <option key={c.slug} value={c.slug}>{c.nameAr}</option>)}
+            </select>
+          </Field>
+          <Field label="تاريخ الانتهاء">
+            <input type="date" value={editForm.expiresAt} onChange={e => setEditForm(f => ({ ...f, expiresAt: e.target.value }))} />
+          </Field>
+          <div className="ka-form-actions">
+            <button className="ka-btn ka-btn--violet" style={{ flex: 1, justifyContent: 'center' }} onClick={saveEdit}>✓ حفظ التعديلات</button>
+            <button className="ka-btn ka-btn--ghost" onClick={() => setEditing(null)}>إلغاء</button>
           </div>
         </Modal>
       )}

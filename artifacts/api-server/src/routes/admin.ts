@@ -373,22 +373,62 @@ router.post("/orders/:id/resend-email", requireAdmin, async (req, res) => {
 });
 
 // ── POST /admin/orders/:id/status ─────────────────────────
-// Cancel/update order status — no DELETE ever
+// Cancel/update order status — no DELETE ever.
+// Cancelling/refunding releases the order's cohort seat (enrolled - 1);
+// reversing a cancellation/refund back to an active status re-reserves it.
+const RELEASES_SEAT = new Set(["cancelled", "refunded"]);
 router.post("/orders/:id/status", requireAdmin, async (req, res) => {
+  const { status, notes } = req.body as { status: string; notes?: string };
+  const allowed = ["cancelled", "refunded", "completed", "partially_paid", "deposit_paid"];
+  if (!allowed.includes(status)) {
+    res.status(400).json({ error: "حالة غير صالحة" });
+    return;
+  }
+
+  const client = await pool.connect();
   try {
-    const { status, notes } = req.body as { status: string; notes?: string };
-    const allowed = ["cancelled", "refunded", "completed", "partially_paid", "deposit_paid"];
-    if (!allowed.includes(status)) {
-      res.status(400).json({ error: "حالة غير صالحة" });
+    await client.query("BEGIN");
+
+    const { rows } = await client.query(
+      "SELECT status, cohort_id FROM orders WHERE id = $1 FOR UPDATE",
+      [req.params.id],
+    );
+    if (!rows.length) {
+      await client.query("ROLLBACK");
+      res.status(404).json({ error: "الطلب غير موجود" });
       return;
     }
-    await db
-      .update(ordersTable)
-      .set({ status, notes: notes ?? undefined, updatedAt: new Date() })
-      .where(eq(ordersTable.id, String(req.params.id)));
+    const { status: oldStatus, cohort_id: cohortId } = rows[0];
+
+    await client.query(
+      "UPDATE orders SET status = $1, notes = COALESCE($2, notes), updated_at = NOW() WHERE id = $3",
+      [status, notes ?? null, req.params.id],
+    );
+
+    const wasReleased = RELEASES_SEAT.has(oldStatus);
+    const isReleased  = RELEASES_SEAT.has(status);
+    if (!wasReleased && isReleased) {
+      // Cancelling/refunding a still-active order — free its seat.
+      await client.query(
+        "UPDATE cohort_seats SET enrolled = GREATEST(enrolled - 1, 0), updated_at = NOW() WHERE cohort_id = $1",
+        [cohortId],
+      );
+    } else if (wasReleased && !isReleased) {
+      // Reversing a prior cancellation/refund — re-reserve the seat.
+      await client.query(
+        "UPDATE cohort_seats SET enrolled = enrolled + 1, updated_at = NOW() WHERE cohort_id = $1",
+        [cohortId],
+      );
+    }
+
+    await client.query("COMMIT");
     res.json({ ok: true });
   } catch (err) {
+    await client.query("ROLLBACK");
+    console.error("admin/order-status error", err);
     res.status(500).json({ error: "خطأ في الخادم" });
+  } finally {
+    client.release();
   }
 });
 
@@ -404,21 +444,40 @@ router.get("/cohorts", requireStaff, async (req, res) => {
 });
 
 // ── POST /admin/cohorts/:id/seats ─────────────────────────
-// Manual seat adjustment (walk-in registrations etc.)
+// Manual seat adjustment (walk-in registrations, correcting enrolled count, etc.)
 router.post("/cohorts/:id/seats", requireAdmin, async (req, res) => {
   try {
     const { enrolled, capacity, isOpen } = req.body as {
       enrolled?: number; capacity?: number; isOpen?: boolean;
     };
+
+    const isNonNegInt = (n: unknown): n is number =>
+      typeof n === "number" && Number.isInteger(n) && n >= 0;
+
+    if (enrolled != null && !isNonNegInt(enrolled)) {
+      res.status(400).json({ error: "عدد المسجّلين يجب أن يكون رقماً صحيحاً غير سالب" });
+      return;
+    }
+    if (capacity != null && !isNonNegInt(capacity)) {
+      res.status(400).json({ error: "السعة يجب أن تكون رقماً صحيحاً غير سالب" });
+      return;
+    }
+
     const updates: Record<string, any> = { updatedAt: new Date() };
     if (enrolled  != null) updates.enrolled  = enrolled;
     if (capacity  != null) updates.capacity  = capacity;
     if (isOpen    != null) updates.isOpen    = isOpen;
 
-    await db
+    const updated = await db
       .update(cohortSeatsTable)
       .set(updates)
-      .where(eq(cohortSeatsTable.cohortId, parseInt(String(req.params.id), 10)));
+      .where(eq(cohortSeatsTable.cohortId, parseInt(String(req.params.id), 10)))
+      .returning({ cohortId: cohortSeatsTable.cohortId });
+
+    if (!updated.length) {
+      res.status(404).json({ error: "الدفعة غير موجودة" });
+      return;
+    }
 
     res.json({ ok: true });
   } catch (err) {

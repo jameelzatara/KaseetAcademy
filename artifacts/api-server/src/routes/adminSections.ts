@@ -11,10 +11,11 @@
  */
 import { Router } from "express";
 import bcrypt from "bcryptjs";
-import { db, pool, consultantAccountsTable, discountCodesTable, coursesTable, voiceEvaluationsTable, instagramLeadsTable } from "@workspace/db";
+import { db, pool, consultantAccountsTable, discountCodesTable, coursesTable, ordersTable, voiceEvaluationsTable, instagramLeadsTable } from "@workspace/db";
 import { eq, desc, asc } from "drizzle-orm";
 import { logger } from "../lib/logger.js";
 import { requireAdmin, requireStaff } from "../middlewares/adminAuth.js";
+import { COHORT_CATALOG } from "../lib/pricing.js";
 
 const router = Router();
 
@@ -403,7 +404,26 @@ router.put("/courses/:slug", requireStaff, async (req, res) => {
 
 router.delete("/courses/:slug", requireAdmin, async (req, res) => {
   try {
-    await db.delete(coursesTable).where(eq(coursesTable.slug, String(req.params.slug)));
+    const slug = String(req.params.slug);
+
+    const catalog = COHORT_CATALOG[slug];
+    const hasCohorts = Boolean(catalog?.onsite?.length) || Boolean(catalog?.live?.length);
+    if (hasCohorts) {
+      res.status(409).json({ error: "لا يمكن حذف الدورة — مرتبطة بكوهورتات نشطة. استخدم الأرشفة بدلاً من الحذف." });
+      return;
+    }
+
+    const [existingOrder] = await db
+      .select({ id: ordersTable.id })
+      .from(ordersTable)
+      .where(eq(ordersTable.courseSlug, slug))
+      .limit(1);
+    if (existingOrder) {
+      res.status(409).json({ error: "لا يمكن حذف الدورة — توجد طلبات تسجيل مرتبطة بها. استخدم الأرشفة بدلاً من الحذف." });
+      return;
+    }
+
+    await db.delete(coursesTable).where(eq(coursesTable.slug, slug));
     res.json({ ok: true });
   } catch {
     res.status(500).json({ error: "خطأ في الخادم" });
