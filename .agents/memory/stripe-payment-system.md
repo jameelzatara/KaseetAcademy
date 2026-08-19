@@ -49,5 +49,13 @@ Checkout always reads the Stripe secret key from the active Replit Stripe connec
 
 **How to apply:** Fetch connection credentials uncached, prefer its browser key, and otherwise use the environment fallback only when it has the same `test`/`live` mode as the secret. Reject a mismatch rather than returning a broken Stripe Elements configuration. Validate a `pk_test_` browser flow before allowing the separately configured live deployment.
 
+## Managed webhook lifecycle
+
+Managed Stripe webhook setup must execute only when the API runs in production. Development may apply database migrations but must not invoke endpoint management.
+
+**Why:** The Stripe sync library removes managed endpoints it sees as orphaned. A development restart can otherwise identify the production endpoint as stale, delete it, and register a development URL in its place.
+
+**How to apply:** Keep `NODE_ENV=production` explicit in deployment configuration. Before a real purchase, confirm the published endpoint is registered in Stripe and points to the final published domain.
+
 ## Stripe Appearance (PaymentElement)
 Night theme, primary color #FFC107 (gold), background #1A2535, Tajawal font, locale `ar`, border radius 12px.

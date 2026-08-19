@@ -8,6 +8,7 @@
 - [Course page layout](course-page-layout.md) — all 6 pages use shared CoursePageLayout; cohorts.json uses mode:'live' (not 'online'); thin wrappers only
 - [Masterclass template](masterclass-template.md) — 3 masterclass pages unified under MasterclassLayout; Audience+Method+Outcomes sections conditional; elam CTA→WhatsApp
 - [Stripe Payment System](stripe-payment-system.md) — full checkout system; needs Stripe API keys entered in Replit Integrations to activate
+- [Stripe webhook lifecycle](stripe-payment-system.md) — managed webhook cleanup must run only in production; development must never manage real endpoints
 - [Email service](email-service.md) — Brevo REST API (not Resend/Gmail); BREVO_API_KEY + SENDER_EMAIL=notify@kaseet.com; generateOrderId now async DB sequence
 - [Icon system](icon-system.md) — all icons are lucide-react SVG components; no other icon library used anywhere
 - [Launch 13 items](launch-13-items.md) — all 13 items complete; prerender.mjs ✅ done; blog content ✅ from real PDFs; nav links ✅ in QuickMenu+SiteFooter
