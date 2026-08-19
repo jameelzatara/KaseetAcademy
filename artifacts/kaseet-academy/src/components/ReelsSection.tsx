@@ -192,7 +192,7 @@ export default function ReelsSection({
         </button>
 
         {/* Stage — overflow visible so adjacent cards peek 40px */}
-        <div className="reels-stage" style={{ position: 'relative', overflow: 'visible', height: CARD_H + 20 }}>
+        <div style={{ position: 'relative', overflow: 'visible', height: CARD_H + 20 }}>
           {activeUrls.map((url, i) => {
             const off      = getOffset(i, cur, n);
             const cstyle   = cardStyle(off);

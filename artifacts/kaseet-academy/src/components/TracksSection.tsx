@@ -77,7 +77,7 @@ function TrackCard({ track }: { track: Track }) {
     background:           hov ? 'rgba(255,255,255,0.055)' : 'rgba(255,255,255,0.035)',
     backdropFilter:       'blur(16px)',
     WebkitBackdropFilter: 'blur(16px)',
-    border:     hov ? '1px solid rgba(255,255,255,0.10)' : '1px solid rgba(255,255,255,0.06)',
+    border:     hov ? '1px solid rgba(255,193,7,0.38)' : '1px solid rgba(255,193,7,0.14)',
     boxShadow:  hov ? '0 20px 45px rgba(0,0,0,0.40)' : '0 10px 30px rgba(0,0,0,0.25)',
     transform:  hov ? 'translateY(-6px)' : 'translateY(0)',
     transition: 'all 0.28s ease',
@@ -182,7 +182,7 @@ function TrackCard({ track }: { track: Track }) {
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'flex-start',
           gap: 6, paddingTop: 8,
-          borderTop: '1px solid rgba(255,255,255,0.07)', marginTop: 'auto',
+          borderTop: '1px solid rgba(255,193,7,0.12)', marginTop: 'auto',
         }}>
           <span style={{
             fontFamily: 'Tajawal, sans-serif', fontWeight: 600, fontSize: 14,
