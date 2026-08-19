@@ -77,10 +77,12 @@ function TrackCard({ track }: { track: Track }) {
     background:           hov ? 'rgba(255,255,255,0.055)' : 'rgba(255,255,255,0.035)',
     backdropFilter:       'blur(16px)',
     WebkitBackdropFilter: 'blur(16px)',
-    border:     hov ? '1px solid rgba(255,193,7,0.38)' : '1px solid rgba(255,193,7,0.14)',
+    // Keep the border transparent in both states. Changing border color on
+    // hover caused a bright flickering outline while the pointer crossed cards.
+    border:     '1px solid transparent',
     boxShadow:  hov ? '0 20px 45px rgba(0,0,0,0.40)' : '0 10px 30px rgba(0,0,0,0.25)',
     transform:  hov ? 'translateY(-6px)' : 'translateY(0)',
-    transition: 'all 0.28s ease',
+    transition: 'transform 0.28s ease, background 0.28s ease, box-shadow 0.28s ease',
     display:    'flex',
     flexDirection: 'column',
     direction:  'rtl',
