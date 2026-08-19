@@ -95,6 +95,10 @@ CREATE TABLE IF NOT EXISTS discount_reservations (
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS consultant_id INTEGER;
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS discount_code TEXT;
 ALTER TABLE courses ADD COLUMN IF NOT EXISTS price_locked BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE courses ADD COLUMN IF NOT EXISTS image_url TEXT;
+ALTER TABLE courses ADD COLUMN IF NOT EXISTS short_description TEXT;
+ALTER TABLE courses ADD COLUMN IF NOT EXISTS display_order INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE courses ADD COLUMN IF NOT EXISTS is_featured BOOLEAN NOT NULL DEFAULT false;
 `;
 
 export async function ensureAdminSchema(): Promise<void> {

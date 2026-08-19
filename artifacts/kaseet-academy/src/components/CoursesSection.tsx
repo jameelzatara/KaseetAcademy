@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Clock, CheckCircle2, ArrowLeft, Star, MapPin, Wifi } from 'lucide-react';
 import { Link } from 'wouter';
 
@@ -25,9 +25,67 @@ function waLink(title: string) {
   return `https://wa.me/${WA_NUM}?text=${encodeURIComponent(`السلام عليكم، أرغب في التسجيل في دورة: ${title}`)}`;
 }
 
+/* ── Live course data from the DB (GET /api/courses) ─────── */
+// These courses have their own dedicated section (TracksSection) — never
+// show them again here even if they're active in the courses table.
+const EXCLUDED_FROM_GRID = new Set(['masar-soti', 'masar-khataba', 'masar-elami']);
 
-/* ── Featured card data ─────────────────────────────────── */
+interface ApiCourse {
+  slug: string;
+  nameAr: string;
+  level: string;
+  imageUrl: string | null;
+  shortDescription: string | null;
+  isFeatured: boolean;
+  displayOrder: number;
+  onsiteEnabled: boolean;
+  onsitePriceJOD: number | null;
+  onsiteHours: number | null;
+  onsiteSessions: number | null;
+  liveEnabled: boolean;
+  livePriceUSD: number | null;
+  liveHours: number | null;
+  liveSessions: number | null;
+}
+
+function useLiveCourses() {
+  const [courses, setCourses] = useState<ApiCourse[]>([]);
+  useEffect(() => {
+    fetch('/api/courses')
+      .then(r => (r.ok ? r.json() : null))
+      .then((d: { courses: ApiCourse[] } | null) => { if (d) setCourses(d.courses); })
+      .catch(() => {/* API unavailable — fall back to static content below */});
+  }, []);
+  return courses;
+}
+
+/** "حضوري في عمّان · ومباشر تفاعلي (Online LIVE)" style pill, computed from mode availability. */
+function modeBadge(c: Pick<ApiCourse, 'onsiteEnabled' | 'liveEnabled'>, joined: boolean): string {
+  if (c.onsiteEnabled && c.liveEnabled) return joined ? 'حضوري في عمّان · ومباشر تفاعلي (Online LIVE)' : 'حضوري ومباشر تفاعلي (Online LIVE)';
+  if (c.liveEnabled) return 'مباشر تفاعلي (Online LIVE)';
+  if (c.onsiteEnabled) return 'حضوري في عمّان';
+  return '';
+}
+
+/** "من 218 د.أ" / "$150" / "218 د.أ · $150" style price line for grid cards. */
+function priceLine(c: ApiCourse): string {
+  const parts: string[] = [];
+  if (c.onsiteEnabled && c.onsitePriceJOD != null) parts.push(`${c.onsitePriceJOD} د.أ`);
+  if (c.liveEnabled && c.livePriceUSD != null) parts.push(`$${c.livePriceUSD}`);
+  return parts.join(' · ');
+}
+
+/** "16 ساعة / 8 جلسات" — prefers onsite hours, falls back to live. */
+function durationLine(c: ApiCourse): string {
+  const hours = c.onsiteEnabled ? c.onsiteHours : c.liveHours;
+  const sessions = c.onsiteEnabled ? c.onsiteSessions : c.liveSessions;
+  if (hours == null) return '';
+  return sessions != null ? `${hours} ساعة / ${sessions} جلسات` : `${hours} ساعة`;
+}
+
+/* ── Featured card data (static fallback until the live fetch resolves) ── */
 const FEATURED = {
+  slug:        'voiceover',
   searchData:  'أساسيات التعليق والأداء الصوتي يسار عبده حضوري عمان المرحلة التأسيسية voice over',
   type:        'حضوري في عمّان (استوديو كاسيت) · ومباشر تفاعلي (Online LIVE)',
   level:       'المرحلة التأسيسية',
@@ -39,15 +97,15 @@ const FEATURED = {
     { photo: instructorOmar,  name: 'عمر درابكة' },
   ],
   trainerLine: 'يسار عبده · رنا العزام · عمر درابكة',
-  priceA: 'JD 218', labelA: 'حضوري',
-  priceB: '$150',   labelB: 'مباشر تفاعلي',
-  duration: '16 ساعة (8 لقاءات) حضوري · 12 ساعة (6 لقاءات) مباشر تفاعلي (Online LIVE)',
+  onsiteDuration: '16 ساعة (8 لقاءات)',
+  liveDuration:   '12 ساعة (6 لقاءات)',
   cover:   coverYasar,
   imgPos:  'center 25%',
 };
 
 /* ── Grid card type ─────────────────────────────────────── */
 interface GCard {
+  slug:       string;
   title:      string;
   badge:      string;
   cover:      string;
@@ -62,6 +120,7 @@ interface GCard {
 
 const GRID: GCard[] = [
   {
+    slug:     'voiceover',
     title:    'التعليق والأداء الصوتي',
     badge:    'مباشر تفاعلي (Online LIVE)',
     cover:    coverOmar,
@@ -78,6 +137,7 @@ const GRID: GCard[] = [
     route: '/courses/voiceover-live',
   },
   {
+    slug:     'presenter',
     title:    'الدورة المكثفة: المذيع المحترف ومهارات الإعلام الرقمي',
     badge:    'حضوري في عمّان',
     cover:    coverPresenter,
@@ -94,6 +154,7 @@ const GRID: GCard[] = [
     route: '/courses/presenter',
   },
   {
+    slug:     'arabic-language',
     title:    'تمكين اللغة العربية وفنون التحرير اللغوي',
     badge:    'مباشر تفاعلي (Online LIVE)',
     cover:    coverRana,
@@ -110,6 +171,7 @@ const GRID: GCard[] = [
     route: '/courses/arabic-language',
   },
   {
+    slug:     'public-speaking',
     title:    'فن الخطابة والإلقاء الجماهيري المؤثر',
     badge:    'حضوري ومباشر تفاعلي (Online LIVE)',
     cover:    coverSohaib,
@@ -333,6 +395,57 @@ function GridCard({ card, hidden }: { card: GCard; hidden: boolean }) {
 /* ── Main section export ─────────────────────────────────── */
 export default function CoursesSection() {
   const [featHov, setFeatHov] = useState(false);
+  const liveCourses = useLiveCourses();
+  const liveBySlug = new Map(liveCourses.map(c => [c.slug, c]));
+
+  // Featured hero: whichever active course has isFeatured=true (lowest
+  // displayOrder wins if more than one); falls back to the static default
+  // (voiceover) until the API responds or if nothing is flagged featured.
+  const eligible = liveCourses.filter(c => !EXCLUDED_FROM_GRID.has(c.slug));
+  const liveFeaturedSlug = eligible
+    .filter(c => c.isFeatured)
+    .sort((a, b) => a.displayOrder - b.displayOrder)[0]?.slug ?? FEATURED.slug;
+  const liveFeatured = liveBySlug.get(liveFeaturedSlug);
+
+  const featured = liveFeatured ? {
+    ...FEATURED,
+    slug:  liveFeatured.slug,
+    title: liveFeatured.nameAr,
+    desc:  liveFeatured.shortDescription ?? FEATURED.desc,
+    type:  modeBadge(liveFeatured, true) || FEATURED.type,
+    cover: liveFeatured.imageUrl ?? FEATURED.cover,
+    onsiteEnabled:  liveFeatured.onsiteEnabled,
+    liveEnabled:    liveFeatured.liveEnabled,
+    onsitePrice:    liveFeatured.onsitePriceJOD,
+    livePrice:      liveFeatured.livePriceUSD,
+    onsiteDuration: durationLine({ ...liveFeatured, onsiteEnabled: true, liveEnabled: false }) || FEATURED.onsiteDuration,
+    liveDuration:   durationLine({ ...liveFeatured, onsiteEnabled: false, liveEnabled: true }) || FEATURED.liveDuration,
+  } : { ...FEATURED, onsiteEnabled: true, liveEnabled: true, onsitePrice: 218, livePrice: 150 };
+
+  // Grid: all active, non-excluded courses (the hero's course included, same
+  // as the original static design), ordered by admin-set display order.
+  // Deliberately NOT excluding the featured slug — doing so caused a grid
+  // card to disappear the instant the live fetch resolved (layout shift).
+  const gridSlugs = liveCourses.length
+    ? eligible.slice().sort((a, b) => a.displayOrder - b.displayOrder).map(c => c.slug)
+    : GRID.map(c => c.slug);
+  const grid: GCard[] = gridSlugs.map(slug => {
+    const base = GRID.find(c => c.slug === slug);
+    const live = liveBySlug.get(slug);
+    if (!live) return base ?? null;
+    return {
+      ...(base ?? {
+        slug, imgPos: 'center', instructor: { name: '', role: '', photo: '' },
+        searchData: live.nameAr, outcomes: [],
+      }),
+      title:    live.nameAr,
+      cover:    live.imageUrl ?? base?.cover ?? '',
+      badge:    modeBadge(live, false) || base?.badge || '',
+      price:    priceLine(live) || base?.price || '',
+      duration: durationLine(live) || base?.duration || '',
+      route:    `/courses/${live.slug}`,
+    };
+  }).filter((c): c is GCard => c !== null);
 
   return (
     <section id="courses" className="sec sec--courses section-block relative overflow-hidden">
@@ -420,12 +533,12 @@ export default function CoursesSection() {
               border: '1px solid rgba(255,193,7,0.35)',
               borderRadius: 999, padding: '7px 15px',
             }}>
-              {FEATURED.type}
+              {featured.type}
             </span>
 
             {/* level */}
             <span style={{ fontFamily: F, fontWeight: 700, fontSize: 13, color: 'rgba(252,251,251,0.60)' }}>
-              {FEATURED.level}
+              {featured.level}
             </span>
 
             {/* title */}
@@ -434,7 +547,7 @@ export default function CoursesSection() {
               fontSize: 'clamp(22px,3vw,34px)',
               color: OFF, lineHeight: 1.3, margin: 0,
             }}>
-              {FEATURED.title}
+              {featured.title}
             </h3>
 
             {/* description */}
@@ -443,13 +556,13 @@ export default function CoursesSection() {
               fontSize: 'clamp(13.5px,1.5vw,16px)',
               color: 'rgba(252,251,251,0.74)', lineHeight: 1.9, margin: 0,
             }}>
-              {FEATURED.desc}
+              {featured.desc}
             </p>
 
             {/* trainer row — overlapping avatars */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 11, marginTop: 2 }}>
               <div style={{ display: 'inline-flex', alignItems: 'center', flexShrink: 0 }}>
-                {FEATURED.trainers.map((t, i) => (
+                {featured.trainers.map((t, i) => (
                   <img
                     key={i}
                     src={t.photo}
@@ -470,7 +583,7 @@ export default function CoursesSection() {
                   بإشراف نخبة من أفضل المدربين
                 </b>
                 <span style={{ fontFamily: F, fontSize: 12.5, color: 'rgba(252,251,251,0.60)' }}>
-                  {FEATURED.trainerLine}
+                  {featured.trainerLine}
                 </span>
               </div>
             </div>
@@ -485,46 +598,52 @@ export default function CoursesSection() {
               {/* dual-mode display */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {/* حضوري */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-                  <span style={{
-                    display: 'inline-flex', alignItems: 'center', gap: 5,
-                    fontFamily: F, fontWeight: 700, fontSize: 12.5,
-                    color: 'rgba(252,251,251,0.70)',
-                  }}>
-                    <MapPin size={14} color={GOLD} />
-                    حضوري
-                  </span>
-                  <span style={{ fontFamily: F, fontSize: 12, color: 'rgba(252,251,251,0.50)' }}>
-                    16 ساعة · 8 لقاءات
-                  </span>
-                  <span style={{ fontFamily: FP, fontSize: 11.5, color: 'rgba(252,251,251,0.35)', textDecoration: 'line-through' }}>260 د.أ</span>
-                  <b style={{ fontFamily: FP, fontWeight: 800, fontSize: 15, color: GOLD }}>
-                    218 <small style={{ fontSize: 11, fontFamily: F }}>د.أ</small>
-                  </b>
-                </div>
+                {featured.onsiteEnabled && featured.onsitePrice != null && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                    <span style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 5,
+                      fontFamily: F, fontWeight: 700, fontSize: 12.5,
+                      color: 'rgba(252,251,251,0.70)',
+                    }}>
+                      <MapPin size={14} color={GOLD} />
+                      حضوري
+                    </span>
+                    {featured.onsiteDuration && (
+                      <span style={{ fontFamily: F, fontSize: 12, color: 'rgba(252,251,251,0.50)' }}>
+                        {featured.onsiteDuration}
+                      </span>
+                    )}
+                    <b style={{ fontFamily: FP, fontWeight: 800, fontSize: 15, color: GOLD }}>
+                      {featured.onsitePrice} <small style={{ fontSize: 11, fontFamily: F }}>د.أ</small>
+                    </b>
+                  </div>
+                )}
                 {/* مباشر تفاعلي */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-                  <span style={{
-                    display: 'inline-flex', alignItems: 'center', gap: 5,
-                    fontFamily: F, fontWeight: 700, fontSize: 12.5,
-                    color: 'rgba(252,251,251,0.70)',
-                  }}>
-                    <Wifi size={14} color={GOLD} />
-                    مباشر تفاعلي (Online LIVE)
-                  </span>
-                  <span style={{ fontFamily: F, fontSize: 12, color: 'rgba(252,251,251,0.50)' }}>
-                    12 ساعة · 6 لقاءات
-                  </span>
-                  <span style={{ fontFamily: FP, fontSize: 11.5, color: 'rgba(252,251,251,0.35)', textDecoration: 'line-through' }}>200$</span>
-                  <b style={{ fontFamily: FP, fontWeight: 800, fontSize: 15, color: GOLD }}>
-                    150 <small style={{ fontSize: 11, fontFamily: F }}>$</small>
-                  </b>
-                </div>
+                {featured.liveEnabled && featured.livePrice != null && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                    <span style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 5,
+                      fontFamily: F, fontWeight: 700, fontSize: 12.5,
+                      color: 'rgba(252,251,251,0.70)',
+                    }}>
+                      <Wifi size={14} color={GOLD} />
+                      مباشر تفاعلي (Online LIVE)
+                    </span>
+                    {featured.liveDuration && (
+                      <span style={{ fontFamily: F, fontSize: 12, color: 'rgba(252,251,251,0.50)' }}>
+                        {featured.liveDuration}
+                      </span>
+                    )}
+                    <b style={{ fontFamily: FP, fontWeight: 800, fontSize: 15, color: GOLD }}>
+                      {featured.livePrice} <small style={{ fontSize: 11, fontFamily: F }}>$</small>
+                    </b>
+                  </div>
+                )}
               </div>
 
               {/* CTA */}
               <Link
-                href="/courses/voiceover"
+                href={`/courses/${featured.slug}`}
                 style={{
                   background: GOLD, color: NAVY,
                   borderRadius: 11, padding: '12px 30px',
@@ -545,12 +664,12 @@ export default function CoursesSection() {
           {/* ── image column (left in RTL) ── */}
           <div style={{ position: 'relative', minHeight: 330 }} className="ch-media-col">
             <img
-              src={FEATURED.cover}
-              alt={FEATURED.title}
+              src={featured.cover}
+              alt={featured.title}
               style={{
                 position: 'absolute', inset: 0,
                 width: '100%', height: '100%',
-                objectFit: 'cover', objectPosition: FEATURED.imgPos ?? 'center top',
+                objectFit: 'cover', objectPosition: featured.imgPos ?? 'center top',
                 display: 'block',
               }}
             />
@@ -577,7 +696,7 @@ export default function CoursesSection() {
           className="courses-grid-4"
           style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 18 }}
         >
-          {GRID.map((card, i) => (
+          {grid.map((card, i) => (
             <GridCard
               key={i}
               card={card}

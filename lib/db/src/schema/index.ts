@@ -188,6 +188,11 @@ export const coursesTable = pgTable("courses", {
   liveCapacity:   integer("live_capacity"),
   /** When true, consultant staff may NOT change prices (admin-only override) */
   priceLocked:   boolean("price_locked").notNull().default(false),
+  // ── Homepage marketing display ────────────────────────────
+  imageUrl:         text("image_url"),                              // cover image shown on homepage cards
+  shortDescription: text("short_description"),                      // marketing blurb for homepage cards
+  displayOrder:     integer("display_order").notNull().default(0),  // lower shows first
+  isFeatured:       boolean("is_featured").notNull().default(false),// shows in the "featured" spot
   createdAt:     timestamp("created_at").defaultNow().notNull(),
   updatedAt:     timestamp("updated_at").defaultNow().notNull(),
 });
