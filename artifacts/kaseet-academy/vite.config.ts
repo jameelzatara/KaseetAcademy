@@ -20,7 +20,8 @@ export default defineConfig({
   base: basePath,
   plugins: [
     react(),
-    tailwindcss(),
+    // Clerk's Tailwind v4 layers must retain their source order in production.
+    tailwindcss({ optimize: false }),
     ...(process.env.NODE_ENV !== 'production' ? [runtimeErrorOverlay()] : []),
     ...(process.env.NODE_ENV !== 'production' &&
     process.env.REPL_ID !== undefined

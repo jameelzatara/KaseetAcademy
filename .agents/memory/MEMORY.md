@@ -1,6 +1,6 @@
 - [Homepage Brief 2026](homepage-brief-2026.md) — full implementation: brand facts, routes, terminology, architecture decisions for stats/currency/legal/FAQ
 - [Artifact previewPath fix](artifact-previewpath-fix.md) — previewPath="/" + BASE_PATH="/" breaks Wouter routing; must match actual /kaseet-academy/ proxy prefix
-- [Auth System](auth-system.md) — student auth DELETED; only admin auth remains (routes/admin.ts); AuthModal/AuthContext/routes/auth.ts gone
+- [Auth System](auth-system.md) — public visitor accounts use Clerk; no student dashboard; admin session auth stays isolated
 - [Assets alias path](assets-alias.md) — `@assets` in Vite resolves to `attached_assets/` (root), NOT `src/assets/`; convert/copy files there before importing
 - [Course page structure](course-page-structure.md) — light #F5F4F0 sections + dark #0D0B14 registration; neon blob CSS classes ka-blob-1/2/3 in index.css
 - [ReelsSection props](reels-section-props.md) — ReelsSection accepts badge/heading/description props with defaults matching the homepage; wire new values from caller

@@ -3,9 +3,16 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import pinoHttp from "pino-http";
+import { clerkMiddleware } from "@clerk/express";
+import { publishableKeyFromHost } from "@clerk/shared/keys";
 import { verifyStripeWebhook, processWebhookEvent } from "./routes/checkout.js";
 import router from "./routes/index.js";
 import { logger } from "./lib/logger.js";
+import {
+  CLERK_PROXY_PATH,
+  clerkProxyMiddleware,
+  getClerkProxyHost,
+} from "./middlewares/clerkProxyMiddleware.js";
 
 const app: Express = express();
 
@@ -53,6 +60,9 @@ app.use(
     credentials: true,
   }),
 );
+
+// Clerk's browser API must be proxied before any body parser consumes its stream.
+app.use(CLERK_PROXY_PATH, clerkProxyMiddleware());
 
 // ── ⛔ Stripe webhook MUST come BEFORE express.json() ─────
 // Needs raw Buffer body for signature verification
@@ -105,6 +115,17 @@ if (!process.env.SESSION_SECRET) {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     },
   }),
+);
+
+// Student identity is owned by Clerk. Existing admin/session authentication
+// remains separate and is still used exclusively by /api/admin routes.
+app.use(
+  clerkMiddleware((req) => ({
+    publishableKey: publishableKeyFromHost(
+      getClerkProxyHost(req) ?? "",
+      process.env.CLERK_PUBLISHABLE_KEY,
+    ),
+  })),
 );
 
 // ── ⑧ ترويسات الأمان ─────────────────────────────────────

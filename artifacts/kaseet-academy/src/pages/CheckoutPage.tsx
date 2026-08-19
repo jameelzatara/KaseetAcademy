@@ -194,6 +194,12 @@ export default function CheckoutPage() {
 
   // ── Submit ────────────────────────────────────────────────
   async function handlePay() {
+    // The cohort can disappear if the page state refreshes while the form is open.
+    if (!cohort) {
+      setError('تعذر العثور على الشعبة المختارة. يرجى العودة واختيار شعبة أخرى.');
+      return;
+    }
+    const selectedCohort = cohort;
     // Ensure phone is built (in case customer was set before dialCode synced)
     const fullPhone = buildPhone(dialCode, localPhone);
     const custToSend = { ...customer, phone: fullPhone || customer.phone };
@@ -209,17 +215,17 @@ export default function CheckoutPage() {
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({
-          cohortId: cohort.id,
+          cohortId: selectedCohort.id,
           courseSlug,
           mode: modeParam,
           plan,
-          cohortCapacity: cohort.capacity,
-          cohortEnrolled: cohort.enrolled,
-          cohortStartAr: cohort.start_ar,
-          cohortDays: cohort.days,
-          cohortTimeAr: cohort.time_ar,
-          cohortTrainer: cohort.trainer,
-          cohortPlatform: cohort.platform,
+          cohortCapacity: selectedCohort.capacity,
+          cohortEnrolled: selectedCohort.enrolled,
+          cohortStartAr: selectedCohort.start_ar,
+          cohortDays: selectedCohort.days,
+          cohortTimeAr: selectedCohort.time_ar,
+          cohortTrainer: selectedCohort.trainer,
+          cohortPlatform: selectedCohort.platform,
           customer: custToSend,
         }),
       });

@@ -1,26 +1,21 @@
 ---
 name: Auth System
-description: Current authentication architecture after student auth deletion
+description: Visitor Clerk accounts and the separate admin session system
 ---
 
-## Current state (Aug 2026)
+## Current state (August 2026)
 
-**Student auth: DELETED**
-- `AuthModal.tsx` — deleted
-- `AuthContext.tsx` — deleted
-- `routes/auth.ts` — deleted (API)
-- `AuthProvider` removed from App.tsx
-- `useAuth` removed from Navbar.tsx and QuickMenu.tsx
-- `router.use(authRouter)` removed from routes/index.ts
+**Public visitor accounts: Clerk**
+- Visitors can create an account or sign in with email/password or configured OAuth providers.
+- The account flow is a compact public-site modal and returns to the homepage.
+- Accounts support future marketing/newsletter communication; they are not a course portal or student dashboard.
+- Clerk browser/API proxying is included for production custom-domain support.
 
-**Admin auth: INTACT** (keep always)
-- `routes/admin.ts` — Express routes with bcrypt + session
-- `AdminOrdersPage.tsx` — protected admin panel
-- Session config in app.ts: `kaseet.sid`, sameSite:none (required for Replit path-routing)
-- ADMIN_PASSWORD env var in Replit Secrets
+**Admin auth: separate and intact**
+- Administrative access continues to use the existing consultant/admin session system.
+- A visitor Clerk account must never grant admin or consultant access.
 
-**Why student auth was deleted:**
-It was never used by real students; consultants handle enrollment manually. Removing it simplifies the codebase and removes an attack surface.
+**Why:** Visitor identity is needed for opt-in contact and future announcements, while student enrollment and internal administration remain separate workflows. Clerk avoids managing public passwords in the project.
 
 **How to apply:**
-Never recreate student auth without explicit user request. If auth is ever needed again, prefer Clerk (see clerk-auth skill) rather than custom session auth.
+Keep the Clerk public-account experience on the public site only. Do not add a dashboard, course access, or admin privileges unless the user explicitly requests that product change.

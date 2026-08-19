@@ -1,10 +1,14 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, type ReactNode } from 'react';
+import { ClerkProvider } from '@clerk/react';
+import { publishableKeyFromHost } from '@clerk/react/internal';
+import { arSA } from '@clerk/localizations';
 import { Route, Switch, Router as WouterRouter, Redirect, useLocation } from 'wouter';
 import { CurrencyProvider } from '@/context/CurrencyContext';
 // AuthProvider removed — student auth deleted (⑤)
 import ScrollToTop from '@/components/ScrollToTop';
 import Analytics   from '@/components/Analytics';
 import Navbar from '@/components/Navbar';
+import AuthScreen from '@/components/AuthScreen';
 // Home stays eager — it's the first paint for most visitors.
 import Home from '@/pages/Home';
 
@@ -34,6 +38,46 @@ const TrainerDetailPage        = lazy(() => import('@/pages/TrainerDetailPage'))
 const BlogIndexPage            = lazy(() => import('@/pages/BlogIndexPage'));
 const BlogPostPage             = lazy(() => import('@/pages/BlogPostPage'));
 const NotFoundPage             = lazy(() => import('@/pages/not-found'));
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
+const clerkPubKey = publishableKeyFromHost(
+  window.location.hostname,
+  import.meta.env.VITE_CLERK_PUBLISHABLE_KEY,
+);
+// Development instances talk to Clerk directly. Published builds route Clerk
+// through the API artifact so the public site uses one verified origin.
+const clerkProxyUrl = import.meta.env.PROD
+  ? new URL('/api/__clerk', window.location.origin).toString()
+  : undefined;
+
+function stripBase(path: string): string {
+  return basePath && path.startsWith(basePath) ? path.slice(basePath.length) || '/' : path;
+}
+
+function ClerkShell({ children }: { children: ReactNode }) {
+  const [, setLocation] = useLocation();
+  return (
+    <ClerkProvider
+      publishableKey={clerkPubKey}
+      proxyUrl={clerkProxyUrl}
+      localization={arSA}
+      signInUrl={`${basePath}/sign-in`}
+      signUpUrl={`${basePath}/sign-up`}
+      routerPush={(to) => setLocation(stripBase(to))}
+      routerReplace={(to) => setLocation(stripBase(to), { replace: true })}
+    >
+      {children}
+    </ClerkProvider>
+  );
+}
+
+function AuthRoute({ mode }: { mode: 'sign-in' | 'sign-up' }) {
+  return (
+    <>
+      <Home />
+      <AuthScreen mode={mode} basePath={basePath} />
+    </>
+  );
+}
 
 function Router() {
   return (
@@ -41,6 +85,9 @@ function Router() {
       <ScrollToTop />
       <Suspense fallback={null}>
       <Switch>
+        {/* Clerk needs these exact optional wildcard routes for OAuth callbacks. */}
+        <Route path="/sign-in/*?" component={() => <AuthRoute mode="sign-in" />} />
+        <Route path="/sign-up/*?" component={() => <AuthRoute mode="sign-up" />} />
         <Route path="/" component={Home} />
 
         {/* Course detail pages */}
@@ -104,13 +151,15 @@ function ChromeAwareNavbar() {
 
 function App() {
   return (
-    <CurrencyProvider>
-      <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
+    <WouterRouter base={basePath}>
+      <ClerkShell>
+        <CurrencyProvider>
         <Analytics />
         <ChromeAwareNavbar />
         <Router />
-      </WouterRouter>
-    </CurrencyProvider>
+        </CurrencyProvider>
+      </ClerkShell>
+    </WouterRouter>
   );
 }
 
