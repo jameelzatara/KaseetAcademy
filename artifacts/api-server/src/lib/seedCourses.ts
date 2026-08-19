@@ -60,3 +60,53 @@ export async function seedCoursesIfEmpty(): Promise<void> {
     logger.warn({ err }, "seedCoursesIfEmpty failed (non-fatal)");
   }
 }
+
+/**
+ * One-time backfill of homepage marketing fields (image/description/order/featured)
+ * for the courses that already existed before those columns were added.
+ * Only fills rows where image_url is still NULL, so it never clobbers an
+ * admin's later edits — safe to run on every startup.
+ */
+const MARKETING_DEFAULTS: Record<string, {
+  imageUrl: string; shortDescription: string; displayOrder: number; isFeatured: boolean;
+}> = {
+  voiceover: {
+    imageUrl: "/course-covers/voiceover.jpg",
+    shortDescription: "منهج متكامل لبناء أداء صوتي احترافي من الصفر — من ضبط مخارج الحروف والتحكم بالتنفس، إلى بناء ملفك الصوتي الجاهز لسوق العمل.",
+    displayOrder: 1,
+    isFeatured: true,
+  },
+  presenter: {
+    imageUrl: "/course-covers/presenter.jpg",
+    shortDescription: "من التحرير الصحفي إلى الحضور الاحترافي أمام الكاميرا — دورة مكثفة لإعداد المذيع المحترف ومهارات الإعلام الرقمي.",
+    displayOrder: 2,
+    isFeatured: false,
+  },
+  "arabic-language": {
+    imageUrl: "/course-covers/arabic-language.jpg",
+    shortDescription: "إتقان النحو والصرف والإملاء وفنون التحرير اللغوي — حقيبة مرجعية شاملة لكتابة عربية سليمة.",
+    displayOrder: 3,
+    isFeatured: false,
+  },
+  "public-speaking": {
+    imageUrl: "/course-covers/public-speaking.jpg",
+    shortDescription: "كسر رهبة المنصة وبناء كاريزما خطابية مؤثرة أمام الجمهور، مع تقييم فردي لأسلوبك الخطابي.",
+    displayOrder: 4,
+    isFeatured: false,
+  },
+};
+
+export async function backfillCourseMarketingDefaults(): Promise<void> {
+  try {
+    for (const [slug, d] of Object.entries(MARKETING_DEFAULTS)) {
+      await pool.query(
+        `UPDATE courses
+         SET image_url = $2, short_description = $3, display_order = $4, is_featured = $5
+         WHERE slug = $1 AND image_url IS NULL`,
+        [slug, d.imageUrl, d.shortDescription, d.displayOrder, d.isFeatured],
+      );
+    }
+  } catch (err) {
+    logger.warn({ err }, "backfillCourseMarketingDefaults failed (non-fatal)");
+  }
+}
