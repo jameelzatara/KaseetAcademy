@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import StatsBar from './StatsBar';
 import Waveform from './Waveform';
-import heroBg from '@assets/hero-bg_1785422080937.jpg';
+import heroBg from '@assets/hero-bg-clean-screen.jpg';
 
 const rotatingWords = [
   'صوتٍ حكاية',
