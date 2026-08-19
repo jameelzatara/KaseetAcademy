@@ -776,6 +776,9 @@ router.post("/checkout/payment-intent", async (req, res) => {
     const pi = await stripe.paymentIntents.create({
       amount:   toMinorUSD(chargeUSD),
       currency: CHARGE_CURRENCY,
+      // Let Stripe show only payment methods enabled for this account and
+      // supported by the payer's device, including Apple Pay / Google Pay.
+      automatic_payment_methods: { enabled: true },
       description: `${courseName} — ${modeLabel} · طلب ${orderId}`,
       metadata: {
         holdId, orderId,

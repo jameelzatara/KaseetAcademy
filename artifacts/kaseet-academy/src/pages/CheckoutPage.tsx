@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { Info, ChevronRight, ChevronLeft, Lock, CreditCard, MessageCircle, Check, ChevronDown } from 'lucide-react';
+import { Info, ChevronRight, ChevronLeft, Lock, CreditCard, Check, ChevronDown } from 'lucide-react';
 import { currentCohorts } from '@/data/currentCohorts';
 import { useCoursePricing } from '@/hooks/useCoursePricing';
 
@@ -75,6 +75,20 @@ const DIAL_COUNTRIES = [
 
 type DialCountry = Exclude<typeof DIAL_COUNTRIES[number], null>;
 
+const COUNTRY_OPTIONS = [
+  'الأردن', 'فلسطين', 'السعودية', 'الإمارات', 'الكويت', 'قطر', 'البحرين',
+  'عُمان', 'مصر', 'سوريا', 'لبنان', 'العراق', 'اليمن', 'ليبيا', 'تونس',
+  'الجزائر', 'المغرب', 'السودان', 'الصومال', 'موريتانيا', 'جيبوتي',
+  'تركيا', 'إيران', 'أفغانستان', 'باكستان', 'الهند', 'بنغلاديش', 'نيبال',
+  'سريلانكا', 'ماليزيا', 'إندونيسيا', 'سنغافورة', 'تايلاند', 'الفلبين',
+  'الصين', 'اليابان', 'كوريا الجنوبية', 'أستراليا', 'نيوزيلندا',
+  'الولايات المتحدة', 'كندا', 'المملكة المتحدة', 'ألمانيا', 'فرنسا',
+  'إيطاليا', 'إسبانيا', 'البرتغال', 'هولندا', 'بلجيكا', 'سويسرا',
+  'النمسا', 'السويد', 'النرويج', 'الدنمارك', 'فنلندا', 'بولندا',
+  'أوكرانيا', 'روسيا', 'نيجيريا', 'غانا', 'كينيا', 'جنوب أفريقيا',
+  'إثيوبيا', 'البرازيل', 'المكسيك', 'الأرجنتين', 'كولومبيا',
+] as const;
+
 /** Drop leading zero from local number, prepend country code → E.164 without + */
 function buildPhone(dialCode: string, local: string): string {
   const digits = local.replace(/\D/g, '').replace(/^0+/, '');
@@ -102,12 +116,6 @@ const CREAM_LINE = 'rgba(24,32,47,.1)';
 const F = "'Tajawal', 'Cairo', Arial, sans-serif";
 
 const API = '/api';
-
-// ─── Advisor config ───────────────────────────────────────
-const ADVISORS: Record<Mode, { name: string; phone: string }> = {
-  onsite: { name: 'آية', phone: '962790234483' },
-  live:   { name: 'ياقوت', phone: '962771052222' },
-};
 
 // ─── Helpers ──────────────────────────────────────────────
 function useQuery() {
@@ -364,8 +372,10 @@ export default function CheckoutPage() {
                   onDialChange={setDialCode}
                   onLocalChange={setLocalPhone}
                 />
-                <Field label="الدولة *" value={customer.country}
-                  onChange={v => setCustomer(c => ({ ...c, country: v }))} placeholder="الأردن" />
+                <CountryField
+                  value={customer.country}
+                  onChange={v => setCustomer(c => ({ ...c, country: v }))}
+                />
                 <Field label="المدينة" value={customer.city}
                   onChange={v => setCustomer(c => ({ ...c, city: v }))} placeholder="عمّان" />
               </div>
@@ -438,24 +448,10 @@ export default function CheckoutPage() {
               <Lock size={17} /> {loading ? 'جارٍ التوجيه…' : `ادفع الآن ← $${nowUSD}`}
             </button>
 
-            {/* Alternative payment */}
-            <div style={{ background: CREAM_CARD, border: `1px solid ${CREAM_LINE}`, borderRadius: 14, padding: '16px 20px', marginBottom: 14 }}>
-              <p style={{ margin: '0 0 4px', fontSize: 14, fontWeight: 700, color: INK }}>تفضّل الدفع بالدينار الأردني؟</p>
-              <p style={{ margin: '0 0 12px', fontSize: 13, color: INK2 }}>تحويل بنكي أو إي فواتيركم — تُرتّبه معك مستشارتك خلال دقائق.</p>
-              <a
-                href={`https://wa.me/${ADVISORS[modeParam].phone}?text=${encodeURIComponent('أرغب في التسجيل وأفضّل الدفع بالدينار الأردني')}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(22,163,74,.1)', border: '1px solid rgba(22,163,74,.3)', borderRadius: 10, padding: '9px 16px', color: GREEN, fontWeight: 700, fontSize: 13.5, textDecoration: 'none' }}
-              >
-                <MessageCircle size={16} /> تحدّث مع {ADVISORS[modeParam].name} لترتيب الدفع
-              </a>
-            </div>
-
             {/* Trust badges */}
             <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap', fontSize: 12.5, color: INK2, opacity: .75, marginBottom: 32 }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><Lock size={13} /> دفع آمن عبر Stripe</span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><CreditCard size={13} /> فيزا · ماستركارد · Apple Pay</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><CreditCard size={13} /> البطاقات وApple Pay وGoogle Pay عند توفّرها</span>
             </div>
           </div>
         )}
@@ -518,6 +514,26 @@ function Field({ label, value, onChange, placeholder, type = 'text' }: {
         onChange={e => onChange(e.target.value)}
         style={{ width: '100%', padding: '10px 14px', border: `1.5px solid ${CREAM_LINE}`, borderRadius: 10, fontFamily: F, fontSize: 14, color: INK, background: '#fff', boxSizing: 'border-box', outline: 'none', direction: 'rtl' }}
       />
+    </div>
+  );
+}
+
+function CountryField({ value, onChange }: { value: string; onChange: (value: string) => void }) {
+  const INK = '#18202F';
+  const INK2 = '#4B5563';
+  const CREAM_LINE = 'rgba(24,32,47,.1)';
+  const F = "'Tajawal', 'Cairo', Arial, sans-serif";
+
+  return (
+    <div>
+      <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: INK2, marginBottom: 6 }}>الدولة *</label>
+      <select
+        value={value}
+        onChange={event => onChange(event.target.value)}
+        style={{ width: '100%', padding: '10px 14px', border: `1.5px solid ${CREAM_LINE}`, borderRadius: 10, fontFamily: F, fontSize: 14, color: INK, background: '#fff', boxSizing: 'border-box', outline: 'none', direction: 'rtl' }}
+      >
+        {COUNTRY_OPTIONS.map(country => <option key={country} value={country}>{country}</option>)}
+      </select>
     </div>
   );
 }

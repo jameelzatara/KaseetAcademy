@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { CheckCircle, Clock, MessageCircle, CalendarPlus } from 'lucide-react';
+import { CheckCircle, Clock, MessageCircle, CalendarPlus, Home } from 'lucide-react';
 
 interface Order {
   id: string;
@@ -195,6 +195,16 @@ export default function CheckoutSuccessPage() {
             >
               <MessageCircle size={17} /> تحدّث مع مستشارتك
             </a>
+            <a
+              href="/"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 12,
+                border: `1.5px solid ${CREAM_LINE}`, borderRadius: 12, padding: '11px 22px',
+                color: INK, fontWeight: 700, textDecoration: 'none', fontSize: 14,
+              }}
+            >
+              <Home size={17} /> العودة للرئيسية
+            </a>
           </div>
         )}
 
@@ -268,6 +278,18 @@ export default function CheckoutSuccessPage() {
                 }}
               >
                 <CalendarPlus size={17} /> أضِف للتقويم
+              </a>
+              <a
+                href="/"
+                style={{
+                  flex: 1, minWidth: 160,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                  background: 'transparent', border: `1.5px solid ${CREAM_LINE}`,
+                  borderRadius: 12, padding: '12px 0',
+                  color: INK, fontWeight: 700, textDecoration: 'none', fontSize: 14,
+                }}
+              >
+                <Home size={17} /> العودة للرئيسية
               </a>
             </div>
           </div>
