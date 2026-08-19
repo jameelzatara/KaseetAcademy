@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { GOLD, OFF, F, FP, INNER, waLink } from './shared/coursePageHelpers';
 import PaymentModal from '../components/PaymentModal';
+import MediaTrustBadges from '../components/MediaTrustBadges';
 import wajeezLogo    from '@assets/wajeez-logo_1785688262989.png';
 import heroShot      from '@assets/engage-your-audience-2_1787084523466.jpg';
 import trainerSohaib from '@assets/instructor-sohaib_1785863334821.jpeg';
@@ -569,6 +570,7 @@ export default function MasarKhatabaPage() {
                 </p>
               </div>
             </div>
+            <MediaTrustBadges />
             <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(210px, 1fr))', gap:12 }}>
               {[
                 { n:'STEP 01', t:'تتخرّج بمخرج قابل للنشر', d:'فيديو خطابك النهائي + تقرير تحليل الأداء + خارطة التطوير الشخصي (90 يوماً) — مُنتَجة بجودة تصلح للعرض المهني وملفّ الترشّح.' },
