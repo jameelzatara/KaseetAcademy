@@ -1,8 +1,8 @@
 /**
  * Seeds the cohorts table (schedule metadata) from the previously-hardcoded
- * roster in the frontend's src/data/currentCohorts.ts. Idempotent: only runs
- * when the table is empty, so it never overwrites data brought in by
- * lib/db/scripts/import-cohorts.ts on a later run.
+ * roster in the frontend's src/data/currentCohorts.ts. It is idempotent:
+ * every missing legacy cohort is backfilled without overwriting records
+ * brought in later by lib/db/scripts/import-cohorts.ts.
  */
 import { pool } from "@workspace/db";
 import { logger } from "./logger.js";
@@ -21,13 +21,13 @@ const LEGACY_COHORTS = [
   { id: 406, courseSlug: "voiceover", level: "beginner", mode: "onsite", trainerName: "رنا العزام", startDate: "2026-08-27", endDate: "2026-09-13", daysAr: "الأحد والثلاثاء والخميس", time24: "12:00-14:00", timeAr: "12:00 ظهراً – 2:00 بعد الظهر", platform: "استوديو كاسيت", capacity: 10, enrolled: 2 },
   { id: 407, courseSlug: "voiceover", level: "advanced", mode: "onsite", trainerName: "رنا العزام", startDate: "2026-08-30", endDate: "2026-09-23", daysAr: "الاثنين والأربعاء", time24: "16:00-18:00", timeAr: "4:00 عصراً – 6:00 مساءً", platform: "استوديو كاسيت", capacity: 10, enrolled: 4 },
   { id: 408, courseSlug: "voiceover", level: "beginner", mode: "onsite", trainerName: "عمر الدرابكة", startDate: "2026-08-31", endDate: "2026-09-17", daysAr: "الأحد والثلاثاء والخميس", time24: "18:00-20:00", timeAr: "6:00 مساءً – 8:00 مساءً", platform: "استوديو كاسيت", capacity: 10, enrolled: 3 },
+  { id: 201, courseSlug: "public-speaking", level: "beginner", mode: "onsite", trainerName: "د. صهيب الخوالدة", startDate: "2026-09-06", endDate: "2026-09-22", daysAr: "الأحد والثلاثاء والخميس", time24: "18:00-20:00", timeAr: "6:00 مساءً – 8:00 مساءً", platform: "استوديو كاسيت", capacity: 15, enrolled: 6 },
+  { id: 202, courseSlug: "presenter", level: "beginner", mode: "onsite", trainerName: "رنا العزام", startDate: "2026-09-08", endDate: "2026-09-24", daysAr: "الأحد والثلاثاء والخميس", time24: "18:00-20:00", timeAr: "6:00 مساءً – 8:00 مساءً", platform: "استوديو كاسيت", capacity: 10, enrolled: 3 },
+  { id: 203, courseSlug: "arabic-language", level: "beginner", mode: "live", trainerName: "رنا العزام", startDate: "2026-08-31", endDate: "2026-09-16", daysAr: "الاثنين والأربعاء", time24: "18:00-20:00", timeAr: "6:00 مساءً – 8:00 مساءً", platform: "Google Meet", capacity: 10, enrolled: 4 },
 ];
 
 export async function seedCohortsIfEmpty(): Promise<void> {
   try {
-    const { rows } = await pool.query(`SELECT COUNT(*) AS c FROM cohorts`);
-    if (Number(rows[0].c) > 0) return;
-
     for (const c of LEGACY_COHORTS) {
       await pool.query(
         `INSERT INTO cohorts (
@@ -44,7 +44,7 @@ export async function seedCohortsIfEmpty(): Promise<void> {
         [c.id, c.capacity, c.enrolled],
       );
     }
-    logger.info("cohorts table seeded from legacy roster");
+    logger.info("legacy cohorts backfilled");
   } catch (err) {
     logger.warn({ err }, "seedCohortsIfEmpty failed (non-fatal)");
   }

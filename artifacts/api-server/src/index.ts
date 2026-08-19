@@ -23,12 +23,18 @@ async function initStripe() {
     await runMigrations({ databaseUrl });
     logger.info("Stripe schema ready");
 
-    const stripeSync = await getStripeSync();
-    const domains = process.env.REPLIT_DOMAINS?.split(",")[0];
-    if (domains) {
-      const webhookUrl = `https://${domains}/api/stripe/webhook`;
-      await stripeSync.findOrCreateManagedWebhook(webhookUrl);
-      logger.info({ webhookUrl }, "Stripe webhook registered");
+    if (process.env.NODE_ENV === "production") {
+      const stripeSync = await getStripeSync();
+      const domains = process.env.REPLIT_DOMAINS?.split(",")[0];
+      if (domains) {
+        const webhookUrl = `https://${domains}/api/stripe/webhook`;
+        await stripeSync.findOrCreateManagedWebhook(webhookUrl);
+        logger.info({ webhookUrl }, "Stripe webhook registered");
+      }
+    } else {
+      // A development restart must never delete or replace the production
+      // endpoint that receives real payment events.
+      logger.info("Skipping managed Stripe webhook setup outside production");
     }
   } catch (err) {
     // Non-fatal — app continues without Stripe if keys aren't set yet

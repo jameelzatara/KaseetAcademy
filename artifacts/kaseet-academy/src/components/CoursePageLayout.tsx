@@ -237,6 +237,30 @@ type LiveSeat = {
   platform?: string; status?: 'open' | 'running';
 };
 
+type ScheduledLiveSeat = LiveSeat & {
+  courseSlug: string;
+  mode: string;
+  trainer: string;
+  start: string;
+  end: string;
+  days: string;
+  platform: string;
+  status: 'open' | 'running';
+};
+
+function isScheduledLiveSeat(seat: LiveSeat): seat is ScheduledLiveSeat {
+  return Boolean(
+    seat.courseSlug &&
+    seat.mode &&
+    seat.trainer &&
+    seat.start &&
+    seat.end &&
+    seat.days &&
+    seat.platform &&
+    seat.status,
+  );
+}
+
 const AR_MONTHS: Record<string, string> = {
   '01': 'يناير', '02': 'فبراير', '03': 'مارس', '04': 'أبريل', '05': 'مايو', '06': 'يونيو',
   '07': 'يوليو', '08': 'أغسطس', '09': 'سبتمبر', '10': 'أكتوبر', '11': 'نوفمبر', '12': 'ديسمبر',
@@ -273,15 +297,13 @@ function CohortsSection({ courseSlug, modes, defaultModeKey, onModeChange, showA
   // immediately without a redeploy. Falls back to the bundled static roster
   // only if the API is unreachable.
   const allCohorts = useMemo<Cohort[]>(() => {
-    const scheduledSeats = liveSeats.filter((s) =>
-      Boolean(s.courseSlug && s.mode && s.trainer && s.start && s.end && s.days && s.platform && s.status)
-    );
+    const scheduledSeats = liveSeats.filter(isScheduledLiveSeat);
     if (!scheduledSeats.length) return currentCohorts as Cohort[];
     return scheduledSeats.map((s): Cohort => ({
       id: s.cohortId, course: s.courseSlug, mode: s.mode, status: s.status,
       trainer: s.trainer, start: s.start, end: s.end,
       start_ar: toArabicDate(s.start), end_ar: toArabicDate(s.end),
-      days: s.days, time_24: s.time24, time_ar: s.timeAr, platform: s.platform,
+      days: s.days, time_24: s.time24 ?? null, time_ar: s.timeAr ?? null, platform: s.platform,
       enrolled: s.enrolled, capacity: s.capacity, remaining: s.remaining, fill: s.fill,
       level: s.level === 'advanced' ? 'advanced' : undefined,
     }));
