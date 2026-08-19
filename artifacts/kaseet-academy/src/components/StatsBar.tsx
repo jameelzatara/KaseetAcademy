@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import wajeezLogo from '@assets/wajeez-logo_1785422080937.png';
+import mediaLogos from '@assets/wajeez-media-logos-light.png';
 import { STATS } from '../data/stats';
 
 /* ── Smooth counter hook ── */
@@ -101,9 +102,17 @@ export default function StatsBar() {
         className="flex items-center gap-3 order-1 md:order-3 no-underline"
         style={{ textDecoration: 'none', cursor: 'pointer' }}
       >
-        <div className="text-right">
+        <div className="text-right min-w-[214px]">
           <div className="text-white font-bold text-[14px]">شهادة معتمدة من تطبيق وجيز</div>
           <div className="text-[rgba(252,251,251,0.62)] text-[12px]">أكبر منصّة صوتية في الشرق الأوسط</div>
+          <div className="mt-2 pt-2 border-t border-[rgba(255,255,255,0.12)]">
+            <div className="text-[10px] font-semibold tracking-[0.02em] text-[#FFC107] mb-1">موثوق إعلامياً</div>
+            <img
+              src={mediaLogos}
+              alt="BBC، الوطن، وForbes Middle East"
+              className="w-[185px] max-w-full h-auto max-h-[22px] object-contain object-right"
+            />
+          </div>
         </div>
         <div className="w-11 h-11 bg-white rounded-[11px] flex items-center justify-center shadow-sm shrink-0">
           <img src={wajeezLogo} alt="وجيز" className="w-8 h-8 object-contain" />

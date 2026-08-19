@@ -8,7 +8,6 @@ import { GOLD, OFF, F, FP, INNER, waLink } from './shared/coursePageHelpers';
 import PaymentModal from '../components/PaymentModal';
 import ReelsSection from '../components/ReelsSection';
 import { Gold } from '../components/SectionHeader';
-import MediaTrustBadges from '../components/MediaTrustBadges';
 import wajeezLogo   from '@assets/wajeez-logo_1785688262989.png';
 import heroShot     from '@assets/voiceover-track1_1785854995070.jpeg';
 import trainerYasar from '@assets/المدربة_يسار_عبده_1785855126478.jpeg';
@@ -635,7 +634,6 @@ export default function MasarSotiPage() {
                 </p>
               </div>
             </div>
-            <MediaTrustBadges />
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: 12 }}>
               {[
                 { n:'STEP 01', t:'تتخرّج بعمل قابل للنشر', d:'مشروع المحطة السادسة — فصل رواية كامل بجودة النشر — مبنيّ على مواصفات وجيز الفنية.' },

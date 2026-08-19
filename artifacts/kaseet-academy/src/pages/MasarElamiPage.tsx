@@ -13,7 +13,6 @@ import {
 import { FaWhatsapp } from 'react-icons/fa6';
 import { GOLD, OFF, F, FP, INNER, waLink } from './shared/coursePageHelpers';
 import PaymentModal from '../components/PaymentModal';
-import MediaTrustBadges from '../components/MediaTrustBadges';
 
 import wajeezLogo     from '@assets/wajeez-logo_1785688262989.png';
 import coverMasar     from '@assets/cover_المسار_الاعلامي_1785777356196.png';
@@ -541,7 +540,6 @@ export default function MasarElamiPage() {
                 </p>
               </div>
             </div>
-            <MediaTrustBadges />
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: 12 }}>
               {[
                 { n:'STEP 01', t:'تتخرّج بمحفظة احترافية', d:'ثمانية مشاريع مصوَّرة وفيلم إعلامي مكتمل — مبنيّ على مواصفات القبول في المؤسسات الإعلامية.' },
