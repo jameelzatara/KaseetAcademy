@@ -20,3 +20,10 @@ description: Visitor Clerk accounts and the separate admin session system
 
 **How to apply:**
 Keep the Clerk public-account experience on the public site only. Preserve the one-screen email/password sign-in experience; do not return to Clerk's staged identifier-first UI. Do not add a dashboard, course access, or admin privileges unless the user explicitly requests that product change.
+
+**Google SSO in development**
+- If Google returns 403 only after a visitor chooses their Google account, while the site has successfully reached `accounts.google.com`, the browser wiring is healthy. Configure Google OAuth credentials for the Development environment from Replit's Auth pane and add the exact callback URLs shown by its provider checklist.
+
+**Why:** Shared development credentials can deny a particular custom development domain or Google account policy after Google authentication.
+
+**How to apply:** Keep Development and Production Google provider credentials/configuration separate. Re-test the flow after saving the Development provider setup; apply the equivalent production configuration only when publishing.
