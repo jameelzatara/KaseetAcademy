@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { db, pool, ordersTable, holdsTable } from "@workspace/db";
 import { eq, or } from "drizzle-orm";
-import { getUncachableStripeClient, getStripeSync } from "../lib/stripeClient.js";
+import { getStripeCredentials, getUncachableStripeClient, getStripeSync } from "../lib/stripeClient.js";
 import {
   CHARGE_CURRENCY,
   DEPOSIT_JOD,
@@ -108,13 +108,29 @@ router.post("/checkout/session", async (req, res) => {
        FROM courses WHERE slug = $1 AND status != 'archived'`,
       [courseSlug],
     );
+    const courseRow = courseRows[0];
+    if (!courseRow) {
+      res.status(400).json({ error: "الدورة غير متاحة للحجز", code: "COURSE_UNAVAILABLE" });
+      return;
+    }
+    if ((mode === "onsite" && !courseRow.onsite_enabled) ||
+        (mode === "live" && !courseRow.live_enabled)) {
+      res.status(400).json({ error: "طريقة الحضور غير متاحة لهذه الدورة", code: "MODE_NOT_AVAILABLE" });
+      return;
+    }
     let discount: ValidDiscount | null = null;
     if (discountCode) {
       try {
         discount = await validateDiscountCode(discountCode, courseSlug);
-      } catch (err: any) {
-      const code = err?.message ?? "COHORT_MISMATCH";
-        res.status(400).json({ error: DISCOUNT_ERROR_AR[code] ?? "كود الخصم غير صالح", code });
+      } catch (err: unknown) {
+        const rawCode = err instanceof Error ? err.message : "";
+        const code = Object.hasOwn(DISCOUNT_ERROR_AR, rawCode)
+          ? rawCode as DiscountError
+          : null;
+        res.status(400).json({
+          error: code ? DISCOUNT_ERROR_AR[code] : "كود الخصم غير صالح",
+          code: code ?? "INVALID_DISCOUNT",
+        });
         return;
       }
     }
@@ -144,6 +160,7 @@ router.post("/checkout/session", async (req, res) => {
     const modeLabel  = mode === "onsite" ? "حضوري" : "مباشر تفاعلي (Online LIVE)";
 
     let totalJOD = 0, totalUSD = 0, chargeUSD = 0;
+    let paidJOD = 0, remainingJOD = 0;
     let installments: InstallmentRecord[] = [];
     let effectivePlan: "full" | "deposit" = plan;
 
@@ -298,21 +315,21 @@ router.get("/checkout/status", async (req, res) => {
     let stripeSession: import("stripe").Stripe.Checkout.Session | null = null;
     try {
       const stripe = await getUncachableStripeClient();
-      stripePI = await stripe.paymentIntents.retrieve(pi_id);
+      stripeSession = await stripe.checkout.sessions.retrieve(session_id);
     } catch (stripeErr) {
-      logger.warn({ stripeErr, pi_id }, "Stripe PI fetch failed in pi-status");
+      logger.warn({ stripeErr, session_id }, "Stripe session fetch failed in checkout/status");
     }
 
-    if (stripePI && stripePI.status === "succeeded") {
+    if (stripeSession?.payment_status === "paid") {
       try {
-        await onPaymentIntentSucceeded(stripePI);
+        await onSessionCompleted(stripeSession);
       } catch (e) {
-        logger.warn({ e, pi_id }, "onPaymentIntentSucceeded error in pi-status polling");
+        logger.warn({ e, session_id }, "onSessionCompleted error in checkout/status polling");
       }
       const [newOrder] = await db
         .select()
         .from(ordersTable)
-        .where(eq(ordersTable.paymentIntent, pi_id))
+        .where(or(eq(ordersTable.sessionId, session_id), eq(ordersTable.stripeSessionId, session_id)))
         .limit(1);
 
       if (newOrder) {
@@ -591,14 +608,34 @@ router.get("/cohorts/seats", async (_req, res) => {
 });
 
 // ── GET /checkout/config — publishable key for frontend ───
-router.get("/checkout/config", (_req, res) => {
-  const pk = process.env.STRIPE_PUBLISHABLE_KEY ?? process.env.STRIPE_PUBLIC_KEY ?? "";
-  if (!pk) {
-    logger.warn("STRIPE_PUBLISHABLE_KEY not set");
+router.get("/checkout/config", async (_req, res) => {
+  try {
+    const { secretKey, publishableKey: connectorPublishableKey } = await getStripeCredentials();
+    // Some connector deployments provide only the server key. Retain the
+    // established environment-key path for those deployments, while always
+    // preferring a browser key supplied by the active connector.
+    const publishableKey = connectorPublishableKey ?? process.env.STRIPE_PUBLISHABLE_KEY;
+    if (!publishableKey) {
+      logger.warn("Stripe connector and STRIPE_PUBLISHABLE_KEY are both missing");
+      res.status(503).json({ error: "Stripe not configured" });
+      return;
+    }
+
+    const secretMode = secretKey.startsWith("sk_test_") ? "test"
+      : secretKey.startsWith("sk_live_") ? "live" : null;
+    const publishableMode = publishableKey.startsWith("pk_test_") ? "test"
+      : publishableKey.startsWith("pk_live_") ? "live" : null;
+    if (secretMode && publishableMode && secretMode !== publishableMode) {
+      logger.error({ secretMode, publishableMode }, "Stripe key modes do not match");
+      res.status(503).json({ error: "Stripe not configured" });
+      return;
+    }
+
+    res.json({ publishableKey });
+  } catch (err) {
+    logger.warn({ err }, "Stripe checkout config unavailable");
     res.status(503).json({ error: "Stripe not configured" });
-    return;
   }
-  res.json({ publishableKey: pk });
 });
 
 // ── POST /checkout/payment-intent — Stripe Elements flow ──
@@ -643,13 +680,29 @@ router.post("/checkout/payment-intent", async (req, res) => {
        FROM courses WHERE slug = $1 AND status != 'archived'`,
       [courseSlug],
     );
+    const courseRow2 = courseRows2[0];
+    if (!courseRow2) {
+      res.status(400).json({ error: "الدورة غير متاحة للحجز", code: "COURSE_UNAVAILABLE" });
+      return;
+    }
+    if ((mode === "onsite" && !courseRow2.onsite_enabled) ||
+        (mode === "live" && !courseRow2.live_enabled)) {
+      res.status(400).json({ error: "طريقة الحضور غير متاحة لهذه الدورة", code: "MODE_NOT_AVAILABLE" });
+      return;
+    }
     let discount: ValidDiscount | null = null;
     if (discountCode) {
       try {
         discount = await validateDiscountCode(discountCode, courseSlug);
-      } catch (err: any) {
-      const code = err?.message ?? "COHORT_MISMATCH";
-        res.status(400).json({ error: DISCOUNT_ERROR_AR[code] ?? "كود الخصم غير صالح", code });
+      } catch (err: unknown) {
+        const rawCode = err instanceof Error ? err.message : "";
+        const code = Object.hasOwn(DISCOUNT_ERROR_AR, rawCode)
+          ? rawCode as DiscountError
+          : null;
+        res.status(400).json({
+          error: code ? DISCOUNT_ERROR_AR[code] : "كود الخصم غير صالح",
+          code: code ?? "INVALID_DISCOUNT",
+        });
         return;
       }
     }

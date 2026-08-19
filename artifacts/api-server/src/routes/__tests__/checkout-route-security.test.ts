@@ -10,13 +10,29 @@
  * All external I/O (DB, Stripe) is mocked.
  */
 
-import { describe, it, expect, vi } from "vitest";
+import { afterEach, beforeEach, describe, it, expect, vi } from "vitest";
 import request from "supertest";
+
+const mockGetStripeCredentials = vi.hoisted(() => vi.fn());
 
 // ── Mock DB ────────────────────────────────────────────────────────────────
 vi.mock("@workspace/db", () => ({
   db:               { select: vi.fn(), insert: vi.fn(), update: vi.fn() },
-  pool:             { query: vi.fn().mockResolvedValue({ rows: [] }) },
+  pool:             {
+    query: vi.fn().mockImplementation((query: string) => {
+      if (query.includes("FROM courses")) {
+        return Promise.resolve({
+          rows: [{
+            onsite_price_jod: 550,
+            live_price_usd: 750,
+            onsite_enabled: true,
+            live_enabled: true,
+          }],
+        });
+      }
+      return Promise.resolve({ rows: [] });
+    }),
+  },
   ordersTable:      {},
   holdsTable:       {},
   cohortSeatsTable: {},
@@ -37,6 +53,7 @@ vi.mock("../../lib/stripeClient.js", () => ({
       }),
     },
   }),
+  getStripeCredentials:  mockGetStripeCredentials,
   getStripeSync:        vi.fn().mockResolvedValue({ processWebhook: vi.fn(), initSchema: vi.fn() }),
   verifyStripeWebhook:  vi.fn(),
 }));
@@ -63,6 +80,18 @@ process.env.DATABASE_URL   = "postgresql://test:test@localhost/test";
 
 import app from "../../app.js";
 
+beforeEach(() => {
+  delete process.env.STRIPE_PUBLISHABLE_KEY;
+  mockGetStripeCredentials.mockResolvedValue({
+    secretKey: "sk_test_connector",
+    publishableKey: "pk_test_connector",
+  });
+});
+
+afterEach(() => {
+  delete process.env.STRIPE_PUBLISHABLE_KEY;
+});
+
 // ── Shared base payloads ────────────────────────────────────────────────────
 
 const VALID_CUSTOMER = { firstName: "علي", phone: "962799999999", country: "الأردن" };
@@ -77,6 +106,42 @@ function sessionBody(overrides: Record<string, unknown> = {}) {
 function intentBody(overrides: Record<string, unknown> = {}) {
   return { cohortId: 301, courseSlug: "masar-soti", mode: "onsite", plan: "deposit", ...COHORT_META, customer: VALID_CUSTOMER, ...overrides };
 }
+
+// ══════════════════════════════════════════════════════════════════════════
+// GET /api/checkout/config — Stripe publishable key
+// ══════════════════════════════════════════════════════════════════════════
+
+describe("GET /api/checkout/config — Stripe publishable key", () => {
+  it("returns the publishable key from the active Stripe connection", async () => {
+    const res = await request(app).get("/api/checkout/config");
+    expect(res.status).toBe(200);
+    expect(res.body.publishableKey).toBe("pk_test_connector");
+    expect(mockGetStripeCredentials).toHaveBeenCalledTimes(1);
+  });
+
+  it("falls back to STRIPE_PUBLISHABLE_KEY when the connector only supplies a secret", async () => {
+    mockGetStripeCredentials.mockResolvedValueOnce({ secretKey: "sk_test_connector" });
+    process.env.STRIPE_PUBLISHABLE_KEY = "pk_test_environment";
+    const res = await request(app).get("/api/checkout/config");
+    expect(res.status).toBe(200);
+    expect(res.body.publishableKey).toBe("pk_test_environment");
+  });
+
+  it("returns 503 when neither connector nor environment supplies a browser key", async () => {
+    mockGetStripeCredentials.mockResolvedValueOnce({ secretKey: "sk_test_connector" });
+    const res = await request(app).get("/api/checkout/config");
+    expect(res.status).toBe(503);
+    expect(res.body.error).toBe("Stripe not configured");
+  });
+
+  it("rejects an environment key from a different Stripe mode", async () => {
+    mockGetStripeCredentials.mockResolvedValueOnce({ secretKey: "sk_test_connector" });
+    process.env.STRIPE_PUBLISHABLE_KEY = "pk_live_environment";
+    const res = await request(app).get("/api/checkout/config");
+    expect(res.status).toBe(503);
+    expect(res.body.error).toBe("Stripe not configured");
+  });
+});
 
 // ══════════════════════════════════════════════════════════════════════════
 // POST /api/checkout/session — cohort validation

@@ -389,7 +389,8 @@ router.put("/courses/:slug", requireStaff, async (req, res) => {
     const updates = courseUpdatesFromBody(req.body, isAdmin(req));
     // Price edits blocked for consultants on courses with priceLocked=true
     const priceEdit = updates.onsitePriceJOD !== undefined || updates.livePriceUSD !== undefined;
-    if (!isAdmin(req) && priceEdit && existing.priceLocked) {
+    const priceLocked = (existing as typeof existing & { priceLocked?: boolean }).priceLocked;
+    if (!isAdmin(req) && priceEdit && priceLocked) {
       res.status(403).json({ error: "سعر هذه الدورة مقفل — تعديل السعر للمدير فقط" }); return;
     }
     updates.updatedAt = new Date();

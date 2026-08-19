@@ -69,7 +69,7 @@ export const COHORT_CATALOG: Record<string, { onsite?: readonly number[]; live?:
 
   // ── Short courses (IDs from the latest cohort roster) ──────────────
   voiceover: {
-    onsite: [135, 137, 406, 407, 408],
+    onsite: [135, 137, 142, 406, 407, 408],
     live:   [136, 138, 143, 401, 402, 403, 404, 405],
   },
   presenter:        { onsite: [202] },

@@ -194,7 +194,7 @@ router.get("/orders/:id", requireStaff, async (req, res) => {
       const [order] = await db
         .select()
         .from(ordersTable)
-        .where(eq(ordersTable.id, orderId))
+        .where(eq(ordersTable.id, orderIdParam))
         .limit(1);
 
     if (!order) { res.status(404).json({ error: "الطلب غير موجود" }); return; }
@@ -320,11 +320,12 @@ router.post("/orders/:id/payment", requireAdmin, async (req, res) => {
 // يُعيد إرسال بريد التأكيد لطلب موجود يدوياً من لوحة التحكم
 router.post("/orders/:id/resend-email", requireAdmin, async (req, res) => {
   try {
-      const [order] = await db
-        .select()
-        .from(ordersTable)
-        .where(eq(ordersTable.id, orderId))
-        .limit(1);
+    const orderId = String(req.params.id);
+    const [order] = await db
+      .select()
+      .from(ordersTable)
+      .where(eq(ordersTable.id, orderId))
+      .limit(1);
 
     if (!order) { res.status(404).json({ error: "الطلب غير موجود" }); return; }
 
@@ -344,7 +345,7 @@ router.post("/orders/:id/resend-email", requireAdmin, async (req, res) => {
         orderId:       order.id,
         firstName:     order.firstName ?? "",
         lastName:      order.lastName  ?? "",
-        courseName:    COURSE_NAMES_MAP[order.courseSlug ?? ""] ?? order.courseSlug ?? "",
+        courseName:    COURSE_NAMES[order.courseSlug ?? ""] ?? order.courseSlug ?? "",
         cohortDate:    "",
         cohortDays:    "",
         cohortTime:    "",
@@ -443,7 +444,7 @@ router.post("/notify-dryrun", requireAdmin, async (req, res) => {
     plan?:       "full" | "deposit";
   };
 
-    const orderId: string | null = logRow.order_id ?? null;
+  const orderId = "DRYRUN";
   const courseName = ({ voiceover: "أساسيات التعليق", masar_soti: "مسار صوتي", casting: "الكاستينغ", podcast: "البودكاست" } as Record<string, string>)[courseSlug] ?? courseSlug;
 
   const results: Record<string, unknown> = {};

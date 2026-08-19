@@ -23,7 +23,10 @@ router.get("/courses/:slug", async (req, res) => {
        WHERE slug = $1 AND status != 'archived'`,
       [slug]
     );
-    if (!rows[0]) return res.status(404).json({ error: "not found" });
+    if (!rows[0]) {
+      res.status(404).json({ error: "not found" });
+      return;
+    }
     const r = rows[0];
     res.json({
       slug: r.slug,

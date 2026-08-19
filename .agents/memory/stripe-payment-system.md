@@ -41,11 +41,13 @@ Calls `createOrderWithSeat`, then `notifyOrderCompleted` + `sendOrderConfirmatio
 - masar-elami: 700 JOD / $1000 USD
 - Deposit for onsite: 50 JOD (DEPOSIT_JOD constant in currency.ts)
 
-## Required Env Var
+## Stripe Key Source
 
-**`STRIPE_PUBLISHABLE_KEY`** must be set in Replit Secrets. It is the `pk_test_...` or `pk_live_...` key from the Stripe dashboard. This key is NOT secret (it's publishable) but must be added manually since it's not injected by the Stripe integration automatically.
+Checkout always reads the Stripe secret key from the active Replit Stripe connection. It prefers a publishable key supplied by that same connection, but falls back to `STRIPE_PUBLISHABLE_KEY` when a connector deployment supplies only the server credential.
 
-**Why:** The Stripe integration auto-injects `STRIPE_SECRET_KEY` for server-side use, but the publishable key for the browser SDK is separate. The `GET /checkout/config` endpoint returns 503 until this env var is set.
+**Why:** Replit connection responses can differ by environment. Removing the established environment fallback makes Stripe Elements unavailable when only a secret key is injected; blindly using it can pair a Sandbox secret with a stale live browser key.
+
+**How to apply:** Fetch connection credentials uncached, prefer its browser key, and otherwise use the environment fallback only when it has the same `test`/`live` mode as the secret. Reject a mismatch rather than returning a broken Stripe Elements configuration. Validate a `pk_test_` browser flow before allowing the separately configured live deployment.
 
 ## Stripe Appearance (PaymentElement)
 Night theme, primary color #FFC107 (gold), background #1A2535, Tajawal font, locale `ar`, border radius 12px.

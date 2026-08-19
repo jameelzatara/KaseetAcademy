@@ -3,6 +3,7 @@ import { StripeSync } from "stripe-replit-sync";
 
 export interface StripeCredentials {
   secretKey: string;
+  publishableKey?: string;
   webhookSecret?: string;
 }
 
@@ -49,9 +50,10 @@ export async function getStripeCredentials(): Promise<StripeCredentials> {
     );
   }
 
+  const publishableKey = settings?.publishable_key ?? settings?.publishable;
   const webhookSecret = settings?.webhook_secret ?? settings?.webhook_signing_secret;
 
-  return { secretKey, webhookSecret };
+  return { secretKey, publishableKey, webhookSecret };
 }
 
 /**
