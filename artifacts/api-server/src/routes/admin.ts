@@ -444,21 +444,40 @@ router.get("/cohorts", requireStaff, async (req, res) => {
 });
 
 // ── POST /admin/cohorts/:id/seats ─────────────────────────
-// Manual seat adjustment (walk-in registrations etc.)
+// Manual seat adjustment (walk-in registrations, correcting enrolled count, etc.)
 router.post("/cohorts/:id/seats", requireAdmin, async (req, res) => {
   try {
     const { enrolled, capacity, isOpen } = req.body as {
       enrolled?: number; capacity?: number; isOpen?: boolean;
     };
+
+    const isNonNegInt = (n: unknown): n is number =>
+      typeof n === "number" && Number.isInteger(n) && n >= 0;
+
+    if (enrolled != null && !isNonNegInt(enrolled)) {
+      res.status(400).json({ error: "عدد المسجّلين يجب أن يكون رقماً صحيحاً غير سالب" });
+      return;
+    }
+    if (capacity != null && !isNonNegInt(capacity)) {
+      res.status(400).json({ error: "السعة يجب أن تكون رقماً صحيحاً غير سالب" });
+      return;
+    }
+
     const updates: Record<string, any> = { updatedAt: new Date() };
     if (enrolled  != null) updates.enrolled  = enrolled;
     if (capacity  != null) updates.capacity  = capacity;
     if (isOpen    != null) updates.isOpen    = isOpen;
 
-    await db
+    const updated = await db
       .update(cohortSeatsTable)
       .set(updates)
-      .where(eq(cohortSeatsTable.cohortId, parseInt(String(req.params.id), 10)));
+      .where(eq(cohortSeatsTable.cohortId, parseInt(String(req.params.id), 10)))
+      .returning({ cohortId: cohortSeatsTable.cohortId });
+
+    if (!updated.length) {
+      res.status(404).json({ error: "الدفعة غير موجودة" });
+      return;
+    }
 
     res.json({ ok: true });
   } catch (err) {

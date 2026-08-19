@@ -1,8 +1,8 @@
 /** Section 4 — الدفعات والمقاعد. Staff can view; only admin toggles is_open. */
 import { useEffect, useState } from 'react';
-import { RefreshCw, Users } from 'lucide-react';
+import { RefreshCw, Users, Settings2 } from 'lucide-react';
 import { api, COURSE_NAMES, ORDER_STATUS, fmtDate } from '../api';
-import { Modal, StatusBadge, useToast } from '../components';
+import { Modal, Field, StatusBadge, useToast } from '../components';
 import { useAdminAuth } from '../context';
 import { currentCohorts } from '@/data/currentCohorts';
 import type { CohortSeat, Order } from '@workspace/admin-types';
@@ -21,6 +21,10 @@ export default function Cohorts() {
   const [open, setOpen] = useState<number | null>(null);
   const [cohortOrders, setCohortOrders] = useState<Order[]>([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
+  const [editing, setEditing] = useState<CohortSeat | null>(null);
+  const [editCapacity, setEditCapacity] = useState('');
+  const [editEnrolled, setEditEnrolled] = useState('');
+  const [editErr, setEditErr] = useState('');
 
   const load = () => {
     setLoading(true);
@@ -37,6 +41,29 @@ export default function Cohorts() {
       setSeats(prev => prev.map(s => s.cohortId === cohortId ? { ...s, isOpen } : s));
       toast(isOpen ? 'فُتح التسجيل' : 'أُغلق التسجيل');
     } catch (e: any) { toast(e.message, 'err'); }
+  }
+
+  function openEdit(s: CohortSeat) {
+    setEditCapacity(String(s.capacity));
+    setEditEnrolled(String(s.enrolled));
+    setEditErr('');
+    setEditing(s);
+  }
+
+  async function saveEdit() {
+    if (!editing) return;
+    const capacity = Number(editCapacity);
+    const enrolled = Number(editEnrolled);
+    if (!Number.isInteger(capacity) || capacity < 0 || !Number.isInteger(enrolled) || enrolled < 0) {
+      setEditErr('السعة وعدد المسجّلين يجب أن يكونا أرقاماً صحيحة غير سالبة');
+      return;
+    }
+    try {
+      await api(`/admin/cohorts/${editing.cohortId}/seats`, { method: 'POST', body: { capacity, enrolled } });
+      setSeats(prev => prev.map(s => s.cohortId === editing.cohortId ? { ...s, capacity, enrolled } : s));
+      toast('حُدّثت بيانات الدفعة');
+      setEditing(null);
+    } catch (e: any) { setEditErr(e.message); }
   }
 
   async function showOrders(cohortId: number) {
@@ -92,6 +119,11 @@ export default function Cohorts() {
                       {s.isOpen ? '✓ التسجيل مفتوح' : 'فتح التسجيل'}
                     </button>
                   )}
+                  {isAdmin && (
+                    <button className="ka-icon-btn" title="تعديل السعة وعدد المسجّلين يدوياً" onClick={() => openEdit(s)}>
+                      <Settings2 size={14} />
+                    </button>
+                  )}
                 </div>
               </div>
             );
@@ -126,6 +158,26 @@ export default function Cohorts() {
                 </table>
               </div>
             )}
+        </Modal>
+      )}
+
+      {editing && (
+        <Modal
+          title={`تعديل السعة والمسجّلين — دفعة #${editing.cohortId}`}
+          sub="تصحيح يدوي — استخدميه للتسجيل الحضوري خارج الموقع أو لتصحيح خطأ في العداد."
+          onClose={() => setEditing(null)}
+        >
+          {editErr && <div className="ka-form-err">{editErr}</div>}
+          <Field label="السعة الكلية">
+            <input type="number" min={0} value={editCapacity} onChange={e => setEditCapacity(e.target.value)} />
+          </Field>
+          <Field label="عدد المسجّلين حالياً" hint="تعديل هذا الرقم يدوياً يغيّر عدد المقاعد المتبقّية الظاهرة للزوّار فوراً.">
+            <input type="number" min={0} value={editEnrolled} onChange={e => setEditEnrolled(e.target.value)} />
+          </Field>
+          <div className="ka-form-actions">
+            <button className="ka-btn ka-btn--violet" style={{ flex: 1, justifyContent: 'center' }} onClick={saveEdit}>✓ حفظ</button>
+            <button className="ka-btn ka-btn--ghost" onClick={() => setEditing(null)}>إلغاء</button>
+          </div>
         </Modal>
       )}
     </>
