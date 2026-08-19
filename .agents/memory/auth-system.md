@@ -7,9 +7,10 @@ description: Visitor Clerk accounts and the separate admin session system
 
 **Public visitor accounts: Clerk**
 - Visitors can create an account or sign in with email/password or configured OAuth providers.
-- The account flow is a compact public-site modal and returns to the homepage.
+- The account flow is a compact custom public-site modal and returns to the homepage.
 - Accounts support future marketing/newsletter communication; they are not a course portal or student dashboard.
 - Clerk browser/API proxying is included for production custom-domain support.
+- The public sign-in form deliberately uses Clerk's custom flow API instead of its prebuilt components, so email and password are visible together; sign-up then asks for the required email verification code.
 
 **Admin auth: separate and intact**
 - Administrative access continues to use the existing consultant/admin session system.
@@ -18,4 +19,4 @@ description: Visitor Clerk accounts and the separate admin session system
 **Why:** Visitor identity is needed for opt-in contact and future announcements, while student enrollment and internal administration remain separate workflows. Clerk avoids managing public passwords in the project.
 
 **How to apply:**
-Keep the Clerk public-account experience on the public site only. Do not add a dashboard, course access, or admin privileges unless the user explicitly requests that product change.
+Keep the Clerk public-account experience on the public site only. Preserve the one-screen email/password sign-in experience; do not return to Clerk's staged identifier-first UI. Do not add a dashboard, course access, or admin privileges unless the user explicitly requests that product change.

@@ -44,10 +44,11 @@ const clerkPubKey = publishableKeyFromHost(
   import.meta.env.VITE_CLERK_PUBLISHABLE_KEY,
 );
 // Development instances talk to Clerk directly. Published builds route Clerk
-// through the API artifact so the public site uses one verified origin.
-const clerkProxyUrl = import.meta.env.PROD
-  ? new URL('/api/__clerk', window.location.origin).toString()
-  : undefined;
+// through the API artifact so the public site keeps one verified origin.
+const clerkProxyUrl = import.meta.env.VITE_CLERK_PROXY_URL ||
+  (import.meta.env.PROD
+    ? new URL('/api/__clerk', window.location.origin).toString()
+    : undefined);
 
 function stripBase(path: string): string {
   return basePath && path.startsWith(basePath) ? path.slice(basePath.length) || '/' : path;
