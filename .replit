@@ -27,4 +27,5 @@ channel = "stable-25_05"
 GOOGLE_SHEET_ID = "1L138tP7iWFLNectfQ4LCC5n01dUcwlXMiu_PCAIZp4g"
 SENDER_EMAIL = "info@kaseet.com"
 ADMIN_EMAIL = "info@kaseet.com"
-ADMIN_PASSWORD = "kaseet2026Admin"
+# ADMIN_PASSWORD must NOT be set here — this file is committed to git.
+# Set it as a Replit Secret instead (bcrypt hash — see admin.ts login route).
