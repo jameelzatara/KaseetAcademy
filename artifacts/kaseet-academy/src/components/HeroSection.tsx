@@ -152,55 +152,33 @@ export default function HeroSection() {
           الأكاديمية الأولى في تدريب التعليق الصوتي، صناعة البودكاست، والإنتاج المرئي.
         </motion.p>
 
-        {/* ── Two CTA buttons ── */}
+        {/* ── Primary CTA ── */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
           style={{ marginTop: 'clamp(24px,4vh,40px)', display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}
         >
-          <a
-            href={`${import.meta.env.BASE_URL}voice-test.html`}
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8,
-              fontFamily: 'Tajawal, sans-serif', fontWeight: 800,
-              fontSize: 'clamp(14px,1.4vw,16px)',
-              background: '#FFC107', color: '#121927',
-              padding: '14px 28px', borderRadius: 999,
-              textDecoration: 'none',
-              boxShadow: '0 6px 24px rgba(255,193,7,0.40)',
-              transition: 'transform .2s, box-shadow .2s',
-              letterSpacing: '0.01em',
-            }}
-            onMouseEnter={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, {
-              transform: 'translateY(-2px)', boxShadow: '0 10px 32px rgba(255,193,7,.55)',
-            })}
-            onMouseLeave={e => Object.assign((e.currentTarget as HTMLAnchorElement).style, {
-              transform: 'none', boxShadow: '0 6px 24px rgba(255,193,7,.40)',
-            })}
-          >
-            سمّعنا صوتك مجاناً ✦
-          </a>
           <button
             onClick={scrollToCourses}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
-              fontFamily: 'Tajawal, sans-serif', fontWeight: 700,
+              fontFamily: 'Tajawal, sans-serif', fontWeight: 800,
               fontSize: 'clamp(14px,1.4vw,16px)',
-              background: 'rgba(255,255,255,0.07)',
-              border: '1px solid rgba(255,255,255,0.24)',
-              color: 'rgba(252,251,251,0.88)',
+              background: '#FFC107',
+              border: '1px solid #FFC107',
+              color: '#121927',
               padding: '14px 28px', borderRadius: 999, cursor: 'pointer',
-              backdropFilter: 'blur(8px)',
-              transition: 'background .2s, border-color .2s, transform .2s',
+              boxShadow: '0 6px 24px rgba(255,193,7,0.40)',
+              transition: 'background .2s, border-color .2s, transform .2s, box-shadow .2s',
             }}
             onMouseEnter={e => Object.assign(e.currentTarget.style, {
-              background: 'rgba(255,255,255,0.13)', borderColor: 'rgba(255,193,7,0.40)',
-              transform: 'translateY(-2px)',
+              background: '#FFD54F', borderColor: '#FFD54F',
+              boxShadow: '0 10px 32px rgba(255,193,7,.55)', transform: 'translateY(-2px)',
             })}
             onMouseLeave={e => Object.assign(e.currentTarget.style, {
-              background: 'rgba(255,255,255,0.07)', borderColor: 'rgba(255,255,255,0.24)',
-              transform: 'none',
+              background: '#FFC107', borderColor: '#FFC107',
+              boxShadow: '0 6px 24px rgba(255,193,7,0.40)', transform: 'none',
             })}
           >
             تصفح دوراتنا المتميزة ↗
