@@ -4,6 +4,8 @@
  */
 
 import { BookOpen, SlidersHorizontal, Star, Mic, Briefcase, Zap, Tv, Video, Award } from 'lucide-react';
+import { useEffect } from 'react';
+import { useLocation } from 'wouter';
 import CoursePageLayout, { type CoursePageLayoutProps } from '../components/CoursePageLayout';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { useCoursePricing } from '../hooks/useCoursePricing';
@@ -118,7 +120,11 @@ export default function CourseArabicLanguagePage() {
     title: 'تمكين اللغة العربية وفنون التحرير اللغوي',
     description: 'دورة 16 ساعة مباشر تفاعلي مع رنا العزام. إتقان النحو والصرف والإملاء وفنون التحرير. شهادة معتمدة من وجيز — كاسيت أكاديمي.',
   });
-  const { pricing } = useCoursePricing('arabic-language');
+  const { pricing, notFound } = useCoursePricing('arabic-language');
+  const [, navigate] = useLocation();
+  useEffect(() => { if (notFound) navigate('/'); }, [notFound, navigate]);
+  if (notFound) return null;
+
   const dynamicConfig = {
     ...config,
     modes: config.modes.map(m => ({

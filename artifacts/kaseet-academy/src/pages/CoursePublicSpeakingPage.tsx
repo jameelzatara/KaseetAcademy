@@ -4,6 +4,8 @@
  */
 
 import { Mic, Zap, SlidersHorizontal, Star, Briefcase, Award } from 'lucide-react';
+import { useEffect } from 'react';
+import { useLocation } from 'wouter';
 import CoursePageLayout, { type CoursePageLayoutProps } from '../components/CoursePageLayout';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { useCoursePricing } from '../hooks/useCoursePricing';
@@ -136,7 +138,11 @@ export default function CoursePublicSpeakingPage() {
     title: 'فن الخطابة والإلقاء الجماهيري المؤثر',
     description: 'دورة 16 ساعة مع د. صهيب الخوالدة. كسر رهبة المنصة وبناء كاريزما خطابية. شهادة معتمدة من وجيز — كاسيت أكاديمي.',
   });
-  const { pricing } = useCoursePricing('public-speaking');
+  const { pricing, notFound } = useCoursePricing('public-speaking');
+  const [, navigate] = useLocation();
+  useEffect(() => { if (notFound) navigate('/'); }, [notFound, navigate]);
+  if (notFound) return null;
+
   const dynamicConfig = {
     ...config,
     modes: config.modes.map(m => ({

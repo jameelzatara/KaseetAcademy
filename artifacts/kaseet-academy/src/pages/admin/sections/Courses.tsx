@@ -1,6 +1,6 @@
 /** Section 5 — إدارة الدورات. Staff create/edit (prices admin-only); admin deletes. */
 import { useEffect, useState } from 'react';
-import { Plus, Pencil, Trash2, RefreshCw } from 'lucide-react';
+import { Plus, Pencil, Trash2, RefreshCw, Archive, ArchiveRestore } from 'lucide-react';
 import { api } from '../api';
 import { Modal, Field, StatusBadge, ConfirmDialog, useToast } from '../components';
 import { useAdminAuth } from '../context';
@@ -120,6 +120,22 @@ export default function Courses() {
     } catch (e: any) { toast(e.message, 'err'); }
   }
 
+  async function archiveCourse(c: Course) {
+    try {
+      await api(`/admin/courses/${c.slug}`, { method: 'PUT', body: { status: 'archived' } });
+      setCourses(prev => prev.map(x => x.slug === c.slug ? { ...x, status: 'archived' } : x));
+      toast('أُرشفت الدورة — لن تظهر على الموقع، وبياناتها محفوظة');
+    } catch (e: any) { toast(e.message, 'err'); }
+  }
+
+  async function unarchiveCourse(c: Course) {
+    try {
+      await api(`/admin/courses/${c.slug}`, { method: 'PUT', body: { status: 'draft' } });
+      setCourses(prev => prev.map(x => x.slug === c.slug ? { ...x, status: 'draft' } : x));
+      toast('أُعيدت الدورة كمسوَّدة — فعّليها لتظهر على الموقع');
+    } catch (e: any) { toast(e.message, 'err'); }
+  }
+
   async function doDelete() {
     if (!deleting) return;
     try {
@@ -162,10 +178,21 @@ export default function Courses() {
                 <span className="num" style={{ fontSize: 11, color: 'var(--t4)', direction: 'ltr', textAlign: 'right' }}>/{c.slug}</span>
               </div>
               <div style={{ display: 'flex', gap: 8 }}>
-                <button className={`ka-toggle-btn${c.status === 'active' ? ' is-on' : ''}`} onClick={() => toggleStatus(c)}>
-                  {c.status === 'active' ? '✓ فعّالة' : 'تفعيل'}
-                </button>
+                {c.status === 'archived' ? (
+                  <button className="ka-toggle-btn" onClick={() => unarchiveCourse(c)}>
+                    <ArchiveRestore size={13} /> إلغاء الأرشفة
+                  </button>
+                ) : (
+                  <button className={`ka-toggle-btn${c.status === 'active' ? ' is-on' : ''}`} onClick={() => toggleStatus(c)}>
+                    {c.status === 'active' ? '✓ فعّالة' : 'تفعيل'}
+                  </button>
+                )}
                 <button className="ka-icon-btn" title="تعديل" onClick={() => openEdit(c)}><Pencil size={14} /></button>
+                {c.status !== 'archived' && (
+                  <button className="ka-icon-btn" title="أرشفة — تخفيها عن الموقع دون حذف بياناتها" onClick={() => archiveCourse(c)}>
+                    <Archive size={14} />
+                  </button>
+                )}
                 {isAdmin && <button className="ka-icon-btn" title="حذف" onClick={() => setDeleting(c)}><Trash2 size={14} /></button>}
               </div>
             </div>

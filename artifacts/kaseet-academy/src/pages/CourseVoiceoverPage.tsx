@@ -3,6 +3,8 @@
  * غلاف رفيع — كل المنطق في CoursePageLayout
  */
 
+import { useEffect } from 'react';
+import { useLocation } from 'wouter';
 import { AudioLines, Volume2, SlidersHorizontal, Mic, Sparkles, Briefcase, AudioWaveform, Award } from 'lucide-react';
 import CoursePageLayout, { type CoursePageLayoutProps } from '../components/CoursePageLayout';
 import { usePageMeta } from '../hooks/usePageMeta';
@@ -176,7 +178,11 @@ export default function CourseVoiceoverPage() {
     title: 'أساسيات التعليق والأداء الصوتي',
     description: 'البرنامج التأسيسي الشامل لتعليق الصوت مع يسار عبده ورنا العزام وعمر الدرابكة. شهادة معتمدة من وجيز — كاسيت أكاديمي.',
   });
-  const { pricing } = useCoursePricing('voiceover');
+  const { pricing, notFound } = useCoursePricing('voiceover');
+  const [, navigate] = useLocation();
+  useEffect(() => { if (notFound) navigate('/'); }, [notFound, navigate]);
+  if (notFound) return null;
+
   const dynamicConfig = {
     ...config,
     modes: config.modes.map(m => ({
