@@ -4,13 +4,13 @@ import { RefreshCw, Users } from 'lucide-react';
 import { api, COURSE_NAMES, ORDER_STATUS, fmtDate } from '../api';
 import { Modal, StatusBadge, useToast } from '../components';
 import { useAdminAuth } from '../context';
-import cohortsData from '@/data/cohorts.json';
+import { currentCohorts } from '@/data/currentCohorts';
 import type { CohortSeat, Order } from '@workspace/admin-types';
 
-// Static cohort metadata lives in cohorts.json — not from the API
+// Current cohort metadata lives in the roster imported from the latest schedule.
 interface CohortMeta { id: number; course: string; mode: string; start_ar: string; days: string; time_ar: string }
 
-const ALL_COHORTS = (cohortsData.cohorts as CohortMeta[]);
+const ALL_COHORTS = currentCohorts as CohortMeta[];
 
 export default function Cohorts() {
   const { user } = useAdminAuth();

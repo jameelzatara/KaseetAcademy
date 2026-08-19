@@ -566,11 +566,21 @@ export async function onSessionCompleted(s: import("stripe").Stripe.Checkout.Ses
 // يُستخدم من الواجهة لعرض السعات الحقيقية من قاعدة البيانات
 router.get("/cohorts/seats", async (_req, res) => {
   try {
-    const rows = await pool.query<{
+    const { rows } = await pool.query<{
       cohort_id: number; capacity: number; enrolled: number; is_open: boolean;
     }>("SELECT cohort_id, capacity, enrolled, is_open FROM cohort_seats");
 
-    const seats = await getCohortSeats(validCohortId);
+    const seats = rows.map((row) => {
+      const remaining = Math.max(0, row.capacity - row.enrolled);
+      return {
+        cohortId: row.cohort_id,
+        capacity:  row.capacity,
+        enrolled:  row.enrolled,
+        remaining,
+        fill:      Math.round((row.enrolled / Math.max(row.capacity, 1)) * 100),
+        isOpen:    row.is_open,
+      };
+    });
 
     res.setHeader("Cache-Control", "no-store");
     res.json({ seats });
@@ -955,7 +965,3 @@ export async function handleStripeWebhook(rawBody: Buffer, signature: string): P
 }
 
 export default router;
-
-    const courseRow2 = courseRows2[0];
-
-    const courseRow = courseRows[0];

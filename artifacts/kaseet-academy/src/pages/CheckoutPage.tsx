@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'wouter';
 import { Info, ChevronRight, ChevronLeft, Lock, CreditCard, MessageCircle, Check, ChevronDown } from 'lucide-react';
-import cohortsData from '@/data/cohorts.json';
+import { currentCohorts } from '@/data/currentCohorts';
 import { useCoursePricing } from '@/hooks/useCoursePricing';
 
 // ─── Types ────────────────────────────────────────────────
@@ -136,7 +136,7 @@ export default function CheckoutPage() {
   // ── Live prices from DB ───────────────────────────────────
   const { pricing: apiPricing, loading: pricingLoading } = useCoursePricing(courseSlug);
 
-  const cohort = (cohortsData.cohorts as Cohort[]).find(
+  const cohort = (currentCohorts as Cohort[]).find(
     (c) => c.id === cohortIdParam && c.mode === modeParam,
   );
   const courseName = COURSE_NAMES[courseSlug] ?? courseSlug;

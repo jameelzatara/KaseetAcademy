@@ -14,7 +14,7 @@ import {
 import ShareModal from './ShareModal';
 import SiteFooter from './SiteFooter';
 import PageBreadcrumb from './PageBreadcrumb';
-import cohortsAll from '../data/cohorts.json';
+import { currentCohorts } from '../data/currentCohorts';
 
 /* ── Design tokens ──────────────────────────────────────────── */
 const CREAM      = '#F4EFE4';
@@ -53,6 +53,7 @@ type Cohort = {
   start_ar: string; end_ar: string; days: string;
   time_24: string | null; time_ar: string | null; platform: string;
   enrolled: number | null; capacity: number; remaining: number | null; fill: number | null;
+  level?: 'advanced';
 };
 
 /* ── Public types ───────────────────────────────────────────── */
@@ -97,6 +98,8 @@ export interface TrainerConfig {
 
 export interface CoursePageLayoutProps {
   courseSlug: string;
+  /** Shows advanced voiceover cohorts on the dedicated Online LIVE page only. */
+  showAdvancedCohorts?: boolean;
   title: string;
   categoryBadge: string;
   levelBadge?: string;
@@ -174,6 +177,7 @@ function CohortRow({ c, onRegister, accentStyle, currencyNote, guaranteeNote }: 
           <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 8, marginBottom: 8 }}>
             <span style={{ fontFamily: F, fontWeight: 700, fontSize: 14, color: OFF }}>الدفعة #{c.id}</span>
             {isOpen && <span style={{ background: 'rgba(255,193,7,.14)', border: '1px solid rgba(255,193,7,.35)', color: GOLD, borderRadius: 999, fontFamily: F, fontWeight: 700, fontSize: 11, padding: '2px 10px' }}>تبدأ قريباً</span>}
+            {c.level === 'advanced' && <span style={{ background: 'rgba(30,122,133,.16)', border: '1px solid rgba(30,122,133,.38)', color: '#8FE5E4', borderRadius: 999, fontFamily: F, fontWeight: 700, fontSize: 11, padding: '2px 10px' }}>متقدم</span>}
             {isRunning && <span style={{ background: 'rgba(255,255,255,.08)', border: '1px solid rgba(255,255,255,.14)', color: 'rgba(252,251,251,.55)', borderRadius: 999, fontFamily: F, fontWeight: 700, fontSize: 11, padding: '2px 10px', display: 'inline-flex', alignItems: 'center', gap: 5 }}><PlayCircle size={11} strokeWidth={1.8} /> جارية الآن</span>}
             {isOpen && !full && <span style={{ background: 'rgba(255,193,7,.10)', color: GOLD, borderRadius: 999, fontFamily: F, fontWeight: 700, fontSize: 11, padding: '2px 10px', border: '1px solid rgba(255,193,7,.22)' }}>متاح التسجيل</span>}
             {full && <span style={{ background: 'rgba(255,255,255,.06)', color: 'rgba(252,251,251,.45)', borderRadius: 999, fontFamily: F, fontWeight: 700, fontSize: 11, padding: '2px 10px', border: '1px solid rgba(255,255,255,.10)', display: 'inline-flex', alignItems: 'center', gap: 4 }}><Lock size={11} strokeWidth={1.8} /> نفدت المقاعد</span>}
@@ -228,8 +232,8 @@ function CohortRow({ c, onRegister, accentStyle, currencyNote, guaranteeNote }: 
 /** نوع استجابة /api/cohorts/seats */
 type LiveSeat = { cohortId: number; capacity: number; enrolled: number; remaining: number; fill: number; isOpen: boolean };
 
-function CohortsSection({ courseSlug, modes, defaultModeKey, onModeChange }: {
-  courseSlug: string; modes: ModeConfig[]; defaultModeKey: string;
+function CohortsSection({ courseSlug, modes, defaultModeKey, onModeChange, showAdvancedCohorts = false }: {
+  courseSlug: string; modes: ModeConfig[]; defaultModeKey: string; showAdvancedCohorts?: boolean;
   onModeChange?: (key: string) => void;
 }) {
   const [tab, setTab]         = useState(defaultModeKey);
@@ -247,9 +251,9 @@ function CohortsSection({ courseSlug, modes, defaultModeKey, onModeChange }: {
 
   const activeMode = modes.find(m => m.key === tab) ?? modes[0];
 
-  // دمج البيانات الحية فوق cohorts.json
+  // Merge live seat counts from the database over the imported cohort roster.
   const allCohorts = useMemo<Cohort[]>(() => {
-    const base = cohortsAll.cohorts as Cohort[];
+    const base = currentCohorts as Cohort[];
     if (!liveSeats.length) return base;
     const map = new Map(liveSeats.map(s => [s.cohortId, s]));
     return base.map(c => {
@@ -259,22 +263,25 @@ function CohortsSection({ courseSlug, modes, defaultModeKey, onModeChange }: {
     });
   }, [liveSeats]);
 
+  const matchesPage = (cohort: Cohort) =>
+    cohort.course === courseSlug && (showAdvancedCohorts || cohort.level !== 'advanced');
+
   const openCohorts = useMemo(() =>
-    allCohorts.filter(c => c.course === courseSlug && c.mode === activeMode.cohortFilter && c.time_ar && c.status === 'open'),
-  [tab]);
+    allCohorts.filter(c => matchesPage(c) && c.mode === activeMode.cohortFilter && c.time_ar && c.status === 'open'),
+  [allCohorts, activeMode.cohortFilter, courseSlug, showAdvancedCohorts]);
   const runCohorts = useMemo(() =>
-    allCohorts.filter(c => c.course === courseSlug && c.mode === activeMode.cohortFilter && c.time_ar && c.status === 'running'),
-  [tab]);
+    allCohorts.filter(c => matchesPage(c) && c.mode === activeMode.cohortFilter && c.time_ar && c.status === 'running'),
+  [allCohorts, activeMode.cohortFilter, courseSlug, showAdvancedCohorts]);
 
   const openCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     for (const m of modes) {
-      counts[m.key] = allCohorts.filter(c =>
-        c.course === courseSlug && c.mode === m.cohortFilter && c.time_ar && c.status === 'open'
+        counts[m.key] = allCohorts.filter(c =>
+          matchesPage(c) && c.mode === m.cohortFilter && c.time_ar && c.status === 'open'
       ).length;
     }
     return counts;
-  }, [courseSlug]);
+  }, [allCohorts, modes, courseSlug, showAdvancedCohorts]);
 
   const handleTab = (key: string) => { setTab(key); onModeChange?.(key); };
 
@@ -883,7 +890,7 @@ function HeroSection({ props, activeMode, openCounts, onModeChange, onShare }: {
    § Main layout
    ══════════════════════════════════════════════════════════════ */
 export default function CoursePageLayout(props: CoursePageLayoutProps) {
-  const { modes, defaultModeKey, curriculumModes, courseSlug } = props;
+  const { modes, defaultModeKey, curriculumModes, courseSlug, showAdvancedCohorts = false } = props;
   const [heroMode,  setHeroMode]  = useState(defaultModeKey ?? modes[0].key);
   const [shareOpen, setShareOpen] = useState(false);
 
@@ -894,8 +901,8 @@ export default function CoursePageLayout(props: CoursePageLayoutProps) {
     const existing = document.getElementById('course-jsonld');
     if (existing) existing.remove();
 
-    const allCohorts = (cohortsAll.cohorts as Cohort[]).filter(
-      (c) => c.course === courseSlug && c.status === 'open',
+    const allCohorts = (currentCohorts as Cohort[]).filter(
+      (c) => c.course === courseSlug && c.status === 'open' && (showAdvancedCohorts || c.level !== 'advanced'),
     );
 
     const instances = allCohorts.map((c) => ({
@@ -935,18 +942,19 @@ export default function CoursePageLayout(props: CoursePageLayoutProps) {
     document.head.appendChild(script);
 
     return () => { document.getElementById('course-jsonld')?.remove(); };
-  }, [courseSlug, props.title, props.description]);
+  }, [courseSlug, props.title, props.description, showAdvancedCohorts]);
 
-  const allCohorts = cohortsAll.cohorts as Cohort[];
+  const allCohorts = currentCohorts as Cohort[];
   const openCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     for (const m of modes) {
       counts[m.key] = allCohorts.filter(c =>
-        c.course === courseSlug && c.mode === m.cohortFilter && c.time_ar && c.status === 'open'
+        c.course === courseSlug && c.mode === m.cohortFilter && c.time_ar && c.status === 'open' &&
+        (showAdvancedCohorts || c.level !== 'advanced')
       ).length;
     }
     return counts;
-  }, [courseSlug, modes]);
+  }, [courseSlug, modes, showAdvancedCohorts]);
 
   // Brochure for curriculum section: first mode's brochure (if single mode)
   const singleBrochure = modes.length === 1 ? modes[0].brochure : undefined;
@@ -995,6 +1003,7 @@ export default function CoursePageLayout(props: CoursePageLayoutProps) {
         modes={modes}
         defaultModeKey={heroMode}
         onModeChange={setHeroMode}
+        showAdvancedCohorts={showAdvancedCohorts}
       />
       <AboutSection
         programDescription={props.programDescription}

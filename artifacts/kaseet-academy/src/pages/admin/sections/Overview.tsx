@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 import { AlertTriangle } from 'lucide-react';
 import { api } from '../api';
 import { KpiCard } from '../components';
-import cohortsData from '@/data/cohorts.json';
+import { currentCohorts } from '@/data/currentCohorts';
 import type { KpiResponse, DueRow } from '@workspace/admin-types';
 
-const ALL_COHORTS = (cohortsData.cohorts as { id: number }[]);
+const ALL_COHORTS = currentCohorts as { id: number }[];
 
 export default function Overview({ goTo }: { goTo: (section: string) => void }) {
   const [kpi, setKpi] = useState<KpiResponse | null>(null);

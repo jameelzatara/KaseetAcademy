@@ -4,13 +4,13 @@ import { ChevronDown, ChevronUp, RefreshCw } from 'lucide-react';
 import { api, COURSE_NAMES, ORDER_STATUS, waLink, fmtDate } from '../api';
 import { Modal, Field, StatusBadge, TableCard, useToast } from '../components';
 import { useAdminAuth } from '../context';
-import cohortsData from '@/data/cohorts.json';
+import { currentCohorts } from '@/data/currentCohorts';
 import type { Order } from '@workspace/admin-types';
 
 export type { Order };
 
 interface CohortRow { id: number; course: string; mode: string; start_ar: string }
-const ALL_COHORTS = (cohortsData.cohorts as CohortRow[]);
+const ALL_COHORTS = currentCohorts as CohortRow[];
 
 function orderName(o: Order) {
   return `${o.firstName ?? o.customer?.firstName ?? ''} ${o.lastName ?? o.customer?.lastName ?? ''}`.trim();

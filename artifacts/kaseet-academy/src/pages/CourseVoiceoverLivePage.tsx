@@ -16,6 +16,7 @@ const GOLD_INK = '#8A6200';
 
 const config: CoursePageLayoutProps = {
   courseSlug: 'voiceover',
+  showAdvancedCohorts: true,
   title: 'دورة التعليق والأداء الصوتي — مباشر تفاعلي (Online LIVE)',
   categoryBadge: 'التعليق الصوتي — أونلاين',
   description: 'البرنامج التطبيقي لتعليق الصوت عبر بث مباشر تفاعلي: من تجهيز الاستوديو المنزلي إلى إنتاج ديمو صوتي احترافي جاهز لسوق العمل.',

@@ -67,10 +67,10 @@ export const COHORT_CATALOG: Record<string, { onsite?: readonly number[]; live?:
   "masar-khataba": { onsite: [303], live: [304] },
   "masar-elami":   { onsite: [305], live: [306] },
 
-  // ── Short courses (IDs from cohorts.json — updated 2026-08-17) ──
+  // ── Short courses (IDs from the latest cohort roster) ──────────────
   voiceover: {
-    onsite: [126, 130, 132, 135, 137, 139, 140, 142],
-    live:   [127, 128, 129, 131, 133, 134, 136, 138, 141, 143],
+    onsite: [135, 137, 406, 407, 408],
+    live:   [136, 138, 143, 401, 402, 403, 404, 405],
   },
   presenter:        { onsite: [202] },
   "public-speaking":  { onsite: [201] },
