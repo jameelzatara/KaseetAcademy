@@ -28,7 +28,18 @@
   border: none !important;
 }
 @media (max-width: 600px) {
-  .reel-embed-wrap iframe { min-height: 260px !important; }
+  /* Instagram's mobile embed adds its own white breathing room. Keep the
+     carousel card compact instead of letting that internal height stretch it. */
+  .reels-stage { height: 465px !important; }
+  .reel-embed-wrap {
+    flex: 0 0 400px !important;
+    height: 400px !important;
+    min-height: 0 !important;
+  }
+  .reel-embed-wrap iframe {
+    height: 400px !important;
+    min-height: 0 !important;
+  }
 }
 @import 'tw-animate-css';
 @plugin "@tailwindcss/typography";
