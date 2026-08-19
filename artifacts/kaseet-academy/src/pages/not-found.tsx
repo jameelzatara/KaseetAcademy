@@ -1,6 +1,14 @@
 // ── 404 Not Found — Branded ─────────────────────────────────
 import { Link } from 'wouter';
+import { usePageMeta } from '@/hooks/usePageMeta';
+
 export default function NotFoundPage() {
+  usePageMeta({
+    title: 'الصفحة غير موجودة',
+    description: 'الصفحة التي تبحث عنها غير موجودة أو تم نقلها.',
+    noIndex: true,
+  });
+
   return (
     <div style={{ minHeight: '100dvh', background: '#0D0B14', direction: 'rtl', display: 'flex', flexDirection: 'column' }}>
 

@@ -10,6 +10,7 @@ interface PageMeta {
   title: string;
   description?: string;
   ogImage?: string; // absolute URL — defaults to https://kaseet.com/og-image.jpg
+  noIndex?: boolean; // true for error/utility pages that shouldn't be indexed
 }
 
 const SITE_NAME      = 'كاسيت أكاديمي';
@@ -39,7 +40,21 @@ function setCanonical(url: string) {
   el.setAttribute('href', url);
 }
 
-export function usePageMeta({ title, description, ogImage }: PageMeta) {
+function setRobots(noIndex: boolean) {
+  let el = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
+  if (noIndex) {
+    if (!el) {
+      el = document.createElement('meta');
+      el.setAttribute('name', 'robots');
+      document.head.appendChild(el);
+    }
+    el.setAttribute('content', 'noindex, nofollow');
+  } else if (el) {
+    el.remove();
+  }
+}
+
+export function usePageMeta({ title, description, ogImage, noIndex }: PageMeta) {
   useEffect(() => {
     const fullTitle = `${title} | ${SITE_NAME}`;
     const img       = ogImage ?? OG_IMG_DEFAULT;
@@ -52,6 +67,7 @@ export function usePageMeta({ title, description, ogImage }: PageMeta) {
 
     // Canonical link
     setCanonical(canonical);
+    setRobots(Boolean(noIndex));
 
     if (description) {
       setMeta('meta[name="description"]', 'content', description);
@@ -70,6 +86,7 @@ export function usePageMeta({ title, description, ogImage }: PageMeta) {
 
     // Restore homepage defaults when component unmounts
     return () => {
+      if (noIndex) setRobots(false);
       document.title = `${SITE_NAME} | Kaseet Academy`;
       setMeta('meta[name="description"]',           'content', 'الأكاديمية الأولى في تدريب التعليق الصوتي، صناعة البودكاست، والإنتاج المرئي.');
       setMeta('meta[property="og:title"]',          'content', `${SITE_NAME} | Kaseet Academy`);

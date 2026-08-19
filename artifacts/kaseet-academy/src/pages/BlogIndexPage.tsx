@@ -81,7 +81,6 @@ export default function BlogIndexPage() {
     <>
       {/* ── الأنماط المنقولة حرفياً ────────────────────── */}
       <style>{`
-@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Poppins:wght@600&display=swap');
 .blog-page{font-family:'Tajawal',sans-serif;background:#1A2533;color:#FFFFFF;line-height:1.9;-webkit-font-smoothing:antialiased;min-height:100vh;padding-top:64px}
 .blog-page::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(to right,rgba(255,255,255,.016) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,.016) 1px,transparent 1px);background-size:64px 64px}
 .blog-page .page{position:relative;z-index:1}

@@ -137,7 +137,7 @@ export default function SiteFooter() {
               {/* Social icons */}
               <div style={{ display: 'flex', gap: 7, flexWrap: 'wrap' }}>
                 {SOCIAL.map(s => (
-                  <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" title={s.label}
+                  <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" title={s.label} aria-label={s.label}
                     style={{
                       width: 34, height: 34, borderRadius: '50%',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
