@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'wouter';
 import { Info, ChevronRight, ChevronLeft, Lock, CreditCard, MessageCircle, Check, ChevronDown } from 'lucide-react';
 import cohortsData from '@/data/cohorts.json';
+import { useCoursePricing } from '@/hooks/useCoursePricing';
 
 // ─── Types ────────────────────────────────────────────────
 type Mode = 'onsite' | 'live';
@@ -18,15 +19,6 @@ interface Customer {
   firstName: string; lastName: string; email: string;
   phone: string; country: string; city: string;
 }
-
-// ─── Pricing config (mirrors server/lib/pricing.ts) ───────
-const COURSE_PRICING: Record<string, { onsite?: { totalJOD: number }; live?: { totalUSD: number } }> = {
-  voiceover:         { onsite: { totalJOD: 218 }, live: { totalUSD: 150 } },
-  'voiceover-basics':{ onsite: { totalJOD: 218 }, live: { totalUSD: 150 } },
-  presenter:         { onsite: { totalJOD: 250 } },
-  'public-speaking': { onsite: { totalJOD: 180 }, live: { totalUSD: 150 } },
-  'arabic-language': { live: { totalUSD: 150 } },
-};
 
 const COURSE_NAMES: Record<string, string> = {
   voiceover:           'أساسيات التعليق والأداء الصوتي',
@@ -141,24 +133,39 @@ export default function CheckoutPage() {
   const [dialCode,  setDialCode]  = useState('962'); // Jordan default
   const [localPhone, setLocalPhone] = useState('');
 
+  // ── Live prices from DB ───────────────────────────────────
+  const { pricing: apiPricing, loading: pricingLoading } = useCoursePricing(courseSlug);
+
   const cohort = (cohortsData.cohorts as Cohort[]).find(
     (c) => c.id === cohortIdParam && c.mode === modeParam,
   );
-  const pricing = COURSE_PRICING[courseSlug];
   const courseName = COURSE_NAMES[courseSlug] ?? courseSlug;
   const modeLabel = modeParam === 'onsite' ? 'حضوري' : 'مباشر تفاعلي (Online LIVE)';
 
-  // Redirect if invalid
-  useEffect(() => {
-    if (!cohort || !pricing) navigate('/');
-  }, [cohort, pricing]);
-
-  if (!cohort || !pricing) return null;
-
-  // ── Amounts ──────────────────────────────────────────────
+  // ── Mode validity check — mirrors server-side guard in checkout.ts ──
   const isLive = modeParam === 'live';
-  const totalJOD = pricing.onsite?.totalJOD ?? 0;
-  const totalUSD = pricing.live?.totalUSD ?? 0;
+  const modeAvailable = apiPricing
+    ? isLive
+      ? apiPricing.liveEnabled && apiPricing.livePriceUSD !== null
+      : apiPricing.onsiteEnabled && apiPricing.onsitePriceJOD !== null
+    : true; // unknown until loaded — let the loading gate handle it
+
+  // Redirect if invalid — wait until pricing has loaded before redirecting
+  useEffect(() => {
+    if (!pricingLoading && (!cohort || !apiPricing || !modeAvailable)) navigate('/');
+  }, [cohort, apiPricing, pricingLoading, modeAvailable]);
+
+  if (pricingLoading) return (
+    <div style={{ minHeight: '100vh', background: CREAM, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: F }}>
+      <span style={{ color: INK2, fontSize: 15 }}>جارٍ التحميل…</span>
+    </div>
+  );
+
+  if (!cohort || !apiPricing || !modeAvailable) return null;
+
+  // ── Amounts (from live DB prices, mode already validated above) ──
+  const totalJOD = apiPricing.onsitePriceJOD ?? 0;
+  const totalUSD = apiPricing.livePriceUSD ?? 0;
   const [dep, inst2, inst3] = splitInstallments(totalJOD);
 
   const nowJOD = isLive ? 0 : plan === 'full' ? totalJOD : dep;

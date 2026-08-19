@@ -9,10 +9,7 @@ import {
   toMinorUSD,
   splitInstallments,
 } from "../lib/currency.js";
-import { getPricing, COURSE_NAMES, validateCohort } from "../lib/pricing.js";
-
-// First instalment for the live (online) 3-payment plan — must match PaymentModal.tsx DEPOSIT_USD
-const DEPOSIT_USD_LIVE = 70;
+import { COURSE_NAMES, validateCohort } from "../lib/pricing.js";
 import {
   createHold,
   setHoldSession,
@@ -36,6 +33,9 @@ import {
   type ValidDiscount,
   type DiscountError,
 } from "../lib/discounts.js";
+
+// First instalment for the live (online) 3-payment plan — must match PaymentModal.tsx DEPOSIT_USD
+const DEPOSIT_USD_LIVE = 70;
 
 // Extend express-session with checkout-specific fields
 declare module "express-session" {
@@ -98,24 +98,22 @@ router.post("/checkout/session", async (req, res) => {
       consultantRef?: number;
     };
 
-    if (!cohortId || !courseSlug || !mode || !customer?.firstName || !customer?.phone) {
-      res.status(400).json({ error: "بيانات غير مكتملة" });
-      return;
-    }
-
-    const pricing = getPricing(courseSlug, mode);
-    if (!pricing) {
-      res.status(400).json({ error: "دورة أو وضع غير صالح" });
-      return;
-    }
-
-    // ── Discount code validation (DB-backed) ─────────────────
+    const { rows: courseRows } = await pool.query<{
+      onsite_price_jod: number | null;
+      live_price_usd: number | null;
+      onsite_enabled: boolean;
+      live_enabled: boolean;
+    }>(
+      `SELECT onsite_price_jod, live_price_usd, onsite_enabled, live_enabled
+       FROM courses WHERE slug = $1 AND status != 'archived'`,
+      [courseSlug],
+    );
     let discount: ValidDiscount | null = null;
     if (discountCode) {
       try {
         discount = await validateDiscountCode(discountCode, courseSlug);
       } catch (err: any) {
-        const code = (err?.message ?? "CODE_NOT_FOUND") as DiscountError;
+      const code = err?.message ?? "COHORT_MISMATCH";
         res.status(400).json({ error: DISCOUNT_ERROR_AR[code] ?? "كود الخصم غير صالح", code });
         return;
       }
@@ -124,34 +122,34 @@ router.post("/checkout/session", async (req, res) => {
     // ── Consultant referral (optional, never blocks checkout) ─
     const consultantId = await resolveConsultantRef(consultantRef);
 
-    // ── Server-side cohort validation ─────────────────────────
+    // ── Server-side cohort validation — reject mismatched / unknown cohorts ─
     let validCohortId: number;
     try {
       validCohortId = validateCohort(courseSlug, mode, cohortId);
     } catch (err: any) {
       const code = err?.message ?? "COHORT_MISMATCH";
-      logger.warn({ courseSlug, mode, cohortId, code }, "Cohort validation failed (session)");
+      logger.warn({ courseSlug, mode, cohortId, code }, "Cohort validation failed");
       res.status(400).json({ error: "cohort/course/mode مجموعة غير مسموح بها", code });
       return;
     }
 
-    // ── Seat check from DB (no browser values trusted) ───────
+    // Use the server-validated cohortId for all downstream operations
     const seats = await getCohortSeats(validCohortId);
     if (!seats.isOpen || seats.enrolled >= seats.capacity) {
       res.status(409).json({ error: "CAP_REACHED", message: "نفدت مقاعد هذه الدفعة" });
       return;
     }
 
-    const courseName  = COURSE_NAMES[courseSlug] ?? courseSlug;
-    const modeLabel   = mode === "onsite" ? "حضوري" : "مباشر تفاعلي (Online LIVE)";
+    const courseName = COURSE_NAMES[courseSlug] ?? courseSlug;
+    const modeLabel  = mode === "onsite" ? "حضوري" : "مباشر تفاعلي (Online LIVE)";
 
-    // ── Compute amounts ──────────────────────────────────────
-    let totalJOD = 0, totalUSD = 0, chargeUSD = 0, paidJOD = 0, remainingJOD = 0;
+    let totalJOD = 0, totalUSD = 0, chargeUSD = 0;
     let installments: InstallmentRecord[] = [];
     let effectivePlan: "full" | "deposit" = plan;
 
     if (mode === "live") {
-      totalUSD = (pricing as { totalUSD: number }).totalUSD;
+      // Price from DB (not hardcoded map)
+      totalUSD = courseRow.live_price_usd!;
       if (discount) totalUSD = Math.round(applyDiscount(totalUSD, discount));
       if (effectivePlan === "deposit") {
         // 3-instalment plan: $70 now, two future Stripe charges
@@ -167,9 +165,13 @@ router.post("/checkout/session", async (req, res) => {
         installments = [{ seq: 1, amountJOD: 0, method: "stripe", paidAt: null }];
       }
     } else {
-      totalJOD = (pricing as { totalJOD: number }).totalJOD;
+      // Price from DB (not hardcoded map)
+      totalJOD = courseRow.onsite_price_jod!;
       if (discount) {
+        // Integer JOD (total_jod column is integer)
         totalJOD = Math.round(applyDiscount(totalJOD, discount));
+        // Deposit invariant: the fixed deposit is always charged, so the
+        // discounted total can never drop below it (remaining stays >= 0)
         if (effectivePlan === "deposit") totalJOD = Math.max(totalJOD, DEPOSIT_JOD);
       }
       const [dep, inst2, inst3] = splitInstallments(totalJOD);
@@ -194,19 +196,15 @@ router.post("/checkout/session", async (req, res) => {
     const orderId = await generateOrderId();
 
     // ── Claim the discount use BEFORE issuing a discounted payment ──
-    // Per-order reservation row + atomic counter claim: under concurrency
-    // only max_uses checkouts proceed with the discounted price. Released
-    // idempotently on session expiry, cancellation, failure, or sweep.
     if (discount) {
-      const claimed = await claimDiscountReservation(discount.code, orderId, 40);
+      const claimed = await claimDiscountReservation(discount.code, orderId, 60);
       if (!claimed) {
         res.status(400).json({ error: DISCOUNT_ERROR_AR.CODE_EXHAUSTED, code: "CODE_EXHAUSTED" });
         return;
       }
       reservedOrderId = orderId;
     }
-
-    const stripe  = await getUncachableStripeClient();
+      const stripe = await getUncachableStripeClient();
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -300,26 +298,21 @@ router.get("/checkout/status", async (req, res) => {
     let stripeSession: import("stripe").Stripe.Checkout.Session | null = null;
     try {
       const stripe = await getUncachableStripeClient();
-      stripeSession = await stripe.checkout.sessions.retrieve(session_id);
+      stripePI = await stripe.paymentIntents.retrieve(pi_id);
     } catch (stripeErr) {
-      // خطأ في جلب جلسة Stripe — تراجع آمن
-      logger.warn({ stripeErr, session_id }, "Stripe session fetch failed in status check");
+      logger.warn({ stripeErr, pi_id }, "Stripe PI fetch failed in pi-status");
     }
 
-    if (stripeSession && stripeSession.payment_status === "paid") {
-      // Payment confirmed by Stripe: create the order (idempotent)
+    if (stripePI && stripePI.status === "succeeded") {
       try {
-        await onSessionCompleted(stripeSession);
-      } catch (sessionErr) {
-        // قد تكون 23505 (طلب مكرر من دفعة سابقة) — ليست خطأً فادحًا
-        logger.warn({ sessionErr, session_id }, "onSessionCompleted error in status polling (may be duplicate)");
+        await onPaymentIntentSucceeded(stripePI);
+      } catch (e) {
+        logger.warn({ e, pi_id }, "onPaymentIntentSucceeded error in pi-status polling");
       }
-
-      // ابحث عن الطلب بعد المحاولة — سواء أنشأناه الآن أو كان موجودًا
       const [newOrder] = await db
         .select()
         .from(ordersTable)
-        .where(or(eq(ordersTable.sessionId, session_id), eq(ordersTable.stripeSessionId, session_id)))
+        .where(eq(ordersTable.paymentIntent, pi_id))
         .limit(1);
 
       if (newOrder) {
@@ -577,14 +570,7 @@ router.get("/cohorts/seats", async (_req, res) => {
       cohort_id: number; capacity: number; enrolled: number; is_open: boolean;
     }>("SELECT cohort_id, capacity, enrolled, is_open FROM cohort_seats");
 
-    const seats = rows.rows.map((r) => ({
-      cohortId:  r.cohort_id,
-      capacity:  r.capacity,
-      enrolled:  r.enrolled,
-      remaining: Math.max(0, r.capacity - r.enrolled),
-      fill:      Math.round((r.enrolled / Math.max(r.capacity, 1)) * 100),
-      isOpen:    r.is_open,
-    }));
+    const seats = await getCohortSeats(validCohortId);
 
     res.setHeader("Cache-Control", "no-store");
     res.json({ seats });
@@ -637,24 +623,22 @@ router.post("/checkout/payment-intent", async (req, res) => {
       consultantRef?: number;
     };
 
-    if (!cohortId || !courseSlug || !mode || !customer?.firstName || !customer?.phone) {
-      res.status(400).json({ error: "بيانات غير مكتملة" });
-      return;
-    }
-
-    const pricing = getPricing(courseSlug, mode);
-    if (!pricing) {
-      res.status(400).json({ error: "دورة أو وضع غير صالح" });
-      return;
-    }
-
-    // ── Discount code validation (DB-backed) ─────────────────
+    const { rows: courseRows2 } = await pool.query<{
+      onsite_price_jod: number | null;
+      live_price_usd: number | null;
+      onsite_enabled: boolean;
+      live_enabled: boolean;
+    }>(
+      `SELECT onsite_price_jod, live_price_usd, onsite_enabled, live_enabled
+       FROM courses WHERE slug = $1 AND status != 'archived'`,
+      [courseSlug],
+    );
     let discount: ValidDiscount | null = null;
     if (discountCode) {
       try {
         discount = await validateDiscountCode(discountCode, courseSlug);
       } catch (err: any) {
-        const code = (err?.message ?? "CODE_NOT_FOUND") as DiscountError;
+      const code = err?.message ?? "COHORT_MISMATCH";
         res.status(400).json({ error: DISCOUNT_ERROR_AR[code] ?? "كود الخصم غير صالح", code });
         return;
       }
@@ -688,7 +672,8 @@ router.post("/checkout/payment-intent", async (req, res) => {
     let effectivePlan: "full" | "deposit" = plan;
 
     if (mode === "live") {
-      totalUSD = (pricing as { totalUSD: number }).totalUSD;
+      // Price from DB (not hardcoded map)
+      totalUSD = courseRow2.live_price_usd!;
       if (discount) totalUSD = Math.round(applyDiscount(totalUSD, discount));
       if (effectivePlan === "deposit") {
         chargeUSD = DEPOSIT_USD_LIVE;
@@ -697,7 +682,8 @@ router.post("/checkout/payment-intent", async (req, res) => {
         chargeUSD = totalUSD;
       }
     } else {
-      totalJOD = (pricing as { totalJOD: number }).totalJOD;
+      // Price from DB (not hardcoded map)
+      totalJOD = courseRow2.onsite_price_jod!;
       if (discount) {
         totalJOD = Math.round(applyDiscount(totalJOD, discount));
         if (effectivePlan === "deposit") totalJOD = Math.max(totalJOD, DEPOSIT_JOD);
@@ -708,6 +694,7 @@ router.post("/checkout/payment-intent", async (req, res) => {
         chargeUSD = jodToChargeUSD(DEPOSIT_JOD);
       }
     }
+
 
     const holdId  = await createHold(validCohortId);
     const orderId = await generateOrderId();
@@ -721,7 +708,7 @@ router.post("/checkout/payment-intent", async (req, res) => {
       }
       reservedOrderId = orderId;
     }
-    const stripe  = await getUncachableStripeClient();
+      const stripe = await getUncachableStripeClient();
 
     const pi = await stripe.paymentIntents.create({
       amount:   toMinorUSD(chargeUSD),
@@ -968,3 +955,7 @@ export async function handleStripeWebhook(rawBody: Buffer, signature: string): P
 }
 
 export default router;
+
+    const courseRow2 = courseRows2[0];
+
+    const courseRow = courseRows[0];
