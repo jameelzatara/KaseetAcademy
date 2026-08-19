@@ -1,39 +1,45 @@
+import { lazy, Suspense } from 'react';
 import { Route, Switch, Router as WouterRouter, Redirect, useLocation } from 'wouter';
 import { CurrencyProvider } from '@/context/CurrencyContext';
 // AuthProvider removed — student auth deleted (⑤)
 import ScrollToTop from '@/components/ScrollToTop';
 import Analytics   from '@/components/Analytics';
 import Navbar from '@/components/Navbar';
+// Home stays eager — it's the first paint for most visitors.
 import Home from '@/pages/Home';
-import CourseVoiceoverPage      from '@/pages/CourseVoiceoverPage';
-import CourseBasicsPage         from '@/pages/CourseBasicsPage';
-import CourseVoiceoverLivePage  from '@/pages/CourseVoiceoverLivePage';
-import CoursePresenterPage      from '@/pages/CoursePresenterPage';
-import CourseArabicLanguagePage from '@/pages/CourseArabicLanguagePage';
-import CoursePublicSpeakingPage from '@/pages/CoursePublicSpeakingPage';
-import MasarElamiPage           from '@/pages/MasarElamiPage';
-import MasarSotiPage            from '@/pages/MasarSotiPage';
-import MasarKhatabaPage         from '@/pages/MasarKhatabaPage';
-import VoiceTestPage             from '@/pages/VoiceTestPage';
-import PrivacyPolicyPage         from '@/pages/PrivacyPolicyPage';
-import TermsPage                 from '@/pages/TermsPage';
-import RefundPolicyPage          from '@/pages/RefundPolicyPage';
-import ApplyVoiceTalentPage      from '@/pages/ApplyVoiceTalentPage';
-import ApplyTrainerPage          from '@/pages/ApplyTrainerPage';
-import CheckoutPage              from '@/pages/CheckoutPage';
-import CheckoutSuccessPage       from '@/pages/CheckoutSuccessPage';
-import AdminDashboard            from '@/pages/admin/AdminDashboard';
-import EventsPage                from '@/pages/EventsPage';
-import TrainersPage              from '@/pages/TrainersPage';
-import TrainerDetailPage         from '@/pages/TrainerDetailPage';
-import BlogIndexPage             from '@/pages/BlogIndexPage';
-import BlogPostPage              from '@/pages/BlogPostPage';
-import NotFoundPage              from '@/pages/not-found';
+
+// Everything else is route-split: each page ships as its own chunk instead
+// of bloating the initial bundle every visitor downloads on the homepage.
+const CourseVoiceoverPage      = lazy(() => import('@/pages/CourseVoiceoverPage'));
+const CourseBasicsPage         = lazy(() => import('@/pages/CourseBasicsPage'));
+const CourseVoiceoverLivePage  = lazy(() => import('@/pages/CourseVoiceoverLivePage'));
+const CoursePresenterPage      = lazy(() => import('@/pages/CoursePresenterPage'));
+const CourseArabicLanguagePage = lazy(() => import('@/pages/CourseArabicLanguagePage'));
+const CoursePublicSpeakingPage = lazy(() => import('@/pages/CoursePublicSpeakingPage'));
+const MasarElamiPage           = lazy(() => import('@/pages/MasarElamiPage'));
+const MasarSotiPage            = lazy(() => import('@/pages/MasarSotiPage'));
+const MasarKhatabaPage         = lazy(() => import('@/pages/MasarKhatabaPage'));
+const VoiceTestPage            = lazy(() => import('@/pages/VoiceTestPage'));
+const PrivacyPolicyPage        = lazy(() => import('@/pages/PrivacyPolicyPage'));
+const TermsPage                = lazy(() => import('@/pages/TermsPage'));
+const RefundPolicyPage         = lazy(() => import('@/pages/RefundPolicyPage'));
+const ApplyVoiceTalentPage     = lazy(() => import('@/pages/ApplyVoiceTalentPage'));
+const ApplyTrainerPage         = lazy(() => import('@/pages/ApplyTrainerPage'));
+const CheckoutPage             = lazy(() => import('@/pages/CheckoutPage'));
+const CheckoutSuccessPage      = lazy(() => import('@/pages/CheckoutSuccessPage'));
+const AdminDashboard           = lazy(() => import('@/pages/admin/AdminDashboard'));
+const EventsPage               = lazy(() => import('@/pages/EventsPage'));
+const TrainersPage             = lazy(() => import('@/pages/TrainersPage'));
+const TrainerDetailPage        = lazy(() => import('@/pages/TrainerDetailPage'));
+const BlogIndexPage            = lazy(() => import('@/pages/BlogIndexPage'));
+const BlogPostPage             = lazy(() => import('@/pages/BlogPostPage'));
+const NotFoundPage             = lazy(() => import('@/pages/not-found'));
 
 function Router() {
   return (
     <>
       <ScrollToTop />
+      <Suspense fallback={null}>
       <Switch>
         <Route path="/" component={Home} />
 
@@ -84,6 +90,7 @@ function Router() {
         {/* 404 */}
         <Route component={NotFoundPage} />
       </Switch>
+      </Suspense>
     </>
   );
 }
