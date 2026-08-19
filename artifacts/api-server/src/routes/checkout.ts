@@ -226,6 +226,10 @@ router.post("/checkout/session", async (req, res) => {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       locale: "auto",
+      // Keep the hosted Checkout focused on cards and card wallets.
+      // Apple Pay, Google Pay, and Link remain available through `card`
+      // when Stripe and the customer's device support them.
+      payment_method_types: ["card"],
       client_reference_id: orderId,
       customer_email: customer.email || undefined,
       line_items: [{
@@ -776,9 +780,10 @@ router.post("/checkout/payment-intent", async (req, res) => {
     const pi = await stripe.paymentIntents.create({
       amount:   toMinorUSD(chargeUSD),
       currency: CHARGE_CURRENCY,
-      // Let Stripe show only payment methods enabled for this account and
-      // supported by the payer's device, including Apple Pay / Google Pay.
-      automatic_payment_methods: { enabled: true },
+      // Keep Payment Element focused on cards and card wallets.
+      // Apple Pay, Google Pay, and Link remain available through `card`
+      // when Stripe and the customer's device support them.
+      payment_method_types: ["card"],
       description: `${courseName} — ${modeLabel} · طلب ${orderId}`,
       metadata: {
         holdId, orderId,
