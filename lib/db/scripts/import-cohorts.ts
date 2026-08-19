@@ -117,9 +117,18 @@ async function main() {
       // Entirely blank row — end of data
       if (!programRaw && !modeRaw && !trainerName) continue;
 
-      if (!programRaw || !MODE_MAP[modeRaw ?? ""] || !trainerName || !startDate || !endDate || !daysAr || !platform || capacity == null) {
+      const missingFields: string[] = [];
+      if (!programRaw) missingFields.push("البرنامج");
+      if (!modeRaw || !MODE_MAP[modeRaw ?? ""]) missingFields.push(`النمط (${modeRaw ?? "فارغ"})`);
+      if (!trainerName) missingFields.push("المدرّب");
+      if (!startDate) missingFields.push(`البداية (${cleanStr(get(6)) ?? "فارغ"})`);
+      if (!endDate) missingFields.push(`الانتهاء (${cleanStr(get(7)) ?? "فارغ"})`);
+      if (!daysAr) missingFields.push("الأيام");
+      if (!platform) missingFields.push("المنصّة");
+      if (capacity == null) missingFields.push("السعة");
+      if (missingFields.length) {
         skipped++;
-        skipReasons.push(`Row ${rowNum}: missing/invalid required field(s)`);
+        skipReasons.push(`Row ${rowNum} (${programRaw ?? "?"}): missing/invalid — ${missingFields.join(", ")}`);
         continue;
       }
       const program = PROGRAM_MAP[programRaw];
