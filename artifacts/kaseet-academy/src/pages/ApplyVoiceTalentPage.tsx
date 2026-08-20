@@ -211,7 +211,7 @@ export default function ApplyVoiceTalentPage() {
               <div style={{ position: 'absolute', inset: '-14% -10% -8%', borderRadius: 40, background: `radial-gradient(ellipse at 50% 40%, rgba(255,193,7,.22), transparent 68%)`, filter: 'blur(8px)', zIndex: 0 }} />
               <div style={{ position: 'relative', borderRadius: 26, overflow: 'hidden', border: `1px solid ${GL}`, aspectRatio: '3/4', boxShadow: '0 34px 90px rgba(0,0,0,.55)', zIndex: 1 }}>
                 <img
-                  src="/voice-talent-cover.png"
+                  src="/voice-talent-cover.jpg"
                   alt="استوديو تسجيل كاسيت"
                   fetchPriority="high"
                   style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 35%', display: 'block' }}
